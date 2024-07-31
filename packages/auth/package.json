@@ -1,0 +1,24 @@
+{
+  "name": "@repo/auth",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "exports": {
+    ".": "./src/auth.ts"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@repo/db": "workspace: *",
+    "@repo/validators": "workspace: *",
+    "bcrypt": "^5.1.1",
+    "next-auth": "beta"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2"
+  }
+}

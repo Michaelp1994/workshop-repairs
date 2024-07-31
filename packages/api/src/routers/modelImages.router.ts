@@ -1,0 +1,170 @@
+import { TRPCError } from "@trpc/server";
+import { protectedProcedure, router } from "../trpc";
+import modelImagesController from "@repo/db/controllers/modelImages.controller";
+import modelsController from "@repo/db/controllers/models.controller";
+import modelImageSchemas from "@repo/validators/modelImages.validators";
+import {
+  createMetadata,
+  deleteMetadata,
+  updateMetadata,
+} from "../helpers/includeMetadata";
+import {
+  getAllSchema,
+  getCountSchema,
+} from "@repo/validators/dataTables.validators";
+
+export default router({
+  getAll: protectedProcedure
+    .input(getAllSchema)
+    .query(async ({ ctx, input }) => {
+      const allModelImages = modelImagesController.getAll(input, ctx.db);
+
+      return allModelImages;
+    }),
+  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
+    const count = modelImagesController.getCount(input, ctx.db);
+    return count;
+  }),
+  getAllByModelId: protectedProcedure
+    .input(modelImageSchemas.getAllByModelId)
+    .query(async ({ ctx, input }) => {
+      const model = await modelsController.getById(input.modelId, ctx.db);
+
+      if (!model) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "model not found",
+        });
+      }
+
+      const allModelImages = await modelImagesController.getAllByModelId(
+        input.modelId,
+        ctx.db,
+      );
+
+      return allModelImages.map((modelImage) => ({
+        ...modelImage,
+        favourite: modelImage.id === model.defaultImageId,
+      }));
+    }),
+  getById: protectedProcedure
+    .input(modelImageSchemas.getById)
+    .query(async ({ input, ctx }) => {
+      const modelImage = await modelImagesController.getById(input.id, ctx.db);
+
+      if (!modelImage) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "modelImage not found",
+        });
+      }
+
+      return modelImage;
+    }),
+  create: protectedProcedure
+    .input(modelImageSchemas.create)
+    .mutation(async ({ input, ctx }) => {
+      const modelImages = await modelImagesController.getAllByModelId(
+        input.modelId,
+        ctx.db,
+      );
+      const isFirstImage = modelImages.length === 0;
+
+      const imageMetadata = createMetadata(ctx.session);
+      const createdModelImage = await modelImagesController.create(
+        { ...input, ...imageMetadata },
+        ctx.db,
+      );
+
+      if (!createdModelImage) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "can't create model Image",
+        });
+      }
+
+      if (isFirstImage) {
+        const modelMetadata = updateMetadata(ctx.session);
+
+        await modelsController.update(
+          {
+            id: input.modelId,
+            defaultImageId: createdModelImage.id,
+            ...modelMetadata,
+          },
+          ctx.db,
+        );
+      }
+
+      return createdModelImage;
+    }),
+  update: protectedProcedure
+    .input(modelImageSchemas.update)
+    .mutation(async ({ input, ctx }) => {
+      const metadata = updateMetadata(ctx.session);
+      const updatedModelImage = await modelImagesController.update(
+        { ...input, ...metadata },
+        ctx.db,
+      );
+
+      if (!updatedModelImage) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "can't update model Image",
+        });
+      }
+
+      return updatedModelImage;
+    }),
+  setFavourite: protectedProcedure
+    .input(modelImageSchemas.setFavourite)
+    .mutation(async ({ input, ctx }) => {
+      const modelImage = await modelImagesController.getById(input.id, ctx.db);
+
+      if (!modelImage) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "model Image not found",
+        });
+      }
+
+      const model = await modelsController.getById(modelImage.modelId, ctx.db);
+
+      if (!model) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "model not found",
+        });
+      }
+      const metadata = updateMetadata(ctx.session);
+      await modelsController.update(
+        {
+          id: model.id,
+          defaultImageId: modelImage.id,
+          ...metadata,
+        },
+        ctx.db,
+      );
+
+      return modelImage;
+    }),
+  delete: protectedProcedure
+    .input(modelImageSchemas.delete)
+    .mutation(async ({ input, ctx }) => {
+      const metadata = deleteMetadata(ctx.session);
+
+      const deletedModelImage = await modelImagesController.delete(
+        { ...input, ...metadata },
+        ctx.db,
+      );
+
+      if (!deletedModelImage) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "modelImage not found",
+        });
+      }
+
+      return deletedModelImage;
+    }),
+});

@@ -1,0 +1,68 @@
+[
+    {
+        "id": 1,
+        "name": "Unassessed",
+        "created_at": "2024-06-17T15:39:22.597Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_by": null,
+        "colour": "#FF0000"
+    },
+    {
+        "id": 2,
+        "name": "Awaiting Parts",
+        "created_at": "2024-06-15T16:10:56.305Z",
+        "updated_at": "2024-06-15T16:10:56.303Z",
+        "deleted_at": null,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_by": null,
+        "colour": "#FF0000"
+    },
+    {
+        "id": 3,
+        "name": "Awaiting Requote",
+        "created_at": "2024-06-15T16:11:46.165Z",
+        "updated_at": "2024-06-15T16:11:46.162Z",
+        "deleted_at": null,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_by": null,
+        "colour": "#FFFFFF"
+    },
+    {
+        "id": 4,
+        "name": "Paperwork",
+        "created_at": "2024-06-15T16:12:06.176Z",
+        "updated_at": "2024-06-15T16:12:06.173Z",
+        "deleted_at": null,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_by": null,
+        "colour": "#FFFFFF"
+    },
+    {
+        "id": 5,
+        "name": "Battery Calibration",
+        "created_at": "2024-06-15T16:12:29.626Z",
+        "updated_at": "2024-06-15T16:12:29.623Z",
+        "deleted_at": null,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_by": null,
+        "colour": "#FFFFFF"
+    },
+    {
+        "id": 6,
+        "name": "Finished",
+        "created_at": "2024-06-17T15:19:51.131Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_by": null,
+        "colour": "#000000"
+    }
+]

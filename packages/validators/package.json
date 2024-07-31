@@ -1,0 +1,31 @@
+{
+  "name": "@repo/validators",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    "./*": "./src/schemas/*.ts"
+  },
+  "scripts": {
+    "// build": "tsc && tsc-alias",
+    "//dev": "tsc --watch",
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "eslint .",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.14.10",
+    "eslint": "^9.6.0",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.1"
+  }
+}

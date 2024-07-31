@@ -1,0 +1,44 @@
+{
+  "name": "@repo/db",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schemas/*": "./src/schemas/*.ts",
+    "./controllers/*": "./src/controllers/*.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules dist",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/seed.ts",
+    "db:studio": "drizzle-kit studio",
+    "lint": "eslint .",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.31.4",
+    "pg": "^8.12.0",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/validators": "workspace:*",
+    "@types/node": "^20.14.10",
+    "@types/pg": "^8.11.6",
+    "drizzle-kit": "^0.22.8",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.0.1"
+  }
+}

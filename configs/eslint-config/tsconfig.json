@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "baseUrl": ".",
+        // "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+        "module": "Preserve",
+        "moduleResolution": "Bundler",
+        "target": "ES2022",
+        "lib": ["ES2022"],
+        "declaration": true,
+        "declarationMap": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"]
+}
