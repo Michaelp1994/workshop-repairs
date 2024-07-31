@@ -1,11 +1,14 @@
 import type { RouterOutputs } from "@repo/api/root";
-import { createColumnHelper } from "@tanstack/react-table";
+
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
-import { formatDate } from "~/utils/formatDate";
 import { DataTableRowActions } from "@repo/ui/data-table";
 import { DataTableImageCell } from "@repo/ui/data-table";
+import { createColumnHelper } from "@tanstack/react-table";
+
+import { formatDate } from "~/utils/formatDate";
+import { getBaseUrl } from "~/utils/getBaseUrl";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["models"]["getAll"][number]>();
@@ -77,7 +80,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) => `models/${row.original.id}`}
+        generateUrl={(row) => `${getBaseUrl()}/models/${row.original.id}`}
         row={row}
       />
     ),

@@ -1,7 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import UpdateModelForm from "./UpdateModelForm";
 import { type ModelID } from "@repo/validators/ids.validators";
+
 import { api } from "~/trpc/server";
+
+import UpdateModelForm from "./UpdateModelForm";
 
 interface ModelDetailsSectionProps {
   modelId: ModelID;

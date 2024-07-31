@@ -1,17 +1,18 @@
-import { TRPCError } from "@trpc/server";
-import { protectedProcedure, router } from "../trpc";
 import locationsController from "@repo/db/controllers/locations.controller";
-import locationSchemas from "@repo/validators/locations.validators";
-import {
-  createMetadata,
-  deleteMetadata,
-  updateMetadata,
-} from "../helpers/includeMetadata";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
+import locationSchemas from "@repo/validators/locations.validators";
+import { TRPCError } from "@trpc/server";
+
+import {
+  createMetadata,
+  deleteMetadata,
+  updateMetadata,
+} from "../helpers/includeMetadata";
+import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure.input(getAllSchema).query(({ ctx, input }) => {

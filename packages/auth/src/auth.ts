@@ -1,9 +1,9 @@
-import NextAuth, { User, type NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import { db } from "@repo/db";
 import usersController from "@repo/db/controllers/users.controller";
-import { compare } from "bcrypt";
 import authSchemas from "@repo/validators/auth.validators";
+import { compare } from "bcrypt";
+import NextAuth, { type NextAuthConfig, User } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
 const authOptions = {
   callbacks: {

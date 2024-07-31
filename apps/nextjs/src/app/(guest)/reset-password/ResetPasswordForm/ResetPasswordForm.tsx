@@ -1,15 +1,16 @@
-import { useResetPasswordForm } from "./useResetPasswordForm";
-import Link from "next/link";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@repo/ui/input-otp";
 import { Button } from "@repo/ui/button";
 import {
   Form,
-  FormField,
-  FormItem,
   FormControl,
   FormDescription,
+  FormField,
+  FormItem,
   FormMessage,
 } from "@repo/ui/form";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@repo/ui/input-otp";
+import Link from "next/link";
+
+import { useResetPasswordForm } from "./useResetPasswordForm";
 
 export default function ResetPasswordForm() {
   const form = useResetPasswordForm();
@@ -48,7 +49,7 @@ export default function ResetPasswordForm() {
         }}
       />
       <div>
-        <Button variant="outline" asChild>
+        <Button asChild variant="outline">
           <Link href="/login">Return</Link>
         </Button>
         <Button type="submit">Verify</Button>

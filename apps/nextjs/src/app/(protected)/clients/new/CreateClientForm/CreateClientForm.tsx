@@ -1,16 +1,19 @@
 "use client";
 import { Button } from "@repo/ui/button";
-import { useCreateClientForm } from "./useCreateClientForm";
-
 import {
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+
+import { useCreateClientForm } from "./useCreateClientForm";
 
 export default function CreateClientForm() {
   const form = useCreateClientForm();
@@ -33,8 +36,10 @@ export default function CreateClientForm() {
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

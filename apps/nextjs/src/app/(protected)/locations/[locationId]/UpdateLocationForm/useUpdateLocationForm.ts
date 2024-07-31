@@ -1,11 +1,13 @@
+import type { LocationID } from "@repo/validators/ids.validators";
+
+import { useForm } from "@repo/ui/form";
 import { toast } from "@repo/ui/sonner";
+import { useRouter } from "next/navigation";
+
 import {
   defaultLocation,
   locationFormSchema,
 } from "~/schemas/locations.schema";
-import { useForm } from "@repo/ui/form";
-import type { LocationID } from "@repo/validators/ids.validators";
-import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 export default function useUpdateLocationForm(locationId: LocationID) {

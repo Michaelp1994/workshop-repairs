@@ -1,5 +1,6 @@
-import { Checkbox } from "../checkbox";
 import { type Row } from "@tanstack/react-table";
+
+import { Checkbox } from "../checkbox";
 
 interface DataTableRowCheckboxProps<T> {
   row: Row<T>;

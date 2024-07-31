@@ -21,11 +21,12 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^20.14.10",
-    "eslint": "^9.6.0",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.8.0",
     "tsc-alias": "^1.8.10",
-    "typescript": "^5.5.3",
-    "vitest": "^2.0.1"
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   }
 }

@@ -1,16 +1,19 @@
 "use client";
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import { useCreatePartForm } from "./useCreatePartForm";
-
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import { useCreatePartForm } from "./useCreatePartForm";
 
 export default function CreatePartForm() {
   const form = useCreatePartForm();
@@ -49,8 +52,10 @@ export default function CreatePartForm() {
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

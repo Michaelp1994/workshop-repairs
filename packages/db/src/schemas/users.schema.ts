@@ -1,19 +1,20 @@
 import {
-  varchar,
-  pgTable,
-  integer,
-  timestamp,
   foreignKey,
-  text,
+  integer,
+  pgTable,
   serial,
+  text,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { userTypes } from "./user-types.schema";
+
 import {
   type InferCreateModel,
   type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { userTypes } from "./user-types.schema";
 
 export const users = pgTable(
   "users",

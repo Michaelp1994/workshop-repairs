@@ -1,4 +1,5 @@
-import { pgTable, varchar, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+
 import {
   type InferCreateModel,
   type InferDeleteModel,

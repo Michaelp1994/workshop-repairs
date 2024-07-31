@@ -1,12 +1,14 @@
 "use client";
 import type { RepairID } from "@repo/validators/ids.validators";
-import { api } from "~/trpc/react";
-import { Card, CardHeader, CardTitle, CardContent } from "@repo/ui/card";
+
+import { Button } from "@repo/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { ArrowUpRight } from "@repo/ui/icons";
 import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
-import { Button } from "@repo/ui/button";
 import Link from "next/link";
-import { ArrowUpRight } from "@repo/ui/icons";
+
+import { api } from "~/trpc/react";
 
 interface AssetDetailsProps {
   repairId: RepairID;
@@ -34,7 +36,7 @@ export default function AssetDetailsSection({ repairId }: AssetDetailsProps) {
     <Card>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Asset Details</CardTitle>
-        <Button variant="ghost" size="icon" asChild>
+        <Button asChild size="icon" variant="ghost">
           <Link href={`/assets/${asset.id}`}>
             <ArrowUpRight className="h-4 w-4" />
             <span className="sr-only">View Asset</span>
@@ -42,7 +44,7 @@ export default function AssetDetailsSection({ repairId }: AssetDetailsProps) {
         </Button>
       </CardHeader>
       <CardContent>
-        <img src={model.imageUrl} alt={model.name} />
+        <img alt={model.name} src={model.imageUrl} />
         <div className="grid grid-cols-2 gap-2">
           <Label>Asset Number</Label>
           <Input disabled value={asset.assetNumber} />

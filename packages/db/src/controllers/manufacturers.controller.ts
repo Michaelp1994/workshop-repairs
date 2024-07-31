@@ -1,21 +1,21 @@
-import { and, count, eq, ilike, isNull } from "drizzle-orm";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { formatSearch } from "../helpers/formatSearch";
+import { and, count, eq, isNull } from "drizzle-orm";
+
+import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import {
-  type DeleteManufacturer,
-  manufacturers,
-  type CreateManufacturer,
-  type UpdateManufacturer,
-  type ManufacturerID,
-} from "../schemas/manufacturers.schema";
+import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database } from "../index";
 import {
   manufacturerFilterMapping,
   manufacturerOrderMapping,
 } from "../mappings/manufacturers.mappings";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import {
+  type CreateManufacturer,
+  type DeleteManufacturer,
+  type ManufacturerID,
+  manufacturers,
+  type UpdateManufacturer,
+} from "../schemas/manufacturers.schema";
 
 const globalFilterColumns = [manufacturers.name];
 

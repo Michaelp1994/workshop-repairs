@@ -1,9 +1,10 @@
 import { Badge } from "@repo/ui/badge";
+
 import { BackButton } from "~/app/_components/BackButton";
 import {
   DetailsPage,
-  DetailsPageToolbar,
   DetailsPageTitle,
+  DetailsPageToolbar,
 } from "~/app/_components/DetailsPage";
 
 interface RepairLayoutProps {
@@ -25,7 +26,7 @@ export default async function RepairLayout({
       <DetailsPageToolbar>
         <BackButton />
         <DetailsPageTitle>Repair #{repairId}</DetailsPageTitle>
-        <Badge variant="outline" className="ml-auto sm:ml-0">
+        <Badge className="ml-auto sm:ml-0" variant="outline">
           Ongoing
         </Badge>
       </DetailsPageToolbar>

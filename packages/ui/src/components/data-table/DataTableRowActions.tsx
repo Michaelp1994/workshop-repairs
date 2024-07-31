@@ -1,7 +1,7 @@
-import { RowData, type Row } from "@tanstack/react-table";
+import { type Row, RowData } from "@tanstack/react-table";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { ChevronRight } from "lucide-react";
 import { Button } from "../button";
 
 interface DataTableRowActionsProps<TData extends RowData> {

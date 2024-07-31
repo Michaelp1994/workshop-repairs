@@ -1,5 +1,6 @@
 "use client";
 import type { RouterOutputs } from "@repo/api/root";
+
 import { Button } from "@repo/ui/button";
 import { formatRelative } from "date-fns";
 import { useState } from "react";
@@ -32,11 +33,11 @@ export function RepairComment({ comment }: RepairCommentProps) {
         <p className="line-clamp-5 whitespace-pre-wrap">{comment.comment}</p>
         {lines > 4 && (
           <Button
-            variant="link"
-            size="sm"
             onClick={() => {
               setTruncate((prev) => !prev);
             }}
+            size="sm"
+            variant="link"
           >
             Read {truncate ? "more" : "less"}
           </Button>

@@ -1,22 +1,22 @@
-import { TRPCError } from "@trpc/server";
-import { protectedProcedure, router } from "../trpc";
-import partsToModelsController from "@repo/db/controllers/partsToModels.controller";
-import partsToModelSchemas from "@repo/validators/partsToModel.validators";
+import * as controller from "@repo/db/controllers/partsToModels.controller";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
+import partsToModelSchemas from "@repo/validators/partsToModel.validators";
+import { TRPCError } from "@trpc/server";
+
+import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure.input(getAllSchema).query(({ ctx, input }) => {
-    const allParts = partsToModelsController.getAll(input, ctx.db);
-
+    const allParts = controller.getAll(input, ctx.db);
     return allParts;
   }),
   getCount: protectedProcedure
     .input(getCountSchema)
     .query(async ({ input, ctx }) => {
-      const count = await partsToModelsController.getCount(input, ctx.db);
+      const count = await controller.getCount(input, ctx.db);
 
       if (count === undefined) {
         throw new TRPCError({
@@ -29,10 +29,7 @@ export default router({
   create: protectedProcedure
     .input(partsToModelSchemas.create)
     .mutation(async ({ input, ctx }) => {
-      const createdPartModel = await partsToModelsController.create(
-        input,
-        ctx.db,
-      );
+      const createdPartModel = await controller.create(input, ctx.db);
 
       if (!createdPartModel) {
         throw new TRPCError({
@@ -46,10 +43,7 @@ export default router({
   delete: protectedProcedure
     .input(partsToModelSchemas.delete)
     .mutation(async ({ input, ctx }) => {
-      const deletedPartModel = await partsToModelsController.delete(
-        input,
-        ctx.db,
-      );
+      const deletedPartModel = await controller.archive(input, ctx.db);
 
       if (!deletedPartModel) {
         throw new TRPCError({

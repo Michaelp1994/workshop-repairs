@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { assetId, manufacturerId, modelId } from "./ids.validators";
 
 const modelColumns = z.enum([

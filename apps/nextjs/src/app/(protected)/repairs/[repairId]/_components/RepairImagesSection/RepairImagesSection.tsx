@@ -1,4 +1,6 @@
 "use client";
+import type { RepairID } from "@repo/validators/ids.validators";
+
 import {
   Card,
   CardContent,
@@ -6,10 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import type { RepairID } from "@repo/validators/ids.validators";
-import { api } from "~/trpc/react";
-import Image from "next/image";
 import { Upload } from "@repo/ui/icons";
+import Image from "next/image";
+
+import { api } from "~/trpc/react";
 
 interface RepairImageSectionProps {
   repairId: RepairID;
@@ -40,9 +42,9 @@ export default function RepairImageSection({
         <div className="grid gap-2">
           {numImages > 0 ? (
             <Image
+              alt="Product image"
               className="aspect-square w-full rounded-md object-cover"
               height="300"
-              alt="Product image"
               src="/placeholder.svg"
               width="300"
             />
@@ -57,10 +59,10 @@ export default function RepairImageSection({
             {data.slice(1, 3).map((repairImage) => {
               return (
                 <Image
-                  key={repairImage.id}
                   alt={repairImage.caption}
                   className="aspect-square w-full rounded-md object-cover"
                   height="84"
+                  key={repairImage.id}
                   src={repairImage.url}
                   width="84"
                 />

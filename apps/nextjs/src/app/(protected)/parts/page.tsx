@@ -1,13 +1,15 @@
-import PartsTable from "./components/PartsTable";
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardWrapper,
   CardToolbar,
+  CardWrapper,
 } from "@repo/ui/card";
+
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import PartsTable from "./components/PartsTable";
 
 export default function AllPartsPage() {
   return (

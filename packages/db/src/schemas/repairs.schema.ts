@@ -1,21 +1,22 @@
 import {
-  varchar,
-  serial,
-  pgTable,
   integer,
+  pgTable,
+  serial,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { assets } from "./assets.schema";
-import { repairTypes } from "./repair-types.schema";
-import { users } from "./users.schema";
+
 import {
   type InferCreateModel,
+  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
-  type InferDeleteModel,
 } from "../types";
-import { repairStatusTypes } from "./repair-status-types.schema";
+import { assets } from "./assets.schema";
 import { clients } from "./clients.schema";
+import { repairStatusTypes } from "./repair-status-types.schema";
+import { repairTypes } from "./repair-types.schema";
+import { users } from "./users.schema";
 
 export const repairs = pgTable("repairs", {
   id: serial("id").primaryKey(),

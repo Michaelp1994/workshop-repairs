@@ -1,6 +1,7 @@
-import { Combobox, type ComboboxProps } from "@repo/ui/combobox";;
+import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
 import { type RepairID } from "@repo/validators/ids.validators";
 import { type ElementRef, forwardRef } from "react";
+
 import { api } from "~/trpc/react";
 
 interface PartSelectProps extends Omit<ComboboxProps, "data"> {
@@ -17,7 +18,7 @@ const PartSelect = forwardRef<ElementRef<typeof Combobox>, PartSelectProps>(
       return <div>Error</div>;
     }
 
-    return <Combobox ref={ref} isLoading={isLoading} data={data} {...props} />;
+    return <Combobox data={data} isLoading={isLoading} ref={ref} {...props} />;
   },
 );
 

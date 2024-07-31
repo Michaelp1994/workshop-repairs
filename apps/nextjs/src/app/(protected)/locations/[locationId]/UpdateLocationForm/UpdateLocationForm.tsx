@@ -1,7 +1,7 @@
 "use client";
 import type { LocationID } from "@repo/validators/ids.validators";
-import useUpdateLocationForm from "./useUpdateLocationForm";
 
+import { Button } from "@repo/ui/button";
 import {
   Card,
   CardContent,
@@ -11,14 +11,15 @@ import {
 } from "@repo/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import useUpdateLocationForm from "./useUpdateLocationForm";
 
 interface UpdateLocationFormProps {
   locationId: LocationID;

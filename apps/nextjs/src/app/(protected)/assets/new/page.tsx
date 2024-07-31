@@ -1,7 +1,9 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+
 import { BackButton } from "~/app/_components/BackButton";
 import { DetailsPage, DetailsPageToolbar } from "~/app/_components/DetailsPage";
+
 import CreateAssetForm from "./CreateAssetForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
 export default function CreateAssetPage() {
   return (

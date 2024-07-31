@@ -1,19 +1,20 @@
 "use client";
-import Link from "next/link";
-import { login } from "./server-action";
-import { defaultLogin, loginFormSchema } from "./schema";
+import { Button } from "@repo/ui/button";
 import {
-  useForm,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  useForm,
 } from "@repo/ui/form";
-import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+import { defaultLogin, loginFormSchema } from "./schema";
+import { login } from "./server-action";
 
 export default function LoginForm() {
   const form = useForm({
@@ -62,10 +63,10 @@ export default function LoginForm() {
         />
 
         <Button type="submit">Submit</Button>
-        <Button variant="link" asChild>
+        <Button asChild variant="link">
           <Link href="/forgot-password">Forgot password?</Link>
         </Button>
-        <Button variant="link" asChild>
+        <Button asChild variant="link">
           <Link href="/register">Register</Link>
         </Button>
       </form>

@@ -1,17 +1,18 @@
-import { TRPCError } from "@trpc/server";
-import { protectedProcedure, router } from "../trpc";
 import clientsController from "@repo/db/controllers/clients.controller";
 import clientSchemas from "@repo/validators/clients.validators";
-import {
-  createMetadata,
-  deleteMetadata,
-  updateMetadata,
-} from "../helpers/includeMetadata";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
+import { TRPCError } from "@trpc/server";
+
+import {
+  createMetadata,
+  deleteMetadata,
+  updateMetadata,
+} from "../helpers/includeMetadata";
+import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure

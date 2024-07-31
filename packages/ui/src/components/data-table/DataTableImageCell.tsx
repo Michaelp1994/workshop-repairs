@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface DataTableImageCellProps {
   url: string;
   alt: string;
@@ -8,11 +6,11 @@ interface DataTableImageCellProps {
 export function DataTableImageCell({ url, alt }: DataTableImageCellProps) {
   return (
     <img
-      className="aspect-square rounded-md object-cover"
-      src={url}
       alt={alt}
-      width={64}
+      className="aspect-square rounded-md object-cover"
       height={64}
+      src={url}
+      width={64}
     />
   );
 }

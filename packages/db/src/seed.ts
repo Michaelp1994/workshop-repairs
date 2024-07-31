@@ -1,23 +1,22 @@
-import { db } from "./index";
+import { sql } from "drizzle-orm";
 
+import { db } from "./index";
+import { schema } from "./schema";
 import assetStatusesData from "./seeds/asset_statuses.json";
 import assetsData from "./seeds/assets.json";
 import clientsData from "./seeds/clients.json";
 import locationsData from "./seeds/locations.json";
 import manufacturersData from "./seeds/manufacturers.json";
 import modelsData from "./seeds/models.json";
-import partsToModelsData from "./seeds/parts_to_models.json";
 import partsData from "./seeds/parts.json";
+import partsToModelsData from "./seeds/parts_to_models.json";
 import repairCommentsData from "./seeds/repair_comments.json";
 import repairPartsData from "./seeds/repair_parts.json";
+import repairStatusTypesData from "./seeds/repair_status_types.json";
 import repairTypesData from "./seeds/repair_types.json";
 import repairsData from "./seeds/repairs.json";
 import userTypesData from "./seeds/user_types.json";
 import usersData from "./seeds/users.json";
-import repairStatusTypesData from "./seeds/repair_status_types.json";
-
-import { schema } from "./schema";
-import { sql } from "drizzle-orm";
 
 const {
   assets,

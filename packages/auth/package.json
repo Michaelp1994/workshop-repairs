@@ -5,20 +5,26 @@
   "keywords": [],
   "license": "ISC",
   "author": "",
+  "type": "module",
   "exports": {
     ".": "./src/auth.ts"
   },
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf .turbo node_modules dist",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@repo/db": "workspace: *",
-    "@repo/validators": "workspace: *",
+    "@repo/db": "workspace:^",
+    "@repo/validators": "workspace:^",
     "bcrypt": "^5.1.1",
     "next-auth": "beta"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/bcrypt": "^5.0.2",
+    "eslint": "^9.8.0"
   }
 }

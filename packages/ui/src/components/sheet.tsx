@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "../lib/utils";
 
@@ -60,8 +60,8 @@ const SheetContent = React.forwardRef<
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content
-      ref={ref}
       className={cn(sheetVariants({ side }), className)}
+      ref={ref}
       {...props}
     >
       {children}
@@ -107,8 +107,8 @@ const SheetTitle = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Title
-    ref={ref}
     className={cn("text-foreground text-lg font-semibold", className)}
+    ref={ref}
     {...props}
   />
 ));
@@ -119,8 +119,8 @@ const SheetDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Description
-    ref={ref}
     className={cn("text-muted-foreground text-sm", className)}
+    ref={ref}
     {...props}
   />
 ));
@@ -128,13 +128,13 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 export {
   Sheet,
-  SheetPortal,
-  SheetOverlay,
-  SheetTrigger,
   SheetClose,
   SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
   SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
 };

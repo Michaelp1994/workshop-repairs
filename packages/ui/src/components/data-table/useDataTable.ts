@@ -79,9 +79,11 @@ export function useDataTableState(initialData?: InitialDataTableState) {
   };
 }
 
-interface BaseData {
-  id: number;
-}
+// interface BaseData {
+//   // id: number;
+// }
+
+type BaseData = Record<string, unknown>;
 
 type RedactedTableOptions<TData extends BaseData> = Omit<
   TableOptions<TData>,
@@ -98,7 +100,7 @@ export function useDataTable<TData extends BaseData>({
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-    getRowId: getRowId ? getRowId : (row) => row.id.toString(),
+    getRowId: getRowId ? getRowId : (row) => row["id"].toString(),
     rowCount: rowCount ?? -1,
     ...otherProps,
   });

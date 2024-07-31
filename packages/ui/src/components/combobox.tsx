@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "../lib/utils";
 import { Button } from "./button";
@@ -44,13 +44,13 @@ export const Combobox = React.forwardRef<
   );
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
-          role="combobox"
           aria-expanded={open}
           className={cn("flex w-full justify-between", className)}
+          role="combobox"
+          variant="outline"
           {...props}
           ref={ref}
         >
@@ -67,9 +67,9 @@ export const Combobox = React.forwardRef<
               {data.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value.toString()}
-                  onSelect={handleSelect}
                   keywords={[option.label]}
+                  onSelect={handleSelect}
+                  value={option.value.toString()}
                 >
                   <Check
                     className={cn(

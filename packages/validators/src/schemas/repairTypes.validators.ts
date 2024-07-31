@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { repairTypeId } from "./ids.validators";
 
 const repairTypeColumns = z.enum(["name", "createdAt", "updatedAt"]);

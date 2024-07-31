@@ -1,6 +1,7 @@
-import { PgColumn } from "drizzle-orm/pg-core";
-import { formatSearch } from "./formatSearch";
 import { ilike, or } from "drizzle-orm";
+import { PgColumn } from "drizzle-orm/pg-core";
+
+import { formatSearch } from "./formatSearch";
 
 export function getGlobalFilterParams(
   globalFilter: string,

@@ -1,6 +1,4 @@
 "use client";
-import { api } from "~/trpc/react";
-import RepairsTableStatusFilter from "./RepairsTableStatusFilter";
 import {
   DataTable,
   DataTableFooter,
@@ -9,11 +7,15 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
+
+import { api } from "~/trpc/react";
 import {
   defaultCountQueryOptns,
   defaultDataQueryOptns,
 } from "~/utils/defaultQueryOptns";
+
 import { columns } from "./columns";
+import RepairsTableStatusFilter from "./RepairsTableStatusFilter";
 
 interface RepairsTableProps {
   initialState: InitialDataTableState;
@@ -53,8 +55,8 @@ export default function RepairsTable({ initialState }: RepairsTableProps) {
   return (
     <>
       <DataTableToolbar
-        table={table}
         ColumnFilter={<RepairsTableStatusFilter table={table} />}
+        table={table}
       />
       <DataTable table={table} />
       <DataTableFooter table={table} />

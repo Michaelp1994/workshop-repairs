@@ -1,3 +1,5 @@
+import { flexRender, type Table as iTable } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -6,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "../table";
-import { flexRender, type Table as iTable } from "@tanstack/react-table";
 
 interface DataTableProps<T> {
   table: iTable<T>;

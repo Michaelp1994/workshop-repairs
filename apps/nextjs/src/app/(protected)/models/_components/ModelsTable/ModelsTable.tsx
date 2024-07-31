@@ -7,11 +7,13 @@ import {
   useDataTableState,
 } from "@repo/ui/data-table";
 import { type ManufacturerID } from "@repo/validators/ids.validators";
+
 import { api } from "~/trpc/react";
 import {
   defaultCountQueryOptns,
   defaultDataQueryOptns,
 } from "~/utils/defaultQueryOptns";
+
 import { columns } from "./columns";
 
 interface ModelsTableProps {

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,8 +8,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@repo/ui/breadcrumb";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 export function NextBreadcrumb() {
   const paths = usePathname();

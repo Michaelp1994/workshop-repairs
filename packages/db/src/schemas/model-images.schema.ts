@@ -1,12 +1,12 @@
 import {
+  type AnyPgColumn,
+  integer,
   pgTable,
   serial,
-  varchar,
-  integer,
   timestamp,
-  type AnyPgColumn,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { users } from "./users.schema";
+
 import {
   type InferCreateModel,
   type InferDeleteModel,
@@ -14,6 +14,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { models } from "./models.schema";
+import { users } from "./users.schema";
 
 export const modelImages = pgTable("model_images", {
   id: serial("id").primaryKey(),

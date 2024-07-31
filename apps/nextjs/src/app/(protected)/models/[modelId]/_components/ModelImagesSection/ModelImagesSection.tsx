@@ -1,11 +1,11 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { type ModelID } from "@repo/validators/ids.validators";
 import { Upload } from "@repo/ui/icons";
-
-import { api } from "~/trpc/react";
+import { type ModelID } from "@repo/validators/ids.validators";
 import Image from "next/image";
 import Link from "next/link";
+
+import { api } from "~/trpc/react";
 
 interface ModelImagesSectionProps {
   modelId: ModelID;
@@ -41,10 +41,10 @@ export default function ModelImagesSection({
                 key={modelImage.id}
               >
                 <img
-                  key={modelImage.id}
                   alt={modelImage.caption}
                   className="aspect-square w-full rounded-md object-cover"
                   height="84"
+                  key={modelImage.id}
                   src={modelImage.url}
                   width="84"
                 />

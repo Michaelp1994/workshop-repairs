@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import ProfileButton from "./ProfileButton";
 
 const navList = [
@@ -42,9 +43,9 @@ export default function NavBar() {
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
         {navList.map((navItem) => (
           <Link
+            className="text-foreground hover:text-foreground transition-colors"
             href={navItem.to}
             key={navItem.to}
-            className="text-foreground hover:text-foreground transition-colors"
           >
             {navItem.label}
           </Link>

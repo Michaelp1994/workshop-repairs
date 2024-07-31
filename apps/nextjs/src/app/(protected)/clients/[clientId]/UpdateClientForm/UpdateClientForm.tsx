@@ -1,23 +1,20 @@
 "use client";
 import type { ClientID } from "@repo/validators/ids.validators";
-import { useUpdateClientForm } from "./useUpdateClientForm";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@repo/ui/card";
+
 import {
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import { useUpdateClientForm } from "./useUpdateClientForm";
 
 interface BaseFormProps {
   clientId: ClientID;
@@ -28,7 +25,6 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
     isLoading,
     data: client,
     isError,
-    deleteClient,
     form,
   } = useUpdateClientForm(clientId);
 
@@ -41,38 +37,27 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Client Details</CardTitle>
-      </CardHeader>
-      <Form {...form}>
-        <CardContent>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+    <Form {...form}>
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </CardContent>
-        <CardFooter>
-          {form.enabled && (
-            <div>
-              <Button type="reset">Reset</Button>
-              <Button type="submit">Submit</Button>
-            </div>
-          )}
-        </CardFooter>
-      </Form>
-    </Card>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
+    </Form>
   );
 }

@@ -1,5 +1,5 @@
 import type { ModelID } from "@repo/validators/ids.validators";
-import CreateModelImageForm from "./CreateModelImageForm";
+
 import {
   Card,
   CardContent,
@@ -7,12 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+
+import { BackButton } from "~/app/_components/BackButton";
 import {
   DetailsPage,
   DetailsPageTitle,
   DetailsPageToolbar,
 } from "~/app/_components/DetailsPage";
-import { BackButton } from "~/app/_components/BackButton";
+
+import CreateModelImageForm from "./CreateModelImageForm";
 
 interface CreateModelImagePageProps {
   params: {

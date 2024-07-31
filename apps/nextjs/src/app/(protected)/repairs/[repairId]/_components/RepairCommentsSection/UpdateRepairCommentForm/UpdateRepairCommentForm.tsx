@@ -1,15 +1,20 @@
+import type { RepairCommentID } from "@repo/validators/ids.validators";
+
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import type { RepairCommentID } from "@repo/validators/ids.validators";
-import useUpdateRepairCommentForm from "./useUpdateRepairCommentForm";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import useUpdateRepairCommentForm from "./useUpdateRepairCommentForm";
 
 interface UpdateRepairCommentFormProps {
   repairCommentId: RepairCommentID;
@@ -46,8 +51,10 @@ export default function UpdateRepairCommentForm({
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

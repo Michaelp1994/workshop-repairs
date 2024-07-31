@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { clientId } from "./ids.validators";
 
 const clientColumns = z.enum(["name", "createdAt", "updatedAt"]);

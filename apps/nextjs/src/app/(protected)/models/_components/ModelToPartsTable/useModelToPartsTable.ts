@@ -1,23 +1,25 @@
-import {
-  type OnChangeFn,
-  type RowSelectionState,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { columns } from "./columns";
-import { api } from "~/trpc/react";
-import { useState } from "react";
-import { keepPreviousData } from "@tanstack/react-query";
-import { useDebounce } from "@uidotdev/usehooks";
+import { type ModelID } from "@repo/validators/ids.validators";
+import { type PartsToModelsColumns } from "@repo/validators/partsToModel.validators";
 import {
   type ColumnsInput,
   type FilterInput,
   type PaginationInput,
   type SortingInput,
 } from "@repo/validators/types";
+import { keepPreviousData } from "@tanstack/react-query";
+import {
+  getCoreRowModel,
+  type OnChangeFn,
+  type RowSelectionState,
+  useReactTable,
+} from "@tanstack/react-table";
 import { type SortingState } from "@tanstack/react-table";
-import { type ModelID } from "@repo/validators/ids.validators";
-import { type PartsToModelsColumns } from "@repo/validators/partsToModel.validators";
+import { useDebounce } from "@uidotdev/usehooks";
+import { useState } from "react";
+
+import { api } from "~/trpc/react";
+
+import { columns } from "./columns";
 
 interface UseModelToPartsTableInput {
   modelId: ModelID;

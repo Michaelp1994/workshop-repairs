@@ -1,3 +1,4 @@
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -6,10 +7,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import { useChangePasswordForm } from "./useChangePasswordForm";
-import Link from "next/link";
-import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
+import Link from "next/link";
+
+import { useChangePasswordForm } from "./useChangePasswordForm";
 
 export default function ChangePasswordForm() {
   const form = useChangePasswordForm();
@@ -50,7 +51,7 @@ export default function ChangePasswordForm() {
       />
 
       <Button type="submit">Login</Button>
-      <Button variant="link" asChild>
+      <Button asChild variant="link">
         <Link href="/forgot-password">Forgot password?</Link>
       </Button>
     </Form>

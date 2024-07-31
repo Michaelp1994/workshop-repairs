@@ -1,4 +1,5 @@
 import { type LocationID } from "@repo/validators/ids.validators";
+
 import UpdateLocationForm from "./UpdateLocationForm";
 
 // import AssetsTable from "~/features/assets/components/AssetsTable";

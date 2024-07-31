@@ -1,14 +1,16 @@
-import RepairsTable from "./_components/RepairsTable";
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardWrapper,
   CardToolbar,
+  CardWrapper,
 } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
+
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import RepairsTable from "./_components/RepairsTable";
 
 export default function AllRepairsPage() {
   const initialState: InitialDataTableState = {

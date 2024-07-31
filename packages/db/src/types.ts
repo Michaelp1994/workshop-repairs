@@ -1,6 +1,6 @@
 import {
-  type InferSelectModel,
   type InferInsertModel,
+  type InferSelectModel,
   type Table,
 } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
@@ -84,8 +84,8 @@ type InferCreateModel<
 > = CreateInput<InferInsertModel<TTable, TConfig>>;
 
 export type {
-  InferSelectModel as InferModel,
   InferCreateModel,
-  InferUpdateModel,
   InferDeleteModel,
+  InferSelectModel as InferModel,
+  InferUpdateModel,
 };

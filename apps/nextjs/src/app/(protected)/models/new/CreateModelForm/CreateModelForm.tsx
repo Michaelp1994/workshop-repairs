@@ -3,15 +3,18 @@ import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import { useCreateModelForm } from "./useCreateModelForm";
+import { Input } from "@repo/ui/input";
+
 import ManufacturerSelect from "~/app/_components/ManufacturerSelect";
 
-import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+import { useCreateModelForm } from "./useCreateModelForm";
 
 export default function CreateModelForm() {
   const form = useCreateModelForm();
@@ -50,8 +53,10 @@ export default function CreateModelForm() {
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

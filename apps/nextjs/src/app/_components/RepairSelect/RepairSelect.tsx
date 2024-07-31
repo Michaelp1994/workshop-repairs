@@ -1,5 +1,6 @@
 import { Combobox, type ComboboxProps } from "@repo/ui/combobox";;
 import { type ElementRef, forwardRef } from "react";
+
 import { api } from "~/trpc/react";
 
 const RepairSelect = forwardRef<
@@ -12,7 +13,7 @@ const RepairSelect = forwardRef<
     return <div>Error</div>;
   }
 
-  return <Combobox ref={ref} isLoading={isLoading} data={data} {...props} />;
+  return <Combobox data={data} isLoading={isLoading} ref={ref} {...props} />;
 });
 
 RepairSelect.displayName = "RepairSelect";

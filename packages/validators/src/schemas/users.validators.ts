@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { userId, userTypeId } from "./ids.validators";
 
 const userColumns = z.enum([

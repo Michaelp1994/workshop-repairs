@@ -1,10 +1,11 @@
-import {
-  locationFormSchema,
-  defaultLocation,
-} from "~/schemas/locations.schema";
-import { toast } from "@repo/ui/sonner";
-import { api } from "~/trpc/react";
 import { useForm } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
+
+import {
+  defaultLocation,
+  locationFormSchema,
+} from "~/schemas/locations.schema";
+import { api } from "~/trpc/react";
 
 export function useCreateLocationForm() {
   const createMutation = api.locations.create.useMutation({

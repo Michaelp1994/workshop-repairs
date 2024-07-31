@@ -1,10 +1,9 @@
-import { type NextRequest, NextResponse } from "next/server";
-
 import {
-  S3Client,
   ListObjectsCommand,
   PutObjectCommand,
+  S3Client,
 } from "@aws-sdk/client-s3";
+import { type NextRequest, NextResponse } from "next/server";
 
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   throw new Error("AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY must be set");
@@ -35,7 +34,7 @@ export async function GET() {
   console.log("saved");
   console.log(response);
   const allObjects = await s3.send(new ListObjectsCommand({ Bucket }));
-  return NextResponse.json(allObjects?.Contents ?? []);
+  return NextResponse.json(allObjects.Contents ?? []);
 }
 
 // // endpoint to upload a file to the bucket

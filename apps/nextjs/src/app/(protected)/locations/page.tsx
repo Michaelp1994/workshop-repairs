@@ -1,14 +1,15 @@
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardWrapper,
   CardToolbar,
+  CardWrapper,
 } from "@repo/ui/card";
 
-import LocationsTable from "./components/LocationsTable";
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import LocationsTable from "./components/LocationsTable";
 
 export default function AllLocationsPage() {
   return (

@@ -6,13 +6,15 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { useManufacturersTable } from "./useManufacturersTable";
+
 import { api } from "~/trpc/react";
-import { columns } from "./columns";
 import {
   defaultCountQueryOptns,
   defaultDataQueryOptns,
 } from "~/utils/defaultQueryOptns";
+
+import { columns } from "./columns";
+import { useManufacturersTable } from "./useManufacturersTable";
 
 export default function ManufacturersTable() {
   const { dataState, countState, tableOptions } = useDataTableState();

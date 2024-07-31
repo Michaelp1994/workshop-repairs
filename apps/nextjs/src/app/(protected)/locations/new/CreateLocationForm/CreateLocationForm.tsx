@@ -1,16 +1,19 @@
 "use client";
+import { Button } from "@repo/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
 import { useCreateLocationForm } from "./useCreateLocationForm";
-import { Button } from "@repo/ui/button";
 
 export default function CreateLocationForm() {
   const form = useCreateLocationForm();
@@ -49,8 +52,10 @@ export default function CreateLocationForm() {
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

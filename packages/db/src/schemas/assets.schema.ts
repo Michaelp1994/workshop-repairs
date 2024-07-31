@@ -1,20 +1,22 @@
 import {
-  varchar,
-  serial,
-  pgTable,
   integer,
+  pgTable,
+  serial,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
+
+import type {
+  InferCreateModel,
+  InferDeleteModel,
+  InferModel,
+  InferUpdateModel,
+} from "../types";
+
+import { assetStatuses } from "./asset-statuses.schema";
+import { locations } from "./locations.schema";
 import { models } from "./models.schema";
 import { users } from "./users.schema";
-import { locations } from "./locations.schema";
-import { assetStatuses } from "./asset-statuses.schema";
-import type {
-  InferDeleteModel,
-  InferUpdateModel,
-  InferCreateModel,
-  InferModel,
-} from "../types";
 
 export const assets = pgTable("assets", {
   id: serial("id").primaryKey(),

@@ -1,17 +1,18 @@
-import { TRPCError } from "@trpc/server";
-import { protectedProcedure, router } from "../trpc";
 import modelImagesController from "@repo/db/controllers/modelImages.controller";
 import modelsController from "@repo/db/controllers/models.controller";
+import {
+  getAllSchema,
+  getCountSchema,
+} from "@repo/validators/dataTables.validators";
 import modelImageSchemas from "@repo/validators/modelImages.validators";
+import { TRPCError } from "@trpc/server";
+
 import {
   createMetadata,
   deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import {
-  getAllSchema,
-  getCountSchema,
-} from "@repo/validators/dataTables.validators";
+import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure

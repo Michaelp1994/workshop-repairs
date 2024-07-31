@@ -1,19 +1,20 @@
 import {
+  boolean,
+  integer,
   pgTable,
   serial,
-  integer,
   timestamp,
-  boolean,
 } from "drizzle-orm/pg-core";
-import { repairs } from "./repairs.schema";
-import { users } from "./users.schema";
-import { parts } from "./parts.schema";
+
 import {
   type InferCreateModel,
   type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { parts } from "./parts.schema";
+import { repairs } from "./repairs.schema";
+import { users } from "./users.schema";
 
 export const repairParts = pgTable("repair_parts", {
   id: serial("id").primaryKey(),

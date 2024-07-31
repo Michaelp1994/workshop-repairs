@@ -1,5 +1,6 @@
-import CreateModelForm from "./CreateModelForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+
+import CreateModelForm from "./CreateModelForm";
 
 export default function CreateModelPage() {
   return (

@@ -1,6 +1,6 @@
 import { models } from "../schemas/models.schema";
-import { partsToModels } from "../schemas/parts-to-models.schema";
 import { parts } from "../schemas/parts.schema";
+import { partsToModels } from "../schemas/parts-to-models.schema";
 
 export const partsToModelsOrderMapping = {
   part_name: parts.name,

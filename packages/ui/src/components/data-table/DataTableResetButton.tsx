@@ -1,6 +1,7 @@
+import { type Table } from "@tanstack/react-table";
+
 import { Button } from "../button";
 import { SlidersHorizontal } from "../icons";
-import { type Table } from "@tanstack/react-table";
 
 interface DataTableResetButtonProps<T> {
   table: Table<T>;
@@ -11,8 +12,6 @@ export function DataTableResetButton<T>({
 }: DataTableResetButtonProps<T>) {
   return (
     <Button
-      variant="outline"
-      size="sm"
       onClick={() => {
         table.resetPageIndex();
         table.resetPagination();
@@ -23,6 +22,8 @@ export function DataTableResetButton<T>({
         // table.resetColumnFilters();
         // table.reset();
       }}
+      size="sm"
+      variant="outline"
     >
       <SlidersHorizontal className="h-4 w-4" />
       Reset

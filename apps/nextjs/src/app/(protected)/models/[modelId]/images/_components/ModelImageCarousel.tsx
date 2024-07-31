@@ -13,6 +13,7 @@ import { Star } from "@repo/ui/icons";
 import { toast } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
 import Image from "next/image";
+
 import { api } from "~/trpc/react";
 
 interface ModelImageCarouselProps extends CarouselProps {
@@ -35,9 +36,9 @@ export default function ModelImageCarousel({
           <CarouselItem key={image.id}>
             <div className="relative">
               <img
-                src={image.url}
                 alt={image.caption ?? ""}
                 className="mx-auto aspect-square rounded-md object-scale-down"
+                src={image.url}
               />
               <FavouriteButton favourite={image.favourite} id={image.id} />
             </div>
@@ -65,12 +66,12 @@ function FavouriteButton({ favourite, id }: FavouriteButtonProps) {
   });
   return (
     <Button
-      variant="ghost"
-      size="icon"
       className="absolute right-0 top-0"
       onClick={() => {
         if (!favourite) favouriteMutation.mutate({ id });
       }}
+      size="icon"
+      variant="ghost"
     >
       <Star className={cn("h-4 w-4", favourite && "fill-current")} />
     </Button>

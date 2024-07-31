@@ -1,17 +1,17 @@
-import { TRPCError } from "@trpc/server";
-import { protectedProcedure, router } from "../trpc";
 import repairPartsController from "@repo/db/controllers/repairParts.controller";
-import repairPartSchemas from "@repo/validators/repairParts.validators";
-import {
-  deleteMetadata,
-  createMetadata,
-  updateMetadata,
-} from "../helpers/includeMetadata";
 import {
   getAllSchema,
   getCountSchema,
-  getSelectSchema,
 } from "@repo/validators/dataTables.validators";
+import repairPartSchemas from "@repo/validators/repairParts.validators";
+import { TRPCError } from "@trpc/server";
+
+import {
+  createMetadata,
+  deleteMetadata,
+  updateMetadata,
+} from "../helpers/includeMetadata";
+import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure

@@ -1,10 +1,11 @@
+import { useForm } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
+
 import {
   changePasswordFormSchema,
   defaultChangePassword,
 } from "~/schemas/auth.schema";
-import { toast } from "@repo/ui/sonner";
 import { api } from "~/trpc/react";
-import { useForm } from "@repo/ui/form";
 
 export function useChangePasswordForm() {
   const changePasswordMutation = api.auth.changePassword.useMutation({

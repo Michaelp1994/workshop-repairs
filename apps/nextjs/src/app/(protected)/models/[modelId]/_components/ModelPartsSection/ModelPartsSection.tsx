@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
 import { type ModelID } from "@repo/validators/ids.validators";
-import PartsTable from "~/app/(protected)/parts/components/PartsTable";
+
+import ModelPartsTable from "./ModelPartsTable";
 
 interface ModelPartsSectionProps {
   modelId: ModelID;
@@ -25,7 +26,7 @@ export default function ModelPartsSection({ modelId }: ModelPartsSectionProps) {
         <CardTitle>Parts</CardTitle>
       </CardHeader>
       <CardContent>
-        <PartsTable initialState={initialState} />
+        <ModelPartsTable initialState={initialState} />
       </CardContent>
     </Card>
   );

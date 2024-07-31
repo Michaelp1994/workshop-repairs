@@ -1,17 +1,18 @@
 import {
-  varchar,
-  serial,
-  pgTable,
-  timestamp,
   integer,
+  pgTable,
+  serial,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { users } from "./users.schema";
+
 import {
   type InferCreateModel,
+  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
-  type InferDeleteModel,
 } from "../types";
+import { users } from "./users.schema";
 
 export const locations = pgTable("locations", {
   id: serial("id").primaryKey(),

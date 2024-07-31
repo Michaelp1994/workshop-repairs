@@ -1,20 +1,21 @@
 import { and, count, eq, isNull } from "drizzle-orm";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
+
+import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import {
-  type DeletePart,
-  type CreatePart,
-  parts,
-  type UpdatePart,
-  type PartID,
-} from "../schemas/parts.schema";
+import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database } from "../index";
 import {
   partFilterMapping,
   partOrderMapping,
 } from "../mappings/parts.mappings";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import {
+  type CreatePart,
+  type DeletePart,
+  type PartID,
+  parts,
+  type UpdatePart,
+} from "../schemas/parts.schema";
 
 const globalFilterColumns = [parts.name];
 
@@ -63,7 +64,7 @@ export default {
     const [res] = await query.execute();
     return res?.count;
   },
-  async getSelect({ columnFilters }: GetSelect, db: Database) {
+  async getSelect(props: GetSelect, db: Database) {
     const query = db
       .select({
         value: parts.id,

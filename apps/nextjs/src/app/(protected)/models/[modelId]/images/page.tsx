@@ -1,7 +1,6 @@
 "use client";
 import type { ModelID } from "@repo/validators/ids.validators";
-import { api } from "~/trpc/react";
-import ModelImageCarousel from "./_components/ModelImageCarousel";
+
 import {
   Card,
   CardContent,
@@ -10,6 +9,10 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 import { useSearchParams } from "next/navigation";
+
+import { api } from "~/trpc/react";
+
+import ModelImageCarousel from "./_components/ModelImageCarousel";
 
 interface ModelImageGalleryModalProps {
   params: {

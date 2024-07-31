@@ -1,3 +1,7 @@
+import { type Table } from "@tanstack/react-table";
+import { SlidersHorizontal } from "lucide-react";
+
+import { Button } from "../../button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,9 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../dropdown-menu";
-import { type Table } from "@tanstack/react-table";
-import { SlidersHorizontal } from "lucide-react";
-import { Button } from "../../button";
 
 interface DataTableViewOptionsProps<T> {
   table: Table<T>;
@@ -23,7 +24,7 @@ export default function DataTableViewOptions<T>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button size="sm" variant="outline">
           <SlidersHorizontal className="h-4 w-4" />
           View
         </Button>
@@ -34,8 +35,8 @@ export default function DataTableViewOptions<T>({
         {visibleColumns.map((column) => {
           return (
             <DropdownMenuCheckboxItem
-              key={column.id}
               checked={column.getIsVisible()}
+              key={column.id}
               onCheckedChange={(value) => {
                 column.toggleVisibility(!!value);
               }}

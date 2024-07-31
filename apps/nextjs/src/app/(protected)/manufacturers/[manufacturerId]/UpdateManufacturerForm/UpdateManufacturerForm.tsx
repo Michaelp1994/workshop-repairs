@@ -1,24 +1,20 @@
 "use client";
 import type { ManufacturerID } from "@repo/validators/ids.validators";
-import useUpdateManufacturerForm from "./useUpdateManufacturerForm";
 
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@repo/ui/card";
-import {
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import useUpdateManufacturerForm from "./useUpdateManufacturerForm";
 
 interface UpdateManufacturerFormProps {
   manufacturerId: ManufacturerID;
@@ -39,38 +35,29 @@ export default function UpdateManufacturerForm({
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Manufacturer Details</CardTitle>
-      </CardHeader>
-      <Form {...form}>
-        <CardContent>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+    <Form {...form}>
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </CardContent>
-        <CardFooter>
-          {form.enabled && (
-            <>
-              <Button type="reset">Reset</Button>
-              <Button type="submit">Submit</Button>
-            </>
-          )}
-        </CardFooter>
-      </Form>
-    </Card>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+      {form.enabled && (
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
+      )}
+    </Form>
   );
 }

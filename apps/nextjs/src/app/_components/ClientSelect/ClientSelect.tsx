@@ -1,5 +1,6 @@
-import { Combobox, type ComboboxProps } from "@repo/ui/combobox";;
+import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
 import { type ElementRef, forwardRef } from "react";
+
 import { api } from "~/trpc/react";
 
 const ClientSelect = forwardRef<
@@ -12,7 +13,7 @@ const ClientSelect = forwardRef<
     return <div>Error</div>;
   }
 
-  return <Combobox ref={ref} data={data} isLoading={isLoading} {...props} />;
+  return <Combobox data={data} isLoading={isLoading} ref={ref} {...props} />;
 });
 
 ClientSelect.displayName = "ClientSelect";

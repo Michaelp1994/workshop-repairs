@@ -1,4 +1,3 @@
-import AssetsTable from "./_components/AssetsTable";
 import {
   Card,
   CardContent,
@@ -9,7 +8,10 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
+
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import AssetsTable from "./_components/AssetsTable";
 
 export default function AllAssetsPage() {
   const initialState: InitialDataTableState = {

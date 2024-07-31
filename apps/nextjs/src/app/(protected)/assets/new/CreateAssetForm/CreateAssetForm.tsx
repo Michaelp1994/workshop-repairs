@@ -1,22 +1,24 @@
 "use client";
-import ModelSelect from "~/app/_components/ModelSelect";
-import LocationSelect from "~/app/_components/LocationSelect";
-
 import {
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
-import { api } from "~/trpc/react";
-import { assetFormSchema, defaultAsset } from "~/schemas";
-import { useRouter } from "next/navigation";
 import { toast } from "@repo/ui/sonner";
+import { useRouter } from "next/navigation";
+
+import LocationSelect from "~/app/_components/LocationSelect";
+import ModelSelect from "~/app/_components/ModelSelect";
+import { assetFormSchema, defaultAsset } from "~/schemas";
+import { api } from "~/trpc/react";
 
 interface CreateAssetFormProps {}
 
@@ -39,7 +41,7 @@ export default function CreateAssetForm({}: CreateAssetFormProps) {
   });
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((data) => createMutation.mutate(data))}>
+      <form onSubmit={form.handleSubmit((data) => { createMutation.mutate(data); })}>
         <FormField
           control={form.control}
           name="assetNumber"
@@ -105,10 +107,10 @@ export default function CreateAssetForm({}: CreateAssetFormProps) {
             );
           }}
         />
-        <div className="mt-4 flex justify-end gap-4">
-          <Button type="reset">Reset</Button>
-          <Button type="submit">Submit</Button>
-        </div>
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
       </form>
     </Form>
   );

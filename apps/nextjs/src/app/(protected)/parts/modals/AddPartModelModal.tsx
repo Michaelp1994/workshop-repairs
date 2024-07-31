@@ -1,3 +1,5 @@
+import type { PartID } from "@repo/validators/ids.validators";
+
 import {
   Dialog,
   DialogContent,
@@ -7,7 +9,7 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import type { PartID } from "@repo/validators/ids.validators";
+
 import AddPartModelForm from "./AddPartModelForm";
 
 interface AddPartModelModalProps {
@@ -17,11 +19,11 @@ interface AddPartModelModalProps {
 export default function AddPartModelModal({ partId }: AddPartModelModalProps) {
   return (
     <Dialog
-      open
       defaultOpen
       onOpenChange={() => {
         closeModal();
       }}
+      open
     >
       <DialogPortal>
         <DialogOverlay />

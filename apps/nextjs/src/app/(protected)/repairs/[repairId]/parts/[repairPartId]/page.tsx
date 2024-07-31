@@ -1,5 +1,5 @@
 import type { RepairID, RepairPartID } from "@repo/validators/ids.validators";
-import UpdateRepairPartForm from "./UpdateRepairPartForm";
+
 import {
   Card,
   CardContent,
@@ -7,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+
+import UpdateRepairPartForm from "./UpdateRepairPartForm";
 
 interface UpdateRepairPartModalProps {
   params: {

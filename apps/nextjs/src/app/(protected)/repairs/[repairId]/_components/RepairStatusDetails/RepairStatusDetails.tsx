@@ -1,17 +1,19 @@
 "use client";
-import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import {
+  Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
   useForm,
-  Form,
 } from "@repo/ui/form";
 import { type RepairID } from "@repo/validators/ids.validators";
 import { z } from "zod";
+
 import RepairStatusTypeSelect from "~/app/_components/RepairStatusTypeSelect";
 import { api } from "~/trpc/react";
 
@@ -40,10 +42,12 @@ export default function RepairStatusDetails({
       <CardContent>
         <Form {...form}>
           <form
+            onReset={() => {
+              form.reset();
+            }}
             onSubmit={form.handleSubmit((values) =>
               updateMutation.mutateAsync(values),
             )}
-            onReset={() => form.reset()}
           >
             <FormField
               control={form.control}
@@ -60,16 +64,12 @@ export default function RepairStatusDetails({
                 );
               }}
             />
-            <div className="mt-4 flex justify-end gap-4">
-              {form.formState.isDirty && (
-                <>
-                  <Button variant="ghost" type="reset">
-                    Reset
-                  </Button>
-                  <Button type="submit">Update</Button>
-                </>
-              )}
-            </div>
+            {form.formState.isDirty && (
+              <FormFooter>
+                <ResetButton />
+                <SubmitButton />
+              </FormFooter>
+            )}
           </form>
         </Form>
       </CardContent>

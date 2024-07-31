@@ -1,17 +1,20 @@
 "use client";
 import {
-  useForm,
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
+  useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
-import { register } from "./server-action";
+
 import { defaultRegister, registerFormSchema } from "./schema";
+import { register } from "./server-action";
 
 export default function RegisterForm() {
   const form = useForm({
@@ -85,9 +88,10 @@ export default function RegisterForm() {
             );
           }}
         />
-
-        <Button type="submit">Submit</Button>
-        <Button type="reset">Reset</Button>
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
       </form>
     </Form>
   );

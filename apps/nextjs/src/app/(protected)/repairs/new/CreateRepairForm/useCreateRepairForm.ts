@@ -1,12 +1,13 @@
-import { repairFormSchema, defaultRepair } from "~/schemas/repair.schema";
-import { toast } from "@repo/ui/sonner";
-import { api } from "~/trpc/react";
-import { useRouter } from "next/navigation";
 import { useForm } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
+import { useRouter } from "next/navigation";
+
+import { defaultRepair, repairFormSchema } from "~/schemas/repair.schema";
+import { api } from "~/trpc/react";
 export function useCreateRepairForm() {
   const router = useRouter();
   const createMutation = api.repairs.create.useMutation({
-    async onSuccess(values) {
+    onSuccess(values) {
       toast.success(`Repair created`);
       router.push(`/repairs/${values.id}`);
     },

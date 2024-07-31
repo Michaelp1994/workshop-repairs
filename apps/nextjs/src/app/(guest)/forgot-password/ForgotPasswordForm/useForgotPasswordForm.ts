@@ -1,12 +1,12 @@
+import { useForm } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
+import { useRouter } from "next/navigation";
+
 import {
   defaultLogin,
-  loginFormSchema,
   type LoginFormInput,
+  loginFormSchema,
 } from "~/schemas/auth.schema";
-import { toast } from "@repo/ui/sonner";
-import { useForm } from "@repo/ui/form";
-
-import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 
 export function useForgotPasswordForm() {

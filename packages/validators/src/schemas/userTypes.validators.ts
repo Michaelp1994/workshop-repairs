@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { userTypeId } from "./ids.validators";
 
 const userTypeColumns = z.enum(["name", "createdAt", "updatedAt"]);

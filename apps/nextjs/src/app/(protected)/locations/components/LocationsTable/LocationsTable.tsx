@@ -1,5 +1,4 @@
 "use client";
-import { api } from "~/trpc/react";
 import {
   DataTable,
   DataTableFooter,
@@ -7,10 +6,13 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
+
+import { api } from "~/trpc/react";
 import {
   defaultCountQueryOptns,
   defaultDataQueryOptns,
 } from "~/utils/defaultQueryOptns";
+
 import { columns } from "./columns";
 
 export default function LocationsTable() {

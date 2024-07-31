@@ -1,20 +1,25 @@
 "use client";
+import type { RepairPartID } from "@repo/validators/ids.validators";
+
+import { Button } from "@repo/ui/button";
+import { Checkbox } from "@repo/ui/checkbox";
 import {
   Form,
   FormControl,
   FormDescription,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import type { RepairPartID } from "@repo/validators/ids.validators";
-import { useCreateRepairPartForm } from "./useCreateRepairPartForm";
+import { Input } from "@repo/ui/input";
+
 import PartSelect from "~/app/_components/PartSelect";
 
-import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
-import { Checkbox } from "@repo/ui/checkbox";
+import { useCreateRepairPartForm } from "./useCreateRepairPartForm";
 
 interface CreateRepairPartFormProps {
   repairId: RepairPartID;
@@ -85,8 +90,10 @@ export default function CreateRepairPartForm({
         }}
       />
 
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

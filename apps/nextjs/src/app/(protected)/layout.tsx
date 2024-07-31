@@ -1,14 +1,14 @@
-import "~/styles/globals.css";
-
-import { Inter as FontSans } from "next/font/google";
-
-import { type Metadata } from "next";
-import { Toaster } from "@repo/ui/sonner";
-import NavBar from "~/app/_components/NavBar";
-import { TRPCReactProvider } from "~/trpc/react";
-import NextBreadcrumb from "../_components/Breadcrumb";
 import { auth } from "@repo/auth";
+import { Toaster } from "@repo/ui/sonner";
+import { type Metadata } from "next";
+import { Inter as FontSans } from "next/font/google";
 import { redirect } from "next/navigation";
+
+import NavBar from "~/app/_components/NavBar";
+import "~/styles/globals.css";
+import { TRPCReactProvider } from "~/trpc/react";
+
+import NextBreadcrumb from "../_components/Breadcrumb";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,7 +33,7 @@ export default async function AuthLayout({ children }: RootLayoutProps) {
   }
 
   return (
-    <html lang="en" className={`${fontSans.variable} h-full`}>
+    <html className={`${fontSans.variable} h-full`} lang="en">
       <body className="bg-muted/40 h-screen w-screen">
         <TRPCReactProvider>
           <div className="grid h-screen w-screen grid-rows-[auto_1fr]">

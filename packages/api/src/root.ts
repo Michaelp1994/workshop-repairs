@@ -1,5 +1,5 @@
-import { createCallerFactory, router } from "./trpc";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+
 import assets from "./routers/assets.router";
 import clients from "./routers/clients.router";
 import locations from "./routers/locations.router";
@@ -17,6 +17,7 @@ import repairStatusTypes from "./routers/repairStatusTypes.router";
 import repairTypes from "./routers/repairTypes.router";
 import users from "./routers/users.router";
 import userTypes from "./routers/userTypes.router";
+import { createCallerFactory, router } from "./trpc";
 /**
  * This is the primary router for your server.
  *

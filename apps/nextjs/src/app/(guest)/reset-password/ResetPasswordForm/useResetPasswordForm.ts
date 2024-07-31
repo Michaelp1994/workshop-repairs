@@ -1,11 +1,13 @@
+import { useForm } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
+import { useRouter } from "next/navigation";
+
 import {
   defaultResetPassword,
   resetPasswordFormSchema,
 } from "~/schemas/auth.schema";
-import { toast } from "@repo/ui/sonner";
-import { useForm } from "@repo/ui/form";
-import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
+
 import { useAuth } from "../../hooks/useAuth";
 
 export function useResetPasswordForm() {

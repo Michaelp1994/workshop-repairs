@@ -1,4 +1,3 @@
-import ClientsTable from "./_components/ClientsTable";
 import {
   Card,
   CardContent,
@@ -7,7 +6,10 @@ import {
   CardToolbar,
   CardWrapper,
 } from "@repo/ui/card";
+
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import ClientsTable from "./_components/ClientsTable";
 
 export default function AllClientsPage() {
   return (

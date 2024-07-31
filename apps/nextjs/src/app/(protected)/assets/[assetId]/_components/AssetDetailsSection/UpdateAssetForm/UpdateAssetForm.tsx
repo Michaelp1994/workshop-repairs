@@ -1,20 +1,25 @@
 "use client";
 import type { AssetID } from "@repo/validators/ids.validators";
-import LocationSelect from "~/app/_components/LocationSelect";
+
+import { Button } from "@repo/ui/button";
 import {
-  useForm,
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
+  ResetButton,
+  SubmitButton,
+  useForm,
 } from "@repo/ui/form";
-import { api } from "~/trpc/react";
-import { toast } from "@repo/ui/sonner";
-import { type AssetFormInput, assetFormSchema } from "~/schemas";
-import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
+
+import LocationSelect from "~/app/_components/LocationSelect";
+import { type AssetFormInput, assetFormSchema } from "~/schemas";
+import { api } from "~/trpc/react";
 
 interface AssetDetailsProps {
   assetId: AssetID;
@@ -54,7 +59,7 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} onReset={() => form.reset()}>
+      <form onReset={() => { form.reset(); }} onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="assetNumber"
@@ -100,16 +105,15 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
             );
           }}
         />
-        <div className="mt-4 flex justify-end gap-4">
+        <FormFooter>
           {form.formState.isDirty && (
             <>
-              <Button variant="ghost" type="reset">
-                Reset
-              </Button>
-              <Button type="submit">Update</Button>
+              <ResetButton />
+
+              <SubmitButton />
             </>
           )}
-        </div>
+        </FormFooter>
       </form>
     </Form>
   );

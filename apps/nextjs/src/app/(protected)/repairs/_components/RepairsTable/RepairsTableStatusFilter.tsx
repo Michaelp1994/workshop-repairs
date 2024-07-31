@@ -1,5 +1,6 @@
-import { type Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "@repo/ui/data-table";
+import { type Table } from "@tanstack/react-table";
+
 import { api } from "~/trpc/react";
 
 interface RepairsTableStatusFilterProps<T> {
@@ -17,6 +18,6 @@ export default function RepairsTableStatusFilter<T>({
   if (isLoading) return null;
   if (isError) return null;
   return (
-    <DataTableFacetedFilter column={column} title="Status" options={data} />
+    <DataTableFacetedFilter column={column} options={data} title="Status" />
   );
 }

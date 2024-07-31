@@ -1,12 +1,13 @@
-import { serial, pgTable, integer, timestamp, text } from "drizzle-orm/pg-core";
-import { repairs } from "./repairs.schema";
-import { users } from "./users.schema";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+
 import {
   type InferCreateModel,
+  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
-  type InferDeleteModel,
 } from "../types";
+import { repairs } from "./repairs.schema";
+import { users } from "./users.schema";
 
 export const repairComments = pgTable("repair_comments", {
   id: serial("id").primaryKey(),

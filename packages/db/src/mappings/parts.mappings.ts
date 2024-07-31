@@ -1,5 +1,3 @@
-import { models } from "../schemas/models.schema";
-import { partsToModels } from "../schemas/parts-to-models.schema";
 import { parts } from "../schemas/parts.schema";
 
 export const partOrderMapping = {
@@ -10,5 +8,5 @@ export const partOrderMapping = {
 };
 
 export const partFilterMapping = {
-  model_id: partsToModels.modelId,
+  // model_id: partsToModels.modelId,
 };

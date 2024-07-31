@@ -3,17 +3,20 @@ import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import { useCreateRepairForm } from "./useCreateRepairForm";
-import AssetSelect from "~/app/_components/AssetSelect";
-import RepairTypeSelect from "~/app/_components/RepairTypeSelect";
-import RepairStatusTypeSelect from "~/app/_components/RepairStatusTypeSelect";
-
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import AssetSelect from "~/app/_components/AssetSelect";
+import RepairStatusTypeSelect from "~/app/_components/RepairStatusTypeSelect";
+import RepairTypeSelect from "~/app/_components/RepairTypeSelect";
+
+import { useCreateRepairForm } from "./useCreateRepairForm";
 
 interface CreateRepairFormProps {}
 
@@ -23,8 +26,8 @@ export default function CreateRepairForm({}: CreateRepairFormProps) {
   return (
     <Form {...form}>
       <form
+        onReset={() => { form.reset(); }}
         onSubmit={form.handleSubmit((data) => createMutation.mutateAsync(data))}
-        onReset={() => form.reset()}
       >
         <FormField
           control={form.control}
@@ -108,10 +111,10 @@ export default function CreateRepairForm({}: CreateRepairFormProps) {
             );
           }}
         />
-        <div className="flex justify-end gap-4">
-          <Button type="reset">Reset</Button>
-          <Button type="submit">Submit</Button>
-        </div>
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
       </form>
     </Form>
   );

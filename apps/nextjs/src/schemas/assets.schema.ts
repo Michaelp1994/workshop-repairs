@@ -1,10 +1,10 @@
-import { z } from "zod";
 import {
   assetStatusId,
   clientId,
   locationId,
   modelId,
 } from "@repo/validators/ids.validators";
+import { z } from "zod";
 
 export const assetFormSchema = z.object({
   assetNumber: z.string().min(3),

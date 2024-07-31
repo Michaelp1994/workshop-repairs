@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { manufacturerId } from "@repo/validators/ids.validators";
+import { z } from "zod";
 
 export const modelFormSchema = z.object({
   name: z.string().min(3),

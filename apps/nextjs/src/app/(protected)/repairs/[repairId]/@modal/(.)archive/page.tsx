@@ -1,4 +1,6 @@
 "use client";
+import type { RepairID } from "@repo/validators/ids.validators";
+
 import { Button } from "@repo/ui/button";
 import {
   Dialog,
@@ -10,9 +12,9 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { toast } from "@repo/ui/sonner";
-import type { RepairID } from "@repo/validators/ids.validators";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { api } from "~/trpc/react";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
@@ -33,7 +35,7 @@ export default function ArchiveRepairModal({
     router.back();
   }
   return (
-    <Dialog open defaultOpen onOpenChange={() => router.back()}>
+    <Dialog defaultOpen onOpenChange={() => { router.back(); }} open>
       <DialogPortal>
         <DialogOverlay />
         <DialogContent>
@@ -44,8 +46,8 @@ export default function ArchiveRepairModal({
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-4">
-            <Button onClick={() => router.back()}>No</Button>
-            <Button variant="destructive" onClick={archiveRepair}>
+            <Button onClick={() => { router.back(); }}>No</Button>
+            <Button onClick={archiveRepair} variant="destructive">
               Yes, I am sure
             </Button>
           </div>

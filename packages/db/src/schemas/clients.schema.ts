@@ -1,17 +1,19 @@
 import {
-  varchar,
-  serial,
-  pgTable,
-  timestamp,
   integer,
+  pgTable,
+  serial,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { users } from "./users.schema";
+
 import type {
   InferCreateModel,
   InferDeleteModel,
   InferModel,
   InferUpdateModel,
 } from "../types";
+
+import { users } from "./users.schema";
 
 export const clients = pgTable("clients", {
   id: serial("id").primaryKey(),

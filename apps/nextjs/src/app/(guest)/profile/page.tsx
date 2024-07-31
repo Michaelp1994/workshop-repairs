@@ -1,11 +1,12 @@
-import ProfileForm from "./ProfileForm";
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from "@repo/ui/card";
+
+import ProfileForm from "./ProfileForm";
 
 export default function ProfilePage() {
   return (

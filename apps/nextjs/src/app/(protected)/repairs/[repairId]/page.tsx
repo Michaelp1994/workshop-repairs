@@ -1,16 +1,17 @@
-import RepairDetailsSection from "./_components/RepairDetailsSection";
-import RepairPartsSection from "./_components/RepairPartsSection";
-import RepairImagesSection from "./_components/RepairImagesSection";
-import RepairCommentsSection from "./_components/RepairCommentsSection";
-import RepairStatusDetails from "./_components/RepairStatusDetails";
-import AssetDetailsSection from "./_components/AssetDetailsSection";
+import ArchiveSection from "~/app/_components/ArchiveSection";
 import {
   DetailsPageGrid,
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
 } from "~/app/_components/DetailsPage";
 import { getBaseUrl } from "~/utils/getBaseUrl";
-import ArchiveSection from "~/app/_components/ArchiveSection";
+
+import AssetDetailsSection from "./_components/AssetDetailsSection";
+import RepairCommentsSection from "./_components/RepairCommentsSection";
+import RepairDetailsSection from "./_components/RepairDetailsSection";
+import RepairImagesSection from "./_components/RepairImagesSection";
+import RepairPartsSection from "./_components/RepairPartsSection";
+import RepairStatusDetails from "./_components/RepairStatusDetails";
 
 interface ViewRepairPageProps {
   params: {
@@ -33,9 +34,9 @@ export default function ViewRepairPage({ params }: ViewRepairPageProps) {
         <AssetDetailsSection repairId={repairId} />
         <RepairImagesSection repairId={repairId} />
         <ArchiveSection
-          title="Archive Repair"
           description="This will archive the repair and prevent any future updates."
           href={`${getBaseUrl()}/repairs/${repairId}/archive`}
+          title="Archive Repair"
         />
       </DetailsPageSecondaryColumn>
     </DetailsPageGrid>

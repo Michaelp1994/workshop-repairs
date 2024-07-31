@@ -5,6 +5,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormFooter,
+  SubmitButton,
+  ResetButton,
   FormMessage,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -31,8 +34,10 @@ export default function CreateRepairTypeForm() {
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

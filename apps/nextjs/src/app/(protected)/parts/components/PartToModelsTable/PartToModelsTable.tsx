@@ -1,15 +1,16 @@
 "use client";
-import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardContent } from "@repo/ui/card";
+import { Button } from "@repo/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
   DataTableToolbar,
 } from "@repo/ui/data-table";
 import { PlusCircle } from "@repo/ui/icons";
-import { usePartToModelsTable } from "./usePartToModelsTable";
 import { type PartID } from "@repo/validators/ids.validators";
-import { Button } from "@repo/ui/button";
+import Link from "next/link";
+
+import { usePartToModelsTable } from "./usePartToModelsTable";
 
 interface PartToModelsTableProps {
   partId: PartID;

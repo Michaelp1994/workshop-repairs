@@ -1,8 +1,8 @@
 import { BackButton } from "~/app/_components/BackButton";
 import {
   DetailsPage,
-  DetailsPageToolbar,
   DetailsPageTitle,
+  DetailsPageToolbar,
 } from "~/app/_components/DetailsPage";
 
 interface AssetLayoutProps {

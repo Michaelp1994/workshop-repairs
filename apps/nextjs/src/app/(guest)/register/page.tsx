@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+
 import RegisterForm from "./RegisterForm";
 
 export default function RegisterPage() {

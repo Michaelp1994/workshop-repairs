@@ -1,12 +1,15 @@
 import type { RouterOutputs } from "@repo/api/root";
+
 import { Badge } from "@repo/ui/badge";
-import { createColumnHelper } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
-import { formatDate } from "~/utils/formatDate";
 import { DataTableImageCell } from "@repo/ui/data-table";
+import { createColumnHelper } from "@tanstack/react-table";
+
+import { formatDate } from "~/utils/formatDate";
+import { getBaseUrl } from "~/utils/getBaseUrl";
 
 type Row = RouterOutputs["assets"]["getAll"][number];
 
@@ -23,7 +26,7 @@ export const columns = [
     id: "image",
     header: "",
     cell: ({ getValue }) => (
-      <DataTableImageCell url={getValue() ?? "/placeholder.svg"} alt="" />
+      <DataTableImageCell alt="" url={getValue() ?? "/placeholder.svg"} />
     ),
     meta: {
       name: "Image",
@@ -116,8 +119,8 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
+        generateUrl={(row) => `${getBaseUrl()}/assets/${row.original.id}`}
         row={row}
-        generateUrl={(row) => `assets/${row.original.id}`}
       />
     ),
   }),

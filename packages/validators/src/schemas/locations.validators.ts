@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { locationId } from "./ids.validators";
 
 const locationColumns = z.enum(["name", "address", "createdAt", "updatedAt"]);

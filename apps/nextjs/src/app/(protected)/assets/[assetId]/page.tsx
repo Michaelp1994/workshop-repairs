@@ -1,13 +1,13 @@
-import AssetDetailsSection from "./_components/AssetDetailsSection";
-import AssetRepairsSection from "./_components/AssetRepairsSection";
-import ModelDetails from "./_components/ModelDetailsSection";
-
+import ArchiveSection from "~/app/_components/ArchiveSection";
 import {
   DetailsPageGrid,
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
 } from "~/app/_components/DetailsPage";
-import ArchiveSection from "~/app/_components/ArchiveSection";
+
+import AssetDetailsSection from "./_components/AssetDetailsSection";
+import AssetRepairsSection from "./_components/AssetRepairsSection";
+import ModelDetails from "./_components/ModelDetailsSection";
 
 interface ViewAssetPageProps {
   params: {

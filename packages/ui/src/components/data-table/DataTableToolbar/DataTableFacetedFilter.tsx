@@ -1,6 +1,8 @@
-import * as React from "react";
 import { type Column } from "@tanstack/react-table";
-import { Popover, PopoverContent, PopoverTrigger } from "../../popover";
+
+import { cn } from "../../../lib/utils";
+import { Badge } from "../../badge";
+import { Button } from "../../button";
 import {
   Command,
   CommandEmpty,
@@ -9,11 +11,9 @@ import {
   CommandItem,
   CommandList,
 } from "../../command";
-import { Separator } from "../../separator";
 import { CheckIcon, PlusCircle } from "../../icons";
-import { Badge } from "../../badge";
-import { Button } from "../../button";
-import { cn } from "../../../lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "../../popover";
+import { Separator } from "../../separator";
 
 interface Option {
   label: string;
@@ -48,17 +48,17 @@ export default function DataTableFacetedFilter<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 border-dashed">
+        <Button className="h-8 border-dashed" size="sm" variant="outline">
           <PlusCircle />
           {title}
           {selectedValues.size > 0 && (
             <>
-              <Separator orientation="vertical" className="mx-2 h-4" />
+              <Separator className="mx-2 h-4" orientation="vertical" />
               <div className="space-x-1">
                 {selectedValues.size > 1 ? (
                   <Badge
-                    variant="secondary"
                     className="rounded-sm px-1 font-normal"
+                    variant="secondary"
                   >
                     {selectedValues.size === totalOptions
                       ? "All selected"
@@ -69,9 +69,9 @@ export default function DataTableFacetedFilter<TData, TValue>({
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
-                        variant="secondary"
-                        key={option.value}
                         className="rounded-sm px-1 font-normal"
+                        key={option.value}
+                        variant="secondary"
                       >
                         {option.label}
                       </Badge>
@@ -93,7 +93,9 @@ export default function DataTableFacetedFilter<TData, TValue>({
                 return (
                   <CommandItem
                     key={option.value}
-                    onSelect={() => selectItem(option, isSelected)}
+                    onSelect={() => {
+                      selectItem(option, isSelected);
+                    }}
                   >
                     <div
                       className={cn(

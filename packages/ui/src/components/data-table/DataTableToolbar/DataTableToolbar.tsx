@@ -1,7 +1,8 @@
 import { RowData, type Table } from "@tanstack/react-table";
-import DataTableViewOptions from "./DataTableViewOptions";
-import DataTableGlobalFilterInput from "./DataTableGlobalFilterInput";
 import { ReactElement } from "react";
+
+import DataTableGlobalFilterInput from "./DataTableGlobalFilterInput";
+import DataTableViewOptions from "./DataTableViewOptions";
 
 interface DataTableToolbarProps<TData extends RowData> {
   table: Table<TData>;

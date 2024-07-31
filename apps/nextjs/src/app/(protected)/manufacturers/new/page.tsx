@@ -1,5 +1,6 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+
 import CreateManufacturerForm from "./CreateManufacturerForm";
-import { Card, CardHeader, CardTitle, CardContent } from "@repo/ui/card";
 
 export default function CreateManufacturerPage() {
   return (

@@ -1,6 +1,7 @@
-import { modelFormSchema, defaultModel } from "~/schemas/models.schema";
-import { toast } from "@repo/ui/sonner";
 import { useForm } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
+
+import { defaultModel, modelFormSchema } from "~/schemas/models.schema";
 import { api } from "~/trpc/react";
 
 export function useCreateModelForm() {

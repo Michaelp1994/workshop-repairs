@@ -1,19 +1,23 @@
 import type { RepairPartID } from "@repo/validators/ids.validators";
-import useUpdateRepairPartForm from "./useUpdateRepairPartForm";
-import PartSelect from "~/app/_components/PartSelect";
 
+import { Checkbox } from "@repo/ui/checkbox";
 import {
   Form,
+  FormControl,
+  FormDescription,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-  FormDescription,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Checkbox } from "@repo/ui/checkbox";
-import { Button } from "@repo/ui/button";
+
+import PartSelect from "~/app/_components/PartSelect";
+
+import useUpdateRepairPartForm from "./useUpdateRepairPartForm";
 
 interface UpdateRepairPartFormProps {
   repairPartId: RepairPartID;
@@ -97,8 +101,10 @@ export default function UpdateRepairPartForm({
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

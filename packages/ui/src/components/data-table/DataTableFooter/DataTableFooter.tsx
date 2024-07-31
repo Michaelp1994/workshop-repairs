@@ -1,10 +1,12 @@
-import { Button } from "../../button";
+import { type Table } from "@tanstack/react-table";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+
+import { Button } from "../../button";
 import {
   Select,
   SelectContent,
@@ -12,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../select";
-import { type Table } from "@tanstack/react-table";
 
 interface DataTableFooterProps<T> {
   table: Table<T>;
@@ -51,11 +52,11 @@ export function DataTableFooter<T>({ table }: DataTableFooterProps<T>) {
         {totalSelected} of {totalRows} Total Rows Selected
         {table.getIsSomeRowsSelected() && (
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => {
               table.resetRowSelection();
             }}
+            size="sm"
+            variant="outline"
           >
             Clear Selection
           </Button>
@@ -64,10 +65,10 @@ export function DataTableFooter<T>({ table }: DataTableFooterProps<T>) {
       <div className="flex items-center gap-4">
         <div>Rows per page</div>
         <Select
-          value={table.getState().pagination.pageSize.toString()}
           onValueChange={(value) => {
             table.setPageSize(Number(value));
           }}
+          value={table.getState().pagination.pageSize.toString()}
         >
           <SelectTrigger className="w-24">
             <SelectValue />
@@ -81,42 +82,42 @@ export function DataTableFooter<T>({ table }: DataTableFooterProps<T>) {
           </SelectContent>
         </Select>
         <Button
-          variant="outline"
-          size="sm"
+          disabled={!table.getCanPreviousPage()}
           onClick={() => {
             table.firstPage();
           }}
-          disabled={!table.getCanPreviousPage()}
+          size="sm"
+          variant="outline"
         >
           <ChevronsLeft className="h-4 w-4" />
         </Button>
         <Button
-          variant="outline"
-          size="sm"
+          disabled={!table.getCanPreviousPage()}
           onClick={() => {
             table.previousPage();
           }}
-          disabled={!table.getCanPreviousPage()}
+          size="sm"
+          variant="outline"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <Button
-          variant="outline"
-          size="sm"
+          disabled={!table.getCanNextPage()}
           onClick={() => {
             table.nextPage();
           }}
-          disabled={!table.getCanNextPage()}
+          size="sm"
+          variant="outline"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
         <Button
-          variant="outline"
-          size="sm"
+          disabled={!table.getCanNextPage()}
           onClick={() => {
             table.lastPage();
           }}
-          disabled={!table.getCanNextPage()}
+          size="sm"
+          variant="outline"
         >
           <ChevronsRight className="h-4 w-4" />
         </Button>

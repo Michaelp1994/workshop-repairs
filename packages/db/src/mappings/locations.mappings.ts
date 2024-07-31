@@ -1,4 +1,3 @@
-import { clients } from "../schemas/clients.schema";
 import { locations } from "../schemas/locations.schema";
 
 export const locationOrderMapping = {

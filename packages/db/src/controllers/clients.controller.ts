@@ -1,11 +1,7 @@
-import {
-  type DeleteClient,
-  type CreateClient,
-  type UpdateClient,
-  clients,
-  type ClientID,
-} from "../schemas/clients.schema";
 import { and, count, eq, isNull } from "drizzle-orm";
+
+import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database } from "../index";
@@ -13,10 +9,15 @@ import {
   clientFilterMapping,
   clientOrderMapping,
 } from "../mappings/clients.mappings";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import {
+  type ClientID,
+  clients,
+  type CreateClient,
+  type DeleteClient,
+  type UpdateClient,
+} from "../schemas/clients.schema";
 
-export const globalFilterColumns = [clients.name];
+const globalFilterColumns = [clients.name];
 
 export default {
   getAll(

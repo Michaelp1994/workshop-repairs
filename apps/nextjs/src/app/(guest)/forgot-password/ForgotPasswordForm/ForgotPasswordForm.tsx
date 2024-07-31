@@ -1,3 +1,4 @@
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -6,10 +7,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@repo/ui/form";
-import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
-import { useForgotPasswordForm } from "./useForgotPasswordForm";
 import Link from "next/link";
+
+import { useForgotPasswordForm } from "./useForgotPasswordForm";
 
 export default function ForgotPasswordForm() {
   const { form, isPending } = useForgotPasswordForm();
@@ -32,7 +33,7 @@ export default function ForgotPasswordForm() {
         }}
       />
       <div>
-        <Button variant="outline" asChild>
+        <Button asChild variant="outline">
           <Link href="/login">Return</Link>
         </Button>
         <Button type="submit">{isPending ? "Loading..." : "Send Code"}</Button>

@@ -1,15 +1,19 @@
+import type { RepairID } from "@repo/validators/ids.validators";
+
 import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import type { RepairID } from "@repo/validators/ids.validators";
-import { useCreateRepairImageForm } from "./useCreateRepairImageForm";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import { useCreateRepairImageForm } from "./useCreateRepairImageForm";
 
 interface CreateRepairImageFormProps {
   repairId: RepairID;
@@ -56,8 +60,10 @@ export default function CreateRepairImageForm({
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

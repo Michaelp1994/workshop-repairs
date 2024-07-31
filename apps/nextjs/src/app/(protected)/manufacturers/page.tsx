@@ -1,14 +1,15 @@
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardWrapper,
   CardToolbar,
+  CardWrapper,
 } from "@repo/ui/card";
 
-import ManufacturersTable from "./components/ManufacturersTable";
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import ManufacturersTable from "./components/ManufacturersTable";
 
 export default function AllManufacturersPage() {
   return (

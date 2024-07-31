@@ -3,13 +3,14 @@ import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@repo/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/toggle-group";
+
 import { api } from "~/trpc/react";
 
 interface RepairPartsTableProps {
@@ -43,13 +44,13 @@ export default function RepairPartsTable({ repairId }: RepairPartsTableProps) {
               {part.parts.name}
             </TableCell>
             <TableCell>
-              <Label htmlFor="price-1" className="sr-only">
+              <Label className="sr-only" htmlFor="price-1">
                 Quantity
               </Label>
               <Input type="number" value={part.repair_parts.quantity} />
             </TableCell>
             <TableCell>
-              <ToggleGroup type="single" defaultValue={true} variant="outline">
+              <ToggleGroup defaultValue={true} type="single" variant="outline">
                 <ToggleGroupItem value={true}>Yes</ToggleGroupItem>
                 <ToggleGroupItem value={false}>No</ToggleGroupItem>
               </ToggleGroup>

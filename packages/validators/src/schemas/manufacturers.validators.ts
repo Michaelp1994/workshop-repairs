@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { manufacturerId } from "./ids.validators";
 
 const manufacturerColumns = z.enum(["name", "createdAt", "updatedAt"]);

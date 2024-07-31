@@ -1,11 +1,14 @@
 import type { RouterOutputs } from "@repo/api/root";
-import { createColumnHelper } from "@tanstack/react-table";
+
+import { Badge } from "@repo/ui/badge";
 import { DataTableColumnHeader, DataTableImageCell } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
-import { formatDate } from "~/utils/formatDate";
 import { DataTableRowActions } from "@repo/ui/data-table";
-import { Badge } from "@repo/ui/badge";
+import { createColumnHelper } from "@tanstack/react-table";
+
+import { formatDate } from "~/utils/formatDate";
+import { getBaseUrl } from "~/utils/getBaseUrl";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["repairs"]["getAll"][number]>();
@@ -21,7 +24,7 @@ export const columns = [
     id: "image",
     header: "",
     cell: ({ getValue }) => (
-      <DataTableImageCell url={getValue() ?? "/placeholder.svg"} alt="" />
+      <DataTableImageCell alt="" url={getValue() ?? "/placeholder.svg"} />
     ),
     meta: {
       name: "Image",
@@ -45,7 +48,7 @@ export const columns = [
   }),
   columnHelper.accessor("status", {
     header: "Current Status",
-    cell: ({ getValue }) => <Badge>{getValue()?.name}</Badge>,
+    cell: ({ getValue }) => <Badge>{getValue().name}</Badge>,
     meta: {
       name: "Current Status",
     },
@@ -84,7 +87,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) => `/repairs/${row.original.id}`}
+        generateUrl={(row) => `${getBaseUrl()}/repairs/${row.original.id}`}
         row={row}
       />
     ),

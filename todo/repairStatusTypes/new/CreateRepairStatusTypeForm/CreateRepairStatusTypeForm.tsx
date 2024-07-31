@@ -2,6 +2,9 @@ import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
+  SubmitButton,
+  ResetButton,
   FormItem,
   FormLabel,
   FormMessage,
@@ -47,8 +50,10 @@ export default function CreateRepairStatusTypeForm() {
           );
         }}
       />
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

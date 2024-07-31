@@ -1,23 +1,24 @@
 "use client";
 import type { ModelID } from "@repo/validators/ids.validators";
-import ManufacturerSelect from "~/app/_components/ManufacturerSelect";
 
+import { type RouterOutputs } from "@repo/api/root";
+import { Button } from "@repo/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
   useForm,
-  FormFooter,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
 import { toast } from "@repo/ui/sonner";
-import { api } from "~/trpc/react";
+
+import ManufacturerSelect from "~/app/_components/ManufacturerSelect";
 import { modelFormSchema } from "~/schemas";
-import { type RouterOutputs } from "@repo/api/root";
+import { api } from "~/trpc/react";
 
 interface UpdateModelFormProps {
   modelId: ModelID;
@@ -40,12 +41,12 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
   });
 
   const handleSubmit = form.handleSubmit((values) =>
-    updateMutation.mutateAsync(values),
+    updateMutation.mutateAsync({ ...values, id: model.id }),
   );
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} onReset={() => form.reset()}>
+      <form onReset={() => { form.reset(); }} onSubmit={handleSubmit}>
         <FormField
           control={form.control}
           name="name"

@@ -1,9 +1,8 @@
-import "~/styles/globals.css";
-
+import { Toaster } from "@repo/ui/sonner";
+import { type Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 
-import { type Metadata } from "next";
-import { Toaster } from "@repo/ui/sonner";
+import "~/styles/globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,7 +21,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" className={`${fontSans.variable} h-full`}>
+    <html className={`${fontSans.variable} h-full`} lang="en">
       <body className="h-full">
         {children}
         <Toaster />

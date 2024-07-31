@@ -1,31 +1,24 @@
-import {
-  and,
-  count,
-  eq,
-  getTableColumns,
-  ilike,
-  isNull,
-  or,
-} from "drizzle-orm";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
+import { and, count, eq, getTableColumns, ilike, isNull } from "drizzle-orm";
+
 import { formatSearch } from "../helpers/formatSearch";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type Database } from "../index";
-import {
-  type DeleteModel,
-  models,
-  type CreateModel,
-  type UpdateModel,
-  type ModelID,
-} from "../schemas/models.schema";
-import { manufacturers } from "../schemas/manufacturers.schema";
-import { modelImages } from "../schemas/model-images.schema";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
+import { getOrderByParams } from "../helpers/getOrderByParams";
+import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
+import { type Database } from "../index";
 import {
   modelFilterMapping,
   modelOrderMapping,
 } from "../mappings/model.mappings";
+import { manufacturers } from "../schemas/manufacturers.schema";
+import { modelImages } from "../schemas/model-images.schema";
+import {
+  type CreateModel,
+  type DeleteModel,
+  type ModelID,
+  models,
+  type UpdateModel,
+} from "../schemas/models.schema";
 
 const { ...modelFields } = getTableColumns(models);
 

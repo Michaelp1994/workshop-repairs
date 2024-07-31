@@ -1,13 +1,15 @@
-import ModelsTable from "./_components/ModelsTable";
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardWrapper,
   CardToolbar,
+  CardWrapper,
 } from "@repo/ui/card";
+
 import { CreateLink } from "~/app/_components/ButtonLink";
+
+import ModelsTable from "./_components/ModelsTable";
 
 export default function AllModelsPage() {
   return (

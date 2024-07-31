@@ -2,9 +2,9 @@
 import { Button } from "@repo/ui/button";
 import {
   Form,
-  FormFooter,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
@@ -14,6 +14,7 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { useRouter } from "next/navigation";
+
 import { defaultModelImage, modelImageFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 import { getBaseUrl } from "~/utils/getBaseUrl";
@@ -52,7 +53,7 @@ export default function CreateModelImageForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} onReset={() => form.reset()}>
+      <form onReset={() => { form.reset(); }} onSubmit={handleSubmit}>
         <FormField
           control={form.control}
           name="url"

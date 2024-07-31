@@ -1,16 +1,22 @@
+import type { PartID } from "@repo/validators/ids.validators";
+
+import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
-import type { PartID } from "@repo/validators/ids.validators";
-import { useAddPartModelForm } from "./useAddPartModelForm";
-import ModelSelect from "~/app/_components/ModelSelect";
 import { Input } from "@repo/ui/input";
-import { Button } from "@repo/ui/button";
+
+import ModelSelect from "~/app/_components/ModelSelect";
+
+import { useAddPartModelForm } from "./useAddPartModelForm";
 
 interface AddPartModelFormProps {
   partId: PartID;
@@ -54,8 +60,10 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
         }}
       />
 
-      <Button type="reset">Reset</Button>
-      <Button type="submit">Submit</Button>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }

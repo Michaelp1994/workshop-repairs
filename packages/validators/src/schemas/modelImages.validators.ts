@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { modelImageId, modelId } from "./ids.validators";
+
+import { modelId, modelImageId } from "./ids.validators";
 
 const modelImageColumns = z.enum(["url", "caption", "createdAt", "updatedAt"]);
 

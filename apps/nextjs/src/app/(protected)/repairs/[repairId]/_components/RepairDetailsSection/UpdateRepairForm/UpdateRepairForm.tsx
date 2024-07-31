@@ -1,22 +1,24 @@
 "use client";
 import type { RepairID } from "@repo/validators/ids.validators";
-import RepairTypeSelect from "~/app/_components/RepairTypeSelect";
+
+import { Button } from "@repo/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { Textarea } from "@repo/ui/textarea";
-import { Button } from "@repo/ui/button";
-import ClientSelect from "~/app/_components/ClientSelect";
-import { api } from "~/trpc/react";
 import { toast } from "@repo/ui/sonner";
+import { Textarea } from "@repo/ui/textarea";
+
+import ClientSelect from "~/app/_components/ClientSelect";
+import RepairTypeSelect from "~/app/_components/RepairTypeSelect";
 import { repairFormSchema } from "~/schemas";
+import { api } from "~/trpc/react";
 
 interface UpdateRepairFormProps {
   repairId: RepairID;
@@ -43,7 +45,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   });
 
   const handleUpdate = form.handleSubmit((data) =>
-    updateMutation.mutate({ ...data, id: repairId }),
+    { updateMutation.mutate({ ...data, id: repairId }); },
   );
 
   if (isLoading) {
@@ -58,9 +60,9 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   return (
     <Form {...form}>
       <form
-        onSubmit={handleUpdate}
-        onReset={() => form.reset()}
         className="space-y-4"
+        onReset={() => { form.reset(); }}
+        onSubmit={handleUpdate}
       >
         <FormField
           control={form.control}
@@ -128,7 +130,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
         <div className="mt-4 flex justify-end gap-4">
           {form.formState.isDirty && (
             <>
-              <Button variant="ghost" type="reset">
+              <Button type="reset" variant="ghost">
                 Reset
               </Button>
               <Button type="submit">Update</Button>

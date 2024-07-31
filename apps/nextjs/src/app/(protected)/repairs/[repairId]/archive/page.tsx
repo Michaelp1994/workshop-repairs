@@ -11,6 +11,7 @@ import {
 import { toast } from "@repo/ui/sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { api } from "~/trpc/react";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
@@ -49,7 +50,7 @@ export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
         <Button asChild>
           <Link href={repairUrl}>No</Link>
         </Button>
-        <Button variant="destructive" onClick={archiveRepair}>
+        <Button onClick={archiveRepair} variant="destructive">
           Yes, I am sure
         </Button>
       </CardFooter>

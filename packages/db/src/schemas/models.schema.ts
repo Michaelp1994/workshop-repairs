@@ -1,20 +1,21 @@
 import {
-  varchar,
-  serial,
-  pgTable,
-  integer,
-  timestamp,
   foreignKey,
+  integer,
+  pgTable,
+  serial,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { manufacturers } from "./manufacturers.schema";
-import { users } from "./users.schema";
+
 import {
   type InferCreateModel,
   type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { manufacturers } from "./manufacturers.schema";
 import { modelImages } from "./model-images.schema";
+import { users } from "./users.schema";
 
 export const models = pgTable(
   "models",

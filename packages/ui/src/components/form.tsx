@@ -1,26 +1,24 @@
 "use client";
 
-import * as React from "react";
 import type * as LabelPrimitive from "@radix-ui/react-label";
+import type { ZodSchema } from "zod";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Slot } from "@radix-ui/react-slot";
+import * as React from "react";
 import {
+  useForm as _useForm,
+  type UseFormProps as _UseFormProps,
   Controller,
   type ControllerProps,
   type FieldPath,
   type FieldValues,
   FormProvider,
   useFormContext,
-  useForm as _useForm,
-  type UseFormProps as _UseFormProps,
-  UseFormReturn,
-  SubmitHandler,
-  SubmitErrorHandler,
-  Resolver,
 } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { AnyZodObject, ZodSchema } from "zod";
 
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 import { Label } from "./label";
 
 const Form = FormProvider;
@@ -65,6 +63,25 @@ const Form = FormProvider;
 // }
 
 // const Form = React.forwardRef(FormFn);
+
+interface UseFormProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TContext = any,
+> extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
+  schema: ZodSchema<TFieldValues>;
+  values?: NoInfer<TFieldValues>;
+}
+
+function useForm<
+  TFieldValues extends FieldValues = FieldValues,
+  TContext = any,
+  TTransformedValues extends FieldValues | undefined = undefined,
+>({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
+  return _useForm({
+    ...props,
+    resolver: zodResolver(schema),
+  });
+}
 
 interface FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -129,7 +146,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div className={cn("space-y-2", className)} ref={ref} {...props} />
     </FormItemContext.Provider>
   );
 });
@@ -143,9 +160,9 @@ const FormLabel = React.forwardRef<
 
   return (
     <Label
-      ref={ref}
       className={cn(error && "text-destructive", className)}
       htmlFor={formItemId}
+      ref={ref}
       {...props}
     />
   );
@@ -161,12 +178,12 @@ const FormControl = React.forwardRef<
 
   return (
     <Slot
-      ref={ref}
-      id={formItemId}
       aria-describedby={
         !error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
+      id={formItemId}
+      ref={ref}
       {...props}
     />
   );
@@ -181,9 +198,9 @@ const FormDescription = React.forwardRef<
 
   return (
     <p
-      ref={ref}
-      id={formDescriptionId}
       className={cn("text-muted-foreground text-sm", className)}
+      id={formDescriptionId}
+      ref={ref}
       {...props}
     />
   );
@@ -203,9 +220,9 @@ const FormMessage = React.forwardRef<
 
   return (
     <p
-      ref={ref}
-      id={formMessageId}
       className={cn("text-destructive text-sm font-medium", className)}
+      id={formMessageId}
+      ref={ref}
       {...props}
     >
       {body}
@@ -220,42 +237,43 @@ const FormFooter = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <div
-      ref={ref}
       className={cn("mt-4 flex justify-end gap-2", className)}
+      ref={ref}
       {...props}
     />
   );
 });
 FormFooter.displayName = "FormFooter";
 
-interface UseFormProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TContext = any,
-> extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
-  schema: ZodSchema<TFieldValues>;
-  values: NoInfer<TFieldValues>;
-}
+const SubmitButton = React.forwardRef<
+  HTMLButtonElement,
+  Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children">
+>((props, ref) => (
+  <Button ref={ref} type="submit" {...props}>
+    Submit
+  </Button>
+));
 
-function useForm<
-  TFieldValues extends FieldValues = FieldValues,
-  TContext = any,
-  TTransformedValues extends FieldValues | undefined = undefined,
->({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
-  return _useForm({
-    ...props,
-    resolver: zodResolver(schema),
-  });
-}
+const ResetButton = React.forwardRef<
+  HTMLButtonElement,
+  Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children">
+>((props, ref) => (
+  <Button ref={ref} type="reset" {...props}>
+    Reset
+  </Button>
+));
 
 export {
-  useForm,
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
-  FormFooter,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
+  FormFooter,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  ResetButton,
+  SubmitButton,
+  useForm,
+  useFormField,
 };

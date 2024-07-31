@@ -1,21 +1,21 @@
-import { and, count, eq, ilike, isNull, or } from "drizzle-orm";
-import { type Database } from "../index";
-import { type GetAll, type GetCount } from "../helpers/types";
-import { formatSearch } from "../helpers/formatSearch";
+import { and, count, eq, isNull } from "drizzle-orm";
+
+import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import {
-  type DeleteUser,
-  type CreateUser,
-  type UpdateUser,
-  users,
-  type UserID,
-} from "../schemas/users.schema";
+import { type GetAll, type GetCount } from "../helpers/types";
+import { type Database } from "../index";
 import {
   userFilterMapping,
   userOrderMapping,
 } from "../mappings/users.mappings";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
+import {
+  type CreateUser,
+  type DeleteUser,
+  type UpdateUser,
+  type UserID,
+  users,
+} from "../schemas/users.schema";
 
 const globalFilterColumns = [users.firstName, users.email];
 

@@ -1,18 +1,19 @@
 import {
+  integer,
   pgTable,
   serial,
-  varchar,
-  integer,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { repairs } from "./repairs.schema";
-import { users } from "./users.schema";
+
 import {
   type InferCreateModel,
   type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { repairs } from "./repairs.schema";
+import { users } from "./users.schema";
 
 export const repairImages = pgTable("repair_images", {
   id: serial("id").primaryKey(),
