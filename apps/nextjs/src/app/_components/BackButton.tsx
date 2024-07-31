@@ -9,7 +9,9 @@ export function BackButton() {
   return (
     <Button
       className="h-7 w-7"
-      onClick={() => { router.back(); }}
+      onClick={() => {
+        router.back();
+      }}
       size="icon"
       variant="outline"
     >

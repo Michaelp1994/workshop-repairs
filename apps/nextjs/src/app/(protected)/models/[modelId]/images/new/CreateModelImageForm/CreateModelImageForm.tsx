@@ -8,6 +8,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -53,7 +55,12 @@ export default function CreateModelImageForm({
 
   return (
     <Form {...form}>
-      <form onReset={() => { form.reset(); }} onSubmit={handleSubmit}>
+      <form
+        onReset={() => {
+          form.reset();
+        }}
+        onSubmit={handleSubmit}
+      >
         <FormField
           control={form.control}
           name="url"
@@ -87,8 +94,8 @@ export default function CreateModelImageForm({
           }}
         />
         <FormFooter>
-          <Button type="reset">Reset</Button>
-          <Button type="submit">Submit</Button>
+          <ResetButton />
+          <SubmitButton />
         </FormFooter>
       </form>
     </Form>

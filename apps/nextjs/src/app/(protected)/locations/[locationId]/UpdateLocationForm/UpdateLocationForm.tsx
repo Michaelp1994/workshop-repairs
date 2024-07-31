@@ -13,9 +13,12 @@ import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
@@ -40,54 +43,43 @@ export default function UpdateLocationForm({
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Location Details</CardTitle>
-      </CardHeader>
-      <Form {...form}>
-        <CardContent>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+    <Form {...form}>
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+      <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </CardContent>
-        <CardFooter>
-          {form.enabled && (
-            <>
-              <Button type="reset">Reset</Button>
-              <Button type="submit">Submit</Button>
-            </>
-          )}
-        </CardFooter>
-      </Form>
-    </Card>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
+    </Form>
   );
 }

@@ -35,7 +35,13 @@ export default function ArchiveRepairModal({
     router.back();
   }
   return (
-    <Dialog defaultOpen onOpenChange={() => { router.back(); }} open>
+    <Dialog
+      defaultOpen
+      onOpenChange={() => {
+        router.back();
+      }}
+      open
+    >
       <DialogPortal>
         <DialogOverlay />
         <DialogContent>
@@ -46,7 +52,13 @@ export default function ArchiveRepairModal({
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-4">
-            <Button onClick={() => { router.back(); }}>No</Button>
+            <Button
+              onClick={() => {
+                router.back();
+              }}
+            >
+              No
+            </Button>
             <Button onClick={archiveRepair} variant="destructive">
               Yes, I am sure
             </Button>

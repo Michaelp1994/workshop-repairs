@@ -1,3 +1,3 @@
 export function formatSearch(input: string) {
-    return "%" + input.trim() + "%";
+  return "%" + input.trim() + "%";
 }

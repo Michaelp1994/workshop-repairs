@@ -5,8 +5,11 @@ import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Textarea } from "@repo/ui/textarea";
 
@@ -45,10 +48,10 @@ export default function CreateRepairCommentForm({
             );
           }}
         />
-        <div className="flex justify-end gap-4 py-4">
-          <Button type="reset">Reset</Button>
-          <Button type="submit">Submit</Button>
-        </div>
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
       </form>
     </Form>
   );

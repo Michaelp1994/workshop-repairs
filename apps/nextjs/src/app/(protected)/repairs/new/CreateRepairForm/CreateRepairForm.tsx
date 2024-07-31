@@ -26,7 +26,9 @@ export default function CreateRepairForm({}: CreateRepairFormProps) {
   return (
     <Form {...form}>
       <form
-        onReset={() => { form.reset(); }}
+        onReset={() => {
+          form.reset();
+        }}
         onSubmit={form.handleSubmit((data) => createMutation.mutateAsync(data))}
       >
         <FormField

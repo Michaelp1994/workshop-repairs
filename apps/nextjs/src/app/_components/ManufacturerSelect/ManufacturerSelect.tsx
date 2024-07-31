@@ -1,4 +1,4 @@
-import { Combobox, type ComboboxProps } from "@repo/ui/combobox";;
+import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
 import { type ElementRef, forwardRef } from "react";
 
 import { api } from "~/trpc/react";

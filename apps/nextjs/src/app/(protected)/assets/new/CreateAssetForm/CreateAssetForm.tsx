@@ -41,7 +41,11 @@ export default function CreateAssetForm({}: CreateAssetFormProps) {
   });
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((data) => { createMutation.mutate(data); })}>
+      <form
+        onSubmit={form.handleSubmit((data) => {
+          createMutation.mutate(data);
+        })}
+      >
         <FormField
           control={form.control}
           name="assetNumber"

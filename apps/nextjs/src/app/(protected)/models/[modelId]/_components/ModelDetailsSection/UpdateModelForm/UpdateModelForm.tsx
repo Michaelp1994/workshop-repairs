@@ -2,7 +2,6 @@
 import type { ModelID } from "@repo/validators/ids.validators";
 
 import { type RouterOutputs } from "@repo/api/root";
-import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -11,6 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -46,7 +47,12 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
 
   return (
     <Form {...form}>
-      <form onReset={() => { form.reset(); }} onSubmit={handleSubmit}>
+      <form
+        onReset={() => {
+          form.reset();
+        }}
+        onSubmit={handleSubmit}
+      >
         <FormField
           control={form.control}
           name="name"
@@ -82,8 +88,8 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
 
         {form.formState.isDirty && (
           <FormFooter>
-            <Button type="reset">Reset</Button>
-            <Button type="submit">Submit</Button>
+            <ResetButton />
+            <SubmitButton />
           </FormFooter>
         )}
       </form>

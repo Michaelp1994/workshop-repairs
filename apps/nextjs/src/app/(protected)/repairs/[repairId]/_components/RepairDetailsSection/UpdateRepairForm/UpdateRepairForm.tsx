@@ -1,14 +1,16 @@
 "use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
-import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -44,9 +46,9 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
     schema: repairFormSchema,
   });
 
-  const handleUpdate = form.handleSubmit((data) =>
-    { updateMutation.mutate({ ...data, id: repairId }); },
-  );
+  const handleUpdate = form.handleSubmit((data) => {
+    updateMutation.mutate({ ...data, id: repairId });
+  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -61,7 +63,9 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
     <Form {...form}>
       <form
         className="space-y-4"
-        onReset={() => { form.reset(); }}
+        onReset={() => {
+          form.reset();
+        }}
         onSubmit={handleUpdate}
       >
         <FormField
@@ -127,16 +131,12 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
             );
           }}
         />
-        <div className="mt-4 flex justify-end gap-4">
-          {form.formState.isDirty && (
-            <>
-              <Button type="reset" variant="ghost">
-                Reset
-              </Button>
-              <Button type="submit">Update</Button>
-            </>
-          )}
-        </div>
+        {form.formState.isDirty && (
+          <FormFooter>
+            <ResetButton />
+            <SubmitButton />
+          </FormFooter>
+        )}
       </form>
     </Form>
   );

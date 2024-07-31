@@ -59,7 +59,12 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
 
   return (
     <Form {...form}>
-      <form onReset={() => { form.reset(); }} onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onReset={() => {
+          form.reset();
+        }}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="assetNumber"

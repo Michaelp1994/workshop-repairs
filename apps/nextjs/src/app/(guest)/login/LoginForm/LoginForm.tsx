@@ -7,6 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  SubmitButton,
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
@@ -62,7 +63,7 @@ export default function LoginForm() {
           }}
         />
 
-        <Button type="submit">Submit</Button>
+        <SubmitButton />
         <Button asChild variant="link">
           <Link href="/forgot-password">Forgot password?</Link>
         </Button>

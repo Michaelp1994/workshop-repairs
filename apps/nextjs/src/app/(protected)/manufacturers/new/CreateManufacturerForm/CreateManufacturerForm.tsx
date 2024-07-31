@@ -1,13 +1,15 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
   FormField,
+  FormFooter,
   FormItem,
   FormLabel,
   FormMessage,
+  ResetButton,
+  SubmitButton,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
@@ -33,10 +35,10 @@ export default function CreateManufacturerForm() {
           );
         }}
       />
-      <div>
-        <Button type="reset">Reset</Button>
-        <Button type="submit">Submit</Button>
-      </div>
+      <FormFooter>
+        <ResetButton />
+        <SubmitButton />
+      </FormFooter>
     </Form>
   );
 }
