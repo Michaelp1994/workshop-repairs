@@ -18,7 +18,7 @@ const repairStatusTypeSchemas = {
   getById: z.object({
     id: repairStatusTypeId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: repairStatusTypeId,
   }),
 };

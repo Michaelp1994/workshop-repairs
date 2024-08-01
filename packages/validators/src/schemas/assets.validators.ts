@@ -23,7 +23,7 @@ export const createAssetSchema = z.object({
   locationId,
 });
 
-export const deleteAssetSchema = z.object({
+export const archiveAssetSchema = z.object({
   id: assetId,
 });
 

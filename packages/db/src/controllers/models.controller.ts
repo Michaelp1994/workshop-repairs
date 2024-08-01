@@ -13,8 +13,8 @@ import {
 import { manufacturers } from "../schemas/manufacturers.schema";
 import { modelImages } from "../schemas/model-images.schema";
 import {
+  type ArchiveModel,
   type CreateModel,
-  type DeleteModel,
   type ModelID,
   models,
   type UpdateModel,
@@ -143,7 +143,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeleteModel, db: Database) {
+  async archive(input: ArchiveModel, db: Database) {
     const query = db
       .update(models)
       .set(input)

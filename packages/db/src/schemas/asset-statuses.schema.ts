@@ -1,8 +1,8 @@
 import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 import {
+  type InferArchiveModel,
   type InferCreateModel,
-  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
@@ -25,4 +25,4 @@ export type AssetStatus = InferModel<typeof assetStatuses>;
 export type AssetStatusID = AssetStatus["id"];
 export type CreateAssetStatus = InferCreateModel<typeof assetStatuses>;
 export type UpdateAssetStatus = InferUpdateModel<typeof assetStatuses>;
-export type DeleteAssetStatus = InferDeleteModel<typeof assetStatuses>;
+export type ArchiveAssetStatus = InferArchiveModel<typeof assetStatuses>;

@@ -8,8 +8,8 @@ import locationSchemas from "@repo/validators/locations.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -80,22 +80,22 @@ export default router({
 
       return updatedLocation;
     }),
-  delete: protectedProcedure
-    .input(locationSchemas.delete)
+  archive: protectedProcedure
+    .input(locationSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedLocation = await locationsController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedLocation = await locationsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedLocation) {
+      if (!archivedLocation) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete location",
+          message: "can't archive location",
         });
       }
 
-      return deletedLocation;
+      return archivedLocation;
     }),
 });

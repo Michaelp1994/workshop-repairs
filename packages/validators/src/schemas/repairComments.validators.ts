@@ -22,7 +22,7 @@ const repairCommentSchemas = {
     id: repairCommentId,
     comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
   }),
-  delete: z.object({
+  archive: z.object({
     id: repairCommentId,
   }),
 };

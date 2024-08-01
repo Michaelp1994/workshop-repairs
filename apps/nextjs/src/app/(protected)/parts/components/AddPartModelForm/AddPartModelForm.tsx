@@ -14,7 +14,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import ModelSelect from "~/app/_components/ModelSelect";
+import ModelSelect from "~/components/ModelSelect";
 
 import { useAddPartModelForm } from "./useAddPartModelForm";
 

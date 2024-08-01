@@ -24,7 +24,7 @@ const partSchemas = {
   getById: z.object({
     id: partId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: partId,
   }),
 };

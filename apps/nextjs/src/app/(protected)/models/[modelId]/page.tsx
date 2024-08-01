@@ -1,11 +1,11 @@
 import { type ModelID } from "@repo/validators/ids.validators";
 
-import ArchiveSection from "~/app/_components/ArchiveSection";
+import ArchiveSection from "~/components/ArchiveSection";
 import {
   DetailsPageGrid,
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
-} from "~/app/_components/DetailsPage";
+} from "~/components/DetailsPage";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import ModelAssetsSection from "./_components/ModelAssetsSection";

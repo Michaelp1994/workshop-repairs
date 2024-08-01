@@ -30,7 +30,7 @@ const partsToModelSchemas = {
     partId,
     modelId,
   }),
-  delete: z.object({
+  archive: z.object({
     partId,
     modelId,
   }),

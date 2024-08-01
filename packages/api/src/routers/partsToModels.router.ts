@@ -26,6 +26,12 @@ export default router({
       }
       return count;
     }),
+  getSelect: protectedProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const allParts = controller.getSelect(input, ctx.db);
+      return allParts;
+    }),
   create: protectedProcedure
     .input(partsToModelSchemas.create)
     .mutation(async ({ input, ctx }) => {
@@ -40,18 +46,18 @@ export default router({
 
       return createdPartModel;
     }),
-  delete: protectedProcedure
-    .input(partsToModelSchemas.delete)
+  archive: protectedProcedure
+    .input(partsToModelSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const deletedPartModel = await controller.archive(input, ctx.db);
+      const archivedPartModel = await controller.archive(input, ctx.db);
 
-      if (!deletedPartModel) {
+      if (!archivedPartModel) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete part model connection",
+          message: "can't archive part model connection",
         });
       }
 
-      return deletedPartModel;
+      return archivedPartModel;
     }),
 });

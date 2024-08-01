@@ -26,7 +26,7 @@ const modelImageSchemas = {
   getById: z.object({
     id: modelImageId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: modelImageId,
   }),
 };

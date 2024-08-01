@@ -20,7 +20,7 @@ const locationSchemas = {
   getById: z.object({
     id: locationId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: locationId,
   }),
 };

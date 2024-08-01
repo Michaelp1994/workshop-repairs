@@ -1,4 +1,4 @@
-import clientsController from "@repo/db/controllers/clients.controller";
+import * as clientsController from "@repo/db/controllers/clients.controller";
 import clientSchemas from "@repo/validators/clients.validators";
 import {
   getAllSchema,
@@ -8,8 +8,8 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -91,22 +91,22 @@ export default router({
 
       return updatedClient;
     }),
-  delete: protectedProcedure
-    .input(clientSchemas.delete)
+  archive: protectedProcedure
+    .input(clientSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedClient = await clientsController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedClient = await clientsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedClient) {
+      if (!archivedClient) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete client",
+          message: "can't archive client",
         });
       }
 
-      return deletedClient;
+      return archivedClient;
     }),
 });

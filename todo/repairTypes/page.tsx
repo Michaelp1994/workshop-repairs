@@ -1,4 +1,4 @@
-import { CreateLink } from "~/app/_components/ButtonLink";
+import { CreateLink } from "~/components/ButtonLink";
 import {
   Card,
   CardContent,

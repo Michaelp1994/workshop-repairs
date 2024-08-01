@@ -17,7 +17,7 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
-import LocationSelect from "~/app/_components/LocationSelect";
+import LocationSelect from "~/components/LocationSelect";
 import { type AssetFormInput, assetFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 

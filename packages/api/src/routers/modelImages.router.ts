@@ -8,8 +8,8 @@ import modelImageSchemas from "@repo/validators/modelImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -149,23 +149,23 @@ export default router({
 
       return modelImage;
     }),
-  delete: protectedProcedure
-    .input(modelImageSchemas.delete)
+  archive: protectedProcedure
+    .input(modelImageSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
+      const metadata = archiveMetadata(ctx.session);
 
-      const deletedModelImage = await modelImagesController.delete(
+      const archivedModelImage = await modelImagesController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedModelImage) {
+      if (!archivedModelImage) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "modelImage not found",
         });
       }
 
-      return deletedModelImage;
+      return archivedModelImage;
     }),
 });

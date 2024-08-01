@@ -7,8 +7,8 @@ import repairPartSchemas from "@repo/validators/repairParts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -85,22 +85,22 @@ export default router({
 
       return updatedRepairPart;
     }),
-  delete: protectedProcedure
-    .input(repairPartSchemas.delete)
+  archive: protectedProcedure
+    .input(repairPartSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedRepairPart = await repairPartsController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedRepairPart = await repairPartsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedRepairPart) {
+      if (!archivedRepairPart) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete repair Part",
+          message: "can't archive repair Part",
         });
       }
 
-      return deletedRepairPart;
+      return archivedRepairPart;
     }),
 });

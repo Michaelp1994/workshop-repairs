@@ -24,7 +24,7 @@ const repairImageSchemas = {
     url: z.string().min(3),
   }),
 
-  delete: z.object({
+  archive: z.object({
     id: repairImageId,
   }),
 };

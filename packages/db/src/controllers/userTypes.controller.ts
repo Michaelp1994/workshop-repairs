@@ -3,8 +3,8 @@ import { count, eq, isNull } from "drizzle-orm";
 import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
 import {
+  type ArchiveUserType,
   type CreateUserType,
-  type DeleteUserType,
   type UpdateUserType,
   type UserTypeID,
   userTypes,
@@ -49,7 +49,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeleteUserType, db: Database) {
+  async archive(input: ArchiveUserType, db: Database) {
     const query = db
       .update(userTypes)
       .set(input)

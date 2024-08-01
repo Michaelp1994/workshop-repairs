@@ -258,7 +258,7 @@ const ResetButton = React.forwardRef<
   HTMLButtonElement,
   Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children">
 >((props, ref) => (
-  <Button ref={ref} type="reset" {...props}>
+  <Button ref={ref} type="reset" variant="ghost" {...props}>
     Reset
   </Button>
 ));

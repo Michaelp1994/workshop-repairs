@@ -2,9 +2,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Upload } from "@repo/ui/icons";
 import { type ModelID } from "@repo/validators/ids.validators";
-import Image from "next/image";
 import Link from "next/link";
 
+import {
+  ImageGrid,
+  ImageGridItem,
+  ImageGridUploadButton,
+} from "~/components/ImageGrid";
 import { api } from "~/trpc/react";
 
 interface ModelImagesSectionProps {
@@ -33,18 +37,17 @@ export default function ModelImagesSection({
         <CardTitle>Images</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 gap-2">
+        <ImageGrid>
           {data.map((modelImage) => {
             return (
               <Link
                 href={`./${modelId}/images?id=${modelImage.id}`}
                 key={modelImage.id}
               >
-                <img
+                <ImageGridItem
                   alt={modelImage.caption}
                   className="aspect-square w-full rounded-md object-cover"
                   height="84"
-                  key={modelImage.id}
                   src={modelImage.url}
                   width="84"
                 />
@@ -52,12 +55,9 @@ export default function ModelImagesSection({
             );
           })}
           <Link href={`./${modelId}/images/new`}>
-            <div className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-              <Upload className="text-muted-foreground h-1/5 w-1/5" />
-              <span className="sr-only">Upload</span>
-            </div>
+            <ImageGridUploadButton />
           </Link>
-        </div>
+        </ImageGrid>
       </CardContent>
     </Card>
   );

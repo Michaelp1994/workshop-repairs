@@ -17,7 +17,7 @@ const clientSchemas = {
   getById: z.object({
     id: clientId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: clientId,
   }),
 };

@@ -4,11 +4,10 @@ import { type Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { redirect } from "next/navigation";
 
-import NavBar from "~/app/_components/NavBar";
+import NavBar from "~/components/NavBar";
+import NextBreadcrumb from "~/components/NextBreadcrumb";
 import "~/styles/globals.css";
 import { TRPCReactProvider } from "~/trpc/react";
-
-import NextBreadcrumb from "../_components/Breadcrumb";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,9 +33,9 @@ export default async function AuthLayout({ children }: RootLayoutProps) {
 
   return (
     <html className={`${fontSans.variable} h-full`} lang="en">
-      <body className="bg-muted/40 h-screen w-screen">
+      <body className="bg-muted/40 h-screen">
         <TRPCReactProvider>
-          <div className="grid h-screen w-screen grid-rows-[auto_1fr]">
+          <div className="grid h-screen grid-rows-[auto_1fr]">
             <NavBar />
             <div className="p-4">
               <NextBreadcrumb />

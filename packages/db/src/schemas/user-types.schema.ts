@@ -1,8 +1,8 @@
 import { pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
 import {
+  type InferArchiveModel,
   type InferCreateModel,
-  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
@@ -22,7 +22,7 @@ export type UpdateUserType = Omit<
   InferUpdateModel<typeof userTypes>,
   "updatedById"
 >;
-export type DeleteUserType = Omit<
-  InferDeleteModel<typeof userTypes>,
+export type ArchiveUserType = Omit<
+  InferArchiveModel<typeof userTypes>,
   "deletedById"
 >;

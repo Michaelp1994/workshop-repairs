@@ -8,8 +8,8 @@ import repairTypeSchemas from "@repo/validators/repairTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -86,23 +86,23 @@ export default router({
 
       return updatedRepairType;
     }),
-  delete: protectedProcedure
-    .input(repairTypeSchemas.delete)
+  archive: protectedProcedure
+    .input(repairTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
+      const metadata = archiveMetadata(ctx.session);
 
-      const deletedRepairType = await repairTypesController.delete(
+      const archivedRepairType = await repairTypesController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedRepairType) {
+      if (!archivedRepairType) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete repair Type",
+          message: "can't archive repair Type",
         });
       }
 
-      return deletedRepairType;
+      return archivedRepairType;
     }),
 });

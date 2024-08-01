@@ -1,9 +1,9 @@
-import ArchiveSection from "~/app/_components/ArchiveSection";
+import ArchiveSection from "~/components/ArchiveSection";
 import {
   DetailsPageGrid,
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
-} from "~/app/_components/DetailsPage";
+} from "~/components/DetailsPage";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import AssetDetailsSection from "./_components/AssetDetailsSection";

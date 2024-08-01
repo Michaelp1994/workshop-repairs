@@ -26,7 +26,7 @@ export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
   const router = useRouter();
   const repairUrl = `${getBaseUrl()}/repairs/${repairId}`;
 
-  const archiveMutation = api.repairs.delete.useMutation({
+  const archiveMutation = api.repairs.archive.useMutation({
     onSuccess() {
       toast.success("Repair has been archived.");
       router.replace(repairUrl);

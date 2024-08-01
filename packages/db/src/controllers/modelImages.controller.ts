@@ -3,8 +3,8 @@ import { and, count, eq, isNull } from "drizzle-orm";
 import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
 import {
+  type ArchiveModelImage,
   type CreateModelImage,
-  type DeleteModelImage,
   type ModelImageID,
   modelImages,
   type UpdateModelImage,
@@ -59,7 +59,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeleteModelImage, db: Database) {
+  async archive(input: ArchiveModelImage, db: Database) {
     const query = db
       .update(modelImages)
       .set(input)

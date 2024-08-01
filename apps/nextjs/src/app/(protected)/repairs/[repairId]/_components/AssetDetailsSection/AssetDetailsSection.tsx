@@ -1,4 +1,3 @@
-"use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import { Button } from "@repo/ui/button";
@@ -8,27 +7,18 @@ import { Input } from "@repo/ui/input";
 import { Label } from "@repo/ui/label";
 import Link from "next/link";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 
 interface AssetDetailsProps {
   repairId: RepairID;
 }
 
-export default function AssetDetailsSection({ repairId }: AssetDetailsProps) {
-  const {
-    data: repair,
-    isLoading,
-    isError,
-  } = api.repairs.getById.useQuery({
+export default async function AssetDetailsSection({
+  repairId,
+}: AssetDetailsProps) {
+  const repair = await api.repairs.getById({
     id: repairId,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !repair) {
-    return <div>Error loading asset</div>;
-  }
 
   const { asset, model, manufacturer, location } = repair;
 
@@ -45,17 +35,17 @@ export default function AssetDetailsSection({ repairId }: AssetDetailsProps) {
       </CardHeader>
       <CardContent>
         <img alt={model.name} src={model.imageUrl} />
-        <div className="grid grid-cols-2 gap-2">
-          <Label>Asset Number</Label>
+        <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+          <Label>Asset Number:</Label>
           <Input disabled value={asset.assetNumber} />
-          <Label>Serial Number</Label>
+          <Label>Serial Number:</Label>
           <Input disabled value={asset.serialNumber} />
-          <Label>Model</Label>
+          <Label>Model:</Label>
           <Input disabled value={model.name} />
-          <Label>Manufacturer</Label>
+          <Label>Manufacturer:</Label>
           <Input disabled value={manufacturer.name} />
 
-          <Label>Location</Label>
+          <Label>Location:</Label>
           <Input disabled value={location.name} />
         </div>
       </CardContent>

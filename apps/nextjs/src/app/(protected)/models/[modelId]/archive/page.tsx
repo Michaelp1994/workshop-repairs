@@ -26,7 +26,7 @@ export default function ArchiveModelPage({ params }: ArchiveModelPageProps) {
   const modelId = Number(params.modelId);
   const modelUrl = `${getBaseUrl()}/models/${modelId}`;
 
-  const archiveMutation = api.models.delete.useMutation({
+  const archiveMutation = api.models.archive.useMutation({
     onSuccess() {
       toast.success("Repair has been archived.");
       router.replace(modelUrl);

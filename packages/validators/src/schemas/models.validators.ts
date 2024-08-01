@@ -34,7 +34,7 @@ const modelSchemas = {
   getByAssetId: z.object({
     assetId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: modelId,
   }),
 };

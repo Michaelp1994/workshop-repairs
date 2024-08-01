@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import ManufacturerSelect from "~/app/_components/ManufacturerSelect";
+import ManufacturerSelect from "~/components/ManufacturerSelect";
 
 import { useCreateModelForm } from "./useCreateModelForm";
 

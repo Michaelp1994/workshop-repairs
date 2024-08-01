@@ -31,7 +31,7 @@ export default function useUpdatePartForm(partId: PartID) {
     },
   });
 
-  const deleteMutation = api.parts.delete.useMutation({
+  const deleteMutation = api.parts.archive.useMutation({
     async onSuccess(values) {
       toast.success(`Part ${values.name} delete`);
       router.push("/parts");

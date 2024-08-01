@@ -1,8 +1,8 @@
 import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 import {
+  type InferArchiveModel,
   type InferCreateModel,
-  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
@@ -25,4 +25,4 @@ export type RepairType = InferModel<typeof repairTypes>;
 export type RepairTypeID = RepairType["id"];
 export type CreateRepairType = InferCreateModel<typeof repairTypes>;
 export type UpdateRepairType = InferUpdateModel<typeof repairTypes>;
-export type DeleteRepairType = InferDeleteModel<typeof repairTypes>;
+export type ArchiveRepairType = InferArchiveModel<typeof repairTypes>;

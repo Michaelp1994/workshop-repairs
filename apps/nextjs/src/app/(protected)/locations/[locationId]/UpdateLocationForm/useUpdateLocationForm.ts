@@ -13,7 +13,7 @@ import { api } from "~/trpc/react";
 export default function useUpdateLocationForm(locationId: LocationID) {
   const router = useRouter();
   const query = api.locations.getById.useQuery({ id: locationId });
-  const deleteMutation = api.locations.delete.useMutation({
+  const deleteMutation = api.locations.archive.useMutation({
     async onSuccess() {
       toast.success(`Location deleted`);
       router.push("/locations");

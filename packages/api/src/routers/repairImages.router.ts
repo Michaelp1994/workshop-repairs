@@ -7,8 +7,8 @@ import repairImageSchemas from "@repo/validators/repairImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -87,22 +87,22 @@ export default router({
 
       return updatedRepairImage;
     }),
-  delete: protectedProcedure
-    .input(repairImageSchemas.delete)
+  archive: protectedProcedure
+    .input(repairImageSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedRepairImage = await repairImagesController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedRepairImage = await repairImagesController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedRepairImage) {
+      if (!archivedRepairImage) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete repair image",
+          message: "can't archive repair image",
         });
       }
 
-      return deletedRepairImage;
+      return archivedRepairImage;
     }),
 });

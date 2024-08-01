@@ -10,8 +10,8 @@ import {
   partOrderMapping,
 } from "../mappings/parts.mappings";
 import {
+  type ArchivePart,
   type CreatePart,
-  type DeletePart,
   type PartID,
   parts,
   type UpdatePart,
@@ -95,7 +95,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeletePart, db: Database) {
+  async archive(input: ArchivePart, db: Database) {
     const query = db
       .update(parts)
       .set(input)

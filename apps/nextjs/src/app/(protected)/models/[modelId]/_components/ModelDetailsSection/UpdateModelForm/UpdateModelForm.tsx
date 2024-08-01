@@ -17,7 +17,7 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
-import ManufacturerSelect from "~/app/_components/ManufacturerSelect";
+import ManufacturerSelect from "~/components/ManufacturerSelect";
 import { modelFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 

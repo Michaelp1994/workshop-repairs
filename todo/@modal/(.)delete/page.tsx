@@ -23,7 +23,7 @@ interface DeleteRepairModalProps {
 
 export default function DeleteRepairModal({ params }: DeleteRepairModalProps) {
   const router = useRouter();
-  const { mutateAsync, isPending } = api.repairs.delete.useMutation();
+  const { mutateAsync, isPending } = api.repairs.archive.useMutation();
   async function handleClick() {
     await mutateAsync({ id: params.repairId });
     router.back();

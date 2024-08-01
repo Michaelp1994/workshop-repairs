@@ -15,7 +15,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import PartSelect from "~/app/_components/PartSelect";
+import PartSelect from "~/components/PartSelect";
 
 import useUpdateRepairPartForm from "./useUpdateRepairPartForm";
 

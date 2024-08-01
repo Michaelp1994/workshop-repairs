@@ -60,7 +60,7 @@ type DeleteInput<T extends BaseType> = Required<
   RemoveNull<Pick<T, "id" | "deletedById" | "deletedAt">>
 >;
 
-type InferDeleteModel<
+type InferArchiveModel<
   TTable extends Table,
   TConfig extends {
     dbColumnNames: boolean;
@@ -84,8 +84,8 @@ type InferCreateModel<
 > = CreateInput<InferInsertModel<TTable, TConfig>>;
 
 export type {
+  InferArchiveModel,
   InferCreateModel,
-  InferDeleteModel,
   InferSelectModel as InferModel,
   InferUpdateModel,
 };

@@ -17,7 +17,7 @@ const repairTypeSchemas = {
   getById: z.object({
     id: repairTypeId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: repairTypeId,
   }),
 };

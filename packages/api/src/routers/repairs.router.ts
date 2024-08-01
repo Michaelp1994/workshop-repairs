@@ -4,12 +4,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import repairSchemas from "@repo/validators/repairs.validators";
+import * as repairSchemas from "@repo/validators/repairs.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -93,22 +93,22 @@ export default router({
 
       return updatedRepair;
     }),
-  delete: protectedProcedure
-    .input(repairSchemas.delete)
+  archive: protectedProcedure
+    .input(repairSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedRepair = await repairsController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedRepair = await repairsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedRepair) {
+      if (!archivedRepair) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete repair",
+          message: "can't archive repair",
         });
       }
 
-      return deletedRepair;
+      return archivedRepair;
     }),
 });

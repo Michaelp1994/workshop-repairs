@@ -7,8 +7,8 @@ import repairCommentSchemas from "@repo/validators/repairComments.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -88,22 +88,22 @@ export default router({
 
       return updatedRepairComment;
     }),
-  delete: protectedProcedure
-    .input(repairCommentSchemas.delete)
+  archive: protectedProcedure
+    .input(repairCommentSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedRepairComment = await repairCommentsController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedRepairComment = await repairCommentsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedRepairComment) {
+      if (!archivedRepairComment) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete Repair Comment",
+          message: "can't archive Repair Comment",
         });
       }
 
-      return deletedRepairComment;
+      return archivedRepairComment;
     }),
 });

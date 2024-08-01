@@ -12,9 +12,9 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
-import AssetSelect from "~/app/_components/AssetSelect";
-import RepairStatusTypeSelect from "~/app/_components/RepairStatusTypeSelect";
-import RepairTypeSelect from "~/app/_components/RepairTypeSelect";
+import AssetSelect from "~/components/AssetSelect";
+import RepairStatusTypeSelect from "~/components/RepairStatusTypeSelect";
+import RepairTypeSelect from "~/components/RepairTypeSelect";
 
 import { useCreateRepairForm } from "./useCreateRepairForm";
 

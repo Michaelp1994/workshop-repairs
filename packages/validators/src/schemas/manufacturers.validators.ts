@@ -18,7 +18,7 @@ const manufacturerSchemas = {
   getById: z.object({
     id: manufacturerId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: manufacturerId,
   }),
 };

@@ -3,7 +3,7 @@ import { and, count, eq, getTableColumns } from "drizzle-orm";
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount } from "../helpers/types";
+import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database } from "../index";
 import {
   partsToModelsFilterMapping,
@@ -17,6 +17,7 @@ import {
   partsToModels,
   UpdatePartToModel,
 } from "../schemas/parts-to-models.schema";
+import { repairs } from "../schemas/repairs.schema";
 
 const globalFilterColumns = [parts.name, parts.partNumber, models.name];
 
@@ -49,8 +50,8 @@ export function getAll(
       },
     })
     .from(partsToModels)
-    .leftJoin(parts, eq(parts.id, partsToModels.partId))
-    .leftJoin(models, eq(models.id, partsToModels.modelId))
+    .innerJoin(parts, eq(parts.id, partsToModels.partId))
+    .innerJoin(models, eq(models.id, partsToModels.modelId))
     .where(and(globalFilterParams, ...columnFilterParams))
     .orderBy(...orderByParams, parts.id)
     .limit(pagination.pageSize)
@@ -75,12 +76,38 @@ export async function getCount(
       count: count(),
     })
     .from(partsToModels)
-    .leftJoin(parts, eq(parts.id, partsToModels.partId))
-    .leftJoin(models, eq(models.id, partsToModels.modelId))
+    .innerJoin(parts, eq(parts.id, partsToModels.partId))
+    .innerJoin(models, eq(models.id, partsToModels.modelId))
     .where(and(globalFilterParams, ...columnFilterParams));
   const [res] = await query.execute();
   return res?.count;
 }
+
+export function getSelect(
+  { globalFilter, columnFilters }: GetSelect,
+  db: Database,
+) {
+  const globalFilterParams = getGlobalFilterParams(
+    globalFilter,
+    globalFilterColumns,
+  );
+  const columnFilterParams = getColumnFilterParams(
+    columnFilters,
+    partsToModelsFilterMapping,
+  );
+  const query = db
+    .select({
+      value: parts.id,
+      label: parts.name,
+    })
+    .from(partsToModels)
+    .innerJoin(parts, eq(parts.id, partsToModels.partId))
+    .innerJoin(models, eq(models.id, partsToModels.modelId))
+    .where(and(globalFilterParams, ...columnFilterParams));
+
+  return query.execute();
+}
+
 export async function getById(
   input: { partId: PartID; modelId: ModelID },
   db: Database,
@@ -117,7 +144,7 @@ export async function update(input: UpdatePartToModel, db: Database) {
   return res;
 }
 
-export async function archive(input: DeletePartToModel, db: Database) {
+export async function archive(input: ArchivePartToModel, db: Database) {
   const query = db
     .delete(partsToModels)
     .where(

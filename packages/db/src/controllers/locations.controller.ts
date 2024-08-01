@@ -10,8 +10,8 @@ import {
   locationOrderMapping,
 } from "../mappings/locations.mappings";
 import {
+  type ArchiveLocation,
   type CreateLocation,
-  type DeleteLocation,
   type LocationID,
   locations,
   type UpdateLocation,
@@ -102,7 +102,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeleteLocation, db: Database) {
+  async archive(input: ArchiveLocation, db: Database) {
     const query = db
       .update(locations)
       .set(input)

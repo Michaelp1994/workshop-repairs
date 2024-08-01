@@ -1,4 +1,5 @@
 "use client";
+import type { RouterOutputs } from "@repo/api/root";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import {
@@ -17,8 +18,8 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
 
-import ClientSelect from "~/app/_components/ClientSelect";
-import RepairTypeSelect from "~/app/_components/RepairTypeSelect";
+import ClientSelect from "~/components/ClientSelect";
+import RepairTypeSelect from "~/components/RepairTypeSelect";
 import { repairFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
@@ -27,14 +28,15 @@ interface UpdateRepairFormProps {
 }
 
 export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
-  const { isLoading, isError, data, error, refetch } =
-    api.repairs.getById.useQuery({
-      id: repairId,
-    });
+  const utils = api.useUtils();
+  const [repair, repairQuery] = api.repairs.getById.useSuspenseQuery({
+    id: repairId,
+  });
   const updateMutation = api.repairs.update.useMutation({
     async onSuccess() {
-      await refetch();
+      await utils.repairs.getById.invalidate({ id: repairId });
       toast.success("Repair updated successfully");
+      await repairQuery.refetch();
     },
     onError() {
       toast.error("Failed to update repair");
@@ -42,22 +44,13 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   });
 
   const form = useForm({
-    values: data,
+    values: repair,
     schema: repairFormSchema,
   });
 
-  const handleUpdate = form.handleSubmit((data) => {
-    updateMutation.mutate({ ...data, id: repairId });
+  const handleSubmit = form.handleSubmit((data) => {
+    updateMutation.mutate({ ...data, id: repair.id });
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !data) {
-    console.log(error);
-    return <div>Error</div>;
-  }
 
   return (
     <Form {...form}>
@@ -66,7 +59,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
         onReset={() => {
           form.reset();
         }}
-        onSubmit={handleUpdate}
+        onSubmit={handleSubmit}
       >
         <FormField
           control={form.control}

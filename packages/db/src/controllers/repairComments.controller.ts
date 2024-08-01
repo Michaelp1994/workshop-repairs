@@ -3,8 +3,8 @@ import { and, count, eq, isNull } from "drizzle-orm";
 import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
 import {
+  type ArchiveRepairComment,
   type CreateRepairComment,
-  type DeleteRepairComment,
   type RepairCommentID,
   repairComments,
   type UpdateRepairComment,
@@ -76,7 +76,7 @@ export default {
     const [res] = await query.execute();
     return res;
   },
-  async delete(input: DeleteRepairComment, db: Database) {
+  async archive(input: ArchiveRepairComment, db: Database) {
     const query = db
       .update(repairComments)
       .set(input)

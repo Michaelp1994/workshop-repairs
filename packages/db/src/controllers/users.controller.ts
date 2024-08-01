@@ -10,8 +10,8 @@ import {
   userOrderMapping,
 } from "../mappings/users.mappings";
 import {
+  type ArchiveUser,
   type CreateUser,
-  type DeleteUser,
   type UpdateUser,
   type UserID,
   users,
@@ -97,7 +97,7 @@ const controller = {
     const [res] = await query.execute();
     return res;
   },
-  async delete(input: DeleteUser, db: Database) {
+  async archive(input: ArchiveUser, db: Database) {
     const query = db
       .update(users)
       .set(input)

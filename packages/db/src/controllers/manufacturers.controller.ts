@@ -10,8 +10,8 @@ import {
   manufacturerOrderMapping,
 } from "../mappings/manufacturers.mappings";
 import {
+  type ArchiveManufacturer,
   type CreateManufacturer,
-  type DeleteManufacturer,
   type ManufacturerID,
   manufacturers,
   type UpdateManufacturer,
@@ -106,7 +106,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeleteManufacturer, db: Database) {
+  async archive(input: ArchiveManufacturer, db: Database) {
     const query = db
       .update(manufacturers)
       .set(input)

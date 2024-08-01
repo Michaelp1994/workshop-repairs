@@ -20,7 +20,7 @@ export function updateMetadata(session: Session) {
   };
 }
 
-export function deleteMetadata(session: Session) {
+export function archiveMetadata(session: Session) {
   if (!session.user?.id) {
     throw new Error("Session data not found");
   }

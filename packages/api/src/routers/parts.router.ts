@@ -8,8 +8,8 @@ import partSchemas from "@repo/validators/parts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -86,23 +86,23 @@ export default router({
 
       return updatedPart;
     }),
-  delete: protectedProcedure
-    .input(partSchemas.delete)
+  archive: protectedProcedure
+    .input(partSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
+      const metadata = archiveMetadata(ctx.session);
 
-      const deletedPart = await partsController.delete(
+      const archivedPart = await partsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedPart) {
+      if (!archivedPart) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete part",
+          message: "can't archive part",
         });
       }
 
-      return deletedPart;
+      return archivedPart;
     }),
 });

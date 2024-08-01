@@ -7,7 +7,7 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/app/_components/ButtonLink";
+import { CreateLink } from "~/components/ButtonLink";
 
 import ManufacturersTable from "./components/ManufacturersTable";
 

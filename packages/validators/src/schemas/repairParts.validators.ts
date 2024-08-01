@@ -22,7 +22,7 @@ const repairPartSchemas = {
     partId,
   }),
 
-  delete: z.object({
+  archive: z.object({
     id: repairPartId,
   }),
 };

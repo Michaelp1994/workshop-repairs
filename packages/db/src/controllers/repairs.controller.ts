@@ -17,8 +17,8 @@ import { models } from "../schemas/models.schema";
 import { repairStatusTypes } from "../schemas/repair-status-types.schema";
 import { repairTypes } from "../schemas/repair-types.schema";
 import {
+  type ArchiveRepair,
   type CreateRepair,
-  type DeleteRepair,
   type RepairID,
   repairs,
   type UpdateRepair,
@@ -189,7 +189,7 @@ export default {
     return res;
   },
 
-  async delete({ id, ...input }: DeleteRepair, db: Database) {
+  async archive({ id, ...input }: ArchiveRepair, db: Database) {
     const query = db
       .update(repairs)
       .set(input)

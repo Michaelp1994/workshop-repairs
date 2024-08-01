@@ -8,12 +8,12 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import { BackButton } from "~/app/_components/BackButton";
+import { BackButton } from "~/components/BackButton";
 import {
   DetailsPage,
   DetailsPageTitle,
   DetailsPageToolbar,
-} from "~/app/_components/DetailsPage";
+} from "~/components/DetailsPage";
 
 import CreateModelImageForm from "./CreateModelImageForm";
 

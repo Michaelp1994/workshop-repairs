@@ -10,7 +10,7 @@ import { api } from "~/trpc/react";
 export function useUpdateClientForm(id: ClientID) {
   const router = useRouter();
   const query = api.clients.getById.useQuery({ id });
-  const deleteMutation = api.clients.delete.useMutation({
+  const deleteMutation = api.clients.archive.useMutation({
     async onSuccess() {
       toast.success(`Client deleted`);
       form.disable();

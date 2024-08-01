@@ -25,7 +25,7 @@ export default function useUpdateManufacturerForm(
     },
   });
 
-  const deleteMutation = api.manufacturers.delete.useMutation({
+  const deleteMutation = api.manufacturers.archive.useMutation({
     onSuccess(values) {
       toast.success(`Manufacturer ${values.name} deleted`);
       form.disable();

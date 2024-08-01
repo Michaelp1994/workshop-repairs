@@ -1,7 +1,7 @@
-import assetsController from "@repo/db/controllers/assets.controller";
+import * as assetsController from "@repo/db/controllers/assets.controller";
 import {
+  archiveAssetSchema,
   createAssetSchema,
-  deleteAssetSchema,
   getAssetByIdSchema,
   getAssetByRepairIdSchema,
   updateAssetSchema,
@@ -14,8 +14,8 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -114,23 +114,23 @@ export default router({
 
       return updatedAsset;
     }),
-  delete: protectedProcedure
-    .input(deleteAssetSchema)
+  archive: protectedProcedure
+    .input(archiveAssetSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
+      const metadata = archiveMetadata(ctx.session);
 
-      const deletedAsset = await assetsController.delete(
+      const archivedAsset = await assetsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedAsset) {
+      if (!archivedAsset) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete asset",
+          message: "can't archive asset",
         });
       }
 
-      return deletedAsset;
+      return archivedAsset;
     }),
 });

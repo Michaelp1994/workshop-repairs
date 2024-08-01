@@ -44,7 +44,7 @@ const userSchemas = {
   getById: z.object({
     id: userId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: userId,
   }),
 };

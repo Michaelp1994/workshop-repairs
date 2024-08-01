@@ -15,8 +15,8 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
-import LocationSelect from "~/app/_components/LocationSelect";
-import ModelSelect from "~/app/_components/ModelSelect";
+import LocationSelect from "~/components/LocationSelect";
+import ModelSelect from "~/components/ModelSelect";
 import { assetFormSchema, defaultAsset } from "~/schemas";
 import { api } from "~/trpc/react";
 

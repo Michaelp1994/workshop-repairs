@@ -7,8 +7,8 @@ import userTypeSchemas from "@repo/validators/userTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -76,22 +76,22 @@ export default router({
 
       return updatedUserType;
     }),
-  delete: protectedProcedure
-    .input(userTypeSchemas.delete)
+  archive: protectedProcedure
+    .input(userTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedUserType = await userTypesController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedUserType = await userTypesController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedUserType) {
+      if (!archivedUserType) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete user Type",
+          message: "can't archive user Type",
         });
       }
 
-      return deletedUserType;
+      return archivedUserType;
     }),
 });

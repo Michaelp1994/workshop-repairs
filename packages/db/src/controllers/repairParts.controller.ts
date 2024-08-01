@@ -4,8 +4,8 @@ import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
 import { parts } from "../schemas/parts.schema";
 import {
+  type ArchiveRepairPart,
   type CreateRepairPart,
-  type DeleteRepairPart,
   type RepairPartID,
   repairParts,
   type UpdateRepairPart,
@@ -65,7 +65,7 @@ export default {
     return res;
   },
 
-  async delete(input: DeleteRepairPart, db: Database) {
+  async archive(input: ArchiveRepairPart, db: Database) {
     const query = db
       .update(repairParts)
       .set(input)

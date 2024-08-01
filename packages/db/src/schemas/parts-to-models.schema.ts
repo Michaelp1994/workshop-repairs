@@ -24,4 +24,4 @@ export const partsToModels = pgTable(
 export type PartToModel = typeof partsToModels.$inferSelect;
 export type CreatePartToModel = typeof partsToModels.$inferInsert;
 export type UpdatePartToModel = CreatePartToModel;
-export type DeletePartToModel = Omit<CreatePartToModel, "quantity">;
+export type ArchivePartToModel = Omit<CreatePartToModel, "quantity">;

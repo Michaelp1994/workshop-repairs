@@ -17,7 +17,7 @@ const userTypeSchemas = {
   getById: z.object({
     id: userTypeId,
   }),
-  delete: z.object({
+  archive: z.object({
     id: userTypeId,
   }),
 };

@@ -27,7 +27,7 @@ export default function ArchiveRepairModal({
 }: ArchiveRepairModalProps) {
   const repairId = Number(params.repairId);
   const router = useRouter();
-  const archiveMutation = api.repairs.delete.useMutation({});
+  const archiveMutation = api.repairs.archive.useMutation({});
   const repairUrl = `${getBaseUrl()}/repairs/${repairId}`;
   async function archiveRepair() {
     await archiveMutation.mutateAsync({ id: repairId });

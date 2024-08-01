@@ -24,7 +24,6 @@ import { createCallerFactory, router } from "./trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = router({
-  // post: postRouter,
   assets,
   clients,
   locations,

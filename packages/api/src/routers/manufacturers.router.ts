@@ -8,8 +8,8 @@ import manufacturerSchemas from "@repo/validators/manufacturers.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -92,22 +92,22 @@ export default router({
 
       return updatedManufacturer;
     }),
-  delete: protectedProcedure
-    .input(manufacturerSchemas.delete)
+  archive: protectedProcedure
+    .input(manufacturerSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
-      const deletedManufacturer = await manufacturersController.delete(
+      const metadata = archiveMetadata(ctx.session);
+      const archivedManufacturer = await manufacturersController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedManufacturer) {
+      if (!archivedManufacturer) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete manufacturer",
+          message: "can't archive manufacturer",
         });
       }
 
-      return deletedManufacturer;
+      return archivedManufacturer;
     }),
 });

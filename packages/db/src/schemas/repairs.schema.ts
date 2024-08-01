@@ -7,8 +7,8 @@ import {
 } from "drizzle-orm/pg-core";
 
 import {
+  type InferArchiveModel,
   type InferCreateModel,
-  type InferDeleteModel,
   type InferModel,
   type InferUpdateModel,
 } from "../types";
@@ -49,4 +49,4 @@ export type Repair = InferModel<typeof repairs>;
 export type RepairID = Repair["id"];
 export type CreateRepair = InferCreateModel<typeof repairs>;
 export type UpdateRepair = InferUpdateModel<typeof repairs>;
-export type DeleteRepair = InferDeleteModel<typeof repairs>;
+export type ArchiveRepair = InferArchiveModel<typeof repairs>;

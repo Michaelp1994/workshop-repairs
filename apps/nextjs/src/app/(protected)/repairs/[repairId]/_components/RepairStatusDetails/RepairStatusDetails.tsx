@@ -12,10 +12,11 @@ import {
   SubmitButton,
   useForm,
 } from "@repo/ui/form";
+import { toast } from "@repo/ui/sonner";
 import { type RepairID } from "@repo/validators/ids.validators";
 import { z } from "zod";
 
-import RepairStatusTypeSelect from "~/app/_components/RepairStatusTypeSelect";
+import RepairStatusTypeSelect from "~/components/RepairStatusTypeSelect";
 import { api } from "~/trpc/react";
 
 export default function RepairStatusDetails({
@@ -23,10 +24,20 @@ export default function RepairStatusDetails({
 }: {
   repairId: RepairID;
 }) {
+  const utils = api.useUtils();
   const { data, isLoading, isError } = api.repairs.getById.useQuery({
     id: repairId,
   });
-  const updateMutation = api.repairs.update.useMutation();
+  const updateMutation = api.repairs.update.useMutation({
+    async onSuccess() {
+      await utils.repairs.getById.invalidate({ id: repairId });
+      toast.success(`Repair Status updated`);
+    },
+    onError(error) {
+      toast.error("Failed to update repair status");
+      console.log(error);
+    },
+  });
   const form = useForm({
     values: data,
     schema: z.object({ statusId: z.number() }),
@@ -35,6 +46,15 @@ export default function RepairStatusDetails({
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  if (isError) {
+    return <div>Error</div>;
+  }
+
+  const handleSubmit = form.handleSubmit(async (values) => {
+    await updateMutation.mutateAsync({ ...values, id: repairId });
+  });
+
   return (
     <Card>
       <CardHeader>
@@ -46,9 +66,7 @@ export default function RepairStatusDetails({
             onReset={() => {
               form.reset();
             }}
-            onSubmit={form.handleSubmit((values) =>
-              updateMutation.mutateAsync(values),
-            )}
+            onSubmit={(e) => void handleSubmit(e)}
           >
             <FormField
               control={form.control}

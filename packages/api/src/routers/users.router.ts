@@ -8,8 +8,8 @@ import { TRPCError } from "@trpc/server";
 import { hash } from "bcrypt";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
@@ -135,23 +135,23 @@ export default router({
 
       return updatedUser;
     }),
-  deleteUser: protectedProcedure
-    .input(userSchemas.delete)
+  archive: protectedProcedure
+    .input(userSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
+      const metadata = archiveMetadata(ctx.session);
 
-      const deletedUser = await usersController.delete(
+      const archivedUser = await usersController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedUser) {
+      if (!archivedUser) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Can't delete user",
+          message: "can't archive user",
         });
       }
 
-      return deletedUser;
+      return archivedUser;
     }),
 });

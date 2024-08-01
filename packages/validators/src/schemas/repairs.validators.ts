@@ -8,33 +8,27 @@ import {
   repairTypeId,
 } from "./ids.validators";
 
-const repairSchemas = {
-  create: z.object({
-    fault: z.string().min(3),
-    clientReference: z.string().min(3),
-    clientId,
-    typeId: repairTypeId,
-    statusId: repairStatusTypeId,
-    assetId,
-  }),
-  update: z.object({
-    id: repairId,
-    statusId: repairStatusTypeId,
-    typeId: repairTypeId,
-    clientId,
-    fault: z.string().min(3),
-    clientReference: z.string().min(3),
-    assetId,
-  }),
-  getAllByAssetId: z.object({
-    assetId,
-  }),
-  getById: z.object({
-    id: repairId,
-  }),
-  delete: z.object({
-    id: repairId,
-  }),
-};
+export const getAllByAssetId = z.object({
+  assetId,
+});
 
-export default repairSchemas;
+export const getById = z.object({
+  id: repairId,
+});
+
+export const create = z.object({
+  fault: z.string().min(3),
+  clientReference: z.string().min(3),
+  typeId: repairTypeId,
+  statusId: repairStatusTypeId,
+  clientId,
+  assetId,
+});
+
+export const update = create.partial().extend({
+  id: repairId,
+});
+
+export const archive = z.object({
+  id: repairId,
+});

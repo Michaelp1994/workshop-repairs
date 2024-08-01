@@ -9,8 +9,8 @@ import modelSchemas from "@repo/validators/models.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
+  archiveMetadata,
   createMetadata,
-  deleteMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { protectedProcedure, router } from "../trpc";
@@ -108,23 +108,23 @@ export default router({
 
       return updatedModel;
     }),
-  delete: protectedProcedure
-    .input(modelSchemas.delete)
+  archive: protectedProcedure
+    .input(modelSchemas.archive)
     .mutation(async ({ input, ctx }) => {
-      const metadata = deleteMetadata(ctx.session);
+      const metadata = archiveMetadata(ctx.session);
 
-      const deletedModel = await modelsController.delete(
+      const archivedModel = await modelsController.archive(
         { ...input, ...metadata },
         ctx.db,
       );
 
-      if (!deletedModel) {
+      if (!archivedModel) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't delete model",
+          message: "can't archive model",
         });
       }
 
-      return deletedModel;
+      return archivedModel;
     }),
 });
