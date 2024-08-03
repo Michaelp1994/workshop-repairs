@@ -4,6 +4,7 @@ import {
   DetailsPageTitle,
   DetailsPageToolbar,
 } from "~/components/DetailsPage";
+import { api } from "~/trpc/server";
 
 interface AssetLayoutProps {
   params: {
@@ -12,13 +13,17 @@ interface AssetLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AssetLayout({ children, params }: AssetLayoutProps) {
+export default async function AssetLayout({
+  children,
+  params,
+}: AssetLayoutProps) {
   const assetId = Number(params.assetId);
+  const asset = await api.assets.getById({ id: assetId });
   return (
     <DetailsPage>
       <DetailsPageToolbar>
         <BackButton />
-        <DetailsPageTitle>Asset {assetId}</DetailsPageTitle>
+        <DetailsPageTitle>Asset {asset.serialNumber}</DetailsPageTitle>
       </DetailsPageToolbar>
       {children}
     </DetailsPage>

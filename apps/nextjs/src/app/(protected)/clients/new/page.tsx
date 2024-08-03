@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
-import CreateClientForm from "./CreateClientForm";
+import CreateClientForm from "../_components/CreateClientForm";
 
 export default function CreateClientPage() {
   return (

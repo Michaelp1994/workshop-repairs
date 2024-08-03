@@ -70,6 +70,7 @@ interface UseFormProps<
 > extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
   schema: ZodSchema<TFieldValues>;
   values?: NoInfer<TFieldValues>;
+  defaultValues?: NoInfer<TFieldValues>;
 }
 
 function useForm<
@@ -245,14 +246,18 @@ const FormFooter = React.forwardRef<
 });
 FormFooter.displayName = "FormFooter";
 
-const SubmitButton = React.forwardRef<
-  HTMLButtonElement,
-  Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children">
->((props, ref) => (
-  <Button ref={ref} type="submit" {...props}>
-    Submit
-  </Button>
-));
+interface SubmitButtonProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  isLoading?: boolean;
+}
+
+const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
+  ({ isLoading, ...buttonProps }, ref) => (
+    <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
+      {isLoading ? "Loading..." : "Submit"}
+    </Button>
+  ),
+);
 
 const ResetButton = React.forwardRef<
   HTMLButtonElement,

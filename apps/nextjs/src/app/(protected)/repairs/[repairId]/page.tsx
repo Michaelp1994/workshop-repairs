@@ -6,12 +6,12 @@ import {
 } from "~/components/DetailsPage";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
-import AssetDetailsSection from "./_components/AssetDetailsSection";
-import RepairCommentsSection from "./_components/RepairCommentsSection";
-import RepairDetailsSection from "./_components/RepairDetailsSection";
-import RepairImagesSection from "./_components/RepairImagesSection";
-import RepairPartsSection from "./_components/RepairPartsSection";
-import RepairStatusDetails from "./_components/RepairStatusDetails";
+import AssetDetailsSection from "../_components/AssetDetailsSection";
+import RepairCommentsSection from "../_components/RepairCommentsSection";
+import RepairDetailsSection from "../_components/RepairDetailsSection";
+import RepairImagesSection from "../_components/RepairImagesSection";
+import RepairPartsSection from "../_components/RepairPartsSection";
+import RepairStatusDetails from "../_components/RepairStatusDetails";
 
 interface ViewRepairPageProps {
   params: {

@@ -5,9 +5,9 @@ import {
   DetailsPageSecondaryColumn,
 } from "~/components/DetailsPage";
 
-import AssetDetailsSection from "./_components/AssetDetailsSection";
-import AssetRepairsSection from "./_components/AssetRepairsSection";
-import ModelDetails from "./_components/ModelDetailsSection";
+import AssetDetailsSection from "../_components/AssetDetailsSection";
+import AssetRepairsSection from "../_components/AssetRepairsSection";
+import ModelDetails from "../_components/ModelDetailsSection";
 
 interface ViewAssetPageProps {
   params: {

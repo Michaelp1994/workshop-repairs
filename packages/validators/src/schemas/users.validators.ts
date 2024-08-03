@@ -2,51 +2,42 @@ import { z } from "zod";
 
 import { userId, userTypeId } from "./ids.validators";
 
-const userColumns = z.enum([
-  "firstName",
-  "lastName",
-  "email",
-  "type_name",
-  "createdAt",
-  "updatedAt",
-]);
+export const register = z.object({
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  email: z.string().email(),
+  password: z.string().min(8),
+});
 
-export type UserColumns = z.infer<typeof userColumns>;
+export const create = z.object({
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  email: z.string().email(),
+  typeId: userTypeId,
+  password: z.string().min(8),
+});
 
-const userSchemas = {
-  register: z.object({
-    firstName: z.string().min(3),
-    lastName: z.string().min(3),
-    email: z.string().email(),
-    password: z.string().min(8),
-  }),
-  create: z.object({
-    firstName: z.string().min(3),
-    lastName: z.string().min(3),
-    email: z.string().email(),
-    typeId: userTypeId,
-    password: z.string().min(8),
-  }),
-  update: z.object({
-    id: userId,
-    firstName: z.string().min(3),
-    lastName: z.string().min(3),
-    email: z.string().email(),
-    typeId: userTypeId,
-    password: z.string().min(8),
-  }),
-  updateCurrent: z.object({
-    firstName: z.string().min(3),
-    lastName: z.string().min(3),
-    email: z.string().email(),
-  }),
-  getCurrent: z.object({}),
-  getById: z.object({
-    id: userId,
-  }),
-  archive: z.object({
-    id: userId,
-  }),
-};
+export const update = z.object({
+  id: userId,
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  email: z.string().email(),
+  typeId: userTypeId,
+  password: z.string().min(8),
+});
 
-export default userSchemas;
+export const updateCurrent = z.object({
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  email: z.string().email(),
+});
+
+export const getCurrent = z.object({});
+
+export const getById = z.object({
+  id: userId,
+});
+
+export const archive = z.object({
+  id: userId,
+});

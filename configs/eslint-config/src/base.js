@@ -1,14 +1,11 @@
 import eslint from "@eslint/js";
-import importPlugin from "eslint-plugin-import";
 import perfectionist from "eslint-plugin-perfectionist";
 import tseslint from "typescript-eslint";
 
 const config = tseslint.config(
   {
     files: ["**/*.js", "**/*.ts", "**/*.tsx"],
-    plugins: {
-      import: importPlugin,
-    },
+    plugins: {},
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.strictTypeChecked,

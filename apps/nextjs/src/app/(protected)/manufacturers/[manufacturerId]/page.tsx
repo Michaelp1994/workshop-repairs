@@ -1,4 +1,4 @@
-import UpdateManufacturerForm from "./UpdateManufacturerForm";
+import UpdateManufacturerForm from "../_components/UpdateManufacturerForm";
 
 // import ModelsTable from "~/features/models/components/ModelsTable";
 

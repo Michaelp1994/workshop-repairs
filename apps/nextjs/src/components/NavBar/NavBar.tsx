@@ -4,7 +4,7 @@ import ProfileButton from "./ProfileButton";
 
 const navList = [
   {
-    to: "/",
+    to: "/dashboard",
     label: "Home",
   },
   {

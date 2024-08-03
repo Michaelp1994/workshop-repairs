@@ -14,6 +14,8 @@ import { Input } from "@repo/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import type { LoginFormInput } from "~/schemas";
+
 import { defaultLogin, loginFormSchema } from "./schema";
 import { login } from "./server-action";
 
@@ -22,15 +24,18 @@ export default function LoginForm() {
     schema: loginFormSchema,
     defaultValues: defaultLogin,
   });
+
+  async function handleValid(data: LoginFormInput) {
+    await login(data);
+    router.push("/dashboard");
+  }
+
   const router = useRouter();
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-5"
-        onSubmit={form.handleSubmit(async (data) => {
-          await login(data);
-          router.push("/dashboard");
-        })}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >
         <FormField
           name="email"

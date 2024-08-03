@@ -1,9 +1,9 @@
-import repairImagesController from "@repo/db/controllers/repairImages.controller";
+import * as repairImagesController from "@repo/db/controllers/repairImages.controller";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import repairImageSchemas from "@repo/validators/repairImages.validators";
+import * as repairImageSchemas from "@repo/validators/repairImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

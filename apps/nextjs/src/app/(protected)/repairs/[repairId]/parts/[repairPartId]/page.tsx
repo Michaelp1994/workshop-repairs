@@ -1,5 +1,3 @@
-import type { RepairID, RepairPartID } from "@repo/validators/ids.validators";
-
 import {
   Card,
   CardContent,
@@ -8,12 +6,12 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import UpdateRepairPartForm from "./UpdateRepairPartForm";
+import UpdateRepairPartForm from "../../../_components/UpdateRepairPartForm";
 
 interface UpdateRepairPartModalProps {
   params: {
-    repairId: RepairID;
-    repairPartId: RepairPartID;
+    repairId: string;
+    repairPartId: string;
   };
 }
 
@@ -33,7 +31,7 @@ export default function UpdateRepairPartModal({
       </CardHeader>
 
       <CardContent>
-        <UpdateRepairPartForm repairId={repairId} />
+        <UpdateRepairPartForm repairId={repairId} repairPartId={repairPartId} />
       </CardContent>
     </Card>
   );

@@ -66,6 +66,7 @@ export async function getCount(
   const [res] = await query.execute();
   return res?.count;
 }
+
 export function getSelect(_: GetSelect, db: Database) {
   const query = db
     .select({
@@ -76,16 +77,19 @@ export function getSelect(_: GetSelect, db: Database) {
     .orderBy(clients.name);
   return query.execute();
 }
+
 export async function getById(id: ClientID, db: Database) {
   const query = db.select().from(clients).where(eq(clients.id, id));
   const [res] = await query.execute();
   return res;
 }
+
 export async function create(input: CreateClient, db: Database) {
   const query = db.insert(clients).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
+
 export async function update(input: UpdateClient, db: Database) {
   const query = db
     .update(clients)
@@ -95,6 +99,7 @@ export async function update(input: UpdateClient, db: Database) {
   const [res] = await query.execute();
   return res;
 }
+
 export async function archive(input: ArchiveClient, db: Database) {
   const query = db
     .update(clients)

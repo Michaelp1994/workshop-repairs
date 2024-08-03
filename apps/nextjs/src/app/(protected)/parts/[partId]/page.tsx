@@ -1,6 +1,6 @@
 import { type PartID } from "@repo/validators/ids.validators";
 
-import UpdatePartForm from "./UpdatePartForm";
+import UpdatePartForm from "../_components/UpdatePartForm";
 
 // import PartToModelsTable from "~/features/partsToModels/components/PartToModelsTable";
 

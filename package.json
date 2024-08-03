@@ -5,6 +5,7 @@
     "build": "turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .vercel",
     "db:push": "dotenv -- pnpm -F db db:push",
+    "db:reset": "dotenv -- pnpm -F db db:reset",
     "db:seed": "dotenv -- pnpm -F db db:seed",
     "db:studio": "dotenv -- pnpm -F db db:studio",
     "dev": "dotenv -- turbo dev",

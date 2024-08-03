@@ -1,11 +1,11 @@
-import assetsController from "@repo/db/controllers/assets.controller";
-import modelsController from "@repo/db/controllers/models.controller";
+import * as assetsController from "@repo/db/controllers/assets.controller";
+import * as modelsController from "@repo/db/controllers/models.controller";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import modelSchemas from "@repo/validators/models.validators";
+import * as modelSchemas from "@repo/validators/models.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

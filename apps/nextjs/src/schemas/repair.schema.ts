@@ -8,7 +8,7 @@ import { z } from "zod";
 
 export const repairFormSchema = z.object({
   fault: z.string().min(3),
-  clientId: clientId,
+  clientId,
   clientReference: z.string(),
   typeId: repairTypeId,
   statusId: repairStatusTypeId,

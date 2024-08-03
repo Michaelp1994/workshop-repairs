@@ -1,9 +1,9 @@
-import repairCommentsController from "@repo/db/controllers/repairComments.controller";
+import * as repairCommentsController from "@repo/db/controllers/repairComments.controller";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import repairCommentSchemas from "@repo/validators/repairComments.validators";
+import * as repairCommentSchemas from "@repo/validators/repairComments.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

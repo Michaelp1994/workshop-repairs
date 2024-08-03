@@ -2,41 +2,26 @@ import { z } from "zod";
 
 import { assetId, manufacturerId, modelId } from "./ids.validators";
 
-const modelColumns = z.enum([
-  "name",
-  "nickname",
-  "createdAt",
-  "updatedAt",
-  "manufacturer_name",
-]);
+export const create = z.object({
+  name: z.string().min(3),
+  nickname: z.string().min(2),
+  manufacturerId,
+});
 
-export type ModelColumns = z.infer<typeof modelColumns>;
+export const update = z.object({
+  id: modelId,
+  name: z.string().min(3),
+  manufacturerId,
+});
 
-const modelFilters = z.enum(["manufacturer_id"]);
+export const getById = z.object({
+  id: modelId,
+});
 
-export type ModelFilters = z.infer<typeof modelFilters>;
+export const getByAssetId = z.object({
+  assetId,
+});
 
-const modelSchemas = {
-  create: z.object({
-    name: z.string().min(3),
-    nickname: z.string().min(2),
-    manufacturerId,
-  }),
-  update: z.object({
-    id: modelId,
-    name: z.string().min(3),
-    manufacturerId,
-  }),
-
-  getById: z.object({
-    id: modelId,
-  }),
-  getByAssetId: z.object({
-    assetId,
-  }),
-  archive: z.object({
-    id: modelId,
-  }),
-};
-
-export default modelSchemas;
+export const archive = z.object({
+  id: modelId,
+});

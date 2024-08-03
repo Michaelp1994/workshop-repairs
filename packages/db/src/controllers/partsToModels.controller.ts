@@ -12,12 +12,11 @@ import {
 import { type ModelID, models } from "../schemas/models.schema";
 import { type PartID, parts } from "../schemas/parts.schema";
 import {
+  type ArchivePartToModel,
   type CreatePartToModel,
-  DeletePartToModel,
   partsToModels,
   UpdatePartToModel,
 } from "../schemas/parts-to-models.schema";
-import { repairs } from "../schemas/repairs.schema";
 
 const globalFilterColumns = [parts.name, parts.partNumber, models.name];
 
@@ -59,6 +58,7 @@ export function getAll(
   const res = query.execute();
   return res;
 }
+
 export async function getCount(
   { columnFilters, globalFilter }: GetCount,
   db: Database,
@@ -124,11 +124,13 @@ export async function getById(
   const [res] = await query.execute();
   return res;
 }
+
 export async function create(input: CreatePartToModel, db: Database) {
   const query = db.insert(partsToModels).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
+
 export async function update(input: UpdatePartToModel, db: Database) {
   const query = db
     .update(partsToModels)

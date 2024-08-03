@@ -2,31 +2,26 @@ import { z } from "zod";
 
 import { repairId, repairImageId } from "./ids.validators";
 
-const repairImageColumns = z.enum(["url", "caption", "createdAt", "updatedAt"]);
+export const getAllByRepairId = z.object({
+  repairId,
+});
 
-export type RepairImageColumns = z.infer<typeof repairImageColumns>;
+export const getById = z.object({
+  id: repairImageId,
+});
 
-const repairImageSchemas = {
-  getAllByRepairId: z.object({
-    repairId,
-  }),
-  getById: z.object({
-    id: repairImageId,
-  }),
-  create: z.object({
-    caption: z.string().min(3),
-    url: z.string().min(3),
-    repairId,
-  }),
-  update: z.object({
-    id: repairImageId,
-    caption: z.string().min(3),
-    url: z.string().min(3),
-  }),
+export const create = z.object({
+  caption: z.string().min(3),
+  url: z.string().min(3),
+  repairId,
+});
 
-  archive: z.object({
-    id: repairImageId,
-  }),
-};
+export const update = z.object({
+  id: repairImageId,
+  caption: z.string().min(3),
+  url: z.string().min(3),
+});
 
-export default repairImageSchemas;
+export const archive = z.object({
+  id: repairImageId,
+});

@@ -1,10 +1,4 @@
-import {
-  boolean,
-  integer,
-  pgTable,
-  serial,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, serial } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -12,9 +6,9 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import metadataColumns from "./metadata-columns";
 import { parts } from "./parts.schema";
 import { repairs } from "./repairs.schema";
-import { users } from "./users.schema";
 
 export const repairParts = pgTable("repair_parts", {
   id: serial("id").primaryKey(),
@@ -26,14 +20,7 @@ export const repairParts = pgTable("repair_parts", {
   partId: integer("part_id")
     .notNull()
     .references(() => parts.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-  deletedAt: timestamp("deleted_at"),
-  createdById: integer("created_by")
-    .notNull()
-    .references(() => users.id),
-  updatedById: integer("updated_by").references(() => users.id),
-  deletedById: integer("deleted_by").references(() => users.id),
+  ...metadataColumns,
 });
 
 export type RepairPart = InferModel<typeof repairParts>;

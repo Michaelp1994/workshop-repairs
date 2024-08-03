@@ -8,14 +8,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import { BackButton } from "~/components/BackButton";
-import {
-  DetailsPage,
-  DetailsPageTitle,
-  DetailsPageToolbar,
-} from "~/components/DetailsPage";
-
-import CreateModelImageForm from "./CreateModelImageForm";
+import CreateModelImageForm from "../../../_components/CreateModelImageForm";
 
 interface CreateModelImagePageProps {
   params: {

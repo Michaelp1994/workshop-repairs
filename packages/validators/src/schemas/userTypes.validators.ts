@@ -2,24 +2,19 @@ import { z } from "zod";
 
 import { userTypeId } from "./ids.validators";
 
-const userTypeColumns = z.enum(["name", "createdAt", "updatedAt"]);
+export const create = z.object({
+  name: z.string().min(3),
+});
 
-export type UserTypeColumns = z.infer<typeof userTypeColumns>;
+export const update = z.object({
+  id: userTypeId,
+  name: z.string().min(3),
+});
 
-const userTypeSchemas = {
-  create: z.object({
-    name: z.string().min(3),
-  }),
-  update: z.object({
-    id: userTypeId,
-    name: z.string().min(3),
-  }),
-  getById: z.object({
-    id: userTypeId,
-  }),
-  archive: z.object({
-    id: userTypeId,
-  }),
-};
+export const getById = z.object({
+  id: userTypeId,
+});
 
-export default userTypeSchemas;
+export const archive = z.object({
+  id: userTypeId,
+});

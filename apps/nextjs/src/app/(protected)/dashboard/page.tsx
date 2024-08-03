@@ -1,6 +1,6 @@
-import OngoingRepairsCard from "./components/OngoingRepairsCard";
+import OngoingRepairsCard from "./_components/OngoingRepairsCard";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   return (
     <div>
       <div>

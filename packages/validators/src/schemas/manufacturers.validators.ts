@@ -2,25 +2,19 @@ import { z } from "zod";
 
 import { manufacturerId } from "./ids.validators";
 
-const manufacturerColumns = z.enum(["name", "createdAt", "updatedAt"]);
+export const create = z.object({
+  name: z.string().min(3),
+});
 
-export type ManufacturerColumns = z.infer<typeof manufacturerColumns>;
+export const update = z.object({
+  id: manufacturerId,
+  name: z.string().min(3),
+});
 
-const manufacturerSchemas = {
-  create: z.object({
-    name: z.string().min(3),
-  }),
-  update: z.object({
-    id: manufacturerId,
-    name: z.string().min(3),
-  }),
+export const getById = z.object({
+  id: manufacturerId,
+});
 
-  getById: z.object({
-    id: manufacturerId,
-  }),
-  archive: z.object({
-    id: manufacturerId,
-  }),
-};
-
-export default manufacturerSchemas;
+export const archive = z.object({
+  id: manufacturerId,
+});

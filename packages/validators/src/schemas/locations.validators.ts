@@ -2,27 +2,21 @@ import { z } from "zod";
 
 import { locationId } from "./ids.validators";
 
-const locationColumns = z.enum(["name", "address", "createdAt", "updatedAt"]);
+export const create = z.object({
+  name: z.string().min(3),
+  address: z.string().min(3),
+});
 
-export type LocationColumns = z.infer<typeof locationColumns>;
+export const update = z.object({
+  id: locationId,
+  name: z.string().min(3),
+  address: z.string().min(3),
+});
 
-const locationSchemas = {
-  create: z.object({
-    name: z.string().min(3),
-    address: z.string().min(3),
-  }),
-  update: z.object({
-    id: locationId,
-    name: z.string().min(3),
-    address: z.string().min(3),
-  }),
+export const getById = z.object({
+  id: locationId,
+});
 
-  getById: z.object({
-    id: locationId,
-  }),
-  archive: z.object({
-    id: locationId,
-  }),
-};
-
-export default locationSchemas;
+export const archive = z.object({
+  id: locationId,
+});

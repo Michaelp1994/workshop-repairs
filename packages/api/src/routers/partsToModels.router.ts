@@ -3,7 +3,7 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import partsToModelSchemas from "@repo/validators/partsToModel.validators";
+import * as partsToModelSchemas from "@repo/validators/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
 import { protectedProcedure, router } from "../trpc";

@@ -1,4 +1,11 @@
-import UpdateClientForm from "./UpdateClientForm";
+import {
+  DetailsPageGrid,
+  DetailsPageMainColumn,
+  DetailsPageSecondaryColumn,
+} from "~/components/DetailsPage";
+
+import ClientAssetsSection from "../_components/ClientAssetsSection";
+import ClientDetailsSection from "../_components/ClientDetailsSection";
 
 interface ViewClientPageProps {
   params: {
@@ -9,13 +16,12 @@ interface ViewClientPageProps {
 export default function ViewClientPage({ params }: ViewClientPageProps) {
   const clientId = Number(params.clientId);
   return (
-    <div>
-      <div>
-        <div>
-          <UpdateClientForm clientId={clientId} />
-        </div>
-        <div>{/* <AssetsTable clientId={clientId} /> */}</div>
-      </div>
-    </div>
+    <DetailsPageGrid>
+      <DetailsPageMainColumn>
+        <ClientDetailsSection clientId={clientId} />
+        <ClientAssetsSection clientId={clientId} />
+      </DetailsPageMainColumn>
+      <DetailsPageSecondaryColumn></DetailsPageSecondaryColumn>
+    </DetailsPageGrid>
   );
 }

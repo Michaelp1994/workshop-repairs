@@ -49,11 +49,7 @@ export function getAll(
 
   const query = db
     .select({
-      id: assets.id,
-      assetNumber: assets.assetNumber,
-      serialNumber: assets.serialNumber,
-      createdAt: assets.createdAt,
-      updatedAt: assets.updatedAt,
+      ...assetFields,
       location: {
         id: locations.id,
         name: locations.name,

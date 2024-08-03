@@ -7,7 +7,8 @@
   "author": "",
   "type": "module",
   "exports": {
-    "./*": "./src/schemas/*.ts"
+    "./*": "./src/schemas/*.ts",
+    "./types": "./src/types.ts"
   },
   "scripts": {
     "// build": "tsc && tsc-alias",

@@ -1,10 +1,10 @@
-import partsController from "@repo/db/controllers/parts.controller";
+import * as partsController from "@repo/db/controllers/parts.controller";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import partSchemas from "@repo/validators/parts.validators";
+import * as partSchemas from "@repo/validators/parts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

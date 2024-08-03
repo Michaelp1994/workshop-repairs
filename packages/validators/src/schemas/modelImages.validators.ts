@@ -2,33 +2,30 @@ import { z } from "zod";
 
 import { modelId, modelImageId } from "./ids.validators";
 
-const modelImageColumns = z.enum(["url", "caption", "createdAt", "updatedAt"]);
+export const create = z.object({
+  caption: z.string().min(3),
+  url: z.string().min(3),
+  modelId,
+});
 
-export type ModelImageColumns = z.infer<typeof modelImageColumns>;
+export const setFavourite = z.object({
+  id: modelImageId,
+});
 
-const modelImageSchemas = {
-  create: z.object({
-    caption: z.string().min(3),
-    url: z.string().min(3),
-    modelId,
-  }),
-  setFavourite: z.object({
-    id: modelImageId,
-  }),
-  update: z.object({
-    id: modelImageId,
-    caption: z.string().min(3),
-    url: z.string().min(3),
-  }),
-  getAllByModelId: z.object({
-    modelId,
-  }),
-  getById: z.object({
-    id: modelImageId,
-  }),
-  archive: z.object({
-    id: modelImageId,
-  }),
-};
+export const update = z.object({
+  id: modelImageId,
+  caption: z.string().min(3),
+  url: z.string().min(3),
+});
 
-export default modelImageSchemas;
+export const getAllByModelId = z.object({
+  modelId,
+});
+
+export const getById = z.object({
+  id: modelImageId,
+});
+
+export const archive = z.object({
+  id: modelImageId,
+});

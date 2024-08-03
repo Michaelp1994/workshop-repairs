@@ -1,10 +1,4 @@
-import {
-  integer,
-  pgTable,
-  serial,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -14,9 +8,9 @@ import {
 } from "../types";
 import { assets } from "./assets.schema";
 import { clients } from "./clients.schema";
+import metadataColumns from "./metadata-columns";
 import { repairStatusTypes } from "./repair-status-types.schema";
 import { repairTypes } from "./repair-types.schema";
-import { users } from "./users.schema";
 
 export const repairs = pgTable("repairs", {
   id: serial("id").primaryKey(),
@@ -35,14 +29,7 @@ export const repairs = pgTable("repairs", {
   assetId: integer("asset_id")
     .notNull()
     .references(() => assets.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-  deletedAt: timestamp("deleted_at"),
-  createdById: integer("created_by")
-    .notNull()
-    .references(() => users.id),
-  updatedById: integer("updated_by").references(() => users.id),
-  deletedById: integer("deleted_by").references(() => users.id),
+  ...metadataColumns,
 });
 
 export type Repair = InferModel<typeof repairs>;

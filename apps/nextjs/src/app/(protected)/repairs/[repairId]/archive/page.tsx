@@ -42,7 +42,7 @@ export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
       <CardHeader>
         <CardTitle>Confirm Archive</CardTitle>
         <CardDescription>
-          Are you sure you wish to archive this item?
+          Are you sure you wish to archive this repair?
         </CardDescription>
       </CardHeader>
       <CardContent>This repair will no longer be avaliable.</CardContent>
@@ -50,7 +50,7 @@ export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
         <Button asChild>
           <Link href={repairUrl}>No</Link>
         </Button>
-        <Button onClick={archiveRepair} variant="destructive">
+        <Button onClick={() => void archiveRepair()} variant="destructive">
           Yes, I am sure
         </Button>
       </CardFooter>

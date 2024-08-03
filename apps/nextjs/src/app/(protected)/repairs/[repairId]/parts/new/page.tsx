@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import CreateRepairPartForm from "./CreateRepairPartForm";
+import CreateRepairPartForm from "../../../_components/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps {
   params: {

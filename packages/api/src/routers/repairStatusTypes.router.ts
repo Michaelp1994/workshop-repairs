@@ -1,10 +1,10 @@
-import repairStatusTypesController from "@repo/db/controllers/repairStatusTypes.controller";
+import * as repairStatusTypesController from "@repo/db/controllers/repairStatusTypes.controller";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import repairStatusTypeSchemas from "@repo/validators/repairStatusTypes.validators";
+import * as repairStatusTypeSchemas from "@repo/validators/repairStatusTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

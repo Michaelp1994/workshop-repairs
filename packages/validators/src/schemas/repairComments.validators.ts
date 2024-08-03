@@ -3,28 +3,24 @@ import { z } from "zod";
 import replaceLineBreaks from "../helpers/replaceLineBreaks";
 import { repairCommentId, repairId } from "./ids.validators";
 
-const repairCommentColumns = z.enum(["comment", "createdAt", "updatedAt"]);
+export const getAllByRepairId = z.object({
+  repairId,
+});
 
-export type RepairCommentColumns = z.infer<typeof repairCommentColumns>;
+export const getById = z.object({
+  id: repairCommentId,
+});
 
-const repairCommentSchemas = {
-  getAllByRepairId: z.object({
-    repairId,
-  }),
-  getById: z.object({
-    id: repairCommentId,
-  }),
-  create: z.object({
-    comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
-    repairId,
-  }),
-  update: z.object({
-    id: repairCommentId,
-    comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
-  }),
-  archive: z.object({
-    id: repairCommentId,
-  }),
-};
+export const create = z.object({
+  comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
+  repairId,
+});
 
-export default repairCommentSchemas;
+export const update = z.object({
+  id: repairCommentId,
+  comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
+});
+
+export const archive = z.object({
+  id: repairCommentId,
+});

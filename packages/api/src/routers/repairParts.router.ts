@@ -1,9 +1,9 @@
-import repairPartsController from "@repo/db/controllers/repairParts.controller";
+import * as repairPartsController from "@repo/db/controllers/repairParts.controller";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import repairPartSchemas from "@repo/validators/repairParts.validators";
+import * as repairPartSchemas from "@repo/validators/repairParts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

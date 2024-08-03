@@ -1,9 +1,9 @@
-import userTypesController from "@repo/db/controllers/userTypes.controller";
+import * as userTypesController from "@repo/db/controllers/userTypes.controller";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import userTypeSchemas from "@repo/validators/userTypes.validators";
+import * as userTypeSchemas from "@repo/validators/userTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

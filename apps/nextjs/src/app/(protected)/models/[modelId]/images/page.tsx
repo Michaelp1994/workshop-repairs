@@ -12,7 +12,7 @@ import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/react";
 
-import ModelImageCarousel from "./_components/ModelImageCarousel";
+import ModelImageCarousel from "../../_components/ModelImageCarousel";
 
 interface ModelImageGalleryModalProps {
   params: {

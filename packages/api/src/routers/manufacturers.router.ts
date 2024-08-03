@@ -1,10 +1,10 @@
-import manufacturersController from "@repo/db/controllers/manufacturers.controller";
+import * as manufacturersController from "@repo/db/controllers/manufacturers.controller";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import manufacturerSchemas from "@repo/validators/manufacturers.validators";
+import * as manufacturerSchemas from "@repo/validators/manufacturers.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

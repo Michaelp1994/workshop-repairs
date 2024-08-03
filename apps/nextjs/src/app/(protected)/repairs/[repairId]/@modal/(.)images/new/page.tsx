@@ -1,7 +1,6 @@
 "use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
-import { Button } from "@repo/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,8 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+
+import CreateRepairImageForm from "../../../../_components/CreateRepairImageForm";
 
 interface ArchiveRepairModalProps {
   params: { repairId: RepairID };
@@ -35,21 +36,12 @@ export default function ArchiveRepairModal({
         <DialogOverlay />
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Archive Repair</DialogTitle>
+            <DialogTitle>Upload Image</DialogTitle>
             <DialogDescription>
-              Are you sure you wish to archive this item?
+              Upload an image to repair {repairId}
             </DialogDescription>
           </DialogHeader>
-          <div className="flex justify-end gap-4">
-            <Button
-              onClick={() => {
-                router.back();
-              }}
-            >
-              No
-            </Button>
-            <Button variant="destructive">Yes, I am sure</Button>
-          </div>
+          <CreateRepairImageForm repairId={repairId} />
         </DialogContent>
       </DialogPortal>
     </Dialog>

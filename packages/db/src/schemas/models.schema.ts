@@ -3,7 +3,6 @@ import {
   integer,
   pgTable,
   serial,
-  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -14,8 +13,8 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { manufacturers } from "./manufacturers.schema";
+import metadataColumns from "./metadata-columns";
 import { modelImages } from "./model-images.schema";
-import { users } from "./users.schema";
 
 export const models = pgTable(
   "models",
@@ -27,14 +26,7 @@ export const models = pgTable(
       .notNull()
       .references(() => manufacturers.id),
     defaultImageId: integer("default_image_id"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-    deletedAt: timestamp("deleted_at"),
-    createdById: integer("created_by")
-      .notNull()
-      .references(() => users.id),
-    updatedById: integer("updated_by").references(() => users.id),
-    deletedById: integer("deleted_by").references(() => users.id),
+    ...metadataColumns,
   },
   (table) => {
     return {

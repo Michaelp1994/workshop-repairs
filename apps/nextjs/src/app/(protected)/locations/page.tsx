@@ -9,7 +9,7 @@ import {
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import LocationsTable from "./components/LocationsTable";
+import LocationsTable from "./_components/LocationsTable";
 
 export default function AllLocationsPage() {
   return (

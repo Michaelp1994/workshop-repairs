@@ -25,8 +25,11 @@ export const create = z.object({
   assetId,
 });
 
-export const update = create.partial().extend({
+export const update = create.partial().extend({ id: repairId });
+
+export const updateStatus = z.object({
   id: repairId,
+  statusId: repairStatusTypeId,
 });
 
 export const archive = z.object({

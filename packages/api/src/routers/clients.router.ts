@@ -1,5 +1,5 @@
 import * as clientsController from "@repo/db/controllers/clients.controller";
-import clientSchemas from "@repo/validators/clients.validators";
+import * as clientSchemas from "@repo/validators/clients.validators";
 import {
   getAllSchema,
   getCountSchema,

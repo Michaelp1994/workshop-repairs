@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Card,
   CardContent,
@@ -11,6 +13,11 @@ import { type InitialDataTableState } from "@repo/ui/data-table";
 import { CreateLink } from "~/components/ButtonLink";
 
 import RepairsTable from "./_components/RepairsTable";
+
+export const metadata: Metadata = {
+  title: "Workshop App | Repairs",
+  description: "Workshop App",
+};
 
 export default function AllRepairsPage() {
   const initialState: InitialDataTableState = {

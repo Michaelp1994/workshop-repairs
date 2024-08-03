@@ -1,10 +1,10 @@
-import locationsController from "@repo/db/controllers/locations.controller";
+import * as locationsController from "@repo/db/controllers/locations.controller";
 import {
   getAllSchema,
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import locationSchemas from "@repo/validators/locations.validators";
+import * as locationSchemas from "@repo/validators/locations.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

@@ -1,11 +1,5 @@
 import * as assetsController from "@repo/db/controllers/assets.controller";
-import {
-  archiveAssetSchema,
-  createAssetSchema,
-  getAssetByIdSchema,
-  getAssetByRepairIdSchema,
-  updateAssetSchema,
-} from "@repo/validators/assets.validators";
+import * as assetSchemas from "@repo/validators/assets.validators";
 import {
   getAllSchema,
   getCountSchema,
@@ -47,7 +41,7 @@ export default router({
       return allAssets;
     }),
   getById: protectedProcedure
-    .input(getAssetByIdSchema)
+    .input(assetSchemas.getById)
     .query(async ({ input, ctx }) => {
       const asset = await assetsController.getById(input.id, ctx.db);
 
@@ -61,7 +55,7 @@ export default router({
       return asset;
     }),
   getByRepairId: protectedProcedure
-    .input(getAssetByRepairIdSchema)
+    .input(assetSchemas.getByRepairId)
     .query(async ({ input, ctx }) => {
       const asset = await assetsController.getByRepairId(input.id, ctx.db);
 
@@ -75,7 +69,7 @@ export default router({
       return asset;
     }),
   create: protectedProcedure
-    .input(createAssetSchema)
+    .input(assetSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdAsset = await assetsController.create(
@@ -97,7 +91,7 @@ export default router({
       return createdAsset;
     }),
   update: protectedProcedure
-    .input(updateAssetSchema)
+    .input(assetSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedAsset = await assetsController.update(
@@ -115,7 +109,7 @@ export default router({
       return updatedAsset;
     }),
   archive: protectedProcedure
-    .input(archiveAssetSchema)
+    .input(assetSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 

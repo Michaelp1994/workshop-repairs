@@ -1,10 +1,10 @@
-import modelImagesController from "@repo/db/controllers/modelImages.controller";
-import modelsController from "@repo/db/controllers/models.controller";
+import * as modelImagesController from "@repo/db/controllers/modelImages.controller";
+import * as modelsController from "@repo/db/controllers/models.controller";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import modelImageSchemas from "@repo/validators/modelImages.validators";
+import * as modelImageSchemas from "@repo/validators/modelImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

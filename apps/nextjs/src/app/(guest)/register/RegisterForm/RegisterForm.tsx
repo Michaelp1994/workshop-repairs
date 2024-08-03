@@ -13,6 +13,8 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 
+import type { RegisterFormInput } from "~/schemas";
+
 import { defaultRegister, registerFormSchema } from "./schema";
 import { register } from "./server-action";
 
@@ -22,9 +24,13 @@ export default function RegisterForm() {
     defaultValues: defaultRegister,
   });
 
+  async function handleValid(data: RegisterFormInput) {
+    await register(data);
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((data) => register(data))}>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
         <FormField
           control={form.control}
           name="firstName"

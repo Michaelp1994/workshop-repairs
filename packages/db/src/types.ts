@@ -1,3 +1,11 @@
+import type {
+  OmitSome,
+  Prettify,
+  RemoveNull,
+  RemoveNullSome,
+  RequireSome,
+} from "@repo/validators/types";
+
 import {
   type InferInsertModel,
   type InferSelectModel,
@@ -8,10 +16,6 @@ import { PgColumn } from "drizzle-orm/pg-core";
 export type OrderMapping = Record<string, PgColumn>;
 export type FilterMapping = Record<string, PgColumn>;
 
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & NonNullable<unknown>;
-
 interface BaseType {
   id?: string | number;
   updatedAt?: string | number | null;
@@ -21,14 +25,6 @@ interface BaseType {
   deletedAt?: string | number | null;
   deletedById?: string | number | null;
 }
-
-type OmitSome<T, K extends keyof T> = Omit<T, K>;
-type RequireSome<T, K extends keyof T> = T & Required<Pick<T, K>>;
-type RemoveNull<T> = {
-  [K in keyof T]: Exclude<T[K], null>;
-};
-type RemoveNullSome<T, K extends keyof T> = RemoveNull<Pick<T, K>> &
-  Partial<Omit<T, K>>;
 
 type OmitKeys<T extends BaseType> = OmitSome<
   T,

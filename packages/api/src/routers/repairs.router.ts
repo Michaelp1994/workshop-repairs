@@ -1,4 +1,4 @@
-import repairsController from "@repo/db/controllers/repairs.controller";
+import * as repairsController from "@repo/db/controllers/repairs.controller";
 import {
   getAllSchema,
   getCountSchema,
@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
 import { protectedProcedure, router } from "../trpc";
 
 export default router({
@@ -21,6 +22,7 @@ export default router({
       const allRepairs = await repairsController.getAll(input, ctx.db);
       return allRepairs;
     }),
+
   getCount: protectedProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
@@ -31,15 +33,16 @@ export default router({
           message: "can't count repairs",
         });
       }
-
       return count;
     }),
+
   getSelect: protectedProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allRepairs = await repairsController.getSelect(input, ctx.db);
       return allRepairs;
     }),
+
   getById: protectedProcedure
     .input(repairSchemas.getById)
     .query(async ({ input, ctx }) => {
@@ -54,6 +57,7 @@ export default router({
 
       return repair;
     }),
+
   create: protectedProcedure
     .input(repairSchemas.create)
     .mutation(async ({ input, ctx }) => {
@@ -78,9 +82,9 @@ export default router({
     .input(repairSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-
+      const sanitizedInput = sanitizeUpdateInput(input);
       const updatedRepair = await repairsController.update(
-        { ...input, ...metadata },
+        { ...sanitizedInput, ...metadata },
         ctx.db,
       );
 
@@ -93,6 +97,7 @@ export default router({
 
       return updatedRepair;
     }),
+
   archive: protectedProcedure
     .input(repairSchemas.archive)
     .mutation(async ({ input, ctx }) => {

@@ -37,165 +37,163 @@ const globalFilterColumns = [
   repairs.clientReference,
 ];
 
-export default {
-  getAll(
-    { globalFilter, sorting, pagination, columnFilters }: GetAll,
-    db: Database,
-  ) {
-    const globalFilterParams = getGlobalFilterParams(
-      globalFilter,
-      globalFilterColumns,
+export function getAll(
+  { globalFilter, sorting, pagination, columnFilters }: GetAll,
+  db: Database,
+) {
+  const globalFilterParams = getGlobalFilterParams(
+    globalFilter,
+    globalFilterColumns,
+  );
+  const columnFilterParams = getColumnFilterParams(
+    columnFilters,
+    repairFilterMapping,
+  );
+  const orderByParams = getOrderByParams(sorting, repairOrderMapping);
+
+  const query = db
+    .select({
+      id: repairs.id,
+      fault: repairs.fault,
+      summary: repairs.summary,
+      clientReference: repairs.clientReference,
+      createdAt: repairs.createdAt,
+      updatedAt: repairs.updatedAt,
+      asset: {
+        id: assets.id,
+        serialNumber: assets.serialNumber,
+        assetNumber: assets.assetNumber,
+        imageUrl: modelImages.url,
+      },
+      status: {
+        id: repairStatusTypes.id,
+        name: repairStatusTypes.name,
+        colour: repairStatusTypes.colour,
+      },
+      type: {
+        id: repairTypes.id,
+        name: repairTypes.name,
+      },
+    })
+    .from(repairs)
+    .innerJoin(assets, eq(repairs.assetId, assets.id))
+    .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
+    .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
+    .innerJoin(models, eq(assets.modelId, models.id))
+    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
+    .where(
+      and(isNull(repairs.deletedAt), globalFilterParams, ...columnFilterParams),
+    )
+    .orderBy(...orderByParams, repairs.id)
+    .limit(pagination.pageSize)
+    .offset(pagination.pageIndex * pagination.pageSize);
+  return query.execute();
+}
+
+export async function getCount(
+  { globalFilter, columnFilters }: GetCount,
+  db: Database,
+) {
+  const globalFilterParams = getGlobalFilterParams(
+    globalFilter,
+    globalFilterColumns,
+  );
+  const columnFilterParams = getColumnFilterParams(
+    columnFilters,
+    repairFilterMapping,
+  );
+
+  const query = db
+    .select({ value: count() })
+    .from(repairs)
+    .innerJoin(assets, eq(repairs.assetId, assets.id))
+    .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
+    .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
+    .where(
+      and(isNull(repairs.deletedAt), globalFilterParams, ...columnFilterParams),
     );
-    const columnFilterParams = getColumnFilterParams(
-      columnFilters,
-      repairFilterMapping,
-    );
-    const orderByParams = getOrderByParams(sorting, repairOrderMapping);
 
-    const query = db
-      .select({
-        id: repairs.id,
-        fault: repairs.fault,
-        summary: repairs.summary,
-        clientReference: repairs.clientReference,
-        createdAt: repairs.createdAt,
-        updatedAt: repairs.updatedAt,
-        asset: {
-          id: assets.id,
-          serialNumber: assets.serialNumber,
-          assetNumber: assets.assetNumber,
-          imageUrl: modelImages.url,
-        },
-        status: {
-          id: repairStatusTypes.id,
-          name: repairStatusTypes.name,
-          colour: repairStatusTypes.colour,
-        },
-        type: {
-          id: repairTypes.id,
-          name: repairTypes.name,
-        },
-      })
-      .from(repairs)
-      .innerJoin(assets, eq(repairs.assetId, assets.id))
-      .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
-      .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
-      .innerJoin(models, eq(assets.modelId, models.id))
-      .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-      .where(
-        and(
-          isNull(repairs.deletedAt),
-          globalFilterParams,
-          ...columnFilterParams,
-        ),
-      )
-      .orderBy(...orderByParams, repairs.id)
-      .limit(pagination.pageSize)
-      .offset(pagination.pageIndex * pagination.pageSize);
-    return query.execute();
-  },
-  async getCount({ globalFilter, columnFilters }: GetCount, db: Database) {
-    const globalFilterParams = getGlobalFilterParams(
-      globalFilter,
-      globalFilterColumns,
-    );
-    const columnFilterParams = getColumnFilterParams(
-      columnFilters,
-      repairFilterMapping,
-    );
+  const [res] = await query.execute();
+  return res?.value;
+}
 
-    const query = db
-      .select({ value: count() })
-      .from(repairs)
-      .innerJoin(assets, eq(repairs.assetId, assets.id))
-      .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
-      .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
-      .where(
-        and(
-          isNull(repairs.deletedAt),
-          globalFilterParams,
-          ...columnFilterParams,
-        ),
-      );
+export async function getSelect(_: GetSelect, db: Database) {
+  const query = db
+    .select({
+      value: repairs.id,
+      label: repairs.fault,
+    })
+    .from(repairs)
+    .where(isNull(repairs.deletedAt));
+  return query.execute();
+}
 
-    const [res] = await query.execute();
-    return res?.value;
-  },
-  async getSelect(_: GetSelect, db: Database) {
-    const query = db
-      .select({
-        value: repairs.id,
-        label: repairs.fault,
-      })
-      .from(repairs)
-      .where(isNull(repairs.deletedAt));
-    return query.execute();
-  },
-  async getById(input: RepairID, db: Database) {
-    const query = db
-      .select({
-        ...repairFields,
-        asset: {
-          ...assetFields,
-        },
-        model: {
-          id: models.id,
-          name: models.name,
-          imageUrl: modelImages.url,
-        },
-        location: {
-          id: locations.id,
-          name: locations.name,
-        },
-        manufacturer: {
-          id: manufacturers.id,
-          name: manufacturers.name,
-        },
-        type: {
-          id: repairTypes.id,
-          name: repairTypes.name,
-        },
-        status: {
-          id: repairStatusTypes.id,
-          name: repairStatusTypes.name,
-          colour: repairStatusTypes.colour,
-        },
-      })
-      .from(repairs)
-      .innerJoin(assets, eq(repairs.assetId, assets.id))
-      .innerJoin(models, eq(assets.modelId, models.id))
-      .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-      .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-      .innerJoin(locations, eq(assets.locationId, locations.id))
-      .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
-      .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
-      .where(eq(repairs.id, input));
+export async function getById(input: RepairID, db: Database) {
+  const query = db
+    .select({
+      ...repairFields,
+      asset: {
+        ...assetFields,
+      },
+      model: {
+        id: models.id,
+        name: models.name,
+        imageUrl: modelImages.url,
+      },
+      location: {
+        id: locations.id,
+        name: locations.name,
+      },
+      manufacturer: {
+        id: manufacturers.id,
+        name: manufacturers.name,
+      },
+      type: {
+        id: repairTypes.id,
+        name: repairTypes.name,
+      },
+      status: {
+        id: repairStatusTypes.id,
+        name: repairStatusTypes.name,
+        colour: repairStatusTypes.colour,
+      },
+    })
+    .from(repairs)
+    .innerJoin(assets, eq(repairs.assetId, assets.id))
+    .innerJoin(models, eq(assets.modelId, models.id))
+    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
+    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .innerJoin(locations, eq(assets.locationId, locations.id))
+    .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
+    .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
+    .where(eq(repairs.id, input));
 
-    const [res] = await query.execute();
-    return res;
-  },
-  async create(input: CreateRepair, db: Database) {
-    const query = db.insert(repairs).values(input).returning();
-    const [res] = await query.execute();
-    return res;
-  },
-  async update(input: UpdateRepair, db: Database) {
-    const query = db
-      .update(repairs)
-      .set(input)
-      .where(eq(repairs.id, input.id))
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  },
+  const [res] = await query.execute();
+  return res;
+}
 
-  async archive({ id, ...input }: ArchiveRepair, db: Database) {
-    const query = db
-      .update(repairs)
-      .set(input)
-      .where(eq(repairs.id, id))
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  },
-};
+export async function create(input: CreateRepair, db: Database) {
+  const query = db.insert(repairs).values(input).returning();
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function update(input: UpdateRepair, db: Database) {
+  const query = db
+    .update(repairs)
+    .set(input)
+    .where(eq(repairs.id, input.id))
+    .returning();
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function archive({ id, ...input }: ArchiveRepair, db: Database) {
+  const query = db
+    .update(repairs)
+    .set(input)
+    .where(eq(repairs.id, id))
+    .returning();
+  const [res] = await query.execute();
+  return res;
+}

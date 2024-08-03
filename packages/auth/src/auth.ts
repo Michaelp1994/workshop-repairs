@@ -1,6 +1,6 @@
 import { db } from "@repo/db";
-import usersController from "@repo/db/controllers/users.controller";
-import authSchemas from "@repo/validators/auth.validators";
+import * as usersController from "@repo/db/controllers/users.controller";
+import * as authSchemas from "@repo/validators/auth.validators";
 import { compare } from "bcrypt";
 import NextAuth, { type NextAuthConfig, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";

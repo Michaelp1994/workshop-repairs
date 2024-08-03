@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import UpdateModelImageForm from "./_components/UpdateModelImageForm";
+import UpdateModelImageForm from "../../../_components/UpdateModelImageForm";
 
 interface ModelImageGalleryModalProps {
   params: {
