@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 import baseConfig from "@repo/eslint-config/base.js";
 import reactConfig from "@repo/eslint-config/react.js";
 

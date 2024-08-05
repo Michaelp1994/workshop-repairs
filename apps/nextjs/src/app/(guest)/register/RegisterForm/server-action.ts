@@ -1,6 +1,6 @@
 "use server";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 
 import { type RegisterFormInput } from "./schema";
 

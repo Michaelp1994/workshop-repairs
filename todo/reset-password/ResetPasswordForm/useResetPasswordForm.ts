@@ -8,8 +8,6 @@ import {
 } from "~/schemas/auth.schema";
 import { api } from "~/trpc/react";
 
-import { useAuth } from "../../hooks/useAuth";
-
 export function useResetPasswordForm() {
   const router = useRouter();
   const { login } = useAuth();

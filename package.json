@@ -2,7 +2,7 @@
   "name": "workshop-repairs",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "dotenv -- turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .vercel",
     "db:push": "dotenv -- pnpm -F db db:push",
     "db:reset": "dotenv -- pnpm -F db db:reset",
