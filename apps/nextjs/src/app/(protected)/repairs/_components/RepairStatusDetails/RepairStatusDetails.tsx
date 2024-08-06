@@ -16,7 +16,7 @@ import { toast } from "@repo/ui/sonner";
 import { type RepairID } from "@repo/validators/ids.validators";
 import { z } from "zod";
 
-import RepairStatusTypeSelect from "~/components/RepairStatusTypeSelect";
+import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import { api } from "~/trpc/react";
 
 const schema = z.object({ statusId: z.number() });

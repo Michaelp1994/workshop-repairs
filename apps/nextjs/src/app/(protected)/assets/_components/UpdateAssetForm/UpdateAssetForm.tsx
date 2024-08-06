@@ -16,7 +16,8 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
-import LocationSelect from "~/components/LocationSelect";
+import ClientSelect from "~/components/selects/ClientSelect";
+import LocationSelect from "~/components/selects/LocationSelect";
 import { type AssetFormInput, assetFormSchema, defaultAsset } from "~/schemas";
 import { api } from "~/trpc/react";
 
@@ -100,6 +101,21 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
         />
         <FormField
           control={form.control}
+          name="clientId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Client</FormLabel>
+                <FormControl>
+                  <ClientSelect {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
           name="locationId"
           render={({ field }) => {
             return (
@@ -117,7 +133,6 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
           {form.formState.isDirty && (
             <>
               <ResetButton />
-
               <SubmitButton />
             </>
           )}

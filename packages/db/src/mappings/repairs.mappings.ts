@@ -19,4 +19,5 @@ export const repairOrderMapping = {
 export const repairFilterMapping: FilterMapping = {
   status: repairs.statusId,
   asset_id: repairs.assetId,
+  client_id: repairs.clientId,
 };

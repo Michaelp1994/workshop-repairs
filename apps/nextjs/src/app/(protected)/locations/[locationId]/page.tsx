@@ -1,8 +1,13 @@
 import { type LocationID } from "@repo/validators/ids.validators";
 
-import UpdateLocationForm from "../_components/UpdateLocationForm";
+import {
+  DetailsPageGrid,
+  DetailsPageMainColumn,
+  DetailsPageSecondaryColumn,
+} from "~/components/DetailsPage";
 
-// import AssetsTable from "~/features/assets/components/AssetsTable";
+import LocationAssetsSection from "../_components/LocationAssetsSection";
+import LocationDetailsSection from "../_components/LocationDetailsSection";
 
 interface ViewLocationPageProps {
   params: {
@@ -13,13 +18,12 @@ interface ViewLocationPageProps {
 export default function ViewLocationPage({ params }: ViewLocationPageProps) {
   const locationId = Number(params.locationId);
   return (
-    <div>
-      <div>
-        <div>
-          <UpdateLocationForm locationId={locationId} />
-        </div>
-        <div>{/* <AssetsTable locationId={locationId} /> */}</div>
-      </div>
-    </div>
+    <DetailsPageGrid>
+      <DetailsPageMainColumn>
+        <LocationDetailsSection locationId={locationId} />
+        <LocationAssetsSection locationId={locationId} />
+      </DetailsPageMainColumn>
+      <DetailsPageSecondaryColumn></DetailsPageSecondaryColumn>
+    </DetailsPageGrid>
   );
 }

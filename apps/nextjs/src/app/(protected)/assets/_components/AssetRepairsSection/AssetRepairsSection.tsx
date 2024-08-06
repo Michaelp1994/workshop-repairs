@@ -7,7 +7,7 @@ import {
 } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
 
-import RepairsTable from "~/app/(protected)/repairs/_components/RepairsTable";
+import RepairsTable from "~/components/tables/RepairsTable";
 
 interface AssetRepairsSectionProps {
   assetId: number;

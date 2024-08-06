@@ -16,7 +16,7 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
-import ModelSelect from "~/components/ModelSelect";
+import ModelSelect from "~/components/selects/ModelSelect";
 import {
   defaultPartsToModels,
   type PartsToModelFormInput,

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
 import { type ModelID } from "@repo/validators/ids.validators";
 
-import AssetsTable from "~/app/(protected)/assets/_components/AssetsTable";
+import AssetsTable from "~/components/tables/AssetsTable";
 
 interface ModelAssetsSectionProps {
   modelId: ModelID;

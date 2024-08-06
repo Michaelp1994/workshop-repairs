@@ -17,6 +17,7 @@ import {
   type CreateAsset,
   type UpdateAsset,
 } from "../schemas/assets.schema";
+import { clients } from "../schemas/clients.schema";
 import { locations } from "../schemas/locations.schema";
 import { manufacturers } from "../schemas/manufacturers.schema";
 import { modelImages } from "../schemas/model-images.schema";
@@ -58,6 +59,10 @@ export function getAll(
         id: assetStatuses.id,
         name: assetStatuses.name,
       },
+      client: {
+        id: clients.id,
+        name: clients.name,
+      },
       model: {
         id: models.id,
         nickname: models.nickname,
@@ -72,6 +77,7 @@ export function getAll(
     .innerJoin(locations, eq(assets.locationId, locations.id))
     .innerJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
     .innerJoin(models, eq(assets.modelId, models.id))
+    .innerJoin(clients, eq(assets.clientId, clients.id))
     .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
     .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
     .where(

@@ -9,7 +9,7 @@ import {
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import ClientsTable from "./_components/ClientsTable";
+import ClientsTable from "../../../components/tables/ClientsTable";
 
 export default function AllClientsPage() {
   return (

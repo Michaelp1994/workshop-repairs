@@ -9,7 +9,7 @@ import {
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import ModelsTable from "./_components/ModelsTable";
+import ModelsTable from "../../../components/tables/ModelsTable";
 
 export default function AllModelsPage() {
   return (

@@ -15,14 +15,13 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
-import LocationSelect from "~/components/LocationSelect";
-import ModelSelect from "~/components/ModelSelect";
+import ClientSelect from "~/components/selects/ClientSelect";
+import LocationSelect from "~/components/selects/LocationSelect";
+import ModelSelect from "~/components/selects/ModelSelect";
 import { type AssetFormInput, assetFormSchema, defaultAsset } from "~/schemas";
 import { api } from "~/trpc/react";
 
-interface CreateAssetFormProps {}
-
-export default function CreateAssetForm({}: CreateAssetFormProps) {
+export default function CreateAssetForm() {
   const router = useRouter();
   const createMutation = api.assets.create.useMutation({
     onSuccess(data) {
@@ -89,7 +88,21 @@ export default function CreateAssetForm({}: CreateAssetFormProps) {
                 <FormControl>
                   <ModelSelect className="max-w-[500px]" {...field} />
                 </FormControl>
-
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="clientId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Client</FormLabel>
+                <FormControl>
+                  <ClientSelect className="max-w-[500px]" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             );
@@ -105,7 +118,6 @@ export default function CreateAssetForm({}: CreateAssetFormProps) {
                 <FormControl>
                   <LocationSelect className="max-w-[500px]" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

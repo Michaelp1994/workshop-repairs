@@ -1,6 +1,13 @@
-import UpdateManufacturerForm from "../_components/UpdateManufacturerForm";
+import type { ManufacturerID } from "@repo/validators/ids.validators";
 
-// import ModelsTable from "~/features/models/components/ModelsTable";
+import {
+  DetailsPageGrid,
+  DetailsPageMainColumn,
+  DetailsPageSecondaryColumn,
+} from "~/components/DetailsPage";
+
+import ManufacturerDetailsSection from "../_components/ManufacturerDetailsSection";
+import ManufacturerModelsSection from "../_components/ManufacturerModelsSection";
 
 interface ViewManufacturerPageProps {
   params: {
@@ -14,13 +21,12 @@ export default function ViewManufacturerPage({
   const manufacturerId = Number(params.manufacturerId);
 
   return (
-    <div>
-      <div>
-        <div>
-          <UpdateManufacturerForm manufacturerId={manufacturerId} />
-        </div>
-        <div>{/* <ModelsTable manufacturerId={manufacturerId} /> */}</div>
-      </div>
-    </div>
+    <DetailsPageGrid>
+      <DetailsPageMainColumn>
+        <ManufacturerDetailsSection manufacturerId={manufacturerId} />
+        <ManufacturerModelsSection manufacturerId={manufacturerId} />
+      </DetailsPageMainColumn>
+      <DetailsPageSecondaryColumn></DetailsPageSecondaryColumn>
+    </DetailsPageGrid>
   );
 }

@@ -3,10 +3,10 @@ import {
   DataTable,
   DataTableFooter,
   DataTableToolbar,
+  type InitialDataTableState,
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { type ManufacturerID } from "@repo/validators/ids.validators";
 
 import { api } from "~/trpc/react";
 import {
@@ -16,19 +16,22 @@ import {
 
 import { columns } from "./columns";
 
-interface ModelsTableProps {
-  manufacturerId?: ManufacturerID;
+interface ModelPartsTable {
+  initialState?: InitialDataTableState;
 }
 
-export default function ModelsTable({ manufacturerId }: ModelsTableProps) {
-  const { dataState, countState, tableOptions } = useDataTableState();
+export default function PartModelsTable({ initialState }: ModelPartsTable) {
+  const { dataState, countState, tableOptions } =
+    useDataTableState(initialState);
 
-  const { data, isLoading, isError, error } = api.models.getAll.useQuery(
-    dataState,
-    defaultDataQueryOptns,
-  );
+  const {
+    data = [],
+    isLoading,
+    isError,
+    error,
+  } = api.partsToModels.getAll.useQuery(dataState, defaultDataQueryOptns);
 
-  const { data: rowCount } = api.models.getCount.useQuery(
+  const { data: rowCount } = api.partsToModels.getCount.useQuery(
     countState,
     defaultCountQueryOptns,
   );
@@ -36,6 +39,7 @@ export default function ModelsTable({ manufacturerId }: ModelsTableProps) {
   const table = useDataTable({
     columns,
     data,
+    getRowId: (row, index) => index.toString(),
     rowCount,
     ...tableOptions,
   });
@@ -44,13 +48,13 @@ export default function ModelsTable({ manufacturerId }: ModelsTableProps) {
     return <div>Loading...</div>;
   }
   if (isError) {
-    return <div>Error loading models</div>;
+    console.log(error);
+    return <div>Error loading parts</div>;
   }
 
   return (
     <>
       <DataTableToolbar table={table} />
-
       <DataTable table={table} />
       <DataTableFooter table={table} />
     </>

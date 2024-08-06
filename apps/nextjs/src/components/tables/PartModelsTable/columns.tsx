@@ -6,6 +6,7 @@ import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { getBaseUrl } from "~/utils/getBaseUrl";
 const columnHelper =
   createColumnHelper<RouterOutputs["partsToModels"]["getAll"][number]>();
 
@@ -16,34 +17,22 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("quantity", {
+  columnHelper.accessor("model.name", {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Quantity" />
+      <DataTableColumnHeader column={column} title="Model Name" />
     ),
     meta: {
-      name: "Quantity",
+      name: "Model Name",
     },
   }),
-  columnHelper.accessor("part.name", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    meta: {
-      name: "Name",
-    },
-  }),
-  columnHelper.accessor("part.partNumber", {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Part Number" />
-    ),
-    meta: {
-      name: "Part Number",
-    },
-  }),
-
   columnHelper.display({
-    id: "id",
+    id: "modelLink",
     enableHiding: false,
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => (
+      <DataTableRowActions
+        generateUrl={(row) => `${getBaseUrl()}/models/${row.original.modelId}`}
+        row={row}
+      />
+    ),
   }),
 ];

@@ -17,5 +17,6 @@ export const assetOrderMapping: OrderMapping = {
 };
 
 export const assetFilterMapping: FilterMapping = {
-  model_id: models.id,
+  model_id: assets.modelId,
+  location_id: assets.locationId
 };

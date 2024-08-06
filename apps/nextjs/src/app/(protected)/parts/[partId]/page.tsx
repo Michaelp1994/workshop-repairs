@@ -1,8 +1,12 @@
 import { type PartID } from "@repo/validators/ids.validators";
 
-import UpdatePartForm from "../_components/UpdatePartForm";
+import {
+  DetailsPageGrid,
+  DetailsPageMainColumn,
+} from "~/components/DetailsPage";
 
-// import PartToModelsTable from "~/features/partsToModels/components/PartToModelsTable";
+import PartDetailSection from "../_components/PartDetailSection";
+import PartModelSection from "../_components/PartModelSection";
 
 interface ViewPartPageProps {
   params: {
@@ -14,14 +18,11 @@ export default function ViewPartPage({ params }: ViewPartPageProps) {
   const partId = Number(params.partId);
 
   return (
-    <div>
-      Part {partId}
-      <div>
-        <div>
-          <UpdatePartForm partId={partId} />
-        </div>
-        <div>{/* <PartToModelsTable partId={partId} /> */}</div>
-      </div>
-    </div>
+    <DetailsPageGrid>
+      <DetailsPageMainColumn>
+        <PartDetailSection partId={partId} />
+        <PartModelSection partId={partId} />
+      </DetailsPageMainColumn>
+    </DetailsPageGrid>
   );
 }

@@ -12,6 +12,7 @@ export const assetFormSchema = z.object({
   statusId: assetStatusId,
   modelId,
   locationId,
+  clientId,
 });
 
 export type AssetFormInput = z.infer<typeof assetFormSchema>;
@@ -22,12 +23,5 @@ export const defaultAsset: AssetFormInput = {
   modelId: 0,
   statusId: 0,
   locationId: 0,
+  clientId: 0,
 };
-
-export const assetSearchSchema = z.object({
-  locationId: locationId.optional(),
-  modelId: modelId.optional(),
-  clientId: clientId.optional(),
-});
-
-export type AssetSearchParams = z.infer<typeof assetSearchSchema>;

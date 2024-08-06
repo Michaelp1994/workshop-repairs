@@ -9,7 +9,7 @@ import {
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import PartsTable from "./_components/PartsTable";
+import PartsTable from "../../../components/tables/PartsTable";
 
 export default function AllPartsPage() {
   return (

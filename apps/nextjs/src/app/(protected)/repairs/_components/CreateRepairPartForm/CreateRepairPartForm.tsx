@@ -19,7 +19,7 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
-import ModelPartSelect from "~/components/ModelPartSelect";
+import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import {
   defaultRepairPart,
   type RepairPartFormInput,

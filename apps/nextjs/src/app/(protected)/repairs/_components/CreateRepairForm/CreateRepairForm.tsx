@@ -16,10 +16,10 @@ import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import AssetSelect from "~/components/AssetSelect";
-import ClientSelect from "~/components/ClientSelect";
-import RepairStatusTypeSelect from "~/components/RepairStatusTypeSelect";
-import RepairTypeSelect from "~/components/RepairTypeSelect";
+import AssetSelect from "~/components/selects/AssetSelect";
+import ClientSelect from "~/components/selects/ClientSelect";
+import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
+import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import {
   defaultRepair,
   type RepairFormInput,

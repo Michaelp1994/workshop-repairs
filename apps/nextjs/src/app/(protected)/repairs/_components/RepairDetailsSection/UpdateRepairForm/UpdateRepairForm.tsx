@@ -17,9 +17,13 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
 
-import ClientSelect from "~/components/ClientSelect";
-import RepairTypeSelect from "~/components/RepairTypeSelect";
-import { defaultRepair, type RepairFormInput, repairFormSchema } from "~/schemas";
+import ClientSelect from "~/components/selects/ClientSelect";
+import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
+import {
+  defaultRepair,
+  type RepairFormInput,
+  repairFormSchema,
+} from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairFormProps {
@@ -71,7 +75,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
         onReset={() => {
           form.reset();
         }}
-        onSubmit={e => void form.handleSubmit(handleValid)(e)}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >
         <FormField
           control={form.control}

@@ -12,7 +12,7 @@ import { type InitialDataTableState } from "@repo/ui/data-table";
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import RepairsTable from "./_components/RepairsTable";
+import RepairsTable from "../../../components/tables/RepairsTable";
 
 export const metadata: Metadata = {
   title: "Workshop App | Repairs",

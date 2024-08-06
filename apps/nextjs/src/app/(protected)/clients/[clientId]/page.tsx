@@ -6,6 +6,7 @@ import {
 
 import ClientAssetsSection from "../_components/ClientAssetsSection";
 import ClientDetailsSection from "../_components/ClientDetailsSection";
+import ClientRepairsSection from "../_components/ClientRepairsSection/ClientRepairsSection";
 
 interface ViewClientPageProps {
   params: {
@@ -20,6 +21,7 @@ export default function ViewClientPage({ params }: ViewClientPageProps) {
       <DetailsPageMainColumn>
         <ClientDetailsSection clientId={clientId} />
         <ClientAssetsSection clientId={clientId} />
+        <ClientRepairsSection clientId={clientId} />
       </DetailsPageMainColumn>
       <DetailsPageSecondaryColumn></DetailsPageSecondaryColumn>
     </DetailsPageGrid>

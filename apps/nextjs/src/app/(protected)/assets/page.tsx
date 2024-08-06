@@ -11,7 +11,7 @@ import { type InitialDataTableState } from "@repo/ui/data-table";
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import AssetsTable from "./_components/AssetsTable";
+import AssetsTable from "../../../components/tables/AssetsTable";
 
 export default function AllAssetsPage() {
   const initialState: InitialDataTableState = {

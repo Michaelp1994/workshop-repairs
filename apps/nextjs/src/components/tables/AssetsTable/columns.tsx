@@ -2,8 +2,6 @@ import type { RouterOutputs } from "@repo/api/root";
 
 import { Badge } from "@repo/ui/badge";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
-import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
-import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
 import { DataTableImageCell } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -80,6 +78,15 @@ export const columns = [
     ),
     meta: {
       name: "Manufacturer",
+    },
+  }),
+  columnHelper.accessor("client.name", {
+    id: "client",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Client" />
+    ),
+    meta: {
+      name: "Client",
     },
   }),
 

@@ -9,7 +9,7 @@ import {
 
 import { CreateLink } from "~/components/ButtonLink";
 
-import ManufacturersTable from "./_components/ManufacturersTable";
+import ManufacturersTable from "../../../components/tables/ManufacturersTable";
 
 export default function AllManufacturersPage() {
   return (

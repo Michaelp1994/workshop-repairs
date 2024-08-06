@@ -23,9 +23,9 @@ export const assets = pgTable("assets", {
   modelId: integer("model_id")
     .notNull()
     .references(() => models.id),
-  // clientId: integer("client_id")
-  //   .notNull()
-  //   .references(() => models.id),
+  clientId: integer("client_id")
+    .notNull()
+    .references(() => models.id),
   locationId: integer("location_id")
     .notNull()
     .references(() => locations.id),

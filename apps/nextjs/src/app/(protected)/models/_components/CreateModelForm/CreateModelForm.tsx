@@ -14,7 +14,7 @@ import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
-import ManufacturerSelect from "~/components/ManufacturerSelect";
+import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import {
   defaultModel,
   type ModelFormInput,

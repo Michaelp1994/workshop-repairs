@@ -19,7 +19,7 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
-import PartSelect from "~/components/PartSelect";
+import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { type RepairPartFormInput, repairPartFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
@@ -82,9 +82,8 @@ export default function UpdateRepairPartForm({
               <FormItem>
                 <FormLabel>Part</FormLabel>
                 <FormControl>
-                  <PartSelect repairId={data.repairId} {...field} />
+                  <ModelPartSelect modelId={repair.asset.modelId} {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

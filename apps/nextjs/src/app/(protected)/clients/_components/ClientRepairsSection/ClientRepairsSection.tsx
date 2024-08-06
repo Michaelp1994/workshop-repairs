@@ -1,4 +1,5 @@
 import type { InitialDataTableState } from "@repo/ui/data-table";
+import type { ClientID } from "@repo/validators/ids.validators";
 
 import {
   Card,
@@ -8,15 +9,15 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import AssetsTable from "~/components/tables/AssetsTable";
+import RepairsTable from "~/components/tables/RepairsTable";
 
-interface ClientAssetsSectionProps {
-  clientId: number;
+interface ClientRepairsSectionProps {
+  clientId: ClientID;
 }
 
-export default function ClientAssetsSection({
+export default function ClientRepairsSection({
   clientId,
-}: ClientAssetsSectionProps) {
+}: ClientRepairsSectionProps) {
   const initialState: InitialDataTableState = {
     pagination: { pageIndex: 1, pageSize: 5 },
     columnFilters: [{ id: "client_id", value: clientId }],
@@ -35,14 +36,11 @@ export default function ClientAssetsSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assets</CardTitle>
-        <CardDescription>
-          Assets associated with client {clientId}
-        </CardDescription>
+        <CardTitle>Repairs</CardTitle>
+        <CardDescription>All repairs for this client.</CardDescription>
       </CardHeader>
-
       <CardContent>
-        <AssetsTable initialState={initialState} />
+        <RepairsTable initialState={initialState} />
       </CardContent>
     </Card>
   );

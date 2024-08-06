@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   assetId,
   assetStatusId,
+  clientId,
   locationId,
   modelId,
   repairId,
@@ -21,6 +22,7 @@ export const create = z.object({
   serialNumber: z.string().min(3),
   modelId,
   locationId,
+  clientId,
 });
 
 export const update = z.object({
@@ -30,6 +32,7 @@ export const update = z.object({
   statusId: assetStatusId,
   modelId,
   locationId,
+  clientId,
 });
 
 export const archive = z.object({
