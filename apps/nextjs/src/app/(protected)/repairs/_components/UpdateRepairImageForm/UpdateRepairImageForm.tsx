@@ -11,9 +11,15 @@ import {
   ResetButton,
   SubmitButton,
 } from "@repo/ui/form";
+import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 
-import useUpdateRepairImageForm from "./useUpdateRepairImageForm";
+import {
+  type RepairImageFormInput,
+  repairImageFormSchema,
+} from "~/schemas/repairImages.schema";
+import { api } from "~/trpc/react";
 
 interface UpdateRepairImageFormProps {
   repairImageId: RepairImageID;
@@ -22,38 +28,61 @@ interface UpdateRepairImageFormProps {
 export default function UpdateRepairImageForm({
   repairImageId,
 }: UpdateRepairImageFormProps) {
-  const form = useUpdateRepairImageForm(repairImageId);
+  const { data, isLoading, isError } = api.repairImages.getById.useQuery({
+    id: repairImageId,
+  });
 
-  if (form.query.isLoading) {
+  const updateMutation = api.repairImages.update.useMutation({
+    onSuccess() {
+      toast.success(`Repair Image updated`);
+    },
+    onError(error) {
+      toast.error("Failed to update repairImage");
+      console.log(error);
+    },
+  });
+
+  const form = useForm({
+    values: data,
+    schema: repairImageFormSchema,
+  });
+
+  async function handleValid(values: RepairImageFormInput) {
+    await updateMutation.mutateAsync({ ...values, id: repairImageId });
+  }
+
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (form.query.isError) {
+  if (isError) {
     return <div>Error</div>;
   }
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="caption"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Caption</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+        <FormField
+          control={form.control}
+          name="caption"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Caption</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormFooter>
-        <ResetButton />
-        <SubmitButton />
-      </FormFooter>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
+      </form>
     </Form>
   );
 }

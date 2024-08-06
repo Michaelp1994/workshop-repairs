@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -11,51 +10,77 @@ import {
   ResetButton,
   SubmitButton,
 } from "@repo/ui/form";
+import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 
-import { useCreateLocationForm } from "./useCreateLocationForm";
+import {
+  defaultLocation,
+  type LocationFormInput,
+  locationFormSchema,
+} from "~/schemas/locations.schema";
+import { api } from "~/trpc/react";
 
 export default function CreateLocationForm() {
-  const form = useCreateLocationForm();
+  const createMutation = api.locations.create.useMutation({
+    onSuccess(data) {
+      toast.success(`Location ${data.name} created`);
+    },
+    onError(error) {
+      toast.error("Failed to create location");
+      console.log(error);
+    },
+  });
+
+  const form = useForm({
+    defaultValues: defaultLocation,
+    schema: locationFormSchema,
+  });
+
+  async function handleValid(values: LocationFormInput) {
+    await createMutation.mutateAsync(values);
+  }
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="name"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormField
-        control={form.control}
-        name="address"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormFooter>
-        <ResetButton />
-        <SubmitButton />
-      </FormFooter>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
+      </form>
     </Form>
   );
 }

@@ -1,8 +1,8 @@
 import { sql } from "drizzle-orm";
 import { getTableName } from "drizzle-orm";
 
-import { db } from "./index";
-import { schema } from "./schema";
+import { db } from "../src/index";
+import { schema } from "../src/schema";
 
 const tables = [
   schema.assets,

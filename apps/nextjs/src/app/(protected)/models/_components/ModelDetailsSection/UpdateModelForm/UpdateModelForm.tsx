@@ -18,7 +18,7 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
 import ManufacturerSelect from "~/components/ManufacturerSelect";
-import { modelFormSchema } from "~/schemas";
+import { type ModelFormInput, modelFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface UpdateModelFormProps {
@@ -28,7 +28,7 @@ interface UpdateModelFormProps {
 
 export default function UpdateModelForm({ model }: UpdateModelFormProps) {
   const updateMutation = api.models.update.useMutation({
-    async onSuccess(values) {
+    onSuccess(values) {
       toast.success(`Model ${values.name} updated`);
     },
     onError() {
@@ -41,9 +41,9 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
     schema: modelFormSchema,
   });
 
-  const handleSubmit = form.handleSubmit((values) =>
-    updateMutation.mutateAsync({ ...values, id: model.id }),
-  );
+  async function handleValid(values: ModelFormInput) {
+    await updateMutation.mutateAsync({ ...values, id: model.id });
+  }
 
   return (
     <Form {...form}>
@@ -51,7 +51,7 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
         onReset={() => {
           form.reset();
         }}
-        onSubmit={handleSubmit}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >
         <FormField
           control={form.control}

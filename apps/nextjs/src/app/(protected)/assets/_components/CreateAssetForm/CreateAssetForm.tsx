@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 
 import LocationSelect from "~/components/LocationSelect";
 import ModelSelect from "~/components/ModelSelect";
-import { assetFormSchema, defaultAsset } from "~/schemas";
+import { type AssetFormInput, assetFormSchema, defaultAsset } from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface CreateAssetFormProps {}
@@ -25,9 +25,9 @@ interface CreateAssetFormProps {}
 export default function CreateAssetForm({}: CreateAssetFormProps) {
   const router = useRouter();
   const createMutation = api.assets.create.useMutation({
-    async onSuccess(data) {
+    onSuccess(data) {
       toast.success(`Asset ${data.assetNumber} created`);
-      await router.push(`/assets/${data.id}`);
+      router.push(`/assets/${data.id}`);
     },
     onError(error) {
       toast.error("Failed to create asset");
@@ -39,13 +39,13 @@ export default function CreateAssetForm({}: CreateAssetFormProps) {
     defaultValues: defaultAsset,
     schema: assetFormSchema,
   });
+
+  async function handleValid(values: AssetFormInput) {
+    await createMutation.mutateAsync(values);
+  }
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit((data) => {
-          createMutation.mutate(data);
-        })}
-      >
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
         <FormField
           control={form.control}
           name="assetNumber"

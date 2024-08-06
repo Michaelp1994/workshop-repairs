@@ -10,53 +10,78 @@ import {
   ResetButton,
   SubmitButton,
 } from "@repo/ui/form";
+import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 
 import ManufacturerSelect from "~/components/ManufacturerSelect";
-
-import { useCreateModelForm } from "./useCreateModelForm";
+import {
+  defaultModel,
+  type ModelFormInput,
+  modelFormSchema,
+} from "~/schemas/models.schema";
+import { api } from "~/trpc/react";
 
 export default function CreateModelForm() {
-  const form = useCreateModelForm();
+  const createMutation = api.models.create.useMutation({
+    onSuccess(data) {
+      toast.success(`Model ${data.name} created`);
+    },
+    onError(error) {
+      toast.error("Failed to create model");
+      console.log(error);
+    },
+  });
+
+  const form = useForm({
+    defaultValues: defaultModel,
+    schema: modelFormSchema,
+  });
+
+  async function handleValid(values: ModelFormInput) {
+    await createMutation.mutateAsync(values);
+  }
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="name"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormField
-        control={form.control}
-        name="manufacturerId"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Manufacturer</FormLabel>
-              <FormControl>
-                <ManufacturerSelect {...field} />
-              </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="manufacturerId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Manufacturer</FormLabel>
+                <FormControl>
+                  <ManufacturerSelect {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormFooter>
-        <ResetButton />
-        <SubmitButton />
-      </FormFooter>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
+      </form>
     </Form>
   );
 }

@@ -1,14 +1,6 @@
 "use client";
 import type { LocationID } from "@repo/validators/ids.validators";
 
-import { Button } from "@repo/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
 import {
   Form,
   FormControl,
@@ -20,9 +12,15 @@ import {
   ResetButton,
   SubmitButton,
 } from "@repo/ui/form";
+import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 
-import useUpdateLocationForm from "./useUpdateLocationForm";
+import {
+  type LocationFormInput,
+  locationFormSchema,
+} from "~/schemas/locations.schema";
+import { api } from "~/trpc/react";
 
 interface UpdateLocationFormProps {
   locationId: LocationID;
@@ -31,8 +29,27 @@ interface UpdateLocationFormProps {
 export default function UpdateLocationForm({
   locationId,
 }: UpdateLocationFormProps) {
-  const { form, isLoading, isError, deleteLocation } =
-    useUpdateLocationForm(locationId);
+  const { isLoading, data, isError } = api.locations.getById.useQuery({
+    id: locationId,
+  });
+
+  const updateMutation = api.locations.update.useMutation({
+    onSuccess(values) {
+      toast.success(`Location ${values.name} updated`);
+    },
+    onError() {
+      toast.error("Failed to update location");
+    },
+  });
+
+  const form = useForm({
+    values: data,
+    schema: locationFormSchema,
+  });
+
+  async function handleValid(values: LocationFormInput) {
+    await updateMutation.mutateAsync({ ...values, id: locationId });
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -44,42 +61,42 @@ export default function UpdateLocationForm({
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="name"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormField
-        control={form.control}
-        name="address"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormFooter>
-        <ResetButton />
-        <SubmitButton />
-      </FormFooter>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
+      </form>
     </Form>
   );
 }

@@ -12,9 +12,15 @@ import {
   ResetButton,
   SubmitButton,
 } from "@repo/ui/form";
+import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 
-import useUpdateManufacturerForm from "./useUpdateManufacturerForm";
+import {
+  type ManufacturerFormInput,
+  manufacturerFormSchema,
+} from "~/schemas/manufacturers.schema";
+import { api } from "~/trpc/react";
 
 interface UpdateManufacturerFormProps {
   manufacturerId: ManufacturerID;
@@ -23,8 +29,27 @@ interface UpdateManufacturerFormProps {
 export default function UpdateManufacturerForm({
   manufacturerId,
 }: UpdateManufacturerFormProps) {
-  const { isLoading, isError, deleteManufacturer, form } =
-    useUpdateManufacturerForm(manufacturerId);
+  const { data, isLoading, isError } = api.manufacturers.getById.useQuery({
+    id: manufacturerId,
+  });
+
+  const updateMutation = api.manufacturers.update.useMutation({
+    onSuccess(values) {
+      toast.success(`Manufacturer ${values.name} updated`);
+    },
+    onError() {
+      toast.error("Failed to create manufacturer");
+    },
+  });
+
+  const form = useForm({
+    values: data,
+    schema: manufacturerFormSchema,
+  });
+
+  async function handleValid(values: ManufacturerFormInput) {
+    await updateMutation.mutateAsync({ ...values, id: manufacturerId });
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -36,28 +61,28 @@ export default function UpdateManufacturerForm({
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="name"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      {form.enabled && (
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <FormFooter>
           <ResetButton />
           <SubmitButton />
         </FormFooter>
-      )}
+      </form>
     </Form>
   );
 }

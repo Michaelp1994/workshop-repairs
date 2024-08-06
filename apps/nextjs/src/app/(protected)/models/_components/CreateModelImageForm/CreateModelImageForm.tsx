@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -17,7 +16,11 @@ import { toast } from "@repo/ui/sonner";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { useRouter } from "next/navigation";
 
-import { defaultModelImage, modelImageFormSchema } from "~/schemas";
+import {
+  defaultModelImage,
+  type ModelImageFormInput,
+  modelImageFormSchema,
+} from "~/schemas";
 import { api } from "~/trpc/react";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
@@ -49,9 +52,9 @@ export default function CreateModelImageForm({
     schema: modelImageFormSchema,
   });
 
-  const handleSubmit = form.handleSubmit((values) =>
-    createMutation.mutateAsync({ ...values, modelId }),
-  );
+  async function handleValid(values: ModelImageFormInput) {
+    await createMutation.mutateAsync({ ...values, modelId });
+  }
 
   return (
     <Form {...form}>
@@ -59,7 +62,7 @@ export default function CreateModelImageForm({
         onReset={() => {
           form.reset();
         }}
-        onSubmit={handleSubmit}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >
         <FormField
           control={form.control}

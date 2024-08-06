@@ -43,7 +43,7 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
     },
   });
 
-  async function onSubmit(values: AssetFormInput) {
+  async function handleValid(values: AssetFormInput) {
     await updateMutation.mutateAsync({ ...values, id: assetId });
   }
 
@@ -66,7 +66,7 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
         onReset={() => {
           form.reset();
         }}
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >
         <FormField
           control={form.control}

@@ -19,7 +19,7 @@ import { Textarea } from "@repo/ui/textarea";
 
 import ClientSelect from "~/components/ClientSelect";
 import RepairTypeSelect from "~/components/RepairTypeSelect";
-import { defaultRepair, repairFormSchema } from "~/schemas";
+import { defaultRepair, type RepairFormInput, repairFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairFormProps {
@@ -52,9 +52,9 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
     schema: repairFormSchema,
   });
 
-  const handleSubmit = form.handleSubmit((data) => {
-    updateMutation.mutate({ ...data, id: repairId });
-  });
+  async function handleValid(data: RepairFormInput) {
+    await updateMutation.mutate({ ...data, id: repairId });
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -71,7 +71,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
         onReset={() => {
           form.reset();
         }}
-        onSubmit={handleSubmit}
+        onSubmit={e => void form.handleSubmit(handleValid)(e)}
       >
         <FormField
           control={form.control}

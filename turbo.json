@@ -10,11 +10,11 @@
     },
     "start": {
       "cache": false,
-      "persistent": false
+      "persistent": true
     },
     "dev": {
       "cache": false,
-      "persistent": false
+      "persistent": true
     },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],

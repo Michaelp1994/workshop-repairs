@@ -12,16 +12,39 @@ import {
   ResetButton,
   SubmitButton,
 } from "@repo/ui/form";
+import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 
-import useUpdatePartForm from "./useUpdatePartForm";
+import { type PartFormInput, partFormSchema } from "~/schemas/parts.schema";
+import { api } from "~/trpc/react";
 
 interface UpdatePartFormProps {
   partId: PartID;
 }
 
 export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
-  const { isLoading, isError, deletePart, form } = useUpdatePartForm(partId);
+  const { isError, isLoading, data } = api.parts.getById.useQuery({
+    id: partId,
+  });
+
+  const updateMutation = api.parts.update.useMutation({
+    onSuccess(values) {
+      toast.success(`Part ${values.name} updated`);
+    },
+    onError() {
+      toast.error("Failed to delete part");
+    },
+  });
+
+  const form = useForm({
+    values: data,
+    schema: partFormSchema,
+  });
+
+  async function handleValid(values: PartFormInput) {
+    await updateMutation.mutateAsync({ ...values, id: partId });
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -33,42 +56,44 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="name"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormField
-        control={form.control}
-        name="partNumber"
-        render={({ field }) => {
-          return (
-            <FormItem>
-              <FormLabel>Part Number</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="partNumber"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Part Number</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-      <FormFooter>
-        <ResetButton />
-        <SubmitButton />
-      </FormFooter>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton />
+        </FormFooter>
+      </form>
     </Form>
   );
 }

@@ -7,7 +7,6 @@ if (!process.env["POSTGRES_URL"]) {
 export default {
   schema: "./src/schemas/*.ts",
   dialect: "postgresql",
-
   dbCredentials: {
     url: process.env["POSTGRES_URL"],
   },

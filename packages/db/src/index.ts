@@ -1,19 +1,26 @@
-// import { drizzle } from "drizzle-orm/postgres-js";
 import { sql } from "@vercel/postgres";
-import { drizzle } from "drizzle-orm/vercel-postgres";
-
-// import postgres from "postgres";
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import {
+  drizzle as vercelDrizzle,
+  type VercelPgDatabase,
+} from "drizzle-orm/vercel-postgres";
+import postgres from "postgres";
 
 import { schema } from "./schema";
 
-// if (!process.env["DATABASE_URL"]) {
-//   throw Error("ensure env variables are set up (DATABASE_URL, NODE_ENV)");
-// }
+if (!process.env["POSTGRES_URL"]) {
+  throw Error("ensure env variables are set up (POSTGRES_URL, NODE_ENV)");
+}
 
-// const conn = postgres(process.env["DATABASE_URL"]);
-// if (process.env["NODE_ENV"] !== "production") globalForDb.conn = conn;
+let db: PostgresJsDatabase<typeof schema> | VercelPgDatabase<typeof schema>;
+if (process.env["NODE_ENV"] === "production") {
+  db = vercelDrizzle(sql, { schema });
+} else {
+  const conn = postgres(process.env["POSTGRES_URL"]);
+  db = drizzle(conn, { schema });
+}
 
-export const db = drizzle(sql, { schema });
+export { db };
 
 // export const db = drizzle(conn, { schema });
 

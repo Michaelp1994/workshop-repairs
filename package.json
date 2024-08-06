@@ -4,11 +4,12 @@
   "scripts": {
     "build": "dotenv -- turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .vercel",
+    "db:export": "dotenv -- pnpm -F db db:export",
     "db:push": "dotenv -- pnpm -F db db:push",
     "db:reset": "dotenv -- pnpm -F db db:reset",
     "db:seed": "dotenv -- pnpm -F db db:seed",
     "db:studio": "dotenv -- pnpm -F db db:studio",
-    "dev": "dotenv -- turbo dev",
+    "dev": "dotenv -- pnpm -F nextjs dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "gen": "turbo gen workspace",
     "lint": "turbo lint --continue",
@@ -17,12 +18,12 @@
     "v": "pnpm -v"
   },
   "devDependencies": {
-    "@turbo/gen": "^2.0.10",
+    "@turbo/gen": "^2.0.11",
     "dotenv-cli": "^7.4.2",
     "eslint": "^9.8.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "turbo": "^2.0.10",
+    "turbo": "^2.0.11",
     "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
