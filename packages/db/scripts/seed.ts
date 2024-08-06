@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { db } from "../src/index";
 import { schema } from "../src/schema";
@@ -12,6 +12,7 @@ import modelsData from "./seeds/models.json";
 import partsData from "./seeds/parts.json";
 import partsToModelsData from "./seeds/parts_to_models.json";
 import repairCommentsData from "./seeds/repair_comments.json";
+import repairImagesData from "./seeds/repair_images.json";
 import repairPartsData from "./seeds/repair_parts.json";
 import repairStatusTypesData from "./seeds/repair_status_types.json";
 import repairTypesData from "./seeds/repair_types.json";
@@ -114,10 +115,10 @@ await db.transaction(async (tx) => {
   console.log("manufacturers done");
 
   await tx.insert(schema.models).values(
-    modelsData.map((data) => {
-      const { defaultImageId, ...rest } = data;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    modelsData.map(({ defaultImageId, ...data }) => {
       return {
-        ...rest,
+        ...data,
         createdAt: formatCreatedAtDate(data.createdAt),
         updatedAt: formatDate(data.updatedAt),
         deletedAt: formatDate(data.deletedAt),
@@ -139,6 +140,19 @@ await db.transaction(async (tx) => {
   );
 
   console.log("model images done");
+
+  for await (const { defaultImageId, id } of modelsData) {
+    if (defaultImageId) {
+      await tx
+        .update(schema.models)
+        .set({
+          defaultImageId: null,
+        })
+        .where(eq(schema.models.id, id));
+    }
+  }
+
+  console.log("model default images done");
 
   await tx.insert(schema.parts).values(
     partsData.map((data) => ({
@@ -186,22 +200,16 @@ await db.transaction(async (tx) => {
 
   console.log("repairs done");
 
-  // await tx.insert(schema.repairImages).values(
-  //     repairImagesData.map((data) => ({
-  //         id: data.id,
-  //         repairId: data.repair_id,
-  //         url: data.url,
-  //         caption: data.caption,
-  //         createdAt: formatCreatedAtDate(data.createdAt),
-  //         updatedAt: formatDate(data.updatedAt),
-  //         deletedAt: formatDate(data.deletedAt),
-  //         deletedById: data.deleted_by,
-  //         updatedById: data.updated_by,
-  //         createdById: data.created_by,
-  //     }))
-  // );
+  await tx.insert(schema.repairImages).values(
+    repairImagesData.map((data) => ({
+      ...data,
+      createdAt: formatCreatedAtDate(data.createdAt),
+      updatedAt: formatDate(data.updatedAt),
+      deletedAt: formatDate(data.deletedAt),
+    })),
+  );
 
-  // console.log("repair images done")
+  console.log("repair images done");
 
   await tx.insert(schema.repairComments).values(
     repairCommentsData
