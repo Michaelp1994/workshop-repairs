@@ -4,7 +4,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   changePasswordFormSchema,
   defaultChangePassword,
-} from "~/schemas/auth.schema";
+} from "@repo/validators/forms/auth.schema";
 import { api } from "~/trpc/react";
 
 export function useChangePasswordForm() {

@@ -17,10 +17,13 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
+import {
+  type RepairPartFormInput,
+  repairPartFormSchema,
+} from "@repo/validators/forms/repairParts.schema";
 import { useRouter } from "next/navigation";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
-import { type RepairPartFormInput, repairPartFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairPartFormProps {

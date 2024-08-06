@@ -19,7 +19,7 @@ import {
   defaultModel,
   type ModelFormInput,
   modelFormSchema,
-} from "~/schemas/models.schema";
+} from "@repo/validators/forms/models.schema";
 import { api } from "~/trpc/react";
 
 export default function CreateModelForm() {

@@ -15,10 +15,14 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
+import {
+  type AssetFormInput,
+  assetFormSchema,
+  defaultAsset,
+} from "@repo/validators/forms/assets.schema";
 
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
-import { type AssetFormInput, assetFormSchema, defaultAsset } from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface AssetDetailsProps {

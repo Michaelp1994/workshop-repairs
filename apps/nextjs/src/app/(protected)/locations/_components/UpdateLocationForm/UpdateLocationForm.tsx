@@ -19,7 +19,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type LocationFormInput,
   locationFormSchema,
-} from "~/schemas/locations.schema";
+} from "@repo/validators/forms/locations.schema";
 import { api } from "~/trpc/react";
 
 interface UpdateLocationFormProps {

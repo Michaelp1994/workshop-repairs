@@ -1,4 +1,6 @@
 "use client";
+import type { RegisterFormInput } from "@repo/validators/forms/auth.schema";
+
 import {
   Form,
   FormControl,
@@ -12,8 +14,6 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-
-import type { RegisterFormInput } from "~/schemas";
 
 import { defaultRegister, registerFormSchema } from "./schema";
 import { register } from "./server-action";

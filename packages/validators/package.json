@@ -8,6 +8,7 @@
   "type": "module",
   "exports": {
     "./*": "./src/schemas/*.ts",
+    "./forms/*": "./src/forms/*.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {

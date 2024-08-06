@@ -18,7 +18,7 @@ import {
   defaultLocation,
   type LocationFormInput,
   locationFormSchema,
-} from "~/schemas/locations.schema";
+} from "@repo/validators/forms/locations.schema";
 import { api } from "~/trpc/react";
 
 export default function CreateLocationForm() {

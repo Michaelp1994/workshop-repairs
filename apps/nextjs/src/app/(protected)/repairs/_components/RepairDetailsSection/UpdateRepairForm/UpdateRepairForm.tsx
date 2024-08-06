@@ -16,14 +16,14 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
-
-import ClientSelect from "~/components/selects/ClientSelect";
-import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import {
   defaultRepair,
   type RepairFormInput,
   repairFormSchema,
-} from "~/schemas";
+} from "@repo/validators/forms/repair.schema";
+
+import ClientSelect from "~/components/selects/ClientSelect";
+import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairFormProps {

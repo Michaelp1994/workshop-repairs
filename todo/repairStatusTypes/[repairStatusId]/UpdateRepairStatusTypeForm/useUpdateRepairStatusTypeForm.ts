@@ -3,7 +3,7 @@ import { useForm } from "@repo/ui/form";
 import {
   defaultRepairStatusType,
   repairStatusTypeFormSchema,
-} from "~/schemas/repairStatusTypes.schema";
+} from "@repo/validators/forms/repairStatusTypes.schema";
 import type { RepairStatusTypeID } from "@repo/validators/ids.validators";
 import { api } from "~/trpc/react";
 

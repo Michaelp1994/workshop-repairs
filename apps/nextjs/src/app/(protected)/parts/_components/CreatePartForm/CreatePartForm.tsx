@@ -13,8 +13,12 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
+import {
+  defaultPart,
+  type PartFormInput,
+  partFormSchema,
+} from "@repo/validators/forms/parts.schema";
 
-import { defaultPart, type PartFormInput, partFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
 export default function CreatePartForm() {

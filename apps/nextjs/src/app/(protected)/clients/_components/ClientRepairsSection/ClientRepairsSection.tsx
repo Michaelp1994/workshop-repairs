@@ -19,7 +19,7 @@ export default function ClientRepairsSection({
   clientId,
 }: ClientRepairsSectionProps) {
   const initialState: InitialDataTableState = {
-    pagination: { pageIndex: 1, pageSize: 5 },
+    pagination: { pageIndex: 0, pageSize: 5 },
     columnFilters: [{ id: "client_id", value: clientId }],
     columnVisibility: {
       image: false,

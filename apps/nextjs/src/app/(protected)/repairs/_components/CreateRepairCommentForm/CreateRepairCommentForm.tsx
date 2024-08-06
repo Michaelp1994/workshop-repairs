@@ -13,12 +13,12 @@ import {
 } from "@repo/ui/form";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
-
 import {
   defaultRepairComment,
   type RepairCommentFormInput,
   repairCommentFormSchema,
-} from "~/schemas";
+} from "@repo/validators/forms/repairComments.schema";
+
 import { api } from "~/trpc/react";
 
 interface CreateRepairCommentFormProps {

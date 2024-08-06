@@ -24,7 +24,7 @@ import {
   defaultRepairPart,
   type RepairPartFormInput,
   repairPartFormSchema,
-} from "~/schemas/repairParts.schema";
+} from "@repo/validators/forms/repairParts.schema";
 import { api } from "~/trpc/react";
 
 interface CreateRepairPartFormProps {

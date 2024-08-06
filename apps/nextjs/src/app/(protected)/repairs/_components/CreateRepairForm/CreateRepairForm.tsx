@@ -24,7 +24,7 @@ import {
   defaultRepair,
   type RepairFormInput,
   repairFormSchema,
-} from "~/schemas/repair.schema";
+} from "@repo/validators/forms/repair.schema";
 import { api } from "~/trpc/react";
 
 export default function CreateRepairForm() {

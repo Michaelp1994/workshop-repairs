@@ -14,13 +14,13 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import { useRouter } from "next/navigation";
-
 import {
   defaultRepairImage,
   type RepairImageFormInput,
   repairImageFormSchema,
-} from "~/schemas";
+} from "@repo/validators/forms/repairImages.schema";
+import { useRouter } from "next/navigation";
+
 import { api } from "~/trpc/react";
 
 interface CreateRepairImageFormProps {

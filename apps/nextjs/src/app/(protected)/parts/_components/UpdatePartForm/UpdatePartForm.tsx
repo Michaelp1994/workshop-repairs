@@ -16,7 +16,10 @@ import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 
-import { type PartFormInput, partFormSchema } from "~/schemas/parts.schema";
+import {
+  type PartFormInput,
+  partFormSchema,
+} from "@repo/validators/forms/parts.schema";
 import { api } from "~/trpc/react";
 
 interface UpdatePartFormProps {

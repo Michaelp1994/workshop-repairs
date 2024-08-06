@@ -19,7 +19,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "~/schemas/manufacturers.schema";
+} from "@repo/validators/forms/manufacturers.schema";
 import { api } from "~/trpc/react";
 
 interface UpdateManufacturerFormProps {

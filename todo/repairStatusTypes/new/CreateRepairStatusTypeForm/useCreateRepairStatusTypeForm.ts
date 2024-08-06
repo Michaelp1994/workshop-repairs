@@ -1,7 +1,7 @@
 import {
   repairStatusTypeFormSchema,
   defaultRepairStatusType,
-} from "~/schemas/repairStatusTypes.schema";
+} from "@repo/validators/forms/repairStatusTypes.schema";
 import { toast } from "@repo/ui/sonner";
 import { useForm } from "@repo/ui/form";
 import { api } from "~/trpc/react";

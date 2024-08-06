@@ -19,7 +19,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ClientFormInput,
   clientFormSchema,
-} from "~/schemas/clients.schema";
+} from "@repo/validators/forms/clients.schema";
 import { api } from "~/trpc/react";
 
 interface BaseFormProps {

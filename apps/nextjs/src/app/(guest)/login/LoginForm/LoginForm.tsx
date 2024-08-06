@@ -1,4 +1,6 @@
 "use client";
+import type { LoginFormInput } from "@repo/validators/forms/auth.schema";
+
 import { Button } from "@repo/ui/button";
 import {
   Form,
@@ -13,8 +15,6 @@ import {
 import { Input } from "@repo/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-import type { LoginFormInput } from "~/schemas";
 
 import { defaultLogin, loginFormSchema } from "./schema";
 import { login } from "./server-action";

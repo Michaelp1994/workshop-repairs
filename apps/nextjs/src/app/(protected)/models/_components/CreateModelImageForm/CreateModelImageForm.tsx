@@ -13,14 +13,14 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import { type ModelID } from "@repo/validators/ids.validators";
-import { useRouter } from "next/navigation";
-
 import {
   defaultModelImage,
   type ModelImageFormInput,
   modelImageFormSchema,
-} from "~/schemas";
+} from "@repo/validators/forms/modelImages.schema";
+import { type ModelID } from "@repo/validators/ids.validators";
+import { useRouter } from "next/navigation";
+
 import { api } from "~/trpc/react";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 

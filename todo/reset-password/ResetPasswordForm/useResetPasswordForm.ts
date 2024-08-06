@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   defaultResetPassword,
   resetPasswordFormSchema,
-} from "~/schemas/auth.schema";
+} from "@repo/validators/forms/auth.schema";
 import { api } from "~/trpc/react";
 
 export function useResetPasswordForm() {

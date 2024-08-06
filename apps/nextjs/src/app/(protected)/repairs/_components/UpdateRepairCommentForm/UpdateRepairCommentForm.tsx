@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import {
   type RepairCommentFormInput,
   repairCommentFormSchema,
-} from "~/schemas/repairComments.schema";
+} from "@repo/validators/forms/repairComments.schema";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairCommentFormProps {

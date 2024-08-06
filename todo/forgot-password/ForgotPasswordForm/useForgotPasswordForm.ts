@@ -6,7 +6,7 @@ import {
   defaultLogin,
   type LoginFormInput,
   loginFormSchema,
-} from "~/schemas/auth.schema";
+} from "@repo/validators/forms/auth.schema";
 import { api } from "~/trpc/react";
 
 export function useForgotPasswordForm() {

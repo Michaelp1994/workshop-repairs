@@ -19,7 +19,7 @@ import {
   type ClientFormInput,
   clientFormSchema,
   defaultClient,
-} from "~/schemas/clients.schema";
+} from "@repo/validators/forms/clients.schema";
 import { api } from "~/trpc/react";
 
 export default function CreateClientForm() {

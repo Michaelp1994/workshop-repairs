@@ -16,9 +16,12 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
+import {
+  type ModelFormInput,
+  modelFormSchema,
+} from "@repo/validators/forms/models.schema";
 
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
-import { type ModelFormInput, modelFormSchema } from "~/schemas";
 import { api } from "~/trpc/react";
 
 interface UpdateModelFormProps {

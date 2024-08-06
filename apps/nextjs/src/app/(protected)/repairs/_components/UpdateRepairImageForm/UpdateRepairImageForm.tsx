@@ -18,7 +18,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type RepairImageFormInput,
   repairImageFormSchema,
-} from "~/schemas/repairImages.schema";
+} from "@repo/validators/forms/repairImages.schema";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairImageFormProps {

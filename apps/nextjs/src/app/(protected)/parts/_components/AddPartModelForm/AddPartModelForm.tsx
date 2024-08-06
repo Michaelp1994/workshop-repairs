@@ -15,13 +15,13 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
-import ModelSelect from "~/components/selects/ModelSelect";
 import {
   defaultPartsToModels,
   type PartsToModelFormInput,
   partsToModelsFormSchema,
-} from "~/schemas";
+} from "@repo/validators/forms/partsToModels.schema";
+
+import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/react";
 
 interface AddPartModelFormProps {

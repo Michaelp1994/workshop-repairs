@@ -13,12 +13,16 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
+import {
+  type AssetFormInput,
+  assetFormSchema,
+  defaultAsset,
+} from "@repo/validators/forms/assets.schema";
 import { useRouter } from "next/navigation";
 
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
 import ModelSelect from "~/components/selects/ModelSelect";
-import { type AssetFormInput, assetFormSchema, defaultAsset } from "~/schemas";
 import { api } from "~/trpc/react";
 
 export default function CreateAssetForm() {

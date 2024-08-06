@@ -20,7 +20,7 @@ import {
   defaultManufacturer,
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "~/schemas/manufacturers.schema";
+} from "@repo/validators/forms/manufacturers.schema";
 import { api } from "~/trpc/react";
 
 export default function CreateManufacturerForm() {

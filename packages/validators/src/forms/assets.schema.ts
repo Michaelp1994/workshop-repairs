@@ -7,7 +7,7 @@ import {
 import { z } from "zod";
 
 export const assetFormSchema = z.object({
-  assetNumber: z.string().min(3),
+  assetNumber: z.string(),
   serialNumber: z.string().min(3),
   statusId: assetStatusId,
   modelId,
