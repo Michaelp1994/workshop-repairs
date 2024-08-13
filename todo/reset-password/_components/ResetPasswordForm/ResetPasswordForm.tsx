@@ -50,7 +50,7 @@ export default function ResetPasswordForm({}: ResetPasswordFormProps) {
   });
 
   async function handleValid(data: ResetPasswordFormInput) {
-    await resetMutation.mutateAsync({ ...data, email: email! });
+    await resetMutation.mutateAsync({ ...data, email });
   }
 
   return (

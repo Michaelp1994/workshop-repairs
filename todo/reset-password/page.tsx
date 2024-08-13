@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import ResetPasswordForm from "./_components/ResetPasswordForm";
 
@@ -15,7 +14,7 @@ export default function ResetPasswordPage() {
       <CardHeader>
         <CardTitle>Reset Password</CardTitle>
         <CardDescription>
-          We've sent a 6 digit code to your email address. Please enter the 6
+          We have sent a 6 digit code to your email address. Please enter the 6
           digit code below.
         </CardDescription>
       </CardHeader>
