@@ -10,6 +10,7 @@ import {
   modelFilterMapping,
   modelOrderMapping,
 } from "../mappings/model.mappings";
+import { equipmentTypes } from "../schemas/equipment-types.schema";
 import { manufacturers } from "../schemas/manufacturers.schema";
 import { modelImages } from "../schemas/model-images.schema";
 import {
@@ -44,6 +45,10 @@ export function getAll(
       name: models.name,
       nickname: models.nickname,
       defaultImageUrl: modelImages.url,
+      equipmentType: {
+        id: equipmentTypes.id,
+        name: equipmentTypes.name,
+      },
       manufacturer: {
         id: manufacturers.id,
         name: manufacturers.name,
@@ -52,7 +57,8 @@ export function getAll(
       updatedAt: models.updatedAt,
     })
     .from(models)
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .innerJoin(equipmentTypes, eq(models.equipmentTypeId, equipmentTypes.id))
     .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
     .where(
       and(isNull(models.deletedAt), globalFilterParams, ...columnFilterParams),

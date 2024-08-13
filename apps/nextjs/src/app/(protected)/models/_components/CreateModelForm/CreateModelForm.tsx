@@ -13,19 +13,23 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
-import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import {
   defaultModel,
   type ModelFormInput,
   modelFormSchema,
 } from "@repo/validators/forms/models.schema";
+import { useRouter } from "next/navigation";
+
+import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
+import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import { api } from "~/trpc/react";
 
 export default function CreateModelForm() {
+  const router = useRouter();
   const createMutation = api.models.create.useMutation({
     onSuccess(data) {
       toast.success(`Model ${data.name} created`);
+      router.push(`/models/${data.id}`);
     },
     onError(error) {
       toast.error("Failed to create model");
@@ -44,7 +48,13 @@ export default function CreateModelForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+      <form
+        className="space-y-8"
+        onReset={() => {
+          form.reset();
+        }}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
+      >
         <FormField
           control={form.control}
           name="name"
@@ -55,7 +65,21 @@ export default function CreateModelForm() {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="equipmentTypeId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Equipment Type</FormLabel>
+                <FormControl>
+                  <EquipmentTypeSelect {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             );
@@ -71,7 +95,6 @@ export default function CreateModelForm() {
                 <FormControl>
                   <ManufacturerSelect {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

@@ -2,22 +2,20 @@ import eslint from "@eslint/js";
 import perfectionist from "eslint-plugin-perfectionist";
 import tseslint from "typescript-eslint";
 
-const config = tseslint.config(
+export default [
+  eslint.configs.recommended,
   {
-    files: ["**/*.js", "**/*.ts", "**/*.tsx"],
-    plugins: {},
-    extends: [
-      eslint.configs.recommended,
-      ...tseslint.configs.strictTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
-    ],
+    ...perfectionist.configs["recommended-natural"],
     rules: {
-      "@typescript-eslint/restrict-template-expressions": [
-        "error",
-        { allowNumber: true },
-      ],
+      ...perfectionist.configs["recommended-natural"].rules,
+      "perfectionist/sort-objects": "off",
+      "perfectionist/sort-object-types": "off",
+      "perfectionist/sort-interfaces": "off",
+      "perfectionist/sort-union-types": "off",
+      "perfectionist/sort-intersection-types": "off",
     },
   },
+  ...tseslint.config(...tseslint.configs.strict, ...tseslint.configs.stylistic),
   {
     ignores: [
       "dist/",
@@ -27,18 +25,4 @@ const config = tseslint.config(
       ".turbo/",
     ],
   },
-);
-
-export default [
-  perfectionist.configs["recommended-natural"],
-  {
-    rules: {
-      "perfectionist/sort-objects": "off",
-      "perfectionist/sort-object-types": "off",
-      "perfectionist/sort-interfaces": "off",
-      "perfectionist/sort-union-types": "off",
-      "perfectionist/sort-intersection-types": "off",
-    },
-  },
-  ...config,
 ];

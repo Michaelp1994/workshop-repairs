@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Upload } from "@repo/ui/icons";
 import { type ModelID } from "@repo/validators/ids.validators";
 import Link from "next/link";
 
@@ -45,11 +44,10 @@ export default function ModelImagesSection({
                 key={modelImage.id}
               >
                 <ImageGridItem
-                  alt={modelImage.caption}
-                  className="aspect-square w-full rounded-md object-cover"
-                  height="84"
+                  alt={modelImage.caption || ""}
+                  height={84}
                   src={modelImage.url}
-                  width="84"
+                  width={84}
                 />
               </Link>
             );

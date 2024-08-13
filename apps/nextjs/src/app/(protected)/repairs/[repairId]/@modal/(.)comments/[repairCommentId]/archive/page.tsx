@@ -8,7 +8,7 @@ import { api } from "~/trpc/react";
 interface ArchiveCommentModalProps {
   params: {
     repairId: string;
-    repairPartId: string;
+    repairCommentId: string;
   };
 }
 
@@ -19,7 +19,7 @@ export default function ArchiveCommentModal({
   const utils = api.useUtils();
 
   const repairId = Number(params.repairId);
-  const repairPartId = Number(params.repairPartId);
+  const repairCommentId = Number(params.repairCommentId);
 
   const archiveMutation = api.repairComments.archive.useMutation({
     async onSuccess() {
@@ -32,7 +32,7 @@ export default function ArchiveCommentModal({
   });
 
   async function archiveRepairComment() {
-    await archiveMutation.mutateAsync({ id: repairPartId });
+    await archiveMutation.mutateAsync({ id: repairCommentId });
   }
 
   return (

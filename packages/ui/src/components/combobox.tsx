@@ -1,5 +1,6 @@
 "use client";
 
+import { CommandLoading } from "cmdk";
 import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 
@@ -30,7 +31,7 @@ export interface ComboboxProps
 export const Combobox = React.forwardRef<
   React.ElementRef<typeof Button>,
   ComboboxProps
->(({ onChange, isLoading, value, className, data = [], ...props }, ref) => {
+>(({ onChange, value, isLoading, className, data = [], ...props }, ref) => {
   const [open, setOpen] = React.useState(false);
 
   function handleSelect(newValue: string) {
@@ -61,25 +62,28 @@ export const Combobox = React.forwardRef<
       <PopoverContent className="p-0">
         <Command>
           <CommandInput placeholder="Search..." />
+
           <CommandEmpty>Nothing found.</CommandEmpty>
           <CommandList>
+            {isLoading && <CommandLoading>Loading...</CommandLoading>}
             <CommandGroup>
-              {data.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  keywords={[option.label]}
-                  onSelect={handleSelect}
-                  value={option.value.toString()}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                  {option.label}
-                </CommandItem>
-              ))}
+              {!isLoading &&
+                data.map((option) => (
+                  <CommandItem
+                    key={option.value}
+                    keywords={[option.label]}
+                    onSelect={handleSelect}
+                    value={option.value.toString()}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === option.value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    {option.label}
+                  </CommandItem>
+                ))}
             </CommandGroup>
           </CommandList>
         </Command>
@@ -87,3 +91,5 @@ export const Combobox = React.forwardRef<
     </Popover>
   );
 });
+
+Combobox.displayName = "Combobox";

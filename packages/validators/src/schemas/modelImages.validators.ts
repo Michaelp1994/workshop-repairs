@@ -8,6 +8,12 @@ export const create = z.object({
   modelId,
 });
 
+export const uploadImage = z.object({
+  caption: z.string().min(3),
+  image: z.instanceof(File),
+  modelId,
+});
+
 export const setFavourite = z.object({
   id: modelImageId,
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import type * as LabelPrimitive from "@radix-ui/react-label";
-import type { ZodSchema } from "zod";
+import type { ZodErrorMap, ZodSchema } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Slot } from "@radix-ui/react-slot";
@@ -69,18 +69,23 @@ interface UseFormProps<
   TContext = any,
 > extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
   schema: ZodSchema<TFieldValues>;
+  errorMap?: ZodErrorMap;
   values?: NoInfer<TFieldValues>;
-  defaultValues?: NoInfer<TFieldValues>;
 }
 
 function useForm<
   TFieldValues extends FieldValues = FieldValues,
   TContext = any,
   TTransformedValues extends FieldValues | undefined = undefined,
->({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
+>({ schema, errorMap, ...props }: UseFormProps<TFieldValues, TContext>) {
   return _useForm({
     ...props,
-    resolver: zodResolver(schema),
+    resolver: async (data, context, options) => {
+      if (errorMap) {
+        return await zodResolver(schema, { errorMap })(data, context, options);
+      }
+      return await zodResolver(schema)(data, context, options);
+    },
   });
 }
 

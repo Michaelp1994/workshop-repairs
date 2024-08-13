@@ -12,6 +12,21 @@ const config = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "workshop-repair-dev.s3.amazonaws.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "www.bd.com",
+        port: "",
+        pathname: "/assets/images/**",
+      },
+    ],
+  },
 };
 
 export default config;

@@ -1,9 +1,14 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database } from "../index";
 import {
   assetFilterMapping,
@@ -35,7 +40,7 @@ const globalFilterColumns = [
 ];
 
 export function getAll(
-  { globalFilter, sorting, pagination, columnFilters }: GetAll,
+  { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
   db: Database,
 ) {
   const orderByParams = getOrderByParams(sorting, assetOrderMapping);
@@ -91,7 +96,7 @@ export function getAll(
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  { globalFilter, columnFilters }: GetCountInput,
   db: Database,
 ) {
   const globalFilterParams = getGlobalFilterParams(
@@ -106,10 +111,10 @@ export async function getCount(
   const query = db
     .select({ count: count() })
     .from(assets)
-    .leftJoin(locations, eq(assets.locationId, locations.id))
-    .leftJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
-    .leftJoin(models, eq(assets.modelId, models.id))
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .innerJoin(locations, eq(assets.locationId, locations.id))
+    .innerJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
+    .innerJoin(models, eq(assets.modelId, models.id))
+    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
     .where(
       and(isNull(assets.deletedAt), globalFilterParams, ...columnFilterParams),
     );
@@ -117,10 +122,40 @@ export async function getCount(
   const [res] = await query.execute();
   return res?.count;
 }
-export async function getSelect(_: GetSelect, db: Database) {
+export async function getSelect(
+  { limit, cursor }: GetSelectInput,
+  db: Database,
+) {
   const query = db
     .select({ value: assets.id, label: assets.serialNumber })
     .from(assets)
+    .orderBy(assets.id)
+    .limit(limit + 1)
+    .offset(cursor);
+
+  const data = await query.execute();
+  const nextCursor = data.length > limit ? data.pop()?.value : undefined;
+  return { data, nextCursor };
+}
+
+export async function getSimpleSelect(_: GetSelectInput, db: Database) {
+  const query = db
+    .select({
+      ...assetFields,
+      model: {
+        id: models.id,
+        name: models.name,
+        imageUrl: modelImages.url,
+      },
+      manufacturer: {
+        id: manufacturers.id,
+        name: manufacturers.name,
+      },
+    })
+    .from(assets)
+    .innerJoin(models, eq(assets.modelId, models.id))
+    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
     .orderBy(assets.id);
 
   const res = await query.execute();
@@ -131,6 +166,11 @@ export async function getById(id: AssetID, db: Database) {
   const query = db
     .select({
       ...assetFields,
+      location: {
+        id: locations.id,
+        name: locations.name,
+        address: locations.address,
+      },
     })
     .from(assets)
     .innerJoin(locations, eq(assets.locationId, locations.id))

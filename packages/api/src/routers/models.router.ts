@@ -20,7 +20,6 @@ export default router({
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allModels = modelsController.getAll(input, ctx.db);
-
       return allModels;
     }),
   getSelect: protectedProcedure

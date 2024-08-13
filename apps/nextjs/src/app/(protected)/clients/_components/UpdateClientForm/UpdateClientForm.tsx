@@ -15,11 +15,11 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
 import {
   type ClientFormInput,
   clientFormSchema,
 } from "@repo/validators/forms/clients.schema";
+
 import { api } from "~/trpc/react";
 
 interface BaseFormProps {
@@ -70,7 +70,6 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

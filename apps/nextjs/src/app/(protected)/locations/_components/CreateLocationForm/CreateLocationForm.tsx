@@ -13,12 +13,12 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
 import {
   defaultLocation,
   type LocationFormInput,
   locationFormSchema,
 } from "@repo/validators/forms/locations.schema";
+
 import { api } from "~/trpc/react";
 
 export default function CreateLocationForm() {
@@ -54,7 +54,6 @@ export default function CreateLocationForm() {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -70,7 +69,6 @@ export default function CreateLocationForm() {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

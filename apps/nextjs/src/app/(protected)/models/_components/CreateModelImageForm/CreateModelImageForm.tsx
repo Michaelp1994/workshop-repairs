@@ -12,17 +12,15 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { toast } from "@repo/ui/sonner";
 import {
   defaultModelImage,
   type ModelImageFormInput,
   modelImageFormSchema,
 } from "@repo/validators/forms/modelImages.schema";
 import { type ModelID } from "@repo/validators/ids.validators";
-import { useRouter } from "next/navigation";
+import { useRef } from "react";
 
-import { api } from "~/trpc/react";
-import { getBaseUrl } from "~/utils/getBaseUrl";
+import { uploadModelImage } from "./action";
 
 interface CreateModelImageFormProps {
   modelId: ModelID;
@@ -31,21 +29,8 @@ interface CreateModelImageFormProps {
 export default function CreateModelImageForm({
   modelId,
 }: CreateModelImageFormProps) {
-  const utils = api.useUtils();
-  const router = useRouter();
-  const createMutation = api.modelImages.create.useMutation({
-    async onSuccess() {
-      await utils.modelImages.getAllByModelId.invalidate({
-        modelId,
-      });
-      toast.success(`Model Image uploaded`);
-      router.replace(`${getBaseUrl()}/models/${modelId}`);
-    },
-    onError(error) {
-      toast.error("Failed to create repairImage");
-      console.log(error);
-    },
-  });
+  const uploadModelImageWithId = uploadModelImage.bind(null, modelId);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm({
     defaultValues: defaultModelImage,
@@ -53,28 +38,36 @@ export default function CreateModelImageForm({
   });
 
   async function handleValid(values: ModelImageFormInput) {
-    await createMutation.mutateAsync({ ...values, modelId });
+    formRef.current?.submit();
   }
 
   return (
     <Form {...form}>
       <form
+        action={uploadModelImageWithId}
+        className="space-y-8"
         onReset={() => {
           form.reset();
         }}
         onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
+        ref={formRef}
       >
         <FormField
           control={form.control}
-          name="url"
+          name="image"
           render={({ field }) => {
+            const { value, onChange, ...rest } = field;
             return (
               <FormItem>
-                <FormLabel>Image Url</FormLabel>
+                <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...rest}
+                    onChange={(e) => onChange(e.target.files[0])}
+                    type="file"
+                    value={value?.fileName}
+                  />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -90,7 +83,6 @@ export default function CreateModelImageForm({
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

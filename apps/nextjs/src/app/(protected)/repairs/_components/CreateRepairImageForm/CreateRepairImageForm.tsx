@@ -27,6 +27,19 @@ interface CreateRepairImageFormProps {
   repairId: RepairID;
 }
 
+function convertToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
+
 export default function CreateRepairImageForm({
   repairId,
 }: CreateRepairImageFormProps) {
@@ -38,7 +51,7 @@ export default function CreateRepairImageForm({
         repairId,
       });
       toast.success(`Repair Image uploaded`);
-      router.push(`/repairs/${repairId}`);
+      router.back();
     },
     onError(error) {
       toast.error("Failed to create repairImage");
@@ -52,22 +65,28 @@ export default function CreateRepairImageForm({
   });
 
   async function handleValid(values: RepairImageFormInput) {
-    await createMutation.mutateAsync({ ...values, repairId });
+    const image = await convertToBase64(values.image);
+    console.log(image);
+    // await createMutation.mutateAsync({ ...values, image, repairId });
   }
   return (
     <Form {...form}>
       <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
         <FormField
           control={form.control}
-          name="url"
-          render={({ field }) => {
+          name="image"
+          render={({ value, onChange, ...rest }) => {
             return (
               <FormItem>
                 <FormLabel>Image URL</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    onChange={(e) => onChange(e.target.files[0])}
+                    type="file"
+                    value={value?.fileName}
+                    {...rest}
+                  />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -83,7 +102,6 @@ export default function CreateRepairImageForm({
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

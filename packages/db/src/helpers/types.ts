@@ -28,6 +28,9 @@ export interface GetCount {
 }
 
 export interface GetSelect {
+  limit: number;
+  cursor: number;
+  direction: "forward" | "backward";
   globalFilter: GlobalFilterInput;
   columnFilters: ColumnFilter[];
 }

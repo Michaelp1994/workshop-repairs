@@ -61,7 +61,6 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
                 <FormControl>
                   <ModelSelect {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -77,7 +76,6 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

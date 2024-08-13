@@ -6,8 +6,10 @@ import {
 } from "~/components/DetailsPage";
 
 import AssetDetailsSection from "../_components/AssetDetailsSection";
+// import AssetLocationSection from "../_components/AssetLocationSection";
+import ModelDetailsSection from "../_components/AssetModelSection";
 import AssetRepairsSection from "../_components/AssetRepairsSection";
-import ModelDetails from "../_components/ModelDetailsSection";
+import AssetStatusSection from "../_components/AssetStatusSection";
 
 interface ViewAssetPageProps {
   params: {
@@ -24,7 +26,9 @@ export default function ViewAssetPage({ params }: ViewAssetPageProps) {
         <AssetRepairsSection assetId={assetId} />
       </DetailsPageMainColumn>
       <DetailsPageSecondaryColumn>
-        <ModelDetails assetId={assetId} />
+        <AssetStatusSection assetId={assetId} />
+        <ModelDetailsSection assetId={assetId} />
+        {/* <AssetLocationSection assetId={assetId} /> */}
         <ArchiveSection description="" href="" title="Archive Asset" />
       </DetailsPageSecondaryColumn>
     </DetailsPageGrid>

@@ -15,12 +15,12 @@ import {
 } from "@repo/ui/form";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
-import { useRouter } from "next/navigation";
-
 import {
   type RepairCommentFormInput,
   repairCommentFormSchema,
 } from "@repo/validators/forms/repairComments.schema";
+import { useRouter } from "next/navigation";
+
 import { api } from "~/trpc/react";
 
 interface UpdateRepairCommentFormProps {
@@ -80,7 +80,6 @@ export default function UpdateRepairCommentForm({
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

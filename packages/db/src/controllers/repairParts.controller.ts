@@ -1,7 +1,8 @@
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
+import { assets } from "../schemas/assets.schema";
 import { parts } from "../schemas/parts.schema";
 import {
   type ArchiveRepairPart,
@@ -10,7 +11,10 @@ import {
   repairParts,
   type UpdateRepairPart,
 } from "../schemas/repair-parts.schema";
-import { type RepairID } from "../schemas/repairs.schema";
+import { type RepairID, repairs } from "../schemas/repairs.schema";
+
+const repairPartFields = getTableColumns(repairParts);
+const assetFields = getTableColumns(assets);
 
 export function getAll({ pagination }: GetAll, db: Database) {
   const query = db
@@ -33,7 +37,15 @@ export async function getCount(_: GetCount, db: Database) {
 }
 
 export async function getById(input: RepairPartID, db: Database) {
-  const query = db.select().from(repairParts).where(eq(repairParts.id, input));
+  const query = db
+    .select({
+      ...repairPartFields,
+      assets: assetFields,
+    })
+    .from(repairParts)
+    .innerJoin(repairs, eq(repairs.id, repairParts.repairId))
+    .innerJoin(assets, eq(assets.id, repairs.assetId))
+    .where(eq(repairParts.id, input));
   const [res] = await query.execute();
   return res;
 }

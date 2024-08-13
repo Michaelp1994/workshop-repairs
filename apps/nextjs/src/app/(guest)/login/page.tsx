@@ -1,27 +1,36 @@
+import { Button } from "@repo/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
+import Link from "next/link";
 
-import LoginForm from "./LoginForm/LoginForm";
+import LoginForm from "./_components/LoginForm/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="grid h-full items-center justify-center">
-      <Card className="max-w-sm">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>
-            Enter your details below to login to your account.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <LoginForm />
-        </CardContent>
-      </Card>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Login</CardTitle>
+        <CardDescription>
+          Enter your details below to login to your account.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <LoginForm />
+      </CardContent>
+      <CardFooter className="flex justify-center gap-4">
+        <Button asChild variant="link">
+          <Link href="/forgot-password">Forgot password?</Link>
+        </Button>
+        <Button asChild variant="link">
+          <Link href="/register">Register</Link>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import {
@@ -14,18 +15,26 @@ import {
   ImageGridItem,
   ImageGridUploadButton,
 } from "~/components/ImageGrid";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/react";
 
 interface RepairImageSectionProps {
   repairId: RepairID;
 }
 
-export default async function RepairImageSection({
+export default function RepairImageSection({
   repairId,
 }: RepairImageSectionProps) {
-  const repairImages = await api.repairImages.getAllByRepairId({
-    repairId,
-  });
+  const { data, isLoading, isError } =
+    api.repairImages.getAllByRepairId.useQuery({
+      repairId,
+    });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError || !data) {
+    return <div>Error loading repair images</div>;
+  }
 
   return (
     <Card>
@@ -35,7 +44,7 @@ export default async function RepairImageSection({
       </CardHeader>
       <CardContent>
         <ImageGrid>
-          {repairImages.map((repairImage) => {
+          {data.map((repairImage) => {
             return (
               <Link
                 href={`./${repairId}/images?id=${repairImage.id}`}

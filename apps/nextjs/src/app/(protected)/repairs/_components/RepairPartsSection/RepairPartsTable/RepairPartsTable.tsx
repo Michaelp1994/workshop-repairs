@@ -43,7 +43,7 @@ export default function RepairPartsTable({ repairId }: RepairPartsTableProps) {
       </TableHeader>
       <TableBody>
         {data.map((repairPart) => (
-          <TableRow>
+          <TableRow key={repairPart.repair_parts.id}>
             <TableCell className="font-semibold">
               <span className="mr-2">{repairPart.parts.partNumber}</span>
             </TableCell>

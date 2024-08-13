@@ -12,6 +12,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { equipmentTypes } from "./equipment-types.schema";
 import { manufacturers } from "./manufacturers.schema";
 import metadataColumns from "./metadata-columns";
 import { modelImages } from "./model-images.schema";
@@ -25,6 +26,9 @@ export const models = pgTable(
     manufacturerId: integer("manufacturer_id")
       .notNull()
       .references(() => manufacturers.id),
+    equipmentTypeId: integer("equipment_type_id")
+      .notNull()
+      .references(() => equipmentTypes.id),
     defaultImageId: integer("default_image_id"),
     ...metadataColumns,
   },

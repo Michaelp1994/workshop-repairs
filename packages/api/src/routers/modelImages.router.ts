@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import { uploadImageS3 } from "../helpers/s3";
 import { protectedProcedure, router } from "../trpc";
 
 export default router({
@@ -61,6 +62,31 @@ export default router({
       }
 
       return modelImage;
+    }),
+  uploadImage: protectedProcedure
+    .input(modelImageSchemas.uploadImage)
+    .mutation(async ({ input, ctx }) => {
+      const { url } = await uploadImageS3(input.image);
+      const imageMetadata = createMetadata(ctx.session);
+
+      const createdModelImage = await modelImagesController.create(
+        {
+          modelId: input.modelId,
+          caption: input.caption,
+          url: url,
+          ...imageMetadata,
+        },
+        ctx.db,
+      );
+
+      if (!createdModelImage) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "can't create model Image",
+        });
+      }
+
+      return createdModelImage;
     }),
   create: protectedProcedure
     .input(modelImageSchemas.create)

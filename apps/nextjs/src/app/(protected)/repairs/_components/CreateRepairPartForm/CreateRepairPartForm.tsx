@@ -17,14 +17,14 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import { useRouter } from "next/navigation";
-
-import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import {
   defaultRepairPart,
   type RepairPartFormInput,
   repairPartFormSchema,
 } from "@repo/validators/forms/repairParts.schema";
+import { useRouter } from "next/navigation";
+
+import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/react";
 
 interface CreateRepairPartFormProps {
@@ -132,7 +132,6 @@ export default function CreateRepairPartForm({
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

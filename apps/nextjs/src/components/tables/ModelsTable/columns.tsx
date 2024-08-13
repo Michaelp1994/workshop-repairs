@@ -38,12 +38,12 @@ export const columns = [
       name: "Name",
     },
   }),
-  columnHelper.accessor("nickname", {
+  columnHelper.accessor("equipmentType.name", {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Nickname" />
+      <DataTableColumnHeader column={column} title="Equipment Type" />
     ),
     meta: {
-      name: "Nickname",
+      name: "Equipment Type",
     },
   }),
   columnHelper.accessor("manufacturer.name", {

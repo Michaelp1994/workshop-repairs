@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
 import { protectedProcedure, router } from "../trpc";
 
 export default router({
@@ -38,6 +39,12 @@ export default router({
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await assetsController.getSelect(input, ctx.db);
+      return allAssets;
+    }),
+  getSimpleSelect: protectedProcedure
+    .input(getSelectSchema)
+    .query(async ({ ctx, input }) => {
+      const allAssets = await assetsController.getSimpleSelect(input, ctx.db);
       return allAssets;
     }),
   getById: protectedProcedure
@@ -94,8 +101,9 @@ export default router({
     .input(assetSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
+      const sanitizedInput = sanitizeUpdateInput(input);
       const updatedAsset = await assetsController.update(
-        { ...input, ...metadata },
+        { ...sanitizedInput, ...metadata },
         ctx.db,
       );
 

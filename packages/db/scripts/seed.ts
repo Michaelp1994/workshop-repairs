@@ -5,6 +5,7 @@ import { schema } from "../src/schema";
 import assetStatusesData from "./seeds/asset_statuses.json";
 import assetsData from "./seeds/assets.json";
 import clientsData from "./seeds/clients.json";
+import equipmentTypeData from "./seeds/equipment_types.json";
 import locationsData from "./seeds/locations.json";
 import manufacturersData from "./seeds/manufacturers.json";
 import modelImagesData from "./seeds/model_images.json";
@@ -114,6 +115,17 @@ await db.transaction(async (tx) => {
 
   console.log("manufacturers done");
 
+  await tx.insert(schema.equipmentTypes).values(
+    equipmentTypeData.map((data) => ({
+      ...data,
+      createdAt: formatCreatedAtDate(data.createdAt),
+      updatedAt: formatDate(data.updatedAt),
+      deletedAt: formatDate(data.deletedAt),
+    })),
+  );
+
+  console.log("equipment types done");
+
   await tx.insert(schema.models).values(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     modelsData.map(({ defaultImageId, ...data }) => {
@@ -146,7 +158,7 @@ await db.transaction(async (tx) => {
       await tx
         .update(schema.models)
         .set({
-          defaultImageId: null,
+          defaultImageId,
         })
         .where(eq(schema.models.id, id));
     }
@@ -246,3 +258,5 @@ await db.transaction(async (tx) => {
 
   console.log("repair parts done");
 });
+
+console.log("done seeding");

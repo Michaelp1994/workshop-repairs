@@ -15,11 +15,11 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
 import {
   type ManufacturerFormInput,
   manufacturerFormSchema,
 } from "@repo/validators/forms/manufacturers.schema";
+
 import { api } from "~/trpc/react";
 
 interface UpdateManufacturerFormProps {
@@ -72,7 +72,6 @@ export default function UpdateManufacturerForm({
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

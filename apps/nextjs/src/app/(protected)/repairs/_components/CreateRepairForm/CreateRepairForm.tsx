@@ -14,17 +14,17 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
+import {
+  defaultRepair,
+  type RepairFormInput,
+  repairFormSchema,
+} from "@repo/validators/forms/repair.schema";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import AssetSelect from "~/components/selects/AssetSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
 import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
-import {
-  defaultRepair,
-  type RepairFormInput,
-  repairFormSchema,
-} from "@repo/validators/forms/repair.schema";
 import { api } from "~/trpc/react";
 
 export default function CreateRepairForm() {
@@ -73,7 +73,6 @@ export default function CreateRepairForm() {
                 <FormControl>
                   <RepairTypeSelect {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -89,45 +88,45 @@ export default function CreateRepairForm() {
                 <FormControl>
                   <AssetSelect {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
           }}
         />
+        <div className="flex gap-4">
+          <FormField
+            control={form.control}
+            name="clientId"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Client</FormLabel>
+                  <FormControl>
+                    <ClientSelect className="w-[500px]" {...field} />
+                  </FormControl>
 
-        <FormField
-          control={form.control}
-          name="clientId"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>Client</FormLabel>
-                <FormControl>
-                  <ClientSelect {...field} />
-                </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="clientReference"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Client Reference Number</FormLabel>
+                  <FormControl>
+                    <Input className="w-[500px]" {...field} />
+                  </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="clientReference"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>Client Reference Number</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -139,7 +138,6 @@ export default function CreateRepairForm() {
                 <FormControl>
                   {<RepairStatusTypeSelect {...field} />}
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -155,7 +153,6 @@ export default function CreateRepairForm() {
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

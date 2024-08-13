@@ -20,20 +20,13 @@ export const getByRepairId = z.object({
 export const create = z.object({
   assetNumber: z.string(),
   serialNumber: z.string().min(3),
-  modelId,
-  locationId,
-  clientId,
-});
-
-export const update = z.object({
-  id: assetId,
-  assetNumber: z.string(),
-  serialNumber: z.string().min(3),
   statusId: assetStatusId,
   modelId,
   locationId,
   clientId,
 });
+
+export const update = create.partial().extend({ id: assetId });
 
 export const archive = z.object({
   id: assetId,

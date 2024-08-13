@@ -40,6 +40,7 @@ export default router({
 
       return user;
     }),
+
   getById: protectedProcedure
     .input(userSchemas.getById)
     .query(async ({ input, ctx }) => {

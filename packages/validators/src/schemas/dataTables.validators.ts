@@ -56,6 +56,9 @@ export const getCountSchema = z.object({
 export type GetCountInput = z.infer<typeof getCountSchema>;
 
 export const getSelectSchema = z.object({
+  limit: z.number().min(1).max(100).optional().default(10),
+  cursor: z.number().optional().default(0),
+  direction: z.enum(["forward", "backward"]).default("forward"),
   globalFilter: globalFilterSchema.default(""),
   columnFilters: columnFiltersSchema.default([]),
 });

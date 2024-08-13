@@ -20,6 +20,7 @@ import {
 } from "@repo/validators/forms/assets.schema";
 import { useRouter } from "next/navigation";
 
+import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
 import ModelSelect from "~/components/selects/ModelSelect";
@@ -44,11 +45,16 @@ export default function CreateAssetForm() {
   });
 
   async function handleValid(values: AssetFormInput) {
+    console.log("test");
     await createMutation.mutateAsync(values);
   }
   return (
     <Form {...form}>
-      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+      <form
+        className="space-y-8"
+        onReset={() => form.reset()}
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
+      >
         <FormField
           control={form.control}
           name="assetNumber"
@@ -59,7 +65,6 @@ export default function CreateAssetForm() {
                 <FormControl>
                   <Input className="max-w-[500px]" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -76,7 +81,21 @@ export default function CreateAssetForm() {
                 <FormControl>
                   <Input className="max-w-[500px]" {...field} />
                 </FormControl>
-
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="statusId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <AssetStatusSelect className="max-w-[500px]" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             );
@@ -129,7 +148,7 @@ export default function CreateAssetForm() {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

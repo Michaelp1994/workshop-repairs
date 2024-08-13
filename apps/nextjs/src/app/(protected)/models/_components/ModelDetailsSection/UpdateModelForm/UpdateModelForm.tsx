@@ -1,7 +1,6 @@
 "use client";
 import type { ModelID } from "@repo/validators/ids.validators";
 
-import { type RouterOutputs } from "@repo/api/root";
 import {
   Form,
   FormControl,
@@ -17,22 +16,34 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
+  defaultModel,
   type ModelFormInput,
   modelFormSchema,
 } from "@repo/validators/forms/models.schema";
 
+import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import { api } from "~/trpc/react";
 
 interface UpdateModelFormProps {
   modelId: ModelID;
-  model: RouterOutputs["models"]["getById"];
 }
 
-export default function UpdateModelForm({ model }: UpdateModelFormProps) {
+export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
+  const utils = api.useUtils();
+  const { data, isLoading, isError } = api.models.getById.useQuery({
+    id: modelId,
+  });
+
   const updateMutation = api.models.update.useMutation({
-    onSuccess(values) {
+    async onMutate() {
+      await utils.models.getAll.cancel();
+      await utils.models.getById.cancel({ id: modelId });
+    },
+    async onSuccess(values) {
       toast.success(`Model ${values.name} updated`);
+      await utils.models.getById.invalidate({ id: modelId });
+      await utils.models.getAll.invalidate();
     },
     onError() {
       toast.error("Failed to update model");
@@ -40,17 +51,27 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
   });
 
   const form = useForm({
-    values: model,
+    values: data,
+    defaultValues: defaultModel,
     schema: modelFormSchema,
   });
 
   async function handleValid(values: ModelFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: model.id });
+    await updateMutation.mutateAsync({ ...values, id: modelId });
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error</div>;
   }
 
   return (
     <Form {...form}>
       <form
+        className="space-y-4"
         onReset={() => {
           form.reset();
         }}
@@ -66,7 +87,6 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -82,7 +102,21 @@ export default function UpdateModelForm({ model }: UpdateModelFormProps) {
                 <FormControl>
                   <ManufacturerSelect {...field} />
                 </FormControl>
-
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="equipmentTypeId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Equipment Type</FormLabel>
+                <FormControl>
+                  <EquipmentTypeSelect {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             );

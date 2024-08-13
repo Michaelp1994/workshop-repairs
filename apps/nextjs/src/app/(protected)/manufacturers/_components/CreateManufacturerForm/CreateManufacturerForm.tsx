@@ -14,13 +14,13 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import { useRouter } from "next/navigation";
-
 import {
   defaultManufacturer,
   type ManufacturerFormInput,
   manufacturerFormSchema,
 } from "@repo/validators/forms/manufacturers.schema";
+import { useRouter } from "next/navigation";
+
 import { api } from "~/trpc/react";
 
 export default function CreateManufacturerForm() {

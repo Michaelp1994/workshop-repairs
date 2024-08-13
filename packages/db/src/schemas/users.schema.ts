@@ -25,8 +25,6 @@ export const users = pgTable(
     email: varchar("email", { length: 255 }).notNull().unique(),
     password: varchar("password").notNull(),
     typeId: integer("type_id").notNull(),
-    otp: varchar("otp"),
-    otpGeneratedAt: timestamp("otp_generated_at"),
     emailVerified: timestamp("email_verified", {
       mode: "date",
       withTimezone: true,

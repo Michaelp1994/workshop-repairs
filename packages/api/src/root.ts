@@ -1,7 +1,10 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 import assets from "./routers/assets.router";
+import assetStatuses from "./routers/assetStatuses.router";
+import auth from "./routers/auth.router";
 import clients from "./routers/clients.router";
+import equipmentTypes from "./routers/equipmentTypes.router";
 import locations from "./routers/locations.router";
 import manufacturers from "./routers/manufacturers.router";
 import meta from "./routers/meta.router";
@@ -20,8 +23,11 @@ import userTypes from "./routers/userTypes.router";
 import { createCallerFactory, router } from "./trpc";
 
 export const appRouter = router({
+  auth,
+  assetStatuses,
   assets,
   clients,
+  equipmentTypes,
   locations,
   manufacturers,
   meta,

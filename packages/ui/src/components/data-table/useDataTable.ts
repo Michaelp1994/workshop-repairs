@@ -8,7 +8,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
+import { type ChangeEvent, useState } from "react";
 
 export interface InitialDataTableState {
   pagination?: PaginationState;
@@ -32,14 +33,34 @@ export function useDataTableState(initialData?: InitialDataTableState) {
     columnFilters: initialData?.columnFilters ?? [],
   }; // TODO: refactor. ugly.
 
-  const [pagination, setPagination] = useState<PaginationState>(
-    init.pagination,
+  const [pageIndex, setPageIndex] = useQueryState<number>(
+    "p",
+    parseAsInteger.withDefault(init.pagination.pageIndex),
   );
+  const [pageSize, setPageSize] = useQueryState<number>(
+    "n",
+    parseAsInteger.withDefault(init.pagination.pageSize),
+  );
+
+  const pagination = {
+    pageIndex,
+    pageSize,
+  };
+  const setPagination = (
+    newPagination: React.Dispatch<React.SetStateAction<PaginationState>>,
+  ) => {
+    console.log({ newPagination });
+    setPageIndex(newPagination(pagination).pageIndex);
+    setPageSize(newPagination(pagination).pageSize);
+  };
   const [sorting, setSorting] = useState<SortingState>(init.sorting);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     init.rowSelection,
   );
-  const [globalFilter, setGlobalFilter] = useState<string>(init.globalFilter);
+  const [globalFilter, setGlobalFilter] = useQueryState<string>(
+    "gf",
+    parseAsString.withDefault(init.globalFilter),
+  );
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     init.columnVisibility,
   );
@@ -50,13 +71,13 @@ export function useDataTableState(initialData?: InitialDataTableState) {
   return {
     dataState: {
       pagination,
-      globalFilter,
+      globalFilter: globalFilter,
       columns: columnVisibility,
       columnFilters,
       sorting,
     },
     countState: {
-      globalFilter,
+      globalFilter: globalFilter,
       columnFilters,
       columns: columnVisibility,
     },

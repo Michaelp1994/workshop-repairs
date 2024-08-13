@@ -15,11 +15,11 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
 import {
   type PartFormInput,
   partFormSchema,
 } from "@repo/validators/forms/parts.schema";
+
 import { api } from "~/trpc/react";
 
 interface UpdatePartFormProps {
@@ -70,7 +70,6 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );
@@ -86,7 +85,6 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

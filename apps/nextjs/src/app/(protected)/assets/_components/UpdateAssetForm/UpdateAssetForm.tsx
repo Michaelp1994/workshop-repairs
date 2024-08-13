@@ -18,7 +18,6 @@ import { toast } from "@repo/ui/sonner";
 import {
   type AssetFormInput,
   assetFormSchema,
-  defaultAsset,
 } from "@repo/validators/forms/assets.schema";
 
 import ClientSelect from "~/components/selects/ClientSelect";
@@ -30,17 +29,14 @@ interface AssetDetailsProps {
 }
 
 export default function AssetDetails({ assetId }: AssetDetailsProps) {
-  const {
-    isLoading,
-    isError,
-    data = defaultAsset,
-  } = api.assets.getById.useQuery({
+  const { isLoading, isError, data, refetch } = api.assets.getById.useQuery({
     id: assetId,
   });
 
   const updateMutation = api.assets.update.useMutation({
-    onSuccess(values) {
+    async onSuccess(values) {
       toast.success(`Asset ${values.assetNumber} updated`);
+      await refetch();
     },
     onError(error) {
       toast.error("Failed to update asset");
@@ -68,6 +64,7 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
   return (
     <Form {...form}>
       <form
+        className="space-y-4"
         onReset={() => {
           form.reset();
         }}
@@ -137,7 +134,7 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
           {form.formState.isDirty && (
             <>
               <ResetButton />
-              <SubmitButton />
+              <SubmitButton isLoading={updateMutation.isPending} />
             </>
           )}
         </FormFooter>

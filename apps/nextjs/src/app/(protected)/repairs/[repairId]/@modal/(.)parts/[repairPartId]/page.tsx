@@ -23,7 +23,6 @@ export default function UpdateRepairPartModal({
   params,
 }: UpdateRepairPartModalProps) {
   const router = useRouter();
-  const repairId = Number(params.repairId);
   const repairPartId = Number(params.repairPartId);
 
   return (
@@ -43,10 +42,7 @@ export default function UpdateRepairPartModal({
               Update Repair Part {repairPartId}
             </DialogDescription>
           </DialogHeader>
-          <UpdateRepairPartForm
-            repairId={repairId}
-            repairPartId={repairPartId}
-          />
+          <UpdateRepairPartForm repairPartId={repairPartId} />
         </DialogContent>
       </DialogPortal>
     </Dialog>

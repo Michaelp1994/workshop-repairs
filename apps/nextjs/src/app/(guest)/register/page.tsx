@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import RegisterForm from "./RegisterForm";
+import RegisterForm from "./_components/RegisterForm";
 
 export default function RegisterPage() {
   return (

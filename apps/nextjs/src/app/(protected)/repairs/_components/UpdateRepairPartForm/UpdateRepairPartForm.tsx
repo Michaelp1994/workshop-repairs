@@ -27,7 +27,6 @@ import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/react";
 
 interface UpdateRepairPartFormProps {
-  repairId: RepairID;
   repairPartId: RepairPartID;
 }
 
@@ -85,7 +84,7 @@ export default function UpdateRepairPartForm({
               <FormItem>
                 <FormLabel>Part</FormLabel>
                 <FormControl>
-                  <ModelPartSelect modelId={repair.asset.modelId} {...field} />
+                  <ModelPartSelect modelId={data.assets.modelId} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -102,7 +101,6 @@ export default function UpdateRepairPartForm({
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             );

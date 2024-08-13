@@ -15,11 +15,11 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-
 import {
   type LocationFormInput,
   locationFormSchema,
 } from "@repo/validators/forms/locations.schema";
+
 import { api } from "~/trpc/react";
 
 interface UpdateLocationFormProps {

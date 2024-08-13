@@ -1,3 +1,5 @@
+import type { InitialDataTableState } from "@repo/ui/data-table";
+
 import {
   Card,
   CardContent,
@@ -12,6 +14,13 @@ import { CreateLink } from "~/components/ButtonLink";
 import ModelsTable from "../../../components/tables/ModelsTable";
 
 export default function AllModelsPage() {
+  const initialState: InitialDataTableState = {
+    columnVisibility: {
+      createdAt: false,
+      updatedAt: false,
+    },
+  };
+
   return (
     <CardWrapper>
       <CardToolbar>
@@ -22,7 +31,7 @@ export default function AllModelsPage() {
           <CardTitle>Models</CardTitle>
         </CardHeader>
         <CardContent>
-          <ModelsTable />
+          <ModelsTable initialState={initialState} />
         </CardContent>
       </Card>
     </CardWrapper>
