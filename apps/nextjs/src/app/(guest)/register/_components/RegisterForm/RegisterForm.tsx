@@ -1,6 +1,4 @@
 "use client";
-import type { RegisterFormInput } from "@repo/validators/forms/auth.schema";
-
 import {
   Form,
   FormControl,
@@ -14,9 +12,13 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import {
+  defaultRegister,
+  type RegisterFormInput,
+  registerFormSchema,
+} from "@repo/validators/forms/auth.schema";
 
-import { defaultRegister, registerFormSchema } from "./schema";
-import { register } from "./server-action";
+import { register } from "~/app/actions";
 
 export default function RegisterForm() {
   const form = useForm({

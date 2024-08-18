@@ -15,9 +15,8 @@ import {
   type LoginFormInput,
   loginFormSchema,
 } from "@repo/validators/forms/auth.schema";
-import { useRouter } from "next/navigation";
 
-import { login } from "./server-action";
+import { login } from "~/app/actions";
 
 export default function LoginForm() {
   const form = useForm({
@@ -27,10 +26,8 @@ export default function LoginForm() {
 
   async function handleValid(data: LoginFormInput) {
     await login(data);
-    router.push("/dashboard");
   }
 
-  const router = useRouter();
   return (
     <Form {...form}>
       <form

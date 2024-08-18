@@ -10,11 +10,13 @@ interface AssetLayoutProps {
   params: {
     modelId: string;
   };
+  modal: React.ReactNode;
   children: React.ReactNode;
 }
 
 export default async function AssetLayout({
   children,
+  modal,
   params,
 }: AssetLayoutProps) {
   const modelId = Number(params.modelId);
@@ -26,6 +28,7 @@ export default async function AssetLayout({
         <DetailsPageTitle>{model.name}</DetailsPageTitle>
       </DetailsPageToolbar>
       {children}
+      {modal}
     </DetailsPage>
   );
 }

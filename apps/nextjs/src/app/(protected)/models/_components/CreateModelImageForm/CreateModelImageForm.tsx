@@ -20,7 +20,7 @@ import {
 import { type ModelID } from "@repo/validators/ids.validators";
 import { useRef } from "react";
 
-import { uploadModelImage } from "./action";
+import { uploadModelImage } from "~/app/actions";
 
 interface CreateModelImageFormProps {
   modelId: ModelID;

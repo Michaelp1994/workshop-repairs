@@ -38,15 +38,11 @@ const authOptions = {
       },
 
       async authorize(credentials): Promise<User> {
-        // logic to salt and hash password
         const { email, password } =
           await authSchemas.login.parseAsync(credentials);
-        // logic to verify if user exists
         const user = await usersController.getByEmail(email, db);
 
         if (!user) {
-          // No user found, so this is their first attempt to login
-          // meaning this is also the place you could do registration
           throw new Error("User not found.");
         }
 
@@ -60,7 +56,6 @@ const authOptions = {
           email: user.email,
           name: `${user.firstName} ${user.lastName}`,
         };
-        // return user object with the their profile data
       },
     }),
   ],

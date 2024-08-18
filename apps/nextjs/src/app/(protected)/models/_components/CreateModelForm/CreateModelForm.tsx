@@ -72,6 +72,21 @@ export default function CreateModelForm() {
         />
         <FormField
           control={form.control}
+          name="nickname"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Nickname</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
           name="equipmentTypeId"
           render={({ field }) => {
             return (

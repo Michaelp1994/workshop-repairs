@@ -8,12 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import { toast } from "@repo/ui/sonner";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
 import { getBaseUrl } from "~/utils/getBaseUrl";
+
+import ArchiveModelButton from "../../_components/ArchiveModelButton/ArchiveModelButton";
 
 interface ArchiveModelPageProps {
   params: {
@@ -22,20 +21,8 @@ interface ArchiveModelPageProps {
 }
 
 export default function ArchiveModelPage({ params }: ArchiveModelPageProps) {
-  const router = useRouter();
   const modelId = Number(params.modelId);
   const modelUrl = `${getBaseUrl()}/models/${modelId}`;
-
-  const archiveMutation = api.models.archive.useMutation({
-    onSuccess() {
-      toast.success("Repair has been archived.");
-      router.replace(modelUrl);
-    },
-  });
-
-  async function archiveRepair() {
-    await archiveMutation.mutateAsync({ id: modelId });
-  }
 
   return (
     <Card>
@@ -50,9 +37,7 @@ export default function ArchiveModelPage({ params }: ArchiveModelPageProps) {
         <Button asChild>
           <Link href={modelUrl}>No</Link>
         </Button>
-        <Button onClick={archiveRepair} variant="destructive">
-          Yes, I am sure
-        </Button>
+        <ArchiveModelButton modelId={modelId} />
       </CardFooter>
     </Card>
   );

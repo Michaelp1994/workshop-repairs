@@ -1,16 +1,26 @@
 import { modelId, partId } from "@repo/validators/ids.validators";
 import { z } from "zod";
 
-export const partsToModelsFormSchema = z.object({
+export const modelPartFormSchema = z.object({
   partId,
-  quantity: z.number().int().positive(),
+  quantity: z.coerce.number().int().positive(),
+});
+
+export type ModelPartFormInput = z.infer<typeof modelPartFormSchema>;
+
+export const defaultModelPart: ModelPartFormInput = {
+  partId: 0,
+  quantity: 1,
+};
+
+export const partModelFormSchema = z.object({
+  quantity: z.coerce.number().int().positive(),
   modelId,
 });
 
-export type PartsToModelFormInput = z.infer<typeof partsToModelsFormSchema>;
+export type PartsModelFormInput = z.infer<typeof partModelFormSchema>;
 
-export const defaultPartsToModels: PartsToModelFormInput = {
-  partId: 0,
+export const defaultPartModel: PartsModelFormInput = {
   quantity: 1,
   modelId: 0,
 };

@@ -2,7 +2,7 @@
 
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
 
-import logout from "./server-action";
+import logout from "~/app/actions";
 
 export default function LogoutButton() {
   return <DropdownMenuItem onClick={() => logout()}>Logout</DropdownMenuItem>;

@@ -9,9 +9,9 @@ import {
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import ModelAssetsSection from "../_components/ModelAssetsSection";
-import ModelDetailsSection from "../_components/ModelDetailsSection/ModelDetailsSection";
+import ModelDetailsSection from "../_components/ModelDetailsSection";
 import ModelImagesSection from "../_components/ModelImagesSection";
-import ModelPartsSection from "../_components/ModelPartsSection/ModelPartsSection";
+import ModelPartsSection from "../_components/ModelPartsSection";
 
 interface ViewModelPageProps {
   params: {
