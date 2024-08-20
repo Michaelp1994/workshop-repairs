@@ -15,17 +15,23 @@ import {
   type LoginFormInput,
   loginFormSchema,
 } from "@repo/validators/forms/auth.schema";
+import { useState } from "react";
 
 import { login } from "~/app/actions";
 
 export default function LoginForm() {
+  const [message, setMessage] = useState<string | null>(null);
   const form = useForm({
     schema: loginFormSchema,
     defaultValues: defaultLogin,
   });
 
   async function handleValid(data: LoginFormInput) {
-    await login(data);
+    setMessage(null);
+    const result = await login(data);
+    if (result?.message) {
+      setMessage(result.message);
+    }
   }
 
   return (
@@ -62,6 +68,8 @@ export default function LoginForm() {
             );
           }}
         />
+
+        {message && <div className="text-destructive">{message}</div>}
 
         <SubmitButton />
       </form>

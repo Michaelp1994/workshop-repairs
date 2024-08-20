@@ -9,7 +9,7 @@ import {
 } from "@repo/ui/card";
 import Link from "next/link";
 
-import LoginForm from "./_components/LoginForm/LoginForm";
+import LoginForm from "./_components/LoginForm";
 
 export default function LoginPage() {
   return (

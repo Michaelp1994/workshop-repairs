@@ -16,10 +16,11 @@ import { getBaseUrl } from "~/utils/getBaseUrl";
 export async function login(data: LoginFormInput) {
   try {
     await signIn("credentials", data);
-    redirect("/dashboard");
   } catch (e) {
     console.log(e);
     return { message: "Invalid email or password" };
+  } finally {
+    redirect("/dashboard");
   }
 }
 
