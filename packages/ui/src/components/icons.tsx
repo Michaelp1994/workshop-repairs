@@ -12,10 +12,10 @@ export {
   ChevronsRight,
   ChevronsUpDown,
   CircleUser,
-  Edit,
   EllipsisVertical,
   EyeOff,
   Info,
+  Laptop,
   Pencil,
   PlusCircle,
   SlidersHorizontal,
@@ -24,5 +24,6 @@ export {
   Trash2,
   Upload,
   User,
+  Wrench,
   X,
 } from "lucide-react";
