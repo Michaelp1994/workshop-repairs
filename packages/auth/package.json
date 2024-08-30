@@ -20,12 +20,12 @@
     "@repo/db": "workspace:^",
     "@repo/validators": "workspace:^",
     "bcrypt": "^5.1.1",
-    "next-auth": "beta"
+    "next-auth": "5.0.0-beta.20"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/bcrypt": "^5.0.2",
-    "eslint": "^9.8.0"
+    "eslint": "^9.9.1"
   }
 }
