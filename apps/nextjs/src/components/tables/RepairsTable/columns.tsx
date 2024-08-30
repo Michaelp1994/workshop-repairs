@@ -53,6 +53,13 @@ export const columns = [
       name: "Current Status",
     },
   }),
+  columnHelper.accessor("type", {
+    header: "Type",
+    cell: ({ getValue }) => <Badge>{getValue().name}</Badge>,
+    meta: {
+      name: "Repair Type",
+    },
+  }),
   columnHelper.accessor("fault", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fault" />
