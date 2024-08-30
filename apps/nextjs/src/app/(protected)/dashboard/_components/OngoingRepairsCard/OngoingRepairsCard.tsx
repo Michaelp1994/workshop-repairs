@@ -1,9 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Wrench } from "@repo/ui/icons";
 
 import { api } from "~/trpc/server";
 
 export default async function OngoingRepairsCard() {
-  const data = await api.repairs.getCount({
+  const totalRepairs = await api.repairs.getCount({
     columnFilters: [
       {
         id: "status",
@@ -14,11 +15,13 @@ export default async function OngoingRepairsCard() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Current Repairs</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">Current Repairs</CardTitle>
+        <Wrench />
       </CardHeader>
       <CardContent>
-        <div>{data}</div>
+        <div className="text-2xl font-bold">{totalRepairs}</div>
+        <p className="text-muted-foreground text-xs">+20.1% from last month</p>
       </CardContent>
     </Card>
   );
