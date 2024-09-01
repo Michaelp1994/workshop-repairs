@@ -6,8 +6,7 @@ import type {
 } from "@repo/validators/forms/auth.schema";
 import type { ModelID } from "@repo/validators/ids.validators";
 
-import { signIn } from "@repo/auth";
-import { signOut } from "@repo/auth";
+import { signIn, signOut } from "@repo/auth";
 import { redirect } from "next/navigation";
 
 import { api } from "~/trpc/server";
