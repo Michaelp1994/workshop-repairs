@@ -6,6 +6,7 @@ import { locations } from "./schemas/locations.schema";
 import { manufacturers } from "./schemas/manufacturers.schema";
 import { modelImages } from "./schemas/model-images.schema";
 import { models } from "./schemas/models.schema";
+import { organizations } from "./schemas/organizations.schema";
 import { parts } from "./schemas/parts.schema";
 import { partsToModels } from "./schemas/parts-to-models.schema";
 import { repairComments } from "./schemas/repair-comments.schema";
@@ -25,6 +26,7 @@ export const schema = {
   clients,
   locations,
   manufacturers,
+  organizations,
   modelImages,
   models,
   partsToModels,
