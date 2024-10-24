@@ -47,3 +47,6 @@ yarn-error.log*
 /**/dist/
 # idea files
 .idea
+
+# sst
+.sst
