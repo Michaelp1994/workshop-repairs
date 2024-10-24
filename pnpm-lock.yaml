@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      sst:
+        specifier: 3.2.47
+        version: 3.2.47
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.5.0
