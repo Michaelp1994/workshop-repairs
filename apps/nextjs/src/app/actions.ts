@@ -29,6 +29,7 @@ export default async function logout() {
 
 export async function register(data: RegisterFormInput) {
   await api.users.register(data);
+  redirect("/dashboard");
 }
 
 export async function uploadModelImage(modelId: ModelID, formData: FormData) {
