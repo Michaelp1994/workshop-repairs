@@ -1,6 +1,7 @@
 {
   "name": "workshop-repairs",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "dotenv -- turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .vercel",
@@ -11,11 +12,9 @@
     "db:studio": "dotenv -- pnpm -F db db:studio",
     "dev": "dotenv -- pnpm -F nextjs dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "gen": "turbo gen workspace",
-    "lint": "turbo lint --continue",
+    "lint": "turbo lint",
     "start": "dotenv -- turbo start",
-    "typecheck": "turbo typecheck --continue",
-    "v": "pnpm -v"
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
@@ -29,8 +28,9 @@
     "husky": "^9.1.6",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
+    "sst": "^3.2.48",
     "turbo": "^2.1.1",
     "typescript": "^5.5.4"
   },
-  "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
 }
