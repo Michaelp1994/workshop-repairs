@@ -14,12 +14,14 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { organizations } from "./organizations.schema";
 import { userTypes } from "./user-types.schema";
 
 export const users = pgTable(
   "users",
   {
     id: serial("id").primaryKey(),
+    organizationId: integer("organizationId").notNull(),
     firstName: varchar("first_name").notNull(),
     lastName: varchar("last_name").notNull(),
     email: varchar("email", { length: 255 }).notNull().unique(),
@@ -39,6 +41,10 @@ export const users = pgTable(
   },
   (t) => {
     return {
+      organization: foreignKey({
+        columns: [t.organizationId],
+        foreignColumns: [organizations.id],
+      }),
       type: foreignKey({
         columns: [t.typeId],
         foreignColumns: [userTypes.id],
