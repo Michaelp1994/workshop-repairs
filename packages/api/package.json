@@ -7,8 +7,6 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "// build": "tsc && tsc-alias",
-    "//dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "eslint .",
     "test": "vitest",

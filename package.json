@@ -5,6 +5,7 @@
   "scripts": {
     "build": "dotenv -- turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .vercel",
+    "db": "sst shell drizzle-kit",
     "db:export": "dotenv -- pnpm -F db db:export",
     "db:push": "dotenv -- pnpm -F db db:push",
     "db:reset": "dotenv -- pnpm -F db db:reset",
