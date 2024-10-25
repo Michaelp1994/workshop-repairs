@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      sst:
+        specifier: 3.2.48
+        version: 3.2.48
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.5.0
@@ -41,9 +45,6 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.6
         version: 0.6.6(prettier@3.3.3)
-      sst:
-        specifier: ^3.2.48
-        version: 3.2.48
       turbo:
         specifier: ^2.1.1
         version: 2.1.1
