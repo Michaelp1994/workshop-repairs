@@ -1,11 +1,14 @@
+import LandingNavBar from "~/components/LandingNavBar";
+
 interface LoginLayoutProps {
   children: React.ReactNode;
 }
 
 export default function LoginLayout({ children }: LoginLayoutProps) {
   return (
-    <div className="grid h-full items-center justify-center">
+    <>
+    <LandingNavBar />
       <div className="w-[500px] max-w-sm">{children}</div>
-    </div>
+    </>
   );
 }
