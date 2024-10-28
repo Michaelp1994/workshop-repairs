@@ -80,13 +80,13 @@ importers:
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/client':
         specifier: 11.0.0-rc.467
-        version: 11.0.0-rc.467(@trpc/server@11.0.0-rc.467)
+        version: 11.0.0-rc.467(@trpc/server@11.0.0-rc.593)
       '@trpc/react-query':
         specifier: 11.0.0-rc.467
-        version: 11.0.0-rc.467(@tanstack/react-query@5.53.1(react@18.3.1))(@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.467))(@trpc/server@11.0.0-rc.467)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 11.0.0-rc.467(@tanstack/react-query@5.53.1(react@18.3.1))(@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
-        specifier: 11.0.0-rc.467
-        version: 11.0.0-rc.467
+        specifier: 11.0.0-rc.593
+        version: 11.0.0-rc.593
       '@uidotdev/usehooks':
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -176,8 +176,8 @@ importers:
         specifier: workspace:*
         version: link:../validators
       '@trpc/server':
-        specifier: 11.0.0-rc.467
-        version: 11.0.0-rc.467
+        specifier: 11.0.0-rc.593
+        version: 11.0.0-rc.593
       '@types/nodemailer':
         specifier: ^6.4.15
         version: 6.4.15
@@ -864,9 +864,11 @@ packages:
 
   '@esbuild-kit/core-utils@3.3.2':
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
+    deprecated: 'Merged into tsx: https://tsx.is'
 
   '@esbuild-kit/esm-loader@2.6.5':
     resolution: {integrity: sha512-FxEMIkJKnodyA1OaCUoEvbYRkoZlLZ4d/eXFu9Fh8CbBBgP5EmZxrfTRyN0qpXZ4vOvqnE5YdRdcrmUUXuU+dA==}
+    deprecated: 'Merged into tsx: https://tsx.is'
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -2704,8 +2706,8 @@ packages:
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
 
-  '@trpc/server@11.0.0-rc.467':
-    resolution: {integrity: sha512-94Gv26ALuBfxgFlSGV3x2uF2ixUEViuK0m3IPKOvCTMreisZkBqyTa3NkBcuPZW/AMUieM5P4Q2NrbHTIA0fKQ==}
+  '@trpc/server@11.0.0-rc.593':
+    resolution: {integrity: sha512-ihZNf7nM3OriZkkuOUFjuB51FJdtCXZUUj8FIXkq0VXF9VmMOD7j4QTl5YojIzMTJBMGUK9VADcO0shgELEmyw==}
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -8605,19 +8607,19 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.467)':
+  '@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.593)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.467
+      '@trpc/server': 11.0.0-rc.593
 
-  '@trpc/react-query@11.0.0-rc.467(@tanstack/react-query@5.53.1(react@18.3.1))(@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.467))(@trpc/server@11.0.0-rc.467)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@11.0.0-rc.467(@tanstack/react-query@5.53.1(react@18.3.1))(@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.593))(@trpc/server@11.0.0-rc.593)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/react-query': 5.53.1(react@18.3.1)
-      '@trpc/client': 11.0.0-rc.467(@trpc/server@11.0.0-rc.467)
-      '@trpc/server': 11.0.0-rc.467
+      '@trpc/client': 11.0.0-rc.467(@trpc/server@11.0.0-rc.593)
+      '@trpc/server': 11.0.0-rc.593
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@trpc/server@11.0.0-rc.467': {}
+  '@trpc/server@11.0.0-rc.593': {}
 
   '@tsconfig/node10@1.0.11': {}
 
