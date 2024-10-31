@@ -22,5 +22,10 @@ declare module "sst" {
       "bastion": string
       "type": "sst.aws.Vpc"
     }
+    "Trpc": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
   }
 }
