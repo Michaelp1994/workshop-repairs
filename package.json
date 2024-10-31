@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "dotenv -- turbo build",
-    "clean": "turbo clean && rm -rf .turbo node_modules .vercel",
-    "db": "sst shell drizzle-kit",
+    "clean": "turbo clean && rm -rf .turbo node_modules .sst db-data",
+    "db": "pnpm -F db db",
     "db:export": "dotenv -- pnpm -F db db:export",
     "db:push": "dotenv -- pnpm -F db db:push",
     "db:reset": "dotenv -- pnpm -F db db:reset",
@@ -16,6 +16,10 @@
     "lint": "turbo lint",
     "start": "dotenv -- turbo start",
     "typecheck": "turbo typecheck"
+  },
+  "dependencies": {
+    "drizzle-kit": "0.27.0",
+    "sst": "3.2.70"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
@@ -33,8 +37,5 @@
     "turbo": "^2.1.1",
     "typescript": "^5.5.4"
   },
-  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228",
-  "dependencies": {
-    "sst": "3.2.48"
-  }
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
 }

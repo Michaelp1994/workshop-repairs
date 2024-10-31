@@ -13,6 +13,7 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
+    "db": "sst shell drizzle-kit",
     "db:export": "tsx scripts/export.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -39,6 +40,7 @@
     "@types/pg": "^8.11.8",
     "drizzle-kit": "^0.24.2",
     "eslint": "^9.9.1",
+    "sst": "^3.2.48",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.19.0",

@@ -10,9 +10,17 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Bucket"
     }
-    "MyWeb": {
-      "type": "sst.aws.Nextjs"
-      "url": string
+    "MyPostgres": {
+      "database": string
+      "host": string
+      "password": string
+      "port": number
+      "type": "sst.aws.Postgres"
+      "username": string
+    }
+    "MyVpc": {
+      "bastion": string
+      "type": "sst.aws.Vpc"
     }
   }
 }
