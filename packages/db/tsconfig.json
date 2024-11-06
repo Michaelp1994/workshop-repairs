@@ -7,6 +7,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "scripts", "drizzle.config.ts"],
+  "include": ["src", "scripts", "drizzle.config.ts", "sst-env.d.ts"],
   "exclude": ["node_modules"]
 }

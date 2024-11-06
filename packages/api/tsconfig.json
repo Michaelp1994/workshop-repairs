@@ -9,6 +9,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src"],
+  "include": ["src", "sst-env.d.ts"],
   "exclude": ["node_modules"]
 }
