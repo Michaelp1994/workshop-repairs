@@ -10,6 +10,7 @@ import locationsData from "./seeds/locations.json";
 import manufacturersData from "./seeds/manufacturers.json";
 import modelImagesData from "./seeds/model_images.json";
 import modelsData from "./seeds/models.json";
+import organizationsData from "./seeds/organizations.json";
 import partsData from "./seeds/parts.json";
 import partsToModelsData from "./seeds/parts_to_models.json";
 import repairCommentsData from "./seeds/repair_comments.json";
@@ -48,6 +49,12 @@ await db.transaction(async (tx) => {
   );
 
   console.log("user types done");
+
+  await tx.insert(schema.organizations).values(
+    organizationsData.map((data) => ({
+      ...data,
+    })),
+  );
 
   await tx.insert(schema.users).values(
     usersData.map((data) => ({

@@ -18,4 +18,5 @@ await db.transaction(async (tx) => {
       console.log(`skipped ${tableName}`);
     }
   }
+  console.log("done.");
 });
