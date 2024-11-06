@@ -6,11 +6,28 @@ import "sst"
 export {}
 declare module "sst" {
   export interface Resource {
-    "MyBucket": {
+    "API1": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
+    }
+    "Bucket1": {
       "name": string
       "type": "sst.aws.Bucket"
     }
-    "MyPostgres": {
+    "Email1": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
+    "JWT_SECRET": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "MyWeb": {
+      "type": "sst.aws.Nextjs"
+      "url": string
+    }
+    "Postgres1": {
       "database": string
       "host": string
       "password": string
@@ -18,14 +35,9 @@ declare module "sst" {
       "type": "sst.aws.Postgres"
       "username": string
     }
-    "MyVpc": {
+    "Vpc1": {
       "bastion": string
       "type": "sst.aws.Vpc"
-    }
-    "Trpc": {
-      "name": string
-      "type": "sst.aws.Function"
-      "url": string
     }
   }
 }
