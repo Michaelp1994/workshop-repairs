@@ -20,7 +20,7 @@ import {
 } from "@repo/validators/forms/auth.schema";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 export default function ForgotPasswordForm() {
   const router = useRouter();
   const forgotPasswordMutation = api.auth.forgotPassword.useMutation({

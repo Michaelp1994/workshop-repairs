@@ -1,7 +1,7 @@
 "use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 import { RepairComment } from "./RepairComment";
 

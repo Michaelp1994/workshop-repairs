@@ -20,7 +20,7 @@ import {
   partFormSchema,
 } from "@repo/validators/forms/parts.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdatePartFormProps {
   partId: PartID;

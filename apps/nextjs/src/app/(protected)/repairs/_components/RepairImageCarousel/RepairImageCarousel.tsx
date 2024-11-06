@@ -11,7 +11,7 @@ import {
 } from "@repo/ui/carousel";
 import { useSearchParams } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface RepairImageCarouselProps extends CarouselProps {
   repairId: RepairID;

@@ -21,7 +21,7 @@ import {
 } from "@repo/validators/forms/repairImages.schema";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface CreateRepairImageFormProps {
   repairId: RepairID;

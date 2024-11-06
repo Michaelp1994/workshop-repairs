@@ -1,11 +1,10 @@
-import { SessionProvider } from "@repo/auth/react";
 import { Toaster } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
-import { TRPCReactProvider } from "~/trpc/react";
+import { TRPCReactProvider } from "~/trpc/client";
 
 const fontHeading = Inter({
   subsets: ["latin"],
@@ -40,12 +39,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       lang="en"
     >
       <body className="bg-muted/40 h-full">
-        <SessionProvider>
-          <TRPCReactProvider>
-            {children}
-            <Toaster closeButton richColors />
-          </TRPCReactProvider>
-        </SessionProvider>
+        <TRPCReactProvider>
+          {children}
+          <Toaster closeButton richColors />
+        </TRPCReactProvider>
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import {
 } from "@repo/ui/infinite-combobox";
 import { type ElementRef, forwardRef } from "react";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 const InfiniteAssetSelect = forwardRef<
   ElementRef<typeof InfiniteCombobox>,

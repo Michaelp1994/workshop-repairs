@@ -7,7 +7,7 @@ import {
   DataTableToolbar,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 
 interface RepairPartsTableProps {

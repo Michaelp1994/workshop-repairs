@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function CreateModelForm() {
   const router = useRouter();

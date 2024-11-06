@@ -1,9 +1,17 @@
 "use client";
 
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
-
-import logout from "~/app/actions";
+import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
-  return <DropdownMenuItem onClick={() => logout()}>Logout</DropdownMenuItem>;
+  const router = useRouter();
+  return (
+    <DropdownMenuItem
+      onClick={async () => {
+        router.push("/");
+      }}
+    >
+      Logout
+    </DropdownMenuItem>
+  );
 }

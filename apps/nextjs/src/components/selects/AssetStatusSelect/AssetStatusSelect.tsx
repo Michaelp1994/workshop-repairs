@@ -1,7 +1,7 @@
 import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
 import { type ElementRef, forwardRef } from "react";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 const AssetStatusSelect = forwardRef<
   ElementRef<typeof Combobox>,

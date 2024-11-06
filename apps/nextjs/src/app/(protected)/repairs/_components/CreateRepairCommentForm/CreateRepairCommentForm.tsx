@@ -19,7 +19,7 @@ import {
   repairCommentFormSchema,
 } from "@repo/validators/forms/repairComments.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface CreateRepairCommentFormProps {
   repairId: RepairID;

@@ -5,7 +5,7 @@ import {
   repairStatusTypeFormSchema,
 } from "@repo/validators/forms/repairStatusTypes.schema";
 import type { RepairStatusTypeID } from "@repo/validators/ids.validators";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function useUpdateRepairStatusTypeForm(
   repairStatusTypeId: RepairStatusTypeID,

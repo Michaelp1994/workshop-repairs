@@ -1,19 +1,9 @@
-import { auth } from "@repo/auth";
 import { Button } from "@repo/ui/button";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import LoginForm from "./(guest)/login/_components/LoginForm/LoginForm";
 
 export default async function HomePage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  } else {
-    redirect("/dashboard");
-  }
-
   return (
     <main>
       <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -58,14 +48,14 @@ export default async function HomePage() {
             </div>
             <LoginForm />
             <p className="text-muted-foreground px-8 text-center text-sm">
-              By clicking continue, you agree to our{" "}
+              By clicking continue, you agree to our
               <Link
                 className="hover:text-primary underline underline-offset-4"
                 href="/terms"
               >
                 Terms of Service
-              </Link>{" "}
-              and{" "}
+              </Link>
+              and
               <Link
                 className="hover:text-primary underline underline-offset-4"
                 href="/privacy"

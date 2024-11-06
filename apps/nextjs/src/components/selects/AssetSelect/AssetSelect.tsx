@@ -7,7 +7,7 @@ import {
 import { CheckIcon } from "@repo/ui/icons";
 import { type ElementRef, forwardRef, useState } from "react";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 const AssetSelect = forwardRef<
   ElementRef<typeof CustomCombobox>,

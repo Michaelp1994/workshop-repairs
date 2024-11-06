@@ -4,7 +4,7 @@ import {
 } from "@repo/validators/forms/repairStatusTypes.schema";
 import { toast } from "@repo/ui/sonner";
 import { useForm } from "@repo/ui/form";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export function useCreateRepairStatusTypeForm() {
   const createMutation = api.repairStatusTypes.create.useMutation({

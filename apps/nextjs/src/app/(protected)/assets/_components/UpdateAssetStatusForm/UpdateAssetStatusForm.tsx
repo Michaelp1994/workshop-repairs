@@ -16,7 +16,7 @@ import { type AssetID, assetStatusId } from "@repo/validators/ids.validators";
 import { z } from "zod";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateAssetStatusFormProps {
   assetId: AssetID;

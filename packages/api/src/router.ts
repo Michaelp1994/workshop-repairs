@@ -50,11 +50,7 @@ export type AppRouter = typeof appRouter;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;
 
-/**
- * Create a server-side caller for the tRPC API.
- * @example
- * const trpc = createCaller(createContext);
- * const res = await trpc.post.all();
- *       ^? Post[]
- */
+// /**
+//  * Create a server-side caller for the tRPC API.
+//  */
 export const createCaller = createCallerFactory(appRouter);

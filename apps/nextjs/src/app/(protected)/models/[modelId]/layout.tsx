@@ -4,7 +4,7 @@ import {
   DetailsPageTitle,
   DetailsPageToolbar,
 } from "~/components/DetailsPage";
-import { api } from "~/trpc/server";
+import { api } from "~/utils/api";
 
 interface AssetLayoutProps {
   params: {
@@ -20,7 +20,7 @@ export default async function AssetLayout({
   params,
 }: AssetLayoutProps) {
   const modelId = Number(params.modelId);
-  const model = await api.models.getById({ id: modelId });
+  const model = await api.models.getById.query({ id: modelId });
   return (
     <DetailsPage>
       <DetailsPageToolbar>

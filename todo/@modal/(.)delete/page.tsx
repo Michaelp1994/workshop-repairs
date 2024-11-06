@@ -13,7 +13,7 @@ import {
 } from "@repo/ui/dialog";
 import { type RepairID } from "@repo/validators/ids.validators";
 import { useRouter } from "next/navigation";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface DeleteRepairModalProps {
   params: {

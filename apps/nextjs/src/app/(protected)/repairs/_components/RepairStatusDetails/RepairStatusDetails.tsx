@@ -17,7 +17,7 @@ import { type RepairID } from "@repo/validators/ids.validators";
 import { z } from "zod";
 
 import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 const schema = z.object({ statusId: z.number() });
 

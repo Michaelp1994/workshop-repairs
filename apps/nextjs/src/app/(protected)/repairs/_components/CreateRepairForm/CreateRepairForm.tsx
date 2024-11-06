@@ -25,7 +25,7 @@ import AssetSelect from "~/components/selects/AssetSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
 import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function CreateRepairForm() {
   const searchParams = useSearchParams();

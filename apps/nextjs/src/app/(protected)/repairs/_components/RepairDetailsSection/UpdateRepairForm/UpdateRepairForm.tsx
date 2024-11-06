@@ -24,7 +24,7 @@ import {
 
 import ClientSelect from "~/components/selects/ClientSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateRepairFormProps {
   repairId: RepairID;

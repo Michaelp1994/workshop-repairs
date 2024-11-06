@@ -6,7 +6,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { columns } from "./columns";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 import { useState } from "react";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";

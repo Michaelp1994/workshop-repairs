@@ -18,21 +18,19 @@ import {
   registerFormSchema,
 } from "@repo/validators/forms/auth.schema";
 
-import { register } from "~/app/actions";
+interface RegisterFormProps {
+  onValid: (data: RegisterFormInput) => void;
+}
 
-export default function RegisterForm() {
+export default function RegisterForm({ onValid }: RegisterFormProps) {
   const form = useForm({
     schema: registerFormSchema,
     defaultValues: defaultRegister,
   });
 
-  async function handleValid(data: RegisterFormInput) {
-    await register(data);
-  }
-
   return (
     <Form {...form}>
-      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+      <form onSubmit={(e) => void form.handleSubmit(onValid)(e)}>
         <FormField
           control={form.control}
           name="firstName"

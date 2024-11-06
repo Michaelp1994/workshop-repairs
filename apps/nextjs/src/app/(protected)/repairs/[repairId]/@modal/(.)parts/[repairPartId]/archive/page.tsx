@@ -3,7 +3,7 @@ import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
 import ArchiveModal from "~/components/ArchiveModal";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface ArchiveRepairPartModalProps {
   params: {

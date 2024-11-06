@@ -20,7 +20,7 @@ import {
   manufacturerFormSchema,
 } from "@repo/validators/forms/manufacturers.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateManufacturerFormProps {
   manufacturerId: ManufacturerID;

@@ -18,7 +18,7 @@ import {
   updateProfileFormSchema,
 } from "@repo/validators/forms/auth.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function ProfileForm() {
   const { isLoading, isError, data } = api.users.getCurrentUser.useQuery({});

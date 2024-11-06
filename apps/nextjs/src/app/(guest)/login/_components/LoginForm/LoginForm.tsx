@@ -15,23 +15,25 @@ import {
   type LoginFormInput,
   loginFormSchema,
 } from "@repo/validators/forms/auth.schema";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { login } from "~/app/actions";
+import { api } from "~/trpc/client";
 
 export default function LoginForm() {
-  const [message, setMessage] = useState<string | null>(null);
+  const router = useRouter();
+  const loginMutation = api.auth.login.useMutation({
+    onSuccess() {
+      // save to cookie.
+      router.push("/dashboard");
+    },
+  });
   const form = useForm({
     schema: loginFormSchema,
     defaultValues: defaultLogin,
   });
 
   async function handleValid(data: LoginFormInput) {
-    setMessage(null);
-    const result = await login(data);
-    if (result?.message) {
-      setMessage(result.message);
-    }
+    await loginMutation.mutateAsync(data);
   }
 
   return (
@@ -69,9 +71,7 @@ export default function LoginForm() {
           }}
         />
 
-        {message && <div className="text-destructive">{message}</div>}
-
-        <SubmitButton />
+        <SubmitButton isLoading={loginMutation.isPending} />
       </form>
     </Form>
   );

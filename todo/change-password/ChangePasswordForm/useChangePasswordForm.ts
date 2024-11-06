@@ -5,7 +5,7 @@ import {
   changePasswordFormSchema,
   defaultChangePassword,
 } from "@repo/validators/forms/auth.schema";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export function useChangePasswordForm() {
   const changePasswordMutation = api.auth.changePassword.useMutation({

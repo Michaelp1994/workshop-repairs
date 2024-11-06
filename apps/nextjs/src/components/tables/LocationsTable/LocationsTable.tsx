@@ -7,26 +7,17 @@ import {
   useDataTableState,
 } from "@repo/ui/data-table";
 
-import { api } from "~/trpc/react";
-import {
-  defaultCountQueryOptns,
-  defaultDataQueryOptns,
-} from "~/utils/defaultQueryOptns";
+import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 
 export default function LocationsTable() {
   const { dataState, countState, tableOptions } = useDataTableState();
 
-  const { data, isLoading, isError, error } = api.locations.getAll.useQuery(
-    dataState,
-    defaultDataQueryOptns,
-  );
+  const { data, isLoading, isError, error } =
+    api.locations.getAll.useQuery(dataState);
 
-  const { data: rowCount } = api.locations.getCount.useQuery(
-    countState,
-    defaultCountQueryOptns,
-  );
+  const { data: rowCount } = api.locations.getCount.useQuery(countState);
 
   const table = useDataTable({
     columns,

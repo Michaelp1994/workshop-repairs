@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Laptop } from "@repo/ui/icons";
 
-import { api } from "~/trpc/server";
+import { api } from "~/utils/api";
 
 interface ActiveAssetsCardProps {}
 
 export default async function ActiveAssetsCard({}: ActiveAssetsCardProps) {
-  const totalAssets = await api.assets.getCount({});
+  const totalAssets = await api.assets.getCount.query({});
 
   return (
     <Card>

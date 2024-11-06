@@ -8,7 +8,7 @@ import {
   ImageGridItem,
   ImageGridUploadButton,
 } from "~/components/ImageGrid";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface ModelImagesSectionProps {
   modelId: ModelID;

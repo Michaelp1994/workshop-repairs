@@ -1,7 +1,7 @@
 import { DataTableFacetedFilter } from "@repo/ui/data-table";
 import { type Table } from "@tanstack/react-table";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface RepairsTableStatusFilterProps<T> {
   table: Table<T>;

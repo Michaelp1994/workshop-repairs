@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { ArrowUpRight } from "@repo/ui/icons";
 import Link from "next/link";
 
-import { api } from "~/trpc/server";
+import { api } from "~/utils/api";
 
 interface AssetDetailsProps {
   repairId: RepairID;
@@ -14,7 +14,7 @@ interface AssetDetailsProps {
 export default async function AssetDetailsSection({
   repairId,
 }: AssetDetailsProps) {
-  const repair = await api.repairs.getById({
+  const repair = await api.repairs.getById.query({
     id: repairId,
   });
 

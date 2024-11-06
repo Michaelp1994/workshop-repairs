@@ -13,7 +13,7 @@ import {
 } from "@repo/ui/table";
 import Link from "next/link";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 interface RepairPartsTableProps {

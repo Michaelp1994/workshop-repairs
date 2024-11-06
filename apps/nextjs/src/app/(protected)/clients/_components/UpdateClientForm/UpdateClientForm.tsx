@@ -20,7 +20,7 @@ import {
   clientFormSchema,
 } from "@repo/validators/forms/clients.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface BaseFormProps {
   clientId: ClientID;

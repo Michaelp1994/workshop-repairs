@@ -1,6 +1,4 @@
-import { auth } from "@repo/auth";
 import { type Metadata } from "next";
-import { redirect } from "next/navigation";
 
 import NavBar from "~/components/NavBar";
 import NextBreadcrumb from "~/components/NextBreadcrumb";
@@ -17,12 +15,6 @@ interface RootLayoutProps {
 }
 
 export default async function AuthLayout({ children }: RootLayoutProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
   return (
     <div className="grid h-full grid-rows-[auto_1fr]">
       <NavBar />

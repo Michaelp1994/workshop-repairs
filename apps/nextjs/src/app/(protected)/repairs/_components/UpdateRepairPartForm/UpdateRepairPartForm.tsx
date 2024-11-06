@@ -24,7 +24,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateRepairPartFormProps {
   repairPartId: RepairPartID;

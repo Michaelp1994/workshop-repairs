@@ -1,4 +1,3 @@
-import { auth } from "@repo/auth";
 import { Button } from "@repo/ui/button";
 import {
   DropdownMenu,
@@ -14,7 +13,7 @@ import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 
 export default async function ProfileButton() {
-  const session = await auth();
+  //const session = await auth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,13 +32,10 @@ export default async function ProfileButton() {
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {session?.user ? (
-          <LogoutButton />
-        ) : (
-          <DropdownMenuItem asChild>
-            <Link href="/login">Login</Link>
-          </DropdownMenuItem>
-        )}
+        <LogoutButton />
+        <DropdownMenuItem asChild>
+          <Link href="/login">Login</Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

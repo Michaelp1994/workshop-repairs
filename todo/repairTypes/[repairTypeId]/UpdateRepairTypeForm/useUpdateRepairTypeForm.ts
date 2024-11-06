@@ -5,7 +5,7 @@ import {
   repairTypeFormSchema,
 } from "@repo/validators/forms/repairTypes.schema";
 import type { RepairTypeID } from "@repo/validators/ids.validators";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function useUpdateRepairTypeForm(repairTypeId: RepairTypeID) {
   const query = api.repairTypes.getById.useQuery({ id: repairTypeId });

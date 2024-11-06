@@ -5,7 +5,6 @@ import {
 } from "@repo/validators/dataTables.validators";
 import * as userSchemas from "@repo/validators/users.validators";
 import { TRPCError } from "@trpc/server";
-import { hash } from "bcrypt";
 
 import {
   archiveMetadata,
@@ -58,41 +57,16 @@ export default router({
   register: publicProcedure
     .input(userSchemas.register)
     .mutation(async ({ input, ctx }) => {
-      const password = await hash(input.password, 10);
-      const user = await usersController.create(
-        { ...input, password, typeId: 1 },
-        ctx.db,
-      );
-
-      if (!user) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+      });
     }),
   create: protectedProcedure
     .input(userSchemas.create)
     .mutation(async ({ input, ctx }) => {
-      const password = await hash(input.password, 10);
-      const metadata = createMetadata(ctx.session);
-
-      const newUser = await usersController.create(
-        {
-          ...input,
-          ...metadata,
-          password,
-        },
-        ctx.db,
-      );
-
-      if (!newUser) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Can't create user",
-        });
-      }
-
-      return newUser;
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+      });
     }),
   update: protectedProcedure
     .input(userSchemas.update)

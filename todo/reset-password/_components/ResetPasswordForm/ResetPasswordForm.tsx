@@ -20,7 +20,7 @@ import {
 } from "@repo/validators/forms/auth.schema";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface ResetPasswordFormProps {}
 

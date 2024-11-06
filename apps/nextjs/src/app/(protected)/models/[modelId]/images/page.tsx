@@ -10,7 +10,7 @@ import {
 } from "@repo/ui/card";
 import { useSearchParams } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 import ModelImageCarousel from "../../_components/ModelImageCarousel";
 

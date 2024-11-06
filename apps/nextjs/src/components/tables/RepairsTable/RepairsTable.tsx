@@ -8,11 +8,7 @@ import {
   useDataTableState,
 } from "@repo/ui/data-table";
 
-import { api } from "~/trpc/react";
-import {
-  defaultCountQueryOptns,
-  defaultDataQueryOptns,
-} from "~/utils/defaultQueryOptns";
+import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 import RepairsTableStatusFilter from "./RepairsTableStatusFilter";
@@ -30,12 +26,9 @@ export default function RepairsTable({ initialState }: RepairsTableProps) {
     isLoading,
     isError,
     error,
-  } = api.repairs.getAll.useQuery(dataState, defaultDataQueryOptns);
+  } = api.repairs.getAll.useQuery(dataState);
 
-  const { data: rowCount } = api.repairs.getCount.useQuery(
-    countState,
-    defaultCountQueryOptns,
-  );
+  const { data: rowCount } = api.repairs.getCount.useQuery(countState);
 
   const table = useDataTable({
     columns,
@@ -48,7 +41,7 @@ export default function RepairsTable({ initialState }: RepairsTableProps) {
     return <div>Loading...</div>;
   }
   if (isError) {
-    console.error(error);
+    console.log(error);
     return <div>Error loading repairs</div>;
   }
 

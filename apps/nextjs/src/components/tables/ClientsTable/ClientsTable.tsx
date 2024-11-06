@@ -7,11 +7,7 @@ import {
   useDataTableState,
 } from "@repo/ui/data-table";
 
-import { api } from "~/trpc/react";
-import {
-  defaultCountQueryOptns,
-  defaultDataQueryOptns,
-} from "~/utils/defaultQueryOptns";
+import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 export default function ClientsTable() {
@@ -22,12 +18,9 @@ export default function ClientsTable() {
     isLoading,
     isError,
     error,
-  } = api.clients.getAll.useQuery(dataState, defaultDataQueryOptns);
+  } = api.clients.getAll.useQuery(dataState);
 
-  const { data: rowCount } = api.clients.getCount.useQuery(
-    countState,
-    defaultCountQueryOptns,
-  );
+  const { data: rowCount } = api.clients.getCount.useQuery(countState);
 
   const table = useDataTable({
     columns,

@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Wrench } from "@repo/ui/icons";
 
-import { api } from "~/trpc/server";
+import { api } from "~/utils/api";
 
 export default async function OngoingRepairsCard() {
-  const totalRepairs = await api.repairs.getCount({
+  const totalRepairs = await api.repairs.getCount.query({
     columnFilters: [
       {
         id: "status",
