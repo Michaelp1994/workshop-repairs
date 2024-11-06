@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   partFilterMapping,
   partOrderMapping,
@@ -21,7 +23,7 @@ const globalFilterColumns = [parts.name];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -36,7 +38,12 @@ export function getAll(
     .select()
     .from(parts)
     .where(
-      and(isNull(parts.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(parts.deletedAt),
+        eq(parts.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
     .orderBy(...orderByParams, parts.id)
     .limit(pagination.pageSize)
@@ -46,7 +53,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -61,7 +68,12 @@ export async function getCount(
     .select({ count: count() })
     .from(parts)
     .where(
-      and(isNull(parts.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(parts.deletedAt),
+        eq(parts.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
 
   const [res] = await query.execute();

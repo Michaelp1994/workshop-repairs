@@ -1,10 +1,12 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   repairFilterMapping,
   repairOrderMapping,
@@ -39,7 +41,7 @@ const globalFilterColumns = [
 
 export function getAll(
   { globalFilter, sorting, pagination, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -82,7 +84,12 @@ export function getAll(
     .innerJoin(models, eq(assets.modelId, models.id))
     .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
     .where(
-      and(isNull(repairs.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(repairs.deletedAt),
+        eq(assets.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
     .orderBy(...orderByParams, repairs.id)
     .limit(pagination.pageSize)
@@ -92,7 +99,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -110,7 +117,12 @@ export async function getCount(
     .innerJoin(repairTypes, eq(repairs.typeId, repairTypes.id))
     .innerJoin(repairStatusTypes, eq(repairs.statusId, repairStatusTypes.id))
     .where(
-      and(isNull(repairs.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(repairs.deletedAt),
+        eq(assets.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
 
   const [res] = await query.execute();

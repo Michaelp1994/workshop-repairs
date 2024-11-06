@@ -1,11 +1,13 @@
 import { and, count, eq, getTableColumns, ilike, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { formatSearch } from "../helpers/formatSearch";
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   modelFilterMapping,
   modelOrderMapping,
@@ -27,7 +29,7 @@ const globalFilterColumns = [models.name, models.nickname, manufacturers.name];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -61,7 +63,12 @@ export function getAll(
     .innerJoin(equipmentTypes, eq(models.equipmentTypeId, equipmentTypes.id))
     .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
     .where(
-      and(isNull(models.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(models.deletedAt),
+        eq(models.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
     .orderBy(...orderByParams, models.id)
     .limit(pagination.pageSize)
@@ -71,7 +78,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -87,14 +94,22 @@ export async function getCount(
     .from(models)
     .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
     .where(
-      and(isNull(models.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(models.deletedAt),
+        eq(models.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
 
   const [res] = await query.execute();
   return res?.count;
 }
 
-export function getSelect({ globalFilter = "" }: GetSelect, db: Database) {
+export function getSelect(
+  { globalFilter = "" }: GetSelect,
+  organizationId: OrganizationID,
+) {
   const searchQuery = formatSearch(globalFilter);
 
   const query = db
@@ -106,6 +121,7 @@ export function getSelect({ globalFilter = "" }: GetSelect, db: Database) {
     .where(
       and(
         isNull(models.deletedAt),
+        eq(models.organizationId, organizationId),
         globalFilter !== "" ? ilike(models.name, searchQuery) : undefined,
       ),
     )
@@ -114,7 +130,7 @@ export function getSelect({ globalFilter = "" }: GetSelect, db: Database) {
   return res;
 }
 
-export async function getById(id: ModelID, db: Database) {
+export async function getById(id: ModelID) {
   const query = db
     .select({
       ...modelFields,
@@ -132,13 +148,13 @@ export async function getById(id: ModelID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateModel, db: Database) {
+export async function create(input: CreateModel) {
   const query = db.insert(models).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateModel, db: Database) {
+export async function update(input: UpdateModel) {
   const query = db
     .update(models)
     .set(input)
@@ -148,7 +164,7 @@ export async function update(input: UpdateModel, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveModel, db: Database) {
+export async function archive(input: ArchiveModel) {
   const query = db
     .update(models)
     .set(input)

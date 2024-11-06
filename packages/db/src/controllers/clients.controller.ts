@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   clientFilterMapping,
   clientOrderMapping,
@@ -21,7 +23,7 @@ const globalFilterColumns = [clients.name];
 
 export function getAll(
   { pagination, sorting, globalFilter, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderByParams(sorting, clientOrderMapping);
   const globalFilterParams = getGlobalFilterParams(
@@ -37,7 +39,12 @@ export function getAll(
     .select()
     .from(clients)
     .where(
-      and(isNull(clients.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(clients.deletedAt),
+        eq(clients.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
     .orderBy(...orderByParams, clients.id)
     .limit(pagination.pageSize)
@@ -47,7 +54,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -61,19 +68,30 @@ export async function getCount(
     .select({ count: count() })
     .from(clients)
     .where(
-      and(isNull(clients.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(clients.deletedAt),
+        eq(clients.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
   const [res] = await query.execute();
   return res?.count;
 }
 
-export function getSelect(_: GetSelect, db: Database) {
+export function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
       value: clients.id,
       label: clients.name,
     })
     .from(clients)
+    .where(
+      and(
+        isNull(clients.deletedAt),
+        eq(clients.organizationId, organizationId),
+      ),
+    )
     .orderBy(clients.name);
   return query.execute();
 }

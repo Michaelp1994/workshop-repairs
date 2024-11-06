@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount } from "../helpers/types";
-import { type Database } from "../index";
+import { db } from "../index";
 import {
   userFilterMapping,
   userOrderMapping,
@@ -21,7 +23,7 @@ const globalFilterColumns = [users.firstName, users.email];
 
 export function getAll(
   { globalFilter, sorting, pagination, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderByParams(sorting, userOrderMapping);
   const globalFilterParams = getGlobalFilterParams(
@@ -36,7 +38,12 @@ export function getAll(
     .select()
     .from(users)
     .where(
-      and(isNull(users.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(users.deletedAt),
+        eq(users.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
     .orderBy(...orderByParams, users.id)
     .limit(pagination.pageSize)
@@ -46,7 +53,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -60,43 +67,74 @@ export async function getCount(
     .select({ count: count() })
     .from(users)
     .where(
-      and(isNull(users.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(users.deletedAt),
+        eq(users.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
   const [res] = await query.execute();
   return res?.count;
 }
 
-export async function getById(input: UserID, db: Database) {
+export async function getById(input: UserID) {
   const query = db.select().from(users).where(eq(users.id, input));
   const [res] = await query.execute();
   return res;
 }
 
-export async function getByEmail(input: string, db: Database) {
+export async function getByEmail(input: string) {
   const query = db.select().from(users).where(eq(users.email, input));
   const [res] = await query.execute();
   return res;
 }
 
-export async function getByLoginDetails(
-  { email, password }: { email: string; password: string },
-  db: Database,
-) {
+export async function confirmEmailVerified(input: UserID) {
   const query = db
-    .select()
-    .from(users)
-    .where(and(eq(users.email, email), eq(users.password, password)));
+    .update(users)
+    .set({
+      emailVerified: true,
+    })
+    .where(eq(users.id, input))
+    .returning();
+
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateUser, db: Database) {
+export async function setOrganization(
+  userId: UserID,
+  organizationId: OrganizationID,
+) {
+  const query = db
+    .update(users)
+    .set({
+      organizationId,
+    })
+    .where(eq(users.id, userId))
+    .returning();
+
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function getByLoginDetails(email: string) {
+  const query = db
+    .select()
+    .from(users)
+    .where(and(eq(users.email, email)));
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function create(input: CreateUser) {
   const query = db.insert(users).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateUser, db: Database) {
+export async function update(input: UpdateUser) {
   const query = db
     .update(users)
     .set(input)
@@ -106,7 +144,7 @@ export async function update(input: UpdateUser, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveUser, db: Database) {
+export async function archive(input: ArchiveUser) {
   const query = db
     .update(users)
     .set(input)

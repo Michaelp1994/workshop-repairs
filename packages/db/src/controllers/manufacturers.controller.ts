@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   manufacturerFilterMapping,
   manufacturerOrderMapping,
@@ -21,7 +23,7 @@ const globalFilterColumns = [manufacturers.name];
 
 export function getAll(
   { pagination, sorting, globalFilter, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -39,6 +41,7 @@ export function getAll(
     .where(
       and(
         isNull(manufacturers.deletedAt),
+        eq(manufacturers.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -51,7 +54,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -68,6 +71,7 @@ export async function getCount(
     .where(
       and(
         isNull(manufacturers.deletedAt),
+        eq(manufacturers.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -83,14 +87,19 @@ export async function getById(id: ManufacturerID, db: Database) {
   return res;
 }
 
-export async function getSelect(_: GetSelect, db: Database) {
+export async function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
       value: manufacturers.id,
       label: manufacturers.name,
     })
     .from(manufacturers)
-    .where(isNull(manufacturers.deletedAt));
+    .where(
+      and(
+        isNull(manufacturers.deletedAt),
+        eq(manufacturers.organizationId, organizationId),
+      ),
+    );
   return query.execute();
 }
 

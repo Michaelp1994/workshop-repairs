@@ -6,10 +6,12 @@ import type {
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   assetFilterMapping,
   assetOrderMapping,
@@ -41,7 +43,7 @@ const globalFilterColumns = [
 
 export function getAll(
   { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderByParams(sorting, assetOrderMapping);
   const globalFilterParams = getGlobalFilterParams(
@@ -86,7 +88,12 @@ export function getAll(
     .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
     .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
     .where(
-      and(isNull(assets.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(assets.deletedAt),
+        eq(assets.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
     .orderBy(...orderByParams, assets.id)
     .limit(pagination.pageSize)
@@ -97,7 +104,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCountInput,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -116,7 +123,12 @@ export async function getCount(
     .innerJoin(models, eq(assets.modelId, models.id))
     .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
     .where(
-      and(isNull(assets.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(assets.deletedAt),
+        eq(assets.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
 
   const [res] = await query.execute();
@@ -124,13 +136,16 @@ export async function getCount(
 }
 export async function getSelect(
   { limit, cursor }: GetSelectInput,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const query = db
     .select({ value: assets.id, label: assets.serialNumber })
     .from(assets)
     .orderBy(assets.id)
     .limit(limit + 1)
+    .where(
+      and(eq(assets.organizationId, organizationId), isNull(assets.deletedAt)),
+    )
     .offset(cursor);
 
   const data = await query.execute();
@@ -138,7 +153,10 @@ export async function getSelect(
   return { data, nextCursor };
 }
 
-export async function getSimpleSelect(_: GetSelectInput, db: Database) {
+export async function getSimpleSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({
       ...assetFields,
@@ -156,13 +174,16 @@ export async function getSimpleSelect(_: GetSelectInput, db: Database) {
     .innerJoin(models, eq(assets.modelId, models.id))
     .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
     .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
+    .where(
+      and(eq(assets.organizationId, organizationId), isNull(assets.deletedAt)),
+    )
     .orderBy(assets.id);
 
   const res = await query.execute();
   return res;
 }
 
-export async function getById(id: AssetID, db: Database) {
+export async function getById(id: AssetID, organizationId: OrganizationID) {
   const query = db
     .select({
       ...assetFields,
@@ -177,12 +198,15 @@ export async function getById(id: AssetID, db: Database) {
     .innerJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
     .innerJoin(models, eq(assets.modelId, models.id))
     .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .where(eq(assets.id, id));
+    .where(and(eq(assets.id, id), eq(assets.organizationId, organizationId)));
   const [res] = await query.execute();
   return res;
 }
 
-export async function getByRepairId(id: RepairID, db: Database) {
+export async function getByRepairId(
+  id: RepairID,
+  organizationId: OrganizationID,
+) {
   const repairQuery = db
     .select({
       assetId: repairs.assetId,
@@ -202,29 +226,40 @@ export async function getByRepairId(id: RepairID, db: Database) {
     .leftJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
     .leftJoin(models, eq(assets.modelId, models.id))
     .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .where(eq(assets.id, repair.assetId));
+    .where(
+      and(
+        eq(assets.id, repair.assetId),
+        eq(assets.organizationId, organizationId),
+      ),
+    );
   const [asset] = await assetQuery.execute();
   return asset;
 }
-export async function create(input: CreateAsset, db: Database) {
+export async function create(input: CreateAsset) {
   const query = db.insert(assets).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
-export async function update({ id, ...values }: UpdateAsset, db: Database) {
+export async function update(
+  { id, ...values }: UpdateAsset,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(assets)
     .set(values)
-    .where(eq(assets.id, id))
+    .where(and(eq(assets.id, id), eq(assets.organizationId, organizationId)))
     .returning();
   const [res] = await query.execute();
   return res;
 }
-export async function archive({ id, ...values }: ArchiveAsset, db: Database) {
+export async function archive(
+  { id, ...values }: ArchiveAsset,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(assets)
     .set(values)
-    .where(eq(assets.id, id))
+    .where(and(eq(assets.id, id), eq(assets.organizationId, organizationId)))
     .returning();
   const [res] = await query.execute();
   return res;

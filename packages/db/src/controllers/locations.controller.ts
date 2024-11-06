@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.schema";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   locationFilterMapping,
   locationOrderMapping,
@@ -21,7 +23,7 @@ const globalFilterColumns = [locations.name];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -38,6 +40,7 @@ export function getAll(
     .where(
       and(
         isNull(locations.deletedAt),
+        eq(locations.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -50,7 +53,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -67,6 +70,7 @@ export async function getCount(
     .where(
       and(
         isNull(locations.deletedAt),
+        eq(locations.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -76,30 +80,36 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(_: GetSelect, db: Database) {
+export function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
       value: locations.id,
       label: locations.name,
     })
     .from(locations)
+    .where(
+      and(
+        isNull(locations.deletedAt),
+        eq(locations.organizationId, organizationId),
+      ),
+    )
     .orderBy(locations.name);
   return query.execute();
 }
 
-export async function getById(id: LocationID, db: Database) {
+export async function getById(id: LocationID) {
   const query = db.select().from(locations).where(eq(locations.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateLocation, db: Database) {
+export async function create(input: CreateLocation) {
   const query = db.insert(locations).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateLocation, db: Database) {
+export async function update(input: UpdateLocation) {
   const query = db
     .update(locations)
     .set(input)
@@ -109,7 +119,7 @@ export async function update(input: UpdateLocation, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveLocation, db: Database) {
+export async function archive(input: ArchiveLocation) {
   const query = db
     .update(locations)
     .set(input)
