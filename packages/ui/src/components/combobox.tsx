@@ -15,6 +15,7 @@ import {
   CommandList,
 } from "./command";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Skeleton } from "./skeleton";
 
 interface ComboboxOption {
   label: string;
@@ -43,6 +44,10 @@ export const Combobox = React.forwardRef<
     () => data.find((option) => option.value === value),
     [value, data],
   );
+
+  if (isLoading) {
+    return <Skeleton className="h-10 w-full" />;
+  }
 
   return (
     <Popover onOpenChange={setOpen} open={open}>

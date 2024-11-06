@@ -5,6 +5,7 @@ import type { ZodErrorMap, ZodSchema } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Slot } from "@radix-ui/react-slot";
+import { LoaderCircle } from "lucide-react";
 import * as React from "react";
 import {
   useForm as _useForm,
@@ -257,9 +258,15 @@ interface SubmitButtonProps
 }
 
 const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
-  ({ isLoading, ...buttonProps }, ref) => (
+  ({ isLoading, children, ...buttonProps }, ref) => (
     <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
-      {isLoading ? "Loading..." : "Submit"}
+      {isLoading ? (
+        <LoaderCircle className="animate-spin" />
+      ) : children ? (
+        children
+      ) : (
+        "Submit"
+      )}
     </Button>
   ),
 );
