@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { ArrowUpRight } from "@repo/ui/icons";
 import Link from "next/link";
 
-import { api } from "~/utils/api";
+import { api } from "~/trpc/server";
 
 interface AssetDetailsProps {
   repairId: RepairID;

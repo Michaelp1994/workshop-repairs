@@ -1,5 +1,5 @@
 "use client";
-import type { RouterOutputs } from "@repo/api/root";
+import type { RouterOutputs } from "@repo/api/router";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import { Avatar, AvatarFallback } from "@repo/ui/avatar";

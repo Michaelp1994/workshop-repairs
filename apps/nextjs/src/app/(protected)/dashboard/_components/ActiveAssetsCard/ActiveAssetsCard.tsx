@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Laptop } from "@repo/ui/icons";
 
-import { api } from "~/utils/api";
+import { api } from "~/trpc/server";
 
 interface ActiveAssetsCardProps {}
 

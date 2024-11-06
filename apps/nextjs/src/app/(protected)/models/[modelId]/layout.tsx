@@ -4,7 +4,7 @@ import {
   DetailsPageTitle,
   DetailsPageToolbar,
 } from "~/components/DetailsPage";
-import { api } from "~/utils/api";
+import { api } from "~/trpc/server";
 
 interface AssetLayoutProps {
   params: {
