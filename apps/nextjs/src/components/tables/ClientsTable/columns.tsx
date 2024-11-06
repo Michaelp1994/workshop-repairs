@@ -1,4 +1,4 @@
-import type { RouterOutputs } from "@repo/api/root";
+import type { RouterOutputs } from "@repo/api/router";
 
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";

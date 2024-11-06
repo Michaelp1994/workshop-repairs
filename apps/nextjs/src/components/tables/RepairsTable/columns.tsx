@@ -1,4 +1,4 @@
-import type { RouterOutputs } from "@repo/api/root";
+import type { RouterOutputs } from "@repo/api/router";
 
 import { Badge } from "@repo/ui/badge";
 import { DataTableColumnHeader, DataTableImageCell } from "@repo/ui/data-table";

@@ -1,4 +1,4 @@
-import type { RouterOutputs } from "@repo/api/root";
+import type { RouterOutputs } from "@repo/api/router";
 import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate } from "~/utils/formatDate";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
