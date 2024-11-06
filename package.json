@@ -3,23 +3,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "dotenv -- turbo build",
+    "build": "turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .sst db-data",
     "db": "pnpm -F db db",
-    "db:export": "dotenv -- pnpm -F db db:export",
-    "db:push": "dotenv -- pnpm -F db db:push",
-    "db:reset": "dotenv -- pnpm -F db db:reset",
-    "db:seed": "dotenv -- pnpm -F db db:seed",
-    "db:studio": "dotenv -- pnpm -F db db:studio",
-    "dev": "dotenv -- pnpm -F nextjs dev",
+    "db:reset": "pnpm -F db reset",
+    "db:seed": "pnpm -F db seed",
+    "dev": "sst dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
-    "start": "dotenv -- turbo start",
+    "start": "turbo start",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
-    "drizzle-kit": "0.27.0",
-    "sst": "3.2.70"
+    "@node-rs/argon2": "^2.0.0",
+    "drizzle-kit": "0.27.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
@@ -29,11 +26,11 @@
     "commitizen": "^4.3.1",
     "commitlint": "^19.5.0",
     "dotenv-cli": "^7.4.2",
-    "eslint": "^9.13.0",
+    "eslint": "^9.14.0",
     "husky": "^9.1.6",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
-    "sst": "^3.2.48",
+    "sst": "3.2.76",
     "turbo": "^2.2.3",
     "typescript": "^5.6.3"
   },
