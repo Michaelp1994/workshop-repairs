@@ -16,24 +16,33 @@ import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure.input(getAllSchema).query(({ ctx, input }) => {
-    const allLocations = locationsController.getAll(input, ctx.db);
+    const allLocations = locationsController.getAll(
+      input,
+      ctx.session.organizationId,
+    );
 
     return allLocations;
   }),
   getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = locationsController.getCount(input, ctx.db);
+    const count = locationsController.getCount(
+      input,
+      ctx.session.organizationId,
+    );
     return count;
   }),
   getSelect: protectedProcedure
     .input(getSelectSchema)
     .query(({ ctx, input }) => {
-      const locations = locationsController.getSelect(input, ctx.db);
+      const locations = locationsController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
       return locations;
     }),
   getById: protectedProcedure
     .input(locationSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const location = await locationsController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const location = await locationsController.getById(input.id);
 
       if (!location) {
         throw new TRPCError({
@@ -48,10 +57,11 @@ export default router({
     .input(locationSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdLocation = await locationsController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const createdLocation = await locationsController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!createdLocation) {
         throw new TRPCError({
@@ -66,10 +76,10 @@ export default router({
     .input(locationSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedLocation = await locationsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedLocation = await locationsController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedLocation) {
         throw new TRPCError({
@@ -84,10 +94,10 @@ export default router({
     .input(locationSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedLocation = await locationsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedLocation = await locationsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedLocation) {
         throw new TRPCError({

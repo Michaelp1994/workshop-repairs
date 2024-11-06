@@ -18,13 +18,19 @@ export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getAll(input, ctx.db);
+      const allClients = await clientsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
       return allClients;
     }),
   getCount: protectedProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await clientsController.getCount(input, ctx.db);
+      const count = await clientsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
 
       if (count === undefined) {
         throw new TRPCError({
@@ -37,7 +43,10 @@ export default router({
   getSelect: protectedProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getSelect(input, ctx.db);
+      const allClients = await clientsController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
 
       return allClients;
     }),
@@ -60,7 +69,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdClient = await clientsController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 

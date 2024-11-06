@@ -19,23 +19,32 @@ export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = modelsController.getAll(input, ctx.db);
+      const allModels = modelsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
       return allModels;
     }),
   getSelect: protectedProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = await modelsController.getSelect(input, ctx.db);
+      const allModels = await modelsController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
       return allModels;
     }),
   getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = modelsController.getCount(input, ctx.db);
+    const count = modelsController.getCount(input, ctx.session.organizationId);
     return count;
   }),
   getByAssetId: protectedProcedure
     .input(modelSchemas.getByAssetId)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getById(input.assetId, ctx.db);
+      const asset = await assetsController.getById(
+        input.assetId,
+        ctx.session.organizationId,
+      );
 
       if (!asset) {
         throw new TRPCError({
@@ -44,7 +53,7 @@ export default router({
         });
       }
 
-      const model = await modelsController.getById(asset.modelId, ctx.db);
+      const model = await modelsController.getById(asset.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -57,8 +66,8 @@ export default router({
     }),
   getById: protectedProcedure
     .input(modelSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const model = await modelsController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const model = await modelsController.getById(input.id);
 
       if (!model) {
         throw new TRPCError({
@@ -74,10 +83,11 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
 
-      const createdModel = await modelsController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const createdModel = await modelsController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!createdModel) {
         throw new TRPCError({
@@ -93,10 +103,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
 
-      const updatedModel = await modelsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedModel = await modelsController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedModel) {
         throw new TRPCError({
@@ -112,10 +122,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedModel = await modelsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedModel = await modelsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedModel) {
         throw new TRPCError({

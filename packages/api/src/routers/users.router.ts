@@ -6,29 +6,28 @@ import {
 import * as userSchemas from "@repo/validators/users.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
-} from "../helpers/includeMetadata";
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
+import { protectedProcedure, router } from "../trpc";
 
 export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allUsers = usersController.getAll(input, ctx.db);
+    .query(async ({ input, ctx }) => {
+      const allUsers = usersController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
 
       return allUsers;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = usersController.getCount(input, ctx.db);
+  getCount: protectedProcedure.input(getCountSchema).query(({ input, ctx }) => {
+    const count = usersController.getCount(input, ctx.session.organizationId);
     return count;
   }),
   getCurrentUser: protectedProcedure
     .input(userSchemas.getCurrent)
     .query(async ({ ctx }) => {
-      const user = await usersController.getById(ctx.session.user.id, ctx.db);
+      const user = await usersController.getById(ctx.session.userId);
 
       if (!user) {
         throw new TRPCError({
@@ -42,8 +41,8 @@ export default router({
 
   getById: protectedProcedure
     .input(userSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const user = await usersController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const user = await usersController.getById(input.id);
 
       if (!user) {
         throw new TRPCError({
@@ -54,28 +53,19 @@ export default router({
 
       return user;
     }),
-  register: publicProcedure
-    .input(userSchemas.register)
-    .mutation(async ({ input, ctx }) => {
-      throw new TRPCError({
-        code: "NOT_IMPLEMENTED",
-      });
-    }),
-  create: protectedProcedure
-    .input(userSchemas.create)
-    .mutation(async ({ input, ctx }) => {
-      throw new TRPCError({
-        code: "NOT_IMPLEMENTED",
-      });
-    }),
+  create: protectedProcedure.input(userSchemas.create).mutation(async () => {
+    throw new TRPCError({
+      code: "NOT_IMPLEMENTED",
+    });
+  }),
   update: protectedProcedure
     .input(userSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedUser = await usersController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedUser = await usersController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedUser) {
         throw new TRPCError({
@@ -92,14 +82,11 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
 
-      const updatedUser = await usersController.update(
-        {
-          ...input,
-          ...metadata,
-          id: ctx.session.user.id,
-        },
-        ctx.db,
-      );
+      const updatedUser = await usersController.update({
+        ...input,
+        ...metadata,
+        id: ctx.session.user.id,
+      });
 
       if (!updatedUser) {
         throw new TRPCError({
@@ -115,10 +102,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedUser = await usersController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedUser = await usersController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedUser) {
         throw new TRPCError({

@@ -12,7 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { uploadImageS3 } from "../helpers/s3";
+// import { uploadImageS3 } from "../helpers/s3";
 import { protectedProcedure, router } from "../trpc";
 
 export default router({
@@ -30,7 +30,7 @@ export default router({
   getAllByModelId: protectedProcedure
     .input(modelImageSchemas.getAllByModelId)
     .query(async ({ ctx, input }) => {
-      const model = await modelsController.getById(input.modelId, ctx.db);
+      const model = await modelsController.getById(input.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -65,28 +65,8 @@ export default router({
     }),
   uploadImage: protectedProcedure
     .input(modelImageSchemas.uploadImage)
-    .mutation(async ({ input, ctx }) => {
-      const { url } = await uploadImageS3(input.image);
-      const imageMetadata = createMetadata(ctx.session);
-
-      const createdModelImage = await modelImagesController.create(
-        {
-          modelId: input.modelId,
-          caption: input.caption,
-          url: url,
-          ...imageMetadata,
-        },
-        ctx.db,
-      );
-
-      if (!createdModelImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create model Image",
-        });
-      }
-
-      return createdModelImage;
+    .mutation(async () => {
+      throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
   create: protectedProcedure
     .input(modelImageSchemas.create)
@@ -113,14 +93,11 @@ export default router({
       if (isFirstImage) {
         const modelMetadata = updateMetadata(ctx.session);
 
-        await modelsController.update(
-          {
-            id: input.modelId,
-            defaultImageId: createdModelImage.id,
-            ...modelMetadata,
-          },
-          ctx.db,
-        );
+        await modelsController.update({
+          id: input.modelId,
+          defaultImageId: createdModelImage.id,
+          ...modelMetadata,
+        });
       }
 
       return createdModelImage;

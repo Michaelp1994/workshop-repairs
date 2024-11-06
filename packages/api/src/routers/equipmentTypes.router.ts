@@ -18,12 +18,18 @@ export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = equipmentTypesController.getAll(input, ctx.db);
+      const allEquipmentTypes = equipmentTypesController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
 
       return allEquipmentTypes;
     }),
   getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = equipmentTypesController.getCount(input, ctx.db);
+    const count = equipmentTypesController.getCount(
+      input,
+      ctx.session.organizationId,
+    );
     return count;
   }),
   getSelect: protectedProcedure
@@ -31,7 +37,7 @@ export default router({
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = await equipmentTypesController.getSelect(
         input,
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       return allEquipmentTypes;
@@ -58,7 +64,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdEquipmentType = await equipmentTypesController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 

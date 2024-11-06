@@ -1,15 +1,17 @@
-import { defineConfig } from "drizzle-kit";
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
 import { Resource } from "sst";
 
-export default defineConfig({
-  out: "./drizzle",
-  schema: ["./schema.ts"],
-  dialect: "postgresql",
-  dbCredentials: {
-    host: Resource.MyPostgres.host,
-    port: Resource.MyPostgres.port,
-    user: Resource.MyPostgres.username,
-    password: Resource.MyPostgres.password,
-    database: Resource.MyPostgres.database,
-  },
+import { schema } from "./schema";
+
+const pool = new pg.Pool({
+  host: Resource.Postgres1.host,
+  port: Resource.Postgres1.port,
+  user: Resource.Postgres1.username,
+  password: Resource.Postgres1.password,
+  database: Resource.Postgres1.database,
 });
+
+export const db = drizzle(pool, { schema });
+
+export type Database = typeof db;

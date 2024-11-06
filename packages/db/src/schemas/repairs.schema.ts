@@ -9,6 +9,7 @@ import {
 import { assets } from "./assets.schema";
 import { clients } from "./clients.schema";
 import metadataColumns from "./metadata-columns";
+import { organizations } from "./organization.schema";
 import { repairStatusTypes } from "./repair-status-types.schema";
 import { repairTypes } from "./repair-types.schema";
 
@@ -19,6 +20,9 @@ export const repairs = pgTable("repairs", {
   clientId: integer("client_id")
     .notNull()
     .references(() => clients.id),
+  organizationId: integer("organization_id")
+    .notNull()
+    .references(() => organizations.id),
   clientReference: varchar("client_reference").notNull(),
   typeId: integer("type_id")
     .notNull()

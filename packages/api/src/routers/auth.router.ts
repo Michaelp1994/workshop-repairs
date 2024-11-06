@@ -1,49 +1,115 @@
-import { signIn } from "@repo/auth";
+import { hashPassword, verifyPasswordHash } from "@repo/auth/password";
+import { generateToken } from "@repo/auth/tokens";
 import * as authController from "@repo/db/controllers/auth.controller";
 import * as usersController from "@repo/db/controllers/users.controller";
 import * as authSchemas from "@repo/validators/auth.validators";
 import { TRPCError } from "@trpc/server";
 
-import generateOTP from "../helpers/generateOTP";
-import { publicProcedure, router } from "../trpc";
+import sendVerificationEmail from "../helpers/sendVerificationEmail";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export default router({
+  login: publicProcedure
+    .input(authSchemas.login)
+    .mutation(async ({ input }) => {
+      const user = await usersController.getByLoginDetails(input.email);
+      if (!user) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Login details are not correct.",
+        });
+      }
+      const passwordCorrect = await verifyPasswordHash(
+        user.password,
+        input.password,
+      );
+      if (!passwordCorrect) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Login details are not correct.",
+        });
+      }
+      const token = await generateToken(user.id);
+      return {
+        token,
+        id: user.id,
+        emailVerified: user.emailVerified,
+        organizationId: user.organizationId,
+      };
+    }),
+  register: publicProcedure
+    .input(authSchemas.register)
+    .mutation(async ({ input }) => {
+      const hash = await hashPassword(input.password);
+      const user = await usersController.create({
+        ...input,
+        typeId: 1,
+        password: hash,
+        emailVerified: false,
+        organizationId: null,
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot create user.",
+        });
+      }
+
+      await sendVerificationEmail(user.id, user.email);
+
+      const token = await generateToken(user.id);
+      const response = {
+        token,
+        id: user.id,
+        emailVerified: false,
+      };
+      console.log(response);
+      return response;
+    }),
+  sendEmailConfirmation: protectedProcedure
+    .input(authSchemas.confirmEmail)
+    .mutation(async ({ ctx, input }) => {
+      // TODO: rate limiting.
+      await sendVerificationEmail(ctx.session.userId, input.email);
+    }),
+  confirmEmail: protectedProcedure
+    .input(authSchemas.confirmEmail)
+    .mutation(async ({ input }) => {
+      const user = await usersController.getByEmail(input.email);
+      if (!user) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot find user.",
+        });
+      }
+      const request = await authController.getByEmail(input.email, input.code);
+      if (!request) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Token is not correct.",
+        });
+      }
+      await usersController.confirmEmailVerified(user.id);
+      await authController.deleteConfirmationRequest(request.id);
+      const token = await generateToken(user.id);
+      return {
+        token,
+        id: user.id,
+        emailVerified: user.emailVerified,
+        organizationId: user.organizationId,
+      };
+    }),
+  logout: publicProcedure.input(authSchemas.logout).mutation(async () => {
+    throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+  }),
   forgotPassword: publicProcedure
     .input(authSchemas.forgotPassword)
-    .mutation(async ({ input, ctx }) => {
-      const user = await usersController.getByEmail(input.email, ctx.db);
-      if (!user) {
-        return true;
-      }
-      const otp = generateOTP();
-      console.log({ name: user.firstName, otp });
-      await authController.create(
-        { userId: user.id, otp, createdAt: new Date() },
-        ctx.db,
-      );
-      return true;
+    .mutation(async () => {
+      throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
   resetPassword: publicProcedure
     .input(authSchemas.resetPassword)
-    .mutation(async ({ input, ctx }) => {
-      const user = await usersController.getByEmail(input.email, ctx.db);
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "OTP not found",
-        });
-      }
-
-      const userOtp = await authController.getById(user.id, ctx.db);
-
-      if (!userOtp || userOtp.otp !== input.otp) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "OTP not found",
-        });
-      }
-      signIn("credentials");
-
-      return true;
+    .mutation(async () => {
+      throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
 });

@@ -19,13 +19,19 @@ export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getAll(input, ctx.db);
+      const allAssets = await assetsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
       return allAssets;
     }),
   getCount: protectedProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await assetsController.getCount(input, ctx.db);
+      const count = await assetsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
 
       if (count === undefined) {
         throw new TRPCError({
@@ -38,19 +44,28 @@ export default router({
   getSelect: protectedProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getSelect(input, ctx.db);
+      const allAssets = await assetsController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
       return allAssets;
     }),
   getSimpleSelect: protectedProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getSimpleSelect(input, ctx.db);
+      const allAssets = await assetsController.getSimpleSelect(
+        input,
+        ctx.session.organizationId,
+      );
       return allAssets;
     }),
   getById: protectedProcedure
     .input(assetSchemas.getById)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getById(input.id, ctx.db);
+      const asset = await assetsController.getById(
+        input.id,
+        ctx.session.organizationId,
+      );
 
       if (!asset) {
         throw new TRPCError({
@@ -64,7 +79,10 @@ export default router({
   getByRepairId: protectedProcedure
     .input(assetSchemas.getByRepairId)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getByRepairId(input.id, ctx.db);
+      const asset = await assetsController.getByRepairId(
+        input.id,
+        ctx.session.organizationId,
+      );
 
       if (!asset) {
         throw new TRPCError({
@@ -79,14 +97,12 @@ export default router({
     .input(assetSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdAsset = await assetsController.create(
-        {
-          ...input,
-          ...metadata,
-          statusId: 1,
-        },
-        ctx.db,
-      );
+      const createdAsset = await assetsController.create({
+        ...input,
+        ...metadata,
+        organizationId: ctx.session.organizationId,
+        statusId: 1,
+      });
 
       if (!createdAsset) {
         throw new TRPCError({
@@ -104,7 +120,7 @@ export default router({
       const sanitizedInput = sanitizeUpdateInput(input);
       const updatedAsset = await assetsController.update(
         { ...sanitizedInput, ...metadata },
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       if (!updatedAsset) {
@@ -123,7 +139,7 @@ export default router({
 
       const archivedAsset = await assetsController.archive(
         { ...input, ...metadata },
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       if (!archivedAsset) {

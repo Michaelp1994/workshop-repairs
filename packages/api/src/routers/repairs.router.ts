@@ -19,14 +19,20 @@ export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allRepairs = await repairsController.getAll(input, ctx.db);
+      const allRepairs = await repairsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
       return allRepairs;
     }),
 
   getCount: protectedProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await repairsController.getCount(input, ctx.db);
+      const count = await repairsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
       if (count === undefined) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -64,7 +70,7 @@ export default router({
       const metadata = createMetadata(ctx.session);
 
       const repair = await repairsController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 

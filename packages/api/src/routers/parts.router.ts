@@ -18,14 +18,20 @@ export default router({
   getAll: protectedProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allParts = partsController.getAll(input, ctx.db);
+      const allParts = partsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
 
       return allParts;
     }),
   getCount: protectedProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await partsController.getCount(input, ctx.db);
+      const count = await partsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
 
       return count;
     }),
@@ -55,7 +61,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdPart = await partsController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 

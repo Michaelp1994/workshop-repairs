@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
 
 import type {
   InferArchiveModel,
@@ -8,12 +8,22 @@ import type {
 } from "../types";
 
 import metadataColumns from "./metadata-columns";
+import { organizations } from "./organization.schema";
 
-export const clients = pgTable("clients", {
-  id: serial("id").primaryKey(),
-  name: varchar("name").notNull().unique(),
-  ...metadataColumns,
-});
+export const clients = pgTable(
+  "clients",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name").notNull(),
+    organizationId: integer("organization_id")
+      .notNull()
+      .references(() => organizations.id),
+    ...metadataColumns,
+  },
+  (t) => ({
+    unique: unique().on(t.name, t.organizationId),
+  }),
+);
 
 export type Client = InferModel<typeof clients>;
 export type ClientID = Client["id"];

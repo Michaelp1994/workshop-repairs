@@ -3,6 +3,7 @@ import {
   integer,
   pgTable,
   serial,
+  unique,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -16,16 +17,20 @@ import { equipmentTypes } from "./equipment-types.schema";
 import { manufacturers } from "./manufacturers.schema";
 import metadataColumns from "./metadata-columns";
 import { modelImages } from "./model-images.schema";
+import { organizations } from "./organization.schema";
 
 export const models = pgTable(
   "models",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name").notNull().unique(),
-    nickname: varchar("nickname").notNull().unique(),
+    name: varchar("name").notNull(),
+    nickname: varchar("nickname").notNull(),
     manufacturerId: integer("manufacturer_id")
       .notNull()
       .references(() => manufacturers.id),
+    organizationId: integer("organization_id")
+      .notNull()
+      .references(() => organizations.id),
     equipmentTypeId: integer("equipment_type_id")
       .notNull()
       .references(() => equipmentTypes.id),
@@ -34,6 +39,8 @@ export const models = pgTable(
   },
   (table) => {
     return {
+      nameUnq: unique().on(table.name, table.organizationId),
+      nicknameUnq: unique().on(table.nickname, table.organizationId),
       defaultImageRelation: foreignKey({
         columns: [table.defaultImageId],
         foreignColumns: [modelImages.id],

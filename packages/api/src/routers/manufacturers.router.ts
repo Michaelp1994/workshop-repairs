@@ -20,13 +20,16 @@ export default router({
     .query(async ({ ctx, input }) => {
       const allManufacturers = await manufacturersController.getAll(
         input,
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       return allManufacturers;
     }),
   getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = manufacturersController.getCount(input, ctx.db);
+    const count = manufacturersController.getCount(
+      input,
+      ctx.session.organizationId,
+    );
     return count;
   }),
   getSelect: protectedProcedure
@@ -34,7 +37,7 @@ export default router({
     .query(async ({ ctx, input }) => {
       const manufacturers = await manufacturersController.getSelect(
         input,
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       return manufacturers;
@@ -61,7 +64,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdManufacturer = await manufacturersController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 

@@ -1,4 +1,5 @@
 import {
+  boolean,
   foreignKey,
   integer,
   pgTable,
@@ -14,6 +15,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { organizations } from "./organization.schema";
 import { userTypes } from "./user-types.schema";
 
 export const users = pgTable(
@@ -25,10 +27,8 @@ export const users = pgTable(
     email: varchar("email", { length: 255 }).notNull().unique(),
     password: varchar("password").notNull(),
     typeId: integer("type_id").notNull(),
-    emailVerified: timestamp("email_verified", {
-      mode: "date",
-      withTimezone: true,
-    }),
+    emailVerified: boolean().default(false),
+    organizationId: integer().references(() => organizations.id),
     image: text("image"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
