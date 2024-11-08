@@ -4,18 +4,18 @@ import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database } from "../index";
 import {
   type ArchiveAssetStatus,
-  assetStatuses,
   type AssetStatusID,
+  assetStatusTable,
   type CreateAssetStatus,
   type UpdateAssetStatus,
-} from "../schemas/asset-statuses.schema";
+} from "../schemas/asset-status.table";
 
 export function getAll({ pagination }: GetAll, db: Database) {
   const query = db
     .select()
-    .from(assetStatuses)
-    .where(isNull(assetStatuses.deletedAt))
-    .orderBy(assetStatuses.id)
+    .from(assetStatusTable)
+    .where(isNull(assetStatusTable.deletedAt))
+    .orderBy(assetStatusTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -24,8 +24,8 @@ export function getAll({ pagination }: GetAll, db: Database) {
 export async function getCount(_: GetCount, db: Database) {
   const query = db
     .select({ count: count() })
-    .from(assetStatuses)
-    .where(isNull(assetStatuses.deletedAt));
+    .from(assetStatusTable)
+    .where(isNull(assetStatusTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
 }
@@ -33,8 +33,8 @@ export async function getCount(_: GetCount, db: Database) {
 export async function getById(input: AssetStatusID, db: Database) {
   const query = db
     .select()
-    .from(assetStatuses)
-    .where(eq(assetStatuses.id, input));
+    .from(assetStatusTable)
+    .where(eq(assetStatusTable.id, input));
   const [res] = await query.execute();
   return res;
 }
@@ -42,25 +42,25 @@ export async function getById(input: AssetStatusID, db: Database) {
 export function getSelect(_: GetSelect, db: Database) {
   const query = db
     .select({
-      value: assetStatuses.id,
-      label: assetStatuses.name,
+      value: assetStatusTable.id,
+      label: assetStatusTable.name,
     })
-    .from(assetStatuses)
-    .orderBy(assetStatuses.name);
+    .from(assetStatusTable)
+    .orderBy(assetStatusTable.name);
   return query.execute();
 }
 
 export async function create(input: CreateAssetStatus, db: Database) {
-  const query = db.insert(assetStatuses).values(input).returning();
+  const query = db.insert(assetStatusTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateAssetStatus, db: Database) {
   const query = db
-    .update(assetStatuses)
+    .update(assetStatusTable)
     .set(input)
-    .where(eq(assetStatuses.id, input.id))
+    .where(eq(assetStatusTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -68,9 +68,9 @@ export async function update(input: UpdateAssetStatus, db: Database) {
 
 export async function archive(input: ArchiveAssetStatus, db: Database) {
   const query = db
-    .update(assetStatuses)
+    .update(assetStatusTable)
     .set(input)
-    .where(eq(assetStatuses.id, input.id))
+    .where(eq(assetStatusTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

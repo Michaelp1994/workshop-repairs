@@ -13,26 +13,28 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { organizations } from "./organizations.schema";
+import { organizationTable } from "./organization.table";
 
-export const organizationInvitation = pgTable("organization_invitation", {
+export const organizationInvitationTable = pgTable("organization_invitation", {
   id: serial().primaryKey(),
   email: text().notNull().unique(),
   invitationCode: uuid().defaultRandom(),
   emailSentAt: timestamp(),
-  organizationId: integer("organization_id")
+  organizationId: integer()
     .notNull()
-    .references(() => organizations.id),
+    .references(() => organizationTable.id),
 });
 
-export type OrganizationInvitation = InferModel<typeof organizationInvitation>;
+export type OrganizationInvitation = InferModel<
+  typeof organizationInvitationTable
+>;
 export type OrganizationInvitationID = OrganizationInvitation["id"];
 export type CreateOrganizationInvitation = InferCreateModel<
-  typeof organizationInvitation
+  typeof organizationInvitationTable
 >;
 export type UpdateOrganizationInvitation = InferUpdateModel<
-  typeof organizationInvitation
+  typeof organizationInvitationTable
 >;
 export type ArchiveOrganizationInvitation = InferArchiveModel<
-  typeof organizationInvitation
+  typeof organizationInvitationTable
 >;

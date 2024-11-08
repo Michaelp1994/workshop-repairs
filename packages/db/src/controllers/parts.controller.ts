@@ -1,6 +1,6 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organizations.schema";
+import type { OrganizationID } from "../schemas/organization.table";
 
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
@@ -15,11 +15,11 @@ import {
   type ArchivePart,
   type CreatePart,
   type PartID,
-  parts,
+  partTable,
   type UpdatePart,
-} from "../schemas/parts.schema";
+} from "../schemas/part.table";
 
-const globalFilterColumns = [parts.name];
+const globalFilterColumns = [partTable.name];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
@@ -36,16 +36,16 @@ export function getAll(
   const orderByParams = getOrderByParams(sorting, partOrderMapping);
   const query = db
     .select()
-    .from(parts)
+    .from(partTable)
     .where(
       and(
-        isNull(parts.deletedAt),
-        eq(parts.organizationId, organizationId),
+        isNull(partTable.deletedAt),
+        eq(partTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, parts.id)
+    .orderBy(...orderByParams, partTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -66,11 +66,11 @@ export async function getCount(
 
   const query = db
     .select({ count: count() })
-    .from(parts)
+    .from(partTable)
     .where(
       and(
-        isNull(parts.deletedAt),
-        eq(parts.organizationId, organizationId),
+        isNull(partTable.deletedAt),
+        eq(partTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -83,32 +83,32 @@ export async function getCount(
 export async function getSelect(props: GetSelect, db: Database) {
   const query = db
     .select({
-      value: parts.id,
-      label: parts.name,
+      value: partTable.id,
+      label: partTable.name,
     })
-    .from(parts)
-    .orderBy(parts.id);
+    .from(partTable)
+    .orderBy(partTable.id);
   const res = await query.execute();
   return res;
 }
 
 export async function getById(id: PartID, db: Database) {
-  const query = db.select().from(parts).where(eq(parts.id, id));
+  const query = db.select().from(partTable).where(eq(partTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreatePart, db: Database) {
-  const query = db.insert(parts).values(input).returning();
+  const query = db.insert(partTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdatePart, db: Database) {
   const query = db
-    .update(parts)
+    .update(partTable)
     .set(input)
-    .where(eq(parts.id, input.id))
+    .where(eq(partTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -116,9 +116,9 @@ export async function update(input: UpdatePart, db: Database) {
 
 export async function archive(input: ArchivePart, db: Database) {
   const query = db
-    .update(parts)
+    .update(partTable)
     .set(input)
-    .where(eq(parts.id, input.id))
+    .where(eq(partTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

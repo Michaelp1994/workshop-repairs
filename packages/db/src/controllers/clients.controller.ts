@@ -1,6 +1,6 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organizations.schema";
+import type { OrganizationID } from "../schemas/organization.table";
 
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
@@ -14,12 +14,12 @@ import {
 import {
   type ArchiveClient,
   type ClientID,
-  clients,
+  clientTable,
   type CreateClient,
   type UpdateClient,
-} from "../schemas/clients.schema";
+} from "../schemas/client.table";
 
-const globalFilterColumns = [clients.name];
+const globalFilterColumns = [clientTable.name];
 
 export function getAll(
   { pagination, sorting, globalFilter, columnFilters }: GetAll,
@@ -37,16 +37,16 @@ export function getAll(
 
   const query = db
     .select()
-    .from(clients)
+    .from(clientTable)
     .where(
       and(
-        isNull(clients.deletedAt),
-        eq(clients.organizationId, organizationId),
+        isNull(clientTable.deletedAt),
+        eq(clientTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, clients.id)
+    .orderBy(...orderByParams, clientTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -66,11 +66,11 @@ export async function getCount(
   );
   const query = db
     .select({ count: count() })
-    .from(clients)
+    .from(clientTable)
     .where(
       and(
-        isNull(clients.deletedAt),
-        eq(clients.organizationId, organizationId),
+        isNull(clientTable.deletedAt),
+        eq(clientTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -82,37 +82,37 @@ export async function getCount(
 export function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
-      value: clients.id,
-      label: clients.name,
+      value: clientTable.id,
+      label: clientTable.name,
     })
-    .from(clients)
+    .from(clientTable)
     .where(
       and(
-        isNull(clients.deletedAt),
-        eq(clients.organizationId, organizationId),
+        isNull(clientTable.deletedAt),
+        eq(clientTable.organizationId, organizationId),
       ),
     )
-    .orderBy(clients.name);
+    .orderBy(clientTable.name);
   return query.execute();
 }
 
 export async function getById(id: ClientID, db: Database) {
-  const query = db.select().from(clients).where(eq(clients.id, id));
+  const query = db.select().from(clientTable).where(eq(clientTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateClient, db: Database) {
-  const query = db.insert(clients).values(input).returning();
+  const query = db.insert(clientTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateClient, db: Database) {
   const query = db
-    .update(clients)
+    .update(clientTable)
     .set(input)
-    .where(eq(clients.id, input.id))
+    .where(eq(clientTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -120,9 +120,9 @@ export async function update(input: UpdateClient, db: Database) {
 
 export async function archive(input: ArchiveClient, db: Database) {
   const query = db
-    .update(clients)
+    .update(clientTable)
     .set(input)
-    .where(eq(clients.id, input.id))
+    .where(eq(clientTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

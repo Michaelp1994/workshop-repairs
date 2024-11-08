@@ -12,6 +12,6 @@ const pool = new pg.Pool({
   database: Resource.Postgres1.database,
 });
 
-export const db = drizzle(pool, { schema });
+export const db = drizzle(pool, { schema, casing: "snake_case" });
 
 export type Database = typeof db;

@@ -1,9 +1,9 @@
-import { clients } from "../schemas/clients.schema";
+import { clientTable } from "../schemas/client.table";
 
 export const clientOrderMapping = {
-  name: clients.name,
-  createdAt: clients.createdAt,
-  updatedAt: clients.updatedAt,
+  name: clientTable.name,
+  createdAt: clientTable.createdAt,
+  updatedAt: clientTable.updatedAt,
 };
 
 export const clientFilterMapping = {};

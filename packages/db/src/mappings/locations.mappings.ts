@@ -1,10 +1,10 @@
-import { locations } from "../schemas/locations.schema";
+import { locationTable } from "../schemas/location.table";
 
 export const locationOrderMapping = {
-  name: locations.name,
-  address: locations.address,
-  createdAt: locations.createdAt,
-  updatedAt: locations.updatedAt,
+  name: locationTable.name,
+  address: locationTable.address,
+  createdAt: locationTable.createdAt,
+  updatedAt: locationTable.updatedAt,
 };
 
 export const locationFilterMapping = {};

@@ -15,17 +15,17 @@ import type {
   InferUpdateModel,
 } from "../types";
 
-import { users } from "./users.schema";
+import { userTable } from "./user.table";
 
-export const emailVerificationRequests = pgTable(
-  "email_verification_requests",
+export const emailVerificationRequestTable = pgTable(
+  "email_verification_request",
   {
-    id: serial("id").primaryKey(),
-    userId: integer("user_id")
+    id: serial().primaryKey(),
+    userId: integer()
       .notNull()
-      .references(() => users.id),
+      .references(() => userTable.id),
     email: text().notNull(),
-    code: varchar("otp"),
+    code: varchar(),
     expiresAt: timestamp().notNull(),
     emailVerified: boolean().notNull().default(false),
     twoFactorVerified: boolean().notNull().default(false),
@@ -33,19 +33,19 @@ export const emailVerificationRequests = pgTable(
 );
 
 export type EmailVerificationRequest = InferModel<
-  typeof emailVerificationRequests
+  typeof emailVerificationRequestTable
 >;
 
 export type EmailVerificationRequestID = EmailVerificationRequest["id"];
 
 export type CreateEmailVerificationRequest = InferCreateModel<
-  typeof emailVerificationRequests
+  typeof emailVerificationRequestTable
 >;
 
 export type UpdateEmailVerificationRequest = InferUpdateModel<
-  typeof emailVerificationRequests
+  typeof emailVerificationRequestTable
 >;
 
 export type ArchiveEmailVerificationRequest = InferArchiveModel<
-  typeof emailVerificationRequests
+  typeof emailVerificationRequestTable
 >;

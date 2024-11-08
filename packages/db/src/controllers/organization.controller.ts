@@ -5,11 +5,11 @@ import {
 } from "../schemas/organization-invitations";
 import {
   type CreateOrganization,
-  organizations,
-} from "../schemas/organizations.schema";
+  organizationTable,
+} from "../schemas/organization.table";
 
 export async function create(input: CreateOrganization) {
-  const query = db.insert(organizations).values(input).returning();
+  const query = db.insert(organizationTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }

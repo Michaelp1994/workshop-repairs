@@ -1,6 +1,6 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organizations.schema";
+import type { OrganizationID } from "../schemas/organization.table";
 
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
@@ -16,10 +16,10 @@ import {
   type CreateUser,
   type UpdateUser,
   type UserID,
-  users,
-} from "../schemas/users.schema";
+  userTable,
+} from "../schemas/user.table";
 
-const globalFilterColumns = [users.firstName, users.email];
+const globalFilterColumns = [userTable.firstName, userTable.email];
 
 export function getAll(
   { globalFilter, sorting, pagination, columnFilters }: GetAll,
@@ -36,16 +36,16 @@ export function getAll(
   );
   const query = db
     .select()
-    .from(users)
+    .from(userTable)
     .where(
       and(
-        isNull(users.deletedAt),
-        eq(users.organizationId, organizationId),
+        isNull(userTable.deletedAt),
+        eq(userTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, users.id)
+    .orderBy(...orderByParams, userTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -65,11 +65,11 @@ export async function getCount(
   );
   const query = db
     .select({ count: count() })
-    .from(users)
+    .from(userTable)
     .where(
       and(
-        isNull(users.deletedAt),
-        eq(users.organizationId, organizationId),
+        isNull(userTable.deletedAt),
+        eq(userTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -79,24 +79,24 @@ export async function getCount(
 }
 
 export async function getById(input: UserID) {
-  const query = db.select().from(users).where(eq(users.id, input));
+  const query = db.select().from(userTable).where(eq(userTable.id, input));
   const [res] = await query.execute();
   return res;
 }
 
 export async function getByEmail(input: string) {
-  const query = db.select().from(users).where(eq(users.email, input));
+  const query = db.select().from(userTable).where(eq(userTable.email, input));
   const [res] = await query.execute();
   return res;
 }
 
 export async function confirmEmailVerified(input: UserID) {
   const query = db
-    .update(users)
+    .update(userTable)
     .set({
       emailVerified: true,
     })
-    .where(eq(users.id, input))
+    .where(eq(userTable.id, input))
     .returning();
 
   const [res] = await query.execute();
@@ -108,11 +108,11 @@ export async function setOrganization(
   organizationId: OrganizationID,
 ) {
   const query = db
-    .update(users)
+    .update(userTable)
     .set({
       organizationId,
     })
-    .where(eq(users.id, userId))
+    .where(eq(userTable.id, userId))
     .returning();
 
   const [res] = await query.execute();
@@ -122,23 +122,23 @@ export async function setOrganization(
 export async function getByLoginDetails(email: string) {
   const query = db
     .select()
-    .from(users)
-    .where(and(eq(users.email, email)));
+    .from(userTable)
+    .where(and(eq(userTable.email, email)));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateUser) {
-  const query = db.insert(users).values(input).returning();
+  const query = db.insert(userTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateUser) {
   const query = db
-    .update(users)
+    .update(userTable)
     .set(input)
-    .where(eq(users.id, input.id))
+    .where(eq(userTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -146,9 +146,9 @@ export async function update(input: UpdateUser) {
 
 export async function archive(input: ArchiveUser) {
   const query = db
-    .update(users)
+    .update(userTable)
     .set(input)
-    .where(eq(users.id, input.id))
+    .where(eq(userTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

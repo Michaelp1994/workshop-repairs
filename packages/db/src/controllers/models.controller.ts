@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, ilike, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organizations.schema";
+import type { OrganizationID } from "../schemas/organization.table";
 
 import { formatSearch } from "../helpers/formatSearch";
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
@@ -12,20 +12,24 @@ import {
   modelFilterMapping,
   modelOrderMapping,
 } from "../mappings/model.mappings";
-import { equipmentTypes } from "../schemas/equipment-types.schema";
-import { manufacturers } from "../schemas/manufacturers.schema";
-import { modelImages } from "../schemas/model-images.schema";
+import { equipmentTypeTable } from "../schemas/equipment-type.table";
+import { manufacturerTable } from "../schemas/manufacturer.table";
+import { modelImageTable } from "../schemas/model-image.table";
 import {
   type ArchiveModel,
   type CreateModel,
   type ModelID,
-  models,
+  modelTable,
   type UpdateModel,
-} from "../schemas/models.schema";
+} from "../schemas/model.table";
 
-const modelFields = getTableColumns(models);
+const modelFields = getTableColumns(modelTable);
 
-const globalFilterColumns = [models.name, models.nickname, manufacturers.name];
+const globalFilterColumns = [
+  modelTable.name,
+  modelTable.nickname,
+  manufacturerTable.name,
+];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
@@ -43,34 +47,43 @@ export function getAll(
 
   const query = db
     .select({
-      id: models.id,
-      name: models.name,
-      nickname: models.nickname,
-      defaultImageUrl: modelImages.url,
+      id: modelTable.id,
+      name: modelTable.name,
+      nickname: modelTable.nickname,
+      defaultImageUrl: modelImageTable.url,
       equipmentType: {
-        id: equipmentTypes.id,
-        name: equipmentTypes.name,
+        id: equipmentTypeTable.id,
+        name: equipmentTypeTable.name,
       },
       manufacturer: {
-        id: manufacturers.id,
-        name: manufacturers.name,
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
       },
-      createdAt: models.createdAt,
-      updatedAt: models.updatedAt,
+      createdAt: modelTable.createdAt,
+      updatedAt: modelTable.updatedAt,
     })
-    .from(models)
-    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .innerJoin(equipmentTypes, eq(models.equipmentTypeId, equipmentTypes.id))
-    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
+    .from(modelTable)
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .innerJoin(
+      equipmentTypeTable,
+      eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
+    )
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
     .where(
       and(
-        isNull(models.deletedAt),
-        eq(models.organizationId, organizationId),
+        isNull(modelTable.deletedAt),
+        eq(modelTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, models.id)
+    .orderBy(...orderByParams, modelTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -91,12 +104,15 @@ export async function getCount(
 
   const query = db
     .select({ count: count() })
-    .from(models)
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .from(modelTable)
+    .leftJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
     .where(
       and(
-        isNull(models.deletedAt),
-        eq(models.organizationId, organizationId),
+        isNull(modelTable.deletedAt),
+        eq(modelTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -114,18 +130,18 @@ export function getSelect(
 
   const query = db
     .select({
-      value: models.id,
-      label: models.name,
+      value: modelTable.id,
+      label: modelTable.name,
     })
-    .from(models)
+    .from(modelTable)
     .where(
       and(
-        isNull(models.deletedAt),
-        eq(models.organizationId, organizationId),
-        globalFilter !== "" ? ilike(models.name, searchQuery) : undefined,
+        isNull(modelTable.deletedAt),
+        eq(modelTable.organizationId, organizationId),
+        globalFilter !== "" ? ilike(modelTable.name, searchQuery) : undefined,
       ),
     )
-    .orderBy(models.id);
+    .orderBy(modelTable.id);
   const res = query.execute();
   return res;
 }
@@ -135,30 +151,36 @@ export async function getById(id: ModelID) {
     .select({
       ...modelFields,
       manufacturer: {
-        id: manufacturers.id,
-        name: manufacturers.name,
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
       },
-      imageUrl: modelImages.url,
+      imageUrl: modelImageTable.url,
     })
-    .from(models)
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-    .where(eq(models.id, id));
+    .from(modelTable)
+    .leftJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
+    .where(eq(modelTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateModel) {
-  const query = db.insert(models).values(input).returning();
+  const query = db.insert(modelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateModel) {
   const query = db
-    .update(models)
+    .update(modelTable)
     .set(input)
-    .where(eq(models.id, input.id))
+    .where(eq(modelTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -166,9 +188,9 @@ export async function update(input: UpdateModel) {
 
 export async function archive(input: ArchiveModel) {
   const query = db
-    .update(models)
+    .update(modelTable)
     .set(input)
-    .where(eq(models.id, input.id))
+    .where(eq(modelTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

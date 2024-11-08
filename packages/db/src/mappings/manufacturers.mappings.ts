@@ -1,9 +1,9 @@
-import { manufacturers } from "../schemas/manufacturers.schema";
+import { manufacturerTable } from "../schemas/manufacturer.table";
 
 export const manufacturerOrderMapping = {
-  name: manufacturers.name,
-  createdAt: manufacturers.createdAt,
-  updatedAt: manufacturers.updatedAt,
+  name: manufacturerTable.name,
+  createdAt: manufacturerTable.createdAt,
+  updatedAt: manufacturerTable.updatedAt,
 };
 
 export const manufacturerFilterMapping = {};

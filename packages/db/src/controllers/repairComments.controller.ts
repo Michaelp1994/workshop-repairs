@@ -6,20 +6,20 @@ import {
   type ArchiveRepairComment,
   type CreateRepairComment,
   type RepairCommentID,
-  repairComments,
+  repairCommentTable,
   type UpdateRepairComment,
-} from "../schemas/repair-comments.schema";
-import { type RepairID } from "../schemas/repairs.schema";
-import { users } from "../schemas/users.schema";
+} from "../schemas/repair-comment.table";
+import { type RepairID } from "../schemas/repair.table";
+import { userTable } from "../schemas/user.table";
 
-const repairCommentFields = getTableColumns(repairComments);
+const repairCommentFields = getTableColumns(repairCommentTable);
 
 export function getAll({ pagination }: GetAll, db: Database) {
   const query = db
     .select()
-    .from(repairComments)
-    .where(isNull(repairComments.deletedAt))
-    .orderBy(repairComments.id)
+    .from(repairCommentTable)
+    .where(isNull(repairCommentTable.deletedAt))
+    .orderBy(repairCommentTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -28,8 +28,8 @@ export function getAll({ pagination }: GetAll, db: Database) {
 export async function getCount(_input: GetCount, db: Database) {
   const query = db
     .select({ count: count() })
-    .from(repairComments)
-    .where(isNull(repairComments.deletedAt));
+    .from(repairCommentTable)
+    .where(isNull(repairCommentTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
 }
@@ -39,17 +39,20 @@ export async function getAllByRepairId(input: RepairID, db: Database) {
     .select({
       ...repairCommentFields,
       createdBy: {
-        id: users.id,
-        firstName: users.firstName,
-        lastName: users.lastName,
+        id: userTable.id,
+        firstName: userTable.firstName,
+        lastName: userTable.lastName,
       },
     })
-    .from(repairComments)
-    .innerJoin(users, eq(repairComments.createdById, users.id))
+    .from(repairCommentTable)
+    .innerJoin(userTable, eq(repairCommentTable.createdById, userTable.id))
     .where(
-      and(isNull(repairComments.deletedAt), eq(repairComments.repairId, input)),
+      and(
+        isNull(repairCommentTable.deletedAt),
+        eq(repairCommentTable.repairId, input),
+      ),
     )
-    .orderBy(repairComments.createdAt);
+    .orderBy(repairCommentTable.createdAt);
   const res = await query.execute();
   return res;
 }
@@ -57,24 +60,24 @@ export async function getAllByRepairId(input: RepairID, db: Database) {
 export async function getById(input: RepairCommentID, db: Database) {
   const query = db
     .select()
-    .from(repairComments)
-    .where(eq(repairComments.id, input));
+    .from(repairCommentTable)
+    .where(eq(repairCommentTable.id, input));
 
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateRepairComment, db: Database) {
-  const query = db.insert(repairComments).values(input).returning();
+  const query = db.insert(repairCommentTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateRepairComment, db: Database) {
   const query = db
-    .update(repairComments)
+    .update(repairCommentTable)
     .set(input)
-    .where(eq(repairComments.id, input.id))
+    .where(eq(repairCommentTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -82,9 +85,9 @@ export async function update(input: UpdateRepairComment, db: Database) {
 
 export async function archive(input: ArchiveRepairComment, db: Database) {
   const query = db
-    .update(repairComments)
+    .update(repairCommentTable)
     .set(input)
-    .where(eq(repairComments.id, input.id))
+    .where(eq(repairCommentTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

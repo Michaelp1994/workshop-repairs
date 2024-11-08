@@ -7,15 +7,17 @@ import {
   type InferUpdateModel,
 } from "../types";
 
-export const userOnboardings = pgTable("user_onboardings", {
+export const userOnboardingTable = pgTable("user_onboarding", {
   id: serial().primaryKey(),
   userId: varchar().notNull().unique(),
   organizationCreated: boolean().default(false),
   invitedUsers: boolean().default(false),
 });
 
-export type UserOnboarding = InferModel<typeof userOnboardings>;
+export type UserOnboarding = InferModel<typeof userOnboardingTable>;
 export type UserOnboardingID = UserOnboarding["id"];
-export type CreateUserOnboarding = InferCreateModel<typeof userOnboardings>;
-export type UpdateUserOnboarding = InferUpdateModel<typeof userOnboardings>;
-export type ArchiveUserOnboarding = InferArchiveModel<typeof userOnboardings>;
+export type CreateUserOnboarding = InferCreateModel<typeof userOnboardingTable>;
+export type UpdateUserOnboarding = InferUpdateModel<typeof userOnboardingTable>;
+export type ArchiveUserOnboarding = InferArchiveModel<
+  typeof userOnboardingTable
+>;
