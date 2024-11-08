@@ -98,7 +98,7 @@ export default router({
           message: "Token is not correct.",
         });
       }
-      await usersController.confirmEmailVerified(user.id);
+      await usersController.setEmailVerified(user.id);
       await authController.deleteConfirmationRequest(request.id);
       const token = await generateToken({
         userId: user.id,

@@ -90,7 +90,7 @@ export async function getByEmail(input: string) {
   return res;
 }
 
-export async function confirmEmailVerified(input: UserID) {
+export async function setEmailVerified(input: UserID) {
   const query = db
     .update(userTable)
     .set({
