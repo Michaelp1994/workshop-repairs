@@ -9,36 +9,17 @@ export default $config({
     };
   },
   async run() {
-    const bucket = new sst.aws.Bucket("MyBucket", {
-      access: "public",
-    });
-    const vpc = new sst.aws.Vpc("MyVpc", { bastion: true, nat: "ec2" });
-    const rds = new sst.aws.Postgres("MyPostgres", { vpc, proxy: true });
+    const env = await import("./infra/env");
+    const auth = await import("./infra/auth");
+    const email = await import("./infra/email");
+    const storage = await import("./infra/storage");
+    const api = await import("./infra/api");
+    const web = await import("./infra/web");
 
-    new sst.x.DevCommand("Studio", {
-      link: [rds],
-      dev: {
-        command: "npx drizzle-kit studio",
-      },
-    });
-
-    const trpc = new sst.aws.Function("Trpc", {
-      url: true,
-      handler: "index.handler",
-    });
-
-    // const api = new sst.aws.Function("MyApi", {
-    //   vpc,
-    //   url: true,
-    //   link: [rds],
-    //   handler: "src/api.handler",
-    // });
-
-    // new sst.aws.Nextjs("MyWeb", {
-    //   link: [bucket, rds],
-    // });
-    // return {
-    //   api: api.url,
-    // };
+    return {
+      Region: aws.getRegionOutput().name,
+      api: api.api.url,
+      nextjs: web.nextjs.url,
+    };
   },
 });

@@ -29,7 +29,11 @@ export default router({
           message: "Login details are not correct.",
         });
       }
-      const token = await generateToken(user.id);
+
+      const token = await generateToken({
+        userId: user.id,
+        organizationId: null,
+      });
       return {
         token,
         id: user.id,
@@ -48,6 +52,7 @@ export default router({
         emailVerified: false,
         organizationId: null,
       });
+
       if (!user) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -57,13 +62,15 @@ export default router({
 
       await sendVerificationEmail(user.id, user.email);
 
-      const token = await generateToken(user.id);
+      const token = await generateToken({
+        userId: user.id,
+        organizationId: null,
+      });
       const response = {
         token,
         id: user.id,
         emailVerified: false,
       };
-      console.log(response);
       return response;
     }),
   sendEmailConfirmation: protectedProcedure
@@ -91,7 +98,10 @@ export default router({
       }
       await usersController.confirmEmailVerified(user.id);
       await authController.deleteConfirmationRequest(request.id);
-      const token = await generateToken(user.id);
+      const token = await generateToken({
+        userId: user.id,
+        organizationId: null,
+      });
       return {
         token,
         id: user.id,

@@ -8,7 +8,7 @@
 .turbo
 # testing
 /coverage
-
+.open-next
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal

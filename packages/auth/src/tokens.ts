@@ -1,3 +1,4 @@
+import type { OrganizationID } from "../../db/src/schemas/organizations.schema";
 import type { UserID } from "@repo/validators/ids.validators";
 
 import { jwtVerify, SignJWT } from "jose";
@@ -5,12 +6,13 @@ import { Resource } from "sst";
 
 const secret = new TextEncoder().encode(Resource.JWT_SECRET.value);
 
-interface Payload {
+export interface SessionData {
   userId: UserID;
+  organizationId: OrganizationID | null;
 }
 
-export async function generateToken(userId: UserID) {
-  return await new SignJWT({ userId })
+export async function generateToken(payload: SessionData) {
+  return await new SignJWT(payload)
     .setProtectedHeader({
       alg: "HS256",
     })
@@ -18,5 +20,5 @@ export async function generateToken(userId: UserID) {
 }
 
 export async function verifyToken(token: string) {
-  return await jwtVerify<Payload>(token, secret);
+  return await jwtVerify<SessionData>(token, secret);
 }

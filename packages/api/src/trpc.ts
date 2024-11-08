@@ -1,32 +1,38 @@
-import type { OrganizationID } from "@repo/db/schemas/organization.schema";
-import type { UserID } from "@repo/validators/ids.validators";
-import type { APIGatewayProxyEvent } from "aws-lambda";
+import type { APIGatewayProxyEventV2 } from "aws-lambda";
 
+import { verifyToken } from "@repo/auth/tokens";
 import { db } from "@repo/db";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { CreateAWSLambdaContextOptions } from "@trpc/server/adapters/aws-lambda";
 
-export interface Session {
-  userId: UserID;
-  organizationId: OrganizationID;
-}
-
 export async function createContext({
   event,
-  context,
-}: CreateAWSLambdaContextOptions<APIGatewayProxyEvent>) {
+}: CreateAWSLambdaContextOptions<APIGatewayProxyEventV2>) {
   const token = event.headers?.["authorization"];
   console.log({ token });
-  // TODO: for now, i can't be fucked working on auth any longer, this will have to do.
-  // I have tried IAM, nextAuth, Lucia Auth (session based) and JWT. all have flaws.
-  return {
-    db,
-    session: {
-      userId: 1,
-      organizationId: 1,
-    },
-    context,
-  };
+  if (!token) {
+    return {
+      db,
+      session: null,
+    };
+  }
+  try {
+    const verifiedToken = await verifyToken(token);
+    const session = {
+      userId: verifiedToken.payload.userId,
+      organizationId: verifiedToken.payload.organizationId,
+    };
+    return {
+      db,
+      session: session,
+    };
+  } catch {
+    console.error("bad token");
+    return {
+      db,
+      session: null,
+    };
+  }
 }
 
 type Context = Awaited<ReturnType<typeof createContext>>;

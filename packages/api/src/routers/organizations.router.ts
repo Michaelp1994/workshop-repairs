@@ -11,9 +11,6 @@ export default router({
     .input(organizationsSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-
-      // CREATE FILE FROM BLOB:
-      console.log(input.logo);
       const createdOrganization = await organizationsController.create({
         ...input,
         ...metadata,
@@ -31,5 +28,21 @@ export default router({
       );
 
       return createdOrganization;
+    }),
+  inviteOthers: protectedProcedure
+    .input(organizationsSchemas.inviteOthers)
+    .mutation(async ({ input, ctx }) => {
+      const metadata = createMetadata(ctx.session);
+      const emails = input.emails.split(",");
+      emails.forEach((unprocessedEmail) => {
+        const email = unprocessedEmail.trim();
+        // TODO: Check if valid email.
+        console.log({ email });
+        organizationsController.createInvitation({
+          email,
+          organizationId: ctx.session.organizationId,
+          emailSentAt: null,
+        });
+      });
     }),
 });
