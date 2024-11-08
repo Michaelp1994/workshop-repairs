@@ -4,7 +4,7 @@ import { buttonVariants } from "@repo/ui/button";
 import { cn } from "@repo/ui/utils";
 import Link from "next/link";
 
-import Logo from "~/app/(public)/components/PublicNavBar/Logo";
+import Logo from "~/components/Logo";
 
 import RegisterForm from "./_components/RegisterForm";
 
