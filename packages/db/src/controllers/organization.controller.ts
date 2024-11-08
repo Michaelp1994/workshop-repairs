@@ -1,12 +1,12 @@
 import { db } from "..";
 import {
-  type CreateOrganizationInvitation,
-  organizationInvitation,
-} from "../schemas/organization-invitations";
-import {
   type CreateOrganization,
   organizationTable,
 } from "../schemas/organization.table";
+import {
+  type CreateOrganizationInvitation,
+  organizationInvitationTable,
+} from "../schemas/organization-invitation.table";
 
 export async function create(input: CreateOrganization) {
   const query = db.insert(organizationTable).values(input).returning();
@@ -15,7 +15,10 @@ export async function create(input: CreateOrganization) {
 }
 
 export async function createInvitation(input: CreateOrganizationInvitation) {
-  const query = db.insert(organizationInvitation).values(input).returning();
+  const query = db
+    .insert(organizationInvitationTable)
+    .values(input)
+    .returning();
   const [res] = await query.execute();
   return res;
 }

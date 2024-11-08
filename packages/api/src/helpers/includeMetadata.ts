@@ -1,6 +1,4 @@
-import type { UserID } from "@repo/validators/ids.validators";
-
-import type { Session } from "../trpc";
+import type { Session } from "../context";
 
 export function createMetadata(session: Session) {
   return {

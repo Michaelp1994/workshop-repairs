@@ -132,7 +132,7 @@ export default router({
         });
       }
 
-      const model = await modelsController.getById(modelImage.modelId, ctx.db);
+      const model = await modelsController.getById(modelImage.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -141,14 +141,11 @@ export default router({
         });
       }
       const metadata = updateMetadata(ctx.session);
-      await modelsController.update(
-        {
-          id: model.id,
-          defaultImageId: modelImage.id,
-          ...metadata,
-        },
-        ctx.db,
-      );
+      await modelsController.update({
+        id: model.id,
+        defaultImageId: modelImage.id,
+        ...metadata,
+      });
 
       return modelImage;
     }),

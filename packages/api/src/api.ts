@@ -1,10 +1,10 @@
 import type { APIGatewayProxyEventV2, Context } from "aws-lambda";
 
 import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda";
-import cookie, { SerializeOptions } from "cookie";
+import cookie from "cookie";
 
+import { createContext } from "./context";
 import { appRouter } from "./router";
-import { createContext } from "./trpc";
 
 // export const handler = awsLambdaRequestHandler({
 //   router: appRouter,
@@ -16,7 +16,6 @@ export const handler = async (
   context: Context,
 ) => {
   let cookies: null | string = null;
-  const tomorrow = new Date(Date.now() + 3600 * 1000 * 100);
   function setCookie(name: string, value: string) {
     cookies = cookie.serialize(name, value, {
       httpOnly: true,

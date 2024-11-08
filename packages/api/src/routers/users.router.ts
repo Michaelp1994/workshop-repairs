@@ -85,7 +85,7 @@ export default router({
       const updatedUser = await usersController.update({
         ...input,
         ...metadata,
-        id: ctx.session.user.id,
+        id: ctx.session.userId,
       });
 
       if (!updatedUser) {
