@@ -32,12 +32,8 @@ declare module "sst" {
       "host": string
       "password": string
       "port": number
-      "type": "sst.aws.Postgres"
+      "type": "sst.sst.Linkable"
       "username": string
-    }
-    "Vpc1": {
-      "bastion": string
-      "type": "sst.aws.Vpc"
     }
   }
 }
