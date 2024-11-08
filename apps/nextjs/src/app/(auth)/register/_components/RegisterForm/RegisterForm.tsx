@@ -20,16 +20,19 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useAuth } from "~/trpc/AuthContext";
 import { api } from "~/trpc/client";
 
 export default function RegisterForm() {
   const router = useRouter();
+  const { setAuth } = useAuth();
   const form = useForm({
     schema: registerFormSchema,
     defaultValues: defaultRegister,
   });
   const registerMutation = api.auth.register.useMutation({
     async onSuccess(values) {
+      await setAuth(values.token);
       router.push("/organization");
     },
   });

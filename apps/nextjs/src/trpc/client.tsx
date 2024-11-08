@@ -10,6 +10,8 @@ import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { type ReactNode, useState } from "react";
 
+import { useAuth } from "./AuthContext";
+
 interface TRPCReactProviderProps {
   children: ReactNode;
 }
@@ -34,6 +36,7 @@ export function TRPCReactProvider(props: TRPCReactProviderProps) {
   if (!apiUrl) {
     throw new Error("Please set NEXT_PUBLIC_AWS_API_URL env variable.");
   }
+  const { token } = useAuth();
   const [trpcClient] = useState(() =>
     api.createClient({
       links: [
@@ -44,6 +47,14 @@ export function TRPCReactProvider(props: TRPCReactProviderProps) {
         }),
         httpBatchLink({
           url: apiUrl,
+          headers() {
+            if (!token) {
+              return {};
+            }
+            return {
+              Authorization: token,
+            };
+          },
         }),
       ],
     }),

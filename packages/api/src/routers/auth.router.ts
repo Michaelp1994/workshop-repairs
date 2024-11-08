@@ -11,7 +11,7 @@ import { protectedProcedure, publicProcedure, router } from "../trpc";
 export default router({
   login: publicProcedure
     .input(authSchemas.login)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       const user = await usersController.getByLoginDetails(input.email);
       if (!user) {
         throw new TRPCError({
@@ -34,7 +34,6 @@ export default router({
         userId: user.id,
         organizationId: null,
       });
-      ctx.setCookie("Authorization", token);
       return {
         token,
         id: user.id,
@@ -44,7 +43,7 @@ export default router({
     }),
   register: publicProcedure
     .input(authSchemas.register)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       const hash = await hashPassword(input.password);
       const user = await usersController.create({
         ...input,
@@ -72,7 +71,6 @@ export default router({
         id: user.id,
         emailVerified: false,
       };
-      ctx.setCookie("Authorization", token);
       return response;
     }),
   sendEmailConfirmation: protectedProcedure

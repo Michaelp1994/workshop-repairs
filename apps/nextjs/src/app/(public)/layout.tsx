@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
+import { AuthProvider } from "~/trpc/AuthContext";
 import { TRPCReactProvider } from "~/trpc/client";
 
 const fontHeading = Inter({
@@ -41,12 +42,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       )}
       lang="en"
     >
-      <TRPCReactProvider>
-        <body className="min-h-screen w-full">
-          {children}
-          <Toaster closeButton richColors />
-        </body>
-      </TRPCReactProvider>
+      <AuthProvider>
+        <TRPCReactProvider>
+          <body className="min-h-screen w-full">
+            {children}
+            <Toaster closeButton richColors />
+          </body>
+        </TRPCReactProvider>
+      </AuthProvider>
     </html>
   );
 }

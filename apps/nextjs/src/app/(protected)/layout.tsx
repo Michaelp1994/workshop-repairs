@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import NavBar from "~/components/NavBar";
 import NextBreadcrumb from "~/components/NextBreadcrumb";
 import "~/styles/globals.css";
+import { AuthProvider } from "~/trpc/AuthContext";
 import { TRPCReactProvider } from "~/trpc/client";
 
 const fontHeading = Inter({
@@ -41,20 +42,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
       )}
       lang="en"
     >
-      <TRPCReactProvider>
-        <body className="h-100 bg-muted/40 w-screen">
-          <div className="grid h-full grid-rows-[auto_1fr]">
-            <NavBar />
-            <div className="p-4">
-              <NextBreadcrumb />
-              <main className="center mx-auto max-w-7xl">
-                <Suspense>{children}</Suspense>
-              </main>
+      <AuthProvider>
+        <TRPCReactProvider>
+          <body className="h-100 bg-muted/40 w-screen">
+            <div className="grid h-full grid-rows-[auto_1fr]">
+              <NavBar />
+              <div className="p-4">
+                <NextBreadcrumb />
+                <main className="center mx-auto max-w-7xl">
+                  <Suspense>{children}</Suspense>
+                </main>
+              </div>
             </div>
-          </div>
-          <Toaster closeButton richColors />
-        </body>
-      </TRPCReactProvider>
+            <Toaster closeButton richColors />
+          </body>
+        </TRPCReactProvider>
+      </AuthProvider>
     </html>
   );
 }

@@ -4,13 +4,6 @@ import { rds, vpc, bucket } from "./storage";
 export const api = new sst.aws.ApiGatewayV2("API1", {
   vpc,
   link: [rds, bucket, email, jwtSecret],
-  cors: {
-    exposeHeaders: ["Authorization"],
-    allowCredentials: true,
-    allowHeaders: ["content-type", "Authorization"],
-    allowMethods: ["*"],
-    allowOrigins: ["https://localhost:3000"],
-  },
 });
 
 api.route("GET /{proxy+}", {
@@ -25,8 +18,4 @@ api.route("POST /{proxy+}", {
   nodejs: {
     install: ["@node-rs/argon2"],
   },
-});
-
-api.route("OPTIONS /{proxy+}", {
-  handler: "./packages/api/src/preflight.handler",
 });

@@ -17,13 +17,16 @@ import {
 } from "@repo/validators/forms/auth.schema";
 import { useRouter } from "next/navigation";
 
+import { useAuth } from "~/trpc/AuthContext";
 import { api } from "~/trpc/client";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { setAuth } = useAuth();
   const loginMutation = api.auth.login.useMutation({
     async onSuccess(values) {
-      // router.push("/dashboard");
+      await setAuth(values.token);
+      router.push("/dashboard");
     },
   });
   const form = useForm({
