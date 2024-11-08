@@ -1,9 +1,7 @@
 import { Button } from "@repo/ui/button";
 import Link from "next/link";
 
-import { isAuthenticated } from "~/utils/isAuthenticated";
-
-import Logo from "./Logo";
+import Logo from "~/components/Logo";
 
 const links = [
   {
@@ -21,7 +19,6 @@ const links = [
 ];
 
 export default function PublicNavBar() {
-  const isAuthed = isAuthenticated();
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b px-2 py-4 backdrop-blur">
       <div className="container flex items-center justify-between">
@@ -36,22 +33,12 @@ export default function PublicNavBar() {
               {link.name}
             </a>
           ))}
-          {isAuthed ? (
-            <>
-              <Button asChild>
-                <Link href="/dashboard">Dashboard</Link>
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button asChild>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button asChild variant="destructive">
-                <Link href="/register">Register</Link>
-              </Button>
-            </>
-          )}
+          <Button asChild>
+            <Link href="/login">Login</Link>
+          </Button>
+          <Button asChild variant="destructive">
+            <Link href="/register">Register</Link>
+          </Button>
         </nav>
       </div>
     </header>

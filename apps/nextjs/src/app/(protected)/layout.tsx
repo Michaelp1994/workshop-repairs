@@ -2,14 +2,12 @@ import { Toaster } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import NavBar from "~/components/NavBar";
 import NextBreadcrumb from "~/components/NextBreadcrumb";
 import "~/styles/globals.css";
 import { TRPCReactProvider } from "~/trpc/client";
-import { isAuthenticated } from "~/utils/isAuthenticated";
 
 const fontHeading = Inter({
   subsets: ["latin"],
@@ -34,9 +32,6 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  if (!isAuthenticated()) {
-    redirect("/login");
-  }
   return (
     <html
       className={cn(

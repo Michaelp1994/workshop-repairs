@@ -18,14 +18,12 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
-import { setAuthCookie } from "~/utils/setCookie";
 
 export default function LoginForm() {
   const router = useRouter();
   const loginMutation = api.auth.login.useMutation({
     async onSuccess(values) {
-      await setAuthCookie(values.token);
-      router.push("/dashboard");
+      // router.push("/dashboard");
     },
   });
   const form = useForm({

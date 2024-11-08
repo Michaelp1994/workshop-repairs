@@ -20,21 +20,19 @@ import {
   defaultOrganization,
 } from "@repo/validators/forms/organization.schema";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type ChangeEvent, useRef, useState } from "react";
 
 import { api } from "~/trpc/client";
 
-interface OnboardingFormProps {
-  onSuccess: (invitationId: string) => void;
-}
-
-export default function OnboardingForm({ onSuccess }: OnboardingFormProps) {
+export default function OnboardingForm() {
   const fileRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const [preview, setPreview] = useState<null | string>(null);
   const createMutation = api.organizations.create.useMutation({
     async onSuccess(data) {
       toast.success("Organization created.");
-      onSuccess(data.invitationId);
+      router.push("/invitation");
     },
     async onError(data) {
       toast.error("Can't Create organization.");

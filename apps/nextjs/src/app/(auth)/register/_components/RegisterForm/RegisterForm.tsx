@@ -21,7 +21,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
-import { setAuthCookie } from "~/utils/setCookie";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -31,8 +30,7 @@ export default function RegisterForm() {
   });
   const registerMutation = api.auth.register.useMutation({
     async onSuccess(values) {
-      await setAuthCookie(values.token);
-      router.push("/onboarding");
+      router.push("/organization");
     },
   });
   async function handleValid(data: RegisterFormInput) {

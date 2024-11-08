@@ -18,19 +18,13 @@ import {
   type InviteOthersInput,
   inviteOthersSchema,
 } from "@repo/validators/forms/organization.schema";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/client";
 
-interface InviteOthersFormProps {
-  invitationId: string;
-  onSuccess: () => void;
-}
-
-export default function InviteOthersForm({
-  invitationId,
-  onSuccess,
-}: InviteOthersFormProps) {
+export default function InviteOthersForm() {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
   const inviteMutation = api.organizations.inviteOthers.useMutation({
     async onSuccess() {
@@ -42,7 +36,7 @@ export default function InviteOthersForm({
     },
   });
   function skipStep() {
-    onSuccess();
+    router.push("/");
   }
   const form = useForm({
     schema: inviteOthersSchema,
@@ -78,7 +72,7 @@ export default function InviteOthersForm({
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder="Example michael@gmail.com, jack@gmail.com"
+                    placeholder="Example michael@gmail.com, bob@gmail.com"
                   />
                 </FormControl>
                 <FormMessage />
@@ -87,9 +81,6 @@ export default function InviteOthersForm({
           }}
         />
         <div className="flex justify-end gap-2">
-          <Button onClick={skipStep} type="button" variant="link">
-            Skip
-          </Button>
           <Button
             className="transition-all"
             onClick={copyInvitationLink}
