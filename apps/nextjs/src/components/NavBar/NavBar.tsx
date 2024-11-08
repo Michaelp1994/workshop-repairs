@@ -7,7 +7,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@repo/ui/navigation-menu";
-import { cn } from "@repo/ui/utils";
 import Link from "next/link";
 import React from "react";
 
@@ -46,6 +45,11 @@ const AssetList = [
     href: "/manufacturers",
     title: "Manufacturers",
     text: "Manufacturers",
+  },
+  {
+    href: "/equipment-types",
+    title: "Equipment Types",
+    text: "Equipment Types",
   },
   {
     href: "/parts",

@@ -25,10 +25,10 @@ import { api } from "~/trpc/client";
 
 export default function CreateManufacturerForm() {
   const router = useRouter();
-  const createMutation = api.manufacturers.create.useMutation({
+  const createMutation = api.equipmentTypes.create.useMutation({
     onSuccess(data) {
-      toast.success(`Manufacturer ${data.name} created`);
-      router.push(`/manufacturers/${data.id}`);
+      toast.success(`Equipment Type ${data.name} created`);
+      router.push(`/equipment-types/${data.id}`);
     },
     onError(error) {
       toast.error("Failed to create manufacturer");

@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
-import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
@@ -23,10 +22,11 @@ interface ModelImageGalleryModalProps {
 export default function ModelImageGalleryModal({
   params,
 }: ModelImageGalleryModalProps) {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const modelId = Number(params.modelId);
-  const id = searchParams.get("id");
-  const modelImageId = id ? Number(id) : undefined;
+  // const id = searchParams.get("id");
+  // const modelImageId = id ? Number(id) : undefined;
+  const modelImageId = undefined;
 
   const { data, isLoading, isError } = api.modelImages.getAllByModelId.useQuery(
     {

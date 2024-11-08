@@ -42,7 +42,6 @@ export default function ArchiveRepairCommentPage({
   });
 
   async function archiveRepairComment() {
-    console.log({ repairCommentId });
     await archiveMutation.mutateAsync({ id: repairCommentId });
   }
 

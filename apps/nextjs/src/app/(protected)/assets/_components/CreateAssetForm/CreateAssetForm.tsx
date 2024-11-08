@@ -45,7 +45,6 @@ export default function CreateAssetForm() {
   });
 
   async function handleValid(values: AssetFormInput) {
-    console.log("test");
     await createMutation.mutateAsync(values);
   }
   return (

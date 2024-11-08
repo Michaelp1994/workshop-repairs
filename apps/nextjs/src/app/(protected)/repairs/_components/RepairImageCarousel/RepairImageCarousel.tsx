@@ -9,7 +9,6 @@ import {
   CarouselPrevious,
   CarouselProps,
 } from "@repo/ui/carousel";
-import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
@@ -20,9 +19,10 @@ interface RepairImageCarouselProps extends CarouselProps {
 export default function RepairImageCarousel({
   repairId,
 }: RepairImageCarouselProps) {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  const repairImageId = id ? Number(id) : undefined;
+  // const searchParams = useSearchParams();
+  // const id = searchParams.get("id");
+  // const repairImageId = id ? Number(id) : undefined;
+  const repairImageId = undefined;
   const { data, isLoading, isError } =
     api.repairImages.getAllByRepairId.useQuery({
       repairId,

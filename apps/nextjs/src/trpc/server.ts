@@ -1,12 +1,23 @@
 import { type AppRouter } from "@repo/api/router";
-import { httpBatchLink } from "@trpc/client";
-import { createTRPCClient } from "@trpc/react-query";
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { cookies } from "next/headers";
 import { Resource } from "sst";
+
+const apiUrl = Resource.API1.url;
 
 export const api = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: Resource.API1.url,
+      url: apiUrl,
+      headers() {
+        const token = cookies().get("Authorization");
+        if (!token) {
+          return {};
+        }
+        return {
+          Authorization: token.value,
+        };
+      },
     }),
   ],
 });

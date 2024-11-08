@@ -9,50 +9,54 @@ import {
   FormMessage,
   ResetButton,
   SubmitButton,
+  useForm,
 } from "@repo/ui/form";
-import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
-import { toast } from "@repo/ui/sonner";
 import {
-  type ClientFormInput,
-  clientFormSchema,
-  defaultClient,
-} from "@repo/validators/forms/clients.schema";
+  type ConfirmFormInput,
+  confirmFormSchema,
+  defaultConfirm,
+} from "@repo/validators/forms/auth.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
-export default function CreateClientForm() {
+export default function ConfirmationForm() {
   const router = useRouter();
-  const createMutation = api.clients.create.useMutation({
-    onSuccess(data) {
-      toast.success(`Client created`);
-      router.push(`/clients/${data.id}`);
-    },
-    onError(error) {
-      toast.error("Failed to create client");
-      console.log(error);
-    },
-  });
-
   const form = useForm({
-    defaultValues: defaultClient,
-    schema: clientFormSchema,
+    schema: confirmFormSchema,
+    defaultValues: defaultConfirm,
   });
 
-  function handleValid(values: ClientFormInput) {
-    createMutation.mutate(values);
+  const confirmMutation = api.auth.confirmEmail.useMutation({
+    async onSuccess(values) {
+      await fetch("/api/auth/set-cookie", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jwtToken: values.token }),
+      });
+      router.push("/onboarding");
+    },
+  });
+
+  async function handleValid(data: ConfirmFormInput) {
+    await confirmMutation.mutateAsync({
+      code: data.otp,
+    });
   }
+
   return (
     <Form {...form}>
       <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
         <FormField
           control={form.control}
-          name="name"
+          name="otp"
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>One Time Password</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -63,7 +67,7 @@ export default function CreateClientForm() {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton isLoading={createMutation.isPending} />
+          <SubmitButton isLoading={confirmMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

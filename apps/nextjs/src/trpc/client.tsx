@@ -8,7 +8,13 @@ import {
 } from "@tanstack/react-query";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
+
+interface TRPCReactProviderProps {
+  children: ReactNode;
+}
+
+const apiUrl = process.env.NEXT_PUBLIC_AWS_API_URL;
 
 export const api = createTRPCReact<AppRouter>();
 const queryClient = new QueryClient({
@@ -24,7 +30,10 @@ const queryClient = new QueryClient({
   },
 });
 
-export function TRPCReactProvider(props: { children: React.ReactNode }) {
+export function TRPCReactProvider(props: TRPCReactProviderProps) {
+  if (!apiUrl) {
+    throw new Error("Please set NEXT_PUBLIC_AWS_API_URL env variable.");
+  }
   const [trpcClient] = useState(() =>
     api.createClient({
       links: [
@@ -34,12 +43,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
             (op.direction === "down" && op.result instanceof Error),
         }),
         httpBatchLink({
-          url: process.env.NEXT_PUBLIC_AWS_API_URL!,
-          headers: () => {
-            const headers = new Headers();
-            headers.set("x-trpc-source", "nextjs-react");
-            return headers;
-          },
+          url: apiUrl,
         }),
       ],
     }),

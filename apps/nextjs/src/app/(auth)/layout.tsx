@@ -19,7 +19,10 @@ const fontBody = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Workshop App",
+  title: {
+    template: "%s | AssetRx",
+    default: "AssetRx",
+  },
   description: "Workshop App",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
@@ -32,18 +35,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       className={cn(
-        "h-screen antialiased",
+        "min-h-screen w-full scroll-smooth antialiased",
         fontHeading.variable,
         fontBody.variable,
       )}
       lang="en"
     >
-      <body className="bg-muted/40 h-full">
-        <TRPCReactProvider>
+      <TRPCReactProvider>
+        <body className="min-h-screen w-full">
           {children}
           <Toaster closeButton richColors />
-        </TRPCReactProvider>
-      </body>
+        </body>
+      </TRPCReactProvider>
     </html>
   );
 }

@@ -13,7 +13,6 @@ import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 
 export default async function ProfileButton() {
-  //const session = await auth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,9 +32,6 @@ export default async function ProfileButton() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <LogoutButton />
-        <DropdownMenuItem asChild>
-          <Link href="/login">Login</Link>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
