@@ -9,7 +9,7 @@ export const api = new sst.aws.ApiGatewayV2("API1", {
     allowCredentials: true,
     allowHeaders: ["content-type", "Authorization"],
     allowMethods: ["*"],
-    allowOrigins: ["http://localhost:3000"],
+    allowOrigins: ["https://localhost:3000"],
   },
 });
 
@@ -25,4 +25,8 @@ api.route("POST /{proxy+}", {
   nodejs: {
     install: ["@node-rs/argon2"],
   },
+});
+
+api.route("OPTIONS /{proxy+}", {
+  handler: "./packages/api/src/preflight.handler",
 });

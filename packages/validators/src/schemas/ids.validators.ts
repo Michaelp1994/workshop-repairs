@@ -50,3 +50,12 @@ export type UserID = z.infer<typeof userId>;
 
 export const userTypeId = z.number().positive();
 export type UserTypeID = z.infer<typeof userTypeId>;
+
+export const userOnboardingId = z.number().positive();
+export type UserOnboardingID = z.infer<typeof userOnboardingId>;
+
+export const organizationId = z.number().positive();
+export type OrganizationID = z.infer<typeof organizationId>;
+
+export const organizationInvitationId = z.number().positive();
+export type OrganizationInvitationID = z.infer<typeof organizationInvitationId>;

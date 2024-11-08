@@ -5,15 +5,29 @@ import { db } from "@repo/db";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { CreateAWSLambdaContextOptions } from "@trpc/server/adapters/aws-lambda";
 
-export async function createContext({
-  event,
-}: CreateAWSLambdaContextOptions<APIGatewayProxyEventV2>) {
+interface CreateContextInput
+  extends CreateAWSLambdaContextOptions<APIGatewayProxyEventV2> {
+  setCookie: (name: string, value: string) => void;
+}
+
+export async function createContext({ event, setCookie }: CreateContextInput) {
+  const session = {
+    userId: 1,
+    organizationId: 1,
+  };
+  return {
+    db,
+    session: session,
+    setCookie,
+  };
+
   const token = event.headers?.["authorization"];
   console.log({ token });
   if (!token) {
     return {
       db,
       session: null,
+      setCookie,
     };
   }
   try {
@@ -25,12 +39,14 @@ export async function createContext({
     return {
       db,
       session: session,
+      setCookie,
     };
   } catch {
     console.error("bad token");
     return {
       db,
       session: null,
+      setCookie,
     };
   }
 }

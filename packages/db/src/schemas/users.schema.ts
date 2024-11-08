@@ -28,6 +28,7 @@ export const users = pgTable(
     password: varchar("password").notNull(),
     typeId: integer("type_id").notNull(),
     emailVerified: boolean().default(false),
+    onboardingCompleted: boolean().default(false),
     organizationId: integer().references(() => organizations.id),
     image: text("image"),
     createdAt: timestamp("created_at").notNull().defaultNow(),

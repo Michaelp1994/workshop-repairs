@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 import { Resource } from "sst";
 
-import { schema } from "./schema";
+import { schema } from "./schemas";
 
 const pool = new pg.Pool({
   host: Resource.Postgres1.host,

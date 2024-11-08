@@ -1,5 +1,4 @@
-import type { OrganizationID } from "../../db/src/schemas/organizations.schema";
-import type { UserID } from "@repo/validators/ids.validators";
+import type { OrganizationID, UserID } from "@repo/validators/ids.validators";
 
 import { jwtVerify, SignJWT } from "jose";
 import { Resource } from "sst";
