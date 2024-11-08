@@ -9,7 +9,7 @@ import {
 import { assets } from "./assets.schema";
 import { clients } from "./clients.schema";
 import metadataColumns from "./metadata-columns";
-import { organizations } from "./organization.schema";
+import { organizations } from "./organizations.schema";
 import { repairStatusTypes } from "./repair-status-types.schema";
 import { repairTypes } from "./repair-types.schema";
 

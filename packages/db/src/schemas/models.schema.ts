@@ -17,7 +17,7 @@ import { equipmentTypes } from "./equipment-types.schema";
 import { manufacturers } from "./manufacturers.schema";
 import metadataColumns from "./metadata-columns";
 import { modelImages } from "./model-images.schema";
-import { organizations } from "./organization.schema";
+import { organizations } from "./organizations.schema";
 
 export const models = pgTable(
   "models",

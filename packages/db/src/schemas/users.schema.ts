@@ -15,7 +15,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { organizations } from "./organization.schema";
+import { organizations } from "./organizations.schema";
 import { userTypes } from "./user-types.schema";
 
 export const users = pgTable(

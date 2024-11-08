@@ -13,10 +13,23 @@ export const defaultLogin: LoginFormInput = {
 };
 
 export const registerFormSchema = z.object({
-  firstName: z.string().min(3),
-  lastName: z.string().min(3),
-  email: z.string().email(),
-  password: z.string().min(8),
+  firstName: z.string().min(3, {
+    message: "Your first name must be atleast 3 characters.",
+  }),
+  lastName: z.string().min(3, {
+    message: "Your last name must be atleast 3 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email",
+  }),
+  password: z.string().min(8, {
+    message: "Your password must be atleast 8 characters.",
+  }),
+  acceptToS: z.literal<boolean>(true, {
+    errorMap: () => ({
+      message: "",
+    }),
+  }),
 });
 
 export type RegisterFormInput = z.infer<typeof registerFormSchema>;
@@ -26,6 +39,17 @@ export const defaultRegister: RegisterFormInput = {
   lastName: "",
   email: "",
   password: "",
+  acceptToS: false,
+};
+
+export const confirmFormSchema = z.object({
+  otp: z.string(),
+});
+
+export type ConfirmFormInput = z.infer<typeof confirmFormSchema>;
+
+export const defaultConfirm = {
+  otp: "",
 };
 
 export const forgotPasswordFormSchema = z.object({

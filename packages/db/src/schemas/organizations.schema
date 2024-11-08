@@ -1,4 +1,4 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, uuid } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -10,6 +10,7 @@ import {
 export const organizations = pgTable("organizations", {
   id: serial().primaryKey(),
   name: text().notNull().unique(),
+  invitationId: uuid().defaultRandom(),
 });
 
 export type Organization = InferModel<typeof organizations>;

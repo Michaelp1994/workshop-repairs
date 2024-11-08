@@ -11,7 +11,7 @@ import { assetStatuses } from "./asset-statuses.schema";
 import { locations } from "./locations.schema";
 import metadataColumns from "./metadata-columns";
 import { models } from "./models.schema";
-import { organizations } from "./organization.schema";
+import { organizations } from "./organizations.schema";
 
 export const assets = pgTable(
   "assets",
