@@ -6,7 +6,7 @@ import type {
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.schema";
+import type { OrganizationID } from "../schemas/organizations.schema";
 
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";

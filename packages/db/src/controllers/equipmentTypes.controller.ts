@@ -1,6 +1,6 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.schema";
+import type { OrganizationID } from "../schemas/organizations.schema";
 
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { type Database, db } from "../index";
