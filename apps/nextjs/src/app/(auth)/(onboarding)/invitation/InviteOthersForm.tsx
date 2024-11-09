@@ -45,7 +45,7 @@ export default function InviteOthersForm() {
 
   function copyInvitationLink() {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/public-invite/${invitationId}`,
+      `${process.env.NEXT_PUBLIC_URL}/public-invite/${invitationId}`,
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

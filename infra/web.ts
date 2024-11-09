@@ -16,7 +16,9 @@ export const nextjs = new sst.aws.Nextjs("MyWeb", {
     NEXT_PUBLIC_AWS_REGION: region,
     NEXT_PUBLIC_AWS_API_URL: api.url,
     NEXT_PUBLIC_AWS_BUCKET: bucket.name,
-    NEXT_PUBLIC_DOMAIN:
-      $app.stage === "production" ? "workshop-repairs.click" : "localhost:3000",
+    NEXT_PUBLIC_URL:
+      $app.stage === "production"
+        ? "https://workshop-repairs.click"
+        : "http://localhost:3000",
   },
 });
