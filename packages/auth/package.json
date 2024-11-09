@@ -28,7 +28,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "eslint": "^9.14.0",
-    "sst": "3.2.76",
+    "sst": "3.3.11",
     "vitest": "^2.1.4"
   }
 }
