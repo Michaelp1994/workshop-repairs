@@ -1,4 +1,4 @@
-import { boolean, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, serial } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -6,10 +6,14 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { userTable } from "./user.table";
 
 export const userOnboardingTable = pgTable("user_onboarding", {
   id: serial().primaryKey(),
-  userId: varchar().notNull().unique(),
+  userId: integer()
+    .notNull()
+    .unique()
+    .references(() => userTable.id),
   organizationCreated: boolean().default(false),
   invitedUsers: boolean().default(false),
 });

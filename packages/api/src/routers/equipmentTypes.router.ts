@@ -12,10 +12,10 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = equipmentTypesController.getAll(
@@ -25,14 +25,16 @@ export default router({
 
       return allEquipmentTypes;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = equipmentTypesController.getCount(
-      input,
-      ctx.session.organizationId,
-    );
-    return count;
-  }),
-  getSelect: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = equipmentTypesController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
+      return count;
+    }),
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = await equipmentTypesController.getSelect(
@@ -42,7 +44,7 @@ export default router({
 
       return allEquipmentTypes;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(equipmentTypeSchemas.getById)
     .query(async ({ input, ctx }) => {
       const repairType = await equipmentTypesController.getById(
@@ -59,7 +61,7 @@ export default router({
 
       return repairType;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(equipmentTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -77,7 +79,7 @@ export default router({
 
       return createdEquipmentType;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(equipmentTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -95,7 +97,7 @@ export default router({
 
       return updatedEquipmentType;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(equipmentTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

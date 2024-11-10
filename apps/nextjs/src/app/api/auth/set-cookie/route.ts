@@ -2,10 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { token } = await req.json();
+    const { token, onboardingCompleted } = await req.json();
 
     if (!token) {
       return NextResponse.json({ error: "JWT token missing" }, { status: 400 });
+    }
+
+    if (!onboardingCompleted) {
+      return NextResponse.json(
+        { error: "OnboardingCompleted missing" },
+        { status: 400 },
+      );
     }
 
     const response = NextResponse.json(
@@ -16,6 +23,15 @@ export async function POST(req: NextRequest) {
     response.cookies.set({
       name: "Authorization",
       value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 3600,
+    });
+
+    response.cookies.set({
+      name: "OnboardingCompleted",
+      value: onboardingCompleted,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",

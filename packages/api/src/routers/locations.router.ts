@@ -12,10 +12,10 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure.input(getAllSchema).query(({ ctx, input }) => {
+  getAll: organizationProcedure.input(getAllSchema).query(({ ctx, input }) => {
     const allLocations = locationsController.getAll(
       input,
       ctx.session.organizationId,
@@ -23,14 +23,16 @@ export default router({
 
     return allLocations;
   }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = locationsController.getCount(
-      input,
-      ctx.session.organizationId,
-    );
-    return count;
-  }),
-  getSelect: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = locationsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
+      return count;
+    }),
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(({ ctx, input }) => {
       const locations = locationsController.getSelect(
@@ -39,7 +41,7 @@ export default router({
       );
       return locations;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(locationSchemas.getById)
     .query(async ({ input }) => {
       const location = await locationsController.getById(input.id);
@@ -53,7 +55,7 @@ export default router({
 
       return location;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(locationSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -72,7 +74,7 @@ export default router({
 
       return createdLocation;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(locationSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -90,7 +92,7 @@ export default router({
 
       return updatedLocation;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(locationSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

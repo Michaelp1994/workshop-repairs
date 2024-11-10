@@ -13,10 +13,10 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await assetsController.getAll(
@@ -25,7 +25,7 @@ export default router({
       );
       return allAssets;
     }),
-  getCount: protectedProcedure
+  getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await assetsController.getCount(
@@ -41,7 +41,7 @@ export default router({
       }
       return count;
     }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await assetsController.getSelect(
@@ -50,7 +50,7 @@ export default router({
       );
       return allAssets;
     }),
-  getSimpleSelect: protectedProcedure
+  getSimpleSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await assetsController.getSimpleSelect(
@@ -59,7 +59,7 @@ export default router({
       );
       return allAssets;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(assetSchemas.getById)
     .query(async ({ input, ctx }) => {
       const asset = await assetsController.getById(
@@ -76,7 +76,7 @@ export default router({
 
       return asset;
     }),
-  getByRepairId: protectedProcedure
+  getByRepairId: organizationProcedure
     .input(assetSchemas.getByRepairId)
     .query(async ({ input, ctx }) => {
       const asset = await assetsController.getByRepairId(
@@ -93,7 +93,7 @@ export default router({
 
       return asset;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(assetSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -113,7 +113,7 @@ export default router({
 
       return createdAsset;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(assetSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -132,7 +132,7 @@ export default router({
 
       return updatedAsset;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(assetSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

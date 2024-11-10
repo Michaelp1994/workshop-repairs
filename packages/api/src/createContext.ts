@@ -13,7 +13,6 @@ export async function createContext({
   event: { headers },
 }: CreateAWSLambdaContextOptions<APIGatewayProxyEventV2>) {
   const token = headers?.["authorization"];
-  console.log({ token });
   if (!token) {
     return {
       db,

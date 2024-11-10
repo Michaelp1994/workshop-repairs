@@ -30,14 +30,20 @@ export function useAuth() {
   }
   const { token, setToken } = context;
 
-  async function setAuth(token: string) {
+  async function setAuth({
+    token,
+    onboardingCompleted,
+  }: {
+    token: string;
+    onboardingCompleted: boolean;
+  }) {
     try {
       const response = await fetch("/api/auth/set-cookie", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token, onboardingCompleted }),
       });
 
       if (!response.ok) {

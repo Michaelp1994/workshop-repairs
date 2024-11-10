@@ -12,10 +12,10 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allParts = partsController.getAll(
@@ -25,7 +25,7 @@ export default router({
 
       return allParts;
     }),
-  getCount: protectedProcedure
+  getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await partsController.getCount(
@@ -35,14 +35,14 @@ export default router({
 
       return count;
     }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allParts = await partsController.getSelect(input, ctx.db);
 
       return allParts;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(partSchemas.getById)
     .query(async ({ input, ctx }) => {
       const part = await partsController.getById(input.id, ctx.db);
@@ -56,7 +56,7 @@ export default router({
 
       return part;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(partSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -74,7 +74,7 @@ export default router({
 
       return createdPart;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(partSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -92,7 +92,7 @@ export default router({
 
       return updatedPart;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(partSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

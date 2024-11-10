@@ -119,15 +119,6 @@ export async function setOrganization(
   return res;
 }
 
-export async function getByLoginDetails(email: string) {
-  const query = db
-    .select()
-    .from(userTable)
-    .where(and(eq(userTable.email, email)));
-  const [res] = await query.execute();
-  return res;
-}
-
 export async function create(input: CreateUser) {
   const query = db.insert(userTable).values(input).returning();
   const [res] = await query.execute();

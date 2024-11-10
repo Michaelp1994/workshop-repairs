@@ -12,24 +12,24 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure.input(getAllSchema).query(async ({ input }) => {
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
     const allRepairTypes = repairTypesController.getAll(input);
     return allRepairTypes;
   }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ input }) => {
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
     const count = repairTypesController.getCount(input);
     return count;
   }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {
       const allRepairTypes = await repairTypesController.getSelect(input);
       return allRepairTypes;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(repairTypeSchemas.getById)
     .query(async ({ input }) => {
       const repairType = await repairTypesController.getById(input.id);
@@ -43,7 +43,7 @@ export default router({
 
       return repairType;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(repairTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -61,7 +61,7 @@ export default router({
 
       return createdRepairType;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(repairTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -79,7 +79,7 @@ export default router({
 
       return updatedRepairType;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(repairTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

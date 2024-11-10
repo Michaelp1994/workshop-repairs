@@ -13,10 +13,10 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allRepairs = await repairsController.getAll(
@@ -26,7 +26,7 @@ export default router({
       return allRepairs;
     }),
 
-  getCount: protectedProcedure
+  getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await repairsController.getCount(
@@ -42,14 +42,14 @@ export default router({
       return count;
     }),
 
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const allRepairs = await repairsController.getSelect(input, ctx.db);
       return allRepairs;
     }),
 
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(repairSchemas.getById)
     .query(async ({ input, ctx }) => {
       const repair = await repairsController.getById(input.id, ctx.db);
@@ -64,7 +64,7 @@ export default router({
       return repair;
     }),
 
-  create: protectedProcedure
+  create: organizationProcedure
     .input(repairSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -84,7 +84,7 @@ export default router({
       return repair;
     }),
 
-  update: protectedProcedure
+  update: organizationProcedure
     .input(repairSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -104,7 +104,7 @@ export default router({
       return updatedRepair;
     }),
 
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(repairSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

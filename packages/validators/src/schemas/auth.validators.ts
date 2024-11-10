@@ -1,11 +1,17 @@
 import { z } from "zod";
 
-export const OTP_LENGTH = 6;
-
 export const login = z.object({
   email: z.string().email(),
   password: z.string(),
 });
+
+export const session = z.object({
+  token: z.string(),
+  onboardingCompleted: z.boolean(),
+  emailVerified: z.boolean(),
+});
+
+export type Session = z.infer<typeof session>;
 
 export const logout = z.object({});
 

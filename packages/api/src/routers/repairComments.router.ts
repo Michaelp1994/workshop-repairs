@@ -11,21 +11,23 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allRepairComments = repairCommentsController.getAll(input, ctx.db);
 
       return allRepairComments;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = repairCommentsController.getCount(input, ctx.db);
-    return count;
-  }),
-  getById: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = repairCommentsController.getCount(input, ctx.db);
+      return count;
+    }),
+  getById: organizationProcedure
     .input(repairCommentSchemas.getById)
     .query(async ({ input, ctx }) => {
       const repairComment = await repairCommentsController.getById(
@@ -42,7 +44,7 @@ export default router({
 
       return repairComment;
     }),
-  getAllByRepairId: protectedProcedure
+  getAllByRepairId: organizationProcedure
     .input(repairCommentSchemas.getAllByRepairId)
     .query(async ({ input, ctx }) => {
       const allRepairParts = repairCommentsController.getAllByRepairId(
@@ -52,7 +54,7 @@ export default router({
 
       return allRepairParts;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(repairCommentSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -70,7 +72,7 @@ export default router({
 
       return createdRepairComment;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(repairCommentSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -88,7 +90,7 @@ export default router({
 
       return updatedRepairComment;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(repairCommentSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

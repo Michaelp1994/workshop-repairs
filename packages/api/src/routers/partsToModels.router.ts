@@ -6,14 +6,14 @@ import {
 import * as partsToModelSchemas from "@repo/validators/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure.input(getAllSchema).query(({ ctx, input }) => {
+  getAll: organizationProcedure.input(getAllSchema).query(({ ctx, input }) => {
     const allParts = controller.getAll(input, ctx.db);
     return allParts;
   }),
-  getCount: protectedProcedure
+  getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ input, ctx }) => {
       const count = await controller.getCount(input, ctx.db);
@@ -26,13 +26,13 @@ export default router({
       }
       return count;
     }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getCountSchema)
     .query(({ ctx, input }) => {
       const allParts = controller.getSelect(input, ctx.db);
       return allParts;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(partsToModelSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const createdPartModel = await controller.create(input, ctx.db);
@@ -46,7 +46,7 @@ export default router({
 
       return createdPartModel;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(partsToModelSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const archivedPartModel = await controller.archive(input, ctx.db);

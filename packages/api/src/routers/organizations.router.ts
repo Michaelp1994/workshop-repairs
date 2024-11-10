@@ -4,10 +4,10 @@ import * as organizationsSchemas from "@repo/validators/organization.validators"
 import { TRPCError } from "@trpc/server";
 
 import { createMetadata } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  create: protectedProcedure
+  create: organizationProcedure
     .input(organizationsSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -29,7 +29,7 @@ export default router({
 
       return createdOrganization;
     }),
-  inviteOthers: protectedProcedure
+  inviteOthers: organizationProcedure
     .input(organizationsSchemas.inviteOthers)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);

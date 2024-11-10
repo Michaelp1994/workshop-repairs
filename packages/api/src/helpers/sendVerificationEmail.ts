@@ -3,8 +3,9 @@ import type { UserID } from "@repo/validators/ids.validators";
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import * as authController from "@repo/db/controllers/auth.controller";
-import { TRPCError } from "@trpc/server";
 import { Resource } from "sst";
+
+import assertDatabaseResult from "./trpcAssert";
 
 const client = new SESv2Client();
 
@@ -21,12 +22,7 @@ export default async function sendVerificationEmail(
     expiresAt: new Date(Date.now() + 1000 * 60 * 10),
   });
 
-  if (!request) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "Cannot create request.",
-    });
-  }
+  assertDatabaseResult(request);
 
   if (process.env["NODE_ENV"] === "production ") {
     await client.send(

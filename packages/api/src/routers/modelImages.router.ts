@@ -13,21 +13,23 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 // import { uploadImageS3 } from "../helpers/s3";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allModelImages = modelImagesController.getAll(input, ctx.db);
 
       return allModelImages;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = modelImagesController.getCount(input, ctx.db);
-    return count;
-  }),
-  getAllByModelId: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = modelImagesController.getCount(input, ctx.db);
+      return count;
+    }),
+  getAllByModelId: organizationProcedure
     .input(modelImageSchemas.getAllByModelId)
     .query(async ({ ctx, input }) => {
       const model = await modelsController.getById(input.modelId);
@@ -49,7 +51,7 @@ export default router({
         favourite: modelImage.id === model.defaultImageId,
       }));
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(modelImageSchemas.getById)
     .query(async ({ input, ctx }) => {
       const modelImage = await modelImagesController.getById(input.id, ctx.db);
@@ -63,12 +65,12 @@ export default router({
 
       return modelImage;
     }),
-  uploadImage: protectedProcedure
+  uploadImage: organizationProcedure
     .input(modelImageSchemas.uploadImage)
     .mutation(async () => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(modelImageSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const modelImages = await modelImagesController.getAllByModelId(
@@ -102,7 +104,7 @@ export default router({
 
       return createdModelImage;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(modelImageSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -120,7 +122,7 @@ export default router({
 
       return updatedModelImage;
     }),
-  setFavourite: protectedProcedure
+  setFavourite: organizationProcedure
     .input(modelImageSchemas.setFavourite)
     .mutation(async ({ input, ctx }) => {
       const modelImage = await modelImagesController.getById(input.id, ctx.db);
@@ -149,7 +151,7 @@ export default router({
 
       return modelImage;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(modelImageSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

@@ -9,7 +9,14 @@ export async function POST() {
   response.cookies.set({
     name: "Authorization",
     value: "",
-    maxAge: 0, // Cookie expires immediately
+    maxAge: 0,
+    path: "/",
+  });
+
+  response.cookies.set({
+    name: "OnboardingCompleted",
+    value: "",
+    maxAge: 0,
     path: "/",
   });
 
