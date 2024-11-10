@@ -20,8 +20,10 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import ErrorAlert from "~/components/ErrorAlert";
 import { useAuth } from "~/trpc/AuthContext";
 import { api } from "~/trpc/client";
+import formatZodError from "~/utils/formatZodError";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -32,20 +34,27 @@ export default function RegisterForm() {
   });
   const registerMutation = api.auth.register.useMutation({
     async onSuccess(values) {
-      await setAuth(values.token);
-      router.push("/organization");
+      await setAuth(values);
+      if (values.onboardingCompleted) {
+        router.push("/dashboard");
+      } else {
+        router.push("/onboarding");
+      }
+    },
+    async onError(error) {
+      formatZodError(error, form);
+      console.log(form.formState.errors);
     },
   });
-  async function handleValid(data: RegisterFormInput) {
-    await registerMutation.mutateAsync(data);
+  function handleValid(data: RegisterFormInput) {
+    registerMutation.mutate(data);
   }
+
+  const rootError = form.formState.errors.root;
 
   return (
     <Form {...form}>
-      <form
-        onReset={() => form.reset()}
-        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
-      >
+      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
         <fieldset
           className="flex flex-col gap-2"
           disabled={registerMutation.isPending}
@@ -115,7 +124,7 @@ export default function RegisterForm() {
             name="acceptToS"
             render={({ field }) => {
               return (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="mt-1 flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -146,6 +155,7 @@ export default function RegisterForm() {
               );
             }}
           />
+          {rootError && <ErrorAlert>{rootError.message}</ErrorAlert>}
           <FormFooter>
             <SubmitButton isLoading={registerMutation.isPending}>
               Sign Up

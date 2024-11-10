@@ -25,8 +25,12 @@ export default function LoginForm() {
   const { setAuth } = useAuth();
   const loginMutation = api.auth.login.useMutation({
     async onSuccess(values) {
-      await setAuth(values.token);
-      router.push("/dashboard");
+      await setAuth(values);
+      if (values.onboardingCompleted) {
+        router.push("/dashboard");
+      } else {
+        router.push("/onboarding");
+      }
     },
   });
   const form = useForm({

@@ -2,6 +2,7 @@ import { Button } from "@repo/ui/button";
 import Link from "next/link";
 
 import Logo from "~/components/Logo";
+import { isAuthenticated } from "~/utils/isAuthenticated";
 
 const links = [
   {
@@ -33,12 +34,20 @@ export default function PublicNavBar() {
               {link.name}
             </a>
           ))}
-          <Button asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild variant="destructive">
-            <Link href="/register">Register</Link>
-          </Button>
+          {isAuthenticated() ? (
+            <Button asChild>
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          ) : (
+            <>
+              <Button asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild variant="destructive">
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
+          )}
         </nav>
       </div>
     </header>

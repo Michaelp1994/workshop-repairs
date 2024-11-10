@@ -1,55 +1,16 @@
-import { Toaster } from "@repo/ui/sonner";
-import { cn } from "@repo/ui/utils";
-import { type Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { ReactNode } from "react";
 
-import "~/styles/globals.css";
-import { AuthProvider } from "~/trpc/AuthContext";
-import { TRPCReactProvider } from "~/trpc/client";
+import { redirect } from "next/navigation";
 
-const fontHeading = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-heading",
-});
+import { isAuthenticated } from "~/utils/isAuthenticated";
 
-const fontBody = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-body",
-});
-
-export const metadata: Metadata = {
-  title: {
-    template: "%s | AssetRx",
-    default: "AssetRx",
-  },
-  description: "Workshop App",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
-
-interface RootLayoutProps {
-  children: React.ReactNode;
+interface AuthLayout {
+  children: ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <html
-      className={cn(
-        "min-h-screen w-full scroll-smooth antialiased",
-        fontHeading.variable,
-        fontBody.variable,
-      )}
-      lang="en"
-    >
-      <AuthProvider>
-        <TRPCReactProvider>
-          <body className="min-h-screen w-full">
-            {children}
-            <Toaster closeButton richColors />
-          </body>
-        </TRPCReactProvider>
-      </AuthProvider>
-    </html>
-  );
+export default function AuthLayout({ children }: AuthLayout) {
+  if (isAuthenticated()) {
+    redirect("/dashboard");
+  }
+  return children;
 }

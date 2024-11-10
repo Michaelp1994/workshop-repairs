@@ -21,49 +21,9 @@ import {
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Label } from "./label";
+export { type Path, type UseFormReturn } from "react-hook-form";
 
 const Form = FormProvider;
-
-// interface FormProps<
-//   TFieldValues extends FieldValues = FieldValues,
-//   TContext = any,
-//   TTransformedValues extends FieldValues | undefined = undefined,
-// > {
-//   children: React.ReactNode;
-//   form: UseFormReturn<TFieldValues, TContext, TTransformedValues>;
-//   onValid: SubmitHandler<TFieldValues>;
-//   onInvalid: SubmitErrorHandler<TFieldValues>;
-// }
-
-// function FormFn<
-//   TFieldValues extends FieldValues = FieldValues,
-//   TContext = any,
-//   TTransformedValues extends FieldValues | undefined = undefined,
-// >(
-//   {
-//     children,
-//     onValid,
-//     onInvalid,
-//     form,
-//   }: FormProps<TFieldValues, TContext, TTransformedValues>,
-//   ref: React.ForwardedRef<HTMLFormElement>,
-// ) {
-//   return (
-//     <FormProvider {...form}>
-//       <form
-//         onSubmit={(e) => void form.handleSubmit(onValid, onInvalid)(e)}
-//         onReset={() => {
-//           form.reset();
-//         }}
-//         ref={ref}
-//       >
-//         {children}
-//       </form>
-//     </FormProvider>
-//   );
-// }
-
-// const Form = React.forwardRef(FormFn);
 
 interface UseFormProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -78,15 +38,10 @@ function useForm<
   TFieldValues extends FieldValues = FieldValues,
   TContext = any,
   TTransformedValues extends FieldValues | undefined = undefined,
->({ schema, errorMap, ...props }: UseFormProps<TFieldValues, TContext>) {
-  return _useForm({
+>({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
+  return _useForm<TFieldValues, TContext, TTransformedValues>({
     ...props,
-    resolver: async (data, context, options) => {
-      if (errorMap) {
-        return await zodResolver(schema, { errorMap })(data, context, options);
-      }
-      return await zodResolver(schema)(data, context, options);
-    },
+    resolver: zodResolver(schema),
   });
 }
 

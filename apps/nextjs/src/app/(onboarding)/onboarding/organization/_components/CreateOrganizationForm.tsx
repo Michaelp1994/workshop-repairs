@@ -30,11 +30,11 @@ export default function OnboardingForm() {
   const router = useRouter();
   const [preview, setPreview] = useState<null | string>(null);
   const createMutation = api.organizations.create.useMutation({
-    async onSuccess(data) {
+    async onSuccess() {
       toast.success("Organization created.");
-      router.push("/invitation");
+      router.push("onboarding/invitation");
     },
-    async onError(data) {
+    async onError() {
       toast.error("Can't Create organization.");
     },
   });
