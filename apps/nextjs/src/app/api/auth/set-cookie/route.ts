@@ -1,19 +1,10 @@
+import { session } from "@repo/validators/auth.validators";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { token, onboardingCompleted } = await req.json();
-
-    if (!token) {
-      return NextResponse.json({ error: "JWT token missing" }, { status: 400 });
-    }
-
-    if (!onboardingCompleted) {
-      return NextResponse.json(
-        { error: "OnboardingCompleted missing" },
-        { status: 400 },
-      );
-    }
+    const jsonData = await req.json();
+    const { token, onboardingCompleted } = session.parse(jsonData);
 
     const response = NextResponse.json(
       { message: "Cookie set successfully" },
@@ -31,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     response.cookies.set({
       name: "OnboardingCompleted",
-      value: onboardingCompleted,
+      value: String(onboardingCompleted),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",

@@ -1,6 +1,8 @@
 "use client";
-import { useLocalStorage } from "@uidotdev/usehooks";
+import type { Session } from "@repo/validators/auth.validators";
+
 import React, { createContext, ReactNode, useContext } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 interface AuthContextType {
   token: string | null;
@@ -30,26 +32,20 @@ export function useAuth() {
   }
   const { token, setToken } = context;
 
-  async function setAuth({
-    token,
-    onboardingCompleted,
-  }: {
-    token: string;
-    onboardingCompleted: boolean;
-  }) {
+  async function setAuth(session: Session) {
     try {
       const response = await fetch("/api/auth/set-cookie", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token, onboardingCompleted }),
+        body: JSON.stringify(session),
       });
 
       if (!response.ok) {
         throw new Error("Failed to set cookie");
       }
-      setToken(token);
+      setToken(session.token);
     } catch (error) {
       console.error("Error setting cookie:", error);
     }
@@ -58,7 +54,7 @@ export function useAuth() {
     try {
       const response = await fetch("/api/auth/remove-cookie", {
         method: "POST",
-        credentials: "include", // Include credentials for cookies
+        credentials: "include",
       });
 
       if (!response.ok) {

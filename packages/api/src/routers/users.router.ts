@@ -1,4 +1,3 @@
-import { generateToken } from "@repo/auth/tokens";
 import * as authController from "@repo/db/controllers/auth.controller";
 import * as usersController from "@repo/db/controllers/users.controller";
 import * as authSchemas from "@repo/validators/auth.validators";
@@ -9,6 +8,7 @@ import {
 import * as userSchemas from "@repo/validators/users.validators";
 import { TRPCError } from "@trpc/server";
 
+import createSession from "../helpers/createSession";
 import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
@@ -58,17 +58,10 @@ export default router({
         });
       }
       await usersController.setEmailVerified(user.id);
+
       await authController.deleteConfirmationRequest(request.id);
-      const token = await generateToken({
-        userId: user.id,
-        organizationId: null,
-      });
-      const session: authSchemas.Session = {
-        token,
-        userId: user.id,
-        emailVerified: user.emailVerified,
-        organizationId: user.organizationId,
-      };
+
+      const session = await createSession(user);
       return session;
     }),
 

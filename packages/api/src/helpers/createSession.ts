@@ -5,7 +5,7 @@ import { generateToken } from "@repo/auth/tokens";
 export default async function createSession(user: User) {
   const token = await generateToken({
     userId: user.id,
-    organizationId: user.organizationId,
+    organizationId: user.organization,
   });
   const session: Session = {
     token,
