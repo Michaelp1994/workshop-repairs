@@ -14,7 +14,6 @@ import {
 } from "../mappings/model.mappings";
 import { equipmentTypeTable } from "../schemas/equipment-type.table";
 import { manufacturerTable } from "../schemas/manufacturer.table";
-import { modelImageTable } from "../schemas/model-image.table";
 import {
   type ArchiveModel,
   type CreateModel,
@@ -22,6 +21,7 @@ import {
   modelTable,
   type UpdateModel,
 } from "../schemas/model.table";
+import { modelImageTable } from "../schemas/model-image.table";
 
 const modelFields = getTableColumns(modelTable);
 
