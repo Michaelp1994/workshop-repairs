@@ -1,14 +1,14 @@
-import { userTypes } from "../schemas/user-types.schema";
-import { users } from "../schemas/users.schema";
+import { userTable } from "../schemas/user.table";
+import { userTypeTable } from "../schemas/user-type.table";
 
 export const userOrderMapping = {
-  firstName: users.firstName,
-  email: users.email,
-  type_name: userTypes.name,
-  createdAt: users.createdAt,
-  updatedAt: users.updatedAt,
+  firstName: userTable.firstName,
+  email: userTable.email,
+  type_name: userTypeTable.name,
+  createdAt: userTable.createdAt,
+  updatedAt: userTable.updatedAt,
 };
 
 export const userFilterMapping = {
-  type: userTypes.id,
+  type: userTypeTable.id,
 };

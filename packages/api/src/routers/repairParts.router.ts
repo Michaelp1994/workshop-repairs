@@ -11,21 +11,23 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allRepairParts = repairPartsController.getAll(input, ctx.db);
 
       return allRepairParts;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = repairPartsController.getCount(input, ctx.db);
-    return count;
-  }),
-  getById: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = repairPartsController.getCount(input, ctx.db);
+      return count;
+    }),
+  getById: organizationProcedure
     .input(repairPartSchemas.getById)
     .query(async ({ input, ctx }) => {
       const repairPart = await repairPartsController.getById(input.id, ctx.db);
@@ -39,7 +41,7 @@ export default router({
 
       return repairPart;
     }),
-  getAllByRepairId: protectedProcedure
+  getAllByRepairId: organizationProcedure
     .input(repairPartSchemas.getAllByRepairId)
     .query(async ({ input, ctx }) => {
       const allRepairParts = await repairPartsController.getAllByRepairId(
@@ -49,7 +51,7 @@ export default router({
 
       return allRepairParts;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(repairPartSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -67,7 +69,7 @@ export default router({
 
       return createdRepairPart;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(repairPartSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -85,7 +87,7 @@ export default router({
 
       return updatedRepairPart;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(repairPartSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

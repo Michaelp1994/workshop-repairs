@@ -15,23 +15,38 @@ import {
   type LoginFormInput,
   loginFormSchema,
 } from "@repo/validators/forms/auth.schema";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { login } from "~/app/actions";
+import { useAuth } from "~/auth/AuthContext";
+import ErrorAlert from "~/components/ErrorAlert";
+import { api } from "~/trpc/client";
+import displayFormErrors from "~/utils/displayFormErrors";
 
 export default function LoginForm() {
-  const [message, setMessage] = useState<string | null>(null);
+  const router = useRouter();
+  const utils = api.useUtils();
+  const { setAuth } = useAuth();
+  const loginMutation = api.auth.login.useMutation({
+    async onSuccess(values) {
+      await setAuth(values);
+      await utils.invalidate();
+      if (values.onboardingCompleted) {
+        router.push("/dashboard");
+      } else {
+        router.push("/onboarding");
+      }
+    },
+    async onError(errors) {
+      displayFormErrors(errors, form);
+    },
+  });
   const form = useForm({
     schema: loginFormSchema,
     defaultValues: defaultLogin,
   });
 
-  async function handleValid(data: LoginFormInput) {
-    setMessage(null);
-    const result = await login(data);
-    if (result?.message) {
-      setMessage(result.message);
-    }
+  function handleValid(data: LoginFormInput) {
+    loginMutation.mutate(data);
   }
 
   return (
@@ -69,9 +84,9 @@ export default function LoginForm() {
           }}
         />
 
-        {message && <div className="text-destructive">{message}</div>}
+        <ErrorAlert form={form} />
 
-        <SubmitButton />
+        <SubmitButton isLoading={loginMutation.isPending} />
       </form>
     </Form>
   );

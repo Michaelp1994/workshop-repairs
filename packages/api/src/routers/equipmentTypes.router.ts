@@ -12,31 +12,39 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = equipmentTypesController.getAll(input, ctx.db);
-
-      return allEquipmentTypes;
-    }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = equipmentTypesController.getCount(input, ctx.db);
-    return count;
-  }),
-  getSelect: protectedProcedure
-    .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = await equipmentTypesController.getSelect(
+      const allEquipmentTypes = equipmentTypesController.getAll(
         input,
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       return allEquipmentTypes;
     }),
-  getById: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = equipmentTypesController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
+      return count;
+    }),
+  getSelect: organizationProcedure
+    .input(getSelectSchema)
+    .query(async ({ ctx, input }) => {
+      const allEquipmentTypes = await equipmentTypesController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
+
+      return allEquipmentTypes;
+    }),
+  getById: organizationProcedure
     .input(equipmentTypeSchemas.getById)
     .query(async ({ input, ctx }) => {
       const repairType = await equipmentTypesController.getById(
@@ -53,12 +61,12 @@ export default router({
 
       return repairType;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(equipmentTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdEquipmentType = await equipmentTypesController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 
@@ -71,7 +79,7 @@ export default router({
 
       return createdEquipmentType;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(equipmentTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -89,7 +97,7 @@ export default router({
 
       return updatedEquipmentType;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(equipmentTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

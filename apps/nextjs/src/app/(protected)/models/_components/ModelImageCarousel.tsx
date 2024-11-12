@@ -12,7 +12,7 @@ import { Star } from "@repo/ui/icons";
 import { toast } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface ModelImageCarouselProps extends CarouselProps {
   images: {

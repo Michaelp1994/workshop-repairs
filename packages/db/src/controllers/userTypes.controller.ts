@@ -7,15 +7,15 @@ import {
   type CreateUserType,
   type UpdateUserType,
   type UserTypeID,
-  userTypes,
-} from "../schemas/user-types.schema";
+  userTypeTable,
+} from "../schemas/user-type.table";
 
 export function getAll({ pagination }: GetAll, db: Database) {
   const query = db
     .select()
-    .from(userTypes)
-    .where(isNull(userTypes.deletedAt))
-    .orderBy(userTypes.id)
+    .from(userTypeTable)
+    .where(isNull(userTypeTable.deletedAt))
+    .orderBy(userTypeTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -24,29 +24,32 @@ export function getAll({ pagination }: GetAll, db: Database) {
 export async function getCount(_: GetCount, db: Database) {
   const query = db
     .select({ count: count() })
-    .from(userTypes)
-    .where(isNull(userTypes.deletedAt));
+    .from(userTypeTable)
+    .where(isNull(userTypeTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
 }
 
 export async function getById(input: UserTypeID, db: Database) {
-  const query = db.select().from(userTypes).where(eq(userTypes.id, input));
+  const query = db
+    .select()
+    .from(userTypeTable)
+    .where(eq(userTypeTable.id, input));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateUserType, db: Database) {
-  const query = db.insert(userTypes).values(input).returning();
+  const query = db.insert(userTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateUserType, db: Database) {
   const query = db
-    .update(userTypes)
+    .update(userTypeTable)
     .set(input)
-    .where(eq(userTypes.id, input.id))
+    .where(eq(userTypeTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -54,9 +57,9 @@ export async function update(input: UpdateUserType, db: Database) {
 
 export async function archive(input: ArchiveUserType, db: Database) {
   const query = db
-    .update(userTypes)
+    .update(userTypeTable)
     .set(input)
-    .where(eq(userTypes.id, input.id))
+    .where(eq(userTypeTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

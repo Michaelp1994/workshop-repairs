@@ -1,14 +1,14 @@
 import { integer, timestamp } from "drizzle-orm/pg-core";
 
-import { users } from "./users.schema";
+import { userTable } from "./user.table";
 
 export default {
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-  deletedAt: timestamp("deleted_at"),
-  createdById: integer("created_by")
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp().$onUpdate(() => new Date()),
+  deletedAt: timestamp(),
+  createdById: integer()
     .notNull()
-    .references(() => users.id),
-  updatedById: integer("updated_by").references(() => users.id),
-  deletedById: integer("deleted_by").references(() => users.id),
+    .references(() => userTable.id),
+  updatedById: integer().references(() => userTable.id),
+  deletedById: integer().references(() => userTable.id),
 };

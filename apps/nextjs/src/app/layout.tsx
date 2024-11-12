@@ -1,11 +1,11 @@
-import { SessionProvider } from "@repo/auth/react";
 import { Toaster } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
-import { TRPCReactProvider } from "~/trpc/react";
+import { AuthProvider } from "~/auth/AuthContext";
+import { TRPCReactProvider } from "~/trpc/client";
 
 const fontHeading = Inter({
   subsets: ["latin"],
@@ -20,7 +20,10 @@ const fontBody = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Workshop App",
+  title: {
+    template: "%s | AssetRx",
+    default: "AssetRx",
+  },
   description: "Workshop App",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
@@ -33,20 +36,20 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       className={cn(
-        "h-screen antialiased",
+        "min-h-screen w-full scroll-smooth antialiased",
         fontHeading.variable,
         fontBody.variable,
       )}
       lang="en"
     >
-      <body className="bg-muted/40 h-full">
-        <SessionProvider>
-          <TRPCReactProvider>
+      <AuthProvider>
+        <TRPCReactProvider>
+          <body className="min-h-screen w-full">
             {children}
             <Toaster closeButton richColors />
-          </TRPCReactProvider>
-        </SessionProvider>
-      </body>
+          </body>
+        </TRPCReactProvider>
+      </AuthProvider>
     </html>
   );
 }

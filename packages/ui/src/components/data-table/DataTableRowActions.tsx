@@ -1,15 +1,20 @@
-import { type Row, RowData } from "@tanstack/react-table";
+import { type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "../button";
 
-interface DataTableRowActionsProps<TData extends RowData> {
+interface Data {
+  id: number;
+  [key: string]: unknown;
+}
+
+interface DataTableRowActionsProps<TData extends Data> {
   row: Row<TData>;
   generateUrl?: (row: Row<TData>) => string;
 }
 
-export function DataTableRowActions<TData extends RowData>({
+export function DataTableRowActions<TData extends Data>({
   row,
   generateUrl,
 }: DataTableRowActionsProps<TData>) {

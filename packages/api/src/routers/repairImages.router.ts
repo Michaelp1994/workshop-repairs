@@ -11,21 +11,23 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allRepairImages = repairImagesController.getAll(input, ctx.db);
 
       return allRepairImages;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = repairImagesController.getCount(input, ctx.db);
-    return count;
-  }),
-  getAllByRepairId: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = repairImagesController.getCount(input, ctx.db);
+      return count;
+    }),
+  getAllByRepairId: organizationProcedure
     .input(repairImageSchemas.getAllByRepairId)
     .query(async ({ ctx, input }) => {
       const allRepairImages = repairImagesController.getAllByRepairId(
@@ -34,7 +36,7 @@ export default router({
       );
       return allRepairImages;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(repairImageSchemas.getById)
     .query(async ({ input, ctx }) => {
       const repairImage = await repairImagesController.getById(
@@ -51,7 +53,7 @@ export default router({
 
       return repairImage;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(repairImageSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -69,7 +71,7 @@ export default router({
 
       return createdRepairImage;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(repairImageSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -87,7 +89,7 @@ export default router({
 
       return updatedRepairImage;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(repairImageSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

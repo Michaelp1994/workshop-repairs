@@ -22,7 +22,7 @@ import {
 } from "@repo/validators/forms/partsToModels.schema";
 
 import PartSelect from "~/components/selects/PartSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface CreateModelPartFormProps {
   modelId: ModelID;

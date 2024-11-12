@@ -6,7 +6,7 @@ import { api } from "~/trpc/server";
 interface ActiveAssetsCardProps {}
 
 export default async function ActiveAssetsCard({}: ActiveAssetsCardProps) {
-  const totalAssets = await api.assets.getCount({});
+  const totalAssets = await api.assets.getCount.query({});
 
   return (
     <Card>

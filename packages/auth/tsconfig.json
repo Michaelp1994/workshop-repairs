@@ -1,12 +1,12 @@
 {
-    "extends": "@repo/typescript-config/internal-package.json",
-    "compilerOptions": {
-        "outDir": "dist",
-        "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
-    },
-    "tsc-alias": {
-        "resolveFullPaths": true
-    },
-    "include": ["src"],
-    "exclude": ["node_modules"]
+  "extends": "@repo/typescript-config/internal-package.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
+  },
+  "include": ["src", "sst-env.d.ts", "vitest.config.ts"],
+  "exclude": ["node_modules"]
 }

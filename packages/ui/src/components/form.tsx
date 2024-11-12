@@ -5,6 +5,7 @@ import type { ZodErrorMap, ZodSchema } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Slot } from "@radix-ui/react-slot";
+import { LoaderCircle } from "lucide-react";
 import * as React from "react";
 import {
   useForm as _useForm,
@@ -20,53 +21,13 @@ import {
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Label } from "./label";
-
+export { type Path, type UseFormReturn } from "react-hook-form";
+export { useFormContext } from "react-hook-form";
 const Form = FormProvider;
-
-// interface FormProps<
-//   TFieldValues extends FieldValues = FieldValues,
-//   TContext = any,
-//   TTransformedValues extends FieldValues | undefined = undefined,
-// > {
-//   children: React.ReactNode;
-//   form: UseFormReturn<TFieldValues, TContext, TTransformedValues>;
-//   onValid: SubmitHandler<TFieldValues>;
-//   onInvalid: SubmitErrorHandler<TFieldValues>;
-// }
-
-// function FormFn<
-//   TFieldValues extends FieldValues = FieldValues,
-//   TContext = any,
-//   TTransformedValues extends FieldValues | undefined = undefined,
-// >(
-//   {
-//     children,
-//     onValid,
-//     onInvalid,
-//     form,
-//   }: FormProps<TFieldValues, TContext, TTransformedValues>,
-//   ref: React.ForwardedRef<HTMLFormElement>,
-// ) {
-//   return (
-//     <FormProvider {...form}>
-//       <form
-//         onSubmit={(e) => void form.handleSubmit(onValid, onInvalid)(e)}
-//         onReset={() => {
-//           form.reset();
-//         }}
-//         ref={ref}
-//       >
-//         {children}
-//       </form>
-//     </FormProvider>
-//   );
-// }
-
-// const Form = React.forwardRef(FormFn);
 
 interface UseFormProps<
   TFieldValues extends FieldValues = FieldValues,
-  TContext = any,
+  TContext = unknown,
 > extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
   schema: ZodSchema<TFieldValues>;
   errorMap?: ZodErrorMap;
@@ -75,17 +36,12 @@ interface UseFormProps<
 
 function useForm<
   TFieldValues extends FieldValues = FieldValues,
-  TContext = any,
+  TContext = unknown,
   TTransformedValues extends FieldValues | undefined = undefined,
->({ schema, errorMap, ...props }: UseFormProps<TFieldValues, TContext>) {
-  return _useForm({
+>({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
+  return _useForm<TFieldValues, TContext, TTransformedValues>({
     ...props,
-    resolver: async (data, context, options) => {
-      if (errorMap) {
-        return await zodResolver(schema, { errorMap })(data, context, options);
-      }
-      return await zodResolver(schema)(data, context, options);
-    },
+    resolver: zodResolver(schema),
   });
 }
 
@@ -257,12 +213,20 @@ interface SubmitButtonProps
 }
 
 const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
-  ({ isLoading, ...buttonProps }, ref) => (
+  ({ isLoading, children, ...buttonProps }, ref) => (
     <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
-      {isLoading ? "Loading..." : "Submit"}
+      {isLoading ? (
+        <LoaderCircle className="animate-spin" />
+      ) : children ? (
+        children
+      ) : (
+        "Submit"
+      )}
     </Button>
   ),
 );
+
+SubmitButton.displayName = "SubmitButton";
 
 const ResetButton = React.forwardRef<
   HTMLButtonElement,
@@ -272,6 +236,8 @@ const ResetButton = React.forwardRef<
     Reset
   </Button>
 ));
+
+ResetButton.displayName = "ResetButton";
 
 export {
   Form,

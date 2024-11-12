@@ -12,19 +12,25 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getAll(input, ctx.db);
+      const allClients = await clientsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
       return allClients;
     }),
-  getCount: protectedProcedure
+  getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await clientsController.getCount(input, ctx.db);
+      const count = await clientsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
 
       if (count === undefined) {
         throw new TRPCError({
@@ -34,14 +40,17 @@ export default router({
       }
       return count;
     }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getSelect(input, ctx.db);
+      const allClients = await clientsController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
 
       return allClients;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(clientSchemas.getById)
     .query(async ({ input, ctx }) => {
       const client = await clientsController.getById(input.id, ctx.db);
@@ -55,12 +64,12 @@ export default router({
 
       return client;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(clientSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdClient = await clientsController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 
@@ -73,7 +82,7 @@ export default router({
 
       return createdClient;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(clientSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -91,7 +100,7 @@ export default router({
 
       return updatedClient;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(clientSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

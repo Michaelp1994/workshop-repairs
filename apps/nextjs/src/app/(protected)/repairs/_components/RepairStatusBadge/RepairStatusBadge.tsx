@@ -3,7 +3,7 @@ import type { RepairID } from "@repo/validators/ids.validators";
 
 import { Badge } from "@repo/ui/badge";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface RepairStatusBadgeProps {
   repairId: RepairID;

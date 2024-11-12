@@ -7,25 +7,28 @@
   "author": "",
   "type": "module",
   "exports": {
-    ".": "./src/auth.ts",
-    "./react": "./src/react.ts"
+    "./*": "./src/*.ts",
+    ".": "./src/index.ts"
   },
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "dependencies": {
+    "@node-rs/argon2": "^2.0.0",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "@repo/db": "workspace:^",
     "@repo/validators": "workspace:^",
-    "bcrypt": "^5.1.1",
-    "next-auth": "5.0.0-beta.20"
+    "jose": "^5.9.6"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/bcrypt": "^5.0.2",
-    "eslint": "^9.9.1"
+    "eslint": "^9.14.0",
+    "sst": "3.3.19",
+    "vitest": "^2.1.4"
   }
 }

@@ -1,14 +1,14 @@
-import { manufacturers } from "../schemas/manufacturers.schema";
-import { models } from "../schemas/models.schema";
+import { manufacturerTable } from "../schemas/manufacturer.table";
+import { modelTable } from "../schemas/model.table";
 
 export const modelOrderMapping = {
-  name: models.name,
-  nickname: models.nickname,
-  createdAt: models.createdAt,
-  updatedAt: models.updatedAt,
-  manufacturer_name: manufacturers.name,
+  name: modelTable.name,
+  nickname: modelTable.nickname,
+  createdAt: modelTable.createdAt,
+  updatedAt: modelTable.updatedAt,
+  manufacturer_name: manufacturerTable.name,
 };
 
 export const modelFilterMapping = {
-  manufacturer_id: manufacturers.id,
+  manufacturer_id: manufacturerTable.id,
 };

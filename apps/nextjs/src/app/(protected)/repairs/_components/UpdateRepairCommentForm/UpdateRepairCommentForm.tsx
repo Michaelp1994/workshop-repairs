@@ -21,7 +21,7 @@ import {
 } from "@repo/validators/forms/repairComments.schema";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateRepairCommentFormProps {
   repairCommentId: RepairCommentID;

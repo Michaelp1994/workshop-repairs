@@ -1,11 +1,19 @@
 import { z } from "zod";
 
-export const OTP_LENGTH = 6;
-
 export const login = z.object({
   email: z.string().email(),
   password: z.string(),
 });
+
+export const session = z.object({
+  token: z.string(),
+  onboardingCompleted: z.boolean(),
+  emailVerified: z.boolean(),
+});
+
+export type Session = z.infer<typeof session>;
+
+export const logout = z.object({});
 
 export const register = z.object({
   firstName: z.string().min(3),
@@ -14,9 +22,14 @@ export const register = z.object({
   password: z.string().min(8),
 });
 
+export const confirmEmail = z.object({
+  email: z.string().email(),
+  code: z.string(),
+});
+
 export const resetPassword = z.object({
   email: z.string().email(),
-  otp: z.string().length(OTP_LENGTH),
+  otp: z.string(),
 });
 
 export const forgotPassword = z.object({

@@ -2,22 +2,22 @@ import { and, count, eq, isNull } from "drizzle-orm";
 
 import type { Database } from "..";
 import type { GetAll, GetCount } from "../helpers/types";
-import type { RepairID } from "../schemas/repairs.schema";
+import type { RepairID } from "../schemas/repair.table";
 
 import {
   type ArchiveRepairImage,
   type CreateRepairImage,
   type RepairImageID,
-  repairImages,
+  repairImageTable,
   type UpdateRepairImage,
-} from "../schemas/repair-images.schema";
+} from "../schemas/repair-image.table";
 
 export function getAll({ pagination }: GetAll, db: Database) {
   const query = db
     .select()
-    .from(repairImages)
-    .where(isNull(repairImages.deletedAt))
-    .orderBy(repairImages.id)
+    .from(repairImageTable)
+    .where(isNull(repairImageTable.deletedAt))
+    .orderBy(repairImageTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -25,39 +25,42 @@ export function getAll({ pagination }: GetAll, db: Database) {
 export async function getCount(_: GetCount, db: Database) {
   const query = db
     .select({ count: count() })
-    .from(repairImages)
-    .where(isNull(repairImages.deletedAt));
+    .from(repairImageTable)
+    .where(isNull(repairImageTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
 }
 export async function getById(input: RepairImageID, db: Database) {
   const query = db
     .select()
-    .from(repairImages)
-    .where(eq(repairImages.id, input));
+    .from(repairImageTable)
+    .where(eq(repairImageTable.id, input));
   const [res] = await query.execute();
   return res;
 }
 export async function getAllByRepairId(input: RepairID, db: Database) {
   const query = db
     .select()
-    .from(repairImages)
+    .from(repairImageTable)
     .where(
-      and(isNull(repairImages.deletedAt), eq(repairImages.repairId, input)),
+      and(
+        isNull(repairImageTable.deletedAt),
+        eq(repairImageTable.repairId, input),
+      ),
     );
   const res = await query.execute();
   return res;
 }
 export async function create(input: CreateRepairImage, db: Database) {
-  const query = db.insert(repairImages).values(input).returning();
+  const query = db.insert(repairImageTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 export async function update(input: UpdateRepairImage, db: Database) {
   const query = db
-    .update(repairImages)
+    .update(repairImageTable)
     .set(input)
-    .where(eq(repairImages.id, input.id))
+    .where(eq(repairImageTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -65,9 +68,9 @@ export async function update(input: UpdateRepairImage, db: Database) {
 
 export async function archive(input: ArchiveRepairImage, db: Database) {
   const query = db
-    .update(repairImages)
+    .update(repairImageTable)
     .set(input)
-    .where(eq(repairImages.id, input.id))
+    .where(eq(repairImageTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

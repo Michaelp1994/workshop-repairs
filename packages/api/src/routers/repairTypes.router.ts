@@ -12,34 +12,27 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairTypes = repairTypesController.getAll(input, ctx.db);
-
-      return allRepairTypes;
-    }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = repairTypesController.getCount(input, ctx.db);
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
+    const allRepairTypes = repairTypesController.getAll(input);
+    return allRepairTypes;
+  }),
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const count = repairTypesController.getCount(input);
     return count;
   }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairTypes = await repairTypesController.getSelect(
-        input,
-        ctx.db,
-      );
-
+    .query(async ({ input }) => {
+      const allRepairTypes = await repairTypesController.getSelect(input);
       return allRepairTypes;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(repairTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairType = await repairTypesController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const repairType = await repairTypesController.getById(input.id);
 
       if (!repairType) {
         throw new TRPCError({
@@ -50,14 +43,14 @@ export default router({
 
       return repairType;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(repairTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairType = await repairTypesController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const createdRepairType = await repairTypesController.create({
+        ...input,
+        ...metadata,
+      });
 
       if (!createdRepairType) {
         throw new TRPCError({
@@ -68,14 +61,14 @@ export default router({
 
       return createdRepairType;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(repairTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairType = await repairTypesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedRepairType = await repairTypesController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedRepairType) {
         throw new TRPCError({
@@ -86,15 +79,15 @@ export default router({
 
       return updatedRepairType;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(repairTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedRepairType = await repairTypesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedRepairType = await repairTypesController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedRepairType) {
         throw new TRPCError({

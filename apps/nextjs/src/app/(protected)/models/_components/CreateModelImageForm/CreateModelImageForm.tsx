@@ -20,7 +20,7 @@ import {
 import { type ModelID } from "@repo/validators/ids.validators";
 import { useRef } from "react";
 
-import { uploadModelImage } from "~/app/actions";
+// import { uploadModelImage } from "~/app/actions";
 
 interface CreateModelImageFormProps {
   modelId: ModelID;
@@ -29,7 +29,7 @@ interface CreateModelImageFormProps {
 export default function CreateModelImageForm({
   modelId,
 }: CreateModelImageFormProps) {
-  const uploadModelImageWithId = uploadModelImage.bind(null, modelId);
+  // const uploadModelImageWithId = uploadModelImage.bind(null, modelId);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm({

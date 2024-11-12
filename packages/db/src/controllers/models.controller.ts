@@ -1,33 +1,39 @@
 import { and, count, eq, getTableColumns, ilike, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.table";
+
 import { formatSearch } from "../helpers/formatSearch";
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { db } from "../index";
 import {
   modelFilterMapping,
   modelOrderMapping,
 } from "../mappings/model.mappings";
-import { equipmentTypes } from "../schemas/equipment-types.schema";
-import { manufacturers } from "../schemas/manufacturers.schema";
-import { modelImages } from "../schemas/model-images.schema";
+import { equipmentTypeTable } from "../schemas/equipment-type.table";
+import { manufacturerTable } from "../schemas/manufacturer.table";
 import {
   type ArchiveModel,
   type CreateModel,
   type ModelID,
-  models,
+  modelTable,
   type UpdateModel,
-} from "../schemas/models.schema";
+} from "../schemas/model.table";
+import { modelImageTable } from "../schemas/model-image.table";
 
-const modelFields = getTableColumns(models);
+const modelFields = getTableColumns(modelTable);
 
-const globalFilterColumns = [models.name, models.nickname, manufacturers.name];
+const globalFilterColumns = [
+  modelTable.name,
+  modelTable.nickname,
+  manufacturerTable.name,
+];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -41,29 +47,43 @@ export function getAll(
 
   const query = db
     .select({
-      id: models.id,
-      name: models.name,
-      nickname: models.nickname,
-      defaultImageUrl: modelImages.url,
+      id: modelTable.id,
+      name: modelTable.name,
+      nickname: modelTable.nickname,
+      defaultImageUrl: modelImageTable.url,
       equipmentType: {
-        id: equipmentTypes.id,
-        name: equipmentTypes.name,
+        id: equipmentTypeTable.id,
+        name: equipmentTypeTable.name,
       },
       manufacturer: {
-        id: manufacturers.id,
-        name: manufacturers.name,
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
       },
-      createdAt: models.createdAt,
-      updatedAt: models.updatedAt,
+      createdAt: modelTable.createdAt,
+      updatedAt: modelTable.updatedAt,
     })
-    .from(models)
-    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .innerJoin(equipmentTypes, eq(models.equipmentTypeId, equipmentTypes.id))
-    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-    .where(
-      and(isNull(models.deletedAt), globalFilterParams, ...columnFilterParams),
+    .from(modelTable)
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
     )
-    .orderBy(...orderByParams, models.id)
+    .innerJoin(
+      equipmentTypeTable,
+      eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
+    )
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
+    .where(
+      and(
+        isNull(modelTable.deletedAt),
+        eq(modelTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    )
+    .orderBy(...orderByParams, modelTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -71,7 +91,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -84,75 +104,93 @@ export async function getCount(
 
   const query = db
     .select({ count: count() })
-    .from(models)
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .from(modelTable)
+    .leftJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
     .where(
-      and(isNull(models.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(modelTable.deletedAt),
+        eq(modelTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
 
   const [res] = await query.execute();
   return res?.count;
 }
 
-export function getSelect({ globalFilter = "" }: GetSelect, db: Database) {
+export function getSelect(
+  { globalFilter = "" }: GetSelect,
+  organizationId: OrganizationID,
+) {
   const searchQuery = formatSearch(globalFilter);
 
   const query = db
     .select({
-      value: models.id,
-      label: models.name,
+      value: modelTable.id,
+      label: modelTable.name,
     })
-    .from(models)
+    .from(modelTable)
     .where(
       and(
-        isNull(models.deletedAt),
-        globalFilter !== "" ? ilike(models.name, searchQuery) : undefined,
+        isNull(modelTable.deletedAt),
+        eq(modelTable.organizationId, organizationId),
+        globalFilter !== "" ? ilike(modelTable.name, searchQuery) : undefined,
       ),
     )
-    .orderBy(models.id);
+    .orderBy(modelTable.id);
   const res = query.execute();
   return res;
 }
 
-export async function getById(id: ModelID, db: Database) {
+export async function getById(id: ModelID) {
   const query = db
     .select({
       ...modelFields,
       manufacturer: {
-        id: manufacturers.id,
-        name: manufacturers.name,
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
       },
-      imageUrl: modelImages.url,
+      imageUrl: modelImageTable.url,
     })
-    .from(models)
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-    .where(eq(models.id, id));
+    .from(modelTable)
+    .leftJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
+    .where(eq(modelTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateModel, db: Database) {
-  const query = db.insert(models).values(input).returning();
+export async function create(input: CreateModel) {
+  const query = db.insert(modelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateModel, db: Database) {
+export async function update(input: UpdateModel) {
   const query = db
-    .update(models)
+    .update(modelTable)
     .set(input)
-    .where(eq(models.id, input.id))
+    .where(eq(modelTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archive(input: ArchiveModel, db: Database) {
+export async function archive(input: ArchiveModel) {
   const query = db
-    .update(models)
+    .update(modelTable)
     .set(input)
-    .where(eq(models.id, input.id))
+    .where(eq(modelTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

@@ -2,26 +2,26 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
-import { assets } from "../schemas/assets.schema";
-import { parts } from "../schemas/parts.schema";
+import { assetTable } from "../schemas/asset.table";
+import { partTable } from "../schemas/part.table";
+import { type RepairID, repairTable } from "../schemas/repair.table";
 import {
   type ArchiveRepairPart,
   type CreateRepairPart,
   type RepairPartID,
-  repairParts,
+  repairPartTable,
   type UpdateRepairPart,
-} from "../schemas/repair-parts.schema";
-import { type RepairID, repairs } from "../schemas/repairs.schema";
+} from "../schemas/repair-part.table";
 
-const repairPartFields = getTableColumns(repairParts);
-const assetFields = getTableColumns(assets);
+const repairPartFields = getTableColumns(repairPartTable);
+const assetFields = getTableColumns(assetTable);
 
 export function getAll({ pagination }: GetAll, db: Database) {
   const query = db
     .select()
-    .from(repairParts)
-    .where(isNull(repairParts.deletedAt))
-    .orderBy(repairParts.id)
+    .from(repairPartTable)
+    .where(isNull(repairPartTable.deletedAt))
+    .orderBy(repairPartTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -30,8 +30,8 @@ export function getAll({ pagination }: GetAll, db: Database) {
 export async function getCount(_: GetCount, db: Database) {
   const query = db
     .select({ count: count() })
-    .from(repairParts)
-    .where(isNull(repairParts.deletedAt));
+    .from(repairPartTable)
+    .where(isNull(repairPartTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
 }
@@ -42,10 +42,10 @@ export async function getById(input: RepairPartID, db: Database) {
       ...repairPartFields,
       assets: assetFields,
     })
-    .from(repairParts)
-    .innerJoin(repairs, eq(repairs.id, repairParts.repairId))
-    .innerJoin(assets, eq(assets.id, repairs.assetId))
-    .where(eq(repairParts.id, input));
+    .from(repairPartTable)
+    .innerJoin(repairTable, eq(repairTable.id, repairPartTable.repairId))
+    .innerJoin(assetTable, eq(assetTable.id, repairTable.assetId))
+    .where(eq(repairPartTable.id, input));
   const [res] = await query.execute();
   return res;
 }
@@ -53,24 +53,29 @@ export async function getById(input: RepairPartID, db: Database) {
 export async function getAllByRepairId(input: RepairID, db: Database) {
   const query = db
     .select()
-    .from(repairParts)
-    .innerJoin(parts, eq(parts.id, repairParts.partId))
-    .where(and(isNull(repairParts.deletedAt), eq(repairParts.repairId, input)));
+    .from(repairPartTable)
+    .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
+    .where(
+      and(
+        isNull(repairPartTable.deletedAt),
+        eq(repairPartTable.repairId, input),
+      ),
+    );
   const res = await query.execute();
   return res;
 }
 
 export async function create(input: CreateRepairPart, db: Database) {
-  const query = db.insert(repairParts).values(input).returning();
+  const query = db.insert(repairPartTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateRepairPart, db: Database) {
   const query = db
-    .update(repairParts)
+    .update(repairPartTable)
     .set(input)
-    .where(eq(repairParts.id, input.id))
+    .where(eq(repairPartTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -78,9 +83,9 @@ export async function update(input: UpdateRepairPart, db: Database) {
 
 export async function archive(input: ArchiveRepairPart, db: Database) {
   const query = db
-    .update(repairParts)
+    .update(repairPartTable)
     .set(input)
-    .where(eq(repairParts.id, input.id))
+    .where(eq(repairPartTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

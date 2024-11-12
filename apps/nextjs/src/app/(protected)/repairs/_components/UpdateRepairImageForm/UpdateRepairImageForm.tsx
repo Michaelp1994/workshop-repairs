@@ -19,7 +19,7 @@ import {
   repairImageFormSchema,
 } from "@repo/validators/forms/repairImages.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateRepairImageFormProps {
   repairImageId: RepairImageID;

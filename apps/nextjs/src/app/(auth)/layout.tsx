@@ -1,11 +1,16 @@
-interface LoginLayoutProps {
-  children: React.ReactNode;
+import type { ReactNode } from "react";
+
+import { redirect } from "next/navigation";
+
+import { isAuthenticated } from "~/auth/cookies";
+
+interface AuthLayout {
+  children: ReactNode;
 }
 
-export default function LoginLayout({ children }: LoginLayoutProps) {
-  return (
-    <div className="grid h-full items-center justify-center">
-      <div className="w-[500px] max-w-sm">{children}</div>
-    </div>
-  );
+export default function AuthLayout({ children }: AuthLayout) {
+  if (isAuthenticated()) {
+    redirect("/dashboard");
+  }
+  return children;
 }

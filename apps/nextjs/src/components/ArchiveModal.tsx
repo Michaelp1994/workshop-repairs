@@ -1,4 +1,4 @@
-import type React from "react";
+import type { ReactNode } from "react";
 
 import { Button } from "@repo/ui/button";
 import {
@@ -15,8 +15,8 @@ import {
 interface ArchiveModalProps {
   onCancel: () => void;
   onConfirm: () => void;
-  title: React.ReactNode;
-  description: React.ReactNode;
+  title: ReactNode;
+  description: ReactNode;
 }
 
 export default function ArchiveModal({

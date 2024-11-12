@@ -1,31 +1,22 @@
-import { type Session } from "@repo/auth";
+import type { Session } from "../createContext";
 
 export function createMetadata(session: Session) {
-  if (!session.user?.id) {
-    throw new Error("Session data not found");
-  }
   return {
     createdAt: new Date(),
-    createdById: Number(session.user.id),
+    createdById: session.userId,
   };
 }
 
 export function updateMetadata(session: Session) {
-  if (!session.user?.id) {
-    throw new Error("Session data not found");
-  }
   return {
     updatedAt: new Date(),
-    updatedById: Number(session.user.id),
+    updatedById: session.userId,
   };
 }
 
 export function archiveMetadata(session: Session) {
-  if (!session.user?.id) {
-    throw new Error("Session data not found");
-  }
   return {
     deletedAt: new Date(),
-    deletedById: Number(session.user.id),
+    deletedById: session.userId,
   };
 }

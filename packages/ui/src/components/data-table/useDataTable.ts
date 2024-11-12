@@ -9,7 +9,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
-import { type ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 export interface InitialDataTableState {
   pagination?: PaginationState;
@@ -104,7 +104,10 @@ export function useDataTableState(initialData?: InitialDataTableState) {
 //   // id: number;
 // }
 
-type BaseData = Record<string, unknown>;
+interface BaseData {
+  id: number;
+  [key: string]: unknown;
+}
 
 type RedactedTableOptions<TData extends BaseData> = Omit<
   TableOptions<TData>,

@@ -12,7 +12,7 @@ import { toast } from "@repo/ui/sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 interface ArchiveRepairCommentPageProps {
@@ -42,7 +42,6 @@ export default function ArchiveRepairCommentPage({
   });
 
   async function archiveRepairComment() {
-    console.log({ repairCommentId });
     await archiveMutation.mutateAsync({ id: repairCommentId });
   }
 

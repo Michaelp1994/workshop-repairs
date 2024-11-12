@@ -20,7 +20,7 @@ import {
 } from "@repo/validators/forms/clients.schema";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function CreateClientForm() {
   const router = useRouter();
@@ -63,7 +63,7 @@ export default function CreateClientForm() {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

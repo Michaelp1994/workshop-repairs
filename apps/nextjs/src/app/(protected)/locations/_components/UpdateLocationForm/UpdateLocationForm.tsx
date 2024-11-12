@@ -20,7 +20,7 @@ import {
   locationFormSchema,
 } from "@repo/validators/forms/locations.schema";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateLocationFormProps {
   locationId: LocationID;

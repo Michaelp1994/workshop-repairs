@@ -23,7 +23,7 @@ import {
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface UpdateModelFormProps {
   modelId: ModelID;

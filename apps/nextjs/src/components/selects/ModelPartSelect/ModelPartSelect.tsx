@@ -2,7 +2,7 @@ import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { type ElementRef, forwardRef } from "react";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface ModelPartSelectProps extends Omit<ComboboxProps, "data"> {
   modelId: ModelID;

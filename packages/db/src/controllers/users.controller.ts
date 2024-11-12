@@ -1,10 +1,12 @@
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
+
+import type { OrganizationID } from "../schemas/organization.table";
 
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount } from "../helpers/types";
-import { type Database } from "../index";
+import { db } from "../index";
 import {
   userFilterMapping,
   userOrderMapping,
@@ -14,14 +16,17 @@ import {
   type CreateUser,
   type UpdateUser,
   type UserID,
-  users,
-} from "../schemas/users.schema";
+  userTable,
+} from "../schemas/user.table";
 
-const globalFilterColumns = [users.firstName, users.email];
+const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
+  getTableColumns(userTable);
+
+const globalFilterColumns = [userTable.firstName, userTable.email];
 
 export function getAll(
   { globalFilter, sorting, pagination, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderByParams(sorting, userOrderMapping);
   const globalFilterParams = getGlobalFilterParams(
@@ -33,12 +38,17 @@ export function getAll(
     userFilterMapping,
   );
   const query = db
-    .select()
-    .from(users)
+    .select({ ...publicUserColumns })
+    .from(userTable)
     .where(
-      and(isNull(users.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(userTable.deletedAt),
+        eq(userTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
-    .orderBy(...orderByParams, users.id)
+    .orderBy(...orderByParams, userTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -46,7 +56,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -58,60 +68,72 @@ export async function getCount(
   );
   const query = db
     .select({ count: count() })
-    .from(users)
+    .from(userTable)
     .where(
-      and(isNull(users.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(userTable.deletedAt),
+        eq(userTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
   const [res] = await query.execute();
   return res?.count;
 }
 
-export async function getById(input: UserID, db: Database) {
-  const query = db.select().from(users).where(eq(users.id, input));
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function getByEmail(input: string, db: Database) {
-  const query = db.select().from(users).where(eq(users.email, input));
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function getByLoginDetails(
-  { email, password }: { email: string; password: string },
-  db: Database,
-) {
+export async function getById(input: UserID) {
   const query = db
-    .select()
-    .from(users)
-    .where(and(eq(users.email, email), eq(users.password, password)));
+    .select({ ...publicUserColumns })
+    .from(userTable)
+    .where(eq(userTable.id, input));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateUser, db: Database) {
-  const query = db.insert(users).values(input).returning();
+export async function getByEmail(input: string) {
+  const query = db.select().from(userTable).where(eq(userTable.email, input));
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateUser, db: Database) {
+export async function setEmailVerified(input: UserID) {
   const query = db
-    .update(users)
+    .update(userTable)
+    .set({
+      emailVerified: true,
+    })
+    .where(eq(userTable.id, input))
+    .returning({ ...publicUserColumns });
+
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function create(input: CreateUser) {
+  const query = db
+    .insert(userTable)
+    .values(input)
+    .returning({ ...publicUserColumns });
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function update(input: UpdateUser) {
+  const query = db
+    .update(userTable)
     .set(input)
-    .where(eq(users.id, input.id))
-    .returning();
+    .where(eq(userTable.id, input.id))
+    .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;
 }
 
-export async function archive(input: ArchiveUser, db: Database) {
+export async function archive(input: ArchiveUser) {
   const query = db
-    .update(users)
+    .update(userTable)
     .set(input)
-    .where(eq(users.id, input.id))
-    .returning();
+    .where(eq(userTable.id, input.id))
+    .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;
 }

@@ -24,7 +24,7 @@ import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
 import ModelSelect from "~/components/selects/ModelSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function CreateAssetForm() {
   const router = useRouter();
@@ -45,7 +45,6 @@ export default function CreateAssetForm() {
   });
 
   async function handleValid(values: AssetFormInput) {
-    console.log("test");
     await createMutation.mutateAsync(values);
   }
   return (

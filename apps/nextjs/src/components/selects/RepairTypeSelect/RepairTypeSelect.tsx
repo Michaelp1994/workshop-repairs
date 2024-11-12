@@ -3,7 +3,7 @@ import type { RepairTypeID } from "@repo/validators/ids.validators";
 import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
 import { type ElementRef, forwardRef } from "react";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface RepairTypeSelectProps extends Omit<ComboboxProps, "data"> {
   value: RepairTypeID;

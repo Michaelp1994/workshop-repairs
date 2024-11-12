@@ -11,20 +11,22 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allUserTypes = userTypesController.getAll(input, ctx.db);
       return allUserTypes;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = userTypesController.getCount(input, ctx.db);
-    return count;
-  }),
-  getById: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = userTypesController.getCount(input, ctx.db);
+      return count;
+    }),
+  getById: organizationProcedure
     .input(userTypeSchemas.getById)
     .query(async ({ input, ctx }) => {
       const userType = await userTypesController.getById(input.id, ctx.db);
@@ -38,7 +40,7 @@ export default router({
 
       return userType;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(userTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
@@ -58,7 +60,7 @@ export default router({
 
       return createdUserType;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(userTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -76,7 +78,7 @@ export default router({
 
       return updatedUserType;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(userTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

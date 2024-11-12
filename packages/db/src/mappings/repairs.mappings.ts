@@ -1,23 +1,23 @@
-import { assets } from "../schemas/assets.schema";
-import { repairStatusTypes } from "../schemas/repair-status-types.schema";
-import { repairTypes } from "../schemas/repair-types.schema";
-import { repairs } from "../schemas/repairs.schema";
+import { assetTable } from "../schemas/asset.table";
+import { repairTable } from "../schemas/repair.table";
+import { repairStatusTypeTable } from "../schemas/repair-status-type.table";
+import { repairTypeTable } from "../schemas/repair-type.table";
 import { FilterMapping } from "../types";
 
 export const repairOrderMapping = {
-  fault: repairs.fault,
-  summary: repairs.summary,
-  type_name: repairTypes.name,
-  status_name: repairStatusTypes.name,
-  asset_assetNumber: assets.assetNumber,
-  asset_serialNumber: assets.serialNumber,
-  clientReference: repairs.clientReference,
-  createdAt: repairs.createdAt,
-  updatedAt: repairs.updatedAt,
+  fault: repairTable.fault,
+  summary: repairTable.summary,
+  type_name: repairTypeTable.name,
+  status_name: repairStatusTypeTable.name,
+  asset_assetNumber: assetTable.assetNumber,
+  asset_serialNumber: assetTable.serialNumber,
+  clientReference: repairTable.clientReference,
+  createdAt: repairTable.createdAt,
+  updatedAt: repairTable.updatedAt,
 };
 
 export const repairFilterMapping: FilterMapping = {
-  status: repairs.statusId,
-  asset_id: repairs.assetId,
-  client_id: repairs.clientId,
+  status: repairTable.statusId,
+  asset_id: repairTable.assetId,
+  client_id: repairTable.clientId,
 };

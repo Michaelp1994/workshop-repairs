@@ -6,42 +6,44 @@ import type {
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.table";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type Database } from "../index";
+import { db } from "../index";
 import {
   assetFilterMapping,
   assetOrderMapping,
 } from "../mappings/assets.mappings";
-import { assetStatuses } from "../schemas/asset-statuses.schema";
 import {
   type ArchiveAsset,
   type AssetID,
-  assets,
+  assetTable,
   type CreateAsset,
   type UpdateAsset,
-} from "../schemas/assets.schema";
-import { clients } from "../schemas/clients.schema";
-import { locations } from "../schemas/locations.schema";
-import { manufacturers } from "../schemas/manufacturers.schema";
-import { modelImages } from "../schemas/model-images.schema";
-import { models } from "../schemas/models.schema";
-import { type RepairID, repairs } from "../schemas/repairs.schema";
+} from "../schemas/asset.table";
+import { assetStatusTable } from "../schemas/asset-status.table";
+import { clientTable } from "../schemas/client.table";
+import { locationTable } from "../schemas/location.table";
+import { manufacturerTable } from "../schemas/manufacturer.table";
+import { modelTable } from "../schemas/model.table";
+import { modelImageTable } from "../schemas/model-image.table";
+import { type RepairID, repairTable } from "../schemas/repair.table";
 
-const assetFields = getTableColumns(assets);
+const assetFields = getTableColumns(assetTable);
 
 const globalFilterColumns = [
-  assets.assetNumber,
-  assets.serialNumber,
-  locations.name,
-  manufacturers.name,
-  models.name,
+  assetTable.assetNumber,
+  assetTable.serialNumber,
+  locationTable.name,
+  manufacturerTable.name,
+  modelTable.name,
 ];
 
 export function getAll(
   { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderByParams(sorting, assetOrderMapping);
   const globalFilterParams = getGlobalFilterParams(
@@ -57,38 +59,49 @@ export function getAll(
     .select({
       ...assetFields,
       location: {
-        id: locations.id,
-        name: locations.name,
+        id: locationTable.id,
+        name: locationTable.name,
       },
       status: {
-        id: assetStatuses.id,
-        name: assetStatuses.name,
+        id: assetStatusTable.id,
+        name: assetStatusTable.name,
       },
       client: {
-        id: clients.id,
-        name: clients.name,
+        id: clientTable.id,
+        name: clientTable.name,
       },
       model: {
-        id: models.id,
-        nickname: models.nickname,
-        imageUrl: modelImages.url,
+        id: modelTable.id,
+        nickname: modelTable.nickname,
+        imageUrl: modelImageTable.url,
       },
       manufacturer: {
-        id: manufacturers.id,
-        name: manufacturers.name,
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
       },
     })
-    .from(assets)
-    .innerJoin(locations, eq(assets.locationId, locations.id))
-    .innerJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
-    .innerJoin(models, eq(assets.modelId, models.id))
-    .innerJoin(clients, eq(assets.clientId, clients.id))
-    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-    .where(
-      and(isNull(assets.deletedAt), globalFilterParams, ...columnFilterParams),
+    .from(assetTable)
+    .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
+    .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
+    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .innerJoin(clientTable, eq(assetTable.clientId, clientTable.id))
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
     )
-    .orderBy(...orderByParams, assets.id)
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
+    .where(
+      and(
+        isNull(assetTable.deletedAt),
+        eq(assetTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    )
+    .orderBy(...orderByParams, assetTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
 
@@ -97,7 +110,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCountInput,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -110,13 +123,21 @@ export async function getCount(
 
   const query = db
     .select({ count: count() })
-    .from(assets)
-    .innerJoin(locations, eq(assets.locationId, locations.id))
-    .innerJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
-    .innerJoin(models, eq(assets.modelId, models.id))
-    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
+    .from(assetTable)
+    .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
+    .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
+    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
     .where(
-      and(isNull(assets.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(assetTable.deletedAt),
+        eq(assetTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
 
   const [res] = await query.execute();
@@ -124,13 +145,19 @@ export async function getCount(
 }
 export async function getSelect(
   { limit, cursor }: GetSelectInput,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const query = db
-    .select({ value: assets.id, label: assets.serialNumber })
-    .from(assets)
-    .orderBy(assets.id)
+    .select({ value: assetTable.id, label: assetTable.serialNumber })
+    .from(assetTable)
+    .orderBy(assetTable.id)
     .limit(limit + 1)
+    .where(
+      and(
+        eq(assetTable.organizationId, organizationId),
+        isNull(assetTable.deletedAt),
+      ),
+    )
     .offset(cursor);
 
   const data = await query.execute();
@@ -138,57 +165,80 @@ export async function getSelect(
   return { data, nextCursor };
 }
 
-export async function getSimpleSelect(_: GetSelectInput, db: Database) {
+export async function getSimpleSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({
       ...assetFields,
       model: {
-        id: models.id,
-        name: models.name,
-        imageUrl: modelImages.url,
+        id: modelTable.id,
+        name: modelTable.name,
+        imageUrl: modelImageTable.url,
       },
       manufacturer: {
-        id: manufacturers.id,
-        name: manufacturers.name,
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
       },
     })
-    .from(assets)
-    .innerJoin(models, eq(assets.modelId, models.id))
-    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .leftJoin(modelImages, eq(models.defaultImageId, modelImages.id))
-    .orderBy(assets.id);
+    .from(assetTable)
+    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
+    .where(
+      and(
+        eq(assetTable.organizationId, organizationId),
+        isNull(assetTable.deletedAt),
+      ),
+    )
+    .orderBy(assetTable.id);
 
   const res = await query.execute();
   return res;
 }
 
-export async function getById(id: AssetID, db: Database) {
+export async function getById(id: AssetID, organizationId: OrganizationID) {
   const query = db
     .select({
       ...assetFields,
       location: {
-        id: locations.id,
-        name: locations.name,
-        address: locations.address,
+        id: locationTable.id,
+        name: locationTable.name,
+        address: locationTable.address,
       },
     })
-    .from(assets)
-    .innerJoin(locations, eq(assets.locationId, locations.id))
-    .innerJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
-    .innerJoin(models, eq(assets.modelId, models.id))
-    .innerJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .where(eq(assets.id, id));
+    .from(assetTable)
+    .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
+    .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
+    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .where(
+      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
+    );
   const [res] = await query.execute();
   return res;
 }
 
-export async function getByRepairId(id: RepairID, db: Database) {
+export async function getByRepairId(
+  id: RepairID,
+  organizationId: OrganizationID,
+) {
   const repairQuery = db
     .select({
-      assetId: repairs.assetId,
+      assetId: repairTable.assetId,
     })
-    .from(repairs)
-    .where(eq(repairs.id, id));
+    .from(repairTable)
+    .where(eq(repairTable.id, id));
   const [repair] = await repairQuery.execute();
 
   if (!repair) {
@@ -197,34 +247,52 @@ export async function getByRepairId(id: RepairID, db: Database) {
 
   const assetQuery = db
     .select()
-    .from(assets)
-    .leftJoin(locations, eq(assets.locationId, locations.id))
-    .leftJoin(assetStatuses, eq(assets.statusId, assetStatuses.id))
-    .leftJoin(models, eq(assets.modelId, models.id))
-    .leftJoin(manufacturers, eq(models.manufacturerId, manufacturers.id))
-    .where(eq(assets.id, repair.assetId));
+    .from(assetTable)
+    .leftJoin(locationTable, eq(assetTable.locationId, locationTable.id))
+    .leftJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
+    .leftJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .leftJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .where(
+      and(
+        eq(assetTable.id, repair.assetId),
+        eq(assetTable.organizationId, organizationId),
+      ),
+    );
   const [asset] = await assetQuery.execute();
   return asset;
 }
-export async function create(input: CreateAsset, db: Database) {
-  const query = db.insert(assets).values(input).returning();
+export async function create(input: CreateAsset) {
+  const query = db.insert(assetTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
-export async function update({ id, ...values }: UpdateAsset, db: Database) {
+export async function update(
+  { id, ...values }: UpdateAsset,
+  organizationId: OrganizationID,
+) {
   const query = db
-    .update(assets)
+    .update(assetTable)
     .set(values)
-    .where(eq(assets.id, id))
+    .where(
+      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
-export async function archive({ id, ...values }: ArchiveAsset, db: Database) {
+export async function archive(
+  { id, ...values }: ArchiveAsset,
+  organizationId: OrganizationID,
+) {
   const query = db
-    .update(assets)
+    .update(assetTable)
     .set(values)
-    .where(eq(assets.id, id))
+    .where(
+      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

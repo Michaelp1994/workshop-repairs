@@ -1,66 +1,83 @@
-import { count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, isNull } from "drizzle-orm";
+
+import type { OrganizationID } from "../schemas/organization.table";
 
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   type ArchiveEquipmentType,
   type CreateEquipmentType,
   type EquipmentTypeID,
-  equipmentTypes,
+  equipmentTypeTable,
   type UpdateEquipmentType,
-} from "../schemas/equipment-types.schema";
+} from "../schemas/equipment-type.table";
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll, organizationId: OrganizationID) {
   const query = db
     .select()
-    .from(equipmentTypes)
-    .where(isNull(equipmentTypes.deletedAt))
-    .orderBy(equipmentTypes.id)
+    .from(equipmentTypeTable)
+    .where(
+      and(
+        isNull(equipmentTypeTable.deletedAt),
+        eq(equipmentTypeTable.organizationId, organizationId),
+      ),
+    )
+    .orderBy(equipmentTypeTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
 
-export async function getCount(_: GetCount, db: Database) {
+export async function getCount(_: GetCount, organizationId: OrganizationID) {
   const query = db
     .select({ count: count() })
-    .from(equipmentTypes)
-    .where(isNull(equipmentTypes.deletedAt));
+    .from(equipmentTypeTable)
+    .where(
+      and(
+        isNull(equipmentTypeTable.deletedAt),
+        eq(equipmentTypeTable.organizationId, organizationId),
+      ),
+    );
   const [res] = await query.execute();
   return res?.count;
 }
 
-export async function getSelect(_: GetSelect, db: Database) {
+export async function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
-      value: equipmentTypes.id,
-      label: equipmentTypes.name,
+      value: equipmentTypeTable.id,
+      label: equipmentTypeTable.name,
     })
-    .from(equipmentTypes)
-    .where(isNull(equipmentTypes.deletedAt));
+    .from(equipmentTypeTable)
+    .where(
+      and(
+        isNull(equipmentTypeTable.deletedAt),
+        eq(equipmentTypeTable.organizationId, organizationId),
+      ),
+    );
   return query.execute();
 }
 
 export async function getById(input: EquipmentTypeID, db: Database) {
   const query = db
     .select()
-    .from(equipmentTypes)
-    .where(eq(equipmentTypes.id, input));
+    .from(equipmentTypeTable)
+    .where(eq(equipmentTypeTable.id, input));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateEquipmentType, db: Database) {
-  const query = db.insert(equipmentTypes).values(input).returning();
+  const query = db.insert(equipmentTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateEquipmentType, db: Database) {
   const query = db
-    .update(equipmentTypes)
+    .update(equipmentTypeTable)
     .set(input)
-    .where(eq(equipmentTypes.id, input.id))
+    .where(eq(equipmentTypeTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -68,9 +85,9 @@ export async function update(input: UpdateEquipmentType, db: Database) {
 
 export async function archive(input: ArchiveEquipmentType, db: Database) {
   const query = db
-    .update(equipmentTypes)
+    .update(equipmentTypeTable)
     .set(input)
-    .where(eq(equipmentTypes.id, input.id))
+    .where(eq(equipmentTypeTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

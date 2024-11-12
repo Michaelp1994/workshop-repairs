@@ -13,19 +13,25 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getAll(input, ctx.db);
+      const allAssets = await assetsController.getAll(
+        input,
+        ctx.session.organizationId,
+      );
       return allAssets;
     }),
-  getCount: protectedProcedure
+  getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await assetsController.getCount(input, ctx.db);
+      const count = await assetsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
 
       if (count === undefined) {
         throw new TRPCError({
@@ -35,22 +41,31 @@ export default router({
       }
       return count;
     }),
-  getSelect: protectedProcedure
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getSelect(input, ctx.db);
+      const allAssets = await assetsController.getSelect(
+        input,
+        ctx.session.organizationId,
+      );
       return allAssets;
     }),
-  getSimpleSelect: protectedProcedure
+  getSimpleSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getSimpleSelect(input, ctx.db);
+      const allAssets = await assetsController.getSimpleSelect(
+        input,
+        ctx.session.organizationId,
+      );
       return allAssets;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(assetSchemas.getById)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getById(input.id, ctx.db);
+      const asset = await assetsController.getById(
+        input.id,
+        ctx.session.organizationId,
+      );
 
       if (!asset) {
         throw new TRPCError({
@@ -61,10 +76,13 @@ export default router({
 
       return asset;
     }),
-  getByRepairId: protectedProcedure
+  getByRepairId: organizationProcedure
     .input(assetSchemas.getByRepairId)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getByRepairId(input.id, ctx.db);
+      const asset = await assetsController.getByRepairId(
+        input.id,
+        ctx.session.organizationId,
+      );
 
       if (!asset) {
         throw new TRPCError({
@@ -75,18 +93,16 @@ export default router({
 
       return asset;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(assetSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdAsset = await assetsController.create(
-        {
-          ...input,
-          ...metadata,
-          statusId: 1,
-        },
-        ctx.db,
-      );
+      const createdAsset = await assetsController.create({
+        ...input,
+        ...metadata,
+        organizationId: ctx.session.organizationId,
+        statusId: 1,
+      });
 
       if (!createdAsset) {
         throw new TRPCError({
@@ -97,14 +113,14 @@ export default router({
 
       return createdAsset;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(assetSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const sanitizedInput = sanitizeUpdateInput(input);
       const updatedAsset = await assetsController.update(
         { ...sanitizedInput, ...metadata },
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       if (!updatedAsset) {
@@ -116,14 +132,14 @@ export default router({
 
       return updatedAsset;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(assetSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
       const archivedAsset = await assetsController.archive(
         { ...input, ...metadata },
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       if (!archivedAsset) {

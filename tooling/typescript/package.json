@@ -6,5 +6,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "devDependencies": {}
+    "dependencies": {
+        "sst": "^3.3.19"
+    }
 }

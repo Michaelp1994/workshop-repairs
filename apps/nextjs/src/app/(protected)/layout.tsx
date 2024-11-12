@@ -1,26 +1,20 @@
-import { auth } from "@repo/auth";
-import { type Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
+import { isAuthenticated, onboardingCompleted } from "~/auth/cookies";
 import NavBar from "~/components/NavBar";
 import NextBreadcrumb from "~/components/NextBreadcrumb";
-import "~/styles/globals.css";
 
-export const metadata: Metadata = {
-  title: "Workshop App",
-  description: "Workshop App",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
-
-interface RootLayoutProps {
+interface ProtectedLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function AuthLayout({ children }: RootLayoutProps) {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/login");
+export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
+  if (!isAuthenticated()) {
+    redirect(`/login`);
+  }
+  if (!onboardingCompleted()) {
+    redirect(`/onboarding`);
   }
 
   return (
@@ -28,7 +22,9 @@ export default async function AuthLayout({ children }: RootLayoutProps) {
       <NavBar />
       <div className="p-4">
         <NextBreadcrumb />
-        <main className="center mx-auto max-w-7xl">{children}</main>
+        <main className="center mx-auto max-w-7xl">
+          <Suspense>{children}</Suspense>
+        </main>
       </div>
     </div>
   );

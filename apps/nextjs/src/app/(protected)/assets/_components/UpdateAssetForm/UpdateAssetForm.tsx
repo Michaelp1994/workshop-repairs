@@ -22,7 +22,7 @@ import {
 
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 interface AssetDetailsProps {
   assetId: AssetID;

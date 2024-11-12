@@ -5,7 +5,7 @@ import { Button } from "@repo/ui/button";
 import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 interface ArchiveModelButtonProps {

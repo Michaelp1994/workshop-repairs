@@ -8,11 +8,7 @@ import {
   useDataTableState,
 } from "@repo/ui/data-table";
 
-import { api } from "~/trpc/react";
-import {
-  defaultCountQueryOptns,
-  defaultDataQueryOptns,
-} from "~/utils/defaultQueryOptns";
+import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 
@@ -29,12 +25,9 @@ export default function PartsTable({ initialState }: PartsTableProps) {
     isLoading,
     isError,
     error,
-  } = api.parts.getAll.useQuery(dataState, defaultDataQueryOptns);
+  } = api.parts.getAll.useQuery(dataState);
 
-  const { data: rowCount } = api.parts.getCount.useQuery(
-    countState,
-    defaultCountQueryOptns,
-  );
+  const { data: rowCount } = api.parts.getCount.useQuery(countState);
 
   const table = useDataTable({
     columns,

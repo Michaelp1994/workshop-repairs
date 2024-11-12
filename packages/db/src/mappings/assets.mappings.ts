@@ -1,23 +1,23 @@
-import { assetStatuses } from "../schemas/asset-statuses.schema";
-import { assets } from "../schemas/assets.schema";
-import { locations } from "../schemas/locations.schema";
-import { manufacturers } from "../schemas/manufacturers.schema";
-import { models } from "../schemas/models.schema";
+import { assetTable } from "../schemas/asset.table";
+import { assetStatusTable } from "../schemas/asset-status.table";
+import { locationTable } from "../schemas/location.table";
+import { manufacturerTable } from "../schemas/manufacturer.table";
+import { modelTable } from "../schemas/model.table";
 import { FilterMapping, OrderMapping } from "../types";
 
 export const assetOrderMapping: OrderMapping = {
-  assetNumber: assets.assetNumber,
-  serialNumber: assets.serialNumber,
-  location_name: locations.name,
-  manufacturer_name: manufacturers.name,
-  model_nickname: models.nickname,
-  status_name: assetStatuses.name,
-  createdAt: assets.createdAt,
-  updatedAt: assets.updatedAt,
+  assetNumber: assetTable.assetNumber,
+  serialNumber: assetTable.serialNumber,
+  location_name: locationTable.name,
+  manufacturer_name: manufacturerTable.name,
+  model_nickname: modelTable.nickname,
+  status_name: assetStatusTable.name,
+  createdAt: assetTable.createdAt,
+  updatedAt: assetTable.updatedAt,
 };
 
 export const assetFilterMapping: FilterMapping = {
-  model_id: assets.modelId,
-  client_id: assets.clientId,
-  location_id: assets.locationId,
+  model_id: assetTable.modelId,
+  client_id: assetTable.clientId,
+  location_id: assetTable.locationId,
 };

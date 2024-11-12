@@ -4,7 +4,7 @@ import { Wrench } from "@repo/ui/icons";
 import { api } from "~/trpc/server";
 
 export default async function OngoingRepairsCard() {
-  const totalRepairs = await api.repairs.getCount({
+  const totalRepairs = await api.repairs.getCount.query({
     columnFilters: [
       {
         id: "status",

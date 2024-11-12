@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 
 import { db } from "../src/index";
-import { schema } from "../src/schema";
+import { schema } from "../src/schemas/index";
 import assetStatusesData from "./seeds/asset_statuses.json";
 import assetsData from "./seeds/assets.json";
 import clientsData from "./seeds/clients.json";
@@ -10,6 +10,7 @@ import locationsData from "./seeds/locations.json";
 import manufacturersData from "./seeds/manufacturers.json";
 import modelImagesData from "./seeds/model_images.json";
 import modelsData from "./seeds/models.json";
+import organizationsData from "./seeds/organizations.json";
 import partsData from "./seeds/parts.json";
 import partsToModelsData from "./seeds/parts_to_models.json";
 import repairCommentsData from "./seeds/repair_comments.json";
@@ -38,7 +39,7 @@ await db.transaction(async (tx) => {
     await tx.execute(sql`TRUNCATE ${table} RESTART IDENTITY CASCADE; `);
   }
 
-  await tx.insert(schema.userTypes).values(
+  await tx.insert(schema.userTypeTable).values(
     userTypesData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -49,7 +50,13 @@ await db.transaction(async (tx) => {
 
   console.log("user types done");
 
-  await tx.insert(schema.users).values(
+  await tx.insert(schema.organizationTable).values(
+    organizationsData.map((data) => ({
+      ...data,
+    })),
+  );
+
+  await tx.insert(schema.userTable).values(
     usersData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -60,7 +67,7 @@ await db.transaction(async (tx) => {
 
   console.log("users done");
 
-  await tx.insert(schema.assetStatuses).values(
+  await tx.insert(schema.assetStatusTable).values(
     assetStatusesData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -71,7 +78,7 @@ await db.transaction(async (tx) => {
 
   console.log("asset statuses done");
 
-  await tx.insert(schema.repairTypes).values(
+  await tx.insert(schema.repairTypeTable).values(
     repairTypesData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -82,7 +89,7 @@ await db.transaction(async (tx) => {
 
   console.log("repair types done");
 
-  await tx.insert(schema.clients).values(
+  await tx.insert(schema.clientTable).values(
     clientsData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -93,7 +100,7 @@ await db.transaction(async (tx) => {
 
   console.log("clients done");
 
-  await tx.insert(schema.locations).values(
+  await tx.insert(schema.locationTable).values(
     locationsData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -104,7 +111,7 @@ await db.transaction(async (tx) => {
 
   console.log("locations done");
 
-  await tx.insert(schema.manufacturers).values(
+  await tx.insert(schema.manufacturerTable).values(
     manufacturersData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -115,7 +122,7 @@ await db.transaction(async (tx) => {
 
   console.log("manufacturers done");
 
-  await tx.insert(schema.equipmentTypes).values(
+  await tx.insert(schema.equipmentTypeTable).values(
     equipmentTypeData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -126,8 +133,7 @@ await db.transaction(async (tx) => {
 
   console.log("equipment types done");
 
-  await tx.insert(schema.models).values(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  await tx.insert(schema.modelTable).values(
     modelsData.map(({ defaultImageId, ...data }) => {
       return {
         ...data,
@@ -140,7 +146,7 @@ await db.transaction(async (tx) => {
 
   console.log("models done");
 
-  await tx.insert(schema.modelImages).values(
+  await tx.insert(schema.modelImageTable).values(
     modelImagesData.map((data) => {
       return {
         ...data,
@@ -156,17 +162,17 @@ await db.transaction(async (tx) => {
   for await (const { defaultImageId, id } of modelsData) {
     if (defaultImageId) {
       await tx
-        .update(schema.models)
+        .update(schema.modelTable)
         .set({
           defaultImageId,
         })
-        .where(eq(schema.models.id, id));
+        .where(eq(schema.modelTable.id, id));
     }
   }
 
   console.log("model default images done");
 
-  await tx.insert(schema.parts).values(
+  await tx.insert(schema.partTable).values(
     partsData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -177,11 +183,11 @@ await db.transaction(async (tx) => {
 
   console.log("parts done");
 
-  await tx.insert(schema.partsToModels).values(partsToModelsData);
+  await tx.insert(schema.partsToModelTable).values(partsToModelsData);
 
   console.log("parts to models done");
 
-  await tx.insert(schema.assets).values(
+  await tx.insert(schema.assetTable).values(
     assetsData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -192,7 +198,7 @@ await db.transaction(async (tx) => {
 
   console.log("assets done");
 
-  await tx.insert(schema.repairStatusTypes).values(
+  await tx.insert(schema.repairStatusTypeTable).values(
     repairStatusTypesData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -201,7 +207,7 @@ await db.transaction(async (tx) => {
     })),
   );
 
-  await tx.insert(schema.repairs).values(
+  await tx.insert(schema.repairTable).values(
     repairsData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -212,7 +218,7 @@ await db.transaction(async (tx) => {
 
   console.log("repairs done");
 
-  await tx.insert(schema.repairImages).values(
+  await tx.insert(schema.repairImageTable).values(
     repairImagesData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),
@@ -223,7 +229,7 @@ await db.transaction(async (tx) => {
 
   console.log("repair images done");
 
-  await tx.insert(schema.repairComments).values(
+  await tx.insert(schema.repairCommentTable).values(
     repairCommentsData
       .map((data) => ({
         ...data,
@@ -234,7 +240,7 @@ await db.transaction(async (tx) => {
       .slice(0, 3000),
   );
 
-  await tx.insert(schema.repairComments).values(
+  await tx.insert(schema.repairCommentTable).values(
     repairCommentsData
       .map((data) => ({
         ...data,
@@ -247,7 +253,7 @@ await db.transaction(async (tx) => {
 
   console.log("repair comments done");
 
-  await tx.insert(schema.repairParts).values(
+  await tx.insert(schema.repairPartTable).values(
     repairPartsData.map((data) => ({
       ...data,
       createdAt: formatCreatedAtDate(data.createdAt),

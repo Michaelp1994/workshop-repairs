@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.table";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { type Database, db } from "../index";
 import {
   clientFilterMapping,
   clientOrderMapping,
@@ -12,16 +14,16 @@ import {
 import {
   type ArchiveClient,
   type ClientID,
-  clients,
+  clientTable,
   type CreateClient,
   type UpdateClient,
-} from "../schemas/clients.schema";
+} from "../schemas/client.table";
 
-const globalFilterColumns = [clients.name];
+const globalFilterColumns = [clientTable.name];
 
 export function getAll(
   { pagination, sorting, globalFilter, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderByParams(sorting, clientOrderMapping);
   const globalFilterParams = getGlobalFilterParams(
@@ -35,11 +37,16 @@ export function getAll(
 
   const query = db
     .select()
-    .from(clients)
+    .from(clientTable)
     .where(
-      and(isNull(clients.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(clientTable.deletedAt),
+        eq(clientTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     )
-    .orderBy(...orderByParams, clients.id)
+    .orderBy(...orderByParams, clientTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -47,7 +54,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -59,42 +66,53 @@ export async function getCount(
   );
   const query = db
     .select({ count: count() })
-    .from(clients)
+    .from(clientTable)
     .where(
-      and(isNull(clients.deletedAt), globalFilterParams, ...columnFilterParams),
+      and(
+        isNull(clientTable.deletedAt),
+        eq(clientTable.organizationId, organizationId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
     );
   const [res] = await query.execute();
   return res?.count;
 }
 
-export function getSelect(_: GetSelect, db: Database) {
+export function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
-      value: clients.id,
-      label: clients.name,
+      value: clientTable.id,
+      label: clientTable.name,
     })
-    .from(clients)
-    .orderBy(clients.name);
+    .from(clientTable)
+    .where(
+      and(
+        isNull(clientTable.deletedAt),
+        eq(clientTable.organizationId, organizationId),
+      ),
+    )
+    .orderBy(clientTable.name);
   return query.execute();
 }
 
 export async function getById(id: ClientID, db: Database) {
-  const query = db.select().from(clients).where(eq(clients.id, id));
+  const query = db.select().from(clientTable).where(eq(clientTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
 export async function create(input: CreateClient, db: Database) {
-  const query = db.insert(clients).values(input).returning();
+  const query = db.insert(clientTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdateClient, db: Database) {
   const query = db
-    .update(clients)
+    .update(clientTable)
     .set(input)
-    .where(eq(clients.id, input.id))
+    .where(eq(clientTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -102,9 +120,9 @@ export async function update(input: UpdateClient, db: Database) {
 
 export async function archive(input: ArchiveClient, db: Database) {
   const query = db
-    .update(clients)
+    .update(clientTable)
     .set(input)
-    .where(eq(clients.id, input.id))
+    .where(eq(clientTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

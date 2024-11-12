@@ -21,7 +21,7 @@ import {
 } from "@repo/validators/forms/manufacturers.schema";
 import { useRouter } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function CreateManufacturerForm() {
   const router = useRouter();
@@ -65,7 +65,7 @@ export default function CreateManufacturerForm() {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

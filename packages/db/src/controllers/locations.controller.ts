@@ -1,10 +1,12 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
+import type { OrganizationID } from "../schemas/organization.table";
+
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { db } from "../index";
 import {
   locationFilterMapping,
   locationOrderMapping,
@@ -13,15 +15,15 @@ import {
   type ArchiveLocation,
   type CreateLocation,
   type LocationID,
-  locations,
+  locationTable,
   type UpdateLocation,
-} from "../schemas/locations.schema";
+} from "../schemas/location.table";
 
-const globalFilterColumns = [locations.name];
+const globalFilterColumns = [locationTable.name];
 
 export function getAll(
   { pagination, globalFilter, sorting, columnFilters }: GetAll,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -34,15 +36,16 @@ export function getAll(
   const orderByParams = getOrderByParams(sorting, locationOrderMapping);
   const query = db
     .select()
-    .from(locations)
+    .from(locationTable)
     .where(
       and(
-        isNull(locations.deletedAt),
+        isNull(locationTable.deletedAt),
+        eq(locationTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, locations.id)
+    .orderBy(...orderByParams, locationTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
@@ -50,7 +53,7 @@ export function getAll(
 
 export async function getCount(
   { globalFilter, columnFilters }: GetCount,
-  db: Database,
+  organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
@@ -63,10 +66,11 @@ export async function getCount(
 
   const query = db
     .select({ count: count() })
-    .from(locations)
+    .from(locationTable)
     .where(
       and(
-        isNull(locations.deletedAt),
+        isNull(locationTable.deletedAt),
+        eq(locationTable.organizationId, organizationId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -76,44 +80,50 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(_: GetSelect, db: Database) {
+export function getSelect(_: GetSelect, organizationId: OrganizationID) {
   const query = db
     .select({
-      value: locations.id,
-      label: locations.name,
+      value: locationTable.id,
+      label: locationTable.name,
     })
-    .from(locations)
-    .orderBy(locations.name);
+    .from(locationTable)
+    .where(
+      and(
+        isNull(locationTable.deletedAt),
+        eq(locationTable.organizationId, organizationId),
+      ),
+    )
+    .orderBy(locationTable.name);
   return query.execute();
 }
 
-export async function getById(id: LocationID, db: Database) {
-  const query = db.select().from(locations).where(eq(locations.id, id));
+export async function getById(id: LocationID) {
+  const query = db.select().from(locationTable).where(eq(locationTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateLocation, db: Database) {
-  const query = db.insert(locations).values(input).returning();
+export async function create(input: CreateLocation) {
+  const query = db.insert(locationTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateLocation, db: Database) {
+export async function update(input: UpdateLocation) {
   const query = db
-    .update(locations)
+    .update(locationTable)
     .set(input)
-    .where(eq(locations.id, input.id))
+    .where(eq(locationTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archive(input: ArchiveLocation, db: Database) {
+export async function archive(input: ArchiveLocation) {
   const query = db
-    .update(locations)
+    .update(locationTable)
     .set(input)
-    .where(eq(locations.id, input.id))
+    .where(eq(locationTable.id, input.id))
     .returning();
   const [res] = await query.execute();
   return res;

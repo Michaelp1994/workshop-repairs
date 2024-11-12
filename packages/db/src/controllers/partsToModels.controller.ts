@@ -9,18 +9,22 @@ import {
   partsToModelsFilterMapping,
   partsToModelsOrderMapping,
 } from "../mappings/partsToModels.mappings";
-import { type ModelID, models } from "../schemas/models.schema";
-import { type PartID, parts } from "../schemas/parts.schema";
+import { type ModelID, modelTable } from "../schemas/model.table";
+import { type PartID, partTable } from "../schemas/part.table";
 import {
   type ArchivePartToModel,
   type CreatePartToModel,
-  partsToModels,
+  partsToModelTable,
   UpdatePartToModel,
-} from "../schemas/parts-to-models.schema";
+} from "../schemas/parts-to-model.table";
 
-const globalFilterColumns = [parts.name, parts.partNumber, models.name];
+const globalFilterColumns = [
+  partTable.name,
+  partTable.partNumber,
+  modelTable.name,
+];
 
-const partsToModelsFields = getTableColumns(partsToModels);
+const partsToModelsFields = getTableColumns(partsToModelTable);
 
 export function getAll(
   { sorting, pagination, globalFilter, columnFilters }: GetAll,
@@ -41,18 +45,18 @@ export function getAll(
     .select({
       ...partsToModelsFields,
       part: {
-        name: parts.name,
-        partNumber: parts.partNumber,
+        name: partTable.name,
+        partNumber: partTable.partNumber,
       },
       model: {
-        name: models.name,
+        name: modelTable.name,
       },
     })
-    .from(partsToModels)
-    .innerJoin(parts, eq(parts.id, partsToModels.partId))
-    .innerJoin(models, eq(models.id, partsToModels.modelId))
+    .from(partsToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
     .where(and(globalFilterParams, ...columnFilterParams))
-    .orderBy(...orderByParams, parts.id)
+    .orderBy(...orderByParams, partTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   const res = query.execute();
@@ -75,9 +79,9 @@ export async function getCount(
     .select({
       count: count(),
     })
-    .from(partsToModels)
-    .innerJoin(parts, eq(parts.id, partsToModels.partId))
-    .innerJoin(models, eq(models.id, partsToModels.modelId))
+    .from(partsToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
     .where(and(globalFilterParams, ...columnFilterParams));
   const [res] = await query.execute();
   return res?.count;
@@ -97,12 +101,12 @@ export function getSelect(
   );
   const query = db
     .select({
-      value: parts.id,
-      label: parts.name,
+      value: partTable.id,
+      label: partTable.name,
     })
-    .from(partsToModels)
-    .innerJoin(parts, eq(parts.id, partsToModels.partId))
-    .innerJoin(models, eq(models.id, partsToModels.modelId))
+    .from(partsToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
     .where(and(globalFilterParams, ...columnFilterParams));
 
   return query.execute();
@@ -114,11 +118,11 @@ export async function getById(
 ) {
   const query = db
     .select()
-    .from(partsToModels)
+    .from(partsToModelTable)
     .where(
       and(
-        eq(partsToModels.partId, input.partId),
-        eq(partsToModels.modelId, input.modelId),
+        eq(partsToModelTable.partId, input.partId),
+        eq(partsToModelTable.modelId, input.modelId),
       ),
     );
   const [res] = await query.execute();
@@ -126,19 +130,19 @@ export async function getById(
 }
 
 export async function create(input: CreatePartToModel, db: Database) {
-  const query = db.insert(partsToModels).values(input).returning();
+  const query = db.insert(partsToModelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function update(input: UpdatePartToModel, db: Database) {
   const query = db
-    .update(partsToModels)
+    .update(partsToModelTable)
     .set(input)
     .where(
       and(
-        eq(partsToModels.partId, input.partId),
-        eq(partsToModels.modelId, input.modelId),
+        eq(partsToModelTable.partId, input.partId),
+        eq(partsToModelTable.modelId, input.modelId),
       ),
     )
     .returning();
@@ -148,11 +152,11 @@ export async function update(input: UpdatePartToModel, db: Database) {
 
 export async function archive(input: ArchivePartToModel, db: Database) {
   const query = db
-    .delete(partsToModels)
+    .delete(partsToModelTable)
     .where(
       and(
-        eq(partsToModels.partId, input.partId),
-        eq(partsToModels.modelId, input.modelId),
+        eq(partsToModelTable.partId, input.partId),
+        eq(partsToModelTable.modelId, input.modelId),
       ),
     )
     .returning();

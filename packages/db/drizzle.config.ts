@@ -1,13 +1,17 @@
-import { type Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
+import { Resource } from "sst";
 
-if (!process.env["POSTGRES_URL"]) {
-  throw new Error("POSTGRES_URL is not set");
-}
-
-export default {
-  schema: "./src/schemas/*.ts",
+export default defineConfig({
   dialect: "postgresql",
+  schema: "./src/schemas/*.table.ts",
+  out: "./migrations",
+  casing: "snake_case",
   dbCredentials: {
-    url: process.env["POSTGRES_URL"],
+    host: Resource.Postgres1.host,
+    port: Resource.Postgres1.port,
+    user: Resource.Postgres1.username,
+    password: Resource.Postgres1.password,
+    database: Resource.Postgres1.database,
+    ssl: false,
   },
-} satisfies Config;
+});

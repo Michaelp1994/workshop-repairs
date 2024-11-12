@@ -1,10 +1,10 @@
-import { parts } from "../schemas/parts.schema";
+import { partTable } from "../schemas/part.table";
 
 export const partOrderMapping = {
-  name: parts.name,
-  createdAt: parts.createdAt,
-  updatedAt: parts.updatedAt,
-  partNumber: parts.partNumber,
+  name: partTable.name,
+  createdAt: partTable.createdAt,
+  updatedAt: partTable.updatedAt,
+  partNumber: partTable.partNumber,
 };
 
 export const partFilterMapping = {

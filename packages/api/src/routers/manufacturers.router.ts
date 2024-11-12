@@ -12,34 +12,39 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { protectedProcedure, router } from "../trpc";
+import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: protectedProcedure
+  getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
       const allManufacturers = await manufacturersController.getAll(
         input,
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       return allManufacturers;
     }),
-  getCount: protectedProcedure.input(getCountSchema).query(({ ctx, input }) => {
-    const count = manufacturersController.getCount(input, ctx.db);
-    return count;
-  }),
-  getSelect: protectedProcedure
+  getCount: organizationProcedure
+    .input(getCountSchema)
+    .query(({ ctx, input }) => {
+      const count = manufacturersController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
+      return count;
+    }),
+  getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
       const manufacturers = await manufacturersController.getSelect(
         input,
-        ctx.db,
+        ctx.session.organizationId,
       );
 
       return manufacturers;
     }),
-  getById: protectedProcedure
+  getById: organizationProcedure
     .input(manufacturerSchemas.getById)
     .query(async ({ input, ctx }) => {
       const manufacturer = await manufacturersController.getById(
@@ -56,12 +61,12 @@ export default router({
 
       return manufacturer;
     }),
-  create: protectedProcedure
+  create: organizationProcedure
     .input(manufacturerSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdManufacturer = await manufacturersController.create(
-        { ...input, ...metadata },
+        { ...input, organizationId: ctx.session.organizationId, ...metadata },
         ctx.db,
       );
 
@@ -74,7 +79,7 @@ export default router({
 
       return createdManufacturer;
     }),
-  update: protectedProcedure
+  update: organizationProcedure
     .input(manufacturerSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
@@ -92,7 +97,7 @@ export default router({
 
       return updatedManufacturer;
     }),
-  archive: protectedProcedure
+  archive: organizationProcedure
     .input(manufacturerSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);

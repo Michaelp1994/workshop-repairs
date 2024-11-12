@@ -19,17 +19,17 @@ import {
   type RepairFormInput,
   repairFormSchema,
 } from "@repo/validators/forms/repair.schema";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import AssetSelect from "~/components/selects/AssetSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
 import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/client";
 
 export default function CreateRepairForm() {
-  const searchParams = useSearchParams();
-  const assetId = searchParams.get("assetId");
+  // const searchParams = useSearchParams();
+  // const assetId = searchParams.get("assetId");
   const router = useRouter();
   const createMutation = api.repairs.create.useMutation({
     onSuccess(values) {
@@ -46,7 +46,7 @@ export default function CreateRepairForm() {
     schema: repairFormSchema,
     defaultValues: {
       ...defaultRepair,
-      assetId: assetId ? Number(assetId) : defaultRepair.assetId,
+      // assetId: assetId ? Number(assetId) : defaultRepair.assetId,
     },
   });
 
