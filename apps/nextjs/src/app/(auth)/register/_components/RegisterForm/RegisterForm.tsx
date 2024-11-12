@@ -21,8 +21,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import ErrorAlert from "~/components/ErrorAlert";
 import { useAuth } from "~/auth/AuthContext";
+import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
 import displayFormErrors from "~/utils/displayFormErrors";
 
