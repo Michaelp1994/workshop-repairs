@@ -1,8 +1,8 @@
 import { Button } from "@repo/ui/button";
 import Link from "next/link";
 
+import { isAuthenticated } from "~/auth/cookies";
 import Logo from "~/components/Logo";
-import { isAuthenticated } from "~/utils/isAuthenticated";
 
 const links = [
   {

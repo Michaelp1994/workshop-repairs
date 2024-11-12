@@ -4,7 +4,7 @@ import type { TRPCClientErrorLike } from "@trpc/client";
 
 import { toast } from "@repo/ui/sonner";
 
-export default function formatZodError<
+export default function displayFormErrors<
   FieldValues extends Record<string, unknown>,
 >(error: TRPCClientErrorLike<AppRouter>, form: UseFormReturn<FieldValues>) {
   if (error.data?.zodError) {

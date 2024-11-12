@@ -19,20 +19,28 @@ export default router({
     .input(authSchemas.login)
     .mutation(async ({ input }) => {
       const user = await usersController.getByEmail(input.email);
-      const passwordCorrect = await verifyPasswordHash(
-        user?.password || "",
-        input.password,
-      );
-      if (!user || !passwordCorrect) {
+      if (!user) {
         throw new ZodError([
           {
             code: "custom",
-            path: [],
+            path: ["root"],
             message: "Login details are not correct.",
           },
         ]);
       }
-
+      const passwordCorrect = await verifyPasswordHash(
+        user?.password,
+        input.password,
+      );
+      if (!passwordCorrect) {
+        throw new ZodError([
+          {
+            code: "custom",
+            path: ["root"],
+            message: "Login details are not correct.",
+          },
+        ]);
+      }
       const session = await createSession(user);
       return session;
     }),
@@ -77,7 +85,7 @@ export default router({
       const onboarding = await userOnboardingsController.create({
         userId: user.id,
         invitedUsers: false,
-        organizationCreated: false,
+        welcomed: false,
       });
       assertDatabaseResult(onboarding);
 

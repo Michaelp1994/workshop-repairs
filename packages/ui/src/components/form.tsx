@@ -22,7 +22,7 @@ import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Label } from "./label";
 export { type Path, type UseFormReturn } from "react-hook-form";
-
+export { useFormContext } from "react-hook-form";
 const Form = FormProvider;
 
 interface UseFormProps<

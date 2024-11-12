@@ -22,6 +22,8 @@ export {
   Info,
   Laptop,
   Link as Chain,
+  LoaderCircle,
+  LogOut,
   Pencil,
   PlusCircle,
   Shield,
@@ -31,6 +33,8 @@ export {
   Trash2,
   Upload,
   User,
+  UserPlus,
+  Users,
   Wrench,
   X,
 } from "lucide-react";

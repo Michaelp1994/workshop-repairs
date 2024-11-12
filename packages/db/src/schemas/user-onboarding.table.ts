@@ -14,14 +14,11 @@ export const userOnboardingTable = pgTable("user_onboarding", {
     .notNull()
     .unique()
     .references(() => userTable.id),
-  organizationCreated: boolean().default(false),
-  invitedUsers: boolean().default(false),
+  welcomed: boolean().notNull().default(false),
+  invitedUsers: boolean().notNull().default(false),
 });
 
 export type UserOnboarding = InferModel<typeof userOnboardingTable>;
 export type UserOnboardingID = UserOnboarding["id"];
 export type CreateUserOnboarding = InferCreateModel<typeof userOnboardingTable>;
-export type UpdateUserOnboarding = InferUpdateModel<typeof userOnboardingTable>;
-export type ArchiveUserOnboarding = InferArchiveModel<
-  typeof userOnboardingTable
->;
+export type UpdateUserOnboarding = CreateUserOnboarding;

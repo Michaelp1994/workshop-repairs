@@ -1,14 +1,17 @@
 "use client";
 import { Progress } from "@repo/ui/progress";
-import { useEffect, useState } from "react";
-import { setInterval } from "timers";
+
+import { api } from "~/trpc/client";
 
 export default function OnboardingProgress() {
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    setInterval(() => {
-      setProgress((progress) => progress + 0.1);
-    }, 10);
-  }, []);
-  return <Progress value={progress} />;
+  const { data, isError, isLoading } = api.userOnboardings.getStatus.useQuery();
+
+  const progress = data
+    ? ((Number(data.invitedUsers) +
+        Number(data.welcomed) +
+        Number(data.organizationChosen)) /
+        3) *
+      100
+    : 0;
+  return <Progress className="mb-4" value={progress} />;
 }

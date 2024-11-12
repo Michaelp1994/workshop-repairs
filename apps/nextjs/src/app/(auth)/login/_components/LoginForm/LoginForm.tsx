@@ -17,20 +17,27 @@ import {
 } from "@repo/validators/forms/auth.schema";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/trpc/AuthContext";
+import { useAuth } from "~/auth/AuthContext";
+import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
+import displayFormErrors from "~/utils/displayFormErrors";
 
 export default function LoginForm() {
   const router = useRouter();
+  const utils = api.useUtils();
   const { setAuth } = useAuth();
   const loginMutation = api.auth.login.useMutation({
     async onSuccess(values) {
       await setAuth(values);
+      await utils.invalidate();
       if (values.onboardingCompleted) {
         router.push("/dashboard");
       } else {
         router.push("/onboarding");
       }
+    },
+    async onError(errors) {
+      displayFormErrors(errors, form);
     },
   });
   const form = useForm({
@@ -38,8 +45,8 @@ export default function LoginForm() {
     defaultValues: defaultLogin,
   });
 
-  async function handleValid(data: LoginFormInput) {
-    await loginMutation.mutateAsync(data);
+  function handleValid(data: LoginFormInput) {
+    loginMutation.mutate(data);
   }
 
   return (
@@ -76,6 +83,8 @@ export default function LoginForm() {
             );
           }}
         />
+
+        <ErrorAlert form={form} />
 
         <SubmitButton isLoading={loginMutation.isPending} />
       </form>

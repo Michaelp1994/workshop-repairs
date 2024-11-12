@@ -1,4 +1,4 @@
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../schemas/organization.table";
 
@@ -19,6 +19,9 @@ import {
   userTable,
 } from "../schemas/user.table";
 
+const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
+  getTableColumns(userTable);
+
 const globalFilterColumns = [userTable.firstName, userTable.email];
 
 export function getAll(
@@ -35,7 +38,7 @@ export function getAll(
     userFilterMapping,
   );
   const query = db
-    .select()
+    .select({ ...publicUserColumns })
     .from(userTable)
     .where(
       and(
@@ -79,7 +82,10 @@ export async function getCount(
 }
 
 export async function getById(input: UserID) {
-  const query = db.select().from(userTable).where(eq(userTable.id, input));
+  const query = db
+    .select({ ...publicUserColumns })
+    .from(userTable)
+    .where(eq(userTable.id, input));
   const [res] = await query.execute();
   return res;
 }
@@ -90,37 +96,11 @@ export async function getByEmail(input: string) {
   return res;
 }
 
-export async function setEmailVerified(input: UserID) {
-  const query = db
-    .update(userTable)
-    .set({
-      emailVerified: true,
-    })
-    .where(eq(userTable.id, input))
-    .returning();
-
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function setOrganization(
-  userId: UserID,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .update(userTable)
-    .set({
-      organizationId,
-    })
-    .where(eq(userTable.id, userId))
-    .returning();
-
-  const [res] = await query.execute();
-  return res;
-}
-
 export async function create(input: CreateUser) {
-  const query = db.insert(userTable).values(input).returning();
+  const query = db
+    .insert(userTable)
+    .values(input)
+    .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;
 }
@@ -130,7 +110,7 @@ export async function update(input: UpdateUser) {
     .update(userTable)
     .set(input)
     .where(eq(userTable.id, input.id))
-    .returning();
+    .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;
 }
@@ -140,7 +120,7 @@ export async function archive(input: ArchiveUser) {
     .update(userTable)
     .set(input)
     .where(eq(userTable.id, input.id))
-    .returning();
+    .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;
 }

@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
-import { AuthProvider } from "~/trpc/AuthContext";
+import { AuthProvider } from "~/auth/AuthContext";
 import { TRPCReactProvider } from "~/trpc/client";
 
 const fontHeading = Inter({

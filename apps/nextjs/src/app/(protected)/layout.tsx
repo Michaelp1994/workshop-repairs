@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import { isAuthenticated, onboardingCompleted } from "~/auth/cookies";
 import NavBar from "~/components/NavBar";
 import NextBreadcrumb from "~/components/NextBreadcrumb";
-import { isAuthenticated, onboardingCompleted } from "~/utils/isAuthenticated";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;

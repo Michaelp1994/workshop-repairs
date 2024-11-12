@@ -1,6 +1,11 @@
 import { session } from "@repo/validators/auth.validators";
 import { NextRequest, NextResponse } from "next/server";
 
+import {
+  AUTHORIZATION_COOKIE_NAME,
+  ONBOARDING_COOKIE_NAME,
+} from "~/auth/cookies";
+
 export async function POST(req: NextRequest) {
   try {
     const jsonData = await req.json();
@@ -12,7 +17,7 @@ export async function POST(req: NextRequest) {
     );
 
     response.cookies.set({
-      name: "Authorization",
+      name: AUTHORIZATION_COOKIE_NAME,
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -21,7 +26,7 @@ export async function POST(req: NextRequest) {
     });
 
     response.cookies.set({
-      name: "OnboardingCompleted",
+      name: ONBOARDING_COOKIE_NAME,
       value: String(onboardingCompleted),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

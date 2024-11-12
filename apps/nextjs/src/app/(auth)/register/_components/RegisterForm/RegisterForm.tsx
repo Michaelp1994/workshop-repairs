@@ -12,6 +12,7 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 import {
   defaultRegister,
   type RegisterFormInput,
@@ -21,9 +22,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import ErrorAlert from "~/components/ErrorAlert";
-import { useAuth } from "~/trpc/AuthContext";
+import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
-import formatZodError from "~/utils/formatZodError";
+import displayFormErrors from "~/utils/displayFormErrors";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export default function RegisterForm() {
   });
   const registerMutation = api.auth.register.useMutation({
     async onSuccess(values) {
+      toast.success("Account successfully created!");
       await setAuth(values);
       if (values.onboardingCompleted) {
         router.push("/dashboard");
@@ -41,16 +43,13 @@ export default function RegisterForm() {
         router.push("/onboarding");
       }
     },
-    async onError(error) {
-      formatZodError(error, form);
-      console.log(form.formState.errors);
+    async onError(errors) {
+      displayFormErrors(errors, form);
     },
   });
   function handleValid(data: RegisterFormInput) {
     registerMutation.mutate(data);
   }
-
-  const rootError = form.formState.errors.root;
 
   return (
     <Form {...form}>
@@ -155,7 +154,7 @@ export default function RegisterForm() {
               );
             }}
           />
-          {rootError && <ErrorAlert>{rootError.message}</ErrorAlert>}
+          <ErrorAlert form={form} />
           <FormFooter>
             <SubmitButton isLoading={registerMutation.isPending}>
               Sign Up

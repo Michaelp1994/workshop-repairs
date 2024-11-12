@@ -10,7 +10,8 @@ import {
 export const organizationTable = pgTable("organization", {
   id: serial().primaryKey(),
   name: text().notNull().unique(),
-  invitationId: uuid().defaultRandom(),
+  logo: text(),
+  invitationCode: uuid().defaultRandom(),
 });
 
 export type Organization = InferModel<typeof organizationTable>;

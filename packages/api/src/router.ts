@@ -19,9 +19,10 @@ import repairParts from "./routers/repairParts.router";
 import repairs from "./routers/repairs.router";
 import repairStatusTypes from "./routers/repairStatusTypes.router";
 import repairTypes from "./routers/repairTypes.router";
+import userOnboardings from "./routers/userOnboardings.router";
 import users from "./routers/users.router";
 import userTypes from "./routers/userTypes.router";
-import { createCallerFactory, router } from "./trpc";
+import { router } from "./trpc";
 
 export const appRouter = router({
   auth,
@@ -44,6 +45,7 @@ export const appRouter = router({
   repairStatusTypes,
   repairTypes,
   users,
+  userOnboardings,
   userTypes,
 });
 
@@ -51,8 +53,3 @@ export const appRouter = router({
 export type AppRouter = typeof appRouter;
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;
-
-// /**
-//  * Create a server-side caller for the tRPC API.
-//  */
-export const createCaller = createCallerFactory(appRouter);

@@ -6,17 +6,17 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import InviteOthersForm from "./InviteOthersForm";
+import SendInvitationsForm from "./components/SendInvitationsForm";
 
 export default function InvitationPage() {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <CardDescription></CardDescription>
         <CardTitle>Invite Others</CardTitle>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
-        <InviteOthersForm />
+        <SendInvitationsForm />
       </CardContent>
     </Card>
   );

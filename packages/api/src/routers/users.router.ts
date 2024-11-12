@@ -11,6 +11,7 @@ import { TRPCError } from "@trpc/server";
 import createSession from "../helpers/createSession";
 import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -65,11 +66,10 @@ export default router({
       return session;
     }),
 
-  getCurrentUser: organizationProcedure
+  getCurrentUser: authedProcedure
     .input(userSchemas.getCurrent)
     .query(async ({ ctx }) => {
       const user = await usersController.getById(ctx.session.userId);
-
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -118,7 +118,7 @@ export default router({
       return updatedUser;
     }),
 
-  updateCurrent: organizationProcedure
+  updateCurrent: authedProcedure
     .input(userSchemas.updateCurrent)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);

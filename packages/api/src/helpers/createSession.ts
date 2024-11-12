@@ -1,16 +1,29 @@
 import type { Session } from "@repo/validators/auth.validators";
+import type { OrganizationID, UserID } from "@repo/validators/ids.validators";
 
 import { generateToken } from "@repo/auth/tokens";
 
-export default async function createSession(user: User) {
+interface CreateSessionInput {
+  id: UserID;
+  organizationId: OrganizationID | null;
+  onboardingCompleted: boolean;
+  emailVerified: boolean;
+}
+
+export default async function createSession({
+  id,
+  organizationId,
+  onboardingCompleted,
+  emailVerified,
+}: CreateSessionInput) {
   const token = await generateToken({
-    userId: user.id,
-    organizationId: user.organization,
+    userId: id,
+    organizationId: organizationId,
   });
   const session: Session = {
     token,
-    onboardingCompleted: user.onboardingCompleted,
-    emailVerified: user.emailVerified,
+    onboardingCompleted: onboardingCompleted,
+    emailVerified: emailVerified,
   };
   return session;
 }
