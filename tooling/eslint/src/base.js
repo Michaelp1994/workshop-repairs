@@ -13,6 +13,18 @@ export default [
       "perfectionist/sort-interfaces": "off",
       "perfectionist/sort-union-types": "off",
       "perfectionist/sort-intersection-types": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
   ...tseslint.config(...tseslint.configs.strict, ...tseslint.configs.stylistic),
