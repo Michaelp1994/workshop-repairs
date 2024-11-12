@@ -14,10 +14,8 @@ import {
 import { assetTable } from "../schemas/asset.table";
 import { locationTable } from "../schemas/location.table";
 import { manufacturerTable } from "../schemas/manufacturer.table";
-import { modelImageTable } from "../schemas/model-image.table";
 import { modelTable } from "../schemas/model.table";
-import { repairStatusTypeTable } from "../schemas/repair-status-type.table";
-import { repairTypeTable } from "../schemas/repair-type.table";
+import { modelImageTable } from "../schemas/model-image.table";
 import {
   type ArchiveRepair,
   type CreateRepair,
@@ -25,6 +23,8 @@ import {
   repairTable,
   type UpdateRepair,
 } from "../schemas/repair.table";
+import { repairStatusTypeTable } from "../schemas/repair-status-type.table";
+import { repairTypeTable } from "../schemas/repair-type.table";
 
 const repairFields = getTableColumns(repairTable);
 const assetFields = getTableColumns(assetTable);

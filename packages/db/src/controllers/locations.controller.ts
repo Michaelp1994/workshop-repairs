@@ -6,7 +6,7 @@ import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database, db } from "../index";
+import { db } from "../index";
 import {
   locationFilterMapping,
   locationOrderMapping,

@@ -27,7 +27,7 @@ const Form = FormProvider;
 
 interface UseFormProps<
   TFieldValues extends FieldValues = FieldValues,
-  TContext = any,
+  TContext = unknown,
 > extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
   schema: ZodSchema<TFieldValues>;
   errorMap?: ZodErrorMap;
@@ -36,7 +36,7 @@ interface UseFormProps<
 
 function useForm<
   TFieldValues extends FieldValues = FieldValues,
-  TContext = any,
+  TContext = unknown,
   TTransformedValues extends FieldValues | undefined = undefined,
 >({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
   return _useForm<TFieldValues, TContext, TTransformedValues>({
@@ -226,6 +226,8 @@ const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
   ),
 );
 
+SubmitButton.displayName = "SubmitButton";
+
 const ResetButton = React.forwardRef<
   HTMLButtonElement,
   Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children">
@@ -234,6 +236,8 @@ const ResetButton = React.forwardRef<
     Reset
   </Button>
 ));
+
+ResetButton.displayName = "ResetButton";
 
 export {
   Form,

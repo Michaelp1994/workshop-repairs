@@ -9,7 +9,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
-import { type ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 export interface InitialDataTableState {
   pagination?: PaginationState;

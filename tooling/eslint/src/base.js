@@ -31,7 +31,9 @@ export default [
   {
     ignores: [
       "dist/",
+      "sst-env.d.ts",
       "eslint.config.js",
+      ".open-next/",
       ".next/",
       "node_modules/",
       ".turbo/",

@@ -2,6 +2,7 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
+import { type RepairID } from "../schemas/repair.table";
 import {
   type ArchiveRepairComment,
   type CreateRepairComment,
@@ -9,7 +10,6 @@ import {
   repairCommentTable,
   type UpdateRepairComment,
 } from "../schemas/repair-comment.table";
-import { type RepairID } from "../schemas/repair.table";
 import { userTable } from "../schemas/user.table";
 
 const repairCommentFields = getTableColumns(repairCommentTable);

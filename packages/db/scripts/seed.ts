@@ -134,7 +134,6 @@ await db.transaction(async (tx) => {
   console.log("equipment types done");
 
   await tx.insert(schema.modelTable).values(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     modelsData.map(({ defaultImageId, ...data }) => {
       return {
         ...data,

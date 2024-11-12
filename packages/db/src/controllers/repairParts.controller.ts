@@ -4,6 +4,7 @@ import { type GetAll, type GetCount } from "../helpers/types";
 import { type Database } from "../index";
 import { assetTable } from "../schemas/asset.table";
 import { partTable } from "../schemas/part.table";
+import { type RepairID, repairTable } from "../schemas/repair.table";
 import {
   type ArchiveRepairPart,
   type CreateRepairPart,
@@ -11,7 +12,6 @@ import {
   repairPartTable,
   type UpdateRepairPart,
 } from "../schemas/repair-part.table";
-import { type RepairID, repairTable } from "../schemas/repair.table";
 
 const repairPartFields = getTableColumns(repairPartTable);
 const assetFields = getTableColumns(assetTable);
