@@ -11,7 +11,6 @@ import { TRPCError } from "@trpc/server";
 import createSession from "../helpers/createSession";
 import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
-import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({

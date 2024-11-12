@@ -104,7 +104,10 @@ export function useDataTableState(initialData?: InitialDataTableState) {
 //   // id: number;
 // }
 
-type BaseData = Record<string, unknown>;
+interface BaseData {
+  id: number;
+  [key: string]: unknown;
+}
 
 type RedactedTableOptions<TData extends BaseData> = Omit<
   TableOptions<TData>,

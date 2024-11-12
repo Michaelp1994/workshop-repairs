@@ -80,7 +80,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getSelect(props: GetSelect, db: Database) {
+export async function getSelect(_props: GetSelect, db: Database) {
   const query = db
     .select({
       value: partTable.id,

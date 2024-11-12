@@ -34,19 +34,6 @@ export async function create(input: CreateUserOnboarding) {
   return res;
 }
 
-export async function setEmailVerified(input: UserID) {
-  const query = db
-    .update(userTable)
-    .set({
-      emailVerified: true,
-    })
-    .where(eq(userTable.id, input))
-    .returning({ ...publicUserColumns });
-
-  const [res] = await query.execute();
-  return res;
-}
-
 export async function setOrganization(
   userId: UserID,
   organizationId: OrganizationID,

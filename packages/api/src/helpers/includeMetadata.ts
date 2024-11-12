@@ -1,4 +1,4 @@
-import type { Session } from "../context";
+import type { Session } from "../createContext";
 
 export function createMetadata(session: Session) {
   return {

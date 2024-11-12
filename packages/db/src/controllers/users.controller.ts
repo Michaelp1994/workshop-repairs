@@ -96,6 +96,19 @@ export async function getByEmail(input: string) {
   return res;
 }
 
+export async function setEmailVerified(input: UserID) {
+  const query = db
+    .update(userTable)
+    .set({
+      emailVerified: true,
+    })
+    .where(eq(userTable.id, input))
+    .returning({ ...publicUserColumns });
+
+  const [res] = await query.execute();
+  return res;
+}
+
 export async function create(input: CreateUser) {
   const query = db
     .insert(userTable)

@@ -6,6 +6,14 @@ import * as React from "react";
 
 import { cn } from "../lib/utils";
 
+export function useOTPInput() {
+  const context = React.useContext(OTPInputContext);
+  if (!context) {
+    throw new Error("useOTPInput must be used within a OTPInputProvider");
+  }
+  return context;
+}
+
 const InputOTP = React.forwardRef<
   React.ElementRef<typeof OTPInput>,
   React.ComponentPropsWithoutRef<typeof OTPInput>
@@ -34,8 +42,14 @@ const InputOTPSlot = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div"> & { index: number }
 >(({ index, className, ...props }, ref) => {
-  const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
+  const inputOTPContext = useOTPInput();
+  const slotProps = inputOTPContext.slots[index];
+  if (!slotProps) {
+    throw new Error(
+      `InputOTPSlot must be a child of OTPInput (index=${index})`,
+    );
+  }
+  const { char, hasFakeCaret, isActive } = slotProps;
 
   return (
     <div
