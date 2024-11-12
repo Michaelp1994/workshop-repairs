@@ -6,7 +6,7 @@ import UpdateModelForm from "./UpdateModelForm";
 interface ModelDetailsSectionProps {
   modelId: ModelID;
 }
-export default async function ModelDetailsSection({
+export default function ModelDetailsSection({
   modelId,
 }: ModelDetailsSectionProps) {
   return (

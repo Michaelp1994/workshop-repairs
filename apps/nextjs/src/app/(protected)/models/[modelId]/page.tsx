@@ -19,7 +19,7 @@ interface ViewModelPageProps {
   };
 }
 
-export default async function ViewModelPage({ params }: ViewModelPageProps) {
+export default function ViewModelPage({ params }: ViewModelPageProps) {
   const modelId = Number(params.modelId);
   return (
     <DetailsPageGrid>

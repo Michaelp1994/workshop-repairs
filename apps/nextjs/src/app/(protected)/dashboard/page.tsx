@@ -1,7 +1,7 @@
 import ActiveAssetsCard from "./_components/ActiveAssetsCard";
 import OngoingRepairsCard from "./_components/OngoingRepairsCard";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   return (
     <div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
