@@ -2,11 +2,14 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/card";
 
+import InvitationLink from "./components/InvitationLink";
 import SendInvitationsForm from "./components/SendInvitationsForm";
+import SkipButton from "./components/SkipButton";
 
 export default function InvitationPage() {
   return (
@@ -18,6 +21,10 @@ export default function InvitationPage() {
       <CardContent>
         <SendInvitationsForm />
       </CardContent>
+      <CardFooter>
+        <SkipButton />
+        {/* <InvitationLink /> */}
+      </CardFooter>
     </Card>
   );
 }

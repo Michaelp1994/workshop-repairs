@@ -91,6 +91,7 @@ export default router({
         ctx.session.userId,
       );
       assertDatabaseResult(user);
+
       if (user.organizationId) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -101,12 +102,11 @@ export default router({
       const organization = await organizationsController.getByInvitationCode(
         input.joinCode,
       );
-      assertDatabaseResult(organization);
       if (!organization) {
         throw new ZodError([
           {
             code: "custom",
-            path: [],
+            path: ["joinCode"],
             message:
               "Invalid Join Code, please contact your organization admin.",
           },
@@ -119,10 +119,12 @@ export default router({
       );
       assertDatabaseResult(updatedUser);
 
-      const session = createSession(updatedUser);
+      await userOnboardingsController.setInvitations(ctx.session.userId);
+
+      const session = await createSession(updatedUser);
       return {
         ...session,
-        ...organization,
+        organization,
       };
     }),
   sendInvitations: organizationProcedure
