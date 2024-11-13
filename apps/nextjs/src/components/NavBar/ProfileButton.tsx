@@ -12,7 +12,7 @@ import Link from "next/link";
 
 import LogoutButton from "./LogoutButton";
 
-export default async function ProfileButton() {
+export default function ProfileButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

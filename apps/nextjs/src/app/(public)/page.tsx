@@ -5,7 +5,7 @@ import Features from "./components/Features";
 import Hero from "./components/Hero";
 import Pricing from "./components/Pricing";
 
-export default async function HomePage() {
+export default function HomePage() {
   return (
     <>
       <Hero />

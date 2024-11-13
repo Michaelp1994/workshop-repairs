@@ -2,5 +2,7 @@ import { publicProcedure, router } from "../trpc";
 
 export default router({
   // Greeting procedure
-  version: publicProcedure.query(() => process.env["npm_package_version"]),
+  ping: publicProcedure.query(
+    () => `Hello! The time is now: ${new Date().toString()}`,
+  ),
 });
