@@ -20,9 +20,7 @@ import { useRouter } from "next/navigation";
 
 import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
-
-import InvitationLink from "./InvitationLink";
-import SkipButton from "./SkipButton";
+import displayFormErrors from "~/utils/displayFormErrors";
 
 export default function SendInvitationsForm() {
   const router = useRouter();
@@ -35,8 +33,8 @@ export default function SendInvitationsForm() {
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");
     },
-    async onError() {
-      toast.error("Can't Send invitations.");
+    async onError(errors) {
+      displayFormErrors(errors, form);
     },
   });
 
@@ -75,8 +73,6 @@ export default function SendInvitationsForm() {
           }}
         />
         <div className="flex justify-end gap-2">
-          <SkipButton />
-          <InvitationLink />
           <SubmitButton isLoading={inviteMutation.isPending} />
         </div>
       </form>

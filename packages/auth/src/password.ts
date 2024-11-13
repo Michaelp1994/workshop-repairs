@@ -15,7 +15,13 @@ export async function verifyPasswordHash(
   hash: string,
   password: string,
 ): Promise<boolean> {
-  return await verify(hash, password);
+  try {
+    console.log({ hash, password });
+    return await verify(hash, password);
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 }
 
 export async function verifyPasswordStrength(

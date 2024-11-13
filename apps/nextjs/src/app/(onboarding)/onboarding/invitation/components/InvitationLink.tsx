@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@repo/ui/button";
 import { Chain } from "@repo/ui/icons";
 import { useState } from "react";

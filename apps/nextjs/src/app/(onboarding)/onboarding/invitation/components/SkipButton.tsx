@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@repo/ui/button";
 import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";

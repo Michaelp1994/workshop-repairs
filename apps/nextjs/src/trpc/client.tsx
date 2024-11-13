@@ -1,11 +1,7 @@
 "use client";
 
 import { type AppRouter } from "@repo/api/router";
-import {
-  keepPreviousData,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { type ReactNode, useMemo } from "react";
@@ -23,7 +19,6 @@ export const api = createTRPCReact<AppRouter>();
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      placeholderData: keepPreviousData,
       refetchOnWindowFocus: false,
       retry: false,
       staleTime: 30 * 1000,
