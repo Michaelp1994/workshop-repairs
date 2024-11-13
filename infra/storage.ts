@@ -1,18 +1,21 @@
 export const bucket = new sst.aws.Bucket("Bucket1", {
   access: "public",
 });
+export const vpc = new sst.aws.Vpc("Vpc1", { bastion: true, nat: "ec2" });
 
-let vpc = undefined,
-  rds;
+const password = process.env.POSTGRES_PASSWORD;
+const username = process.env.POSTGRES_USERNAME;
+const database = process.env.POSTGRES_DATABASE;
+const port = Number(process.env.POSTGRES_PORT);
+
 if ($dev) {
-  const password = "password";
-  const username = "postgres";
-  const database = "local";
-  const port = 5432;
+  if (!password || !username || !database || !port) {
+    throw new Error("Please check your .env file for postgres credentials.");
+  }
 
-  new docker.Container("LocalPostgres", {
+  new docker.Container("LocalPostgres1", {
     // Unique container name
-    name: `postgres-${$app.name}`,
+    name: `postgres-${$app.name}-dev`,
     restart: "always",
     image: "postgres:16.4",
     ports: [
@@ -34,21 +37,19 @@ if ($dev) {
       },
     ],
   });
-  rds = new sst.Linkable("Postgres1", {
-    properties: {
-      host: "localhost",
-      port,
-      username,
-      password,
-      database,
-    },
-  });
-} else {
-  vpc = new sst.aws.Vpc("Vpc1", { bastion: true, nat: "ec2" });
-  rds = new sst.aws.Postgres("Postgres1", { vpc, proxy: true });
 }
 
-export { rds, vpc };
+export const rds = $dev
+  ? new sst.Linkable("Postgres1", {
+      properties: {
+        host: "localhost",
+        port,
+        username,
+        password,
+        database,
+      },
+    })
+  : new sst.aws.Postgres("Postgres1", { vpc, proxy: true });
 
 export const devCommand = new sst.x.DevCommand("Studio", {
   link: [rds],
