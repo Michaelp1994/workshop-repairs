@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "turbo build",
-    "clean": "turbo clean && rm -rf .turbo node_modules .sst db-data",
-    "db": "pnpm -F db db",
-    "db:reset": "pnpm -F db reset",
-    "db:seed": "pnpm -F db seed",
+    "clean": "turbo clean && rm -rf .turbo node_modules .sst",
+    "db": "drizzle-kit",
+    "db:seed": "pnpm -F db db:seed",
+    "db:wipe": "pnpm -F db db:wipe",
     "dev": "sst dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
@@ -15,8 +15,7 @@
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
-    "@node-rs/argon2": "^2.0.0",
-    "drizzle-kit": "0.28.0"
+    "@node-rs/argon2": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
@@ -25,7 +24,7 @@
     "@types/aws-lambda": "8.10.145",
     "commitizen": "^4.3.1",
     "commitlint": "^19.5.0",
-    "dotenv-cli": "^7.4.2",
+    "drizzle-kit": "0.28.0",
     "eslint": "^9.14.0",
     "husky": "^9.1.6",
     "prettier": "^3.3.3",

@@ -12,20 +12,15 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
-    "db": "sst shell drizzle-kit",
+    "db:seed": "tsx ./scripts/seed-database.ts",
+    "db:wipe": "tsx ./scripts/wipe-database.ts",
     "lint": "eslint .",
-    "reset": "sst shell tsx ./scripts/reset-sequences.ts",
-    "seed": "sst shell tsx ./scripts/seed.ts",
     "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "wipe": "sst shell tsx ./scripts/wipe-database.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vercel/postgres": "^0.9.0",
-    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.1",
-    "pg": "^8.13.1",
-    "postgres": "^3.4.5"
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

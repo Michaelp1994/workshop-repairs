@@ -53,7 +53,6 @@ export { rds, vpc };
 export const devCommand = new sst.x.DevCommand("Studio", {
   link: [rds],
   dev: {
-    directory: "./packages/db",
-    command: "npx drizzle-kit studio",
+    command: "pnpm db studio",
   },
 });
