@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
+
 import ActiveAssetsCard from "./_components/ActiveAssetsCard";
 import OngoingRepairsCard from "./_components/OngoingRepairsCard";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 export default function DashboardPage() {
   return (

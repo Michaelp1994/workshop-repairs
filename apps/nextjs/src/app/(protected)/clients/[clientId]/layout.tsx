@@ -7,17 +7,12 @@ import {
 
 interface ClientLayoutProps {
   children: React.ReactNode;
-  // modal: React.ReactNode;
   params: {
     clientId: string;
   };
 }
 
-export default function ClientLayout({
-  children,
-  // modal,
-  params,
-}: ClientLayoutProps) {
+export default function ClientLayout({ children, params }: ClientLayoutProps) {
   const clientId = Number(params.clientId);
   return (
     <DetailsPage>
@@ -26,7 +21,6 @@ export default function ClientLayout({
         <DetailsPageTitle>Client #{clientId}</DetailsPageTitle>
       </DetailsPageToolbar>
       {children}
-      {/* {modal} */}
     </DetailsPage>
   );
 }

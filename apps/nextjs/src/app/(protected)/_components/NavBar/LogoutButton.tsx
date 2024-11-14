@@ -1,6 +1,7 @@
 "use client";
 
 import { DropdownMenuItem } from "@repo/ui/dropdown-menu";
+import { LogOut } from "@repo/ui/icons";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "~/auth/AuthContext";
@@ -18,7 +19,8 @@ export default function LogoutButton() {
         router.push("/");
       }}
     >
-      Logout
+      <LogOut />
+      Log out
     </DropdownMenuItem>
   );
 }

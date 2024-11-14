@@ -25,9 +25,13 @@ export default function PartModelsTable({ initialState }: ModelPartsTable) {
     isLoading,
     isError,
     error,
-  } = api.partsToModels.getAll.useQuery(dataState);
+  } = api.partsToModels.getAll.useQuery(dataState, {
+    placeholderData: keepPreviousData,
+  });
 
-  const { data: rowCount } = api.partsToModels.getCount.useQuery(countState);
+  const { data: rowCount } = api.partsToModels.getCount.useQuery(countState, {
+    placeholderData: keepPreviousData,
+  });
 
   const table = useDataTable({
     columns,

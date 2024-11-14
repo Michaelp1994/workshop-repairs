@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Card,
   CardContent,
@@ -12,6 +14,10 @@ import { type InitialDataTableState } from "@repo/ui/data-table";
 import { CreateLink } from "~/components/ButtonLink";
 
 import AssetsTable from "../../../components/tables/AssetsTable";
+
+export const metadata: Metadata = {
+  title: "Assets",
+};
 
 export default function AllAssetsPage() {
   const initialState: InitialDataTableState = {

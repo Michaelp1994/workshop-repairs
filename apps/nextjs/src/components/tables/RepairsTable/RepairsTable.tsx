@@ -7,6 +7,7 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
+import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -26,9 +27,13 @@ export default function RepairsTable({ initialState }: RepairsTableProps) {
     isLoading,
     isError,
     error,
-  } = api.repairs.getAll.useQuery(dataState);
+  } = api.repairs.getAll.useQuery(dataState, {
+    placeholderData: keepPreviousData,
+  });
 
-  const { data: rowCount } = api.repairs.getCount.useQuery(countState);
+  const { data: rowCount } = api.repairs.getCount.useQuery(countState, {
+    placeholderData: keepPreviousData,
+  });
 
   const table = useDataTable({
     columns,

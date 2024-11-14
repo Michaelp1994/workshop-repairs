@@ -1,9 +1,10 @@
+import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 import { isAuthenticated, onboardingCompleted } from "~/auth/cookies";
-import NavBar from "~/components/NavBar";
-import NextBreadcrumb from "~/components/NextBreadcrumb";
+
+import AppSidebar from "./_components/AppSideBar";
+import NavBar from "./_components/NavBar";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -16,16 +17,13 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   if (!onboardingCompleted()) {
     redirect(`/onboarding`);
   }
-
   return (
-    <div className="grid h-full grid-rows-[auto_1fr]">
-      <NavBar />
-      <div className="p-4">
-        <NextBreadcrumb />
-        <main className="center mx-auto max-w-7xl">
-          <Suspense>{children}</Suspense>
-        </main>
-      </div>
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <NavBar />
+        <div className="h-full p-4">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

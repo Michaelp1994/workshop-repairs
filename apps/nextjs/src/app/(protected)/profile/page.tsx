@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Card,
   CardContent,
@@ -7,6 +9,10 @@ import {
 } from "@repo/ui/card";
 
 import ProfileForm from "./_components/ProfileForm";
+
+export const metadata: Metadata = {
+  title: "Profile",
+};
 
 export default function ProfilePage() {
   return (

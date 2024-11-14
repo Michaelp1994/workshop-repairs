@@ -1,4 +1,5 @@
 import type { InitialDataTableState } from "@repo/ui/data-table";
+import type { Metadata } from "next";
 
 import {
   Card,
@@ -12,6 +13,10 @@ import {
 import { CreateLink } from "~/components/ButtonLink";
 
 import ModelsTable from "../../../components/tables/ModelsTable";
+
+export const metadata: Metadata = {
+  title: "Models",
+};
 
 export default function AllModelsPage() {
   const initialState: InitialDataTableState = {
