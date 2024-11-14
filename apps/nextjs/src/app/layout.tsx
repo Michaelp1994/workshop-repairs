@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | AssetRx",
     default: "AssetRx",
   },
-  description: "Workshop App",
+  description: "AssetRx",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

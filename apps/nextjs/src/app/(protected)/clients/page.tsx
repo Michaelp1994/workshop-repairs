@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Card,
   CardContent,
@@ -10,6 +12,10 @@ import {
 import { CreateLink } from "~/components/ButtonLink";
 
 import ClientsTable from "../../../components/tables/ClientsTable";
+
+export const metadata: Metadata = {
+  title: "Clients",
+};
 
 export default function AllClientsPage() {
   return (

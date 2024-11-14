@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Card,
   CardContent,
@@ -10,6 +12,10 @@ import {
 import { CreateLink } from "~/components/ButtonLink";
 
 import ManufacturersTable from "../../../components/tables/ManufacturersTable";
+
+export const metadata: Metadata = {
+  title: "Locations",
+};
 
 export default function AllManufacturersPage() {
   return (

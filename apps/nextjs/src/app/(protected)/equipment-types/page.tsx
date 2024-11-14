@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Card,
   CardContent,
@@ -10,6 +12,10 @@ import {
 import { CreateLink } from "~/components/ButtonLink";
 
 import EquipmentTypeTable from "./_components/EquipmentTypeTable";
+
+export const metadata: Metadata = {
+  title: "Equipment Types",
+};
 
 export default function AllEquipmentTypesPage() {
   return (

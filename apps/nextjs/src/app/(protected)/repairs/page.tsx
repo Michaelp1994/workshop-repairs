@@ -15,8 +15,7 @@ import { CreateLink } from "~/components/ButtonLink";
 import RepairsTable from "../../../components/tables/RepairsTable";
 
 export const metadata: Metadata = {
-  title: "Workshop App | Repairs",
-  description: "Workshop App",
+  title: "Repairs",
 };
 
 export default function AllRepairsPage() {
