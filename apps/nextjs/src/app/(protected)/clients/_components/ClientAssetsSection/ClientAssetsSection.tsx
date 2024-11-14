@@ -9,14 +9,16 @@ import {
 } from "@repo/ui/card";
 
 import AssetsTable from "~/components/tables/AssetsTable";
+import { api } from "~/trpc/server";
 
 interface ClientAssetsSectionProps {
   clientId: number;
 }
 
-export default function ClientAssetsSection({
+export default async function ClientAssetsSection({
   clientId,
 }: ClientAssetsSectionProps) {
+  const client = await api.clients.getById.query({ id: clientId });
   const initialState: InitialDataTableState = {
     pagination: { pageIndex: 0, pageSize: 5 },
     columnFilters: [{ id: "client_id", value: clientId }],
@@ -36,9 +38,7 @@ export default function ClientAssetsSection({
     <Card>
       <CardHeader>
         <CardTitle>Assets</CardTitle>
-        <CardDescription>
-          Assets associated with client {clientId}
-        </CardDescription>
+        <CardDescription>Assets owned by {client.name}</CardDescription>
       </CardHeader>
 
       <CardContent>
