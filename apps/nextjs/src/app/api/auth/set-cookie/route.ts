@@ -6,6 +6,8 @@ import {
   ONBOARDING_COOKIE_NAME,
 } from "~/auth/cookies";
 
+const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+
 export async function POST(req: NextRequest) {
   try {
     const jsonData = await req.json();
@@ -22,7 +24,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 3600,
+      maxAge: ONE_DAY_IN_SECONDS,
     });
 
     response.cookies.set({
@@ -31,7 +33,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 3600,
+      maxAge: ONE_DAY_IN_SECONDS,
     });
 
     return response;
