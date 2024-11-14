@@ -24,9 +24,13 @@ export default function ModelsTable({ initialState }: ModelsTableProps) {
     data = [],
     isLoading,
     isError,
-  } = api.models.getAll.useQuery(dataState);
+  } = api.models.getAll.useQuery(dataState, {
+    placeholderData: keepPreviousData,
+  });
 
-  const { data: rowCount } = api.models.getCount.useQuery(countState);
+  const { data: rowCount } = api.models.getCount.useQuery(countState, {
+    placeholderData: keepPreviousData,
+  });
 
   const table = useDataTable({
     columns,

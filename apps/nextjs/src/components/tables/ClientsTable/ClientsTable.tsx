@@ -6,6 +6,7 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
+import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -17,10 +18,13 @@ export default function ClientsTable() {
     data = [],
     isLoading,
     isError,
-    error,
-  } = api.clients.getAll.useQuery(dataState);
+  } = api.clients.getAll.useQuery(dataState, {
+    placeholderData: keepPreviousData,
+  });
 
-  const { data: rowCount } = api.clients.getCount.useQuery(countState);
+  const { data: rowCount } = api.clients.getCount.useQuery(countState, {
+    placeholderData: keepPreviousData,
+  });
 
   const table = useDataTable({
     columns,

@@ -24,7 +24,9 @@ export default function UsersTable() {
     placeholderData: keepPreviousData,
   });
 
-  const { data: rowCount } = api.users.getCount.useQuery(countState);
+  const { data: rowCount } = api.users.getCount.useQuery(countState, {
+    placeholderData: keepPreviousData,
+  });
 
   const table = useDataTable({
     columns,

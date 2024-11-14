@@ -6,6 +6,7 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
+import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -14,10 +15,16 @@ import { columns } from "./columns";
 export default function LocationsTable() {
   const { dataState, countState, tableOptions } = useDataTableState();
 
-  const { data, isLoading, isError, error } =
-    api.locations.getAll.useQuery(dataState);
+  const { data, isLoading, isError, error } = api.locations.getAll.useQuery(
+    dataState,
+    {
+      placeholderData: keepPreviousData,
+    },
+  );
 
-  const { data: rowCount } = api.locations.getCount.useQuery(countState);
+  const { data: rowCount } = api.locations.getCount.useQuery(countState, {
+    placeholderData: keepPreviousData,
+  });
 
   const table = useDataTable({
     columns,
