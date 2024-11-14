@@ -5,9 +5,9 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .sst",
-    "db": "drizzle-kit",
-    "db:seed": "pnpm -F db db:seed",
-    "db:wipe": "pnpm -F db db:wipe",
+    "db": "sst shell drizzle-kit",
+    "db:seed": "sst shell -- pnpm -F db db:seed",
+    "db:wipe": "sst shell -- pnpm -F db db:wipe",
     "dev": "sst dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
