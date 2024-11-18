@@ -37,7 +37,7 @@ export default function CreateModelImageForm({
     schema: modelImageFormSchema,
   });
 
-  async function handleValid(values: ModelImageFormInput) {
+  function handleValid(values: ModelImageFormInput) {
     formRef.current?.submit();
   }
 

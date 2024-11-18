@@ -46,8 +46,8 @@ export default function CreateModelPartForm({
     defaultValues: defaultModelPart,
   });
 
-  async function handleValid(data: ModelPartFormInput) {
-    await createMutation.mutateAsync({ ...data, modelId });
+  function handleValid(data: ModelPartFormInput) {
+    createMutation.mutate({ ...data, modelId });
   }
 
   return (

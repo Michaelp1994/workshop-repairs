@@ -45,8 +45,8 @@ export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
     schema: userFormSchema,
   });
 
-  async function handleValid(values: UserFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: userId });
+  function handleValid(values: UserFormInput) {
+    updateMutation.mutate({ ...values, id: userId });
   }
 
   return (

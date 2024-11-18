@@ -43,8 +43,8 @@ export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
     },
   });
 
-  async function handleValid(values: AssetFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: assetId });
+  function handleValid(values: AssetFormInput) {
+    updateMutation.mutate({ ...values, id: assetId });
   }
 
   const form = useForm({

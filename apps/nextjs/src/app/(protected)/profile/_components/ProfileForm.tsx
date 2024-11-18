@@ -38,8 +38,8 @@ export default function ProfileForm() {
     values: data,
   });
 
-  async function handleValid(data: UpdateProfileFormInput) {
-    await updateMutation.mutateAsync(data);
+  function handleValid(data: UpdateProfileFormInput) {
+    updateMutation.mutate(data);
   }
 
   if (isLoading) {

@@ -63,8 +63,8 @@ export default function CreateRepairPartForm({
     schema: repairPartFormSchema,
   });
 
-  async function handleValid(values: RepairPartFormInput) {
-    await createMutation.mutateAsync({ ...values, repairId });
+  function handleValid(values: RepairPartFormInput) {
+    createMutation.mutate({ ...values, repairId });
   }
 
   if (isLoading) {

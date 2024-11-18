@@ -53,8 +53,8 @@ export default function UpdateEquipmentTypeForm({
     values: equipmentType,
   });
 
-  async function handleValid(values: EquipmentTypeFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: equipmentTypeId });
+  function handleValid(values: EquipmentTypeFormInput) {
+    updateMutation.mutate({ ...values, id: equipmentTypeId });
   }
 
   return (

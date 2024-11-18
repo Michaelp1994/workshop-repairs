@@ -44,8 +44,8 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
     schema: partsToModelsFormSchema,
   });
 
-  async function handleValid(values: PartsToModelFormInput) {
-    await createMutation.mutateAsync({ ...values, partId });
+  function handleValid(values: PartsToModelFormInput) {
+    createMutation.mutate({ ...values, partId });
   }
 
   return (

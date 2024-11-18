@@ -58,7 +58,7 @@ export default function UpdateRepairPartForm({
   });
 
   async function onValid(values: RepairPartFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: repairPartId });
+    updateMutation.mutate({ ...values, id: repairPartId });
   }
 
   return (

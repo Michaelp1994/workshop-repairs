@@ -42,8 +42,8 @@ export default function CreateModelForm() {
     schema: modelFormSchema,
   });
 
-  async function handleValid(values: ModelFormInput) {
-    await createMutation.mutateAsync(values);
+  function handleValid(values: ModelFormInput) {
+    createMutation.mutate(values);
   }
 
   return (

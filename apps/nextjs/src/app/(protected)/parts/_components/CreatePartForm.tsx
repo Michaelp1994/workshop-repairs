@@ -37,8 +37,8 @@ export default function CreatePartForm() {
     schema: partFormSchema,
   });
 
-  async function handleValid(values: PartFormInput) {
-    await createMutation.mutateAsync(values);
+  function handleValid(values: PartFormInput) {
+    createMutation.mutate(values);
   }
 
   return (

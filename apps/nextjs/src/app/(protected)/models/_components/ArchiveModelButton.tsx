@@ -25,7 +25,7 @@ export default function ArchiveModelButton({
   });
 
   async function archiveRepair() {
-    await archiveMutation.mutateAsync({ id: modelId });
+    archiveMutation.mutate({ id: modelId });
   }
 
   return (

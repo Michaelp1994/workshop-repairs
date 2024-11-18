@@ -55,8 +55,8 @@ export default function UpdateRepairCommentForm({
     schema: repairCommentFormSchema,
   });
 
-  async function handleValid(data: RepairCommentFormInput) {
-    await updateMutation.mutateAsync({ ...data, id: repairCommentId });
+  function handleValid(data: RepairCommentFormInput) {
+    updateMutation.mutate({ ...data, id: repairCommentId });
   }
 
   if (isLoading) {

@@ -47,8 +47,8 @@ export default function UpdateManufacturerForm({
     schema: manufacturerFormSchema,
   });
 
-  async function handleValid(values: ManufacturerFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: manufacturerId });
+  function handleValid(values: ManufacturerFormInput) {
+    updateMutation.mutate({ ...values, id: manufacturerId });
   }
 
   if (isLoading) {

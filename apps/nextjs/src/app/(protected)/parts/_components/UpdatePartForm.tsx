@@ -45,8 +45,8 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
     schema: partFormSchema,
   });
 
-  async function handleValid(values: PartFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: partId });
+  function handleValid(values: PartFormInput) {
+    updateMutation.mutate({ ...values, id: partId });
   }
 
   return (

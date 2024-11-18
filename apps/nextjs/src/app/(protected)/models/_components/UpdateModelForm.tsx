@@ -54,8 +54,8 @@ export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
     schema: modelFormSchema,
   });
 
-  async function handleValid(values: ModelFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: modelId });
+  function handleValid(values: ModelFormInput) {
+    updateMutation.mutate({ ...values, id: modelId });
   }
 
   return (

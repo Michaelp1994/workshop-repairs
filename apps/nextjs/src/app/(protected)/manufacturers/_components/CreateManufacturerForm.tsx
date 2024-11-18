@@ -41,8 +41,8 @@ export default function CreateManufacturerForm() {
     schema: manufacturerFormSchema,
   });
 
-  async function handleValid(values: ManufacturerFormInput) {
-    await createMutation.mutateAsync(values);
+  function handleValid(values: ManufacturerFormInput) {
+    createMutation.mutate(values);
   }
 
   return (

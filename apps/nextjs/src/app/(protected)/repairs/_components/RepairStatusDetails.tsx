@@ -53,8 +53,8 @@ export default function RepairStatusDetails({
     schema,
   });
 
-  async function handleValid(values: UpdateRepairStatusFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: repairId });
+  function handleValid(values: UpdateRepairStatusFormInput) {
+    updateMutation.mutate({ ...values, id: repairId });
   }
 
   if (isLoading) {

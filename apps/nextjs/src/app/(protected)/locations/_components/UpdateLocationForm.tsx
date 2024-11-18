@@ -47,8 +47,8 @@ export default function UpdateLocationForm({
     schema: locationFormSchema,
   });
 
-  async function handleValid(values: LocationFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: locationId });
+  function handleValid(values: LocationFormInput) {
+    updateMutation.mutate({ ...values, id: locationId });
   }
 
   return (

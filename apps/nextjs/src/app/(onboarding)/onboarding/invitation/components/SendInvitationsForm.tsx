@@ -43,8 +43,8 @@ export default function SendInvitationsForm() {
     defaultValues: defaultInviteOthers,
   });
 
-  async function handleValid(data: InviteOthersInput) {
-    await inviteMutation.mutateAsync({
+  function handleValid(data: InviteOthersInput) {
+    inviteMutation.mutate({
       emails: data.email,
     });
   }

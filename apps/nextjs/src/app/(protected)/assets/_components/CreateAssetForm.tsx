@@ -44,8 +44,8 @@ export default function CreateAssetForm() {
     schema: assetFormSchema,
   });
 
-  async function handleValid(values: AssetFormInput) {
-    await createMutation.mutateAsync(values);
+  function handleValid(values: AssetFormInput) {
+    createMutation.mutate(values);
   }
   return (
     <Form {...form}>

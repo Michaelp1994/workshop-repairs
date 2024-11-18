@@ -47,8 +47,8 @@ export default function UpdateRepairImageForm({
     schema: repairImageFormSchema,
   });
 
-  async function handleValid(values: RepairImageFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: repairImageId });
+  function handleValid(values: RepairImageFormInput) {
+    updateMutation.mutate({ ...values, id: repairImageId });
   }
 
   if (isLoading) {

@@ -41,8 +41,8 @@ export default function CreateEquipmentTypeForm() {
     schema: equipmentTypeFormSchema,
   });
 
-  async function handleValid(values: EquipmentTypeFormInput) {
-    await createMutation.mutateAsync(values);
+  function handleValid(values: EquipmentTypeFormInput) {
+    createMutation.mutate(values);
   }
 
   return (

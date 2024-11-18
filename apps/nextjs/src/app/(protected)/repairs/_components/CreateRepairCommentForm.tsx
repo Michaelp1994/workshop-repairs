@@ -47,8 +47,8 @@ export default function CreateRepairCommentForm({
     schema: repairCommentFormSchema,
   });
 
-  async function handleValid(data: RepairCommentFormInput) {
-    await createMutation.mutateAsync({ ...data, repairId });
+  function handleValid(data: RepairCommentFormInput) {
+    createMutation.mutate({ ...data, repairId });
   }
 
   return (

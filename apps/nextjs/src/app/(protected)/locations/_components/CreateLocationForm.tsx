@@ -37,8 +37,8 @@ export default function CreateLocationForm() {
     schema: locationFormSchema,
   });
 
-  async function handleValid(values: LocationFormInput) {
-    await createMutation.mutateAsync(values);
+  function handleValid(values: LocationFormInput) {
+    createMutation.mutate(values);
   }
 
   return (

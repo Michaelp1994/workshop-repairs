@@ -50,8 +50,8 @@ export default function UpdateAssetStatusForm({
     schema,
   });
 
-  async function handleValid(values: UpdateAssetStatusFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: assetId });
+  function handleValid(values: UpdateAssetStatusFormInput) {
+    updateMutation.mutate({ ...values, id: assetId });
   }
 
   if (isLoading) {

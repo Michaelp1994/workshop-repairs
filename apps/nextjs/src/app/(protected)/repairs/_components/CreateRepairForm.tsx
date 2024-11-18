@@ -50,8 +50,8 @@ export default function CreateRepairForm() {
     },
   });
 
-  async function handleValid(data: RepairFormInput) {
-    await createMutation.mutateAsync(data);
+  function handleValid(data: RepairFormInput) {
+    createMutation.mutate(data);
   }
 
   return (

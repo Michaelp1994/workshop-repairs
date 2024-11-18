@@ -37,8 +37,8 @@ export default function ForgotPasswordForm() {
     defaultValues: defaultLogin,
   });
 
-  async function handleValid(data: ForgotPasswordFormInput) {
-    await forgotPasswordMutation.mutateAsync(data);
+  function handleValid(data: ForgotPasswordFormInput) {
+    forgotPasswordMutation.mutate(data);
   }
   return (
     <Form {...form}>

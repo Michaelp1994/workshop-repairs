@@ -45,8 +45,8 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
     schema: clientFormSchema,
   });
 
-  async function handleValid(values: ClientFormInput) {
-    await updateMutation.mutateAsync({ ...values, id: clientId });
+  function handleValid(values: ClientFormInput) {
+    updateMutation.mutate({ ...values, id: clientId });
   }
 
   return (
