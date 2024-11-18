@@ -27,7 +27,7 @@ export const registerFormSchema = z.object({
   }),
   acceptToS: z.literal<boolean>(true, {
     errorMap: () => ({
-      message: "",
+      message: "Please accept the Terms and Services.",
     }),
   }),
 });

@@ -1,7 +1,7 @@
 import { Button, type ButtonProps } from "@repo/ui/button";
 import { Eye, Pencil, PlusCircle, Trash2 } from "@repo/ui/icons";
 import Link from "next/link";
-import React, { type ComponentType } from "react";
+import React from "react";
 
 interface IconButtonProps extends Omit<ButtonProps, "asChild"> {
   href: string;

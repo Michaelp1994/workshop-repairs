@@ -9,22 +9,15 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import Breadcrumbs from "../../_components/Breadcrumbs";
 import CreateRepairForm from "../_components/CreateRepairForm";
 
 export const metadata: Metadata = {
   title: "Create Repair",
 };
 
-const breadcrumbs = [
-  { label: "Repairs", href: "/repairs" },
-  { label: "Create", href: "/repairs/new" },
-];
-
 export default function CreateRepairPage() {
   return (
     <PageWrapper>
-      <Breadcrumbs routes={breadcrumbs} />
       <PageHeader>
         <PageHeaderText>
           <PageTitle>New Repair</PageTitle>

@@ -12,7 +12,6 @@ interface ClientAssetsSectionProps {
 export default async function ClientAssetsSection({
   clientId,
 }: ClientAssetsSectionProps) {
-  const client = await api.clients.getById({ id: clientId });
   const initialState: InitialDataTableState = {
     pagination: { pageIndex: 0, pageSize: 5 },
     columnFilters: [{ id: "client_id", value: clientId }],
@@ -33,7 +32,6 @@ export default async function ClientAssetsSection({
       <CardHeader>
         <CardTitle>Assets</CardTitle>
       </CardHeader>
-
       <CardContent>
         <AssetsTable initialState={initialState} />
       </CardContent>

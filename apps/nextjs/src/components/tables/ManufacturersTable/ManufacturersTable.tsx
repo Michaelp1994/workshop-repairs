@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -14,35 +15,28 @@ import { columns } from "./columns";
 export default function ManufacturersTable() {
   const { dataState, countState, tableOptions } = useDataTableState();
 
-  const { data, isLoading, isError } = api.manufacturers.getAll.useQuery(
+  const [manufacturers] = api.manufacturers.getAll.useSuspenseQuery(
     dataState,
-    {
-      placeholderData: keepPreviousData,
-    },
+    {},
   );
 
-  const { data: rowCount } = api.manufacturers.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
+  const [rowCount] = api.manufacturers.getCount.useSuspenseQuery(
+    countState,
+    {},
+  );
 
   const table = useDataTable({
     columns,
-    data,
+    data: manufacturers,
     rowCount,
     ...tableOptions,
   });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading manufacturers</div>;
-  }
 
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

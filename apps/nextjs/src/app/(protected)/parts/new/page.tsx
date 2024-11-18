@@ -1,16 +1,27 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/card";
+
+import {
+  PageHeader,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import CreatePartForm from "../_components/CreatePartForm";
 
 export default function CreatePartPage() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Part</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CreatePartForm />
-      </CardContent>
-    </Card>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>New Part</PageTitle>
+        </PageHeaderText>
+      </PageHeader>
+      <Card>
+        <CardContent>
+          <CreatePartForm />
+        </CardContent>
+      </Card>
+    </PageWrapper>
   );
 }

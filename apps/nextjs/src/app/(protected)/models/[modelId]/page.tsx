@@ -6,6 +6,15 @@ import {
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
 } from "~/components/DetailsPage";
+import { IconButton } from "~/components/IconButton";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
+import { api } from "~/trpc/server";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import ModelAssetsSection from "../_components/ModelAssetsSection";
@@ -19,23 +28,25 @@ interface ViewModelPageProps {
   };
 }
 
-export default function ViewModelPage({ params }: ViewModelPageProps) {
+export default async function ViewModelPage({ params }: ViewModelPageProps) {
   const modelId = Number(params.modelId);
+  const model = await api.models.getById({ id: modelId });
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <ModelDetailsSection modelId={modelId} />
-        <ModelAssetsSection modelId={modelId} />
-        <ModelPartsSection modelId={modelId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn>
-        <ModelImagesSection modelId={modelId} />
-        <ArchiveSection
-          description="This will archive the model and prevent any future updates."
-          href={`${getBaseUrl()}/models/${modelId}/archive`}
-          title="Archive Model"
-        />
-      </DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{model.name}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`${modelId}/edit`} variant="update">
+            Update
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+
+      <ModelAssetsSection modelId={modelId} />
+      <ModelPartsSection modelId={modelId} />
+      <ModelImagesSection modelId={modelId} />
+    </PageWrapper>
   );
 }

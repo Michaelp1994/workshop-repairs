@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -32,10 +33,10 @@ export default function AssetsTable({ initialState }: AssetsTableProps) {
   });
 
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
-      <DataTable className="rounded-md border" table={table} />
+      <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

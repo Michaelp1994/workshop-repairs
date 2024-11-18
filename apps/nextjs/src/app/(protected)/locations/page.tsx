@@ -10,6 +10,13 @@ import {
 } from "@repo/ui/card";
 
 import { IconButton } from "~/components/IconButton";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import LocationsTable from "../../../components/tables/LocationsTable";
 
@@ -19,20 +26,18 @@ export const metadata: Metadata = {
 
 export default function AllLocationsPage() {
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <IconButton variant="create" href="/locations/new">
-          Create Location
-        </IconButton>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Locations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LocationsTable />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Locations</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href="/locations/new" variant="create">
+            Create
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <LocationsTable />
+    </PageWrapper>
   );
 }

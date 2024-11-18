@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -20,40 +21,26 @@ export default function PartsTable({ initialState }: ModelPartsTable) {
   const { dataState, countState, tableOptions } =
     useDataTableState(initialState);
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-  } = api.partsToModels.getAll.useQuery(dataState, {
-    placeholderData: keepPreviousData,
-  });
+  const [modelParts] = api.partsToModels.getAll.useSuspenseQuery(dataState, {});
 
-  const { data: rowCount } = api.partsToModels.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
+  const [rowCount] = api.partsToModels.getCount.useSuspenseQuery(
+    countState,
+    {},
+  );
 
   const table = useDataTable({
     columns,
-    data,
+    data: modelParts,
     getRowId: (row, index) => index.toString(),
     rowCount,
     ...tableOptions,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    console.log(error);
-    return <div>Error loading parts</div>;
-  }
-
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

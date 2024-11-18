@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -20,37 +21,22 @@ export default function ModelsTable({ initialState }: ModelsTableProps) {
   const { dataState, countState, tableOptions } =
     useDataTableState(initialState);
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = api.models.getAll.useQuery(dataState, {
-    placeholderData: keepPreviousData,
-  });
+  const [models] = api.models.getAll.useSuspenseQuery(dataState, {});
 
-  const { data: rowCount } = api.models.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
+  const [rowCount] = api.models.getCount.useSuspenseQuery(countState, {});
 
   const table = useDataTable({
     columns,
-    data,
+    data: models,
     rowCount,
     ...tableOptions,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading models</div>;
-  }
-
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

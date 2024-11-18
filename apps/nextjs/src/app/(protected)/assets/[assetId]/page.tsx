@@ -1,11 +1,12 @@
-import ArchiveSection from "~/components/ArchiveSection";
+import { IconButton } from "~/components/IconButton";
 import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
-import AssetDetailsSection from "../_components/AssetDetailsSection";
 // import AssetLocationSection from "../_components/AssetLocationSection";
 import ModelDetailsSection from "../_components/AssetModelSection";
 import AssetRepairsSection from "../_components/AssetRepairsSection";
@@ -19,18 +20,22 @@ interface ViewAssetPageProps {
 
 export default function ViewAssetPage({ params }: ViewAssetPageProps) {
   const assetId = Number(params.assetId);
+
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <AssetDetailsSection assetId={assetId} />
-        <AssetRepairsSection assetId={assetId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn>
-        <AssetStatusSection assetId={assetId} />
-        <ModelDetailsSection assetId={assetId} />
-        {/* <AssetLocationSection assetId={assetId} /> */}
-        <ArchiveSection description="" href="" title="Archive Asset" />
-      </DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{assetId}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`${assetId}/edit`} variant="update">
+            Edit
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <AssetRepairsSection assetId={assetId} />
+      <AssetStatusSection assetId={assetId} />
+      <ModelDetailsSection assetId={assetId} />
+    </PageWrapper>
   );
 }

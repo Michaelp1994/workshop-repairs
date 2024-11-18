@@ -52,7 +52,7 @@ export const columns = [
     cell: ({ row }) => (
       <DataTableRowActions
         generateUrl={(row) =>
-          `${getBaseUrl()}/manufacturers/${row.original.id}`
+          `${getBaseUrl()}/equipment-types/${row.original.id}`
         }
         row={row}
       />

@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -42,10 +43,10 @@ export default function LocationsTable() {
   }
 
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

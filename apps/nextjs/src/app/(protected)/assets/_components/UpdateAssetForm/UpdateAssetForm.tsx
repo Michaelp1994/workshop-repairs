@@ -24,19 +24,18 @@ import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
 import { api } from "~/trpc/client";
 
-interface AssetDetailsProps {
+interface UpdateAssetFormProps {
   assetId: AssetID;
 }
 
-export default function AssetDetails({ assetId }: AssetDetailsProps) {
-  const { isLoading, isError, data, refetch } = api.assets.getById.useQuery({
+export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
+  const [asset] = api.assets.getById.useSuspenseQuery({
     id: assetId,
   });
 
   const updateMutation = api.assets.update.useMutation({
     async onSuccess(values) {
       toast.success(`Asset ${values.assetNumber} updated`);
-      await refetch();
     },
     onError(error) {
       toast.error("Failed to update asset");
@@ -49,17 +48,9 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
   }
 
   const form = useForm({
-    values: data,
+    values: asset,
     schema: assetFormSchema,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
-  }
 
   return (
     <Form {...form}>
@@ -131,12 +122,8 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
           }}
         />
         <FormFooter>
-          {form.formState.isDirty && (
-            <>
-              <ResetButton />
-              <SubmitButton isLoading={updateMutation.isPending} />
-            </>
-          )}
+          <ResetButton />
+          <SubmitButton isLoading={updateMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

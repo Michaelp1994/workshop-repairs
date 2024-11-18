@@ -1,10 +1,20 @@
+import { partId } from "@repo/validators/ids.validators";
+
 import ArchiveSection from "~/components/ArchiveSection";
 import {
   DetailsPageGrid,
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
 } from "~/components/DetailsPage";
-import { getBaseUrl } from "~/utils/getBaseUrl";
+import { IconButton } from "~/components/IconButton";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
+import { api } from "~/trpc/server";
 
 import AssetDetailsSection from "../_components/AssetDetailsSection";
 import RepairCommentsSection from "../_components/RepairCommentsSection";
@@ -19,26 +29,28 @@ interface ViewRepairPageProps {
   };
 }
 
-export default function ViewRepairPage({ params }: ViewRepairPageProps) {
+export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
   const repairId = Number(params.repairId);
-
+  const repair = await api.repairs.getById({
+    id: repairId,
+  });
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <RepairDetailsSection repairId={repairId} />
-        <RepairPartsSection repairId={repairId} />
-        <RepairCommentsSection repairId={repairId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn>
-        <RepairStatusDetails repairId={repairId} />
-        <AssetDetailsSection repairId={repairId} />
-        <RepairImagesSection repairId={repairId} />
-        <ArchiveSection
-          description="This will archive the repair and prevent any future updates."
-          href={`${getBaseUrl()}/repairs/${repairId}/archive`}
-          title="Archive Repair"
-        />
-      </DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{repair.id}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`/repairs/${repairId}/edit`} variant="update">
+            Update
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      {/* <RepairPartsSection repairId={repairId} /> */}
+      <RepairCommentsSection repairId={repairId} />
+      <RepairStatusDetails repairId={repairId} />
+      <AssetDetailsSection repairId={repairId} />
+      <RepairImagesSection repairId={repairId} />
+    </PageWrapper>
   );
 }

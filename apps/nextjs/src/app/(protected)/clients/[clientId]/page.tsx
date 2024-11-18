@@ -8,6 +8,7 @@ import {
   DetailsPageMainColumn,
   DetailsPageSecondaryColumn,
 } from "~/components/DetailsPage";
+import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
   PageHeaderActions,
@@ -17,9 +18,7 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import Breadcrumbs from "../../_components/Breadcrumbs";
 import ClientAssetsSection from "../_components/ClientAssetsSection";
-import ClientDetailsSection from "../_components/ClientDetailsSection";
 import ClientRepairsSection from "../_components/ClientRepairsSection/ClientRepairsSection";
 
 interface ViewClientPageProps {
@@ -32,27 +31,19 @@ export default async function ViewClientPage({ params }: ViewClientPageProps) {
   const clientId = Number(params.clientId);
   const client = await api.clients.getById({ id: clientId });
 
-  const breadcrumbs = [
-    { label: "Clients", href: "/clients" },
-    { label: "View Client", href: `/clients/${clientId}` },
-  ];
-
   return (
     <PageWrapper>
-      <Breadcrumbs routes={breadcrumbs} />
       <PageHeader>
         <PageHeaderText>
           <PageTitle>{client.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <Button asChild>
-            <Link>Edit</Link>
-          </Button>
+          <IconButton href={`${clientId}/edit`} variant="update">
+            Edit
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      {/* <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
-        <ClientDetailsSection clientId={clientId} />
-      </Suspense> */}
+
       <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
         <ClientAssetsSection clientId={clientId} />
       </Suspense>

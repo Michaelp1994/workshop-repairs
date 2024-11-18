@@ -13,13 +13,10 @@ import {
 } from "~/components/Page";
 
 import RepairsTable from "../../../components/tables/RepairsTable";
-import Breadcrumbs from "../_components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Repairs",
 };
-
-const breadcrumbs = [{ label: "Repairs", href: "/repairs" }];
 
 export default function AllRepairsPage() {
   const initialState: InitialDataTableState = {
@@ -32,7 +29,6 @@ export default function AllRepairsPage() {
   };
   return (
     <PageWrapper>
-      <Breadcrumbs routes={breadcrumbs} />
       <PageHeader>
         <PageHeaderText>
           <PageTitle>Repairs</PageTitle>
@@ -41,7 +37,7 @@ export default function AllRepairsPage() {
           </PageDescription>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton variant="create" href="/repairs/new">
+          <IconButton href="/repairs/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

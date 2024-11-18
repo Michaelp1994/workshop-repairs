@@ -8,22 +8,17 @@ import {
   BreadcrumbSeparator,
 } from "@repo/ui/breadcrumb";
 import { Home } from "@repo/ui/icons";
-import { Separator } from "@repo/ui/separator";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
-interface Route {
-  href: string;
-  label: string;
-}
+import BreadcrumbMap from "./BreadcrumbMap";
 
-interface BreadcrumbProps {
-  routes: Route[];
-}
-
-export default function Breadcrumbs({ routes }: BreadcrumbProps) {
+export default function Breadcrumbs() {
+  const pathName = usePathname();
+  const routes = BreadcrumbMap(pathName);
   return (
-    <Breadcrumb separator={<Separator />}>
+    <Breadcrumb className="mb-4">
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbLink asChild className="capitalize">
@@ -32,11 +27,13 @@ export default function Breadcrumbs({ routes }: BreadcrumbProps) {
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator className="hidden md:block" />
+        {routes.length > 0 && (
+          <BreadcrumbSeparator className="hidden md:block" />
+        )}
         {routes.map((route, index) => {
           if (index === routes.length - 1) {
             return (
-              <BreadcrumbItem key={route.href}>
+              <BreadcrumbItem key={route.label}>
                 <BreadcrumbPage className="capitalize">
                   {route.label}
                 </BreadcrumbPage>

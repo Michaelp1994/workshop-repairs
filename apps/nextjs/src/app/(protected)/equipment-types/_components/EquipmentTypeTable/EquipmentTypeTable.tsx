@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -14,29 +15,23 @@ import { columns } from "./columns";
 export default function EquipmentTypeTable() {
   const { dataState, countState, tableOptions } = useDataTableState();
 
-  const { data, isLoading, isError } =
-    api.equipmentTypes.getAll.useQuery(dataState);
+  const [equipmentTypes] =
+    api.equipmentTypes.getAll.useSuspenseQuery(dataState);
 
-  const { data: rowCount } = api.equipmentTypes.getCount.useQuery(countState);
+  const [rowCount] = api.equipmentTypes.getCount.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,
-    data,
+    data: equipmentTypes,
     rowCount,
     ...tableOptions,
   });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading manufacturers</div>;
-  }
 
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

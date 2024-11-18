@@ -31,7 +31,7 @@ interface UpdateModelFormProps {
 
 export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
   const utils = api.useUtils();
-  const { data, isLoading, isError } = api.models.getById.useQuery({
+  const [model] = api.models.getById.useSuspenseQuery({
     id: modelId,
   });
 
@@ -51,21 +51,12 @@ export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
   });
 
   const form = useForm({
-    values: data,
-    defaultValues: defaultModel,
+    values: model,
     schema: modelFormSchema,
   });
 
   async function handleValid(values: ModelFormInput) {
     await updateMutation.mutateAsync({ ...values, id: modelId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (
@@ -123,12 +114,10 @@ export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
           }}
         />
 
-        {form.formState.isDirty && (
-          <FormFooter>
-            <ResetButton />
-            <SubmitButton />
-          </FormFooter>
-        )}
+        <FormFooter>
+          <ResetButton />
+          <SubmitButton isLoading={updateMutation.isPending} />
+        </FormFooter>
       </form>
     </Form>
   );

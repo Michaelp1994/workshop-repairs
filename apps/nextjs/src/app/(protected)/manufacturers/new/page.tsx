@@ -1,18 +1,27 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/card";
+
+import {
+  PageHeader,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import CreateManufacturerForm from "../_components/CreateManufacturerForm";
 
 export default function CreateManufacturerPage() {
   return (
-    <div>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>New Manufacturer</PageTitle>
+        </PageHeaderText>
+      </PageHeader>
       <Card>
-        <CardHeader>
-          <CardTitle>Create Manufacturer</CardTitle>
-        </CardHeader>
         <CardContent>
           <CreateManufacturerForm />
         </CardContent>
       </Card>
-    </div>
+    </PageWrapper>
   );
 }

@@ -29,6 +29,7 @@ import {
   SidebarMenuSubItem,
 } from "@repo/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const items = [
   {
@@ -87,12 +88,17 @@ const items = [
 ];
 
 export function NavMain() {
+  const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild tooltip={item.title}>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname.startsWith(item.href)}
+              tooltip={item.title}
+            >
               <Link href={item.href}>
                 <item.icon />
                 <span>{item.title}</span>

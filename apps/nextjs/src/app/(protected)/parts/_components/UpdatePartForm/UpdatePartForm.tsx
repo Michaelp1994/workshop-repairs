@@ -27,7 +27,7 @@ interface UpdatePartFormProps {
 }
 
 export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
-  const { isError, isLoading, data } = api.parts.getById.useQuery({
+  const [part] = api.parts.getById.useSuspenseQuery({
     id: partId,
   });
 
@@ -36,25 +36,17 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
       toast.success(`Part ${values.name} updated`);
     },
     onError() {
-      toast.error("Failed to delete part");
+      toast.error("Failed to update part");
     },
   });
 
   const form = useForm({
-    values: data,
+    values: part,
     schema: partFormSchema,
   });
 
   async function handleValid(values: PartFormInput) {
     await updateMutation.mutateAsync({ ...values, id: partId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (

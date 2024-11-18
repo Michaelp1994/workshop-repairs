@@ -62,7 +62,7 @@ export default function CreateAssetForm() {
               <FormItem>
                 <FormLabel>Asset Number</FormLabel>
                 <FormControl>
-                  <Input className="max-w-[500px]" {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -78,7 +78,7 @@ export default function CreateAssetForm() {
               <FormItem>
                 <FormLabel>Serial Number</FormLabel>
                 <FormControl>
-                  <Input className="max-w-[500px]" {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -93,7 +93,7 @@ export default function CreateAssetForm() {
               <FormItem>
                 <FormLabel>Status</FormLabel>
                 <FormControl>
-                  <AssetStatusSelect className="max-w-[500px]" {...field} />
+                  <AssetStatusSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -108,7 +108,7 @@ export default function CreateAssetForm() {
               <FormItem>
                 <FormLabel>Model</FormLabel>
                 <FormControl>
-                  <ModelSelect className="max-w-[500px]" {...field} />
+                  <ModelSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,7 +123,7 @@ export default function CreateAssetForm() {
               <FormItem>
                 <FormLabel>Client</FormLabel>
                 <FormControl>
-                  <ClientSelect className="max-w-[500px]" {...field} />
+                  <ClientSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -138,7 +138,7 @@ export default function CreateAssetForm() {
               <FormItem>
                 <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <LocationSelect className="max-w-[500px]" {...field} />
+                  <LocationSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

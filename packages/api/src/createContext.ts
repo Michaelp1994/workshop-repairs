@@ -37,7 +37,6 @@ export async function createTRPCContext(
       userId: verifiedToken.payload.userId,
       organizationId: verifiedToken.payload.organizationId,
     };
-    console.log("good token");
     return {
       db,
       setCookie,

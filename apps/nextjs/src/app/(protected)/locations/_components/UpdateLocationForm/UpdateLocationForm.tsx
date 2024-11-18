@@ -29,7 +29,7 @@ interface UpdateLocationFormProps {
 export default function UpdateLocationForm({
   locationId,
 }: UpdateLocationFormProps) {
-  const { isLoading, data, isError } = api.locations.getById.useQuery({
+  const [location] = api.locations.getById.useSuspenseQuery({
     id: locationId,
   });
 
@@ -43,20 +43,12 @@ export default function UpdateLocationForm({
   });
 
   const form = useForm({
-    values: data,
+    values: location,
     schema: locationFormSchema,
   });
 
   async function handleValid(values: LocationFormInput) {
     await updateMutation.mutateAsync({ ...values, id: locationId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (
