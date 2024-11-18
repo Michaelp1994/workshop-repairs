@@ -1,5 +1,6 @@
 import { flexRender, type Table as iTable } from "@tanstack/react-table";
 
+import { cn } from "../../lib/utils";
 import {
   Table,
   TableBody,
@@ -9,7 +10,7 @@ import {
   TableRow,
 } from "../table";
 
-interface DataTableProps<T> {
+interface DataTableProps<T> extends React.HTMLAttributes<HTMLDivElement> {
   table: iTable<T>;
   noResultsText?: string;
 }
@@ -17,11 +18,14 @@ interface DataTableProps<T> {
 export function DataTable<T>({
   table,
   noResultsText = "No Results!",
+
+  className,
+  ...props
 }: DataTableProps<T>) {
   const numRows = table.getRowCount();
   const numCols = table.getAllColumns().length;
   return (
-    <div className="rounded-md border">
+    <div className={cn("border-y", className)} {...props}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

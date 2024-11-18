@@ -12,7 +12,7 @@ export default function DataTableGlobalFilterInput<TData extends RowData>({
   const value = table.getState().globalFilter as string;
   return (
     <Input
-      className="max-w-sm"
+      className="h-8 max-w-sm"
       onChange={(e) => {
         table.setGlobalFilter(e.target.value);
       }}

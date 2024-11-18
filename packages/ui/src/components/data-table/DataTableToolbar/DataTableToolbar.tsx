@@ -14,7 +14,7 @@ export default function DataTableToolbar<TData extends RowData>({
   ColumnFilter,
 }: DataTableToolbarProps<TData>) {
   return (
-    <div className="flex items-center justify-between pb-4">
+    <div className="flex items-center justify-between p-4">
       <div className="flex flex-1 items-center space-x-2">
         <DataTableGlobalFilterInput table={table} />
         {ColumnFilter}

@@ -8,7 +8,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useState } from "react";
 
 export interface InitialDataTableState {
@@ -33,14 +32,8 @@ export function useDataTableState(initialData?: InitialDataTableState) {
     columnFilters: initialData?.columnFilters ?? [],
   }; // TODO: refactor. ugly.
 
-  const [pageIndex, setPageIndex] = useQueryState<number>(
-    "p",
-    parseAsInteger.withDefault(init.pagination.pageIndex),
-  );
-  const [pageSize, setPageSize] = useQueryState<number>(
-    "n",
-    parseAsInteger.withDefault(init.pagination.pageSize),
-  );
+  const [pageIndex, setPageIndex] = useState<number>(init.pagination.pageIndex);
+  const [pageSize, setPageSize] = useState<number>(init.pagination.pageSize);
 
   const pagination = {
     pageIndex,
@@ -57,10 +50,7 @@ export function useDataTableState(initialData?: InitialDataTableState) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     init.rowSelection,
   );
-  const [globalFilter, setGlobalFilter] = useQueryState<string>(
-    "gf",
-    parseAsString.withDefault(init.globalFilter),
-  );
+  const [globalFilter, setGlobalFilter] = useState<string>(init.globalFilter);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     init.columnVisibility,
   );
@@ -99,10 +89,6 @@ export function useDataTableState(initialData?: InitialDataTableState) {
     },
   };
 }
-
-// interface BaseData {
-//   // id: number;
-// }
 
 interface BaseData {
   id: number;
