@@ -9,7 +9,7 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 
 import PartsTable from "../../../components/tables/PartsTable";
 
@@ -21,7 +21,9 @@ export default function AllPartsPage() {
   return (
     <CardWrapper>
       <CardToolbar>
-        <CreateLink href="/parts/new">Create Part</CreateLink>
+        <IconButton variant="create" href="/parts/new">
+          Create Part
+        </IconButton>
       </CardToolbar>
       <Card>
         <CardHeader>

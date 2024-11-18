@@ -9,7 +9,7 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 
 import ManufacturersTable from "../../../components/tables/ManufacturersTable";
 
@@ -21,7 +21,9 @@ export default function AllManufacturersPage() {
   return (
     <CardWrapper>
       <CardToolbar>
-        <CreateLink href="/manufacturers/new">Create Manufacturer</CreateLink>
+        <IconButton variant="create" href="/manufacturers/new">
+          Create Manufacturer
+        </IconButton>
       </CardToolbar>
       <Card>
         <CardHeader>

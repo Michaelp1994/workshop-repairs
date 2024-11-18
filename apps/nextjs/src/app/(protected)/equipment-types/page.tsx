@@ -9,7 +9,7 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 
 import EquipmentTypeTable from "./_components/EquipmentTypeTable";
 
@@ -21,9 +21,9 @@ export default function AllEquipmentTypesPage() {
   return (
     <CardWrapper>
       <CardToolbar>
-        <CreateLink href="/equipment-types/new">
+        <IconButton variant="create" href="/equipment-types/new">
           Create Equipment Type
-        </CreateLink>
+        </IconButton>
       </CardToolbar>
       <Card>
         <CardHeader>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
   PageHeaderActions,
@@ -27,7 +27,9 @@ export default function AllClientsPage() {
           <PageTitle>Clients</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <CreateLink href="/clients/new">Create</CreateLink>
+          <IconButton variant="create" href="/clients/new">
+            Create
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <ClientsTable />

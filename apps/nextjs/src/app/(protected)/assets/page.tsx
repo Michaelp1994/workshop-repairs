@@ -3,14 +3,13 @@ import type { Metadata } from "next";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
   CardWrapper,
 } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 
 import AssetsTable from "../../../components/tables/AssetsTable";
 
@@ -34,7 +33,9 @@ export default function AllAssetsPage() {
             <CardTitle>Assets</CardTitle>
           </div>
           <div>
-            <CreateLink href="/assets/new">Create Asset</CreateLink>
+            <IconButton href="/assets/new" variant="create">
+              Create Asset
+            </IconButton>
           </div>
         </CardHeader>
         <CardContent>

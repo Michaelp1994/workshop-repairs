@@ -9,7 +9,7 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 
 import LocationsTable from "../../../components/tables/LocationsTable";
 
@@ -21,7 +21,9 @@ export default function AllLocationsPage() {
   return (
     <CardWrapper>
       <CardToolbar>
-        <CreateLink href="/locations/new">Create Location</CreateLink>
+        <IconButton variant="create" href="/locations/new">
+          Create Location
+        </IconButton>
       </CardToolbar>
       <Card>
         <CardHeader>

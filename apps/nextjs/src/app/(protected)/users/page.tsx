@@ -7,14 +7,16 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 import UsersTable from "~/components/tables/UsersTable";
 
 export default function UsersPage() {
   return (
     <CardWrapper>
       <CardToolbar>
-        <CreateLink href="/users/new">Create User</CreateLink>
+        <IconButton variant="create" href="/users/new">
+          Create User
+        </IconButton>
       </CardToolbar>
       <Card>
         <CardHeader>

@@ -10,7 +10,7 @@ import {
   CardWrapper,
 } from "@repo/ui/card";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 
 import ModelsTable from "../../../components/tables/ModelsTable";
 
@@ -29,7 +29,9 @@ export default function AllModelsPage() {
   return (
     <CardWrapper>
       <CardToolbar>
-        <CreateLink href="/models/new">Create Model</CreateLink>
+        <IconButton variant="create" href="/models/new">
+          Create Model
+        </IconButton>
       </CardToolbar>
       <Card>
         <CardHeader>

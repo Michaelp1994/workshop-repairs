@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { type InitialDataTableState } from "@repo/ui/data-table";
 
-import { CreateLink } from "~/components/ButtonLink";
+import { IconButton } from "~/components/IconButton";
 import {
   PageDescription,
   PageHeader,
@@ -41,7 +41,9 @@ export default function AllRepairsPage() {
           </PageDescription>
         </PageHeaderText>
         <PageHeaderActions>
-          <CreateLink href="/repairs/new">Create</CreateLink>
+          <IconButton variant="create" href="/repairs/new">
+            Create
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <RepairsTable initialState={initialState} />

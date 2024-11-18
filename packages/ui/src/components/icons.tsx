@@ -31,6 +31,7 @@ export {
   CreditCard,
   Database,
   EllipsisVertical,
+  Eye,
   EyeOff,
   Factory,
   Folder,
