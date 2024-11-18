@@ -21,14 +21,9 @@ interface RepairPartsTableProps {
 }
 
 export default function RepairPartsTable({ repairId }: RepairPartsTableProps) {
-  const { data, isLoading, isError } =
-    api.repairParts.getAllByRepairId.useQuery({ id: repairId });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !data) {
-    return <div>Error loading repairs</div>;
-  }
+  const [data] = api.repairParts.getAllByRepairId.useSuspenseQuery({
+    id: repairId,
+  });
 
   return (
     <Table>

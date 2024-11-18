@@ -7,13 +7,9 @@ const ModelSelect = forwardRef<
   ElementRef<typeof Combobox>,
   Omit<ComboboxProps, "data" | "isLoading">
 >((props, ref) => {
-  const { data = [], isLoading, isError } = api.models.getSelect.useQuery({});
+  const [data] = api.models.getSelect.useSuspenseQuery({});
 
-  if (isError) {
-    return <div>Error</div>;
-  }
-
-  return <Combobox data={data} isLoading={isLoading} ref={ref} {...props} />;
+  return <Combobox data={data} ref={ref} {...props} />;
 });
 
 ModelSelect.displayName = "ModelSelect";

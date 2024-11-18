@@ -17,19 +17,14 @@ const AssetSelect = forwardRef<
   >
 >((props, ref) => {
   const [filter, setFilter] = useState("");
-  const { data, isLoading, isError } = api.assets.getSimpleSelect.useQuery({
+  const [data] = api.assets.getSimpleSelect.useSuspenseQuery({
     globalFilter: filter,
   });
-
-  if (isError) {
-    return <div>Error</div>;
-  }
 
   return (
     <CustomCombobox
       {...props}
       data={data}
-      isLoading={isLoading}
       Item={AssetItem}
       ref={ref}
       SelectedItem={SelectedAssetItem}

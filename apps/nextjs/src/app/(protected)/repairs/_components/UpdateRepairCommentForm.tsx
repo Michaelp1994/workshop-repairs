@@ -33,7 +33,7 @@ export default function UpdateRepairCommentForm({
 }: UpdateRepairCommentFormProps) {
   const utils = api.useUtils();
   const router = useRouter();
-  const { data, isLoading, isError } = api.repairComments.getById.useQuery({
+  const [data] = api.repairComments.getById.useSuspenseQuery({
     id: repairCommentId,
   });
 
@@ -57,14 +57,6 @@ export default function UpdateRepairCommentForm({
 
   function handleValid(data: RepairCommentFormInput) {
     updateMutation.mutate({ ...data, id: repairCommentId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (

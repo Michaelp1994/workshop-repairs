@@ -22,7 +22,7 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function ProfileForm() {
-  const { isLoading, isError, data } = api.users.getCurrentUser.useQuery({});
+  const [data] = api.users.getCurrentUser.useSuspenseQuery({});
 
   const updateMutation = api.users.updateCurrent.useMutation({
     onSuccess() {
@@ -40,14 +40,6 @@ export default function ProfileForm() {
 
   function handleValid(data: UpdateProfileFormInput) {
     updateMutation.mutate(data);
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (

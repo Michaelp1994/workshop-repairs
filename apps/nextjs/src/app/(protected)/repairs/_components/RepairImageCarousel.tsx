@@ -23,17 +23,9 @@ export default function RepairImageCarousel({
   // const id = searchParams.get("id");
   // const repairImageId = id ? Number(id) : undefined;
   const repairImageId = undefined;
-  const { data, isLoading, isError } =
-    api.repairImages.getAllByRepairId.useQuery({
-      repairId,
-    });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !data) {
-    return <div>Error loading model images</div>;
-  }
+  const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
+    repairId,
+  });
 
   const startIndex = repairImageId
     ? data.findIndex((image) => image.id === repairImageId)

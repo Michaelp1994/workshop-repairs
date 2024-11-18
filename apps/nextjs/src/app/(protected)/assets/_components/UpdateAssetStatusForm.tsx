@@ -17,6 +17,7 @@ import { z } from "zod";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateAssetStatusFormProps {
   assetId: AssetID;
@@ -31,7 +32,7 @@ type UpdateAssetStatusFormInput = z.infer<typeof schema>;
 export default function UpdateAssetStatusForm({
   assetId,
 }: UpdateAssetStatusFormProps) {
-  const { data, isLoading, isError, refetch } = api.assets.getById.useQuery({
+  const [asset] = api.assets.getById.useSuspenseQuery({
     id: assetId,
   });
 
@@ -41,25 +42,17 @@ export default function UpdateAssetStatusForm({
       await refetch();
     },
     onError(errors) {
-      displayFormErrors(errors, form);
+      displayMutationErrors(errors, form);
     },
   });
 
   const form = useForm({
-    values: data,
+    values: asset,
     schema,
   });
 
   function handleValid(values: UpdateAssetStatusFormInput) {
     updateMutation.mutate({ ...values, id: assetId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (

@@ -24,17 +24,9 @@ interface RepairImageSectionProps {
 export default function RepairImageSection({
   repairId,
 }: RepairImageSectionProps) {
-  const { data, isLoading, isError } =
-    api.repairImages.getAllByRepairId.useQuery({
-      repairId,
-    });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !data) {
-    return <div>Error loading repair images</div>;
-  }
+  const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
+    repairId,
+  });
 
   return (
     <Card>

@@ -18,15 +18,8 @@ import getInitials from "~/utils/getInitials";
 export default function ProfileAvatar() {
   const router = useRouter();
   const utils = api.useUtils();
-  const {
-    data: user,
-    isLoading,
-    isError,
-  } = api.users.getCurrentUser.useQuery({});
+  const [user] = api.users.getCurrentUser.useSuspenseQuery({});
 
-  if (isLoading || isError || !user) {
-    return null;
-  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -30,11 +30,7 @@ export default function RepairStatusDetails({
   repairId: RepairID;
 }) {
   const utils = api.useUtils();
-  const {
-    data: repair,
-    isLoading,
-    isError,
-  } = api.repairs.getById.useQuery({
+  const [repair] = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
 
@@ -55,14 +51,6 @@ export default function RepairStatusDetails({
 
   function handleValid(values: UpdateRepairStatusFormInput) {
     updateMutation.mutate({ ...values, id: repairId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (

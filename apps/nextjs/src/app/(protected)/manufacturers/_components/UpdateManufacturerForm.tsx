@@ -30,7 +30,7 @@ interface UpdateManufacturerFormProps {
 export default function UpdateManufacturerForm({
   manufacturerId,
 }: UpdateManufacturerFormProps) {
-  const { data, isLoading, isError } = api.manufacturers.getById.useQuery({
+  const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
     id: manufacturerId,
   });
 
@@ -44,20 +44,12 @@ export default function UpdateManufacturerForm({
   });
 
   const form = useForm({
-    values: data,
+    values: manufacturer,
     schema: manufacturerFormSchema,
   });
 
   function handleValid(values: ManufacturerFormInput) {
     updateMutation.mutate({ ...values, id: manufacturerId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
   }
 
   return (

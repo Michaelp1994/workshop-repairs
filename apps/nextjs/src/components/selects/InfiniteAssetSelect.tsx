@@ -24,17 +24,12 @@ const InfiniteAssetSelect = forwardRef<
       },
     );
 
-  if (isError) {
-    return <div>Error</div>;
-  }
-
   return (
     <InfiniteCombobox
       {...props}
       data={data}
       fetchNextPage={fetchNextPage}
       isFetchingNextPage={isFetchingNextPage}
-      isLoading={isLoading}
       ref={ref}
     />
   );

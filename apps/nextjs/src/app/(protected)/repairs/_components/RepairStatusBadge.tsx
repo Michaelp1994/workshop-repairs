@@ -12,7 +12,7 @@ interface RepairStatusBadgeProps {
 export default function RepairStatusBadge({
   repairId,
 }: RepairStatusBadgeProps) {
-  const { data: repair } = api.repairs.getById.useQuery({
+  const { data: repair } = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
   return (

@@ -17,18 +17,9 @@ interface ModelImagesSectionProps {
 export default function ModelImagesSection({
   modelId,
 }: ModelImagesSectionProps) {
-  const { data, isLoading, isError } = api.modelImages.getAllByModelId.useQuery(
-    {
-      modelId,
-    },
-  );
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !data) {
-    return <div>Error loading model images</div>;
-  }
+  const [data] = api.modelImages.getAllByModelId.useSuspenseQuery({
+    modelId,
+  });
 
   return (
     <Card>

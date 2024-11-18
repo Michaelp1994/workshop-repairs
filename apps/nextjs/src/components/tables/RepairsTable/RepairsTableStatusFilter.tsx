@@ -10,13 +10,9 @@ interface RepairsTableStatusFilterProps<T> {
 export default function RepairsTableStatusFilter<T>({
   table,
 }: RepairsTableStatusFilterProps<T>) {
-  const { data, isLoading, isError } = api.repairStatusTypes.getSelect.useQuery(
-    {},
-  );
+  const [data] = api.repairStatusTypes.getSelect.useSuspenseQuery({});
   const column = table.getColumn("status");
   if (!column) return null;
-  if (isLoading) return null;
-  if (isError) return null;
   return (
     <DataTableFacetedFilter column={column} options={data} title="Status" />
   );

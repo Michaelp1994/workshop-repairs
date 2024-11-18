@@ -13,21 +13,9 @@ interface ModelDetailsProps {
 }
 
 export default function ModelDetailsSection({ assetId }: ModelDetailsProps) {
-  const {
-    data: model,
-    isLoading,
-    isError,
-  } = api.models.getByAssetId.useQuery({
+  const [model] = api.models.getByAssetId.useSuspenseQuery({
     assetId,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !model) {
-    return <div>Error</div>;
-  }
 
   return (
     <Card>

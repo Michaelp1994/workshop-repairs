@@ -13,17 +13,10 @@ interface AssetLocationSectionProps {
 export default function AssetLocationSection({
   assetId,
 }: AssetLocationSectionProps) {
-  const { data, isLoading, isError } = api.assets.getById.useQuery({
+  const [asset] = api.assets.getById.useSuspenseQuery({
     id: assetId,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !data) {
-    return <div>Error</div>;
-  }
   return (
     <Card>
       <CardHeader>

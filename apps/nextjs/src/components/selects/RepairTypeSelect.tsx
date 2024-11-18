@@ -13,13 +13,9 @@ const RepairTypeSelect = forwardRef<
   ElementRef<typeof Combobox>,
   RepairTypeSelectProps
 >((props, ref) => {
-  const { data, isLoading, isError } = api.repairTypes.getSelect.useQuery({});
+  const [data] = api.repairTypes.getSelect.useSuspenseQuery({});
 
-  if (isError) {
-    return <div>Error</div>;
-  }
-
-  return <Combobox data={data} isLoading={isLoading} ref={ref} {...props} />;
+  return <Combobox data={data} ref={ref} {...props} />;
 });
 
 RepairTypeSelect.displayName = "RepairTypeSelect";

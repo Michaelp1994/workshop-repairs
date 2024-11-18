@@ -37,11 +37,7 @@ export default function CreateRepairPartForm({
 }: CreateRepairPartFormProps) {
   const utils = api.useUtils();
   const router = useRouter();
-  const {
-    data: repair,
-    isLoading,
-    isError,
-  } = api.repairs.getById.useQuery({
+  const [repair] = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
 
@@ -65,14 +61,6 @@ export default function CreateRepairPartForm({
 
   function handleValid(values: RepairPartFormInput) {
     createMutation.mutate({ ...values, repairId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !repair) {
-    return <div>Error</div>;
   }
 
   return (

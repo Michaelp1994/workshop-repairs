@@ -12,17 +12,10 @@ interface RepairCommentsTableProps {
 export default function RepairCommentsTable({
   repairId,
 }: RepairCommentsTableProps) {
-  const { data, isLoading, isError } =
-    api.repairComments.getAllByRepairId.useQuery({
-      repairId,
-    });
+  const [data] = api.repairComments.getAllByRepairId.useSuspenseQuery({
+    repairId,
+  });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !data) {
-    return <div>Error loading comments</div>;
-  }
   return (
     <>
       {data.map((comment) => (

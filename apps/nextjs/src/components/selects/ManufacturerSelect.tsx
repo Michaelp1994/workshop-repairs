@@ -7,13 +7,9 @@ const ManufacturerSelect = forwardRef<
   ElementRef<typeof Combobox>,
   Omit<ComboboxProps, "data">
 >((props, ref) => {
-  const { data, isLoading, isError } = api.manufacturers.getSelect.useQuery({});
+  const [data] = api.manufacturers.getSelect.useSuspenseQuery({});
 
-  if (isError) {
-    return <div>Error</div>;
-  }
-
-  return <Combobox data={data} isLoading={isLoading} ref={ref} {...props} />;
+  return <Combobox data={data} ref={ref} {...props} />;
 });
 
 ManufacturerSelect.displayName = "ManufacturerSelect";
