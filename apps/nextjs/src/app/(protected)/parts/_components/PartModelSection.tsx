@@ -3,7 +3,7 @@ import type { PartID } from "@repo/validators/ids.validators";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
-import PartModelsTable from "../../../../../components/tables/PartModelsTable";
+import PartModelsTable from "../../../../components/tables/PartModelsTable";
 
 interface PartModelSectionProps {
   partId: PartID;

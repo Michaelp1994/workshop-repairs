@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import CreateRepairCommentForm from "../CreateRepairCommentForm";
+import CreateRepairCommentForm from "./CreateRepairCommentForm";
 import RepairCommentsTable from "./RepairCommentsTable";
 
 interface RepairCommentsSectionProps {

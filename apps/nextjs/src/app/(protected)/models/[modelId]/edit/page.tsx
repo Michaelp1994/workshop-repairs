@@ -7,7 +7,7 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import UpdateModelForm from "../../_components/ModelDetailsSection/UpdateModelForm";
+import UpdateModelForm from "../../_components/UpdateModelForm";
 
 interface EditModelPageProps {
   params: {

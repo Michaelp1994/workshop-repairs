@@ -16,7 +16,6 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
-  defaultModel,
   type ModelFormInput,
   modelFormSchema,
 } from "@repo/validators/forms/models.schema";

@@ -2,7 +2,7 @@ import type { PartID } from "@repo/validators/ids.validators";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
-import UpdatePartForm from "../UpdatePartForm";
+import UpdatePartForm from "./UpdatePartForm";
 
 interface PartDetailSectionProps {
   partId: PartID;

@@ -2,10 +2,9 @@ import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 import { redirect } from "next/navigation";
 
 import isAuthenticated from "~/auth/isAuthenticated";
-import { PageWrapper } from "~/components/Page";
 
 import AppSidebar from "./_components/AppSideBar";
-import Breadcrumbs from "./_components/Breadcrumbs";
+import Breadcrumbs from "./_components/Breadcrumbs/Breadcrumbs";
 import NavBar from "./_components/NavBar";
 
 interface ProtectedLayoutProps {
