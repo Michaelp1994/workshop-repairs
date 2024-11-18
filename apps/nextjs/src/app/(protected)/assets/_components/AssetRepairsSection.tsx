@@ -1,10 +1,9 @@
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { type InitialDataTableState } from "@repo/ui/data-table";
 import { PlusCircle } from "@repo/ui/icons";
 import Link from "next/link";
 
-import RepairsTable from "~/components/tables/RepairsTable";
+import RepairsTable from "~/app/(protected)/repairs/_components/RepairsTable";
 
 interface AssetRepairsSectionProps {
   assetId: number;
@@ -13,16 +12,6 @@ interface AssetRepairsSectionProps {
 export default function AssetRepairsSection({
   assetId,
 }: AssetRepairsSectionProps) {
-  const initialState: InitialDataTableState = {
-    columnFilters: [{ id: "asset_id", value: [assetId] }],
-    columnVisibility: {
-      image: false,
-      asset_assetNumber: false,
-      asset_serialNumber: false,
-      createdAt: true,
-      updatedAt: false,
-    },
-  };
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -39,7 +28,7 @@ export default function AssetRepairsSection({
         </div>
       </CardHeader>
       <CardContent>
-        <RepairsTable initialState={initialState} />
+        <RepairsTable />
       </CardContent>
     </Card>
   );

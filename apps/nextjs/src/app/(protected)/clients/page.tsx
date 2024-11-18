@@ -9,7 +9,7 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import ClientsTable from "../../../components/tables/ClientsTable";
+import ClientsTable from "./_components/ClientsTable";
 
 export const metadata: Metadata = {
   title: "Clients",

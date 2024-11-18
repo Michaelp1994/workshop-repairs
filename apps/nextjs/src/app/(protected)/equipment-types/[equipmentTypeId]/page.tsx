@@ -8,6 +8,9 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
+import EquipmentTypeAssetsSection from "../_components/EquipmentTypeAssetsSection";
+import EquipmentTypeModelsSection from "../_components/EquipmentTypeModelsSection";
+
 interface ViewEquipmentTypePageProps {
   params: {
     equipmentTypeId: string;
@@ -36,6 +39,8 @@ export default async function ViewEquipmentTypePage({
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
+      <EquipmentTypeModelsSection equipmentTypeId={equipmentTypeId} />
+      <EquipmentTypeAssetsSection equipmentTypeId={equipmentTypeId} />
     </PageWrapper>
   );
 }

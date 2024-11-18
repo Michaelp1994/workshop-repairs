@@ -1,14 +1,5 @@
 import type { Metadata } from "next";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
-
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -18,7 +9,7 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import LocationsTable from "../../../components/tables/LocationsTable";
+import LocationsTable from "./_components/LocationsTable";
 
 export const metadata: Metadata = {
   title: "Locations",

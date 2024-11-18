@@ -33,14 +33,15 @@ export default function UpdateEquipmentTypeForm({
   equipmentTypeId,
 }: UpdateEquipmentTypeFormProps) {
   const router = useRouter();
-
+  const utils = api.useUtils();
   const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
     id: equipmentTypeId,
   });
 
   const updateMutation = api.equipmentTypes.update.useMutation({
-    onSuccess(data) {
-      toast.success(`${data.name} updated.`);
+    async onSuccess(data) {
+      await utils.equipmentTypes.getById.invalidate({ id: equipmentTypeId });
+      toast.success(`Updated Equipment Type: ${data.name}`);
       router.push(`/equipment-types/${data.id}`);
     },
     onError(errors) {

@@ -1,7 +1,6 @@
 import {
   ColumnFiltersState,
   getCoreRowModel,
-  PaginationState,
   RowSelectionState,
   SortingState,
   TableOptions,
@@ -10,53 +9,20 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-export interface InitialDataTableState {
-  pagination?: PaginationState;
-  sorting?: SortingState;
-  rowSelection?: RowSelectionState;
-  globalFilter?: string;
-  columnVisibility?: VisibilityState;
-  columnFilters?: ColumnFiltersState;
-}
+export function useDataTableState() {
+  const [pagination, setPagination] = useState<{
+    pageIndex: number;
+    pageSize: number;
+  }>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
-export function useDataTableState(initialData?: InitialDataTableState) {
-  const init = {
-    pagination: initialData?.pagination ?? {
-      pageIndex: 0,
-      pageSize: 10,
-    },
-    sorting: initialData?.sorting ?? [],
-    rowSelection: initialData?.rowSelection ?? {},
-    globalFilter: initialData?.globalFilter ?? "",
-    columnVisibility: initialData?.columnVisibility ?? {},
-    columnFilters: initialData?.columnFilters ?? [],
-  }; // TODO: refactor. ugly.
-
-  const [pageIndex, setPageIndex] = useState<number>(init.pagination.pageIndex);
-  const [pageSize, setPageSize] = useState<number>(init.pagination.pageSize);
-
-  const pagination = {
-    pageIndex,
-    pageSize,
-  };
-  const setPagination = (
-    newPagination: React.Dispatch<React.SetStateAction<PaginationState>>,
-  ) => {
-    console.log({ newPagination });
-    setPageIndex(newPagination(pagination).pageIndex);
-    setPageSize(newPagination(pagination).pageSize);
-  };
-  const [sorting, setSorting] = useState<SortingState>(init.sorting);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>(
-    init.rowSelection,
-  );
-  const [globalFilter, setGlobalFilter] = useState<string>(init.globalFilter);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    init.columnVisibility,
-  );
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    init.columnFilters,
-  );
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   return {
     dataState: {

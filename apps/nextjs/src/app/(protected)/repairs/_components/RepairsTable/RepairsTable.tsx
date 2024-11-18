@@ -4,7 +4,6 @@ import {
   DataTable,
   DataTableFooter,
   DataTableToolbar,
-  type InitialDataTableState,
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
@@ -12,15 +11,9 @@ import {
 import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
-import RepairsTableStatusFilter from "./RepairsTableStatusFilter";
 
-interface RepairsTableProps {
-  initialState: InitialDataTableState;
-}
-
-export default function RepairsTable({ initialState }: RepairsTableProps) {
-  const { dataState, countState, tableOptions } =
-    useDataTableState(initialState);
+export default function RepairsTable() {
+  const { dataState, countState, tableOptions } = useDataTableState();
 
   const [allRepairs] = api.repairs.getAll.useSuspenseQuery(dataState);
 
@@ -35,10 +28,7 @@ export default function RepairsTable({ initialState }: RepairsTableProps) {
 
   return (
     <Card>
-      <DataTableToolbar
-        ColumnFilter={<RepairsTableStatusFilter table={table} />}
-        table={table}
-      />
+      <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
     </Card>

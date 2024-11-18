@@ -1,3 +1,4 @@
+import UsersTable from "~/app/(protected)/users/_components/UsersTable";
 import { IconButton } from "~/components/IconButton";
 import {
   PageDescription,
@@ -7,7 +8,6 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-import UsersTable from "~/components/tables/UsersTable";
 
 export default function UsersPage() {
   return (

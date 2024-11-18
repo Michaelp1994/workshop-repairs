@@ -1,14 +1,5 @@
 import type { Metadata } from "next";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
-
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,

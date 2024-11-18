@@ -4,7 +4,6 @@ import {
   DataTable,
   DataTableFooter,
   DataTableToolbar,
-  type InitialDataTableState,
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
@@ -13,21 +12,16 @@ import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 
-interface ModelsTableProps {
-  initialState: InitialDataTableState;
-}
+export default function AssetsTable() {
+  const { dataState, countState, tableOptions } = useDataTableState();
 
-export default function ModelsTable({ initialState }: ModelsTableProps) {
-  const { dataState, countState, tableOptions } =
-    useDataTableState(initialState);
+  const [allAssets] = api.assets.getAll.useSuspenseQuery(dataState);
 
-  const [models] = api.models.getAll.useSuspenseQuery(dataState, {});
-
-  const [rowCount] = api.models.getCount.useSuspenseQuery(countState, {});
+  const [rowCount] = api.assets.getCount.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,
-    data: models,
+    data: allAssets,
     rowCount,
     ...tableOptions,
   });

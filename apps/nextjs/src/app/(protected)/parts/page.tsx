@@ -9,7 +9,7 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import PartsTable from "../../../components/tables/PartsTable";
+import PartsTable from "./_components/PartsTable";
 
 export const metadata: Metadata = {
   title: "Parts",

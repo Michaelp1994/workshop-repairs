@@ -1,4 +1,3 @@
-import type { InitialDataTableState } from "@repo/ui/data-table";
 import type { Metadata } from "next";
 
 import { IconButton } from "~/components/IconButton";
@@ -10,20 +9,13 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import ModelsTable from "../../../components/tables/ModelsTable";
+import ModelsTable from "./_components/ModelsTable";
 
 export const metadata: Metadata = {
   title: "Models",
 };
 
 export default function AllModelsPage() {
-  const initialState: InitialDataTableState = {
-    columnVisibility: {
-      createdAt: false,
-      updatedAt: false,
-    },
-  };
-
   return (
     <PageWrapper>
       <PageHeader>
@@ -36,7 +28,7 @@ export default function AllModelsPage() {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <ModelsTable initialState={initialState} />
+      <ModelsTable />
     </PageWrapper>
   );
 }

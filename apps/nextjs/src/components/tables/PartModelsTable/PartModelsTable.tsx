@@ -4,7 +4,6 @@ import {
   DataTable,
   DataTableFooter,
   DataTableToolbar,
-  type InitialDataTableState,
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
@@ -13,13 +12,8 @@ import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 
-interface ModelPartsTable {
-  initialState?: InitialDataTableState;
-}
-
-export default function PartModelsTable({ initialState }: ModelPartsTable) {
-  const { dataState, countState, tableOptions } =
-    useDataTableState(initialState);
+export default function PartModelsTable() {
+  const { dataState, countState, tableOptions } = useDataTableState();
 
   const [partModels] = api.partsToModels.getAll.useSuspenseQuery(dataState);
 
