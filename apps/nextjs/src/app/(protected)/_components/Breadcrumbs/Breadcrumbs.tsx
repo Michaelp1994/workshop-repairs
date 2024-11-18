@@ -9,14 +9,14 @@ import {
 } from "@repo/ui/breadcrumb";
 import { Home } from "@repo/ui/icons";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegments } from "next/navigation";
 import React from "react";
 
-import BreadcrumbMap from "./BreadcrumbMap";
+import generateBreadcrumbs from "./generateBreadcrumbs";
 
 export default function Breadcrumbs() {
-  const pathName = usePathname();
-  const routes = BreadcrumbMap(pathName);
+  const layoutSegments = useSelectedLayoutSegments();
+  const breadcrumbs = generateBreadcrumbs(layoutSegments);
   return (
     <Breadcrumb className="mb-4">
       <BreadcrumbList>
@@ -27,11 +27,11 @@ export default function Breadcrumbs() {
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {routes.length > 0 && (
+        {breadcrumbs.length > 0 && (
           <BreadcrumbSeparator className="hidden md:block" />
         )}
-        {routes.map((route, index) => {
-          if (index === routes.length - 1) {
+        {breadcrumbs.map((route, index) => {
+          if (index === breadcrumbs.length - 1) {
             return (
               <BreadcrumbItem key={route.label}>
                 <BreadcrumbPage className="capitalize">
