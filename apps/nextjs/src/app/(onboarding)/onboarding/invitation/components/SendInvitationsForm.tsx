@@ -18,18 +18,15 @@ import {
 } from "@repo/validators/forms/organization.schema";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function SendInvitationsForm() {
   const router = useRouter();
-  const { setAuth } = useAuth();
   const utils = api.useUtils();
   const inviteMutation = api.userOnboardings.sendInvitations.useMutation({
     async onSuccess(values) {
       toast.success("Your invitations have been sent.");
-      await setAuth(values);
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");
     },

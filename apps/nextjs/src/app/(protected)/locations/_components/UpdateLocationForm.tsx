@@ -21,6 +21,7 @@ import {
 } from "@repo/validators/forms/locations.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateLocationFormProps {
   locationId: LocationID;
@@ -37,8 +38,8 @@ export default function UpdateLocationForm({
     onSuccess(values) {
       toast.success(`Location ${values.name} updated`);
     },
-    onError() {
-      toast.error("Failed to update location");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

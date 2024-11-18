@@ -1,23 +1,20 @@
 "use client";
 import { Button } from "@repo/ui/button";
-import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function SkipButton() {
   const router = useRouter();
-  const { setAuth } = useAuth();
   const utils = api.useUtils();
   const skipMutation = api.userOnboardings.skipInvitations.useMutation({
     async onSuccess(values) {
-      await setAuth(values);
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");
     },
-    async onError() {
-      toast.error("Can't Skip Step.");
+    onError(errors) {
+      displayMutationErrors(errors);
     },
   });
   return (

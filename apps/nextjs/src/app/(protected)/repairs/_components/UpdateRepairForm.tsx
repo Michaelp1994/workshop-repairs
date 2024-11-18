@@ -17,7 +17,6 @@ import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
 import {
-  defaultRepair,
   type RepairFormInput,
   repairFormSchema,
 } from "@repo/validators/forms/repair.schema";
@@ -25,6 +24,7 @@ import {
 import ClientSelect from "~/components/selects/ClientSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateRepairFormProps {
   repairId: RepairID;
@@ -40,8 +40,8 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
       await utils.repairs.getById.invalidate({ id: repairId });
       toast.success("Repair updated successfully");
     },
-    onError() {
-      toast.error("Failed to update repair");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

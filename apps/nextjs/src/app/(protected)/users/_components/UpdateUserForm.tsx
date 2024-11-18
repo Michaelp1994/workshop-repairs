@@ -21,6 +21,7 @@ import {
 } from "@repo/validators/forms/users.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateUserFormProps {
   userId: PartID;
@@ -35,8 +36,8 @@ export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
     onSuccess(values) {
       toast.success(`User ${values.firstName} updated`);
     },
-    onError() {
-      toast.error("Failed to update user");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

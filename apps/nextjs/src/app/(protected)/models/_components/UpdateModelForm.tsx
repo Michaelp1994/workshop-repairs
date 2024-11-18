@@ -23,6 +23,7 @@ import {
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateModelFormProps {
   modelId: ModelID;
@@ -44,8 +45,8 @@ export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
       await utils.models.getById.invalidate({ id: modelId });
       await utils.models.getAll.invalidate();
     },
-    onError() {
-      toast.error("Failed to update model");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

@@ -21,6 +21,7 @@ import {
 } from "@repo/validators/forms/parts.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdatePartFormProps {
   partId: PartID;
@@ -35,8 +36,8 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
     onSuccess(values) {
       toast.success(`Part ${values.name} updated`);
     },
-    onError() {
-      toast.error("Failed to update part");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

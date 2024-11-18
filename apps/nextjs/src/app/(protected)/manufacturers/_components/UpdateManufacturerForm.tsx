@@ -21,6 +21,7 @@ import {
 } from "@repo/validators/forms/manufacturers.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateManufacturerFormProps {
   manufacturerId: ManufacturerID;
@@ -37,8 +38,8 @@ export default function UpdateManufacturerForm({
     onSuccess(values) {
       toast.success(`Manufacturer ${values.name} updated`);
     },
-    onError() {
-      toast.error("Failed to create manufacturer");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 
