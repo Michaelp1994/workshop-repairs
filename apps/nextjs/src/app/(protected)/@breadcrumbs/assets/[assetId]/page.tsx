@@ -11,7 +11,7 @@ export default async function ViewAssetBreadcrumb({
   params,
 }: ViewAssetBreadcrumbProps) {
   const assetId = Number(params.assetId);
-  const asset = await api.assets.getById.query({ id: assetId });
+  const asset = await api.assets.getById({ id: assetId });
 
   const routes = [
     { href: "/assets", label: "Assets" },

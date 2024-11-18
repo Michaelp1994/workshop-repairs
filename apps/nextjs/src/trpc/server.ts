@@ -1,23 +1,26 @@
-import { type AppRouter } from "@repo/api/router";
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
-import { cookies } from "next/headers";
-import { Resource } from "sst";
+import "server-only"; // <-- ensure this file cannot be imported from the client
+import { createTRPCContext } from "@repo/api/createContext";
+// import { createContext } from "@repo/api/createContext";
+import { appRouter, createCaller } from "@repo/api/router";
+import { createHydrationHelpers } from "@trpc/react-query/rsc";
+import { headers } from "next/headers";
+import { cache } from "react";
 
-const apiUrl = Resource.API1.url;
+import { makeQueryClient } from "./query-client";
 
-export const api = createTRPCClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: apiUrl,
-      headers() {
-        const token = cookies().get("Authorization");
-        if (!token) {
-          return {};
-        }
-        return {
-          Authorization: token.value,
-        };
-      },
-    }),
-  ],
+const createContext = cache(async () => {
+  const heads = new Headers(headers());
+  heads.set("x-trpc-source", "rsc");
+
+  return createTRPCContext({
+    headers: heads,
+  });
 });
+
+// IMPORTANT: Create a stable getter for the query client that
+//            will return the same client during the same request.
+export const getQueryClient = cache(makeQueryClient);
+const caller = createCaller(createContext);
+export const { trpc: api, HydrateClient } = createHydrationHelpers<
+  typeof appRouter
+>(caller, getQueryClient);

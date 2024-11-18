@@ -10,7 +10,7 @@ import Link from "next/link";
 import { api } from "~/trpc/server";
 
 export default async function NavHeader() {
-  const organization = await api.organizations.get.query({});
+  const organization = await api.organizations.get({});
   return (
     <SidebarHeader>
       <SidebarMenu>

@@ -19,7 +19,6 @@ const t = initTRPC.context<Context>().create({
 export const { router, createCallerFactory } = t;
 
 export const publicProcedure = t.procedure;
-
 export const authedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.userId) {
     throw new TRPCError({

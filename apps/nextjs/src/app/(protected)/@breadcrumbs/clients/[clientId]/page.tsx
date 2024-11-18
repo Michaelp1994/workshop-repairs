@@ -11,7 +11,7 @@ export default async function ViewClientBreadcrumb({
   params,
 }: ViewAssetBreadcrumbProps) {
   const clientId = Number(params.clientId);
-  const client = await api.clients.getById.query({ id: clientId });
+  const client = await api.clients.getById({ id: clientId });
 
   const routes = [
     { href: "/assets", label: "Clients" },

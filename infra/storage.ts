@@ -12,31 +12,34 @@ if ($dev) {
   if (!password || !username || !database || !port) {
     throw new Error("Please check your .env file for postgres credentials.");
   }
-
-  new docker.Container("LocalPostgres1", {
-    // Unique container name
-    name: `postgres-${$app.name}-dev`,
-    restart: "always",
-    image: "postgres:16.4",
-    ports: [
-      {
-        internal: 5432,
-        external: port,
-      },
-    ],
-    envs: [
-      `POSTGRES_PASSWORD=${password}`,
-      `POSTGRES_USER=${username}`,
-      `POSTGRES_DB=${database}`,
-    ],
-    volumes: [
-      {
-        // Where to store the data locally
-        hostPath: "/tmp/postgres-data",
-        containerPath: "/var/lib/postgresql/data",
-      },
-    ],
-  });
+  const container = docker.Container.get(
+    "LocalPostgres1",
+    "ee2b2ed8e5cc29eebe64bcfd01f47abbc01651f6f73028967c890d2ae4608468",
+  );
+  // const container = new docker.Container("LocalPostgres1", {
+  //   // Unique container name
+  //   name: `postgres-${$app.name}-dev`,
+  //   restart: "always",
+  //   image: "postgres:16.4",
+  //   ports: [
+  //     {
+  //       internal: 5432,
+  //       external: port,
+  //     },
+  //   ],
+  //   envs: [
+  //     `POSTGRES_PASSWORD=${password}`,
+  //     `POSTGRES_USER=${username}`,
+  //     `POSTGRES_DB=${database}`,
+  //   ],
+  //   volumes: [
+  //     {
+  //       // Where to store the data locally
+  //       hostPath: "/tmp/postgres-data",
+  //       containerPath: "/var/lib/postgresql/data",
+  //     },
+  //   ],
+  // });
 }
 
 export const rds = $dev

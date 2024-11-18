@@ -23,11 +23,12 @@ import {
 } from "@repo/ui/sidebar";
 
 import { api } from "~/trpc/server";
+import getInitials from "~/utils/getInitials";
 
 export async function NavUser() {
   // const { isMobile } = useSidebar();
-  const user = await api.users.getCurrentUser.query({});
-  const userInitials = user.firstName[0] + user.lastName[0];
+  const user = await api.users.getCurrentUser({});
+  const initials = getInitials(user.firstName, user.lastName);
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -38,9 +39,9 @@ export async function NavUser() {
               size="lg"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage alt={userInitials} src={user.image} />
+                <AvatarImage alt={initials} src={user.image} />
                 <AvatarFallback className="rounded-lg">
-                  {userInitials}
+                  {initials}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -61,9 +62,9 @@ export async function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage alt={userInitials} src={user.image} />
+                  <AvatarImage alt={initials} src={user.image} />
                   <AvatarFallback className="rounded-lg">
-                    {userInitials}
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

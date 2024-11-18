@@ -17,7 +17,7 @@ import { authedProcedure, publicProcedure, router } from "../trpc";
 export default router({
   login: publicProcedure
     .input(authSchemas.login)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const user = await usersController.getByEmail(input.email);
       if (!user) {
         throw new ZodError([
@@ -42,11 +42,17 @@ export default router({
         ]);
       }
       const session = await createSession(user);
+      ctx.setCookie("Authorization", `Bearer ${session.token}`, {
+        secure: false,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30,
+      });
       return session;
     }),
   register: publicProcedure
     .input(authSchemas.register)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const issues: ZodIssue[] = [];
       const passwordStrongEnough = await verifyPasswordStrength(input.password);
 
@@ -91,7 +97,12 @@ export default router({
 
       await sendVerificationEmail(user.id, user.email);
       const session = await createSession(user);
-
+      ctx.setCookie("Authorization", `Bearer ${session.token}`, {
+        secure: false,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30,
+      });
       return session;
     }),
   logout: authedProcedure.input(authSchemas.logout).mutation(async () => {

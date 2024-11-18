@@ -2,65 +2,51 @@
 
 import { type AppRouter } from "@repo/api/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode, useState } from "react";
 
-import { useAuth } from "../auth/AuthContext";
+import { makeQueryClient } from "./query-client";
 
 interface TRPCReactProviderProps {
   children: ReactNode;
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_AWS_API_URL;
-
 export const api = createTRPCReact<AppRouter>();
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: false,
-      staleTime: 30 * 1000,
-    },
-  },
-});
-
-export function TRPCReactProvider(props: TRPCReactProviderProps) {
-  const { token } = useAuth();
-  if (!apiUrl) {
-    throw new Error("Please set NEXT_PUBLIC_AWS_API_URL env variable.");
+let clientQueryClientSingleton: QueryClient;
+function getQueryClient() {
+  if (typeof window === "undefined") {
+    // Server: always make a new query client
+    return makeQueryClient();
   }
-  const trpcClient = useMemo(
-    () =>
-      api.createClient({
-        links: [
-          loggerLink({
-            enabled: (op) =>
-              process.env.NODE_ENV === "development" ||
-              (op.direction === "down" && op.result instanceof Error),
-          }),
-          httpBatchLink({
-            url: apiUrl,
-            headers() {
-              if (!token) {
-                return {};
-              }
-              return {
-                Authorization: token,
-              };
-            },
-          }),
-        ],
-      }),
-    [token],
+  // Browser: use singleton pattern to keep the same query client
+  return (clientQueryClientSingleton ??= makeQueryClient());
+}
+function getUrl() {
+  const base = (() => {
+    if (typeof window !== "undefined") return "";
+    return process.env.NEXT_PUBLIC_URL;
+  })();
+  return `${base}/api/trpc`;
+}
+export function TRPCProvider({ children }: TRPCReactProviderProps) {
+  // NOTE: Avoid useState when initializing the query client if you don't
+  //       have a suspense boundary between this and the code that may
+  //       suspend because React will throw away the client on the initial
+  //       render if it suspends and there is no boundary
+  const queryClient = getQueryClient();
+  const [trpcClient] = useState(() =>
+    api.createClient({
+      links: [
+        httpBatchLink({
+          url: getUrl(),
+        }),
+      ],
+    }),
   );
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <api.Provider client={trpcClient} queryClient={queryClient}>
-        {props.children}
-      </api.Provider>
-    </QueryClientProvider>
+    <api.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </api.Provider>
   );
 }
