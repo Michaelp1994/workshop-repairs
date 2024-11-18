@@ -1,13 +1,6 @@
-import { Button } from "@repo/ui/button";
 import { Skeleton } from "@repo/ui/skeleton";
-import Link from "next/link";
 import { Suspense } from "react";
 
-import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -19,7 +12,7 @@ import {
 import { api } from "~/trpc/server";
 
 import ClientAssetsSection from "../_components/ClientAssetsSection";
-import ClientRepairsSection from "../_components/ClientRepairsSection/ClientRepairsSection";
+import ClientRepairsSection from "../_components/ClientRepairsSection";
 
 interface ViewClientPageProps {
   params: {

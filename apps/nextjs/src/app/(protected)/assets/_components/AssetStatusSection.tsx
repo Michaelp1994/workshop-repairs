@@ -2,7 +2,7 @@ import type { AssetID } from "@repo/validators/ids.validators";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
-import UpdateAssetStatusForm from "../UpdateAssetStatusForm";
+import UpdateAssetStatusForm from "./UpdateAssetStatusForm";
 
 interface AssetStatusSectionProps {
   assetId: AssetID;

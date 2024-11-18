@@ -1,11 +1,5 @@
 import { type ModelID } from "@repo/validators/ids.validators";
 
-import ArchiveSection from "~/components/ArchiveSection";
-import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -15,10 +9,8 @@ import {
   PageWrapper,
 } from "~/components/Page";
 import { api } from "~/trpc/server";
-import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import ModelAssetsSection from "../_components/ModelAssetsSection";
-import ModelDetailsSection from "../_components/ModelDetailsSection";
 import ModelImagesSection from "../_components/ModelImagesSection";
 import ModelPartsSection from "../_components/ModelPartsSection";
 

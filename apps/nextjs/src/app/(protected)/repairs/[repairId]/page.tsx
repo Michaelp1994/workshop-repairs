@@ -1,11 +1,3 @@
-import { partId } from "@repo/validators/ids.validators";
-
-import ArchiveSection from "~/components/ArchiveSection";
-import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -18,9 +10,7 @@ import { api } from "~/trpc/server";
 
 import AssetDetailsSection from "../_components/AssetDetailsSection";
 import RepairCommentsSection from "../_components/RepairCommentsSection";
-import RepairDetailsSection from "../_components/RepairDetailsSection";
 import RepairImagesSection from "../_components/RepairImagesSection";
-import RepairPartsSection from "../_components/RepairPartsSection";
 import RepairStatusDetails from "../_components/RepairStatusDetails";
 
 interface ViewRepairPageProps {

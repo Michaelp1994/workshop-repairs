@@ -1,10 +1,5 @@
 import type { ManufacturerID } from "@repo/validators/ids.validators";
 
-import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -15,7 +10,6 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import ManufacturerDetailsSection from "../_components/ManufacturerDetailsSection";
 import ManufacturerModelsSection from "../_components/ManufacturerModelsSection";
 
 interface ViewManufacturerPageProps {
