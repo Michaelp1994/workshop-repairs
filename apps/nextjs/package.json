@@ -34,7 +34,7 @@
     "react-dom": "^18.3.1",
     "recharts": "^2.13.3",
     "server-only": "^0.0.1",
-    "sst": "^3.3.21",
+    "sst": "^3.3.22",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",
     "vaul": "^0.9.9",

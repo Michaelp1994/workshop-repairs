@@ -20,7 +20,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "sst": "^3.3.21",
+    "sst": "^3.3.22",
     "zod": "^3.23.8"
   },
   "devDependencies": {
