@@ -40,9 +40,8 @@ export default function UpdateAssetStatusForm({
       toast.success(`Asset ${assetId} updated`);
       await refetch();
     },
-    onError(error) {
-      toast.error("Failed to update asset");
-      console.log(error);
+    onError(errors) {
+      displayFormErrors(errors, form);
     },
   });
 

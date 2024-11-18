@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 
 import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
-import displayFormErrors from "~/utils/displayFormErrors";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function SendInvitationsForm() {
   const router = useRouter();
@@ -33,8 +33,8 @@ export default function SendInvitationsForm() {
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");
     },
-    async onError(errors) {
-      displayFormErrors(errors, form);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

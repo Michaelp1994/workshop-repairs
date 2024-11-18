@@ -22,6 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateRepairCommentFormProps {
   repairCommentId: RepairCommentID;
@@ -44,9 +45,8 @@ export default function UpdateRepairCommentForm({
       });
       router.back();
     },
-    onError(error) {
-      toast.error("Failed to create repairComment");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

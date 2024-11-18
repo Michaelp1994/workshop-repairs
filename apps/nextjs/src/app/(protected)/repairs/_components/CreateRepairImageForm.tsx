@@ -22,6 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateRepairImageFormProps {
   repairId: RepairID;
@@ -53,9 +54,8 @@ export default function CreateRepairImageForm({
       toast.success(`Repair Image uploaded`);
       router.back();
     },
-    onError(error) {
-      toast.error("Failed to create repairImage");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

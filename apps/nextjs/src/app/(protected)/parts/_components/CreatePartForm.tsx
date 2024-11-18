@@ -20,15 +20,15 @@ import {
 } from "@repo/validators/forms/parts.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreatePartForm() {
   const createMutation = api.parts.create.useMutation({
     onSuccess(data) {
       toast.success(`Part ${data.name} created`);
     },
-    onError(error) {
-      toast.error("Failed to create part");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

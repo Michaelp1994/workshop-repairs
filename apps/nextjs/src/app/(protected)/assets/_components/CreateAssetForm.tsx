@@ -25,6 +25,7 @@ import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateAssetForm() {
   const router = useRouter();
@@ -33,9 +34,8 @@ export default function CreateAssetForm() {
       toast.success(`Asset ${data.assetNumber} created`);
       router.push(`/assets/${data.id}`);
     },
-    onError(error) {
-      toast.error("Failed to create asset");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

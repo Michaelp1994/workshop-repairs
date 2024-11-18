@@ -23,6 +23,7 @@ import {
 
 import PartSelect from "~/components/selects/PartSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateModelPartFormProps {
   modelId: ModelID;
@@ -36,8 +37,8 @@ export default function CreateModelPartForm({
     onSuccess(data) {
       toast.success("Model Part Created");
     },
-    onError(error) {
-      toast.error("Model part could not be created.");
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
   const form = useForm({

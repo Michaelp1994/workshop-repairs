@@ -26,6 +26,7 @@ import ClientSelect from "~/components/selects/ClientSelect";
 import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateRepairForm() {
   // const searchParams = useSearchParams();
@@ -36,9 +37,8 @@ export default function CreateRepairForm() {
       toast.success(`Repair created`);
       router.push(`/repairs/${values.id}`);
     },
-    onError(error) {
-      toast.error("Failed to create repair");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

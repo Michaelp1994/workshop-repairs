@@ -20,15 +20,15 @@ import {
 } from "@repo/validators/forms/locations.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateLocationForm() {
   const createMutation = api.locations.create.useMutation({
     onSuccess(data) {
       toast.success(`Location ${data.name} created`);
     },
-    onError(error) {
-      toast.error("Failed to create location");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

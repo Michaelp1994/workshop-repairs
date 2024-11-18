@@ -22,6 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateManufacturerForm() {
   const router = useRouter();
@@ -30,9 +31,8 @@ export default function CreateManufacturerForm() {
       toast.success(`Manufacturer ${data.name} created`);
       router.push(`/manufacturers/${data.id}`);
     },
-    onError(error) {
-      toast.error("Failed to create manufacturer");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

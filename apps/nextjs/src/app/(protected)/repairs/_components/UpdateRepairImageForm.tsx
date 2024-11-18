@@ -20,6 +20,7 @@ import {
 } from "@repo/validators/forms/repairImages.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateRepairImageFormProps {
   repairImageId: RepairImageID;
@@ -28,7 +29,7 @@ interface UpdateRepairImageFormProps {
 export default function UpdateRepairImageForm({
   repairImageId,
 }: UpdateRepairImageFormProps) {
-  const { data, isLoading, isError } = api.repairImages.getById.useQuery({
+  const [repairImage] = api.repairImages.getById.useSuspenseQuery({
     id: repairImageId,
   });
 
@@ -36,14 +37,13 @@ export default function UpdateRepairImageForm({
     onSuccess() {
       toast.success(`Repair Image updated`);
     },
-    onError(error) {
-      toast.error("Failed to update repairImage");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 
   const form = useForm({
-    values: data,
+    values: repairImage,
     schema: repairImageFormSchema,
   });
 

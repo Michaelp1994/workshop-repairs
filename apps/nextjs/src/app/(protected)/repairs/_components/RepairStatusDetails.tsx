@@ -18,6 +18,7 @@ import { z } from "zod";
 
 import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 const schema = z.object({ statusId: z.number() });
 
@@ -42,9 +43,8 @@ export default function RepairStatusDetails({
       await utils.repairs.getById.invalidate({ id: repairId });
       toast.success(`Repair Status updated`);
     },
-    onError(error) {
-      toast.error("Failed to update repair status");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

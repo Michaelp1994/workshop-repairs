@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 
 import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
-import displayFormErrors from "~/utils/displayFormErrors";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -34,14 +34,14 @@ export default function RegisterForm() {
   const registerMutation = api.auth.register.useMutation({
     async onSuccess(values) {
       toast.success("Account successfully created!");
-      // if (values.onboardingCompleted) {
-      //   router.push("/dashboard");
-      // } else {
-      //   router.push("/onboarding");
-      // }
+      if (values.onboardingCompleted) {
+        router.push("/dashboard");
+      } else {
+        router.push("/onboarding");
+      }
     },
-    async onError(errors) {
-      displayFormErrors(errors, form);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
   function handleValid(data: RegisterFormInput) {

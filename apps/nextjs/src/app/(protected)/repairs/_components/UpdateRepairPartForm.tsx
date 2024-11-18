@@ -1,5 +1,5 @@
 "use client";
-import type { RepairID, RepairPartID } from "@repo/validators/ids.validators";
+import type { RepairPartID } from "@repo/validators/ids.validators";
 
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateRepairPartFormProps {
   repairPartId: RepairPartID;
@@ -33,7 +34,7 @@ interface UpdateRepairPartFormProps {
 export default function UpdateRepairPartForm({
   repairPartId,
 }: UpdateRepairPartFormProps) {
-  const { isLoading, isError, data, error } = api.repairParts.getById.useQuery({
+  const [repairPart] = api.repairParts.getById.useSuspenseQuery({
     id: repairPartId,
   });
   const router = useRouter();
@@ -46,28 +47,18 @@ export default function UpdateRepairPartForm({
       toast.success(`Repair Part updated`);
       router.back();
     },
-    onError(error) {
-      toast.error("Failed to update Part");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 
   const form = useForm({
-    values: data,
+    values: repairPart,
     schema: repairPartFormSchema,
   });
 
   async function onValid(values: RepairPartFormInput) {
     await updateMutation.mutateAsync({ ...values, id: repairPartId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !data) {
-    console.log(error);
-    return <div>Error</div>;
   }
 
   return (
@@ -84,7 +75,10 @@ export default function UpdateRepairPartForm({
               <FormItem>
                 <FormLabel>Part</FormLabel>
                 <FormControl>
-                  <ModelPartSelect modelId={data.assets.modelId} {...field} />
+                  <ModelPartSelect
+                    modelId={repairPart.assets.modelId}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

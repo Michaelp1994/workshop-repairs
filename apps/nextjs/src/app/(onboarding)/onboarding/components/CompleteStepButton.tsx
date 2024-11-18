@@ -5,6 +5,7 @@ import { toast } from "@repo/ui/sonner";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CompleteStepButton() {
   const router = useRouter();
@@ -14,9 +15,9 @@ export default function CompleteStepButton() {
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/onboarding/organization");
     },
-    onError(error) {
+    onError(errors) {
+      displayMutationErrors(errors);
       toast.error("Failed. Please try again.");
-      console.log(error);
     },
   });
   return (

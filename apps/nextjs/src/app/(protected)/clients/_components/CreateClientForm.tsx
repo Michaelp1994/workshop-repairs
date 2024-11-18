@@ -21,6 +21,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateClientForm() {
   const router = useRouter();
@@ -29,9 +30,8 @@ export default function CreateClientForm() {
       toast.success(`Client created`);
       router.push(`/clients/${data.id}`);
     },
-    onError(error) {
-      toast.error("Failed to create client");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

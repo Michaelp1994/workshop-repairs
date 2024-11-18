@@ -23,6 +23,7 @@ import {
 
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface AddPartModelFormProps {
   partId: PartID;
@@ -33,9 +34,8 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
     onSuccess() {
       toast.success(`Part To Model relationship created`);
     },
-    onError(error) {
-      toast.error("Failed to create parts to model relationship");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

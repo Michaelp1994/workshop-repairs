@@ -20,6 +20,7 @@ import {
 } from "@repo/validators/forms/repairComments.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateRepairCommentFormProps {
   repairId: RepairID;
@@ -36,9 +37,8 @@ export default function CreateRepairCommentForm({
         repairId,
       });
     },
-    onError(error) {
-      toast.error("Failed to create repairComment");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

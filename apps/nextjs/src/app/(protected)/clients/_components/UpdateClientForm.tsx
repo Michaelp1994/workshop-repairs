@@ -21,6 +21,7 @@ import {
 } from "@repo/validators/forms/clients.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface BaseFormProps {
   clientId: ClientID;
@@ -34,9 +35,8 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
     onSuccess() {
       toast.success(`Client updated`);
     },
-    onError(error) {
-      toast.error("Failed to create client");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

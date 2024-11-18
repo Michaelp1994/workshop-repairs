@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateRepairPartFormProps {
   repairId: RepairID;
@@ -52,9 +53,8 @@ export default function CreateRepairPartForm({
       toast.success(`Part was added to Repair`);
       router.back();
     },
-    onError(error) {
-      toast.error("Failed to create repair Part");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

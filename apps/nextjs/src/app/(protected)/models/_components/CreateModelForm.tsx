@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateModelForm() {
   const router = useRouter();
@@ -31,9 +32,8 @@ export default function CreateModelForm() {
       toast.success(`Model ${data.name} created`);
       router.push(`/models/${data.id}`);
     },
-    onError(error) {
-      toast.error("Failed to create model");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

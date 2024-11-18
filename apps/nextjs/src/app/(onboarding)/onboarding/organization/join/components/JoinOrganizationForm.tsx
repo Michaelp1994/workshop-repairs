@@ -18,23 +18,20 @@ import {
 } from "@repo/validators/forms/organization.schema";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
-import displayFormErrors from "~/utils/displayFormErrors";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function JoinOrganizationForm() {
   const router = useRouter();
   const utils = api.useUtils();
-  const { setAuth } = useAuth();
   const joinMutation = api.userOnboardings.joinOrganization.useMutation({
     async onSuccess({ organization, ...values }) {
-      await setAuth(values);
       await utils.userOnboardings.getStatus.invalidate();
       toast.success(`You have succesfully joined ${organization.name}!`);
       router.push("/dashboard");
     },
-    async onError(errors) {
-      displayFormErrors(errors, form);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

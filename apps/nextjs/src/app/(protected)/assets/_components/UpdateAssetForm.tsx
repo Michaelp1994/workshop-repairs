@@ -23,6 +23,7 @@ import {
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateAssetFormProps {
   assetId: AssetID;
@@ -37,9 +38,8 @@ export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
     async onSuccess(values) {
       toast.success(`Asset ${values.assetNumber} updated`);
     },
-    onError(error) {
-      toast.error("Failed to update asset");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

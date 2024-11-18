@@ -19,6 +19,7 @@ import {
 } from "@repo/validators/forms/auth.schema";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function ProfileForm() {
   const { isLoading, isError, data } = api.users.getCurrentUser.useQuery({});
@@ -27,9 +28,8 @@ export default function ProfileForm() {
     onSuccess() {
       toast.success("Your profile has been updated");
     },
-    onError(error) {
-      toast.error("Unable to update profile");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 

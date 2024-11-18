@@ -23,6 +23,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateEquipmentTypeFormProps {
   equipmentTypeId: EquipmentTypeID;
@@ -39,12 +40,11 @@ export default function UpdateEquipmentTypeForm({
 
   const updateMutation = api.equipmentTypes.update.useMutation({
     onSuccess(data) {
-      toast.success(`Equipment Type ${data.name} created`);
+      toast.success(`${data.name} updated.`);
       router.push(`/equipment-types/${data.id}`);
     },
-    onError(error) {
-      toast.error("Failed to create EquipmentType");
-      console.log(error);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 
