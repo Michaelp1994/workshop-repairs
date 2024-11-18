@@ -8,7 +8,8 @@
     "./utils": "./src/lib/utils.ts",
     "./*": "./src/components/*.tsx",
     "./data-table": "./src/components/data-table/index.ts",
-    "./data-table/*": "./src/components/data-table/*.tsx"
+    "./data-table/*": "./src/components/data-table/*.tsx",
+    "./hooks/*": "./src/hooks/*.tsx"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",

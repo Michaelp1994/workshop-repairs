@@ -12,13 +12,12 @@ import {
 import { LogOut } from "@repo/ui/icons";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
+import getInitials from "~/utils/getInitials";
 
 export default function ProfileAvatar() {
   const router = useRouter();
   const utils = api.useUtils();
-  const { removeAuth } = useAuth();
   const {
     data: user,
     isLoading,
@@ -28,7 +27,6 @@ export default function ProfileAvatar() {
   if (isLoading || isError || !user) {
     return null;
   }
-  const initials = user.firstName.charAt(0) + user.lastName.charAt(0);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,7 +34,7 @@ export default function ProfileAvatar() {
           <Avatar className="h-10 w-10">
             {/* <AvatarImage alt="@shadcn" src="/avatars/01.png" /> */}
             <AvatarFallback className="bg-primary text-primary-foreground">
-              {initials && <span>{initials}</span>}
+              <span>{getInitials(user.firstName, user.lastName)}</span>
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -55,7 +53,6 @@ export default function ProfileAvatar() {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
-            await removeAuth();
             await utils.invalidate();
             router.push("/");
           }}

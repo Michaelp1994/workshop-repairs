@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -7,7 +8,6 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -22,42 +22,25 @@ export default function RepairsTable({ initialState }: RepairsTableProps) {
   const { dataState, countState, tableOptions } =
     useDataTableState(initialState);
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-  } = api.repairs.getAll.useQuery(dataState, {
-    placeholderData: keepPreviousData,
-  });
+  const [allRepairs] = api.repairs.getAll.useSuspenseQuery(dataState);
 
-  const { data: rowCount } = api.repairs.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
+  const [rowCount] = api.repairs.getCount.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,
-    data,
+    data: allRepairs,
     rowCount,
     ...tableOptions,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    console.log(error);
-    return <div>Error loading repairs</div>;
-  }
-
   return (
-    <>
+    <Card>
       <DataTableToolbar
         ColumnFilter={<RepairsTableStatusFilter table={table} />}
         table={table}
       />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

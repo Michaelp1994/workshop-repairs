@@ -7,7 +7,6 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -21,38 +20,21 @@ export default function AssetsTable({ initialState }: AssetsTableProps) {
   const { dataState, countState, tableOptions } =
     useDataTableState(initialState);
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-  } = api.assets.getAll.useQuery(dataState, {
-    placeholderData: keepPreviousData,
-  });
+  const [allAssets] = api.assets.getAll.useSuspenseQuery(dataState);
 
-  const { data: rowCount } = api.assets.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
+  const [rowCount] = api.assets.getCount.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,
-    data,
+    data: allAssets,
     rowCount,
     ...tableOptions,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    console.log(error);
-    return <div>Error loading assets</div>;
-  }
-
   return (
     <>
       <DataTableToolbar table={table} />
-      <DataTable table={table} />
+      <DataTable className="rounded-md border" table={table} />
       <DataTableFooter table={table} />
     </>
   );

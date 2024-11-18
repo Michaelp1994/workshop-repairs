@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type AssetID } from "@repo/validators/ids.validators";
 
 import UpdateAssetForm from "../UpdateAssetForm";
@@ -20,7 +14,6 @@ export default function AssetDetailsSection({
     <Card>
       <CardHeader>
         <CardTitle>Asset Details</CardTitle>
-        <CardDescription>General details about the asset.</CardDescription>
       </CardHeader>
       <CardContent>
         <UpdateAssetForm assetId={assetId} />

@@ -6,7 +6,6 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -15,33 +14,15 @@ import { columns } from "./columns";
 export default function UsersTable() {
   const { dataState, countState, tableOptions } = useDataTableState();
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-  } = api.users.getAll.useQuery(dataState, {
-    placeholderData: keepPreviousData,
-  });
+  const [users] = api.users.getAll.useSuspenseQuery(dataState);
 
-  const { data: rowCount } = api.users.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
-
+  const [rowCount] = api.users.getCount.useSuspenseQuery(countState);
   const table = useDataTable({
     columns,
-    data,
+    data: users,
     rowCount,
     ...tableOptions,
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    console.log(error);
-    return <div>Error loading repairs</div>;
-  }
 
   return (
     <>

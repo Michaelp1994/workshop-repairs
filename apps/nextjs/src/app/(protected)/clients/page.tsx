@@ -1,36 +1,36 @@
 import type { Metadata } from "next";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
-
 import { CreateLink } from "~/components/ButtonLink";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import ClientsTable from "../../../components/tables/ClientsTable";
+import Breadcrumbs from "../_components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Clients",
 };
 
+const breadcrumbs = [{ label: "Clients", href: "/clients" }];
+
 export default function AllClientsPage() {
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/clients/new">Create Client</CreateLink>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Clients</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ClientsTable />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <Breadcrumbs routes={breadcrumbs} />
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Clients</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <CreateLink href="/clients/new">Create</CreateLink>
+        </PageHeaderActions>
+      </PageHeader>
+      <ClientsTable />
+    </PageWrapper>
   );
 }

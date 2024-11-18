@@ -10,9 +10,9 @@ export default function NavBar() {
       <div className="flex shrink-0 items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Separator className="mr-2 h-4" orientation="vertical" />
+        <SearchBar />
       </div>
       <div className="flex gap-2">
-        <SearchBar />
         <ProfileButton />
       </div>
     </header>

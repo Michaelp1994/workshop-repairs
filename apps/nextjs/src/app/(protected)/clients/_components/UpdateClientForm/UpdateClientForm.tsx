@@ -27,7 +27,7 @@ interface BaseFormProps {
 }
 
 export default function UpdateClientForm({ clientId }: BaseFormProps) {
-  const { data, isLoading, isError } = api.clients.getById.useQuery({
+  const [client] = api.clients.getById.useSuspenseQuery({
     id: clientId,
   });
   const updateMutation = api.clients.update.useMutation({
@@ -41,20 +41,12 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
   });
 
   const form = useForm({
-    values: data,
+    values: client,
     schema: clientFormSchema,
   });
 
   async function handleValid(values: ClientFormInput) {
     await updateMutation.mutateAsync({ ...values, id: clientId });
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !data) {
-    return <div>Error</div>;
   }
 
   return (

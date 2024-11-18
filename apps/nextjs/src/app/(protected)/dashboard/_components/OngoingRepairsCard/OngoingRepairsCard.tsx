@@ -1,10 +1,11 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Wrench } from "@repo/ui/icons";
 
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
-export default async function OngoingRepairsCard() {
-  const totalRepairs = await api.repairs.getCount.query({
+export default function OngoingRepairsCard() {
+  const [totalRepairs] = api.repairs.getCount.useSuspenseQuery({
     columnFilters: [
       {
         id: "status",

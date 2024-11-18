@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
 
 import { CreateLink } from "~/components/ButtonLink";
+import {
+  PageDescription,
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import RepairsTable from "../../../components/tables/RepairsTable";
+import Breadcrumbs from "../_components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Repairs",
 };
+
+const breadcrumbs = [{ label: "Repairs", href: "/repairs" }];
 
 export default function AllRepairsPage() {
   const initialState: InitialDataTableState = {
@@ -28,18 +31,20 @@ export default function AllRepairsPage() {
     },
   };
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/repairs/new">Create Repair</CreateLink>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Repairs</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RepairsTable initialState={initialState} />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <Breadcrumbs routes={breadcrumbs} />
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Repairs</PageTitle>
+          <PageDescription>
+            Manage and track all equipment repairs
+          </PageDescription>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <CreateLink href="/repairs/new">Create</CreateLink>
+        </PageHeaderActions>
+      </PageHeader>
+      <RepairsTable initialState={initialState} />
+    </PageWrapper>
   );
 }

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { api } from "~/trpc/server";
 
 export default async function OnboardingPage() {
-  const data = await api.userOnboardings.getStatus.query();
+  const data = await api.userOnboardings.getStatus();
   if (!data.welcomed) {
     redirect("/onboarding/welcome");
   }

@@ -21,14 +21,12 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
 import displayFormErrors from "~/utils/displayFormErrors";
 
 export default function RegisterForm() {
   const router = useRouter();
-  const { setAuth } = useAuth();
   const form = useForm({
     schema: registerFormSchema,
     defaultValues: defaultRegister,
@@ -36,12 +34,11 @@ export default function RegisterForm() {
   const registerMutation = api.auth.register.useMutation({
     async onSuccess(values) {
       toast.success("Account successfully created!");
-      await setAuth(values);
-      if (values.onboardingCompleted) {
-        router.push("/dashboard");
-      } else {
-        router.push("/onboarding");
-      }
+      // if (values.onboardingCompleted) {
+      //   router.push("/dashboard");
+      // } else {
+      //   router.push("/onboarding");
+      // }
     },
     async onError(errors) {
       displayFormErrors(errors, form);

@@ -1,4 +1,5 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
   DataTable,
   DataTableFooter,
@@ -6,7 +7,6 @@ import {
   useDataTable,
   useDataTableState,
 } from "@repo/ui/data-table";
-import { keepPreviousData } from "@tanstack/react-query";
 
 import { api } from "~/trpc/client";
 
@@ -14,37 +14,22 @@ import { columns } from "./columns";
 export default function ClientsTable() {
   const { dataState, countState, tableOptions } = useDataTableState();
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = api.clients.getAll.useQuery(dataState, {
-    placeholderData: keepPreviousData,
-  });
+  const [allClients] = api.clients.getAll.useSuspenseQuery(dataState);
 
-  const { data: rowCount } = api.clients.getCount.useQuery(countState, {
-    placeholderData: keepPreviousData,
-  });
+  const [rowCount] = api.clients.getCount.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,
-    data,
+    data: allClients,
     rowCount,
     ...tableOptions,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading clients</div>;
-  }
-
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
       <DataTable table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

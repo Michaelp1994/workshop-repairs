@@ -10,7 +10,6 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { getBaseUrl } from "~/utils/getBaseUrl";

@@ -9,7 +9,7 @@ import {
 import { api } from "~/trpc/server";
 
 export default async function OrganizationPage() {
-  const organization = await api.organizations.get.query({});
+  const organization = await api.organizations.get({});
 
   return (
     <Card>

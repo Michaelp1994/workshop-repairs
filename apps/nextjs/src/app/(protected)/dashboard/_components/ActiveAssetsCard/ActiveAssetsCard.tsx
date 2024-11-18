@@ -1,13 +1,11 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Laptop } from "@repo/ui/icons";
 
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
-interface ActiveAssetsCardProps {}
-
-export default async function ActiveAssetsCard({}: ActiveAssetsCardProps) {
-  const totalAssets = await api.assets.getCount.query({});
-
+export default function ActiveAssetsCard() {
+  const [totalAssets] = api.assets.getCount.useSuspenseQuery({});
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

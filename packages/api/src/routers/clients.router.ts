@@ -54,14 +54,12 @@ export default router({
     .input(clientSchemas.getById)
     .query(async ({ input, ctx }) => {
       const client = await clientsController.getById(input.id, ctx.db);
-
       if (!client) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "client not found",
+          message: "can't find client",
         });
       }
-
       return client;
     }),
   create: organizationProcedure

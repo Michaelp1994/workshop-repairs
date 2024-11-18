@@ -7,7 +7,7 @@ export function CardWrapper({ children }: { children: React.ReactNode }) {
 }
 
 export function CardToolbar({ children }: { children: React.ReactNode }) {
-  return <div className="flex justify-end">{children}</div>;
+  return <div className="flex items-center justify-between">{children}</div>;
 }
 
 const Card = React.forwardRef<
@@ -68,7 +68,7 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div className={cn("p-6 pt-0", className)} ref={ref} {...props} />
+  <div className={cn("p-6", className)} ref={ref} {...props} />
 ));
 CardContent.displayName = "CardContent";
 

@@ -1,11 +1,5 @@
 import { Button } from "@repo/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
 import { PlusCircle } from "@repo/ui/icons";
 import Link from "next/link";
@@ -34,9 +28,6 @@ export default function AssetRepairsSection({
       <CardHeader className="flex flex-row justify-between">
         <div>
           <CardTitle>Repairs</CardTitle>
-          <CardDescription>
-            All recorded repairs for this asset.
-          </CardDescription>
         </div>
         <div>
           <Button asChild size="sm" variant="ghost">

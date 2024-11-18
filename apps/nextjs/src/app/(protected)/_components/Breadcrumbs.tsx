@@ -7,6 +7,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@repo/ui/breadcrumb";
+import { Home } from "@repo/ui/icons";
+import { Separator } from "@repo/ui/separator";
+import Link from "next/link";
 import React from "react";
 
 interface Route {
@@ -20,8 +23,16 @@ interface BreadcrumbProps {
 
 export default function Breadcrumbs({ routes }: BreadcrumbProps) {
   return (
-    <Breadcrumb>
+    <Breadcrumb separator={<Separator />}>
       <BreadcrumbList>
+        <BreadcrumbItem className="hidden md:block">
+          <BreadcrumbLink asChild className="capitalize">
+            <Link href="/dashboard">
+              <Home className="size-4" />
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="hidden md:block" />
         {routes.map((route, index) => {
           if (index === routes.length - 1) {
             return (
@@ -35,8 +46,8 @@ export default function Breadcrumbs({ routes }: BreadcrumbProps) {
           return (
             <React.Fragment key={route.href}>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink className="capitalize">
-                  {route.label}
+                <BreadcrumbLink asChild className="capitalize">
+                  <Link href={route.href}>{route.label}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />

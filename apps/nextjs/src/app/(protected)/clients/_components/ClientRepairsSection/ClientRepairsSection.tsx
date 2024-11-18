@@ -1,13 +1,7 @@
 import type { InitialDataTableState } from "@repo/ui/data-table";
 import type { ClientID } from "@repo/validators/ids.validators";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
 import RepairsTable from "~/components/tables/RepairsTable";
 
@@ -37,7 +31,6 @@ export default function ClientRepairsSection({
     <Card>
       <CardHeader>
         <CardTitle>Repairs</CardTitle>
-        <CardDescription>All repairs for this client.</CardDescription>
       </CardHeader>
       <CardContent>
         <RepairsTable initialState={initialState} />

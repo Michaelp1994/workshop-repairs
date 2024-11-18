@@ -6,7 +6,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardToolbar,
   CardWrapper,
 } from "@repo/ui/card";
 import { type InitialDataTableState } from "@repo/ui/data-table";
@@ -29,15 +28,14 @@ export default function AllAssetsPage() {
   };
   return (
     <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/assets/new">Create Asset</CreateLink>
-      </CardToolbar>
       <Card>
-        <CardHeader>
-          <CardTitle>Assets</CardTitle>
-          <CardDescription>
-            Manage the assets across all clients
-          </CardDescription>
+        <CardHeader className="flex flex-row justify-between">
+          <div>
+            <CardTitle>Assets</CardTitle>
+          </div>
+          <div>
+            <CreateLink href="/assets/new">Create Asset</CreateLink>
+          </div>
         </CardHeader>
         <CardContent>
           <AssetsTable initialState={initialState} />

@@ -10,6 +10,7 @@ import {
   useForm,
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 import {
   defaultLogin,
   type LoginFormInput,
@@ -17,7 +18,6 @@ import {
 } from "@repo/validators/forms/auth.schema";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
 import displayFormErrors from "~/utils/displayFormErrors";
@@ -25,16 +25,15 @@ import displayFormErrors from "~/utils/displayFormErrors";
 export default function LoginForm() {
   const router = useRouter();
   const utils = api.useUtils();
-  const { setAuth } = useAuth();
   const loginMutation = api.auth.login.useMutation({
     async onSuccess(values) {
-      await setAuth(values);
       await utils.invalidate();
       if (values.onboardingCompleted) {
         router.push("/dashboard");
       } else {
         router.push("/onboarding");
       }
+      toast.success("Logged in!");
     },
     async onError(errors) {
       displayFormErrors(errors, form);
@@ -62,7 +61,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input autoComplete="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

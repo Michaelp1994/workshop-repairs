@@ -18,6 +18,7 @@ import {
   type UserID,
   userTable,
 } from "../schemas/user.table";
+import { userTypeTable } from "../schemas/user-type.table";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
@@ -38,8 +39,9 @@ export function getAll(
     userFilterMapping,
   );
   const query = db
-    .select({ ...publicUserColumns })
+    .select({ ...publicUserColumns, type: userTypeTable })
     .from(userTable)
+    .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
     .where(
       and(
         isNull(userTable.deletedAt),

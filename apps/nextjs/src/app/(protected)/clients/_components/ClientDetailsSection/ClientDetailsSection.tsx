@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
 import UpdateClientForm from "../UpdateClientForm";
 
@@ -18,8 +12,7 @@ export default function ClientDetailsSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Client Details</CardTitle>
-        <CardDescription>Details about the client {clientId}</CardDescription>
+        <CardTitle>Edit Client</CardTitle>
       </CardHeader>
       <CardContent>
         <UpdateClientForm clientId={clientId} />

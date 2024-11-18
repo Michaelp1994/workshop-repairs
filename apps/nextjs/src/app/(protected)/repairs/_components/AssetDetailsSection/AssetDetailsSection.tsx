@@ -14,7 +14,7 @@ interface AssetDetailsProps {
 export default async function AssetDetailsSection({
   repairId,
 }: AssetDetailsProps) {
-  const repair = await api.repairs.getById.query({
+  const repair = await api.repairs.getById({
     id: repairId,
   });
 

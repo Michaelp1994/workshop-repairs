@@ -20,7 +20,7 @@ export default async function AssetLayout({
   params,
 }: AssetLayoutProps) {
   const modelId = Number(params.modelId);
-  const model = await api.models.getById.query({ id: modelId });
+  const model = await api.models.getById({ id: modelId });
   return (
     <DetailsPage>
       <DetailsPageToolbar>
