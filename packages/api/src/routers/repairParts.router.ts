@@ -11,6 +11,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -55,12 +56,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdRepairPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Part",
-        });
-      }
+      assertDatabaseResult(createdRepairPart);
 
       return createdRepairPart;
     }),
@@ -73,12 +69,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedRepairPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repairPart",
-        });
-      }
+      assertDatabaseResult(updatedRepairPart);
 
       return updatedRepairPart;
     }),
@@ -91,12 +82,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedRepairPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair Part",
-        });
-      }
+      assertDatabaseResult(archivedRepairPart);
 
       return archivedRepairPart;
     }),

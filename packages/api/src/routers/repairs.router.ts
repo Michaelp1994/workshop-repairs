@@ -13,6 +13,7 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -75,12 +76,7 @@ export default router({
         ...metadata,
       });
 
-      if (!repair) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair",
-        });
-      }
+      assertDatabaseResult(repair);
 
       return repair;
     }),
@@ -95,12 +91,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedRepair) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair",
-        });
-      }
+      assertDatabaseResult(updatedRepair);
 
       return updatedRepair;
     }),
@@ -114,12 +105,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedRepair) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair",
-        });
-      }
+      assertDatabaseResult(archivedRepair);
 
       return archivedRepair;
     }),

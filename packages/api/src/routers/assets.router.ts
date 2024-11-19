@@ -13,6 +13,7 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -32,13 +33,8 @@ export default router({
         input,
         ctx.session.organizationId,
       );
+      assertDatabaseResult(count);
 
-      if (count === undefined) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't get count for total assets",
-        });
-      }
       return count;
     }),
   getSelect: organizationProcedure
@@ -104,13 +100,7 @@ export default router({
         statusId: 1,
       });
 
-      if (!createdAsset) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create asset",
-        });
-      }
-
+      assertDatabaseResult(createdAsset);
       return createdAsset;
     }),
   update: organizationProcedure
@@ -122,13 +112,7 @@ export default router({
         { ...sanitizedInput, ...metadata },
         ctx.session.organizationId,
       );
-
-      if (!updatedAsset) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update asset",
-        });
-      }
+      assertDatabaseResult(updatedAsset);
 
       return updatedAsset;
     }),
@@ -141,13 +125,7 @@ export default router({
         { ...input, ...metadata },
         ctx.session.organizationId,
       );
-
-      if (!archivedAsset) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive asset",
-        });
-      }
+      assertDatabaseResult(archivedAsset);
 
       return archivedAsset;
     }),

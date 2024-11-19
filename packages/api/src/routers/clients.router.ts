@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -31,13 +32,7 @@ export default router({
         input,
         ctx.session.organizationId,
       );
-
-      if (count === undefined) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't count clients",
-        });
-      }
+      assertDatabaseResult(count);
       return count;
     }),
   getSelect: organizationProcedure
@@ -72,12 +67,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdClient) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create client",
-        });
-      }
+      assertDatabaseResult(createdClient);
 
       return createdClient;
     }),
@@ -90,13 +80,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedClient) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update client",
-        });
-      }
-
+      assertDatabaseResult(updatedClient);
       return updatedClient;
     }),
   archive: organizationProcedure
@@ -108,12 +92,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedClient) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive client",
-        });
-      }
+      assertDatabaseResult(archivedClient);
 
       return archivedClient;
     }),

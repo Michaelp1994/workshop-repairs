@@ -11,6 +11,7 @@ import { TRPCError } from "@trpc/server";
 import createSession from "../helpers/createSession";
 import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -107,12 +108,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedUser) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Can't update user",
-        });
-      }
+      assertDatabaseResult(updatedUser);
 
       return updatedUser;
     }),
@@ -128,12 +124,7 @@ export default router({
         id: ctx.session.userId,
       });
 
-      if (!updatedUser) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Can't update user",
-        });
-      }
+      assertDatabaseResult(updatedUser);
 
       return updatedUser;
     }),
@@ -147,12 +138,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedUser) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't archive user",
-        });
-      }
+      assertDatabaseResult(archivedUser);
 
       return archivedUser;
     }),

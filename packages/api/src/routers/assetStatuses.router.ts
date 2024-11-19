@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -49,12 +50,8 @@ export default router({
         ...input,
         ...metadata,
       });
-      if (!createdUserType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create user Type",
-        });
-      }
+
+      assertDatabaseResult(createdUserType);
 
       return createdUserType;
     }),
@@ -67,12 +64,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedUserType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update user Type",
-        });
-      }
+      assertDatabaseResult(updatedUserType);
 
       return updatedUserType;
     }),
@@ -85,12 +77,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedUserType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive user Type",
-        });
-      }
+      assertDatabaseResult(archivedUserType);
 
       return archivedUserType;
     }),

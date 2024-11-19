@@ -11,6 +11,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -54,12 +55,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdRepairImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair image",
-        });
-      }
+      assertDatabaseResult(createdRepairImage);
 
       return createdRepairImage;
     }),
@@ -72,12 +68,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedRepairImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair image",
-        });
-      }
+      assertDatabaseResult(updatedRepairImage);
 
       return updatedRepairImage;
     }),
@@ -90,12 +81,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedRepairImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair image",
-        });
-      }
+      assertDatabaseResult(archivedRepairImage);
 
       return archivedRepairImage;
     }),

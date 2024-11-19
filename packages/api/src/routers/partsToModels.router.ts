@@ -6,6 +6,7 @@ import {
 import * as partsToModelSchemas from "@repo/validators/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -35,12 +36,7 @@ export default router({
     .mutation(async ({ input }) => {
       const createdPartModel = await controller.create(input);
 
-      if (!createdPartModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create part model connection",
-        });
-      }
+      assertDatabaseResult(createdPartModel);
 
       return createdPartModel;
     }),
@@ -49,12 +45,7 @@ export default router({
     .mutation(async ({ input }) => {
       const archivedPartModel = await controller.archive(input);
 
-      if (!archivedPartModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive part model connection",
-        });
-      }
+      assertDatabaseResult(archivedPartModel);
 
       return archivedPartModel;
     }),

@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -68,12 +69,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdEquipmentType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Type",
-        });
-      }
+      assertDatabaseResult(createdEquipmentType);
 
       return createdEquipmentType;
     }),
@@ -86,12 +82,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedEquipmentType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair Type",
-        });
-      }
+      assertDatabaseResult(updatedEquipmentType);
 
       return updatedEquipmentType;
     }),
@@ -105,12 +96,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedEquipmentType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair Type",
-        });
-      }
+      assertDatabaseResult(archivedEquipmentType);
 
       return archivedEquipmentType;
     }),

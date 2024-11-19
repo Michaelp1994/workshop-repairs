@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -65,12 +66,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdLocation) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create location",
-        });
-      }
+      assertDatabaseResult(createdLocation);
 
       return createdLocation;
     }),
@@ -83,12 +79,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedLocation) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update location",
-        });
-      }
+      assertDatabaseResult(updatedLocation);
 
       return updatedLocation;
     }),
@@ -101,12 +92,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedLocation) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive location",
-        });
-      }
+      assertDatabaseResult(archivedLocation);
 
       return archivedLocation;
     }),
