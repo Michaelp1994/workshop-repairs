@@ -1,7 +1,7 @@
 import { type Table } from "@tanstack/react-table";
 
-import { Button } from "../button";
-import { SlidersHorizontal } from "../icons";
+import { Button } from "../../button";
+import { SlidersHorizontal } from "../../icons";
 
 interface DataTableResetButtonProps<T> {
   table: Table<T>;

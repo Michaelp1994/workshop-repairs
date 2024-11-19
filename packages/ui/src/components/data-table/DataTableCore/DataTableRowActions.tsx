@@ -2,7 +2,7 @@ import { type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-import { Button } from "../button";
+import { Button } from "../../button";
 
 interface Data {
   id: number;

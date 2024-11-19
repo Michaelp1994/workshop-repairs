@@ -37,7 +37,7 @@ export function useDataTableState() {
       columnFilters,
       columns: columnVisibility,
     },
-    tableOptions: {
+    tableState: {
       state: {
         columnVisibility,
         columnFilters,
