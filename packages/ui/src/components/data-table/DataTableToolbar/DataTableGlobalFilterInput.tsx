@@ -1,3 +1,4 @@
+"use client";
 import { RowData, type Table } from "@tanstack/react-table";
 
 import { Input } from "../../input";
