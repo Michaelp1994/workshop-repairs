@@ -44,15 +44,15 @@ export default router({
 
   getSelect: organizationProcedure
     .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairs = await repairsController.getSelect(input, ctx.db);
+    .query(async ({ input }) => {
+      const allRepairs = await repairsController.getSelect(input);
       return allRepairs;
     }),
 
   getById: organizationProcedure
     .input(repairSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repair = await repairsController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const repair = await repairsController.getById(input.id);
 
       if (!repair) {
         throw new TRPCError({
@@ -69,10 +69,11 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
 
-      const repair = await repairsController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const repair = await repairsController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!repair) {
         throw new TRPCError({
@@ -89,10 +90,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const sanitizedInput = sanitizeUpdateInput(input);
-      const updatedRepair = await repairsController.update(
-        { ...sanitizedInput, ...metadata },
-        ctx.db,
-      );
+      const updatedRepair = await repairsController.update({
+        ...sanitizedInput,
+        ...metadata,
+      });
 
       if (!updatedRepair) {
         throw new TRPCError({
@@ -108,10 +109,10 @@ export default router({
     .input(repairSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepair = await repairsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedRepair = await repairsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedRepair) {
         throw new TRPCError({

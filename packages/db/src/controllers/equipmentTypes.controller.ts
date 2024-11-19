@@ -3,7 +3,7 @@ import { and, count, eq, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../schemas/organization.table";
 
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database, db } from "../index";
+import { db } from "../index";
 import {
   type ArchiveEquipmentType,
   type CreateEquipmentType,
@@ -58,7 +58,7 @@ export async function getSelect(_: GetSelect, organizationId: OrganizationID) {
   return query.execute();
 }
 
-export async function getById(input: EquipmentTypeID, db: Database) {
+export async function getById(input: EquipmentTypeID) {
   const query = db
     .select()
     .from(equipmentTypeTable)
@@ -67,13 +67,13 @@ export async function getById(input: EquipmentTypeID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateEquipmentType, db: Database) {
+export async function create(input: CreateEquipmentType) {
   const query = db.insert(equipmentTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateEquipmentType, db: Database) {
+export async function update(input: UpdateEquipmentType) {
   const query = db
     .update(equipmentTypeTable)
     .set(input)
@@ -83,7 +83,7 @@ export async function update(input: UpdateEquipmentType, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveEquipmentType, db: Database) {
+export async function archive(input: ArchiveEquipmentType) {
   const query = db
     .update(equipmentTypeTable)
     .set(input)

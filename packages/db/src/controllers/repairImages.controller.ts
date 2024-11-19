@@ -1,9 +1,9 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { Database } from "..";
 import type { GetAll, GetCount } from "../helpers/types";
 import type { RepairID } from "../schemas/repair.table";
 
+import { db } from "..";
 import {
   type ArchiveRepairImage,
   type CreateRepairImage,
@@ -12,7 +12,7 @@ import {
   type UpdateRepairImage,
 } from "../schemas/repair-image.table";
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -22,7 +22,7 @@ export function getAll({ pagination }: GetAll, db: Database) {
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
-export async function getCount(_: GetCount, db: Database) {
+export async function getCount(_: GetCount) {
   const query = db
     .select({ count: count() })
     .from(repairImageTable)
@@ -30,7 +30,7 @@ export async function getCount(_: GetCount, db: Database) {
   const [res] = await query.execute();
   return res?.count;
 }
-export async function getById(input: RepairImageID, db: Database) {
+export async function getById(input: RepairImageID) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -38,7 +38,7 @@ export async function getById(input: RepairImageID, db: Database) {
   const [res] = await query.execute();
   return res;
 }
-export async function getAllByRepairId(input: RepairID, db: Database) {
+export async function getAllByRepairId(input: RepairID) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -51,12 +51,12 @@ export async function getAllByRepairId(input: RepairID, db: Database) {
   const res = await query.execute();
   return res;
 }
-export async function create(input: CreateRepairImage, db: Database) {
+export async function create(input: CreateRepairImage) {
   const query = db.insert(repairImageTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
-export async function update(input: UpdateRepairImage, db: Database) {
+export async function update(input: UpdateRepairImage) {
   const query = db
     .update(repairImageTable)
     .set(input)
@@ -66,7 +66,7 @@ export async function update(input: UpdateRepairImage, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairImage, db: Database) {
+export async function archive(input: ArchiveRepairImage) {
   const query = db
     .update(repairImageTable)
     .set(input)

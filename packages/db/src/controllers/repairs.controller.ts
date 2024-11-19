@@ -6,7 +6,7 @@ import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database, db } from "../index";
+import { db } from "../index";
 import {
   repairFilterMapping,
   repairOrderMapping,
@@ -138,7 +138,7 @@ export async function getCount(
   return res?.value;
 }
 
-export async function getSelect(_: GetSelect, db: Database) {
+export async function getSelect(_: GetSelect) {
   const query = db
     .select({
       value: repairTable.id,
@@ -149,7 +149,7 @@ export async function getSelect(_: GetSelect, db: Database) {
   return query.execute();
 }
 
-export async function getById(input: RepairID, db: Database) {
+export async function getById(input: RepairID) {
   const query = db
     .select({
       ...repairFields,
@@ -202,13 +202,13 @@ export async function getById(input: RepairID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateRepair, db: Database) {
+export async function create(input: CreateRepair) {
   const query = db.insert(repairTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepair, db: Database) {
+export async function update(input: UpdateRepair) {
   const query = db
     .update(repairTable)
     .set(input)
@@ -218,7 +218,7 @@ export async function update(input: UpdateRepair, db: Database) {
   return res;
 }
 
-export async function archive({ id, ...input }: ArchiveRepair, db: Database) {
+export async function archive({ id, ...input }: ArchiveRepair) {
   const query = db
     .update(repairTable)
     .set(input)

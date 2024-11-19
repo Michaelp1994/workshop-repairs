@@ -1,7 +1,7 @@
 import { count, eq, isNull } from "drizzle-orm";
 
+import { db } from "..";
 import { type GetAll, type GetCount } from "../helpers/types";
-import { type Database } from "../index";
 import {
   type ArchiveUserType,
   type CreateUserType,
@@ -10,7 +10,7 @@ import {
   userTypeTable,
 } from "../schemas/user-type.table";
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll) {
   const query = db
     .select()
     .from(userTypeTable)
@@ -21,7 +21,7 @@ export function getAll({ pagination }: GetAll, db: Database) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount, db: Database) {
+export async function getCount(_: GetCount) {
   const query = db
     .select({ count: count() })
     .from(userTypeTable)
@@ -30,7 +30,7 @@ export async function getCount(_: GetCount, db: Database) {
   return res?.count;
 }
 
-export async function getById(input: UserTypeID, db: Database) {
+export async function getById(input: UserTypeID) {
   const query = db
     .select()
     .from(userTypeTable)
@@ -39,13 +39,13 @@ export async function getById(input: UserTypeID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateUserType, db: Database) {
+export async function create(input: CreateUserType) {
   const query = db.insert(userTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateUserType, db: Database) {
+export async function update(input: UpdateUserType) {
   const query = db
     .update(userTypeTable)
     .set(input)
@@ -55,7 +55,7 @@ export async function update(input: UpdateUserType, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveUserType, db: Database) {
+export async function archive(input: ArchiveUserType) {
   const query = db
     .update(userTypeTable)
     .set(input)

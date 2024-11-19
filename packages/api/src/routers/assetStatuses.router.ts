@@ -15,28 +15,22 @@ import {
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allUserTypes = assetStatusesController.getAll(input, ctx.db);
-      return allUserTypes;
-    }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = assetStatusesController.getCount(input, ctx.db);
-      return count;
-    }),
-  getSelect: organizationProcedure
-    .input(getSelectSchema)
-    .query(({ ctx, input }) => {
-      const allUserTypes = assetStatusesController.getSelect(input, ctx.db);
-      return allUserTypes;
-    }),
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
+    const allUserTypes = assetStatusesController.getAll(input);
+    return allUserTypes;
+  }),
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const count = assetStatusesController.getCount(input);
+    return count;
+  }),
+  getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
+    const allUserTypes = assetStatusesController.getSelect(input);
+    return allUserTypes;
+  }),
   getById: organizationProcedure
     .input(userTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const userType = await assetStatusesController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const userType = await assetStatusesController.getById(input.id);
 
       if (!userType) {
         throw new TRPCError({
@@ -51,13 +45,10 @@ export default router({
     .input(userTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdUserType = await assetStatusesController.create(
-        {
-          ...input,
-          ...metadata,
-        },
-        ctx.db,
-      );
+      const createdUserType = await assetStatusesController.create({
+        ...input,
+        ...metadata,
+      });
       if (!createdUserType) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -71,10 +62,10 @@ export default router({
     .input(userTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedUserType = await assetStatusesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedUserType = await assetStatusesController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedUserType) {
         throw new TRPCError({
@@ -89,10 +80,10 @@ export default router({
     .input(userTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedUserType = await assetStatusesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedUserType = await assetStatusesController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedUserType) {
         throw new TRPCError({

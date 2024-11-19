@@ -1,7 +1,7 @@
 import { count, eq, isNull } from "drizzle-orm";
 
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
+import { db } from "../index";
 import {
   type ArchiveAssetStatus,
   type AssetStatusID,
@@ -10,7 +10,7 @@ import {
   type UpdateAssetStatus,
 } from "../schemas/asset-status.table";
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll) {
   const query = db
     .select()
     .from(assetStatusTable)
@@ -21,7 +21,7 @@ export function getAll({ pagination }: GetAll, db: Database) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount, db: Database) {
+export async function getCount(_: GetCount) {
   const query = db
     .select({ count: count() })
     .from(assetStatusTable)
@@ -30,7 +30,7 @@ export async function getCount(_: GetCount, db: Database) {
   return res?.count;
 }
 
-export async function getById(input: AssetStatusID, db: Database) {
+export async function getById(input: AssetStatusID) {
   const query = db
     .select()
     .from(assetStatusTable)
@@ -39,7 +39,7 @@ export async function getById(input: AssetStatusID, db: Database) {
   return res;
 }
 
-export function getSelect(_: GetSelect, db: Database) {
+export function getSelect(_: GetSelect) {
   const query = db
     .select({
       value: assetStatusTable.id,
@@ -50,13 +50,13 @@ export function getSelect(_: GetSelect, db: Database) {
   return query.execute();
 }
 
-export async function create(input: CreateAssetStatus, db: Database) {
+export async function create(input: CreateAssetStatus) {
   const query = db.insert(assetStatusTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateAssetStatus, db: Database) {
+export async function update(input: UpdateAssetStatus) {
   const query = db
     .update(assetStatusTable)
     .set(input)
@@ -66,7 +66,7 @@ export async function update(input: UpdateAssetStatus, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveAssetStatus, db: Database) {
+export async function archive(input: ArchiveAssetStatus) {
   const query = db
     .update(assetStatusTable)
     .set(input)

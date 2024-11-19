@@ -14,26 +14,19 @@ import {
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairComments = repairCommentsController.getAll(input, ctx.db);
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
+    const allRepairComments = repairCommentsController.getAll(input);
 
-      return allRepairComments;
-    }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = repairCommentsController.getCount(input, ctx.db);
-      return count;
-    }),
+    return allRepairComments;
+  }),
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const count = repairCommentsController.getCount(input);
+    return count;
+  }),
   getById: organizationProcedure
     .input(repairCommentSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairComment = await repairCommentsController.getById(
-        input.id,
-        ctx.db,
-      );
+    .query(async ({ input }) => {
+      const repairComment = await repairCommentsController.getById(input.id);
 
       if (!repairComment) {
         throw new TRPCError({
@@ -46,10 +39,9 @@ export default router({
     }),
   getAllByRepairId: organizationProcedure
     .input(repairCommentSchemas.getAllByRepairId)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const allRepairParts = repairCommentsController.getAllByRepairId(
         input.repairId,
-        ctx.db,
       );
 
       return allRepairParts;
@@ -58,10 +50,10 @@ export default router({
     .input(repairCommentSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairComment = await repairCommentsController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const createdRepairComment = await repairCommentsController.create({
+        ...input,
+        ...metadata,
+      });
 
       if (!createdRepairComment) {
         throw new TRPCError({
@@ -76,10 +68,10 @@ export default router({
     .input(repairCommentSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairComment = await repairCommentsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedRepairComment = await repairCommentsController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedRepairComment) {
         throw new TRPCError({
@@ -94,10 +86,10 @@ export default router({
     .input(repairCommentSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairComment = await repairCommentsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedRepairComment = await repairCommentsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedRepairComment) {
         throw new TRPCError({

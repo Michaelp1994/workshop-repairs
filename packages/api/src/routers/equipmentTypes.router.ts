@@ -46,11 +46,8 @@ export default router({
     }),
   getById: organizationProcedure
     .input(equipmentTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairType = await equipmentTypesController.getById(
-        input.id,
-        ctx.db,
-      );
+    .query(async ({ input }) => {
+      const repairType = await equipmentTypesController.getById(input.id);
 
       if (!repairType) {
         throw new TRPCError({
@@ -65,10 +62,11 @@ export default router({
     .input(equipmentTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdEquipmentType = await equipmentTypesController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const createdEquipmentType = await equipmentTypesController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!createdEquipmentType) {
         throw new TRPCError({
@@ -83,10 +81,10 @@ export default router({
     .input(equipmentTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedEquipmentType = await equipmentTypesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedEquipmentType = await equipmentTypesController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedEquipmentType) {
         throw new TRPCError({
@@ -102,10 +100,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedEquipmentType = await equipmentTypesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedEquipmentType = await equipmentTypesController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedEquipmentType) {
         throw new TRPCError({

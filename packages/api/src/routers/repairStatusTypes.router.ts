@@ -15,37 +15,27 @@ import {
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairStatusTypes = repairStatusTypesController.getAll(
-        input,
-        ctx.db,
-      );
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
+    const allRepairStatusTypes = repairStatusTypesController.getAll(input);
 
-      return allRepairStatusTypes;
-    }),
+    return allRepairStatusTypes;
+  }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairStatusTypes = await repairStatusTypesController.getSelect(
-        input,
-        ctx.db,
-      );
+    .query(async ({ input }) => {
+      const allRepairStatusTypes =
+        await repairStatusTypesController.getSelect(input);
       return allRepairStatusTypes;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = repairStatusTypesController.getCount(input, ctx.db);
-      return count;
-    }),
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const count = repairStatusTypesController.getCount(input);
+    return count;
+  }),
   getById: organizationProcedure
     .input(repairStatusTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const repairStatusType = await repairStatusTypesController.getById(
         input.id,
-        ctx.db,
       );
 
       if (!repairStatusType) {
@@ -61,10 +51,10 @@ export default router({
     .input(repairStatusTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairStatusType = await repairStatusTypesController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const createdRepairStatusType = await repairStatusTypesController.create({
+        ...input,
+        ...metadata,
+      });
       if (!createdRepairStatusType) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -78,10 +68,10 @@ export default router({
     .input(repairStatusTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairStatusType = await repairStatusTypesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedRepairStatusType = await repairStatusTypesController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedRepairStatusType) {
         throw new TRPCError({
@@ -97,10 +87,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedRepairStatusType =
-        await repairStatusTypesController.archive(
-          { ...input, ...metadata },
-          ctx.db,
-        );
+        await repairStatusTypesController.archive({ ...input, ...metadata });
 
       if (!archivedRepairStatusType) {
         throw new TRPCError({

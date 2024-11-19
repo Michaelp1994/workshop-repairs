@@ -46,11 +46,8 @@ export default router({
     }),
   getById: organizationProcedure
     .input(manufacturerSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const manufacturer = await manufacturersController.getById(
-        input.id,
-        ctx.db,
-      );
+    .query(async ({ input }) => {
+      const manufacturer = await manufacturersController.getById(input.id);
 
       if (!manufacturer) {
         throw new TRPCError({
@@ -65,10 +62,11 @@ export default router({
     .input(manufacturerSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdManufacturer = await manufacturersController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const createdManufacturer = await manufacturersController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!createdManufacturer) {
         throw new TRPCError({
@@ -83,10 +81,10 @@ export default router({
     .input(manufacturerSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedManufacturer = await manufacturersController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedManufacturer = await manufacturersController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedManufacturer) {
         throw new TRPCError({
@@ -101,10 +99,10 @@ export default router({
     .input(manufacturerSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedManufacturer = await manufacturersController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedManufacturer = await manufacturersController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedManufacturer) {
         throw new TRPCError({

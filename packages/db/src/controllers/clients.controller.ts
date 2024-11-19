@@ -6,7 +6,7 @@ import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database, db } from "../index";
+import { db } from "../index";
 import {
   clientFilterMapping,
   clientOrderMapping,
@@ -96,19 +96,19 @@ export function getSelect(_: GetSelect, organizationId: OrganizationID) {
   return query.execute();
 }
 
-export async function getById(id: ClientID, db: Database) {
+export async function getById(id: ClientID) {
   const query = db.select().from(clientTable).where(eq(clientTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateClient, db: Database) {
+export async function create(input: CreateClient) {
   const query = db.insert(clientTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateClient, db: Database) {
+export async function update(input: UpdateClient) {
   const query = db
     .update(clientTable)
     .set(input)
@@ -118,7 +118,7 @@ export async function update(input: UpdateClient, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveClient, db: Database) {
+export async function archive(input: ArchiveClient) {
   const query = db
     .update(clientTable)
     .set(input)

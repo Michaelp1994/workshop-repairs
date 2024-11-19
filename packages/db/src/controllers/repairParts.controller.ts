@@ -1,7 +1,7 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
+import { db } from "..";
 import { type GetAll, type GetCount } from "../helpers/types";
-import { type Database } from "../index";
 import { assetTable } from "../schemas/asset.table";
 import { partTable } from "../schemas/part.table";
 import { type RepairID, repairTable } from "../schemas/repair.table";
@@ -16,7 +16,7 @@ import {
 const repairPartFields = getTableColumns(repairPartTable);
 const assetFields = getTableColumns(assetTable);
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll) {
   const query = db
     .select()
     .from(repairPartTable)
@@ -27,7 +27,7 @@ export function getAll({ pagination }: GetAll, db: Database) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount, db: Database) {
+export async function getCount(_: GetCount) {
   const query = db
     .select({ count: count() })
     .from(repairPartTable)
@@ -36,7 +36,7 @@ export async function getCount(_: GetCount, db: Database) {
   return res?.count;
 }
 
-export async function getById(input: RepairPartID, db: Database) {
+export async function getById(input: RepairPartID) {
   const query = db
     .select({
       ...repairPartFields,
@@ -50,7 +50,7 @@ export async function getById(input: RepairPartID, db: Database) {
   return res;
 }
 
-export async function getAllByRepairId(input: RepairID, db: Database) {
+export async function getAllByRepairId(input: RepairID) {
   const query = db
     .select()
     .from(repairPartTable)
@@ -65,13 +65,13 @@ export async function getAllByRepairId(input: RepairID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateRepairPart, db: Database) {
+export async function create(input: CreateRepairPart) {
   const query = db.insert(repairPartTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairPart, db: Database) {
+export async function update(input: UpdateRepairPart) {
   const query = db
     .update(repairPartTable)
     .set(input)
@@ -81,7 +81,7 @@ export async function update(input: UpdateRepairPart, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairPart, db: Database) {
+export async function archive(input: ArchiveRepairPart) {
   const query = db
     .update(repairPartTable)
     .set(input)

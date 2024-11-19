@@ -1,7 +1,7 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
+import { db } from "..";
 import { type GetAll, type GetCount } from "../helpers/types";
-import { type Database } from "../index";
 import { type RepairID } from "../schemas/repair.table";
 import {
   type ArchiveRepairComment,
@@ -14,7 +14,7 @@ import { userTable } from "../schemas/user.table";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll) {
   const query = db
     .select()
     .from(repairCommentTable)
@@ -25,7 +25,7 @@ export function getAll({ pagination }: GetAll, db: Database) {
   return query.execute();
 }
 
-export async function getCount(_input: GetCount, db: Database) {
+export async function getCount(_input: GetCount) {
   const query = db
     .select({ count: count() })
     .from(repairCommentTable)
@@ -34,7 +34,7 @@ export async function getCount(_input: GetCount, db: Database) {
   return res?.count;
 }
 
-export async function getAllByRepairId(input: RepairID, db: Database) {
+export async function getAllByRepairId(input: RepairID) {
   const query = db
     .select({
       ...repairCommentFields,
@@ -57,7 +57,7 @@ export async function getAllByRepairId(input: RepairID, db: Database) {
   return res;
 }
 
-export async function getById(input: RepairCommentID, db: Database) {
+export async function getById(input: RepairCommentID) {
   const query = db
     .select()
     .from(repairCommentTable)
@@ -67,13 +67,13 @@ export async function getById(input: RepairCommentID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateRepairComment, db: Database) {
+export async function create(input: CreateRepairComment) {
   const query = db.insert(repairCommentTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairComment, db: Database) {
+export async function update(input: UpdateRepairComment) {
   const query = db
     .update(repairCommentTable)
     .set(input)
@@ -83,7 +83,7 @@ export async function update(input: UpdateRepairComment, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairComment, db: Database) {
+export async function archive(input: ArchiveRepairComment) {
   const query = db
     .update(repairCommentTable)
     .set(input)

@@ -6,7 +6,7 @@ import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database, db } from "../index";
+import { db } from "../index";
 import {
   manufacturerFilterMapping,
   manufacturerOrderMapping,
@@ -81,7 +81,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getById(id: ManufacturerID, db: Database) {
+export async function getById(id: ManufacturerID) {
   const query = db
     .select()
     .from(manufacturerTable)
@@ -106,13 +106,13 @@ export async function getSelect(_: GetSelect, organizationId: OrganizationID) {
   return query.execute();
 }
 
-export async function create(input: CreateManufacturer, db: Database) {
+export async function create(input: CreateManufacturer) {
   const query = db.insert(manufacturerTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateManufacturer, db: Database) {
+export async function update(input: UpdateManufacturer) {
   const query = db
     .update(manufacturerTable)
     .set(input)
@@ -122,7 +122,7 @@ export async function update(input: UpdateManufacturer, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveManufacturer, db: Database) {
+export async function archive(input: ArchiveManufacturer) {
   const query = db
     .update(manufacturerTable)
     .set(input)

@@ -52,8 +52,8 @@ export default router({
     }),
   getById: organizationProcedure
     .input(clientSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const client = await clientsController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const client = await clientsController.getById(input.id);
       if (!client) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -66,10 +66,11 @@ export default router({
     .input(clientSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdClient = await clientsController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const createdClient = await clientsController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!createdClient) {
         throw new TRPCError({
@@ -84,10 +85,10 @@ export default router({
     .input(clientSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedClient = await clientsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedClient = await clientsController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedClient) {
         throw new TRPCError({
@@ -102,10 +103,10 @@ export default router({
     .input(clientSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedClient = await clientsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedClient = await clientsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedClient) {
         throw new TRPCError({

@@ -16,22 +16,18 @@ import {
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allModelImages = modelImagesController.getAll(input, ctx.db);
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
+    const allModelImages = modelImagesController.getAll(input);
 
-      return allModelImages;
-    }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = modelImagesController.getCount(input, ctx.db);
-      return count;
-    }),
+    return allModelImages;
+  }),
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const count = modelImagesController.getCount(input);
+    return count;
+  }),
   getAllByModelId: organizationProcedure
     .input(modelImageSchemas.getAllByModelId)
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const model = await modelsController.getById(input.modelId);
 
       if (!model) {
@@ -43,7 +39,6 @@ export default router({
 
       const allModelImages = await modelImagesController.getAllByModelId(
         input.modelId,
-        ctx.db,
       );
 
       return allModelImages.map((modelImage) => ({
@@ -53,8 +48,8 @@ export default router({
     }),
   getById: organizationProcedure
     .input(modelImageSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const modelImage = await modelImagesController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const modelImage = await modelImagesController.getById(input.id);
 
       if (!modelImage) {
         throw new TRPCError({
@@ -75,15 +70,14 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const modelImages = await modelImagesController.getAllByModelId(
         input.modelId,
-        ctx.db,
       );
       const isFirstImage = modelImages.length === 0;
 
       const imageMetadata = createMetadata(ctx.session);
-      const createdModelImage = await modelImagesController.create(
-        { ...input, ...imageMetadata },
-        ctx.db,
-      );
+      const createdModelImage = await modelImagesController.create({
+        ...input,
+        ...imageMetadata,
+      });
 
       if (!createdModelImage) {
         throw new TRPCError({
@@ -108,10 +102,10 @@ export default router({
     .input(modelImageSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedModelImage = await modelImagesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedModelImage = await modelImagesController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedModelImage) {
         throw new TRPCError({
@@ -125,7 +119,7 @@ export default router({
   setFavourite: organizationProcedure
     .input(modelImageSchemas.setFavourite)
     .mutation(async ({ input, ctx }) => {
-      const modelImage = await modelImagesController.getById(input.id, ctx.db);
+      const modelImage = await modelImagesController.getById(input.id);
 
       if (!modelImage) {
         throw new TRPCError({
@@ -156,10 +150,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedModelImage = await modelImagesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedModelImage = await modelImagesController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedModelImage) {
         throw new TRPCError({

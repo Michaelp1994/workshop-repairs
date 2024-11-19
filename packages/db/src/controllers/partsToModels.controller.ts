@@ -1,10 +1,10 @@
 import { and, count, eq, getTableColumns } from "drizzle-orm";
 
+import { db } from "..";
 import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
 import {
   partsToModelsFilterMapping,
   partsToModelsOrderMapping,
@@ -26,10 +26,12 @@ const globalFilterColumns = [
 
 const partsToModelsFields = getTableColumns(partsToModelTable);
 
-export function getAll(
-  { sorting, pagination, globalFilter, columnFilters }: GetAll,
-  db: Database,
-) {
+export function getAll({
+  sorting,
+  pagination,
+  globalFilter,
+  columnFilters,
+}: GetAll) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
     globalFilterColumns,
@@ -63,10 +65,7 @@ export function getAll(
   return res;
 }
 
-export async function getCount(
-  { columnFilters, globalFilter }: GetCount,
-  db: Database,
-) {
+export async function getCount({ columnFilters, globalFilter }: GetCount) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
     globalFilterColumns,
@@ -87,10 +86,7 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(
-  { globalFilter, columnFilters }: GetSelect,
-  db: Database,
-) {
+export function getSelect({ globalFilter, columnFilters }: GetSelect) {
   const globalFilterParams = getGlobalFilterParams(
     globalFilter,
     globalFilterColumns,
@@ -112,10 +108,7 @@ export function getSelect(
   return query.execute();
 }
 
-export async function getById(
-  input: { partId: PartID; modelId: ModelID },
-  db: Database,
-) {
+export async function getById(input: { partId: PartID; modelId: ModelID }) {
   const query = db
     .select()
     .from(partsToModelTable)
@@ -129,13 +122,13 @@ export async function getById(
   return res;
 }
 
-export async function create(input: CreatePartToModel, db: Database) {
+export async function create(input: CreatePartToModel) {
   const query = db.insert(partsToModelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdatePartToModel, db: Database) {
+export async function update(input: UpdatePartToModel) {
   const query = db
     .update(partsToModelTable)
     .set(input)
@@ -150,7 +143,7 @@ export async function update(input: UpdatePartToModel, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchivePartToModel, db: Database) {
+export async function archive(input: ArchivePartToModel) {
   const query = db
     .delete(partsToModelTable)
     .where(

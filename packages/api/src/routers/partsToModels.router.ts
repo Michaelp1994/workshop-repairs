@@ -9,14 +9,14 @@ import { TRPCError } from "@trpc/server";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(({ ctx, input }) => {
-    const allParts = controller.getAll(input, ctx.db);
+  getAll: organizationProcedure.input(getAllSchema).query(({ input }) => {
+    const allParts = controller.getAll(input);
     return allParts;
   }),
   getCount: organizationProcedure
     .input(getCountSchema)
-    .query(async ({ input, ctx }) => {
-      const count = await controller.getCount(input, ctx.db);
+    .query(async ({ input }) => {
+      const count = await controller.getCount(input);
 
       if (count === undefined) {
         throw new TRPCError({
@@ -26,16 +26,14 @@ export default router({
       }
       return count;
     }),
-  getSelect: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const allParts = controller.getSelect(input, ctx.db);
-      return allParts;
-    }),
+  getSelect: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const allParts = controller.getSelect(input);
+    return allParts;
+  }),
   create: organizationProcedure
     .input(partsToModelSchemas.create)
-    .mutation(async ({ input, ctx }) => {
-      const createdPartModel = await controller.create(input, ctx.db);
+    .mutation(async ({ input }) => {
+      const createdPartModel = await controller.create(input);
 
       if (!createdPartModel) {
         throw new TRPCError({
@@ -48,8 +46,8 @@ export default router({
     }),
   archive: organizationProcedure
     .input(partsToModelSchemas.archive)
-    .mutation(async ({ input, ctx }) => {
-      const archivedPartModel = await controller.archive(input, ctx.db);
+    .mutation(async ({ input }) => {
+      const archivedPartModel = await controller.archive(input);
 
       if (!archivedPartModel) {
         throw new TRPCError({

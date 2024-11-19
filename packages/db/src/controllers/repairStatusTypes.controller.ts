@@ -1,7 +1,7 @@
 import { count, eq, isNull } from "drizzle-orm";
 
+import { db } from "..";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database } from "../index";
 import {
   type ArchiveRepairStatusType,
   type CreateRepairStatusType,
@@ -10,7 +10,7 @@ import {
   type UpdateRepairStatusType,
 } from "../schemas/repair-status-type.table";
 
-export function getAll({ pagination }: GetAll, db: Database) {
+export function getAll({ pagination }: GetAll) {
   const query = db
     .select()
     .from(repairStatusTypeTable)
@@ -21,7 +21,7 @@ export function getAll({ pagination }: GetAll, db: Database) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount, db: Database) {
+export async function getCount(_: GetCount) {
   const query = db
     .select({ count: count() })
     .from(repairStatusTypeTable)
@@ -30,7 +30,7 @@ export async function getCount(_: GetCount, db: Database) {
   return res?.count;
 }
 
-export async function getSelect(_: GetSelect, db: Database) {
+export async function getSelect(_: GetSelect) {
   const query = db
     .select({
       value: repairStatusTypeTable.id,
@@ -42,7 +42,7 @@ export async function getSelect(_: GetSelect, db: Database) {
   return query.execute();
 }
 
-export async function getById(input: RepairStatusTypeID, db: Database) {
+export async function getById(input: RepairStatusTypeID) {
   const query = db
     .select()
     .from(repairStatusTypeTable)
@@ -51,13 +51,13 @@ export async function getById(input: RepairStatusTypeID, db: Database) {
   return res;
 }
 
-export async function create(input: CreateRepairStatusType, db: Database) {
+export async function create(input: CreateRepairStatusType) {
   const query = db.insert(repairStatusTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairStatusType, db: Database) {
+export async function update(input: UpdateRepairStatusType) {
   const query = db
     .update(repairStatusTypeTable)
     .set(input)
@@ -67,7 +67,7 @@ export async function update(input: UpdateRepairStatusType, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairStatusType, db: Database) {
+export async function archive(input: ArchiveRepairStatusType) {
   const query = db
     .update(repairStatusTypeTable)
     .set(input)

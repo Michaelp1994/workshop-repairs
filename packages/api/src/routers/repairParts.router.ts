@@ -14,23 +14,19 @@ import {
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairParts = repairPartsController.getAll(input, ctx.db);
+  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
+    const allRepairParts = repairPartsController.getAll(input);
 
-      return allRepairParts;
-    }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = repairPartsController.getCount(input, ctx.db);
-      return count;
-    }),
+    return allRepairParts;
+  }),
+  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
+    const count = repairPartsController.getCount(input);
+    return count;
+  }),
   getById: organizationProcedure
     .input(repairPartSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairPart = await repairPartsController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const repairPart = await repairPartsController.getById(input.id);
 
       if (!repairPart) {
         throw new TRPCError({
@@ -43,10 +39,9 @@ export default router({
     }),
   getAllByRepairId: organizationProcedure
     .input(repairPartSchemas.getAllByRepairId)
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const allRepairParts = await repairPartsController.getAllByRepairId(
         input.id,
-        ctx.db,
       );
 
       return allRepairParts;
@@ -55,10 +50,10 @@ export default router({
     .input(repairPartSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairPart = await repairPartsController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const createdRepairPart = await repairPartsController.create({
+        ...input,
+        ...metadata,
+      });
 
       if (!createdRepairPart) {
         throw new TRPCError({
@@ -73,10 +68,10 @@ export default router({
     .input(repairPartSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairPart = await repairPartsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedRepairPart = await repairPartsController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedRepairPart) {
         throw new TRPCError({
@@ -91,10 +86,10 @@ export default router({
     .input(repairPartSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairPart = await repairPartsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedRepairPart = await repairPartsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedRepairPart) {
         throw new TRPCError({

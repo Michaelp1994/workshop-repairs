@@ -37,15 +37,15 @@ export default router({
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allParts = await partsController.getSelect(input, ctx.db);
+    .query(async ({ input }) => {
+      const allParts = await partsController.getSelect(input);
 
       return allParts;
     }),
   getById: organizationProcedure
     .input(partSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const part = await partsController.getById(input.id, ctx.db);
+    .query(async ({ input }) => {
+      const part = await partsController.getById(input.id);
 
       if (!part) {
         throw new TRPCError({
@@ -60,10 +60,11 @@ export default router({
     .input(partSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdPart = await partsController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const createdPart = await partsController.create({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
       if (!createdPart) {
         throw new TRPCError({
@@ -78,10 +79,10 @@ export default router({
     .input(partSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedPart = await partsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const updatedPart = await partsController.update({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedPart) {
         throw new TRPCError({
@@ -97,10 +98,10 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedPart = await partsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedPart = await partsController.archive({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedPart) {
         throw new TRPCError({

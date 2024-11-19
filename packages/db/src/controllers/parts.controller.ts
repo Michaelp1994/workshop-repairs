@@ -6,7 +6,7 @@ import { getColumnFilterParams } from "../helpers/getColumnFilters";
 import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
 import { getOrderByParams } from "../helpers/getOrderByParams";
 import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
-import { type Database, db } from "../index";
+import { db } from "../index";
 import {
   partFilterMapping,
   partOrderMapping,
@@ -80,7 +80,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getSelect(_props: GetSelect, db: Database) {
+export async function getSelect(_props: GetSelect) {
   const query = db
     .select({
       value: partTable.id,
@@ -92,19 +92,19 @@ export async function getSelect(_props: GetSelect, db: Database) {
   return res;
 }
 
-export async function getById(id: PartID, db: Database) {
+export async function getById(id: PartID) {
   const query = db.select().from(partTable).where(eq(partTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreatePart, db: Database) {
+export async function create(input: CreatePart) {
   const query = db.insert(partTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdatePart, db: Database) {
+export async function update(input: UpdatePart) {
   const query = db
     .update(partTable)
     .set(input)
@@ -114,7 +114,7 @@ export async function update(input: UpdatePart, db: Database) {
   return res;
 }
 
-export async function archive(input: ArchivePart, db: Database) {
+export async function archive(input: ArchivePart) {
   const query = db
     .update(partTable)
     .set(input)
