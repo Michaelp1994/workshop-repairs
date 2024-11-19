@@ -13,7 +13,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import metadataColumns from "./metadata-columns";
-import { modelTable } from "./model.table";
+import { modelTable } from "./model.sql";
 
 export const modelImageTable = pgTable("model_image", {
   id: serial().primaryKey(),

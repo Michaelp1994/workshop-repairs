@@ -15,7 +15,7 @@ import type {
   InferUpdateModel,
 } from "../types";
 
-import { userTable } from "./user.table";
+import { userTable } from "./user.sql";
 
 export const emailVerificationRequestTable = pgTable(
   "email_verification_request",

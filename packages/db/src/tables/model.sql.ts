@@ -13,11 +13,11 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { equipmentTypeTable } from "./equipment-type.table";
-import { manufacturerTable } from "./manufacturer.table";
+import { equipmentTypeTable } from "./equipment-type.sql";
+import { manufacturerTable } from "./manufacturer.sql";
 import metadataColumns from "./metadata-columns";
-import { modelImageTable } from "./model-image.table";
-import { organizationTable } from "./organization.table";
+import { modelImageTable } from "./model-image.sql";
+import { organizationTable } from "./organization.sql";
 
 export const modelTable = pgTable(
   "model",

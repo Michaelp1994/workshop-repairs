@@ -1,7 +1,7 @@
 import { boolean, integer, pgTable, serial } from "drizzle-orm/pg-core";
 
 import { type InferCreateModel, type InferModel } from "../types";
-import { userTable } from "./user.table";
+import { userTable } from "./user.sql";
 
 export const userOnboardingTable = pgTable("user_onboarding", {
   id: serial().primaryKey(),

@@ -7,7 +7,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import metadataColumns from "./metadata-columns";
-import { repairTable } from "./repair.table";
+import { repairTable } from "./repair.sql";
 
 export const repairCommentTable = pgTable("repair_comment", {
   id: serial().primaryKey(),

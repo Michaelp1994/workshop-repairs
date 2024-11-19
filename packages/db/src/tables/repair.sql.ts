@@ -6,12 +6,12 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { assetTable } from "./asset.table";
-import { clientTable } from "./client.table";
+import { assetTable } from "./asset.sql";
+import { clientTable } from "./client.sql";
 import metadataColumns from "./metadata-columns";
-import { organizationTable } from "./organization.table";
-import { repairStatusTypeTable } from "./repair-status-type.table";
-import { repairTypeTable } from "./repair-type.table";
+import { organizationTable } from "./organization.sql";
+import { repairStatusTypeTable } from "./repair-status-type.sql";
+import { repairTypeTable } from "./repair-type.sql";
 
 export const repairTable = pgTable("repair", {
   id: serial().primaryKey(),

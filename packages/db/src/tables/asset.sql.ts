@@ -7,11 +7,11 @@ import type {
   InferUpdateModel,
 } from "../types";
 
-import { assetStatusTable } from "./asset-status.table";
-import { locationTable } from "./location.table";
+import { assetStatusTable } from "./asset-status.sql";
+import { locationTable } from "./location.sql";
 import metadataColumns from "./metadata-columns";
-import { modelTable } from "./model.table";
-import { organizationTable } from "./organization.table";
+import { modelTable } from "./model.sql";
+import { organizationTable } from "./organization.sql";
 
 export const assetTable = pgTable(
   "asset",

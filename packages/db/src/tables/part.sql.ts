@@ -7,7 +7,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import metadataColumns from "./metadata-columns";
-import { organizationTable } from "./organization.table";
+import { organizationTable } from "./organization.sql";
 
 export const partTable = pgTable("part", {
   id: serial().primaryKey(),

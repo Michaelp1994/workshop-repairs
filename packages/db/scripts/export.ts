@@ -2,7 +2,7 @@ import { getTableName } from "drizzle-orm";
 import { mkdir, writeFile } from "node:fs/promises";
 
 import { db } from "../src/index";
-import { schema } from "../src/schemas";
+import { schema } from "../src/tables";
 
 const outputDir = `./scripts/seeds/${new Date().toISOString().split("T")[0]}`;
 

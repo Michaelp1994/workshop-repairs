@@ -13,7 +13,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { organizationTable } from "./organization.table";
+import { organizationTable } from "./organization.sql";
 
 export const organizationInvitationTable = pgTable("organization_invitation", {
   id: serial().primaryKey(),

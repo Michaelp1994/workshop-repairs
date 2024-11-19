@@ -1,6 +1,6 @@
 import { integer, timestamp } from "drizzle-orm/pg-core";
 
-import { userTable } from "./user.table";
+import { userTable } from "./user.sql";
 
 export default {
   createdAt: timestamp().notNull().defaultNow(),

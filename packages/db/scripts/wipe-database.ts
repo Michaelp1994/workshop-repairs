@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 
 import { db } from "../src/index";
-import { schema } from "../src/schemas";
+import { schema } from "../src/tables";
 
 await db.transaction(async (tx) => {
   await tx.execute(sql`SET CONSTRAINTS ALL DEFERRED;`);

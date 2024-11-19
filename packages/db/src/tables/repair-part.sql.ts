@@ -7,8 +7,8 @@ import {
   type InferUpdateModel,
 } from "../types";
 import metadataColumns from "./metadata-columns";
-import { partTable } from "./part.table";
-import { repairTable } from "./repair.table";
+import { partTable } from "./part.sql";
+import { repairTable } from "./repair.sql";
 
 export const repairPartTable = pgTable("repair_part", {
   id: serial().primaryKey(),

@@ -7,14 +7,13 @@ import {
   type InferUpdateModel,
 } from "../types";
 import metadataColumns from "./metadata-columns";
-import { organizationTable } from "./organization.table";
+import { organizationTable } from "./organization.sql";
 
-export const locationTable = pgTable(
-  "location",
+export const manufacturerTable = pgTable(
+  "manufacturer",
   {
     id: serial().primaryKey(),
     name: varchar().notNull(),
-    address: varchar().notNull(),
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
@@ -23,8 +22,8 @@ export const locationTable = pgTable(
   (t) => [unique().on(t.name, t.organizationId)],
 );
 
-export type Location = InferModel<typeof locationTable>;
-export type LocationID = Location["id"];
-export type CreateLocation = InferCreateModel<typeof locationTable>;
-export type UpdateLocation = InferUpdateModel<typeof locationTable>;
-export type ArchiveLocation = InferArchiveModel<typeof locationTable>;
+export type Manufacturer = InferModel<typeof manufacturerTable>;
+export type ManufacturerID = Manufacturer["id"];
+export type CreateManufacturer = InferCreateModel<typeof manufacturerTable>;
+export type UpdateManufacturer = InferUpdateModel<typeof manufacturerTable>;
+export type ArchiveManufacturer = InferArchiveModel<typeof manufacturerTable>;

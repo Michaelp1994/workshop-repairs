@@ -1,7 +1,7 @@
 import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 
-import { modelTable } from "./model.table";
-import { partTable } from "./part.table";
+import { modelTable } from "./model.sql";
+import { partTable } from "./part.sql";
 
 export const partsToModelTable = pgTable(
   "parts_to_model",

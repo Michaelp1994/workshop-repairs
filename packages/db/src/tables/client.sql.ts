@@ -8,7 +8,7 @@ import type {
 } from "../types";
 
 import metadataColumns from "./metadata-columns";
-import { organizationTable } from "./organization.table";
+import { organizationTable } from "./organization.sql";
 
 export const clientTable = pgTable(
   "client",
