@@ -5,7 +5,7 @@ import {
   type CreateEmailVerificationRequest,
   type EmailVerificationRequestID,
   emailVerificationRequestTable,
-} from "../schemas/email-verification-request.table";
+} from "../tables/email-verification-request.sql";
 
 export async function create(input: CreateEmailVerificationRequest) {
   const query = db

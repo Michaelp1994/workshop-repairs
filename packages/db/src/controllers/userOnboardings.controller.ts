@@ -1,15 +1,15 @@
 import assert from "assert";
 import { eq, getTableColumns } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
 import { db } from "../index";
-import { type UserID, userTable } from "../schemas/user.table";
+import { type UserID, userTable } from "../tables/user.sql";
 import {
   type CreateUserOnboarding,
   type UpdateUserOnboarding,
   userOnboardingTable,
-} from "../schemas/user-onboarding.table";
+} from "../tables/user-onboarding.sql";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);

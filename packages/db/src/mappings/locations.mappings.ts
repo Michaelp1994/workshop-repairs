@@ -1,10 +1,21 @@
-import { locationTable } from "../schemas/location.table";
+import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
+import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
+import { createOrderByFunction } from "../helpers/createOrderByFunction";
+import { locationTable } from "../tables/location.sql";
 
-export const locationOrderMapping = {
+const orderMapping = {
   name: locationTable.name,
   address: locationTable.address,
   createdAt: locationTable.createdAt,
   updatedAt: locationTable.updatedAt,
 };
 
-export const locationFilterMapping = {};
+const filterMapping = {};
+
+const globalFilterColumns = [locationTable.name];
+
+export const getGlobalFilters = createGlobalFilterFunction(globalFilterColumns);
+
+export const getColumnFilters = createColumnFilterFunction(filterMapping);
+
+export const getOrderBy = createOrderByFunction(orderMapping);

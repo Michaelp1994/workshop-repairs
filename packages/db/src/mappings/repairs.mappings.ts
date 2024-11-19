@@ -1,10 +1,12 @@
-import { assetTable } from "../schemas/asset.table";
-import { repairTable } from "../schemas/repair.table";
-import { repairStatusTypeTable } from "../schemas/repair-status-type.table";
-import { repairTypeTable } from "../schemas/repair-type.table";
-import { FilterMapping } from "../types";
+import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
+import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
+import { createOrderByFunction } from "../helpers/createOrderByFunction";
+import { assetTable } from "../tables/asset.sql";
+import { repairTable } from "../tables/repair.sql";
+import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
+import { repairTypeTable } from "../tables/repair-type.sql";
 
-export const repairOrderMapping = {
+const orderMapping = {
   fault: repairTable.fault,
   summary: repairTable.summary,
   type_name: repairTypeTable.name,
@@ -16,8 +18,24 @@ export const repairOrderMapping = {
   updatedAt: repairTable.updatedAt,
 };
 
-export const repairFilterMapping: FilterMapping = {
+const filterMapping = {
   status: repairTable.statusId,
   asset_id: repairTable.assetId,
   client_id: repairTable.clientId,
 };
+
+const globalFilterColumns = [
+  repairTable.fault,
+  repairTable.summary,
+  repairStatusTypeTable.name,
+  repairTypeTable.name,
+  assetTable.assetNumber,
+  assetTable.serialNumber,
+  repairTable.clientReference,
+];
+
+export const getGlobalFilters = createGlobalFilterFunction(globalFilterColumns);
+
+export const getColumnFilters = createColumnFilterFunction(filterMapping);
+
+export const getOrderBy = createOrderByFunction(orderMapping);

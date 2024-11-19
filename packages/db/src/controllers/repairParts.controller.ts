@@ -1,22 +1,25 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { db } from "..";
-import { type GetAll, type GetCount } from "../helpers/types";
-import { assetTable } from "../schemas/asset.table";
-import { partTable } from "../schemas/part.table";
-import { type RepairID, repairTable } from "../schemas/repair.table";
+import { assetTable } from "../tables/asset.sql";
+import { partTable } from "../tables/part.sql";
+import { type RepairID, repairTable } from "../tables/repair.sql";
 import {
   type ArchiveRepairPart,
   type CreateRepairPart,
   type RepairPartID,
   repairPartTable,
   type UpdateRepairPart,
-} from "../schemas/repair-part.table";
+} from "../tables/repair-part.sql";
 
 const repairPartFields = getTableColumns(repairPartTable);
-const assetFields = getTableColumns(assetTable);
 
-export function getAll({ pagination }: GetAll) {
+export function getAll({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairPartTable)
@@ -27,7 +30,7 @@ export function getAll({ pagination }: GetAll) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount) {
+export async function getCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairPartTable)
@@ -40,7 +43,7 @@ export async function getById(input: RepairPartID) {
   const query = db
     .select({
       ...repairPartFields,
-      assets: assetFields,
+      assets: assetTable,
     })
     .from(repairPartTable)
     .innerJoin(repairTable, eq(repairTable.id, repairPartTable.repairId))

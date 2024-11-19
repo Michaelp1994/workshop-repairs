@@ -1,7 +1,10 @@
-import { userTable } from "../schemas/user.table";
-import { userTypeTable } from "../schemas/user-type.table";
+import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
+import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
+import { createOrderByFunction } from "../helpers/createOrderByFunction";
+import { userTable } from "../tables/user.sql";
+import { userTypeTable } from "../tables/user-type.sql";
 
-export const userOrderMapping = {
+export const orderMapping = {
   firstName: userTable.firstName,
   email: userTable.email,
   type_name: userTypeTable.name,
@@ -9,6 +12,14 @@ export const userOrderMapping = {
   updatedAt: userTable.updatedAt,
 };
 
-export const userFilterMapping = {
+export const filterMapping = {
   type: userTypeTable.id,
 };
+
+const globalFilterColumns = [userTable.firstName, userTable.email];
+
+export const getGlobalFilters = createGlobalFilterFunction(globalFilterColumns);
+
+export const getColumnFilters = createColumnFilterFunction(filterMapping);
+
+export const getOrderBy = createOrderByFunction(orderMapping);

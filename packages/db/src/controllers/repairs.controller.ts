@@ -1,57 +1,44 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
 import {
-  repairFilterMapping,
-  repairOrderMapping,
+  getColumnFilters,
+  getGlobalFilters,
+  getOrderBy,
 } from "../mappings/repairs.mappings";
-import { assetTable } from "../schemas/asset.table";
-import { locationTable } from "../schemas/location.table";
-import { manufacturerTable } from "../schemas/manufacturer.table";
-import { modelTable } from "../schemas/model.table";
-import { modelImageTable } from "../schemas/model-image.table";
+import { assetTable } from "../tables/asset.sql";
+import { locationTable } from "../tables/location.sql";
+import { manufacturerTable } from "../tables/manufacturer.sql";
+import { modelTable } from "../tables/model.sql";
+import { modelImageTable } from "../tables/model-image.sql";
 import {
   type ArchiveRepair,
   type CreateRepair,
   type RepairID,
   repairTable,
   type UpdateRepair,
-} from "../schemas/repair.table";
-import { repairStatusTypeTable } from "../schemas/repair-status-type.table";
-import { repairTypeTable } from "../schemas/repair-type.table";
+} from "../tables/repair.sql";
+import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
+import { repairTypeTable } from "../tables/repair-type.sql";
 
 const repairFields = getTableColumns(repairTable);
 const assetFields = getTableColumns(assetTable);
 
-const globalFilterColumns = [
-  repairTable.fault,
-  repairTable.summary,
-  repairStatusTypeTable.name,
-  repairTypeTable.name,
-  assetTable.assetNumber,
-  assetTable.serialNumber,
-  repairTable.clientReference,
-];
-
 export function getAll(
-  { globalFilter, sorting, pagination, columnFilters }: GetAll,
+  { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    repairFilterMapping,
-  );
-  const orderByParams = getOrderByParams(sorting, repairOrderMapping);
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
+  const orderByParams = getOrderBy(sorting);
 
   const query = db
     .select({
@@ -104,17 +91,11 @@ export function getAll(
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    repairFilterMapping,
-  );
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
 
   const query = db
     .select({ value: count() })
@@ -138,7 +119,7 @@ export async function getCount(
   return res?.value;
 }
 
-export async function getSelect(_: GetSelect) {
+export async function getSelect(_: GetSelectInput) {
   const query = db
     .select({
       value: repairTable.id,

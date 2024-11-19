@@ -1,15 +1,17 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount } from "../helpers/types";
 import { db } from "../index";
 import {
-  userFilterMapping,
-  userOrderMapping,
+  getColumnFilters,
+  getGlobalFilters,
+  getOrderBy,
 } from "../mappings/users.mappings";
 import {
   type ArchiveUser,
@@ -17,27 +19,19 @@ import {
   type UpdateUser,
   type UserID,
   userTable,
-} from "../schemas/user.table";
-import { userTypeTable } from "../schemas/user-type.table";
+} from "../tables/user.sql";
+import { userTypeTable } from "../tables/user-type.sql";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
-const globalFilterColumns = [userTable.firstName, userTable.email];
-
 export function getAll(
-  { globalFilter, sorting, pagination, columnFilters }: GetAll,
+  { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const orderByParams = getOrderByParams(sorting, userOrderMapping);
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    userFilterMapping,
-  );
+  const orderByParams = getOrderBy(sorting);
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
     .select({ ...publicUserColumns, type: userTypeTable })
     .from(userTable)
@@ -57,17 +51,11 @@ export function getAll(
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    userFilterMapping,
-  );
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
     .select({ count: count() })
     .from(userTable)

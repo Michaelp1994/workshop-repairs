@@ -1,6 +1,11 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { count, eq, isNull } from "drizzle-orm";
 
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
 import {
   type ArchiveRepairType,
@@ -8,9 +13,9 @@ import {
   type RepairTypeID,
   repairTypeTable,
   type UpdateRepairType,
-} from "../schemas/repair-type.table";
+} from "../tables/repair-type.sql";
 
-export function getAll({ pagination }: GetAll) {
+export function getAll({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairTypeTable)
@@ -21,7 +26,7 @@ export function getAll({ pagination }: GetAll) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount) {
+export async function getCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairTypeTable)
@@ -30,7 +35,7 @@ export async function getCount(_: GetCount) {
   return res?.count;
 }
 
-export async function getSelect(_: GetSelect) {
+export async function getSelect(_: GetSelectInput) {
   const query = db
     .select({
       value: repairTypeTable.id,

@@ -1,10 +1,6 @@
 import * as assetsController from "@repo/db/controllers/assets.controller";
 import * as modelsController from "@repo/db/controllers/models.controller";
-import {
-  getAllSchema,
-  getCountSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
+import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import * as modelSchemas from "@repo/validators/models.validators";
 import { TRPCError } from "@trpc/server";
 
@@ -18,13 +14,23 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(modelSchemas.getAll)
     .query(async ({ ctx, input }) => {
       const allModels = modelsController.getAll(
         input,
         ctx.session.organizationId,
       );
       return allModels;
+    }),
+
+  getCount: organizationProcedure
+    .input(modelSchemas.getCount)
+    .query(({ ctx, input }) => {
+      const count = modelsController.getCount(
+        input,
+        ctx.session.organizationId,
+      );
+      return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
@@ -35,15 +41,7 @@ export default router({
       );
       return allModels;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = modelsController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
-      return count;
-    }),
+
   getByAssetId: organizationProcedure
     .input(modelSchemas.getByAssetId)
     .query(async ({ input, ctx }) => {

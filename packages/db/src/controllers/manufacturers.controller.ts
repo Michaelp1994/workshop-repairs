@@ -1,15 +1,18 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
 import {
-  manufacturerFilterMapping,
-  manufacturerOrderMapping,
+  getColumnFilters,
+  getGlobalFilters,
+  getOrderBy,
 } from "../mappings/manufacturers.mappings";
 import {
   type ArchiveManufacturer,
@@ -17,23 +20,15 @@ import {
   type ManufacturerID,
   manufacturerTable,
   type UpdateManufacturer,
-} from "../schemas/manufacturer.table";
-
-const globalFilterColumns = [manufacturerTable.name];
+} from "../tables/manufacturer.sql";
 
 export function getAll(
-  { pagination, sorting, globalFilter, columnFilters }: GetAll,
+  { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    manufacturerFilterMapping,
-  );
-  const orderByParams = getOrderByParams(sorting, manufacturerOrderMapping);
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
+  const orderByParams = getOrderBy(sorting);
 
   const query = db
     .select()
@@ -53,17 +48,11 @@ export function getAll(
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    manufacturerFilterMapping,
-  );
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
 
   const query = db
     .select({ count: count() })
@@ -90,7 +79,10 @@ export async function getById(id: ManufacturerID) {
   return res;
 }
 
-export async function getSelect(_: GetSelect, organizationId: OrganizationID) {
+export async function getSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({
       value: manufacturerTable.id,

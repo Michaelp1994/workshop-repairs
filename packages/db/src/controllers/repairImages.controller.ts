@@ -1,7 +1,11 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { GetAll, GetCount } from "../helpers/types";
-import type { RepairID } from "../schemas/repair.table";
+import type { RepairID } from "../tables/repair.sql";
 
 import { db } from "..";
 import {
@@ -10,9 +14,9 @@ import {
   type RepairImageID,
   repairImageTable,
   type UpdateRepairImage,
-} from "../schemas/repair-image.table";
+} from "../tables/repair-image.sql";
 
-export function getAll({ pagination }: GetAll) {
+export function getAll({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -22,7 +26,7 @@ export function getAll({ pagination }: GetAll) {
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
-export async function getCount(_: GetCount) {
+export async function getCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairImageTable)

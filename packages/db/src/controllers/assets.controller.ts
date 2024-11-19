@@ -4,145 +4,57 @@ import type {
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
-import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
+import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
 import { db } from "../index";
-import {
-  assetFilterMapping,
-  assetOrderMapping,
-} from "../mappings/assets.mappings";
+import { createCountQuery, createDataQuery } from "../queries/assets.queries";
 import {
   type ArchiveAsset,
   type AssetID,
   assetTable,
   type CreateAsset,
   type UpdateAsset,
-} from "../schemas/asset.table";
-import { assetStatusTable } from "../schemas/asset-status.table";
-import { clientTable } from "../schemas/client.table";
-import { locationTable } from "../schemas/location.table";
-import { manufacturerTable } from "../schemas/manufacturer.table";
-import { modelTable } from "../schemas/model.table";
-import { modelImageTable } from "../schemas/model-image.table";
-import { type RepairID, repairTable } from "../schemas/repair.table";
+} from "../tables/asset.sql";
+import { assetStatusTable } from "../tables/asset-status.sql";
+import { locationTable } from "../tables/location.sql";
+import { manufacturerTable } from "../tables/manufacturer.sql";
+import { modelTable } from "../tables/model.sql";
+import { modelImageTable } from "../tables/model-image.sql";
+import { type RepairID, repairTable } from "../tables/repair.sql";
 
 const assetFields = getTableColumns(assetTable);
 
-const globalFilterColumns = [
-  assetTable.assetNumber,
-  assetTable.serialNumber,
-  locationTable.name,
-  manufacturerTable.name,
-  modelTable.name,
-];
-
 export function getAll(
-  { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
+  dataTableParams: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const orderByParams = getOrderByParams(sorting, assetOrderMapping);
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    assetFilterMapping,
+  const query = createDataQuery(
+    dataTableParams,
+    isNull(assetTable.deletedAt),
+    eq(assetTable.organizationId, organizationId),
   );
 
-  const query = db
-    .select({
-      ...assetFields,
-      location: {
-        id: locationTable.id,
-        name: locationTable.name,
-      },
-      status: {
-        id: assetStatusTable.id,
-        name: assetStatusTable.name,
-      },
-      client: {
-        id: clientTable.id,
-        name: clientTable.name,
-      },
-      model: {
-        id: modelTable.id,
-        nickname: modelTable.nickname,
-        imageUrl: modelImageTable.url,
-      },
-      manufacturer: {
-        id: manufacturerTable.id,
-        name: manufacturerTable.name,
-      },
-    })
-    .from(assetTable)
-    .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
-    .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
-    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
-    .innerJoin(clientTable, eq(assetTable.clientId, clientTable.id))
-    .innerJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .leftJoin(
-      modelImageTable,
-      eq(modelTable.defaultImageId, modelImageTable.id),
-    )
-    .where(
-      and(
-        isNull(assetTable.deletedAt),
-        eq(assetTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, assetTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
+  const res = query.execute();
 
-  return query.execute();
+  return res;
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCountInput,
+  dataTableParams: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
+  const query = createCountQuery(
+    dataTableParams,
+    isNull(assetTable.deletedAt),
+    eq(assetTable.organizationId, organizationId),
   );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    assetFilterMapping,
-  );
-
-  const query = db
-    .select({ count: count() })
-    .from(assetTable)
-    .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
-    .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
-    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
-    .innerJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .where(
-      and(
-        isNull(assetTable.deletedAt),
-        eq(assetTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
 
   const [res] = await query.execute();
   return res?.count;
 }
+
 export async function getSelect(
   { limit, cursor }: GetSelectInput,
   organizationId: OrganizationID,

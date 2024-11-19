@@ -1,8 +1,13 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
 import {
   type ArchiveEquipmentType,
@@ -10,9 +15,12 @@ import {
   type EquipmentTypeID,
   equipmentTypeTable,
   type UpdateEquipmentType,
-} from "../schemas/equipment-type.table";
+} from "../tables/equipment-type.sql";
 
-export function getAll({ pagination }: GetAll, organizationId: OrganizationID) {
+export function getAll(
+  { pagination }: GetAllInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select()
     .from(equipmentTypeTable)
@@ -28,7 +36,10 @@ export function getAll({ pagination }: GetAll, organizationId: OrganizationID) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount, organizationId: OrganizationID) {
+export async function getCount(
+  _: GetCountInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({ count: count() })
     .from(equipmentTypeTable)
@@ -42,7 +53,10 @@ export async function getCount(_: GetCount, organizationId: OrganizationID) {
   return res?.count;
 }
 
-export async function getSelect(_: GetSelect, organizationId: OrganizationID) {
+export async function getSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({
       value: equipmentTypeTable.id,

@@ -1,12 +1,23 @@
-import { partTable } from "../schemas/part.table";
+import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
+import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
+import { createOrderByFunction } from "../helpers/createOrderByFunction";
+import { partTable } from "../tables/part.sql";
 
-export const partOrderMapping = {
+const orderMapping = {
   name: partTable.name,
   createdAt: partTable.createdAt,
   updatedAt: partTable.updatedAt,
   partNumber: partTable.partNumber,
 };
 
-export const partFilterMapping = {
+const filterMapping = {
   // model_id: partsToModels.modelId,
 };
+
+const globalFilterColumns = [partTable.name];
+
+export const getGlobalFilters = createGlobalFilterFunction(globalFilterColumns);
+
+export const getColumnFilters = createColumnFilterFunction(filterMapping);
+
+export const getOrderBy = createOrderByFunction(orderMapping);

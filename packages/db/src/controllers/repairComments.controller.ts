@@ -1,20 +1,24 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { db } from "..";
-import { type GetAll, type GetCount } from "../helpers/types";
-import { type RepairID } from "../schemas/repair.table";
+import { type RepairID } from "../tables/repair.sql";
 import {
   type ArchiveRepairComment,
   type CreateRepairComment,
   type RepairCommentID,
   repairCommentTable,
   type UpdateRepairComment,
-} from "../schemas/repair-comment.table";
-import { userTable } from "../schemas/user.table";
+} from "../tables/repair-comment.sql";
+import { userTable } from "../tables/user.sql";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
-export function getAll({ pagination }: GetAll) {
+export function getAll({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairCommentTable)
@@ -25,7 +29,7 @@ export function getAll({ pagination }: GetAll) {
   return query.execute();
 }
 
-export async function getCount(_input: GetCount) {
+export async function getCount(_input: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairCommentTable)

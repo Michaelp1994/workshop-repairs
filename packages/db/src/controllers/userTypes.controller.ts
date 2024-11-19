@@ -1,16 +1,21 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { count, eq, isNull } from "drizzle-orm";
 
 import { db } from "..";
-import { type GetAll, type GetCount } from "../helpers/types";
 import {
   type ArchiveUserType,
   type CreateUserType,
   type UpdateUserType,
   type UserTypeID,
   userTypeTable,
-} from "../schemas/user-type.table";
+} from "../tables/user-type.sql";
 
-export function getAll({ pagination }: GetAll) {
+export function getAll({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(userTypeTable)
@@ -21,7 +26,7 @@ export function getAll({ pagination }: GetAll) {
   return query.execute();
 }
 
-export async function getCount(_: GetCount) {
+export async function getCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(userTypeTable)

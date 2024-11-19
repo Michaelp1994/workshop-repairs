@@ -1,129 +1,120 @@
-import { and, count, eq, getTableColumns, ilike, isNull } from "drizzle-orm";
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import { and, eq, getTableColumns, ilike, isNull } from "drizzle-orm";
+
+import type { OrganizationID } from "../tables/organization.sql";
 
 import { formatSearch } from "../helpers/formatSearch";
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
+import { baseCountQuery, baseModelDataQuery } from "../queries/models.queries";
 import {
-  modelFilterMapping,
-  modelOrderMapping,
-} from "../mappings/model.mappings";
-import { equipmentTypeTable } from "../schemas/equipment-type.table";
-import { manufacturerTable } from "../schemas/manufacturer.table";
+  type EquipmentTypeID,
+  equipmentTypeTable,
+} from "../tables/equipment-type.sql";
+import {
+  type ManufacturerID,
+  manufacturerTable,
+} from "../tables/manufacturer.sql";
 import {
   type ArchiveModel,
   type CreateModel,
   type ModelID,
   modelTable,
   type UpdateModel,
-} from "../schemas/model.table";
-import { modelImageTable } from "../schemas/model-image.table";
+} from "../tables/model.sql";
+import { modelImageTable } from "../tables/model-image.sql";
 
 const modelFields = getTableColumns(modelTable);
 
-const globalFilterColumns = [
-  modelTable.name,
-  modelTable.nickname,
-  manufacturerTable.name,
-];
-
 export function getAll(
-  { pagination, globalFilter, sorting, columnFilters }: GetAll,
+  dataTableParams: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
+  const query = baseModelDataQuery(
+    dataTableParams,
+    isNull(modelTable.deletedAt),
+    eq(modelTable.organizationId, organizationId),
   );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    modelFilterMapping,
-  );
-  const orderByParams = getOrderByParams(sorting, modelOrderMapping);
-
-  const query = db
-    .select({
-      id: modelTable.id,
-      name: modelTable.name,
-      nickname: modelTable.nickname,
-      defaultImageUrl: modelImageTable.url,
-      equipmentType: {
-        id: equipmentTypeTable.id,
-        name: equipmentTypeTable.name,
-      },
-      manufacturer: {
-        id: manufacturerTable.id,
-        name: manufacturerTable.name,
-      },
-      createdAt: modelTable.createdAt,
-      updatedAt: modelTable.updatedAt,
-    })
-    .from(modelTable)
-    .innerJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .innerJoin(
-      equipmentTypeTable,
-      eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
-    )
-    .leftJoin(
-      modelImageTable,
-      eq(modelTable.defaultImageId, modelImageTable.id),
-    )
-    .where(
-      and(
-        isNull(modelTable.deletedAt),
-        eq(modelTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, modelTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  dataTableParams: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
+  const query = baseCountQuery(
+    dataTableParams,
+    isNull(modelTable.deletedAt),
+    eq(modelTable.organizationId, organizationId),
   );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    modelFilterMapping,
+  const [res] = await query.execute();
+  return res?.count;
+}
+
+export function getAllByEquipmentTypeId(
+  dataTableParams: GetAllInput,
+  organizationId: OrganizationID,
+  equipmentTypeId: EquipmentTypeID,
+) {
+  const query = baseModelDataQuery(
+    dataTableParams,
+    isNull(modelTable.deletedAt),
+    eq(modelTable.organizationId, organizationId),
+    eq(equipmentTypeTable.id, equipmentTypeId),
   );
+  return query.execute();
+}
 
-  const query = db
-    .select({ count: count() })
-    .from(modelTable)
-    .leftJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .where(
-      and(
-        isNull(modelTable.deletedAt),
-        eq(modelTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
+export async function getCountByEquipmentTypeId(
+  dataTableParams: GetCountInput,
+  organizationId: OrganizationID,
+  equipmentTypeId: EquipmentTypeID,
+) {
+  const query = baseCountQuery(
+    dataTableParams,
+    isNull(modelTable.deletedAt),
+    eq(modelTable.organizationId, organizationId),
+    eq(equipmentTypeTable.id, equipmentTypeId),
+  );
+  const [res] = await query.execute();
+  return res?.count;
+}
 
+export function getAllByManufacturerId(
+  dataTableParams: GetAllInput,
+  organizationId: OrganizationID,
+  manufacturerId: ManufacturerID,
+) {
+  const query = baseModelDataQuery(
+    dataTableParams,
+    isNull(modelTable.deletedAt),
+    eq(modelTable.organizationId, organizationId),
+    eq(manufacturerTable.id, manufacturerId),
+  );
+  return query.execute();
+}
+
+export async function getCountByManufacturerId(
+  dataTableParams: GetCountInput,
+  organizationId: OrganizationID,
+  manufacturerId: ManufacturerID,
+) {
+  const query = baseCountQuery(
+    dataTableParams,
+    isNull(modelTable.deletedAt),
+    eq(modelTable.organizationId, organizationId),
+    eq(manufacturerTable.id, manufacturerId),
+  );
   const [res] = await query.execute();
   return res?.count;
 }
 
 export function getSelect(
-  { globalFilter = "" }: GetSelect,
+  { globalFilter = "" }: GetSelectInput,
   organizationId: OrganizationID,
 ) {
   const searchQuery = formatSearch(globalFilter);

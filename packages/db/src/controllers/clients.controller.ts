@@ -1,15 +1,18 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
 import {
-  clientFilterMapping,
-  clientOrderMapping,
+  getColumnFilters,
+  getGlobalFilters,
+  getOrderBy,
 } from "../mappings/clients.mappings";
 import {
   type ArchiveClient,
@@ -17,23 +20,15 @@ import {
   clientTable,
   type CreateClient,
   type UpdateClient,
-} from "../schemas/client.table";
-
-const globalFilterColumns = [clientTable.name];
+} from "../tables/client.sql";
 
 export function getAll(
-  { pagination, sorting, globalFilter, columnFilters }: GetAll,
+  { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const orderByParams = getOrderByParams(sorting, clientOrderMapping);
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    clientFilterMapping,
-  );
+  const orderBys = getOrderBy(sorting);
+  const globalFilters = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
 
   const query = db
     .select()
@@ -42,28 +37,22 @@ export function getAll(
       and(
         isNull(clientTable.deletedAt),
         eq(clientTable.organizationId, organizationId),
-        globalFilterParams,
+        globalFilters,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, clientTable.id)
+    .orderBy(...orderBys, clientTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    clientFilterMapping,
-  );
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
     .select({ count: count() })
     .from(clientTable)
@@ -79,7 +68,7 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(_: GetSelect, organizationId: OrganizationID) {
+export function getSelect(_: GetSelectInput, organizationId: OrganizationID) {
   const query = db
     .select({
       value: clientTable.id,

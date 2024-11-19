@@ -1,17 +1,21 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import { type GetAll, type GetCount } from "../helpers/types";
 import { db } from "../index";
-import { type ModelID } from "../schemas/model.table";
+import { type ModelID } from "../tables/model.sql";
 import {
   type ArchiveModelImage,
   type CreateModelImage,
   type ModelImageID,
   modelImageTable,
   type UpdateModelImage,
-} from "../schemas/model-image.table";
+} from "../tables/model-image.sql";
 
-export function getAll({ pagination }: GetAll) {
+export function getAll({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(modelImageTable)
@@ -34,7 +38,7 @@ export async function getAllByModelId(id: ModelID) {
   return res;
 }
 
-export async function getCount(_: GetCount) {
+export async function getCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(modelImageTable)

@@ -1,9 +1,20 @@
-import { manufacturerTable } from "../schemas/manufacturer.table";
+import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
+import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
+import { createOrderByFunction } from "../helpers/createOrderByFunction";
+import { manufacturerTable } from "../tables/manufacturer.sql";
 
-export const manufacturerOrderMapping = {
+const orderMapping = {
   name: manufacturerTable.name,
   createdAt: manufacturerTable.createdAt,
   updatedAt: manufacturerTable.updatedAt,
 };
 
-export const manufacturerFilterMapping = {};
+const filterMapping = {};
+
+const globalFilterColumns = [manufacturerTable.name];
+
+export const getGlobalFilters = createGlobalFilterFunction(globalFilterColumns);
+
+export const getColumnFilters = createColumnFilterFunction(filterMapping);
+
+export const getOrderBy = createOrderByFunction(orderMapping);

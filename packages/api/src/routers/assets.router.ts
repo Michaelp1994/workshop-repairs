@@ -1,10 +1,6 @@
 import * as assetsController from "@repo/db/controllers/assets.controller";
 import * as assetSchemas from "@repo/validators/assets.validators";
-import {
-  getAllSchema,
-  getCountSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
+import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -18,7 +14,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(assetSchemas.getAll)
     .query(async ({ ctx, input }) => {
       const allAssets = await assetsController.getAll(
         input,
@@ -27,14 +23,13 @@ export default router({
       return allAssets;
     }),
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(assetSchemas.getCount)
     .query(async ({ ctx, input }) => {
       const count = await assetsController.getCount(
         input,
         ctx.session.organizationId,
       );
       assertDatabaseResult(count);
-
       return count;
     }),
   getSelect: organizationProcedure

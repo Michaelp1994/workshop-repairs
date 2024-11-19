@@ -5,11 +5,11 @@ import {
   type CreateOrganization,
   type OrganizationID,
   organizationTable,
-} from "../schemas/organization.table";
+} from "../tables/organization.sql";
 import {
   type CreateOrganizationInvitation,
   organizationInvitationTable,
-} from "../schemas/organization-invitation.table";
+} from "../tables/organization-invitation.sql";
 
 export async function getById(id: OrganizationID) {
   const query = db

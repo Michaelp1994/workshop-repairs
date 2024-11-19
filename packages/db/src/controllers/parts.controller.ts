@@ -1,15 +1,18 @@
+import type {
+  GetAllInput,
+  GetCountInput,
+  GetSelectInput,
+} from "@repo/validators/dataTables.validators";
+
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../schemas/organization.table";
+import type { OrganizationID } from "../tables/organization.sql";
 
-import { getColumnFilterParams } from "../helpers/getColumnFilters";
-import { getGlobalFilterParams } from "../helpers/getGlobalFilterParams";
-import { getOrderByParams } from "../helpers/getOrderByParams";
-import { type GetAll, type GetCount, type GetSelect } from "../helpers/types";
 import { db } from "../index";
 import {
-  partFilterMapping,
-  partOrderMapping,
+  getColumnFilters,
+  getGlobalFilters,
+  getOrderBy,
 } from "../mappings/parts.mappings";
 import {
   type ArchivePart,
@@ -17,23 +20,15 @@ import {
   type PartID,
   partTable,
   type UpdatePart,
-} from "../schemas/part.table";
-
-const globalFilterColumns = [partTable.name];
+} from "../tables/part.sql";
 
 export function getAll(
-  { pagination, globalFilter, sorting, columnFilters }: GetAll,
+  { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    partFilterMapping,
-  );
-  const orderByParams = getOrderByParams(sorting, partOrderMapping);
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
+  const orderByParams = getOrderBy(sorting);
   const query = db
     .select()
     .from(partTable)
@@ -52,17 +47,11 @@ export function getAll(
 }
 
 export async function getCount(
-  { globalFilter, columnFilters }: GetCount,
+  { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const globalFilterParams = getGlobalFilterParams(
-    globalFilter,
-    globalFilterColumns,
-  );
-  const columnFilterParams = getColumnFilterParams(
-    columnFilters,
-    partFilterMapping,
-  );
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
 
   const query = db
     .select({ count: count() })
@@ -80,7 +69,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getSelect(_props: GetSelect) {
+export async function getSelect(_props: GetSelectInput) {
   const query = db
     .select({
       value: partTable.id,
