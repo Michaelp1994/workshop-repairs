@@ -1,7 +1,7 @@
 "use client";
 import { Card } from "@repo/ui/card";
 import {
-  DataTable,
+  DataTableCore,
   DataTableFooter,
   DataTableToolbar,
   useDataTable,
@@ -13,7 +13,7 @@ import { api } from "~/trpc/client";
 import { columns } from "./columns";
 
 export default function PartsTable() {
-  const { dataState, countState, tableOptions } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState();
 
   const [parts] = api.parts.getAll.useSuspenseQuery(dataState);
 
@@ -23,13 +23,13 @@ export default function PartsTable() {
     columns,
     data: parts,
     rowCount,
-    ...tableOptions,
+    ...tableState,
   });
 
   return (
     <Card>
       <DataTableToolbar table={table} />
-      <DataTable table={table} />
+      <DataTableCore table={table} />
       <DataTableFooter table={table} />
     </Card>
   );

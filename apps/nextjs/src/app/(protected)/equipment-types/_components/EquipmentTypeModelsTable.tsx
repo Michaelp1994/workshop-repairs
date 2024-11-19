@@ -7,31 +7,31 @@ import DataTable from "@repo/ui/data-table/DataTable";
 
 import { api } from "~/trpc/client";
 
-import { columns } from "../../assets/_components/AssetsTable/columns";
+import { columns } from "../../models/_components/ModelsTable/columns";
 
-interface EquipmentTypeAssetsSectionProps {
+interface EquipmentTypeModelsSectionProps {
   equipmentTypeId: EquipmentTypeID;
 }
 
-export default function EquipmentTypeAssetsSection({
+export default function EquipmentTypeModelsTable({
   equipmentTypeId,
-}: EquipmentTypeAssetsSectionProps) {
+}: EquipmentTypeModelsSectionProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
-  const [models] = api.models.getAll.useSuspenseQuery({
+  const [models] = api.models.getAllByEquipmentTypeId.useSuspenseQuery({
     ...dataState,
     equipmentTypeId,
   });
 
-  const [rowCount] = api.models.getCount.useSuspenseQuery({
+  const [rowCount] = api.models.getCountByEquipmentTypeId.useSuspenseQuery({
     ...countState,
     equipmentTypeId,
   });
 
   return (
     <Card>
-      <CardHeader className="flex flex-row justify-between">
-        <CardTitle>Assets</CardTitle>
+      <CardHeader>
+        <CardTitle>Models</CardTitle>
       </CardHeader>
       <CardContent>
         <DataTable

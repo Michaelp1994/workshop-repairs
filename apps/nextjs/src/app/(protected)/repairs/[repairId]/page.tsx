@@ -36,10 +36,10 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
+      <AssetDetailsSection repairId={repairId} />
       {/* <RepairPartsSection repairId={repairId} /> */}
       <RepairCommentsSection repairId={repairId} />
       <RepairStatusDetails repairId={repairId} />
-      <AssetDetailsSection repairId={repairId} />
       <RepairImagesSection repairId={repairId} />
     </PageWrapper>
   );
