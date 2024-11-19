@@ -13,9 +13,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.685.0",
-    "@aws-sdk/client-sesv2": "^3.684.0",
-    "@aws-sdk/s3-request-presigner": "^3.689.0",
+    "@aws-sdk/client-s3": "^3.693.0",
+    "@aws-sdk/client-sesv2": "^3.693.0",
+    "@aws-sdk/s3-request-presigner": "^3.693.0",
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
@@ -28,10 +28,10 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.9.0",
-    "eslint": "^9.14.0",
+    "eslint": "^9.15.0",
     "tsc-alias": "^1.8.10",
     "typescript": "^5.6.3",
-    "vite-tsconfig-paths": "^5.1.0",
-    "vitest": "^2.1.4"
+    "vite-tsconfig-paths": "^5.1.2",
+    "vitest": "^2.1.5"
   }
 }
