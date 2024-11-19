@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 // import { uploadImageS3 } from "../helpers/s3";
 import { organizationProcedure, router } from "../trpc";
 
@@ -79,12 +80,7 @@ export default router({
         ...imageMetadata,
       });
 
-      if (!createdModelImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create model Image",
-        });
-      }
+      assertDatabaseResult(createdModelImage);
 
       if (isFirstImage) {
         const modelMetadata = updateMetadata(ctx.session);
@@ -107,12 +103,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedModelImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update model Image",
-        });
-      }
+      assertDatabaseResult(updatedModelImage);
 
       return updatedModelImage;
     }),
@@ -155,12 +146,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedModelImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "modelImage not found",
-        });
-      }
+      assertDatabaseResult(archivedModelImage);
 
       return archivedModelImage;
     }),

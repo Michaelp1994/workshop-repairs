@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -55,12 +56,7 @@ export default router({
         ...input,
         ...metadata,
       });
-      if (!createdRepairStatusType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Status Type",
-        });
-      }
+      assertDatabaseResult(createdRepairStatusType);
 
       return createdRepairStatusType;
     }),
@@ -73,12 +69,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedRepairStatusType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair Status Type",
-        });
-      }
+      assertDatabaseResult(updatedRepairStatusType);
 
       return updatedRepairStatusType;
     }),
@@ -89,12 +80,7 @@ export default router({
       const archivedRepairStatusType =
         await repairStatusTypesController.archive({ ...input, ...metadata });
 
-      if (!archivedRepairStatusType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair Status Type",
-        });
-      }
+      assertDatabaseResult(archivedRepairStatusType);
 
       return archivedRepairStatusType;
     }),

@@ -13,6 +13,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -94,12 +95,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create model",
-        });
-      }
+      assertDatabaseResult(createdModel);
 
       return createdModel;
     }),
@@ -113,12 +109,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update model",
-        });
-      }
+      assertDatabaseResult(updatedModel);
 
       return updatedModel;
     }),
@@ -132,12 +123,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive model",
-        });
-      }
+      assertDatabaseResult(archivedModel);
 
       return archivedModel;
     }),

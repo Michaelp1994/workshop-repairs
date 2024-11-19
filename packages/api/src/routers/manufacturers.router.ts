@@ -12,6 +12,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -68,12 +69,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdManufacturer) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create manufacturer",
-        });
-      }
+      assertDatabaseResult(createdManufacturer);
 
       return createdManufacturer;
     }),
@@ -86,12 +82,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedManufacturer) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update manufacturer",
-        });
-      }
+      assertDatabaseResult(updatedManufacturer);
 
       return updatedManufacturer;
     }),
@@ -104,12 +95,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedManufacturer) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive manufacturer",
-        });
-      }
+      assertDatabaseResult(archivedManufacturer);
 
       return archivedManufacturer;
     }),

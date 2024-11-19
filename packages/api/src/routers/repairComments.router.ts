@@ -11,6 +11,7 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
@@ -55,12 +56,7 @@ export default router({
         ...metadata,
       });
 
-      if (!createdRepairComment) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Comment",
-        });
-      }
+      assertDatabaseResult(createdRepairComment);
 
       return createdRepairComment;
     }),
@@ -73,12 +69,7 @@ export default router({
         ...metadata,
       });
 
-      if (!updatedRepairComment) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update Repair Comment",
-        });
-      }
+      assertDatabaseResult(updatedRepairComment);
 
       return updatedRepairComment;
     }),
@@ -91,12 +82,7 @@ export default router({
         ...metadata,
       });
 
-      if (!archivedRepairComment) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive Repair Comment",
-        });
-      }
+      assertDatabaseResult(archivedRepairComment);
 
       return archivedRepairComment;
     }),
