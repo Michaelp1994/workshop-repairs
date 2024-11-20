@@ -15,7 +15,7 @@ export function createOrderByFunction(mapping: ColumnMapping) {
         const direction = isDescending ? desc : asc;
         const column = mapping[id];
         if (!column) {
-          throw Error("error in getOrderByParams filter method");
+          throw Error(`cannot sort by column: ${column}`);
         }
         return direction(column);
       });
