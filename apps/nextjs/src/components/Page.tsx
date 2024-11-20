@@ -22,5 +22,5 @@ export function PageHeaderText({ children }: GenericComponentProps) {
 }
 
 export function PageHeaderActions({ children }: GenericComponentProps) {
-  return <div>{children}</div>;
+  return <div className="flex gap-2">{children}</div>;
 }
