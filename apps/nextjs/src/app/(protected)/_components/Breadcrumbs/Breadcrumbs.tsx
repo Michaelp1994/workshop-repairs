@@ -18,7 +18,7 @@ export default function Breadcrumbs() {
   const layoutSegments = useSelectedLayoutSegments();
   const breadcrumbs = generateBreadcrumbs(layoutSegments);
   return (
-    <Breadcrumb className="mb-4">
+    <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbLink asChild className="capitalize">

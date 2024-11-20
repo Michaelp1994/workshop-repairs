@@ -21,10 +21,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
       <SidebarInset>
         <NavBar />
         <div className="mx-auto w-full max-w-6xl">
-          <div className="h-full p-4">
-            <Breadcrumbs />
-            {children}
-          </div>
+          <div className="h-full p-4">{children}</div>
         </div>
       </SidebarInset>
     </SidebarProvider>
