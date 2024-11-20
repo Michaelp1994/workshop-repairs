@@ -22,7 +22,7 @@ import {
   type UpdateManufacturer,
 } from "../tables/manufacturer.sql";
 
-export function getAll(
+export function getAllManufacturers(
   { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -47,7 +47,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getManufacturersCount(
   { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -70,7 +70,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getById(id: ManufacturerID) {
+export async function getManufacturerById(id: ManufacturerID) {
   const query = db
     .select()
     .from(manufacturerTable)
@@ -79,7 +79,7 @@ export async function getById(id: ManufacturerID) {
   return res;
 }
 
-export async function getSelect(
+export async function getManufacturersSelect(
   _: GetSelectInput,
   organizationId: OrganizationID,
 ) {
@@ -98,13 +98,13 @@ export async function getSelect(
   return query.execute();
 }
 
-export async function create(input: CreateManufacturer) {
+export async function createManufacturer(input: CreateManufacturer) {
   const query = db.insert(manufacturerTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateManufacturer) {
+export async function updateManufacturer(input: UpdateManufacturer) {
   const query = db
     .update(manufacturerTable)
     .set(input)
@@ -114,7 +114,7 @@ export async function update(input: UpdateManufacturer) {
   return res;
 }
 
-export async function archive(input: ArchiveManufacturer) {
+export async function archiveManufacturer(input: ArchiveManufacturer) {
   const query = db
     .update(manufacturerTable)
     .set(input)

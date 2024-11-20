@@ -22,7 +22,7 @@ import {
   type UpdateClient,
 } from "../tables/client.sql";
 
-export function getAll(
+export function getAllClients(
   { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -47,7 +47,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getClientsCount(
   { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -68,7 +68,10 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(_: GetSelectInput, organizationId: OrganizationID) {
+export function getClientsSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({
       value: clientTable.id,
@@ -85,19 +88,19 @@ export function getSelect(_: GetSelectInput, organizationId: OrganizationID) {
   return query.execute();
 }
 
-export async function getById(id: ClientID) {
+export async function getClientById(id: ClientID) {
   const query = db.select().from(clientTable).where(eq(clientTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateClient) {
+export async function createClient(input: CreateClient) {
   const query = db.insert(clientTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateClient) {
+export async function updateClient(input: UpdateClient) {
   const query = db
     .update(clientTable)
     .set(input)
@@ -107,7 +110,7 @@ export async function update(input: UpdateClient) {
   return res;
 }
 
-export async function archive(input: ArchiveClient) {
+export async function archiveClient(input: ArchiveClient) {
   const query = db
     .update(clientTable)
     .set(input)

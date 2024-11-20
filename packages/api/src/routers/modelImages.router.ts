@@ -1,5 +1,13 @@
-import * as modelImageRepository from "@repo/db/repositories/modelImage.repository";
 import * as modelRepository from "@repo/db/repositories/model.repository";
+import {
+  archiveModelImage,
+  createModelImage,
+  getAllModelImages,
+  getAllModelImagesByModelId,
+  getModelImageById,
+  getModelImagesCount,
+  updateModelImage,
+} from "@repo/db/repositories/modelImage.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -13,23 +21,24 @@ import {
   updateMetadata,
 } from "../helpers/includeMetadata";
 import assertDatabaseResult from "../helpers/trpcAssert";
+
 // import { uploadImageS3 } from "../helpers/s3";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allModelImages = modelImageRepository.getAll(input);
+    const allModelImages = getAllModelImages(input);
 
     return allModelImages;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = modelImageRepository.getCount(input);
+    const count = getModelImagesCount(input);
     return count;
   }),
   getAllByModelId: organizationProcedure
     .input(modelImageSchemas.getAllByModelId)
     .query(async ({ input }) => {
-      const model = await modelRepository.getById(input.modelId);
+      const model = await modelRepository.getModelById(input.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -38,9 +47,7 @@ export default router({
         });
       }
 
-      const allModelImages = await modelImageRepository.getAllByModelId(
-        input.modelId,
-      );
+      const allModelImages = await getAllModelImagesByModelId(input.modelId);
 
       return allModelImages.map((modelImage) => ({
         ...modelImage,
@@ -50,7 +57,7 @@ export default router({
   getById: organizationProcedure
     .input(modelImageSchemas.getById)
     .query(async ({ input }) => {
-      const modelImage = await modelImageRepository.getById(input.id);
+      const modelImage = await getModelImageById(input.id);
 
       if (!modelImage) {
         throw new TRPCError({
@@ -69,13 +76,11 @@ export default router({
   create: organizationProcedure
     .input(modelImageSchemas.create)
     .mutation(async ({ input, ctx }) => {
-      const modelImages = await modelImageRepository.getAllByModelId(
-        input.modelId,
-      );
+      const modelImages = await getAllModelImagesByModelId(input.modelId);
       const isFirstImage = modelImages.length === 0;
 
       const imageMetadata = createMetadata(ctx.session);
-      const createdModelImage = await modelImageRepository.create({
+      const createdModelImage = await createModelImage({
         ...input,
         ...imageMetadata,
       });
@@ -85,7 +90,7 @@ export default router({
       if (isFirstImage) {
         const modelMetadata = updateMetadata(ctx.session);
 
-        await modelRepository.update({
+        await modelRepository.updateModel({
           id: input.modelId,
           defaultImageId: createdModelImage.id,
           ...modelMetadata,
@@ -98,7 +103,7 @@ export default router({
     .input(modelImageSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedModelImage = await modelImageRepository.update({
+      const updatedModelImage = await updateModelImage({
         ...input,
         ...metadata,
       });
@@ -110,7 +115,7 @@ export default router({
   setFavourite: organizationProcedure
     .input(modelImageSchemas.setFavourite)
     .mutation(async ({ input, ctx }) => {
-      const modelImage = await modelImageRepository.getById(input.id);
+      const modelImage = await getModelImageById(input.id);
 
       if (!modelImage) {
         throw new TRPCError({
@@ -119,7 +124,7 @@ export default router({
         });
       }
 
-      const model = await modelRepository.getById(modelImage.modelId);
+      const model = await modelRepository.getModelById(modelImage.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -128,7 +133,7 @@ export default router({
         });
       }
       const metadata = updateMetadata(ctx.session);
-      await modelRepository.update({
+      await modelRepository.updateModel({
         id: model.id,
         defaultImageId: modelImage.id,
         ...metadata,
@@ -141,7 +146,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedModelImage = await modelImageRepository.archive({
+      const archivedModelImage = await archiveModelImage({
         ...input,
         ...metadata,
       });

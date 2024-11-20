@@ -22,7 +22,7 @@ import {
   type UpdateLocation,
 } from "../tables/location.sql";
 
-export function getAll(
+export function getAllLocations(
   { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -46,7 +46,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getLocationsCount(
   { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -69,7 +69,10 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(_: GetSelectInput, organizationId: OrganizationID) {
+export function getLocationsSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
   const query = db
     .select({
       value: locationTable.id,
@@ -86,19 +89,19 @@ export function getSelect(_: GetSelectInput, organizationId: OrganizationID) {
   return query.execute();
 }
 
-export async function getById(id: LocationID) {
+export async function getLocationById(id: LocationID) {
   const query = db.select().from(locationTable).where(eq(locationTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreateLocation) {
+export async function createLocation(input: CreateLocation) {
   const query = db.insert(locationTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateLocation) {
+export async function updateLocation(input: UpdateLocation) {
   const query = db
     .update(locationTable)
     .set(input)
@@ -108,7 +111,7 @@ export async function update(input: UpdateLocation) {
   return res;
 }
 
-export async function archive(input: ArchiveLocation) {
+export async function archiveLocation(input: ArchiveLocation) {
   const query = db
     .update(locationTable)
     .set(input)

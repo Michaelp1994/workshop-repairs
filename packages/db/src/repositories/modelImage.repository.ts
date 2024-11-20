@@ -15,7 +15,7 @@ import {
   type UpdateModelImage,
 } from "../tables/model-image.sql";
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllModelImages({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(modelImageTable)
@@ -26,7 +26,16 @@ export function getAll({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getAllByModelId(id: ModelID) {
+export async function getModelImagesCount(_: GetCountInput) {
+  const query = db
+    .select({ count: count() })
+    .from(modelImageTable)
+    .where(isNull(modelImageTable.deletedAt));
+  const [res] = await query.execute();
+  return res?.count;
+}
+
+export async function getAllModelImagesByModelId(id: ModelID) {
   const query = db
     .select()
     .from(modelImageTable)
@@ -38,16 +47,7 @@ export async function getAllByModelId(id: ModelID) {
   return res;
 }
 
-export async function getCount(_: GetCountInput) {
-  const query = db
-    .select({ count: count() })
-    .from(modelImageTable)
-    .where(isNull(modelImageTable.deletedAt));
-  const [res] = await query.execute();
-  return res?.count;
-}
-
-export async function getById(id: ModelImageID) {
+export async function getModelImageById(id: ModelImageID) {
   const query = db
     .select()
     .from(modelImageTable)
@@ -56,13 +56,13 @@ export async function getById(id: ModelImageID) {
   return res;
 }
 
-export async function create(input: CreateModelImage) {
+export async function createModelImage(input: CreateModelImage) {
   const query = db.insert(modelImageTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateModelImage) {
+export async function updateModelImage(input: UpdateModelImage) {
   const query = db
     .update(modelImageTable)
     .set(input)
@@ -72,7 +72,7 @@ export async function update(input: UpdateModelImage) {
   return res;
 }
 
-export async function archive(input: ArchiveModelImage) {
+export async function archiveModelImage(input: ArchiveModelImage) {
   const query = db
     .update(modelImageTable)
     .set(input)

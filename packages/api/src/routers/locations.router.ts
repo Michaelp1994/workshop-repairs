@@ -1,4 +1,12 @@
-import * as locationRepository from "@repo/db/repositories/location.repository";
+import {
+  archiveLocation,
+  createLocation,
+  getAllLocations,
+  getLocationById,
+  getLocationsCount,
+  getLocationsSelect,
+  updateLocation,
+} from "@repo/db/repositories/location.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -17,35 +25,26 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(({ ctx, input }) => {
-    const allLocations = locationRepository.getAll(
-      input,
-      ctx.session.organizationId,
-    );
+    const allLocations = getAllLocations(input, ctx.session.organizationId);
 
     return allLocations;
   }),
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(({ ctx, input }) => {
-      const count = locationRepository.getCount(
-        input,
-        ctx.session.organizationId,
-      );
+      const count = getLocationsCount(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(({ ctx, input }) => {
-      const locations = locationRepository.getSelect(
-        input,
-        ctx.session.organizationId,
-      );
+      const locations = getLocationsSelect(input, ctx.session.organizationId);
       return locations;
     }),
   getById: organizationProcedure
     .input(locationSchemas.getById)
     .query(async ({ input }) => {
-      const location = await locationRepository.getById(input.id);
+      const location = await getLocationById(input.id);
 
       if (!location) {
         throw new TRPCError({
@@ -60,7 +59,7 @@ export default router({
     .input(locationSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdLocation = await locationRepository.create({
+      const createdLocation = await createLocation({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -74,7 +73,7 @@ export default router({
     .input(locationSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedLocation = await locationRepository.update({
+      const updatedLocation = await updateLocation({
         ...input,
         ...metadata,
       });
@@ -87,7 +86,7 @@ export default router({
     .input(locationSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedLocation = await locationRepository.archive({
+      const archivedLocation = await archiveLocation({
         ...input,
         ...metadata,
       });

@@ -15,7 +15,7 @@ import {
   type UpdateAssetStatus,
 } from "../tables/asset-status.sql";
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllAssetStatuses({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(assetStatusTable)
@@ -26,7 +26,7 @@ export function getAll({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getCount(_: GetCountInput) {
+export async function getAssetStatusesCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(assetStatusTable)
@@ -35,7 +35,7 @@ export async function getCount(_: GetCountInput) {
   return res?.count;
 }
 
-export async function getById(input: AssetStatusID) {
+export async function getAssetStatusById(input: AssetStatusID) {
   const query = db
     .select()
     .from(assetStatusTable)
@@ -44,7 +44,7 @@ export async function getById(input: AssetStatusID) {
   return res;
 }
 
-export function getSelect(_: GetSelectInput) {
+export function getAssetStatusSelect(_: GetSelectInput) {
   const query = db
     .select({
       value: assetStatusTable.id,
@@ -55,13 +55,13 @@ export function getSelect(_: GetSelectInput) {
   return query.execute();
 }
 
-export async function create(input: CreateAssetStatus) {
+export async function createAssetStatus(input: CreateAssetStatus) {
   const query = db.insert(assetStatusTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateAssetStatus) {
+export async function updateAssetStatus(input: UpdateAssetStatus) {
   const query = db
     .update(assetStatusTable)
     .set(input)
@@ -71,7 +71,7 @@ export async function update(input: UpdateAssetStatus) {
   return res;
 }
 
-export async function archive(input: ArchiveAssetStatus) {
+export async function archiveAssetStatus(input: ArchiveAssetStatus) {
   const query = db
     .update(assetStatusTable)
     .set(input)

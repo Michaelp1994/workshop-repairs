@@ -17,7 +17,7 @@ import {
   type UpdateEquipmentType,
 } from "../tables/equipment-type.sql";
 
-export function getAll(
+export function getAllEquipmentTypes(
   { pagination }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -36,7 +36,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getEquipmentTypesCount(
   _: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -53,7 +53,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getSelect(
+export async function getEquipmentTypesSelect(
   _: GetSelectInput,
   organizationId: OrganizationID,
 ) {
@@ -72,7 +72,7 @@ export async function getSelect(
   return query.execute();
 }
 
-export async function getById(input: EquipmentTypeID) {
+export async function getEquipmentTypeById(input: EquipmentTypeID) {
   const query = db
     .select()
     .from(equipmentTypeTable)
@@ -81,13 +81,13 @@ export async function getById(input: EquipmentTypeID) {
   return res;
 }
 
-export async function create(input: CreateEquipmentType) {
+export async function createEquipmentType(input: CreateEquipmentType) {
   const query = db.insert(equipmentTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateEquipmentType) {
+export async function updateEquipmentType(input: UpdateEquipmentType) {
   const query = db
     .update(equipmentTypeTable)
     .set(input)
@@ -97,7 +97,7 @@ export async function update(input: UpdateEquipmentType) {
   return res;
 }
 
-export async function archive(input: ArchiveEquipmentType) {
+export async function archiveEquipmentType(input: ArchiveEquipmentType) {
   const query = db
     .update(equipmentTypeTable)
     .set(input)

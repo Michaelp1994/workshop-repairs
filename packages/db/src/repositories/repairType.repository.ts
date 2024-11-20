@@ -15,7 +15,7 @@ import {
   type UpdateRepairType,
 } from "../tables/repair-type.sql";
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllRepairTypes({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairTypeTable)
@@ -26,7 +26,7 @@ export function getAll({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getCount(_: GetCountInput) {
+export async function getRepairTypesCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairTypeTable)
@@ -35,7 +35,7 @@ export async function getCount(_: GetCountInput) {
   return res?.count;
 }
 
-export async function getSelect(_: GetSelectInput) {
+export async function getRepairTypesSelect(_: GetSelectInput) {
   const query = db
     .select({
       value: repairTypeTable.id,
@@ -46,7 +46,7 @@ export async function getSelect(_: GetSelectInput) {
   return query.execute();
 }
 
-export async function getById(input: RepairTypeID) {
+export async function getRepairTypeById(input: RepairTypeID) {
   const query = db
     .select()
     .from(repairTypeTable)
@@ -55,13 +55,13 @@ export async function getById(input: RepairTypeID) {
   return res;
 }
 
-export async function create(input: CreateRepairType) {
+export async function createRepairType(input: CreateRepairType) {
   const query = db.insert(repairTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairType) {
+export async function updateRepairType(input: UpdateRepairType) {
   const query = db
     .update(repairTypeTable)
     .set(input)
@@ -71,7 +71,7 @@ export async function update(input: UpdateRepairType) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairType) {
+export async function archiveRepairType(input: ArchiveRepairType) {
   const query = db
     .update(repairTypeTable)
     .set(input)

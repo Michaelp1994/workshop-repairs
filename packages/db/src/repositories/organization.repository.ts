@@ -11,7 +11,7 @@ import {
   organizationInvitationTable,
 } from "../tables/organization-invitation.sql";
 
-export async function getById(id: OrganizationID) {
+export async function getOrganizationById(id: OrganizationID) {
   const query = db
     .select()
     .from(organizationTable)
@@ -20,7 +20,7 @@ export async function getById(id: OrganizationID) {
   return res;
 }
 
-export async function getByName(name: string) {
+export async function getOrganizationByName(name: string) {
   const query = db
     .select()
     .from(organizationTable)
@@ -29,13 +29,13 @@ export async function getByName(name: string) {
   return res;
 }
 
-export async function create(input: CreateOrganization) {
+export async function createOrganization(input: CreateOrganization) {
   const query = db.insert(organizationTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function getByInvitationCode(invitationCode: string) {
+export async function getOrganizationByInvitationCode(invitationCode: string) {
   const query = db
     .select()
     .from(organizationTable)

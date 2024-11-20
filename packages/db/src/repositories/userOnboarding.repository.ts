@@ -15,7 +15,7 @@ const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 const userOnboardingColumns = getTableColumns(userOnboardingTable);
 
-export async function getByUserId(userId: UserID) {
+export async function getUserOnboardingByUserId(userId: UserID) {
   const query = db
     .select({
       ...publicUserColumns,
@@ -28,7 +28,7 @@ export async function getByUserId(userId: UserID) {
   return res;
 }
 
-export async function create(input: CreateUserOnboarding) {
+export async function createUserOnboarding(input: CreateUserOnboarding) {
   const query = db.insert(userOnboardingTable).values(input).returning();
   const [res] = await query.execute();
   return res;
@@ -74,7 +74,9 @@ export async function setInvitations(userId: UserID) {
   return res2;
 }
 
-export async function updateByUserId(input: UpdateUserOnboarding) {
+export async function updateUserOnboardingByUserId(
+  input: UpdateUserOnboarding,
+) {
   const query = db
     .update(userOnboardingTable)
     .set(input)

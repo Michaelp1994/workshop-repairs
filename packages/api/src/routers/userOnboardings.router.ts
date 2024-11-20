@@ -1,8 +1,18 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import * as organizationRepository from "@repo/db/repositories/organization.repository";
-import * as userOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
-import * as userRepository from "@repo/db/repositories/user.repository";
+import {
+  createInvitation,
+  createOrganization,
+  getOrganizationByInvitationCode,
+  getOrganizationByName,
+} from "@repo/db/repositories/organization.repository";
+import { getUserById } from "@repo/db/repositories/user.repository";
+import {
+  getUserOnboardingByUserId,
+  setInvitations,
+  setOrganization,
+  updateUserOnboardingByUserId,
+} from "@repo/db/repositories/userOnboarding.repository";
 import * as organizationsSchemas from "@repo/validators/organization.validators";
 import { TRPCError } from "@trpc/server";
 import { Resource } from "sst";
@@ -15,7 +25,7 @@ import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
   getStatus: authedProcedure.query(async ({ ctx }) => {
-    const user = await userOnboardingRepository.getByUserId(ctx.session.userId);
+    const user = await getUserOnboardingByUserId(ctx.session.userId);
     assertDatabaseResult(user);
     return {
       welcomed: user.onboarding?.welcomed,
@@ -25,7 +35,7 @@ export default router({
     };
   }),
   markUserAsWelcomed: authedProcedure.mutation(async ({ ctx }) => {
-    const onboarding = await userOnboardingRepository.updateByUserId({
+    const onboarding = await updateUserOnboardingByUserId({
       userId: ctx.session.userId,
       welcomed: true,
     });
@@ -35,7 +45,7 @@ export default router({
     .input(organizationsSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const user = await userRepository.getById(ctx.session.userId);
+      const user = await getUserById(ctx.session.userId);
       assertDatabaseResult(user);
 
       if (user.organizationId) {
@@ -45,9 +55,7 @@ export default router({
         });
       }
 
-      const organizationExists = await organizationRepository.getByName(
-        input.name,
-      );
+      const organizationExists = await getOrganizationByName(input.name);
 
       if (organizationExists) {
         throw new ZodError([
@@ -59,13 +67,13 @@ export default router({
         ]);
       }
 
-      const createdOrganization = await organizationRepository.create({
+      const createdOrganization = await createOrganization({
         ...input,
         ...metadata,
       });
       assertDatabaseResult(createdOrganization);
 
-      const updatedUser = await userOnboardingRepository.setOrganization(
+      const updatedUser = await setOrganization(
         ctx.session.userId,
         createdOrganization.id,
       );
@@ -85,9 +93,7 @@ export default router({
   joinOrganization: authedProcedure
     .input(organizationsSchemas.join)
     .mutation(async ({ input, ctx }) => {
-      const user = await userOnboardingRepository.getByUserId(
-        ctx.session.userId,
-      );
+      const user = await getUserOnboardingByUserId(ctx.session.userId);
       assertDatabaseResult(user);
 
       if (user.organizationId) {
@@ -97,7 +103,7 @@ export default router({
         });
       }
 
-      const organization = await organizationRepository.getByInvitationCode(
+      const organization = await getOrganizationByInvitationCode(
         input.joinCode,
       );
       if (!organization) {
@@ -111,13 +117,13 @@ export default router({
         ]);
       }
 
-      const updatedUser = await userOnboardingRepository.setOrganization(
+      const updatedUser = await setOrganization(
         ctx.session.userId,
         organization.id,
       );
       assertDatabaseResult(updatedUser);
 
-      await userOnboardingRepository.setInvitations(ctx.session.userId);
+      await setInvitations(ctx.session.userId);
 
       const session = await createSession(updatedUser);
       return {
@@ -133,7 +139,7 @@ export default router({
         const email = unprocessedEmail.trim();
         // TODO: Check if valid email.
         console.log({ email });
-        return organizationRepository.createInvitation({
+        return createInvitation({
           email,
           organizationId: ctx.session.organizationId,
           emailSentAt: null,
@@ -141,17 +147,13 @@ export default router({
       });
       await Promise.all(emailPromises);
 
-      const user = await userOnboardingRepository.setInvitations(
-        ctx.session.userId,
-      );
+      const user = await setInvitations(ctx.session.userId);
       assertDatabaseResult(user);
       const session = await createSession(user);
       return session;
     }),
   skipInvitations: organizationProcedure.mutation(async ({ ctx }) => {
-    const user = await userOnboardingRepository.setInvitations(
-      ctx.session.userId,
-    );
+    const user = await setInvitations(ctx.session.userId);
     assertDatabaseResult(user);
     const session = await createSession(user);
     return session;

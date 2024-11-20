@@ -29,27 +29,6 @@ import { type RepairID, repairTable } from "../tables/repair.sql";
 
 const assetFields = getTableColumns(assetTable);
 
-export async function archiveAsset(
-  { id, ...values }: ArchiveAsset,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .update(assetTable)
-    .set(values)
-    .where(
-      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
-    )
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function createAsset(input: CreateAsset) {
-  const query = db.insert(assetTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
-
 export async function getAllAssets(
   dataTableParams: GetAllInput,
   organizationId: OrganizationID,
@@ -62,6 +41,58 @@ export async function getAllAssets(
 
   const res = query.execute();
 
+  return res;
+}
+
+export async function getAssetsCount(
+  dataTableParams: GetCountInput,
+  organizationId: OrganizationID,
+) {
+  const query = createCountTableQuery(
+    dataTableParams,
+    isNull(assetTable.deletedAt),
+    eq(assetTable.organizationId, organizationId),
+  );
+
+  const [res] = await query.execute();
+  return res?.count;
+}
+export async function getAssetsSelect(
+  _: GetSelectInput,
+  organizationId: OrganizationID,
+) {
+  const query = db
+    .select({
+      ...assetFields,
+      model: {
+        id: modelTable.id,
+        name: modelTable.name,
+        imageUrl: modelImageTable.url,
+      },
+      manufacturer: {
+        id: manufacturerTable.id,
+        name: manufacturerTable.name,
+      },
+    })
+    .from(assetTable)
+    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .innerJoin(
+      manufacturerTable,
+      eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
+    .where(
+      and(
+        eq(assetTable.organizationId, organizationId),
+        isNull(assetTable.deletedAt),
+      ),
+    )
+    .orderBy(assetTable.id);
+
+  const res = await query.execute();
   return res;
 }
 
@@ -129,80 +160,29 @@ export async function getAssetByRepairId(
   return asset;
 }
 
-export async function getAssetsCount(
-  dataTableParams: GetCountInput,
-  organizationId: OrganizationID,
-) {
-  const query = createCountTableQuery(
-    dataTableParams,
-    isNull(assetTable.deletedAt),
-    eq(assetTable.organizationId, organizationId),
-  );
-
+export async function createAsset(input: CreateAsset) {
+  const query = db.insert(assetTable).values(input).returning();
   const [res] = await query.execute();
-  return res?.count;
-}
-export async function getAssetSelect(
-  { limit, cursor }: GetSelectInput,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .select({ value: assetTable.id, label: assetTable.serialNumber })
-    .from(assetTable)
-    .orderBy(assetTable.id)
-    .limit(limit + 1)
-    .where(
-      and(
-        eq(assetTable.organizationId, organizationId),
-        isNull(assetTable.deletedAt),
-      ),
-    )
-    .offset(cursor);
-
-  const data = await query.execute();
-  const nextCursor = data.length > limit ? data.pop()?.value : undefined;
-  return { data, nextCursor };
-}
-export async function getAssetSimpleSelect(
-  _: GetSelectInput,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .select({
-      ...assetFields,
-      model: {
-        id: modelTable.id,
-        name: modelTable.name,
-        imageUrl: modelImageTable.url,
-      },
-      manufacturer: {
-        id: manufacturerTable.id,
-        name: manufacturerTable.name,
-      },
-    })
-    .from(assetTable)
-    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
-    .innerJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .leftJoin(
-      modelImageTable,
-      eq(modelTable.defaultImageId, modelImageTable.id),
-    )
-    .where(
-      and(
-        eq(assetTable.organizationId, organizationId),
-        isNull(assetTable.deletedAt),
-      ),
-    )
-    .orderBy(assetTable.id);
-
-  const res = await query.execute();
   return res;
 }
+
 export async function updateAsset(
   { id, ...values }: UpdateAsset,
+  organizationId: OrganizationID,
+) {
+  const query = db
+    .update(assetTable)
+    .set(values)
+    .where(
+      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
+    )
+    .returning();
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function archiveAsset(
+  { id, ...values }: ArchiveAsset,
   organizationId: OrganizationID,
 ) {
   const query = db

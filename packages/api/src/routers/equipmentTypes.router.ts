@@ -1,4 +1,12 @@
-import * as equipmentTypeRepository from "@repo/db/repositories/equipmentType.repository";
+import {
+  archiveEquipmentType,
+  createEquipmentType,
+  getAllEquipmentTypes,
+  getEquipmentTypeById,
+  getEquipmentTypesCount,
+  getEquipmentTypesSelect,
+  updateEquipmentType,
+} from "@repo/db/repositories/equipmentType.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -19,7 +27,7 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = equipmentTypeRepository.getAll(
+      const allEquipmentTypes = getAllEquipmentTypes(
         input,
         ctx.session.organizationId,
       );
@@ -29,16 +37,13 @@ export default router({
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(({ ctx, input }) => {
-      const count = equipmentTypeRepository.getCount(
-        input,
-        ctx.session.organizationId,
-      );
+      const count = getEquipmentTypesCount(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = await equipmentTypeRepository.getSelect(
+      const allEquipmentTypes = await getEquipmentTypesSelect(
         input,
         ctx.session.organizationId,
       );
@@ -48,7 +53,7 @@ export default router({
   getById: organizationProcedure
     .input(equipmentTypeSchemas.getById)
     .query(async ({ input }) => {
-      const repairType = await equipmentTypeRepository.getById(input.id);
+      const repairType = await getEquipmentTypeById(input.id);
 
       if (!repairType) {
         throw new TRPCError({
@@ -63,7 +68,7 @@ export default router({
     .input(equipmentTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdEquipmentType = await equipmentTypeRepository.create({
+      const createdEquipmentType = await createEquipmentType({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -77,7 +82,7 @@ export default router({
     .input(equipmentTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedEquipmentType = await equipmentTypeRepository.update({
+      const updatedEquipmentType = await updateEquipmentType({
         ...input,
         ...metadata,
       });
@@ -91,7 +96,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedEquipmentType = await equipmentTypeRepository.archive({
+      const archivedEquipmentType = await archiveEquipmentType({
         ...input,
         ...metadata,
       });

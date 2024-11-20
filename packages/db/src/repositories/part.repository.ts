@@ -22,7 +22,7 @@ import {
   type UpdatePart,
 } from "../tables/part.sql";
 
-export function getAll(
+export function getAllParts(
   { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -46,7 +46,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getPartsCount(
   { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -69,7 +69,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getSelect(_props: GetSelectInput) {
+export async function getPartsSelect(_props: GetSelectInput) {
   const query = db
     .select({
       value: partTable.id,
@@ -81,19 +81,19 @@ export async function getSelect(_props: GetSelectInput) {
   return res;
 }
 
-export async function getById(id: PartID) {
+export async function getPartById(id: PartID) {
   const query = db.select().from(partTable).where(eq(partTable.id, id));
   const [res] = await query.execute();
   return res;
 }
 
-export async function create(input: CreatePart) {
+export async function createPart(input: CreatePart) {
   const query = db.insert(partTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdatePart) {
+export async function updatePart(input: UpdatePart) {
   const query = db
     .update(partTable)
     .set(input)
@@ -103,7 +103,7 @@ export async function update(input: UpdatePart) {
   return res;
 }
 
-export async function archive(input: ArchivePart) {
+export async function archivePart(input: ArchivePart) {
   const query = db
     .update(partTable)
     .set(input)

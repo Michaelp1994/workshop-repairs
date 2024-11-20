@@ -1,4 +1,10 @@
-import * as controller from "@repo/db/repositories/partsToModel.repository";
+import {
+  archivePartToModel,
+  createPartToModel,
+  getAllPartsToModels,
+  getPartsToModelsCount,
+  getPartsToModelsSelect,
+} from "@repo/db/repositories/partToModel.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -11,13 +17,13 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(({ input }) => {
-    const allParts = controller.getAll(input);
+    const allParts = getAllPartsToModels(input);
     return allParts;
   }),
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ input }) => {
-      const count = await controller.getCount(input);
+      const count = await getPartsToModelsCount(input);
 
       if (count === undefined) {
         throw new TRPCError({
@@ -28,13 +34,13 @@ export default router({
       return count;
     }),
   getSelect: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const allParts = controller.getSelect(input);
+    const allParts = getPartsToModelsSelect(input);
     return allParts;
   }),
   create: organizationProcedure
     .input(partsToModelSchemas.create)
     .mutation(async ({ input }) => {
-      const createdPartModel = await controller.create(input);
+      const createdPartModel = await createPartToModel(input);
 
       assertDatabaseResult(createdPartModel);
 
@@ -43,7 +49,7 @@ export default router({
   archive: organizationProcedure
     .input(partsToModelSchemas.archive)
     .mutation(async ({ input }) => {
-      const archivedPartModel = await controller.archive(input);
+      const archivedPartModel = await archivePartToModel(input);
 
       assertDatabaseResult(archivedPartModel);
 

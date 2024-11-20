@@ -7,7 +7,9 @@ import {
   emailVerificationRequestTable,
 } from "../tables/email-verification-request.sql";
 
-export async function create(input: CreateEmailVerificationRequest) {
+export async function createEmailVerificationRequest(
+  input: CreateEmailVerificationRequest,
+) {
   const query = db
     .insert(emailVerificationRequestTable)
     .values(input)
@@ -16,7 +18,7 @@ export async function create(input: CreateEmailVerificationRequest) {
   return res;
 }
 
-export async function getByEmail(email: string, code: string) {
+export async function getEmailVerificationRequest(email: string, code: string) {
   const query = db
     .select()
     .from(emailVerificationRequestTable)
@@ -30,7 +32,7 @@ export async function getByEmail(email: string, code: string) {
   return res;
 }
 
-export async function deleteConfirmationRequest(
+export async function deleteEmailConfirmationRequestById(
   id: EmailVerificationRequestID,
 ) {
   const query = db

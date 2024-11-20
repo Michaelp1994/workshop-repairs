@@ -16,7 +16,7 @@ import {
   type UpdateRepairImage,
 } from "../tables/repair-image.sql";
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllRepairImages({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -26,7 +26,7 @@ export function getAll({ pagination }: GetAllInput) {
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
-export async function getCount(_: GetCountInput) {
+export async function getRepairImagesCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairImageTable)
@@ -34,7 +34,7 @@ export async function getCount(_: GetCountInput) {
   const [res] = await query.execute();
   return res?.count;
 }
-export async function getById(input: RepairImageID) {
+export async function getRepairImageById(input: RepairImageID) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -42,7 +42,7 @@ export async function getById(input: RepairImageID) {
   const [res] = await query.execute();
   return res;
 }
-export async function getAllByRepairId(input: RepairID) {
+export async function getAllRepairImagesByRepairId(input: RepairID) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -55,12 +55,12 @@ export async function getAllByRepairId(input: RepairID) {
   const res = await query.execute();
   return res;
 }
-export async function create(input: CreateRepairImage) {
+export async function createRepairImage(input: CreateRepairImage) {
   const query = db.insert(repairImageTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
-export async function update(input: UpdateRepairImage) {
+export async function updateRepairImage(input: UpdateRepairImage) {
   const query = db
     .update(repairImageTable)
     .set(input)
@@ -70,7 +70,7 @@ export async function update(input: UpdateRepairImage) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairImage) {
+export async function archiveRepairImage(input: ArchiveRepairImage) {
   const query = db
     .update(repairImageTable)
     .set(input)

@@ -1,4 +1,11 @@
-import * as userTypeRepository from "@repo/db/repositories/userType.repository";
+import {
+  archiveUserType,
+  createUserType,
+  getAllUserTypes,
+  getUserTypeById,
+  getUserTypesCount,
+  updateUserType,
+} from "@repo/db/repositories/userType.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -15,17 +22,17 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allUserTypes = userTypeRepository.getAll(input);
+    const allUserTypes = getAllUserTypes(input);
     return allUserTypes;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = userTypeRepository.getCount(input);
+    const count = getUserTypesCount(input);
     return count;
   }),
   getById: organizationProcedure
     .input(userTypeSchemas.getById)
     .query(async ({ input }) => {
-      const userType = await userTypeRepository.getById(input.id);
+      const userType = await getUserTypeById(input.id);
 
       if (!userType) {
         throw new TRPCError({
@@ -40,7 +47,7 @@ export default router({
     .input(userTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdUserType = await userTypeRepository.create({
+      const createdUserType = await createUserType({
         ...input,
         ...metadata,
       });
@@ -57,7 +64,7 @@ export default router({
     .input(userTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedUserType = await userTypeRepository.update({
+      const updatedUserType = await updateUserType({
         ...input,
         ...metadata,
       });
@@ -75,7 +82,7 @@ export default router({
     .input(userTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedUserType = await userTypeRepository.archive({
+      const archivedUserType = await archiveUserType({
         ...input,
         ...metadata,
       });

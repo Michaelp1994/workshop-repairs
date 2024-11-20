@@ -18,7 +18,7 @@ export default router({
   login: publicProcedure
     .input(authSchemas.login)
     .mutation(async ({ input, ctx }) => {
-      const user = await userRepository.getByEmail(input.email);
+      const user = await userRepository.getUserByEmail(input.email);
       if (!user) {
         throw new ZodError([
           {
@@ -64,7 +64,7 @@ export default router({
             "Your password has been found in a data breach. Please choose a different password",
         });
       }
-      const emailExists = await userRepository.getByEmail(input.email);
+      const emailExists = await userRepository.getUserByEmail(input.email);
 
       if (emailExists) {
         issues.push({
@@ -79,7 +79,7 @@ export default router({
       }
 
       const hash = await hashPassword(input.password);
-      const user = await userRepository.create({
+      const user = await userRepository.createUser({
         ...input,
         typeId: 1,
         password: hash,
@@ -88,7 +88,7 @@ export default router({
       });
       assertDatabaseResult(user);
 
-      const onboarding = await userOnboardingRepository.create({
+      const onboarding = await userOnboardingRepository.createUserOnboarding({
         userId: user.id,
         invitedUsers: false,
         welcomed: false,

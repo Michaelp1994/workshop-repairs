@@ -32,7 +32,7 @@ import { repairTypeTable } from "../tables/repair-type.sql";
 const repairFields = getTableColumns(repairTable);
 const assetFields = getTableColumns(assetTable);
 
-export function getAll(
+export function getAllRepairs(
   { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -90,7 +90,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getRepairsCount(
   { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -119,7 +119,7 @@ export async function getCount(
   return res?.value;
 }
 
-export async function getSelect(_: GetSelectInput) {
+export async function getRepairsSelect(_: GetSelectInput) {
   const query = db
     .select({
       value: repairTable.id,
@@ -130,7 +130,7 @@ export async function getSelect(_: GetSelectInput) {
   return query.execute();
 }
 
-export async function getById(input: RepairID) {
+export async function getRepairsById(input: RepairID) {
   const query = db
     .select({
       ...repairFields,
@@ -183,13 +183,13 @@ export async function getById(input: RepairID) {
   return res;
 }
 
-export async function create(input: CreateRepair) {
+export async function createRepair(input: CreateRepair) {
   const query = db.insert(repairTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepair) {
+export async function updateRepair(input: UpdateRepair) {
   const query = db
     .update(repairTable)
     .set(input)
@@ -199,7 +199,7 @@ export async function update(input: UpdateRepair) {
   return res;
 }
 
-export async function archive({ id, ...input }: ArchiveRepair) {
+export async function archiveRepair({ id, ...input }: ArchiveRepair) {
   const query = db
     .update(repairTable)
     .set(input)

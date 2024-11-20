@@ -18,7 +18,7 @@ import { userTable } from "../tables/user.sql";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllRepairComments({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairCommentTable)
@@ -29,7 +29,7 @@ export function getAll({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getCount(_input: GetCountInput) {
+export async function getRepairCommentsCount(_input: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairCommentTable)
@@ -38,7 +38,7 @@ export async function getCount(_input: GetCountInput) {
   return res?.count;
 }
 
-export async function getAllByRepairId(input: RepairID) {
+export async function getAllRepairCommentsByRepairId(input: RepairID) {
   const query = db
     .select({
       ...repairCommentFields,
@@ -61,7 +61,7 @@ export async function getAllByRepairId(input: RepairID) {
   return res;
 }
 
-export async function getById(input: RepairCommentID) {
+export async function getRepairCommentById(input: RepairCommentID) {
   const query = db
     .select()
     .from(repairCommentTable)
@@ -71,13 +71,13 @@ export async function getById(input: RepairCommentID) {
   return res;
 }
 
-export async function create(input: CreateRepairComment) {
+export async function createRepairComment(input: CreateRepairComment) {
   const query = db.insert(repairCommentTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairComment) {
+export async function updateRepairComment(input: UpdateRepairComment) {
   const query = db
     .update(repairCommentTable)
     .set(input)
@@ -87,7 +87,7 @@ export async function update(input: UpdateRepairComment) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairComment) {
+export async function archiveRepairComment(input: ArchiveRepairComment) {
   const query = db
     .update(repairCommentTable)
     .set(input)

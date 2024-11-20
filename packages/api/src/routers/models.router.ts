@@ -1,5 +1,13 @@
-import * as assetRepository from "@repo/db/repositories/asset.repository";
-import * as modelRepository from "@repo/db/repositories/model.repository";
+import { getAssetById } from "@repo/db/repositories/asset.repository";
+import {
+  archiveModel,
+  createModel,
+  getAllModels,
+  getModelById,
+  getModelsCount,
+  getModelsSelect,
+  updateModel,
+} from "@repo/db/repositories/model.repository";
 import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import * as modelSchemas from "@repo/validators/models.validators";
 import { TRPCError } from "@trpc/server";
@@ -16,23 +24,20 @@ export default router({
   getAll: organizationProcedure
     .input(modelSchemas.getAllModels)
     .query(async ({ ctx, input }) => {
-      const allModels = modelRepository.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allModels = getAllModels(input, ctx.session.organizationId);
       return allModels;
     }),
 
   getCount: organizationProcedure
     .input(modelSchemas.getCount)
     .query(({ ctx, input }) => {
-      const count = modelRepository.getCount(input, ctx.session.organizationId);
+      const count = getModelsCount(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = await modelRepository.getSelect(
+      const allModels = await getModelsSelect(
         input,
         ctx.session.organizationId,
       );
@@ -42,7 +47,7 @@ export default router({
   getByAssetId: organizationProcedure
     .input(modelSchemas.getByAssetId)
     .query(async ({ input, ctx }) => {
-      const asset = await assetRepository.getAssetById(
+      const asset = await getAssetById(
         input.assetId,
         ctx.session.organizationId,
       );
@@ -54,7 +59,7 @@ export default router({
         });
       }
 
-      const model = await modelRepository.getById(asset.modelId);
+      const model = await getModelById(asset.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -68,7 +73,7 @@ export default router({
   getById: organizationProcedure
     .input(modelSchemas.getById)
     .query(async ({ input }) => {
-      const model = await modelRepository.getById(input.id);
+      const model = await getModelById(input.id);
 
       if (!model) {
         throw new TRPCError({
@@ -84,7 +89,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
 
-      const createdModel = await modelRepository.create({
+      const createdModel = await createModel({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -99,7 +104,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
 
-      const updatedModel = await modelRepository.update({
+      const updatedModel = await updateModel({
         ...input,
         ...metadata,
       });
@@ -113,7 +118,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedModel = await modelRepository.archive({
+      const archivedModel = await archiveModel({
         ...input,
         ...metadata,
       });

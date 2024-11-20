@@ -1,4 +1,12 @@
-import * as repairImageRepository from "@repo/db/repositories/repairImage.repository";
+import {
+  archiveRepairImage,
+  createRepairImage,
+  getAllRepairImages,
+  getAllRepairImagesByRepairId,
+  getRepairImageById,
+  getRepairImagesCount,
+  updateRepairImage,
+} from "@repo/db/repositories/repairImage.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -16,26 +24,24 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairImages = repairImageRepository.getAll(input);
+    const allRepairImages = getAllRepairImages(input);
 
     return allRepairImages;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairImageRepository.getCount(input);
+    const count = getRepairImagesCount(input);
     return count;
   }),
   getAllByRepairId: organizationProcedure
     .input(repairImageSchemas.getAllByRepairId)
     .query(async ({ input }) => {
-      const allRepairImages = repairImageRepository.getAllByRepairId(
-        input.repairId,
-      );
+      const allRepairImages = getAllRepairImagesByRepairId(input.repairId);
       return allRepairImages;
     }),
   getById: organizationProcedure
     .input(repairImageSchemas.getById)
     .query(async ({ input }) => {
-      const repairImage = await repairImageRepository.getById(input.id);
+      const repairImage = await getRepairImageById(input.id);
 
       if (!repairImage) {
         throw new TRPCError({
@@ -50,7 +56,7 @@ export default router({
     .input(repairImageSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairImage = await repairImageRepository.create({
+      const createdRepairImage = await createRepairImage({
         ...input,
         ...metadata,
       });
@@ -63,7 +69,7 @@ export default router({
     .input(repairImageSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairImage = await repairImageRepository.update({
+      const updatedRepairImage = await updateRepairImage({
         ...input,
         ...metadata,
       });
@@ -76,7 +82,7 @@ export default router({
     .input(repairImageSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairImage = await repairImageRepository.archive({
+      const archivedRepairImage = await archiveRepairImage({
         ...input,
         ...metadata,
       });

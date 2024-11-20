@@ -25,7 +25,7 @@ import { userTypeTable } from "../tables/user-type.sql";
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
-export function getAll(
+export function getAllUsers(
   { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
   organizationId: OrganizationID,
 ) {
@@ -50,7 +50,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getUsersCount(
   { globalFilter, columnFilters }: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -71,7 +71,7 @@ export async function getCount(
   return res?.count;
 }
 
-export async function getById(input: UserID) {
+export async function getUserById(input: UserID) {
   const query = db
     .select({ ...publicUserColumns })
     .from(userTable)
@@ -80,13 +80,13 @@ export async function getById(input: UserID) {
   return res;
 }
 
-export async function getByEmail(input: string) {
+export async function getUserByEmail(input: string) {
   const query = db.select().from(userTable).where(eq(userTable.email, input));
   const [res] = await query.execute();
   return res;
 }
 
-export async function setEmailVerified(input: UserID) {
+export async function setUserEmailVerified(input: UserID) {
   const query = db
     .update(userTable)
     .set({
@@ -99,7 +99,7 @@ export async function setEmailVerified(input: UserID) {
   return res;
 }
 
-export async function create(input: CreateUser) {
+export async function createUser(input: CreateUser) {
   const query = db
     .insert(userTable)
     .values(input)
@@ -108,7 +108,7 @@ export async function create(input: CreateUser) {
   return res;
 }
 
-export async function update(input: UpdateUser) {
+export async function updateUser(input: UpdateUser) {
   const query = db
     .update(userTable)
     .set(input)
@@ -118,7 +118,7 @@ export async function update(input: UpdateUser) {
   return res;
 }
 
-export async function archive(input: ArchiveUser) {
+export async function archiveUser(input: ArchiveUser) {
   const query = db
     .update(userTable)
     .set(input)

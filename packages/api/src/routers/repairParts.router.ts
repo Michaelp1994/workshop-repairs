@@ -1,4 +1,12 @@
-import * as repairPartRepository from "@repo/db/repositories/repairPart.repository";
+import {
+  archiveRepairPart,
+  createRepairPart,
+  getAllRepairParts,
+  getAllRepairPartsByRepairId,
+  getRepairPartById,
+  getRepairPartsCount,
+  updateRepairPart,
+} from "@repo/db/repositories/repairPart.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -16,18 +24,18 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairParts = repairPartRepository.getAll(input);
+    const allRepairParts = getAllRepairParts(input);
 
     return allRepairParts;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairPartRepository.getCount(input);
+    const count = getRepairPartsCount(input);
     return count;
   }),
   getById: organizationProcedure
     .input(repairPartSchemas.getById)
     .query(async ({ input }) => {
-      const repairPart = await repairPartRepository.getById(input.id);
+      const repairPart = await getRepairPartById(input.id);
 
       if (!repairPart) {
         throw new TRPCError({
@@ -41,9 +49,7 @@ export default router({
   getAllByRepairId: organizationProcedure
     .input(repairPartSchemas.getAllByRepairId)
     .query(async ({ input }) => {
-      const allRepairParts = await repairPartRepository.getAllByRepairId(
-        input.id,
-      );
+      const allRepairParts = await getAllRepairPartsByRepairId(input.id);
 
       return allRepairParts;
     }),
@@ -51,7 +57,7 @@ export default router({
     .input(repairPartSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairPart = await repairPartRepository.create({
+      const createdRepairPart = await createRepairPart({
         ...input,
         ...metadata,
       });
@@ -64,7 +70,7 @@ export default router({
     .input(repairPartSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairPart = await repairPartRepository.update({
+      const updatedRepairPart = await updateRepairPart({
         ...input,
         ...metadata,
       });
@@ -77,7 +83,7 @@ export default router({
     .input(repairPartSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairPart = await repairPartRepository.archive({
+      const archivedRepairPart = await archiveRepairPart({
         ...input,
         ...metadata,
       });

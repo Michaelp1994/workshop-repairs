@@ -1,4 +1,12 @@
-import * as manufacturerRepository from "@repo/db/repositories/manufacturer.repository";
+import {
+  archiveManufacturer,
+  createManufacturer,
+  getAllManufacturers,
+  getManufacturerById,
+  getManufacturersCount,
+  getManufacturersSelect,
+  updateManufacturer,
+} from "@repo/db/repositories/manufacturer.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -19,7 +27,7 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allManufacturers = await manufacturerRepository.getAll(
+      const allManufacturers = await getAllManufacturers(
         input,
         ctx.session.organizationId,
       );
@@ -29,16 +37,13 @@ export default router({
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(({ ctx, input }) => {
-      const count = manufacturerRepository.getCount(
-        input,
-        ctx.session.organizationId,
-      );
+      const count = getManufacturersCount(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const manufacturers = await manufacturerRepository.getSelect(
+      const manufacturers = await getManufacturersSelect(
         input,
         ctx.session.organizationId,
       );
@@ -48,7 +53,7 @@ export default router({
   getById: organizationProcedure
     .input(manufacturerSchemas.getById)
     .query(async ({ input }) => {
-      const manufacturer = await manufacturerRepository.getById(input.id);
+      const manufacturer = await getManufacturerById(input.id);
 
       if (!manufacturer) {
         throw new TRPCError({
@@ -63,7 +68,7 @@ export default router({
     .input(manufacturerSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdManufacturer = await manufacturerRepository.create({
+      const createdManufacturer = await createManufacturer({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -77,7 +82,7 @@ export default router({
     .input(manufacturerSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedManufacturer = await manufacturerRepository.update({
+      const updatedManufacturer = await updateManufacturer({
         ...input,
         ...metadata,
       });
@@ -90,7 +95,7 @@ export default router({
     .input(manufacturerSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedManufacturer = await manufacturerRepository.archive({
+      const archivedManufacturer = await archiveManufacturer({
         ...input,
         ...metadata,
       });

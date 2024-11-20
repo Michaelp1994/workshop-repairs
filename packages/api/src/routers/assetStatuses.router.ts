@@ -1,5 +1,13 @@
-import * as assetStatusRepository from "@repo/db/repositories/assetStatus.repository";
-import * as userTypeSchemas from "@repo/validators/assetStatuses.validators";
+import {
+  archiveAssetStatus,
+  createAssetStatus,
+  getAllAssetStatuses,
+  getAssetStatusById,
+  getAssetStatusesCount,
+  getAssetStatusSelect,
+  updateAssetStatus,
+} from "@repo/db/repositories/assetStatus.repository";
+import * as assetStatusesSchema from "@repo/validators/assetStatuses.validators";
 import {
   getAllSchema,
   getCountSchema,
@@ -17,21 +25,21 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allUserTypes = assetStatusRepository.getAll(input);
+    const allUserTypes = getAllAssetStatuses(input);
     return allUserTypes;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = assetStatusRepository.getCount(input);
+    const count = getAssetStatusesCount(input);
     return count;
   }),
   getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
-    const allUserTypes = assetStatusRepository.getSelect(input);
+    const allUserTypes = getAssetStatusSelect(input);
     return allUserTypes;
   }),
   getById: organizationProcedure
-    .input(userTypeSchemas.getById)
+    .input(assetStatusesSchema.getById)
     .query(async ({ input }) => {
-      const userType = await assetStatusRepository.getById(input.id);
+      const userType = await getAssetStatusById(input.id);
 
       if (!userType) {
         throw new TRPCError({
@@ -43,10 +51,10 @@ export default router({
       return userType;
     }),
   create: organizationProcedure
-    .input(userTypeSchemas.create)
+    .input(assetStatusesSchema.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdUserType = await assetStatusRepository.create({
+      const createdUserType = await createAssetStatus({
         ...input,
         ...metadata,
       });
@@ -56,10 +64,10 @@ export default router({
       return createdUserType;
     }),
   update: organizationProcedure
-    .input(userTypeSchemas.update)
+    .input(assetStatusesSchema.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedUserType = await assetStatusRepository.update({
+      const updatedUserType = await updateAssetStatus({
         ...input,
         ...metadata,
       });
@@ -69,10 +77,10 @@ export default router({
       return updatedUserType;
     }),
   archive: organizationProcedure
-    .input(userTypeSchemas.archive)
+    .input(assetStatusesSchema.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedUserType = await assetStatusRepository.archive({
+      const archivedUserType = await archiveAssetStatus({
         ...input,
         ...metadata,
       });

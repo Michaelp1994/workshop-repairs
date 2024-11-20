@@ -19,7 +19,7 @@ import {
 
 const repairPartFields = getTableColumns(repairPartTable);
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllRepairParts({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairPartTable)
@@ -30,7 +30,7 @@ export function getAll({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getCount(_: GetCountInput) {
+export async function getRepairPartsCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairPartTable)
@@ -39,7 +39,7 @@ export async function getCount(_: GetCountInput) {
   return res?.count;
 }
 
-export async function getById(input: RepairPartID) {
+export async function getRepairPartById(input: RepairPartID) {
   const query = db
     .select({
       ...repairPartFields,
@@ -53,7 +53,7 @@ export async function getById(input: RepairPartID) {
   return res;
 }
 
-export async function getAllByRepairId(input: RepairID) {
+export async function getAllRepairPartsByRepairId(input: RepairID) {
   const query = db
     .select()
     .from(repairPartTable)
@@ -68,13 +68,13 @@ export async function getAllByRepairId(input: RepairID) {
   return res;
 }
 
-export async function create(input: CreateRepairPart) {
+export async function createRepairPart(input: CreateRepairPart) {
   const query = db.insert(repairPartTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairPart) {
+export async function updateRepairPart(input: UpdateRepairPart) {
   const query = db
     .update(repairPartTable)
     .set(input)
@@ -84,7 +84,7 @@ export async function update(input: UpdateRepairPart) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairPart) {
+export async function archiveRepairPart(input: ArchiveRepairPart) {
   const query = db
     .update(repairPartTable)
     .set(input)

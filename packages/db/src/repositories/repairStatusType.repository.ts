@@ -15,7 +15,7 @@ import {
   type UpdateRepairStatusType,
 } from "../tables/repair-status-type.sql";
 
-export function getAll({ pagination }: GetAllInput) {
+export function getAllRepairStatusTypes({ pagination }: GetAllInput) {
   const query = db
     .select()
     .from(repairStatusTypeTable)
@@ -26,7 +26,7 @@ export function getAll({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getCount(_: GetCountInput) {
+export async function getRepairStatusTypesCount(_: GetCountInput) {
   const query = db
     .select({ count: count() })
     .from(repairStatusTypeTable)
@@ -35,7 +35,7 @@ export async function getCount(_: GetCountInput) {
   return res?.count;
 }
 
-export async function getSelect(_: GetSelectInput) {
+export async function getRepairStatusTypesSelect(_: GetSelectInput) {
   const query = db
     .select({
       value: repairStatusTypeTable.id,
@@ -47,7 +47,7 @@ export async function getSelect(_: GetSelectInput) {
   return query.execute();
 }
 
-export async function getById(input: RepairStatusTypeID) {
+export async function getRepairStatusById(input: RepairStatusTypeID) {
   const query = db
     .select()
     .from(repairStatusTypeTable)
@@ -56,13 +56,13 @@ export async function getById(input: RepairStatusTypeID) {
   return res;
 }
 
-export async function create(input: CreateRepairStatusType) {
+export async function createRepairStatus(input: CreateRepairStatusType) {
   const query = db.insert(repairStatusTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateRepairStatusType) {
+export async function updateRepairStatus(input: UpdateRepairStatusType) {
   const query = db
     .update(repairStatusTypeTable)
     .set(input)
@@ -72,7 +72,7 @@ export async function update(input: UpdateRepairStatusType) {
   return res;
 }
 
-export async function archive(input: ArchiveRepairStatusType) {
+export async function archiveRepairStatus(input: ArchiveRepairStatusType) {
   const query = db
     .update(repairStatusTypeTable)
     .set(input)

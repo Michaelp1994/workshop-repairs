@@ -23,7 +23,7 @@ import {
 
 const partsToModelsFields = getTableColumns(partsToModelTable);
 
-export function getAll({
+export function getAllPartsToModels({
   sorting,
   pagination,
   globalFilter,
@@ -56,7 +56,10 @@ export function getAll({
   return res;
 }
 
-export async function getCount({ columnFilters, globalFilter }: GetCountInput) {
+export async function getPartsToModelsCount({
+  columnFilters,
+  globalFilter,
+}: GetCountInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -71,7 +74,10 @@ export async function getCount({ columnFilters, globalFilter }: GetCountInput) {
   return res?.count;
 }
 
-export function getSelect({ globalFilter, columnFilters }: GetSelectInput) {
+export function getPartsToModelsSelect({
+  globalFilter,
+  columnFilters,
+}: GetSelectInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -87,7 +93,10 @@ export function getSelect({ globalFilter, columnFilters }: GetSelectInput) {
   return query.execute();
 }
 
-export async function getById(input: { partId: PartID; modelId: ModelID }) {
+export async function getPartToModelById(input: {
+  partId: PartID;
+  modelId: ModelID;
+}) {
   const query = db
     .select()
     .from(partsToModelTable)
@@ -101,13 +110,13 @@ export async function getById(input: { partId: PartID; modelId: ModelID }) {
   return res;
 }
 
-export async function create(input: CreatePartToModel) {
+export async function createPartToModel(input: CreatePartToModel) {
   const query = db.insert(partsToModelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdatePartToModel) {
+export async function updatePartToModel(input: UpdatePartToModel) {
   const query = db
     .update(partsToModelTable)
     .set(input)
@@ -122,7 +131,7 @@ export async function update(input: UpdatePartToModel) {
   return res;
 }
 
-export async function archive(input: ArchivePartToModel) {
+export async function archivePartToModel(input: ArchivePartToModel) {
   const query = db
     .delete(partsToModelTable)
     .where(

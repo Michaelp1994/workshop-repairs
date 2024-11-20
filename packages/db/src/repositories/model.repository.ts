@@ -26,7 +26,7 @@ import { modelImageTable } from "../tables/model-image.sql";
 
 const modelFields = getTableColumns(modelTable);
 
-export function getAll(
+export function getAllModels(
   input: GetAllModelsInput,
   organizationId: OrganizationID,
 ) {
@@ -38,7 +38,7 @@ export function getAll(
   return query.execute();
 }
 
-export async function getCount(
+export async function getModelsCount(
   input: GetCountInput,
   organizationId: OrganizationID,
 ) {
@@ -51,7 +51,7 @@ export async function getCount(
   return res?.count;
 }
 
-export function getSelect(
+export function getModelsSelect(
   input: GetSelectInput,
   organizationId: OrganizationID,
 ) {
@@ -74,7 +74,7 @@ export function getSelect(
   return res;
 }
 
-export async function getById(id: ModelID) {
+export async function getModelById(id: ModelID) {
   const query = db
     .select({
       ...modelFields,
@@ -98,13 +98,13 @@ export async function getById(id: ModelID) {
   return res;
 }
 
-export async function create(input: CreateModel) {
+export async function createModel(input: CreateModel) {
   const query = db.insert(modelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function update(input: UpdateModel) {
+export async function updateModel(input: UpdateModel) {
   const query = db
     .update(modelTable)
     .set(input)
@@ -114,7 +114,7 @@ export async function update(input: UpdateModel) {
   return res;
 }
 
-export async function archive(input: ArchiveModel) {
+export async function archiveModel(input: ArchiveModel) {
   const query = db
     .update(modelTable)
     .set(input)
