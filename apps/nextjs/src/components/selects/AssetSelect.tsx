@@ -17,7 +17,7 @@ const AssetSelect = forwardRef<
   >
 >((props, ref) => {
   const [filter, setFilter] = useState("");
-  const [data] = api.assets.getSimpleSelect.useSuspenseQuery({
+  const [data] = api.assets.getSelect.useSuspenseQuery({
     globalFilter: filter,
   });
 
@@ -36,7 +36,7 @@ function AssetItem({
   option,
   isSelected,
 }: {
-  option: RouterOutputs["assets"]["getSimpleSelect"][number];
+  option: RouterOutputs["assets"]["getSelect"][number];
   isSelected: boolean;
 }) {
   return (
@@ -59,7 +59,7 @@ function AssetItem({
 function SelectedAssetItem({
   option,
 }: {
-  option: RouterOutputs["assets"]["getSimpleSelect"][number];
+  option: RouterOutputs["assets"]["getSelect"][number];
 }) {
   return (
     <div className="flex gap-4">

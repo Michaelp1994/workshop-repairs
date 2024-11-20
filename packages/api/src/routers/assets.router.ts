@@ -5,8 +5,7 @@ import {
   getAssetById,
   getAssetByRepairId,
   getAssetsCount,
-  getAssetSelect,
-  getAssetSimpleSelect,
+  getAssetsSelect,
   updateAsset,
 } from "@repo/db/repositories/asset.repository";
 import * as assetSchemas from "@repo/validators/assets.validators";
@@ -39,13 +38,7 @@ export default router({
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await getAssetSelect(input, ctx.session.organizationId);
-      return allAssets;
-    }),
-  getSimpleSelect: organizationProcedure
-    .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allAssets = await getAssetSimpleSelect(
+      const allAssets = await getAssetsSelect(
         input,
         ctx.session.organizationId,
       );
