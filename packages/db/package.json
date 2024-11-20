@@ -8,7 +8,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./controllers/*": "./src/controllers/*.ts"
+    "./repositories/*": "./src/repositories/*.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",

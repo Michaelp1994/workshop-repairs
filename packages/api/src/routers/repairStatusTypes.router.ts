@@ -1,4 +1,4 @@
-import * as repairStatusTypesController from "@repo/db/controllers/repairStatusTypes.controller";
+import * as repairStatusTypeRepository from "@repo/db/repositories/repairStatusType.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -17,7 +17,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairStatusTypes = repairStatusTypesController.getAll(input);
+    const allRepairStatusTypes = repairStatusTypeRepository.getAll(input);
 
     return allRepairStatusTypes;
   }),
@@ -25,17 +25,17 @@ export default router({
     .input(getSelectSchema)
     .query(async ({ input }) => {
       const allRepairStatusTypes =
-        await repairStatusTypesController.getSelect(input);
+        await repairStatusTypeRepository.getSelect(input);
       return allRepairStatusTypes;
     }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairStatusTypesController.getCount(input);
+    const count = repairStatusTypeRepository.getCount(input);
     return count;
   }),
   getById: organizationProcedure
     .input(repairStatusTypeSchemas.getById)
     .query(async ({ input }) => {
-      const repairStatusType = await repairStatusTypesController.getById(
+      const repairStatusType = await repairStatusTypeRepository.getById(
         input.id,
       );
 
@@ -52,7 +52,7 @@ export default router({
     .input(repairStatusTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairStatusType = await repairStatusTypesController.create({
+      const createdRepairStatusType = await repairStatusTypeRepository.create({
         ...input,
         ...metadata,
       });
@@ -64,7 +64,7 @@ export default router({
     .input(repairStatusTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairStatusType = await repairStatusTypesController.update({
+      const updatedRepairStatusType = await repairStatusTypeRepository.update({
         ...input,
         ...metadata,
       });
@@ -77,8 +77,9 @@ export default router({
     .input(repairStatusTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairStatusType =
-        await repairStatusTypesController.archive({ ...input, ...metadata });
+      const archivedRepairStatusType = await repairStatusTypeRepository.archive(
+        { ...input, ...metadata },
+      );
 
       assertDatabaseResult(archivedRepairStatusType);
 

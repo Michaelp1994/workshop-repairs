@@ -1,4 +1,4 @@
-import * as controller from "@repo/db/controllers/partsToModels.controller";
+import * as controller from "@repo/db/repositories/partsToModel.repository";
 import {
   getAllSchema,
   getCountSchema,

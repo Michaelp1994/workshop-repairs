@@ -1,4 +1,4 @@
-import * as locationsController from "@repo/db/controllers/locations.controller";
+import * as locationRepository from "@repo/db/repositories/location.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -17,7 +17,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(({ ctx, input }) => {
-    const allLocations = locationsController.getAll(
+    const allLocations = locationRepository.getAll(
       input,
       ctx.session.organizationId,
     );
@@ -27,7 +27,7 @@ export default router({
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(({ ctx, input }) => {
-      const count = locationsController.getCount(
+      const count = locationRepository.getCount(
         input,
         ctx.session.organizationId,
       );
@@ -36,7 +36,7 @@ export default router({
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(({ ctx, input }) => {
-      const locations = locationsController.getSelect(
+      const locations = locationRepository.getSelect(
         input,
         ctx.session.organizationId,
       );
@@ -45,7 +45,7 @@ export default router({
   getById: organizationProcedure
     .input(locationSchemas.getById)
     .query(async ({ input }) => {
-      const location = await locationsController.getById(input.id);
+      const location = await locationRepository.getById(input.id);
 
       if (!location) {
         throw new TRPCError({
@@ -60,7 +60,7 @@ export default router({
     .input(locationSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdLocation = await locationsController.create({
+      const createdLocation = await locationRepository.create({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -74,7 +74,7 @@ export default router({
     .input(locationSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedLocation = await locationsController.update({
+      const updatedLocation = await locationRepository.update({
         ...input,
         ...metadata,
       });
@@ -87,7 +87,7 @@ export default router({
     .input(locationSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedLocation = await locationsController.archive({
+      const archivedLocation = await locationRepository.archive({
         ...input,
         ...metadata,
       });

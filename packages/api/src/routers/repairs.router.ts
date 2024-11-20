@@ -1,4 +1,4 @@
-import * as repairsController from "@repo/db/controllers/repairs.controller";
+import * as repairRepository from "@repo/db/repositories/repair.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -20,7 +20,7 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allRepairs = await repairsController.getAll(
+      const allRepairs = await repairRepository.getAll(
         input,
         ctx.session.organizationId,
       );
@@ -30,7 +30,7 @@ export default router({
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await repairsController.getCount(
+      const count = await repairRepository.getCount(
         input,
         ctx.session.organizationId,
       );
@@ -46,14 +46,14 @@ export default router({
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {
-      const allRepairs = await repairsController.getSelect(input);
+      const allRepairs = await repairRepository.getSelect(input);
       return allRepairs;
     }),
 
   getById: organizationProcedure
     .input(repairSchemas.getById)
     .query(async ({ input }) => {
-      const repair = await repairsController.getById(input.id);
+      const repair = await repairRepository.getById(input.id);
 
       if (!repair) {
         throw new TRPCError({
@@ -70,7 +70,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
 
-      const repair = await repairsController.create({
+      const repair = await repairRepository.create({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -86,7 +86,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const sanitizedInput = sanitizeUpdateInput(input);
-      const updatedRepair = await repairsController.update({
+      const updatedRepair = await repairRepository.update({
         ...sanitizedInput,
         ...metadata,
       });
@@ -100,7 +100,7 @@ export default router({
     .input(repairSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepair = await repairsController.archive({
+      const archivedRepair = await repairRepository.archive({
         ...input,
         ...metadata,
       });

@@ -1,4 +1,4 @@
-import * as assetStatusesController from "@repo/db/controllers/assetStatuses.controller";
+import * as assetStatusRepository from "@repo/db/repositories/assetStatus.repository";
 import * as userTypeSchemas from "@repo/validators/assetStatuses.validators";
 import {
   getAllSchema,
@@ -17,21 +17,21 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allUserTypes = assetStatusesController.getAll(input);
+    const allUserTypes = assetStatusRepository.getAll(input);
     return allUserTypes;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = assetStatusesController.getCount(input);
+    const count = assetStatusRepository.getCount(input);
     return count;
   }),
   getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
-    const allUserTypes = assetStatusesController.getSelect(input);
+    const allUserTypes = assetStatusRepository.getSelect(input);
     return allUserTypes;
   }),
   getById: organizationProcedure
     .input(userTypeSchemas.getById)
     .query(async ({ input }) => {
-      const userType = await assetStatusesController.getById(input.id);
+      const userType = await assetStatusRepository.getById(input.id);
 
       if (!userType) {
         throw new TRPCError({
@@ -46,7 +46,7 @@ export default router({
     .input(userTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdUserType = await assetStatusesController.create({
+      const createdUserType = await assetStatusRepository.create({
         ...input,
         ...metadata,
       });
@@ -59,7 +59,7 @@ export default router({
     .input(userTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedUserType = await assetStatusesController.update({
+      const updatedUserType = await assetStatusRepository.update({
         ...input,
         ...metadata,
       });
@@ -72,7 +72,7 @@ export default router({
     .input(userTypeSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedUserType = await assetStatusesController.archive({
+      const archivedUserType = await assetStatusRepository.archive({
         ...input,
         ...metadata,
       });

@@ -1,4 +1,4 @@
-import * as clientsController from "@repo/db/controllers/clients.controller";
+import * as clientRepository from "@repo/db/repositories/client.repository";
 import * as clientSchemas from "@repo/validators/clients.validators";
 import {
   getAllSchema,
@@ -19,7 +19,7 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getAll(
+      const allClients = await clientRepository.getAll(
         input,
         ctx.session.organizationId,
       );
@@ -28,7 +28,7 @@ export default router({
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await clientsController.getCount(
+      const count = await clientRepository.getCount(
         input,
         ctx.session.organizationId,
       );
@@ -38,7 +38,7 @@ export default router({
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getSelect(
+      const allClients = await clientRepository.getSelect(
         input,
         ctx.session.organizationId,
       );
@@ -48,7 +48,7 @@ export default router({
   getById: organizationProcedure
     .input(clientSchemas.getById)
     .query(async ({ input }) => {
-      const client = await clientsController.getById(input.id);
+      const client = await clientRepository.getById(input.id);
       if (!client) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -61,7 +61,7 @@ export default router({
     .input(clientSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdClient = await clientsController.create({
+      const createdClient = await clientRepository.create({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -75,7 +75,7 @@ export default router({
     .input(clientSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedClient = await clientsController.update({
+      const updatedClient = await clientRepository.update({
         ...input,
         ...metadata,
       });
@@ -87,7 +87,7 @@ export default router({
     .input(clientSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedClient = await clientsController.archive({
+      const archivedClient = await clientRepository.archive({
         ...input,
         ...metadata,
       });

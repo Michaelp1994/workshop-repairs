@@ -1,4 +1,4 @@
-import * as repairCommentsController from "@repo/db/controllers/repairComments.controller";
+import * as repairCommentRepository from "@repo/db/repositories/repairComment.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -16,18 +16,18 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairComments = repairCommentsController.getAll(input);
+    const allRepairComments = repairCommentRepository.getAll(input);
 
     return allRepairComments;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairCommentsController.getCount(input);
+    const count = repairCommentRepository.getCount(input);
     return count;
   }),
   getById: organizationProcedure
     .input(repairCommentSchemas.getById)
     .query(async ({ input }) => {
-      const repairComment = await repairCommentsController.getById(input.id);
+      const repairComment = await repairCommentRepository.getById(input.id);
 
       if (!repairComment) {
         throw new TRPCError({
@@ -41,7 +41,7 @@ export default router({
   getAllByRepairId: organizationProcedure
     .input(repairCommentSchemas.getAllByRepairId)
     .query(async ({ input }) => {
-      const allRepairParts = repairCommentsController.getAllByRepairId(
+      const allRepairParts = repairCommentRepository.getAllByRepairId(
         input.repairId,
       );
 
@@ -51,7 +51,7 @@ export default router({
     .input(repairCommentSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairComment = await repairCommentsController.create({
+      const createdRepairComment = await repairCommentRepository.create({
         ...input,
         ...metadata,
       });
@@ -64,7 +64,7 @@ export default router({
     .input(repairCommentSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairComment = await repairCommentsController.update({
+      const updatedRepairComment = await repairCommentRepository.update({
         ...input,
         ...metadata,
       });
@@ -77,7 +77,7 @@ export default router({
     .input(repairCommentSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairComment = await repairCommentsController.archive({
+      const archivedRepairComment = await repairCommentRepository.archive({
         ...input,
         ...metadata,
       });

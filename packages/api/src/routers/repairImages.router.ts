@@ -1,4 +1,4 @@
-import * as repairImagesController from "@repo/db/controllers/repairImages.controller";
+import * as repairImageRepository from "@repo/db/repositories/repairImage.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -16,18 +16,18 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairImages = repairImagesController.getAll(input);
+    const allRepairImages = repairImageRepository.getAll(input);
 
     return allRepairImages;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairImagesController.getCount(input);
+    const count = repairImageRepository.getCount(input);
     return count;
   }),
   getAllByRepairId: organizationProcedure
     .input(repairImageSchemas.getAllByRepairId)
     .query(async ({ input }) => {
-      const allRepairImages = repairImagesController.getAllByRepairId(
+      const allRepairImages = repairImageRepository.getAllByRepairId(
         input.repairId,
       );
       return allRepairImages;
@@ -35,7 +35,7 @@ export default router({
   getById: organizationProcedure
     .input(repairImageSchemas.getById)
     .query(async ({ input }) => {
-      const repairImage = await repairImagesController.getById(input.id);
+      const repairImage = await repairImageRepository.getById(input.id);
 
       if (!repairImage) {
         throw new TRPCError({
@@ -50,7 +50,7 @@ export default router({
     .input(repairImageSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairImage = await repairImagesController.create({
+      const createdRepairImage = await repairImageRepository.create({
         ...input,
         ...metadata,
       });
@@ -63,7 +63,7 @@ export default router({
     .input(repairImageSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairImage = await repairImagesController.update({
+      const updatedRepairImage = await repairImageRepository.update({
         ...input,
         ...metadata,
       });
@@ -76,7 +76,7 @@ export default router({
     .input(repairImageSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedRepairImage = await repairImagesController.archive({
+      const archivedRepairImage = await repairImageRepository.archive({
         ...input,
         ...metadata,
       });

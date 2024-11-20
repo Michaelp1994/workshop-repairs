@@ -1,4 +1,4 @@
-import * as repairTypesController from "@repo/db/controllers/repairTypes.controller";
+import * as repairTypeRepository from "@repo/db/repositories/repairType.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -17,23 +17,23 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairTypes = repairTypesController.getAll(input);
+    const allRepairTypes = repairTypeRepository.getAll(input);
     return allRepairTypes;
   }),
   getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairTypesController.getCount(input);
+    const count = repairTypeRepository.getCount(input);
     return count;
   }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {
-      const allRepairTypes = await repairTypesController.getSelect(input);
+      const allRepairTypes = await repairTypeRepository.getSelect(input);
       return allRepairTypes;
     }),
   getById: organizationProcedure
     .input(repairTypeSchemas.getById)
     .query(async ({ input }) => {
-      const repairType = await repairTypesController.getById(input.id);
+      const repairType = await repairTypeRepository.getById(input.id);
 
       if (!repairType) {
         throw new TRPCError({
@@ -48,7 +48,7 @@ export default router({
     .input(repairTypeSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdRepairType = await repairTypesController.create({
+      const createdRepairType = await repairTypeRepository.create({
         ...input,
         ...metadata,
       });
@@ -61,7 +61,7 @@ export default router({
     .input(repairTypeSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedRepairType = await repairTypesController.update({
+      const updatedRepairType = await repairTypeRepository.update({
         ...input,
         ...metadata,
       });
@@ -75,7 +75,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedRepairType = await repairTypesController.archive({
+      const archivedRepairType = await repairTypeRepository.archive({
         ...input,
         ...metadata,
       });

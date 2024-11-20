@@ -1,5 +1,5 @@
-import * as authController from "@repo/db/controllers/auth.controller";
-import * as usersController from "@repo/db/controllers/users.controller";
+import * as authController from "@repo/db/repositories/auth.repository";
+import * as userRepository from "@repo/db/repositories/user.repository";
 import * as authSchemas from "@repo/validators/auth.validators";
 import {
   getAllSchema,
@@ -18,17 +18,14 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ input, ctx }) => {
-      const allUsers = usersController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allUsers = userRepository.getAll(input, ctx.session.organizationId);
 
       return allUsers;
     }),
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(({ input, ctx }) => {
-      const count = usersController.getCount(input, ctx.session.organizationId);
+      const count = userRepository.getCount(input, ctx.session.organizationId);
       return count;
     }),
   resetPassword: authedProcedure
@@ -44,7 +41,7 @@ export default router({
   confirmEmail: authedProcedure
     .input(authSchemas.confirmEmail)
     .mutation(async ({ input }) => {
-      const user = await usersController.getByEmail(input.email);
+      const user = await userRepository.getByEmail(input.email);
       if (!user) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -58,7 +55,7 @@ export default router({
           message: "Token is not correct.",
         });
       }
-      await usersController.setEmailVerified(user.id);
+      await userRepository.setEmailVerified(user.id);
 
       await authController.deleteConfirmationRequest(request.id);
 
@@ -69,7 +66,7 @@ export default router({
   getCurrentUser: authedProcedure
     .input(userSchemas.getCurrent)
     .query(async ({ ctx }) => {
-      const user = await usersController.getById(ctx.session.userId);
+      const user = await userRepository.getById(ctx.session.userId);
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -83,7 +80,7 @@ export default router({
   getById: organizationProcedure
     .input(userSchemas.getById)
     .query(async ({ input }) => {
-      const user = await usersController.getById(input.id);
+      const user = await userRepository.getById(input.id);
 
       if (!user) {
         throw new TRPCError({
@@ -103,7 +100,7 @@ export default router({
     .input(userSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedUser = await usersController.update({
+      const updatedUser = await userRepository.update({
         ...input,
         ...metadata,
       });
@@ -118,7 +115,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
 
-      const updatedUser = await usersController.update({
+      const updatedUser = await userRepository.update({
         ...input,
         ...metadata,
         id: ctx.session.userId,
@@ -133,7 +130,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedUser = await usersController.archive({
+      const archivedUser = await userRepository.archive({
         ...input,
         ...metadata,
       });

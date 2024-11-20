@@ -3,8 +3,8 @@ import {
   verifyPasswordHash,
   verifyPasswordStrength,
 } from "@repo/auth/password";
-import * as userOnboardingsController from "@repo/db/controllers/userOnboardings.controller";
-import * as usersController from "@repo/db/controllers/users.controller";
+import * as userRepository from "@repo/db/repositories/user.repository";
+import * as userOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
 import * as authSchemas from "@repo/validators/auth.validators";
 import { TRPCError } from "@trpc/server";
 import { ZodError, type ZodIssue } from "zod";
@@ -18,7 +18,7 @@ export default router({
   login: publicProcedure
     .input(authSchemas.login)
     .mutation(async ({ input, ctx }) => {
-      const user = await usersController.getByEmail(input.email);
+      const user = await userRepository.getByEmail(input.email);
       if (!user) {
         throw new ZodError([
           {
@@ -64,7 +64,7 @@ export default router({
             "Your password has been found in a data breach. Please choose a different password",
         });
       }
-      const emailExists = await usersController.getByEmail(input.email);
+      const emailExists = await userRepository.getByEmail(input.email);
 
       if (emailExists) {
         issues.push({
@@ -79,7 +79,7 @@ export default router({
       }
 
       const hash = await hashPassword(input.password);
-      const user = await usersController.create({
+      const user = await userRepository.create({
         ...input,
         typeId: 1,
         password: hash,
@@ -88,7 +88,7 @@ export default router({
       });
       assertDatabaseResult(user);
 
-      const onboarding = await userOnboardingsController.create({
+      const onboarding = await userOnboardingRepository.create({
         userId: user.id,
         invitedUsers: false,
         welcomed: false,

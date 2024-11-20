@@ -1,8 +1,8 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import * as organizationsController from "@repo/db/controllers/organization.controller";
-import * as userOnboardingsController from "@repo/db/controllers/userOnboardings.controller";
-import * as usersController from "@repo/db/controllers/users.controller";
+import * as organizationRepository from "@repo/db/repositories/organization.repository";
+import * as userOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
+import * as userRepository from "@repo/db/repositories/user.repository";
 import * as organizationsSchemas from "@repo/validators/organization.validators";
 import { TRPCError } from "@trpc/server";
 import { Resource } from "sst";
@@ -15,9 +15,7 @@ import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
   getStatus: authedProcedure.query(async ({ ctx }) => {
-    const user = await userOnboardingsController.getByUserId(
-      ctx.session.userId,
-    );
+    const user = await userOnboardingRepository.getByUserId(ctx.session.userId);
     assertDatabaseResult(user);
     return {
       welcomed: user.onboarding?.welcomed,
@@ -27,7 +25,7 @@ export default router({
     };
   }),
   markUserAsWelcomed: authedProcedure.mutation(async ({ ctx }) => {
-    const onboarding = await userOnboardingsController.updateByUserId({
+    const onboarding = await userOnboardingRepository.updateByUserId({
       userId: ctx.session.userId,
       welcomed: true,
     });
@@ -37,7 +35,7 @@ export default router({
     .input(organizationsSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const user = await usersController.getById(ctx.session.userId);
+      const user = await userRepository.getById(ctx.session.userId);
       assertDatabaseResult(user);
 
       if (user.organizationId) {
@@ -47,7 +45,7 @@ export default router({
         });
       }
 
-      const organizationExists = await organizationsController.getByName(
+      const organizationExists = await organizationRepository.getByName(
         input.name,
       );
 
@@ -61,13 +59,13 @@ export default router({
         ]);
       }
 
-      const createdOrganization = await organizationsController.create({
+      const createdOrganization = await organizationRepository.create({
         ...input,
         ...metadata,
       });
       assertDatabaseResult(createdOrganization);
 
-      const updatedUser = await userOnboardingsController.setOrganization(
+      const updatedUser = await userOnboardingRepository.setOrganization(
         ctx.session.userId,
         createdOrganization.id,
       );
@@ -87,7 +85,7 @@ export default router({
   joinOrganization: authedProcedure
     .input(organizationsSchemas.join)
     .mutation(async ({ input, ctx }) => {
-      const user = await userOnboardingsController.getByUserId(
+      const user = await userOnboardingRepository.getByUserId(
         ctx.session.userId,
       );
       assertDatabaseResult(user);
@@ -99,7 +97,7 @@ export default router({
         });
       }
 
-      const organization = await organizationsController.getByInvitationCode(
+      const organization = await organizationRepository.getByInvitationCode(
         input.joinCode,
       );
       if (!organization) {
@@ -113,13 +111,13 @@ export default router({
         ]);
       }
 
-      const updatedUser = await userOnboardingsController.setOrganization(
+      const updatedUser = await userOnboardingRepository.setOrganization(
         ctx.session.userId,
         organization.id,
       );
       assertDatabaseResult(updatedUser);
 
-      await userOnboardingsController.setInvitations(ctx.session.userId);
+      await userOnboardingRepository.setInvitations(ctx.session.userId);
 
       const session = await createSession(updatedUser);
       return {
@@ -135,7 +133,7 @@ export default router({
         const email = unprocessedEmail.trim();
         // TODO: Check if valid email.
         console.log({ email });
-        return organizationsController.createInvitation({
+        return organizationRepository.createInvitation({
           email,
           organizationId: ctx.session.organizationId,
           emailSentAt: null,
@@ -143,7 +141,7 @@ export default router({
       });
       await Promise.all(emailPromises);
 
-      const user = await userOnboardingsController.setInvitations(
+      const user = await userOnboardingRepository.setInvitations(
         ctx.session.userId,
       );
       assertDatabaseResult(user);
@@ -151,7 +149,7 @@ export default router({
       return session;
     }),
   skipInvitations: organizationProcedure.mutation(async ({ ctx }) => {
-    const user = await userOnboardingsController.setInvitations(
+    const user = await userOnboardingRepository.setInvitations(
       ctx.session.userId,
     );
     assertDatabaseResult(user);

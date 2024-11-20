@@ -1,4 +1,4 @@
-import * as manufacturersController from "@repo/db/controllers/manufacturers.controller";
+import * as manufacturerRepository from "@repo/db/repositories/manufacturer.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -19,7 +19,7 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allManufacturers = await manufacturersController.getAll(
+      const allManufacturers = await manufacturerRepository.getAll(
         input,
         ctx.session.organizationId,
       );
@@ -29,7 +29,7 @@ export default router({
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(({ ctx, input }) => {
-      const count = manufacturersController.getCount(
+      const count = manufacturerRepository.getCount(
         input,
         ctx.session.organizationId,
       );
@@ -38,7 +38,7 @@ export default router({
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const manufacturers = await manufacturersController.getSelect(
+      const manufacturers = await manufacturerRepository.getSelect(
         input,
         ctx.session.organizationId,
       );
@@ -48,7 +48,7 @@ export default router({
   getById: organizationProcedure
     .input(manufacturerSchemas.getById)
     .query(async ({ input }) => {
-      const manufacturer = await manufacturersController.getById(input.id);
+      const manufacturer = await manufacturerRepository.getById(input.id);
 
       if (!manufacturer) {
         throw new TRPCError({
@@ -63,7 +63,7 @@ export default router({
     .input(manufacturerSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdManufacturer = await manufacturersController.create({
+      const createdManufacturer = await manufacturerRepository.create({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -77,7 +77,7 @@ export default router({
     .input(manufacturerSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedManufacturer = await manufacturersController.update({
+      const updatedManufacturer = await manufacturerRepository.update({
         ...input,
         ...metadata,
       });
@@ -90,7 +90,7 @@ export default router({
     .input(manufacturerSchemas.archive)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
-      const archivedManufacturer = await manufacturersController.archive({
+      const archivedManufacturer = await manufacturerRepository.archive({
         ...input,
         ...metadata,
       });

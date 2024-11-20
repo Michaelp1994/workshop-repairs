@@ -1,4 +1,4 @@
-import * as partsController from "@repo/db/controllers/parts.controller";
+import * as partRepository from "@repo/db/repositories/part.repository";
 import {
   getAllSchema,
   getCountSchema,
@@ -19,17 +19,14 @@ export default router({
   getAll: organizationProcedure
     .input(getAllSchema)
     .query(async ({ ctx, input }) => {
-      const allParts = partsController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allParts = partRepository.getAll(input, ctx.session.organizationId);
 
       return allParts;
     }),
   getCount: organizationProcedure
     .input(getCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await partsController.getCount(
+      const count = await partRepository.getCount(
         input,
         ctx.session.organizationId,
       );
@@ -39,14 +36,14 @@ export default router({
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {
-      const allParts = await partsController.getSelect(input);
+      const allParts = await partRepository.getSelect(input);
 
       return allParts;
     }),
   getById: organizationProcedure
     .input(partSchemas.getById)
     .query(async ({ input }) => {
-      const part = await partsController.getById(input.id);
+      const part = await partRepository.getById(input.id);
 
       if (!part) {
         throw new TRPCError({
@@ -61,7 +58,7 @@ export default router({
     .input(partSchemas.create)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
-      const createdPart = await partsController.create({
+      const createdPart = await partRepository.create({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
@@ -75,7 +72,7 @@ export default router({
     .input(partSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const updatedPart = await partsController.update({
+      const updatedPart = await partRepository.update({
         ...input,
         ...metadata,
       });
@@ -89,7 +86,7 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
-      const archivedPart = await partsController.archive({
+      const archivedPart = await partRepository.archive({
         ...input,
         ...metadata,
       });

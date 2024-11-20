@@ -1,4 +1,4 @@
-import * as organizationsController from "@repo/db/controllers/organization.controller";
+import * as organizationRepository from "@repo/db/repositories/organization.repository";
 import * as organizationsSchemas from "@repo/validators/organization.validators";
 
 import assertDatabaseResult from "../helpers/trpcAssert";
@@ -8,7 +8,7 @@ export default router({
   get: organizationProcedure
     .input(organizationsSchemas.getById)
     .query(async ({ ctx }) => {
-      const organization = await organizationsController.getById(
+      const organization = await organizationRepository.getById(
         ctx.session.organizationId,
       );
       assertDatabaseResult(organization);
