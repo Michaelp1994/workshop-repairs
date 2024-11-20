@@ -17,7 +17,6 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -93,9 +92,8 @@ export default router({
     .input(assetSchemas.update)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const sanitizedInput = sanitizeUpdateInput(input);
       const updatedAsset = await updateAsset(
-        { ...sanitizedInput, ...metadata },
+        { ...input, ...metadata },
         ctx.session.organizationId,
       );
       assertDatabaseResult(updatedAsset);
