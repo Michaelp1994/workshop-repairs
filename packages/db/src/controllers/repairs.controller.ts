@@ -13,7 +13,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/repairs.mappings";
+} from "../mappings/repairs.mapper";
 import { assetTable } from "../tables/asset.sql";
 import { locationTable } from "../tables/location.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";

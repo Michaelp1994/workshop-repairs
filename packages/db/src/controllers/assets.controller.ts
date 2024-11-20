@@ -9,7 +9,10 @@ import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import { db } from "../index";
-import { createCountQuery, createDataQuery } from "../queries/assets.queries";
+import {
+  createCountTableQuery,
+  createDataTableQuery,
+} from "../mappings/assets.mapper";
 import {
   type ArchiveAsset,
   type AssetID,
@@ -30,7 +33,7 @@ export function getAll(
   dataTableParams: GetAllInput,
   organizationId: OrganizationID,
 ) {
-  const query = createDataQuery(
+  const query = createDataTableQuery(
     dataTableParams,
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),
@@ -45,7 +48,7 @@ export async function getCount(
   dataTableParams: GetCountInput,
   organizationId: OrganizationID,
 ) {
-  const query = createCountQuery(
+  const query = createCountTableQuery(
     dataTableParams,
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),

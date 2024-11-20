@@ -12,7 +12,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/users.mappings";
+} from "../mappings/users.mapper";
 import {
   type ArchiveUser,
   type CreateUser,

@@ -13,7 +13,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/parts.mappings";
+} from "../mappings/parts.mapper";
 import {
   type ArchivePart,
   type CreatePart,

@@ -13,7 +13,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/locations.mappings";
+} from "../mappings/locations.mapper";
 import {
   type ArchiveLocation,
   type CreateLocation,

@@ -13,7 +13,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/manufacturers.mappings";
+} from "../mappings/manufacturers.mapper";
 import {
   type ArchiveManufacturer,
   type CreateManufacturer,

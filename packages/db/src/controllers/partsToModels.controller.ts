@@ -11,7 +11,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/partsToModels.mappings";
+} from "../mappings/partsToModels.mapper";
 import { type ModelID, modelTable } from "../tables/model.sql";
 import { type PartID, partTable } from "../tables/part.sql";
 import {

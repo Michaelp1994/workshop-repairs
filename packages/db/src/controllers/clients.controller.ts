@@ -13,7 +13,7 @@ import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
-} from "../mappings/clients.mappings";
+} from "../mappings/clients.mapper";
 import {
   type ArchiveClient,
   type ClientID,
