@@ -8,4 +8,3 @@ export * from "./DataTableCore/DataTableRowActions";
 export * from "./DataTableCore/DataTableRowCheckbox";
 export * from "./DataTableFooter";
 export * from "./DataTableToolbar";
-export * from "./useDataTable";

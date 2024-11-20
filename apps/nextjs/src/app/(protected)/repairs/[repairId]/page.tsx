@@ -8,11 +8,9 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import AssetDetailsSection from "../_components/AssetDetailsSection";
 import RepairCommentsSection from "../_components/RepairCommentsSection";
 import RepairDetailsSection from "../_components/RepairDetailsSection";
 import RepairImagesSection from "../_components/RepairImagesSection";
-import RepairStatusDetails from "../_components/RepairStatusDetails";
 
 interface ViewRepairPageProps {
   params: {

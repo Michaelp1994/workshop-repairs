@@ -9,7 +9,7 @@
     "./*": "./src/components/*.tsx",
     "./data-table": "./src/components/data-table/index.ts",
     "./data-table/*": "./src/components/data-table/*.tsx",
-    "./hooks/*": "./src/hooks/*.tsx"
+    "./hooks/*": "./src/hooks/*.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
@@ -71,6 +71,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/validators": "workspace:*",
     "@testing-library/react": "^16.0.1",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",

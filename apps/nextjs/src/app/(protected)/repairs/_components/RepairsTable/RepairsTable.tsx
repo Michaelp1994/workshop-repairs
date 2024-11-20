@@ -4,9 +4,8 @@ import {
   DataTableCore,
   DataTableFooter,
   DataTableToolbar,
-  useDataTable,
-  useDataTableState,
 } from "@repo/ui/data-table";
+import { useDataTable, useDataTableState } from "@repo/ui/hooks/use-data-table";
 
 import { api } from "~/trpc/client";
 

@@ -1,7 +1,7 @@
+import { useDataTable } from "../../hooks/use-data-table";
 import { DataTableCore } from "./DataTableCore/DataTableCore";
 import { DataTableFooter } from "./DataTableFooter";
 import { DataTableToolbar } from "./DataTableToolbar";
-import { useDataTable } from "./useDataTable";
 
 export default function DataTable({ columns, data, rowCount, tableState }) {
   const table = useDataTable({

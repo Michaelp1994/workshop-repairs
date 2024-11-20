@@ -2,8 +2,8 @@
 import type { EquipmentTypeID } from "@repo/validators/ids.validators";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { useDataTableState } from "@repo/ui/data-table";
 import DataTable from "@repo/ui/data-table/DataTable";
+import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
 import { api } from "~/trpc/client";
 
