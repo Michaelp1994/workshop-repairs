@@ -19,7 +19,9 @@ import {
   UserFormInput,
   userFormSchema,
 } from "@repo/validators/forms/users.schema";
+import { useRouter } from "next/navigation";
 
+import UserTypeSelect from "~/components/selects/UserTypeSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
@@ -28,13 +30,17 @@ interface UpdateUserFormProps {
 }
 
 export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
+  const router = useRouter();
+  const utils = api.useUtils();
   const [user] = api.users.getById.useSuspenseQuery({
     id: userId,
   });
 
   const updateMutation = api.users.update.useMutation({
-    onSuccess(values) {
+    async onSuccess(values) {
+      await utils.users.getById.invalidate({ id: values.id });
       toast.success(`User ${values.firstName} updated`);
+      router.push(`/users/${values.id}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -77,6 +83,21 @@ export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="typeId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>User Type</FormLabel>
+                <FormControl>
+                  <UserTypeSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

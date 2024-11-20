@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -7,16 +9,19 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-// import AssetLocationSection from "../_components/AssetLocationSection";
-import ModelDetailsSection from "../_components/AssetModelSection";
+import AssetDetailsSection from "../_components/AssetDetailsSection";
 import AssetRepairsSection from "../_components/AssetRepairsSection";
-import AssetStatusSection from "../_components/AssetStatusSection";
 
 interface ViewAssetPageProps {
   params: {
     assetId: string;
   };
 }
+
+export const metadata: Metadata = {
+  title: "View Asset",
+  description: "Create a new asset",
+};
 
 export default function ViewAssetPage({ params }: ViewAssetPageProps) {
   const assetId = Number(params.assetId);
@@ -33,9 +38,8 @@ export default function ViewAssetPage({ params }: ViewAssetPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
+      <AssetDetailsSection assetId={assetId} />
       <AssetRepairsSection assetId={assetId} />
-      <AssetStatusSection assetId={assetId} />
-      <ModelDetailsSection assetId={assetId} />
     </PageWrapper>
   );
 }

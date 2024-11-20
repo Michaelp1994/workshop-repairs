@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Card, CardContent } from "@repo/ui/card";
 
 import {
@@ -14,6 +16,11 @@ interface EditAssetPageProps {
     assetId: string;
   };
 }
+
+export const metadata: Metadata = {
+  title: "Update Asset",
+  description: "Create a new asset",
+};
 
 export default function EditAssetPage({ params }: EditAssetPageProps) {
   const assetId = Number(params.assetId);

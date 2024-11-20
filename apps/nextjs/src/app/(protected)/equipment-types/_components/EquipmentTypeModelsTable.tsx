@@ -18,14 +18,12 @@ export default function EquipmentTypeModelsTable({
 }: EquipmentTypeModelsSectionProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
-  const [models] = api.models.getAllByEquipmentTypeId.useSuspenseQuery({
+  const [models] = api.models.getAll.useSuspenseQuery({
     ...dataState,
-    equipmentTypeId,
   });
 
-  const [rowCount] = api.models.getCountByEquipmentTypeId.useSuspenseQuery({
+  const [rowCount] = api.models.getAll.useSuspenseQuery({
     ...countState,
-    equipmentTypeId,
   });
 
   return (

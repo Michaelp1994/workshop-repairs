@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { userTypeId } from "../schemas/ids.validators";
+
 export const userFormSchema = z.object({
   firstName: z.string().min(3, {
     message: "First name must be atleast 3 characters.",
@@ -7,16 +9,9 @@ export const userFormSchema = z.object({
   lastName: z.string().min(3, {
     message: "Last name must be atleast 3 characters.",
   }),
+  typeId: userTypeId,
   email: z.string().email({
     message: "Please enter a valid email",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be atleast 8 characters.",
-  }),
-  acceptToS: z.literal<boolean>(true, {
-    errorMap: () => ({
-      message: "Please accept the Terms and Services.",
-    }),
   }),
 });
 

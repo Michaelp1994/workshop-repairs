@@ -73,8 +73,9 @@ export async function getUsersCount(
 
 export async function getUserById(input: UserID) {
   const query = db
-    .select({ ...publicUserColumns })
+    .select({ ...publicUserColumns, type: userTypeTable })
     .from(userTable)
+    .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
     .where(eq(userTable.id, input));
   const [res] = await query.execute();
   return res;

@@ -21,6 +21,7 @@ import {
   type UpdateAsset,
 } from "../tables/asset.sql";
 import { assetStatusTable } from "../tables/asset-status.sql";
+import { clientTable } from "../tables/client.sql";
 import { locationTable } from "../tables/location.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
 import { modelTable } from "../tables/model.sql";
@@ -103,16 +104,25 @@ export async function getAssetById(
   const query = db
     .select({
       ...assetFields,
-      location: {
-        id: locationTable.id,
-        name: locationTable.name,
-        address: locationTable.address,
+      location: locationTable,
+      status: assetStatusTable,
+      model: {
+        id: modelTable.id,
+        name: modelTable.name,
+        manufacturer: manufacturerTable.name,
+        image: modelImageTable.url,
       },
+      client: clientTable,
     })
     .from(assetTable)
     .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
     .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
+    .innerJoin(clientTable, eq(assetTable.clientId, clientTable.id))
     .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
+    .leftJoin(
+      modelImageTable,
+      eq(modelTable.defaultImageId, modelImageTable.id),
+    )
     .innerJoin(
       manufacturerTable,
       eq(modelTable.manufacturerId, manufacturerTable.id),

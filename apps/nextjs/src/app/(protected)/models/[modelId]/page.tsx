@@ -11,6 +11,7 @@ import {
 import { api } from "~/trpc/server";
 
 import ModelAssetsSection from "../_components/ModelAssetsSection";
+import ModelDetailsSection from "../_components/ModelDetailsSection";
 import ModelImagesSection from "../_components/ModelImagesSection";
 import ModelPartsSection from "../_components/ModelPartsSection";
 
@@ -35,7 +36,7 @@ export default async function ViewModelPage({ params }: ViewModelPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-
+      <ModelDetailsSection modelId={modelId} />
       <ModelAssetsSection modelId={modelId} />
       <ModelPartsSection modelId={modelId} />
       <ModelImagesSection modelId={modelId} />

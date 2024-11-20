@@ -1,6 +1,7 @@
 import type {
   GetAllInput,
   GetCountInput,
+  GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
@@ -32,6 +33,17 @@ export async function getUserTypesCount(_: GetCountInput) {
     .where(isNull(userTypeTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
+}
+
+export async function getUserTypesSelect(_: GetSelectInput) {
+  const query = db
+    .select({
+      value: userTypeTable.id,
+      label: userTypeTable.name,
+    })
+    .from(userTypeTable)
+    .where(isNull(userTypeTable.deletedAt));
+  return query.execute();
 }
 
 export async function getUserTypeById(input: UserTypeID) {

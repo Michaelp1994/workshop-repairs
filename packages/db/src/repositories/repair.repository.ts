@@ -30,7 +30,6 @@ import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
 import { repairTypeTable } from "../tables/repair-type.sql";
 
 const repairFields = getTableColumns(repairTable);
-const assetFields = getTableColumns(assetTable);
 
 export function getAllRepairs(
   { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
@@ -134,31 +133,16 @@ export async function getRepairsById(input: RepairID) {
   const query = db
     .select({
       ...repairFields,
-      asset: {
-        ...assetFields,
-      },
+      asset: assetTable,
       model: {
         id: modelTable.id,
         name: modelTable.name,
         imageUrl: modelImageTable.url,
       },
-      location: {
-        id: locationTable.id,
-        name: locationTable.name,
-      },
-      manufacturer: {
-        id: manufacturerTable.id,
-        name: manufacturerTable.name,
-      },
-      type: {
-        id: repairTypeTable.id,
-        name: repairTypeTable.name,
-      },
-      status: {
-        id: repairStatusTypeTable.id,
-        name: repairStatusTypeTable.name,
-        colour: repairStatusTypeTable.colour,
-      },
+      location: locationTable,
+      manufacturer: manufacturerTable,
+      type: repairTypeTable,
+      status: repairStatusTypeTable,
     })
     .from(repairTable)
     .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))

@@ -23,7 +23,6 @@ export const updateUserSchema = z.object({
   lastName: z.string().min(3),
   email: z.string().email(),
   typeId: userTypeId,
-  password: z.string().min(8),
 });
 
 export const updateCurrentUserSchema = z.object({

@@ -4,11 +4,13 @@ import {
   getAllUserTypes,
   getUserTypeById,
   getUserTypesCount,
+  getUserTypesSelect,
   updateUserType,
 } from "@repo/db/repositories/userType.repository";
 import {
   getAllSchema,
   getCountSchema,
+  getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveUserTypeSchema,
@@ -34,6 +36,12 @@ export default router({
     const count = getUserTypesCount(input);
     return count;
   }),
+  getSelect: organizationProcedure
+    .input(getSelectSchema)
+    .query(async ({ input }) => {
+      const allUserTypes = getUserTypesSelect(input);
+      return allUserTypes;
+    }),
   getById: organizationProcedure
     .input(getUserTypeByIdSchema)
     .query(async ({ input }) => {

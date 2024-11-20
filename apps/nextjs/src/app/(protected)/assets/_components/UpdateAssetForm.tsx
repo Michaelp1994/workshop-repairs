@@ -20,8 +20,10 @@ import {
   assetFormSchema,
 } from "@repo/validators/forms/assets.schema";
 
+import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
 import LocationSelect from "~/components/selects/LocationSelect";
+import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
@@ -36,7 +38,7 @@ export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
 
   const updateMutation = api.assets.update.useMutation({
     async onSuccess(values) {
-      toast.success(`Asset ${values.assetNumber} updated`);
+      toast.success(`Asset updated`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -85,6 +87,51 @@ export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
                 <FormLabel>Serial Number</FormLabel>
                 <FormControl>
                   <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="softwareVersion"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Software Version</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="statusId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <AssetStatusSelect {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="modelId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Model</FormLabel>
+                <FormControl>
+                  <ModelSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

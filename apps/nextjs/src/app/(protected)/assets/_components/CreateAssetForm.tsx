@@ -85,6 +85,22 @@ export default function CreateAssetForm() {
             );
           }}
         />
+
+        <FormField
+          control={form.control}
+          name="softwareVersion"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Software Version</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <FormField
           control={form.control}
           name="statusId"

@@ -10,6 +10,8 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
+import UserDetailsSection from "../_components/UserDetailsSection";
+
 interface ViewUserPageProps {
   params: {
     userId: UserID;
@@ -35,6 +37,7 @@ export default async function ViewUserPage({ params }: ViewUserPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
+      <UserDetailsSection userId={userId} />
     </PageWrapper>
   );
 }

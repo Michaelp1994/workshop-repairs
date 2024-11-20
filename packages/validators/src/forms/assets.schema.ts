@@ -6,6 +6,7 @@ export const assetFormSchema = z.object(
     serialNumber: z
       .string()
       .min(3, "Serial Number must be at least 3 characters"),
+    softwareVersion: z.string().optional(),
     statusId: z
       .number({
         message: "Status is required",

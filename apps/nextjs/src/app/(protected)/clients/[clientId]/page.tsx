@@ -1,6 +1,3 @@
-import { Skeleton } from "@repo/ui/skeleton";
-import { Suspense } from "react";
-
 import { IconButton } from "~/components/IconButton";
 import {
   PageHeader,
@@ -12,6 +9,7 @@ import {
 import { api } from "~/trpc/server";
 
 import ClientAssetsSection from "../_components/ClientAssetsSection";
+import ClientDetailsSection from "../_components/ClientDetailsSection";
 import ClientRepairsSection from "../_components/ClientRepairsSection";
 
 interface ViewClientPageProps {
@@ -36,13 +34,9 @@ export default async function ViewClientPage({ params }: ViewClientPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-
-      <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
-        <ClientAssetsSection clientId={clientId} />
-      </Suspense>
-      <Suspense fallback={<Skeleton className="h-[250px] w-full" />}>
-        <ClientRepairsSection clientId={clientId} />
-      </Suspense>
+      <ClientDetailsSection clientId={clientId} />
+      <ClientAssetsSection clientId={clientId} />
+      <ClientRepairsSection clientId={clientId} />
     </PageWrapper>
   );
 }

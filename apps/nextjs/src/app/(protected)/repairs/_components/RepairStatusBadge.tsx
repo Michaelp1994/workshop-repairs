@@ -12,12 +12,12 @@ interface RepairStatusBadgeProps {
 export default function RepairStatusBadge({
   repairId,
 }: RepairStatusBadgeProps) {
-  const { data: repair } = api.repairs.getById.useSuspenseQuery({
+  const [repair] = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
   return (
     <Badge className="ml-auto sm:ml-0" variant="default">
-      {repair?.status.name}
+      {repair.status.name}
     </Badge>
   );
 }

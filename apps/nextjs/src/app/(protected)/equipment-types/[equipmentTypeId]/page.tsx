@@ -9,6 +9,7 @@ import {
 import { api } from "~/trpc/server";
 
 import EquipmentTypeAssetsSection from "../_components/EquipmentTypeAssetsSection";
+import EquipmentTypeDetailsSection from "../_components/EquipmentTypeDetailsSection";
 import EquipmentTypeModelsTable from "../_components/EquipmentTypeModelsTable";
 
 interface ViewEquipmentTypePageProps {
@@ -39,7 +40,8 @@ export default async function ViewEquipmentTypePage({
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <EquipmentTypeModelsTable equipmentTypeId={equipmentTypeId} />
+      <EquipmentTypeDetailsSection equipmentTypeId={equipmentTypeId} />
+      {/* <EquipmentTypeModelsTable equipmentTypeId={equipmentTypeId} /> */}
       <EquipmentTypeAssetsSection equipmentTypeId={equipmentTypeId} />
     </PageWrapper>
   );

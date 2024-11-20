@@ -14,6 +14,7 @@ import {
   createDataTableQuery,
   createGlobalFilters,
 } from "../mappings/model.mapper";
+import { equipmentTypeTable } from "../tables/equipment-type.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
 import {
   type ArchiveModel,
@@ -78,16 +79,18 @@ export async function getModelById(id: ModelID) {
   const query = db
     .select({
       ...modelFields,
-      manufacturer: {
-        id: manufacturerTable.id,
-        name: manufacturerTable.name,
-      },
+      manufacturer: manufacturerTable,
+      equipmentType: equipmentTypeTable,
       imageUrl: modelImageTable.url,
     })
     .from(modelTable)
-    .leftJoin(
+    .innerJoin(
       manufacturerTable,
       eq(modelTable.manufacturerId, manufacturerTable.id),
+    )
+    .innerJoin(
+      equipmentTypeTable,
+      eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
     )
     .leftJoin(
       modelImageTable,
