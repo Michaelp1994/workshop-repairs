@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { modelId, partId } from "./ids.validators";
+import { modelId, partId } from "../isomorphic/ids.validators";
 
 export const createPartToModelSchema = z.object({
   quantity: z.number().positive(),

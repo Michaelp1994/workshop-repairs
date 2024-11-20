@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { userTypeId } from "./ids.validators";
+import { userTypeId } from "../isomorphic/ids.validators";
 
 export const createUserTypeSchema = z.object({
   name: z.string().min(3),

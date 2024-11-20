@@ -17,7 +17,7 @@ import {
   defaultRepairComment,
   type RepairCommentFormInput,
   repairCommentFormSchema,
-} from "@repo/validators/forms/repairComments.schema";
+} from "@repo/validators/client/repairComments.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

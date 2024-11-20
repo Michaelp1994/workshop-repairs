@@ -17,7 +17,7 @@ import {
   defaultModel,
   type ModelFormInput,
   modelFormSchema,
-} from "@repo/validators/forms/models.schema";
+} from "@repo/validators/client/models.schema";
 import { useRouter } from "next/navigation";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";

@@ -17,7 +17,7 @@ import {
   getAssetByRepairIdSchema,
   getAssetsCountSchema,
   updateAssetSchema,
-} from "@repo/validators/assets.validators";
+} from "@repo/validators/server/assets.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

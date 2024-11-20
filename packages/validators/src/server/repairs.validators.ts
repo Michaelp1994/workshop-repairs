@@ -6,7 +6,7 @@ import {
   repairId,
   repairStatusTypeId,
   repairTypeId,
-} from "./ids.validators";
+} from "../isomorphic/ids.validators";
 
 export const getAllRepairsByAssetIdSchema = z.object({
   assetId,

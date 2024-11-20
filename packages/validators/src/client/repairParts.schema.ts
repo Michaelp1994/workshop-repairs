@@ -1,4 +1,4 @@
-import { partId } from "@repo/validators/ids.validators";
+import { partId } from "../isomorphic/ids.validators";
 import { z } from "zod";
 
 export const repairPartFormSchema = z.object({

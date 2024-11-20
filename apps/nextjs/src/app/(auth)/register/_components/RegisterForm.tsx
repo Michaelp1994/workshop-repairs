@@ -17,7 +17,7 @@ import {
   defaultRegister,
   type RegisterFormInput,
   registerFormSchema,
-} from "@repo/validators/forms/auth.schema";
+} from "@repo/validators/client/auth.schema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 

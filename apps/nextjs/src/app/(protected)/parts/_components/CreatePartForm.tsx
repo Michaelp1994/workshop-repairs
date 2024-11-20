@@ -17,7 +17,7 @@ import {
   defaultPart,
   type PartFormInput,
   partFormSchema,
-} from "@repo/validators/forms/parts.schema";
+} from "@repo/validators/client/parts.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

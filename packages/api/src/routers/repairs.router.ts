@@ -8,8 +8,8 @@ import {
   updateRepair,
 } from "@repo/db/repositories/repair.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createRepairSchema,
   getRepairByIdSchema,
   updateRepairSchema,
-} from "@repo/validators/repairs.validators";
+} from "@repo/validators/server/repairs.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -30,14 +30,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
       const allRepairs = await getAllRepairs(input, ctx.session.organizationId);
       return allRepairs;
     }),
 
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getRepairsCount(input, ctx.session.organizationId);
       if (count === undefined) {

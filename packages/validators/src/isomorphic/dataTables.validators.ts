@@ -34,7 +34,7 @@ export const columnFiltersSchema = z
 
 export type ColumnFilters = z.infer<typeof columnFiltersSchema>;
 
-export const getAllSchema = z.object({
+export const dataTableSchema = z.object({
   pagination: paginationSchema.default({
     pageIndex: 0,
     pageSize: 10,
@@ -45,15 +45,15 @@ export const getAllSchema = z.object({
   columnFilters: columnFiltersSchema.default([]),
 });
 
-export type GetAllInput = z.infer<typeof getAllSchema>;
+export type DataTableInput = z.infer<typeof dataTableSchema>;
 
-export const getCountSchema = z.object({
+export const dataTableCountSchema = z.object({
   globalFilter: globalFilterSchema.default(""),
   columns: columnVisibilitySchema.default({}),
   columnFilters: columnFiltersSchema.default([]),
 });
 
-export type GetCountInput = z.infer<typeof getCountSchema>;
+export type DataTableCountSchema = z.infer<typeof dataTableCountSchema>;
 
 export const getSelectSchema = z.object({
   limit: z.number().min(1).max(100).optional().default(10),

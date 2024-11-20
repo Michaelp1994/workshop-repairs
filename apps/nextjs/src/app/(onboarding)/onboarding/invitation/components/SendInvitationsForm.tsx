@@ -15,7 +15,7 @@ import {
   defaultInviteOthers,
   type InviteOthersInput,
   inviteOthersSchema,
-} from "@repo/validators/forms/organization.schema";
+} from "@repo/validators/client/organization.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

@@ -17,7 +17,7 @@ import {
   defaultLocation,
   type LocationFormInput,
   locationFormSchema,
-} from "@repo/validators/forms/locations.schema";
+} from "@repo/validators/client/locations.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

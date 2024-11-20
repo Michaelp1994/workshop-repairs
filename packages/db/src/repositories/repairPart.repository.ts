@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -19,7 +19,7 @@ import {
 
 const repairPartFields = getTableColumns(repairPartTable);
 
-export function getAllRepairParts({ pagination }: GetAllInput) {
+export function getAllRepairParts({ pagination }: DataTableInput) {
   const query = db
     .select()
     .from(repairPartTable)
@@ -30,7 +30,7 @@ export function getAllRepairParts({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getRepairPartsCount(_: GetCountInput) {
+export async function getRepairPartsCount(_: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(repairPartTable)

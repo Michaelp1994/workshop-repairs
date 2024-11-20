@@ -8,8 +8,8 @@ import {
   updateRepairImage,
 } from "@repo/db/repositories/repairImage.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveRepairImageSchema,
@@ -17,7 +17,7 @@ import {
   getAllRepairImagesByRepairIdSchema,
   getRepairImageByIdSchema,
   updateRepairImageSchema,
-} from "@repo/validators/repairImages.validators";
+} from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -29,15 +29,19 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairImages = getAllRepairImages(input);
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairImages = getAllRepairImages(input);
 
-    return allRepairImages;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getRepairImagesCount(input);
-    return count;
-  }),
+      return allRepairImages;
+    }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getRepairImagesCount(input);
+      return count;
+    }),
   getAllByRepairId: organizationProcedure
     .input(getAllRepairImagesByRepairIdSchema)
     .query(async ({ input }) => {

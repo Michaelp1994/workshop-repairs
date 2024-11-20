@@ -20,7 +20,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type RepairPartFormInput,
   repairPartFormSchema,
-} from "@repo/validators/forms/repairParts.schema";
+} from "@repo/validators/client/repairParts.schema";
 import { useRouter } from "next/navigation";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";

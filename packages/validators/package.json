@@ -7,8 +7,9 @@
   "author": "",
   "type": "module",
   "exports": {
-    "./*": "./src/schemas/*.ts",
-    "./forms/*": "./src/forms/*.ts",
+    "./server/*": "./src/server/*.ts",
+    "./client/*": "./src/client/*.ts",
+    "./*": "./src/isomorphic/*.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {

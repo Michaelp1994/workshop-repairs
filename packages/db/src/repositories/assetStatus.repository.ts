@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -15,7 +15,7 @@ import {
   type UpdateAssetStatus,
 } from "../tables/asset-status.sql";
 
-export function getAllAssetStatuses({ pagination }: GetAllInput) {
+export function getAllAssetStatuses({ pagination }: DataTableInput) {
   const query = db
     .select()
     .from(assetStatusTable)
@@ -26,7 +26,7 @@ export function getAllAssetStatuses({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getAssetStatusesCount(_: GetCountInput) {
+export async function getAssetStatusesCount(_: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(assetStatusTable)

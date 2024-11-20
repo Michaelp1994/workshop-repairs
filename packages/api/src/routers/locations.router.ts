@@ -8,8 +8,8 @@ import {
   updateLocation,
 } from "@repo/db/repositories/location.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createLocationSchema,
   getLocationByIdSchema,
   updateLocationSchema,
-} from "@repo/validators/locations.validators";
+} from "@repo/validators/server/locations.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -29,13 +29,15 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(({ ctx, input }) => {
-    const allLocations = getAllLocations(input, ctx.session.organizationId);
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(({ ctx, input }) => {
+      const allLocations = getAllLocations(input, ctx.session.organizationId);
 
-    return allLocations;
-  }),
+      return allLocations;
+    }),
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
       const count = getLocationsCount(input, ctx.session.organizationId);
       return count;

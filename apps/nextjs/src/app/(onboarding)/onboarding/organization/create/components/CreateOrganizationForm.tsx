@@ -15,7 +15,7 @@ import {
   type CreateOrganizationInput,
   createOrganizationSchema,
   defaultOrganization,
-} from "@repo/validators/forms/organization.schema";
+} from "@repo/validators/client/organization.schema";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

@@ -16,7 +16,7 @@ import {
   defaultLogin,
   type ForgotPasswordFormInput,
   forgotPasswordFormSchema,
-} from "@repo/validators/forms/auth.schema";
+} from "@repo/validators/client/auth.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

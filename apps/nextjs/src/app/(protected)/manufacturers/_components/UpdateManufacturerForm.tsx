@@ -18,7 +18,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "@repo/validators/forms/manufacturers.schema";
+} from "@repo/validators/client/manufacturers.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

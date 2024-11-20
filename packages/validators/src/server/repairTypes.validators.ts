@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { repairTypeId } from "./ids.validators";
+import { repairTypeId } from "../isomorphic/ids.validators";
 
 export const createRepairTypeSchema = z.object({
   name: z.string().min(3),

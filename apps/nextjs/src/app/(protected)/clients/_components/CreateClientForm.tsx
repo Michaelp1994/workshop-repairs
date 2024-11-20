@@ -17,7 +17,7 @@ import {
   type ClientFormInput,
   clientFormSchema,
   defaultClient,
-} from "@repo/validators/forms/clients.schema";
+} from "@repo/validators/client/clients.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

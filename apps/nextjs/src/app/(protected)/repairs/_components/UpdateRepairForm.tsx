@@ -19,7 +19,7 @@ import { Textarea } from "@repo/ui/textarea";
 import {
   type RepairFormInput,
   repairFormSchema,
-} from "@repo/validators/forms/repair.schema";
+} from "@repo/validators/client/repair.schema";
 
 import ClientSelect from "~/components/selects/ClientSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";

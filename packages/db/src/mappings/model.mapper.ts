@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, type SQL } from "drizzle-orm";
@@ -43,7 +43,7 @@ export const createSortOrder = createOrderByFunction(orderMapping);
 const modelFields = getTableColumns(modelTable);
 
 export function createDataTableQuery(
-  { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
+  { pagination, globalFilter, sorting, columnFilters }: DataTableInput,
   ...filters: (SQL | undefined)[]
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);
@@ -78,7 +78,7 @@ export function createDataTableQuery(
 }
 
 export function createCountQuery(
-  { globalFilter, columnFilters }: GetCountInput,
+  { globalFilter, columnFilters }: DataTableCountSchema,
   ...filters: SQL[]
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);

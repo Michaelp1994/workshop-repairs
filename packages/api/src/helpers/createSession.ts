@@ -1,5 +1,5 @@
-import type { Session } from "@repo/validators/auth.validators";
 import type { OrganizationID, UserID } from "@repo/validators/ids.validators";
+import type { Session } from "@repo/validators/server/auth.validators";
 
 import { generateToken } from "@repo/auth/tokens";
 

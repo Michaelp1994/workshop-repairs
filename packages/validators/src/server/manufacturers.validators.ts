@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { manufacturerId } from "./ids.validators";
+import { manufacturerId } from "../isomorphic/ids.validators";
 
 export const createManufacturerSchema = z.object({
   name: z.string().min(3),

@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -15,7 +15,7 @@ import {
   userTypeTable,
 } from "../tables/user-type.sql";
 
-export function getAllUserTypes({ pagination }: GetAllInput) {
+export function getAllUserTypes({ pagination }: DataTableInput) {
   const query = db
     .select()
     .from(userTypeTable)
@@ -26,7 +26,7 @@ export function getAllUserTypes({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getUserTypesCount(_: GetCountInput) {
+export async function getUserTypesCount(_: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(userTypeTable)

@@ -12,10 +12,10 @@ import {
   createAssetStatusSchema,
   getAssetStatusByIdSchema,
   updateAssetStatusSchema,
-} from "@repo/validators/assetStatuses.validators";
+} from "@repo/validators/server/assetStatuses.validators";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import { TRPCError } from "@trpc/server";
@@ -29,14 +29,18 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allUserTypes = getAllAssetStatuses(input);
-    return allUserTypes;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getAssetStatusesCount(input);
-    return count;
-  }),
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allUserTypes = getAllAssetStatuses(input);
+      return allUserTypes;
+    }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getAssetStatusesCount(input);
+      return count;
+    }),
   getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
     const allUserTypes = getAssetStatusSelect(input);
     return allUserTypes;

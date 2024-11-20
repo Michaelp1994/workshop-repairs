@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -23,7 +23,7 @@ import {
 } from "../tables/location.sql";
 
 export function getAllLocations(
-  { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
+  { pagination, globalFilter, sorting, columnFilters }: DataTableInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -47,7 +47,7 @@ export function getAllLocations(
 }
 
 export async function getLocationsCount(
-  { globalFilter, columnFilters }: GetCountInput,
+  { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

@@ -8,8 +8,8 @@ import {
   updateRepairComment,
 } from "@repo/db/repositories/repairComment.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveRepairCommentSchema,
@@ -17,7 +17,7 @@ import {
   getAllRepairCommentsByRepairIdSchema,
   getRepairCommentByIdSchema,
   updateRepairCommentSchema,
-} from "@repo/validators/repairComments.validators";
+} from "@repo/validators/server/repairComments.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -29,15 +29,19 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairComments = getAllRepairComments(input);
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairComments = getAllRepairComments(input);
 
-    return allRepairComments;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getRepairCommentsCount(input);
-    return count;
-  }),
+      return allRepairComments;
+    }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getRepairCommentsCount(input);
+      return count;
+    }),
   getById: organizationProcedure
     .input(getRepairCommentByIdSchema)
     .query(async ({ input }) => {

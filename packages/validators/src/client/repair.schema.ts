@@ -3,7 +3,7 @@ import {
   clientId,
   repairStatusTypeId,
   repairTypeId,
-} from "@repo/validators/ids.validators";
+} from "../isomorphic/ids.validators";
 import { z } from "zod";
 
 export const repairFormSchema = z.object({

@@ -12,8 +12,8 @@ import {
   updateModelImage,
 } from "@repo/db/repositories/modelImage.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveModelImageSchema,
@@ -23,7 +23,7 @@ import {
   setFavouriteModelImageSchema,
   updateModelImageSchema,
   uploadModelImageSchema,
-} from "@repo/validators/modelImages.validators";
+} from "@repo/validators/server/modelImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -37,15 +37,19 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allModelImages = getAllModelImages(input);
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allModelImages = getAllModelImages(input);
 
-    return allModelImages;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getModelImagesCount(input);
-    return count;
-  }),
+      return allModelImages;
+    }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getModelImagesCount(input);
+      return count;
+    }),
   getAllByModelId: organizationProcedure
     .input(getAllModelImagesByModelIdSchema)
     .query(async ({ input }) => {

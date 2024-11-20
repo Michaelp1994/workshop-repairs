@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { partId } from "./ids.validators";
+import { partId } from "../isomorphic/ids.validators";
 
 export const createPartSchema = z.object({
   name: z.string().min(3),

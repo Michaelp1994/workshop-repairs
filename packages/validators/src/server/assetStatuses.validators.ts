@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { assetStatusId } from "./ids.validators";
+import { assetStatusId } from "../isomorphic/ids.validators";
 
 export const createAssetStatusSchema = z.object({
   name: z.string().min(3),

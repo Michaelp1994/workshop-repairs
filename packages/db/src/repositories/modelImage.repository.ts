@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, isNull } from "drizzle-orm";
@@ -15,7 +15,7 @@ import {
   type UpdateModelImage,
 } from "../tables/model-image.sql";
 
-export function getAllModelImages({ pagination }: GetAllInput) {
+export function getAllModelImages({ pagination }: DataTableInput) {
   const query = db
     .select()
     .from(modelImageTable)
@@ -26,7 +26,7 @@ export function getAllModelImages({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getModelImagesCount(_: GetCountInput) {
+export async function getModelImagesCount(_: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(modelImageTable)

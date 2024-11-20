@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { userId, userTypeId } from "./ids.validators";
+import { userId, userTypeId } from "../isomorphic/ids.validators";
 
 export const registerUserSchema = z.object({
   firstName: z.string().min(3),

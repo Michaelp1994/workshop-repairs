@@ -8,8 +8,8 @@ import {
   updateRepairType,
 } from "@repo/db/repositories/repairType.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createRepairTypeSchema,
   getRepairTypeByIdSchema,
   updateRepairTypeSchema,
-} from "@repo/validators/repairTypes.validators";
+} from "@repo/validators/server/repairTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -29,14 +29,18 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairTypes = getAllRepairTypes(input);
-    return allRepairTypes;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getRepairTypesCount(input);
-    return count;
-  }),
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairTypes = getAllRepairTypes(input);
+      return allRepairTypes;
+    }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getRepairTypesCount(input);
+      return count;
+    }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {

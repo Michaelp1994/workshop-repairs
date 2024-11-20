@@ -1,7 +1,4 @@
-import {
-  equipmentTypeId,
-  manufacturerId,
-} from "@repo/validators/ids.validators";
+import { equipmentTypeId, manufacturerId } from "../isomorphic/ids.validators";
 import { z } from "zod";
 
 export const modelFormSchema = z.object({

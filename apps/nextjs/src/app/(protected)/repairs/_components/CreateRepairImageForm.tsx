@@ -18,7 +18,7 @@ import {
   defaultRepairImage,
   type RepairImageFormInput,
   repairImageFormSchema,
-} from "@repo/validators/forms/repairImages.schema";
+} from "@repo/validators/client/repairImages.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

@@ -17,7 +17,7 @@ import {
   getModelByIdSchema,
   getModelsCountSchema,
   updateModelSchema,
-} from "@repo/validators/models.validators";
+} from "@repo/validators/server/models.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

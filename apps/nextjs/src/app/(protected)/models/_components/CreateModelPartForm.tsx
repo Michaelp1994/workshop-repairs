@@ -19,7 +19,7 @@ import {
   defaultModelPart,
   type ModelPartFormInput,
   modelPartFormSchema,
-} from "@repo/validators/forms/partsToModels.schema";
+} from "@repo/validators/client/partsToModels.schema";
 
 import PartSelect from "~/components/selects/PartSelect";
 import { api } from "~/trpc/client";

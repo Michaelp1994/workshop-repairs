@@ -17,7 +17,7 @@ import {
   createOrganizationSchema,
   inviteOthersToOrganizationSchema,
   joinOrganizationSchema,
-} from "@repo/validators/organization.validators";
+} from "@repo/validators/server/organization.validators";
 import { TRPCError } from "@trpc/server";
 import { Resource } from "sst";
 import { ZodError } from "zod";

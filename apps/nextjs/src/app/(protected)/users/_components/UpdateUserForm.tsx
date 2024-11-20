@@ -18,7 +18,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   UserFormInput,
   userFormSchema,
-} from "@repo/validators/forms/users.schema";
+} from "@repo/validators/client/users.schema";
 import { useRouter } from "next/navigation";
 
 import UserTypeSelect from "~/components/selects/UserTypeSelect";

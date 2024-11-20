@@ -16,7 +16,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type UpdateProfileFormInput,
   updateProfileFormSchema,
-} from "@repo/validators/forms/auth.schema";
+} from "@repo/validators/client/auth.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

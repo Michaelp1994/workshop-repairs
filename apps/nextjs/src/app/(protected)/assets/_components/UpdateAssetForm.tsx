@@ -18,7 +18,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type AssetFormInput,
   assetFormSchema,
-} from "@repo/validators/forms/assets.schema";
+} from "@repo/validators/client/assets.schema";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import ClientSelect from "~/components/selects/ClientSelect";

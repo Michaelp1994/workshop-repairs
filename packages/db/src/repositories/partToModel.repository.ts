@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -28,7 +28,7 @@ export function getAllPartsToModels({
   pagination,
   globalFilter,
   columnFilters,
-}: GetAllInput) {
+}: DataTableInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
 
@@ -59,7 +59,7 @@ export function getAllPartsToModels({
 export async function getPartsToModelsCount({
   columnFilters,
   globalFilter,
-}: GetCountInput) {
+}: DataTableCountSchema) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db

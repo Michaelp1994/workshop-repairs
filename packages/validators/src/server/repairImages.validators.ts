@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { repairId, repairImageId } from "./ids.validators";
+import { repairId, repairImageId } from "../isomorphic/ids.validators";
 
 export const getAllRepairImagesByRepairIdSchema = z.object({
   repairId,

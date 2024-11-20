@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { locationId } from "./ids.validators";
+import { locationId } from "../isomorphic/ids.validators";
 
 export const createLocationSchema = z.object({
   name: z.string().min(3),

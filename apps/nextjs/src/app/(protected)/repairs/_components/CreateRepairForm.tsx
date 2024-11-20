@@ -18,7 +18,7 @@ import {
   defaultRepair,
   type RepairFormInput,
   repairFormSchema,
-} from "@repo/validators/forms/repair.schema";
+} from "@repo/validators/client/repair.schema";
 import { useRouter } from "next/navigation";
 
 import AssetSelect from "~/components/selects/AssetSelect";

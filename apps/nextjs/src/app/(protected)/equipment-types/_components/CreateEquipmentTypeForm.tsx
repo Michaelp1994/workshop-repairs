@@ -18,7 +18,7 @@ import {
   defaultEquipmentType,
   type EquipmentTypeFormInput,
   equipmentTypeFormSchema,
-} from "@repo/validators/forms/equipmentTypes.schema";
+} from "@repo/validators/client/equipmentTypes.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

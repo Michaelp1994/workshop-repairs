@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -31,7 +31,7 @@ import { type RepairID, repairTable } from "../tables/repair.sql";
 const assetFields = getTableColumns(assetTable);
 
 export async function getAllAssets(
-  dataTableParams: GetAllInput,
+  dataTableParams: DataTableInput,
   organizationId: OrganizationID,
 ) {
   const query = createDataTableQuery(
@@ -46,7 +46,7 @@ export async function getAllAssets(
 }
 
 export async function getAssetsCount(
-  dataTableParams: GetCountInput,
+  dataTableParams: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
   const query = createCountTableQuery(

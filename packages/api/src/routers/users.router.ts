@@ -14,10 +14,10 @@ import {
 import {
   confirmEmailSchema,
   resetPasswordSchema,
-} from "@repo/validators/auth.validators";
+} from "@repo/validators/server/auth.validators";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveUserSchema,
@@ -26,7 +26,7 @@ import {
   getUserByIdSchema,
   updateCurrentUserSchema,
   updateUserSchema,
-} from "@repo/validators/users.validators";
+} from "@repo/validators/server/users.validators";
 import { TRPCError } from "@trpc/server";
 
 import createSession from "../helpers/createSession";
@@ -40,14 +40,14 @@ import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ input, ctx }) => {
       const allUsers = getAllUsers(input, ctx.session.organizationId);
 
       return allUsers;
     }),
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(dataTableCountSchema)
     .query(({ input, ctx }) => {
       const count = getUsersCount(input, ctx.session.organizationId);
       return count;

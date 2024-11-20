@@ -1,4 +1,4 @@
-import { modelId, partId } from "@repo/validators/ids.validators";
+import { modelId, partId } from "../isomorphic/ids.validators";
 import { z } from "zod";
 
 export const modelPartFormSchema = z.object({

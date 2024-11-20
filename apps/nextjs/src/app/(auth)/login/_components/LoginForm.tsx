@@ -15,7 +15,7 @@ import {
   defaultLogin,
   type LoginFormInput,
   loginFormSchema,
-} from "@repo/validators/forms/auth.schema";
+} from "@repo/validators/client/auth.schema";
 import { useRouter } from "next/navigation";
 
 import ErrorAlert from "~/components/ErrorAlert";

@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -23,7 +23,7 @@ import {
 } from "../tables/manufacturer.sql";
 
 export function getAllManufacturers(
-  { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
+  { pagination, sorting, globalFilter, columnFilters }: DataTableInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -48,7 +48,7 @@ export function getAllManufacturers(
 }
 
 export async function getManufacturersCount(
-  { globalFilter, columnFilters }: GetCountInput,
+  { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

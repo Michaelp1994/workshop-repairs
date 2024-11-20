@@ -16,7 +16,7 @@ import {
   defaultModelImage,
   type ModelImageFormInput,
   modelImageFormSchema,
-} from "@repo/validators/forms/modelImages.schema";
+} from "@repo/validators/client/modelImages.schema";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { useRef } from "react";
 

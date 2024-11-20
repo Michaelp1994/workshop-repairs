@@ -8,8 +8,8 @@ import {
   updateUserType,
 } from "@repo/db/repositories/userType.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createUserTypeSchema,
   getUserTypeByIdSchema,
   updateUserTypeSchema,
-} from "@repo/validators/userTypes.validators";
+} from "@repo/validators/server/userTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -28,14 +28,18 @@ import {
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allUserTypes = getAllUserTypes(input);
-    return allUserTypes;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getUserTypesCount(input);
-    return count;
-  }),
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allUserTypes = getAllUserTypes(input);
+      return allUserTypes;
+    }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getUserTypesCount(input);
+      return count;
+    }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {

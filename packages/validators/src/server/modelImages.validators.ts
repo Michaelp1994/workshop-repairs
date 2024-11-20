@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { modelId, modelImageId } from "./ids.validators";
+import { modelId, modelImageId } from "../isomorphic/ids.validators";
 
 export const createModelImageSchema = z.object({
   caption: z.string().min(3),

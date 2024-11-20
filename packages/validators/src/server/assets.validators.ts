@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
-} from "./dataTables.validators";
+} from "../isomorphic/dataTables.validators";
 import {
   assetId,
   assetStatusId,
@@ -12,12 +12,12 @@ import {
   locationId,
   modelId,
   repairId,
-} from "./ids.validators";
+} from "../isomorphic/ids.validators";
 
 // Data Tables.
 
-export const getAllAssetsSchema = getAllSchema.extend({});
-export const getAssetsCountSchema = getCountSchema.extend({});
+export const getAllAssetsSchema = dataTableSchema.extend({});
+export const getAssetsCountSchema = dataTableCountSchema.extend({});
 export const getAssestsSelectSchema = getSelectSchema.extend({});
 
 export const getAssetByIdSchema = z.object({

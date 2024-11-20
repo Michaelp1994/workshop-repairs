@@ -17,7 +17,7 @@ import {
   type AssetFormInput,
   assetFormSchema,
   defaultAsset,
-} from "@repo/validators/forms/assets.schema";
+} from "@repo/validators/client/assets.schema";
 import { useRouter } from "next/navigation";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";

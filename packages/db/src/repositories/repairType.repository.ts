@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -15,7 +15,7 @@ import {
   type UpdateRepairType,
 } from "../tables/repair-type.sql";
 
-export function getAllRepairTypes({ pagination }: GetAllInput) {
+export function getAllRepairTypes({ pagination }: DataTableInput) {
   const query = db
     .select()
     .from(repairTypeTable)
@@ -26,7 +26,7 @@ export function getAllRepairTypes({ pagination }: GetAllInput) {
   return query.execute();
 }
 
-export async function getRepairTypesCount(_: GetCountInput) {
+export async function getRepairTypesCount(_: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(repairTypeTable)

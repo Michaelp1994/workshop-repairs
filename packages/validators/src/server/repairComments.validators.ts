@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import replaceLineBreaks from "../helpers/replaceLineBreaks";
-import { repairCommentId, repairId } from "./ids.validators";
+import { repairCommentId, repairId } from "../isomorphic/ids.validators";
 
 export const getAllRepairCommentsByRepairIdSchema = z.object({
   repairId,

@@ -6,25 +6,25 @@ import {
   getPartsToModelsSelect,
 } from "@repo/db/repositories/partToModel.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archivePartToModelSchema,
   createPartToModelSchema,
-} from "@repo/validators/partsToModel.validators";
+} from "@repo/validators/server/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(({ input }) => {
+  getAll: organizationProcedure.input(dataTableSchema).query(({ input }) => {
     const allParts = getAllPartsToModels(input);
     return allParts;
   }),
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(dataTableCountSchema)
     .query(async ({ input }) => {
       const count = await getPartsToModelsCount(input);
 
@@ -36,10 +36,12 @@ export default router({
       }
       return count;
     }),
-  getSelect: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const allParts = getPartsToModelsSelect(input);
-    return allParts;
-  }),
+  getSelect: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const allParts = getPartsToModelsSelect(input);
+      return allParts;
+    }),
   create: organizationProcedure
     .input(createPartToModelSchema)
     .mutation(async ({ input }) => {

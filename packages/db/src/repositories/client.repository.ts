@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -23,7 +23,7 @@ import {
 } from "../tables/client.sql";
 
 export function getAllClients(
-  { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
+  { pagination, sorting, globalFilter, columnFilters }: DataTableInput,
   organizationId: OrganizationID,
 ) {
   const orderBys = getOrderBy(sorting);
@@ -48,7 +48,7 @@ export function getAllClients(
 }
 
 export async function getClientsCount(
-  { globalFilter, columnFilters }: GetCountInput,
+  { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

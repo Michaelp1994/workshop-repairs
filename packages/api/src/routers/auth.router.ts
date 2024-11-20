@@ -13,7 +13,7 @@ import {
   loginSchema,
   logoutSchema,
   registerSchema,
-} from "@repo/validators/auth.validators";
+} from "@repo/validators/server/auth.validators";
 import { TRPCError } from "@trpc/server";
 import { ZodError, type ZodIssue } from "zod";
 

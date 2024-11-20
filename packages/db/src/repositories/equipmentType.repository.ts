@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -18,7 +18,7 @@ import {
 } from "../tables/equipment-type.sql";
 
 export function getAllEquipmentTypes(
-  { pagination }: GetAllInput,
+  { pagination }: DataTableInput,
   organizationId: OrganizationID,
 ) {
   const query = db
@@ -37,7 +37,7 @@ export function getAllEquipmentTypes(
 }
 
 export async function getEquipmentTypesCount(
-  _: GetCountInput,
+  _: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
   const query = db

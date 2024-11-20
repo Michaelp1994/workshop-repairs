@@ -1,6 +1,6 @@
 import type {
-  GetAllInput,
-  GetCountInput,
+  DataTableInput,
+  DataTableCountSchema,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -32,7 +32,7 @@ import { repairTypeTable } from "../tables/repair-type.sql";
 const repairFields = getTableColumns(repairTable);
 
 export function getAllRepairs(
-  { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
+  { globalFilter, sorting, pagination, columnFilters }: DataTableInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -90,7 +90,7 @@ export function getAllRepairs(
 }
 
 export async function getRepairsCount(
-  { globalFilter, columnFilters }: GetCountInput,
+  { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

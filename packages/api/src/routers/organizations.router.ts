@@ -1,5 +1,5 @@
 import { getOrganizationById } from "@repo/db/repositories/organization.repository";
-import { getOrganizationByIdSchema } from "@repo/validators/organization.validators";
+import { getOrganizationByIdSchema } from "@repo/validators/server/organization.validators";
 
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";

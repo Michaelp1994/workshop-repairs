@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-export function useDataTableState() {
+export function useDataTableState(initial: ) {
   const [pagination, setPagination] = useState<{
     pageIndex: number;
     pageSize: number;

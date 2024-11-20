@@ -1,21 +1,24 @@
 import { z } from "zod";
 
-import { getAllSchema, getCountSchema } from "./dataTables.validators";
+import {
+  dataTableSchema,
+  dataTableCountSchema,
+} from "../isomorphic/dataTables.validators";
 import {
   assetId,
   equipmentTypeId,
   manufacturerId,
   modelId,
-} from "./ids.validators";
+} from "../isomorphic/ids.validators";
 
-export const getAllModelsSchema = getAllSchema.extend({
+export const getAllModelsSchema = dataTableSchema.extend({
   equipmentTypeId: equipmentTypeId.optional(),
   manufacturerId: manufacturerId.optional(),
 });
 
 export type GetAllModelsInput = z.infer<typeof getAllModelsSchema>;
 
-export const getModelsCountSchema = getCountSchema.extend({
+export const getModelsCountSchema = dataTableCountSchema.extend({
   equipmentTypeId: equipmentTypeId.optional(),
   manufacturerId: manufacturerId.optional(),
 });

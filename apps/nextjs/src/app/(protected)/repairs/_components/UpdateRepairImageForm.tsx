@@ -17,7 +17,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type RepairImageFormInput,
   repairImageFormSchema,
-} from "@repo/validators/forms/repairImages.schema";
+} from "@repo/validators/client/repairImages.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

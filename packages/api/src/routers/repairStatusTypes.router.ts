@@ -8,8 +8,8 @@ import {
   updateRepairStatus,
 } from "@repo/db/repositories/repairStatusType.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createRepairStatusTypeSchema,
   getRepairStatusTypeByIdSchema,
   updateRepairStatusTypeSchema,
-} from "@repo/validators/repairStatusTypes.validators";
+} from "@repo/validators/server/repairStatusTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -29,21 +29,25 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairStatusTypes = getAllRepairStatusTypes(input);
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairStatusTypes = getAllRepairStatusTypes(input);
 
-    return allRepairStatusTypes;
-  }),
+      return allRepairStatusTypes;
+    }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {
       const allRepairStatusTypes = await getRepairStatusTypesSelect(input);
       return allRepairStatusTypes;
     }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = getRepairStatusTypesCount(input);
-    return count;
-  }),
+  getCount: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = getRepairStatusTypesCount(input);
+      return count;
+    }),
   getById: organizationProcedure
     .input(getRepairStatusTypeByIdSchema)
     .query(async ({ input }) => {

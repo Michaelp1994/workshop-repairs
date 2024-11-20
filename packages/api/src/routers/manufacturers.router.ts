@@ -8,8 +8,8 @@ import {
   updateManufacturer,
 } from "@repo/db/repositories/manufacturer.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createManufacturerSchema,
   getManufacturerByIdSchema,
   updateManufacturerSchema,
-} from "@repo/validators/manufacturers.validators";
+} from "@repo/validators/server/manufacturers.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -30,7 +30,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
       const allManufacturers = await getAllManufacturers(
         input,
@@ -40,7 +40,7 @@ export default router({
       return allManufacturers;
     }),
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
       const count = getManufacturersCount(input, ctx.session.organizationId);
       return count;

@@ -18,7 +18,7 @@ import { Textarea } from "@repo/ui/textarea";
 import {
   type RepairCommentFormInput,
   repairCommentFormSchema,
-} from "@repo/validators/forms/repairComments.schema";
+} from "@repo/validators/client/repairComments.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

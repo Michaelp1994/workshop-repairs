@@ -18,7 +18,7 @@ import {
   defaultManufacturer,
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "@repo/validators/forms/manufacturers.schema";
+} from "@repo/validators/client/manufacturers.schema";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";

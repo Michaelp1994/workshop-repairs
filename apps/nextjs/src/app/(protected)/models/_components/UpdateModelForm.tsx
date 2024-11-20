@@ -18,7 +18,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ModelFormInput,
   modelFormSchema,
-} from "@repo/validators/forms/models.schema";
+} from "@repo/validators/client/models.schema";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";

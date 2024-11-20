@@ -8,8 +8,8 @@ import {
   updatePart,
 } from "@repo/db/repositories/part.repository";
 import {
-  getAllSchema,
-  getCountSchema,
+  dataTableSchema,
+  dataTableCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -17,7 +17,7 @@ import {
   createPartSchema,
   getPartByIdSchema,
   updatePartSchema,
-} from "@repo/validators/parts.validators";
+} from "@repo/validators/server/parts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -30,14 +30,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
       const allParts = getAllParts(input, ctx.session.organizationId);
 
       return allParts;
     }),
   getCount: organizationProcedure
-    .input(getCountSchema)
+    .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getPartsCount(input, ctx.session.organizationId);
 
