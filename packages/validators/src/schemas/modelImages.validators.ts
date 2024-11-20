@@ -2,36 +2,36 @@ import { z } from "zod";
 
 import { modelId, modelImageId } from "./ids.validators";
 
-export const create = z.object({
+export const createModelImageSchema = z.object({
   caption: z.string().min(3),
   url: z.string().min(3),
   modelId,
 });
 
-export const uploadImage = z.object({
+export const uploadModelImageSchema = z.object({
   caption: z.string().min(3),
   image: z.instanceof(File),
   modelId,
 });
 
-export const setFavourite = z.object({
+export const setFavouriteModelImageSchema = z.object({
   id: modelImageId,
 });
 
-export const update = z.object({
+export const updateModelImageSchema = z.object({
   id: modelImageId,
   caption: z.string().min(3),
   url: z.string().min(3),
 });
 
-export const getAllByModelId = z.object({
+export const getAllModelImagesByModelIdSchema = z.object({
   modelId,
 });
 
-export const getById = z.object({
+export const getModelImageByIdSchema = z.object({
   id: modelImageId,
 });
 
-export const archive = z.object({
+export const archiveModelImageSchema = z.object({
   id: modelImageId,
 });

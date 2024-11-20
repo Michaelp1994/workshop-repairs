@@ -13,7 +13,11 @@ import {
   setOrganization,
   updateUserOnboardingByUserId,
 } from "@repo/db/repositories/userOnboarding.repository";
-import * as organizationsSchemas from "@repo/validators/organization.validators";
+import {
+  createOrganizationSchema,
+  inviteOthersToOrganizationSchema,
+  joinOrganizationSchema,
+} from "@repo/validators/organization.validators";
 import { TRPCError } from "@trpc/server";
 import { Resource } from "sst";
 import { ZodError } from "zod";
@@ -42,7 +46,7 @@ export default router({
     assertDatabaseResult(onboarding);
   }),
   createOrganization: authedProcedure
-    .input(organizationsSchemas.create)
+    .input(createOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const user = await getUserById(ctx.session.userId);
@@ -91,7 +95,7 @@ export default router({
       return { url, ...session };
     }),
   joinOrganization: authedProcedure
-    .input(organizationsSchemas.join)
+    .input(joinOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const user = await getUserOnboardingByUserId(ctx.session.userId);
       assertDatabaseResult(user);
@@ -132,7 +136,7 @@ export default router({
       };
     }),
   sendInvitations: organizationProcedure
-    .input(organizationsSchemas.inviteOthers)
+    .input(inviteOthersToOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const emails = input.emails.split(/[, \n]/);
       const emailPromises = emails.map((unprocessedEmail) => {

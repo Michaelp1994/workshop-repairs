@@ -12,7 +12,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as manufacturerSchemas from "@repo/validators/manufacturers.validators";
+import {
+  archiveManufacturerSchema,
+  createManufacturerSchema,
+  getManufacturerByIdSchema,
+  updateManufacturerSchema,
+} from "@repo/validators/manufacturers.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -51,7 +56,7 @@ export default router({
       return manufacturers;
     }),
   getById: organizationProcedure
-    .input(manufacturerSchemas.getById)
+    .input(getManufacturerByIdSchema)
     .query(async ({ input }) => {
       const manufacturer = await getManufacturerById(input.id);
 
@@ -65,7 +70,7 @@ export default router({
       return manufacturer;
     }),
   create: organizationProcedure
-    .input(manufacturerSchemas.create)
+    .input(createManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdManufacturer = await createManufacturer({
@@ -79,7 +84,7 @@ export default router({
       return createdManufacturer;
     }),
   update: organizationProcedure
-    .input(manufacturerSchemas.update)
+    .input(updateManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedManufacturer = await updateManufacturer({
@@ -92,7 +97,7 @@ export default router({
       return updatedManufacturer;
     }),
   archive: organizationProcedure
-    .input(manufacturerSchemas.archive)
+    .input(archiveManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedManufacturer = await archiveManufacturer({

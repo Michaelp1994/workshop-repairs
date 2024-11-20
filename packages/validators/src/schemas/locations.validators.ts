@@ -2,21 +2,21 @@ import { z } from "zod";
 
 import { locationId } from "./ids.validators";
 
-export const create = z.object({
+export const createLocationSchema = z.object({
   name: z.string().min(3),
   address: z.string().min(3),
 });
 
-export const update = z.object({
+export const updateLocationSchema = z.object({
   id: locationId,
   name: z.string().min(3),
   address: z.string().min(3),
 });
 
-export const getById = z.object({
+export const getLocationByIdSchema = z.object({
   id: locationId,
 });
 
-export const archive = z.object({
+export const archiveLocationSchema = z.object({
   id: locationId,
 });

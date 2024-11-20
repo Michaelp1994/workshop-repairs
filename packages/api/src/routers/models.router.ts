@@ -9,7 +9,15 @@ import {
   updateModel,
 } from "@repo/db/repositories/model.repository";
 import { getSelectSchema } from "@repo/validators/dataTables.validators";
-import * as modelSchemas from "@repo/validators/models.validators";
+import {
+  archiveModelSchema,
+  createModelSchema,
+  getAllModelsSchema,
+  getModelByAssetIdSchema,
+  getModelByIdSchema,
+  getModelsCountSchema,
+  updateModelSchema,
+} from "@repo/validators/models.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -22,14 +30,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(modelSchemas.getAllModels)
+    .input(getAllModelsSchema)
     .query(async ({ ctx, input }) => {
       const allModels = getAllModels(input, ctx.session.organizationId);
       return allModels;
     }),
 
   getCount: organizationProcedure
-    .input(modelSchemas.getCount)
+    .input(getModelsCountSchema)
     .query(({ ctx, input }) => {
       const count = getModelsCount(input, ctx.session.organizationId);
       return count;
@@ -45,7 +53,7 @@ export default router({
     }),
 
   getByAssetId: organizationProcedure
-    .input(modelSchemas.getByAssetId)
+    .input(getModelByAssetIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetById(
         input.assetId,
@@ -71,7 +79,7 @@ export default router({
       return model;
     }),
   getById: organizationProcedure
-    .input(modelSchemas.getById)
+    .input(getModelByIdSchema)
     .query(async ({ input }) => {
       const model = await getModelById(input.id);
 
@@ -85,7 +93,7 @@ export default router({
       return model;
     }),
   create: organizationProcedure
-    .input(modelSchemas.create)
+    .input(createModelSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
 
@@ -100,7 +108,7 @@ export default router({
       return createdModel;
     }),
   update: organizationProcedure
-    .input(modelSchemas.update)
+    .input(updateModelSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
 
@@ -114,7 +122,7 @@ export default router({
       return updatedModel;
     }),
   archive: organizationProcedure
-    .input(modelSchemas.archive)
+    .input(archiveModelSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 

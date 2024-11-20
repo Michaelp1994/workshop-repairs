@@ -12,7 +12,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairTypeSchemas from "@repo/validators/repairTypes.validators";
+import {
+  archiveRepairTypeSchema,
+  createRepairTypeSchema,
+  getRepairTypeByIdSchema,
+  updateRepairTypeSchema,
+} from "@repo/validators/repairTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -39,7 +44,7 @@ export default router({
       return allRepairTypes;
     }),
   getById: organizationProcedure
-    .input(repairTypeSchemas.getById)
+    .input(getRepairTypeByIdSchema)
     .query(async ({ input }) => {
       const repairType = await getRepairTypeById(input.id);
 
@@ -53,7 +58,7 @@ export default router({
       return repairType;
     }),
   create: organizationProcedure
-    .input(repairTypeSchemas.create)
+    .input(createRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdRepairType = await createRepairType({
@@ -66,7 +71,7 @@ export default router({
       return createdRepairType;
     }),
   update: organizationProcedure
-    .input(repairTypeSchemas.update)
+    .input(updateRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedRepairType = await updateRepairType({
@@ -79,7 +84,7 @@ export default router({
       return updatedRepairType;
     }),
   archive: organizationProcedure
-    .input(repairTypeSchemas.archive)
+    .input(archiveRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 

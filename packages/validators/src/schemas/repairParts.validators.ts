@@ -2,28 +2,28 @@ import { z } from "zod";
 
 import { partId, repairId, repairPartId } from "./ids.validators";
 
-export const getAllByRepairId = z.object({
+export const getAllRepairPartsByRepairIdSchema = z.object({
   id: repairId,
 });
 
-export const getById = z.object({
+export const getRepairPartByIdSchema = z.object({
   id: repairPartId,
 });
 
-export const create = z.object({
+export const createRepairPartSchema = z.object({
   quantity: z.number(),
   installed: z.boolean(),
   repairId,
   partId,
 });
 
-export const update = z.object({
+export const updateRepairPartSchema = z.object({
   id: repairPartId,
   quantity: z.number(),
   installed: z.boolean(),
   partId,
 });
 
-export const archive = z.object({
+export const archiveRepairPartSchema = z.object({
   id: repairPartId,
 });

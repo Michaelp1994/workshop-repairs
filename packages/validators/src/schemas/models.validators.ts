@@ -8,42 +8,42 @@ import {
   modelId,
 } from "./ids.validators";
 
-export const getAllModels = getAllSchema.extend({
+export const getAllModelsSchema = getAllSchema.extend({
   equipmentTypeId: equipmentTypeId.optional(),
   manufacturerId: manufacturerId.optional(),
 });
 
-export type GetAllModelsInput = z.infer<typeof getAllModels>;
+export type GetAllModelsInput = z.infer<typeof getAllModelsSchema>;
 
-export const getCount = getCountSchema.extend({
+export const getModelsCountSchema = getCountSchema.extend({
   equipmentTypeId: equipmentTypeId.optional(),
   manufacturerId: manufacturerId.optional(),
 });
 
-export type GetCountModelsInput = z.infer<typeof getCount>;
+export type GetCountModelsInput = z.infer<typeof getModelsCountSchema>;
 
-export const create = z.object({
+export const createModelSchema = z.object({
   name: z.string().min(3),
   nickname: z.string().min(2),
   manufacturerId,
   equipmentTypeId,
 });
 
-export const update = z.object({
+export const updateModelSchema = z.object({
   id: modelId,
   name: z.string().min(3),
   manufacturerId,
   equipmentTypeId,
 });
 
-export const getById = z.object({
+export const getModelByIdSchema = z.object({
   id: modelId,
 });
 
-export const getByAssetId = z.object({
+export const getModelByAssetIdSchema = z.object({
   assetId,
 });
 
-export const archive = z.object({
+export const archiveModelSchema = z.object({
   id: modelId,
 });

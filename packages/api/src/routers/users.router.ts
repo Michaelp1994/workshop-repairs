@@ -11,12 +11,22 @@ import {
   setUserEmailVerified,
   updateUser,
 } from "@repo/db/repositories/user.repository";
-import * as authSchemas from "@repo/validators/auth.validators";
+import {
+  confirmEmailSchema,
+  resetPasswordSchema,
+} from "@repo/validators/auth.validators";
 import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as userSchemas from "@repo/validators/users.validators";
+import {
+  archiveUserSchema,
+  createUserSchema,
+  getCurrentUserSchema,
+  getUserByIdSchema,
+  updateCurrentUserSchema,
+  updateUserSchema,
+} from "@repo/validators/users.validators";
 import { TRPCError } from "@trpc/server";
 
 import createSession from "../helpers/createSession";
@@ -40,17 +50,17 @@ export default router({
       return count;
     }),
   resetPassword: authedProcedure
-    .input(authSchemas.resetPassword)
+    .input(resetPasswordSchema)
     .mutation(async () => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
   sendEmailConfirmation: authedProcedure
-    .input(authSchemas.confirmEmail)
+    .input(confirmEmailSchema)
     .mutation(async ({ ctx, input }) => {
       await sendVerificationEmail(ctx.session.userId, input.email);
     }),
   confirmEmail: authedProcedure
-    .input(authSchemas.confirmEmail)
+    .input(confirmEmailSchema)
     .mutation(async ({ input }) => {
       const user = await getUserByEmail(input.email);
       if (!user) {
@@ -78,7 +88,7 @@ export default router({
     }),
 
   getCurrentUser: authedProcedure
-    .input(userSchemas.getCurrent)
+    .input(getCurrentUserSchema)
     .query(async ({ ctx }) => {
       const user = await getUserById(ctx.session.userId);
       if (!user) {
@@ -92,7 +102,7 @@ export default router({
     }),
 
   getById: organizationProcedure
-    .input(userSchemas.getById)
+    .input(getUserByIdSchema)
     .query(async ({ input }) => {
       const user = await getUserById(input.id);
 
@@ -105,13 +115,13 @@ export default router({
 
       return user;
     }),
-  create: organizationProcedure.input(userSchemas.create).mutation(async () => {
+  create: organizationProcedure.input(createUserSchema).mutation(async () => {
     throw new TRPCError({
       code: "NOT_IMPLEMENTED",
     });
   }),
   update: organizationProcedure
-    .input(userSchemas.update)
+    .input(updateUserSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedUser = await updateUser({
@@ -125,7 +135,7 @@ export default router({
     }),
 
   updateCurrent: authedProcedure
-    .input(userSchemas.updateCurrent)
+    .input(updateCurrentUserSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
 
@@ -140,7 +150,7 @@ export default router({
       return updatedUser;
     }),
   archive: organizationProcedure
-    .input(userSchemas.archive)
+    .input(archiveUserSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 

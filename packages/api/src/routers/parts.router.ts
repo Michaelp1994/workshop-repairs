@@ -12,7 +12,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as partSchemas from "@repo/validators/parts.validators";
+import {
+  archivePartSchema,
+  createPartSchema,
+  getPartByIdSchema,
+  updatePartSchema,
+} from "@repo/validators/parts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -46,7 +51,7 @@ export default router({
       return allParts;
     }),
   getById: organizationProcedure
-    .input(partSchemas.getById)
+    .input(getPartByIdSchema)
     .query(async ({ input }) => {
       const part = await getPartById(input.id);
 
@@ -60,7 +65,7 @@ export default router({
       return part;
     }),
   create: organizationProcedure
-    .input(partSchemas.create)
+    .input(createPartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdPart = await createPart({
@@ -74,7 +79,7 @@ export default router({
       return createdPart;
     }),
   update: organizationProcedure
-    .input(partSchemas.update)
+    .input(updatePartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedPart = await updatePart({
@@ -87,7 +92,7 @@ export default router({
       return updatedPart;
     }),
   archive: organizationProcedure
-    .input(partSchemas.archive)
+    .input(archivePartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 

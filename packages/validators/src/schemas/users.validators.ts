@@ -2,14 +2,14 @@ import { z } from "zod";
 
 import { userId, userTypeId } from "./ids.validators";
 
-export const register = z.object({
+export const registerUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-export const create = z.object({
+export const createUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
   email: z.string().email(),
@@ -17,7 +17,7 @@ export const create = z.object({
   password: z.string().min(8),
 });
 
-export const update = z.object({
+export const updateUserSchema = z.object({
   id: userId,
   firstName: z.string().min(3),
   lastName: z.string().min(3),
@@ -26,18 +26,18 @@ export const update = z.object({
   password: z.string().min(8),
 });
 
-export const updateCurrent = z.object({
+export const updateCurrentUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
   email: z.string().email(),
 });
 
-export const getCurrent = z.object({});
+export const getCurrentUserSchema = z.object({});
 
-export const getById = z.object({
+export const getUserByIdSchema = z.object({
   id: userId,
 });
 
-export const archive = z.object({
+export const archiveUserSchema = z.object({
   id: userId,
 });

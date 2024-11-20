@@ -10,7 +10,12 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as userTypeSchemas from "@repo/validators/userTypes.validators";
+import {
+  archiveUserTypeSchema,
+  createUserTypeSchema,
+  getUserTypeByIdSchema,
+  updateUserTypeSchema,
+} from "@repo/validators/userTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -30,7 +35,7 @@ export default router({
     return count;
   }),
   getById: organizationProcedure
-    .input(userTypeSchemas.getById)
+    .input(getUserTypeByIdSchema)
     .query(async ({ input }) => {
       const userType = await getUserTypeById(input.id);
 
@@ -44,7 +49,7 @@ export default router({
       return userType;
     }),
   create: organizationProcedure
-    .input(userTypeSchemas.create)
+    .input(createUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdUserType = await createUserType({
@@ -61,7 +66,7 @@ export default router({
       return createdUserType;
     }),
   update: organizationProcedure
-    .input(userTypeSchemas.update)
+    .input(updateUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedUserType = await updateUserType({
@@ -79,7 +84,7 @@ export default router({
       return updatedUserType;
     }),
   archive: organizationProcedure
-    .input(userTypeSchemas.archive)
+    .input(archiveUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedUserType = await archiveUserType({

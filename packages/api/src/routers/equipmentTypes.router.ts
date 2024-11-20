@@ -12,7 +12,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as equipmentTypeSchemas from "@repo/validators/equipmentTypes.validators";
+import {
+  archiveEquipmentTypeSchema,
+  createEquipmentTypeSchema,
+  getEquipmentTypeByIdSchema,
+  updateEquipmentTypeSchema,
+} from "@repo/validators/equipmentTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -51,7 +56,7 @@ export default router({
       return allEquipmentTypes;
     }),
   getById: organizationProcedure
-    .input(equipmentTypeSchemas.getById)
+    .input(getEquipmentTypeByIdSchema)
     .query(async ({ input }) => {
       const repairType = await getEquipmentTypeById(input.id);
 
@@ -65,7 +70,7 @@ export default router({
       return repairType;
     }),
   create: organizationProcedure
-    .input(equipmentTypeSchemas.create)
+    .input(createEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdEquipmentType = await createEquipmentType({
@@ -79,7 +84,7 @@ export default router({
       return createdEquipmentType;
     }),
   update: organizationProcedure
-    .input(equipmentTypeSchemas.update)
+    .input(updateEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedEquipmentType = await updateEquipmentType({
@@ -92,7 +97,7 @@ export default router({
       return updatedEquipmentType;
     }),
   archive: organizationProcedure
-    .input(equipmentTypeSchemas.archive)
+    .input(archiveEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 

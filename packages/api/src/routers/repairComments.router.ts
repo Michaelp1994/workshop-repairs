@@ -11,7 +11,13 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairCommentSchemas from "@repo/validators/repairComments.validators";
+import {
+  archiveRepairCommentSchema,
+  createRepairCommentSchema,
+  getAllRepairCommentsByRepairIdSchema,
+  getRepairCommentByIdSchema,
+  updateRepairCommentSchema,
+} from "@repo/validators/repairComments.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -33,7 +39,7 @@ export default router({
     return count;
   }),
   getById: organizationProcedure
-    .input(repairCommentSchemas.getById)
+    .input(getRepairCommentByIdSchema)
     .query(async ({ input }) => {
       const repairComment = await getRepairCommentById(input.id);
 
@@ -47,14 +53,14 @@ export default router({
       return repairComment;
     }),
   getAllByRepairId: organizationProcedure
-    .input(repairCommentSchemas.getAllByRepairId)
+    .input(getAllRepairCommentsByRepairIdSchema)
     .query(async ({ input }) => {
       const allRepairParts = getAllRepairCommentsByRepairId(input.repairId);
 
       return allRepairParts;
     }),
   create: organizationProcedure
-    .input(repairCommentSchemas.create)
+    .input(createRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdRepairComment = await createRepairComment({
@@ -67,7 +73,7 @@ export default router({
       return createdRepairComment;
     }),
   update: organizationProcedure
-    .input(repairCommentSchemas.update)
+    .input(updateRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedRepairComment = await updateRepairComment({
@@ -80,7 +86,7 @@ export default router({
       return updatedRepairComment;
     }),
   archive: organizationProcedure
-    .input(repairCommentSchemas.archive)
+    .input(archiveRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedRepairComment = await archiveRepairComment({

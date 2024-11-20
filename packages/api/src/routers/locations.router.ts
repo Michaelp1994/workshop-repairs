@@ -12,7 +12,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as locationSchemas from "@repo/validators/locations.validators";
+import {
+  archiveLocationSchema,
+  createLocationSchema,
+  getLocationByIdSchema,
+  updateLocationSchema,
+} from "@repo/validators/locations.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -42,7 +47,7 @@ export default router({
       return locations;
     }),
   getById: organizationProcedure
-    .input(locationSchemas.getById)
+    .input(getLocationByIdSchema)
     .query(async ({ input }) => {
       const location = await getLocationById(input.id);
 
@@ -56,7 +61,7 @@ export default router({
       return location;
     }),
   create: organizationProcedure
-    .input(locationSchemas.create)
+    .input(createLocationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdLocation = await createLocation({
@@ -70,7 +75,7 @@ export default router({
       return createdLocation;
     }),
   update: organizationProcedure
-    .input(locationSchemas.update)
+    .input(updateLocationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedLocation = await updateLocation({
@@ -83,7 +88,7 @@ export default router({
       return updatedLocation;
     }),
   archive: organizationProcedure
-    .input(locationSchemas.archive)
+    .input(archiveLocationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedLocation = await archiveLocation({

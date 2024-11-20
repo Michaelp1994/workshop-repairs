@@ -8,8 +8,16 @@ import {
   getAssetsSelect,
   updateAsset,
 } from "@repo/db/repositories/asset.repository";
-import * as assetSchemas from "@repo/validators/assets.validators";
-import { getSelectSchema } from "@repo/validators/dataTables.validators";
+import {
+  archiveAssetSchema,
+  createAssetSchema,
+  getAllAssetsSchema,
+  getAssestsSelectSchema,
+  getAssetByIdSchema,
+  getAssetByRepairIdSchema,
+  getAssetsCountSchema,
+  updateAssetSchema,
+} from "@repo/validators/assets.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -22,20 +30,20 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(assetSchemas.getAll)
+    .input(getAllAssetsSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await getAllAssets(input, ctx.session.organizationId);
       return allAssets;
     }),
   getCount: organizationProcedure
-    .input(assetSchemas.getCount)
+    .input(getAssetsCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getAssetsCount(input, ctx.session.organizationId);
       assertDatabaseResult(count);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getAssestsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await getAssetsSelect(
         input,
@@ -44,7 +52,7 @@ export default router({
       return allAssets;
     }),
   getById: organizationProcedure
-    .input(assetSchemas.getById)
+    .input(getAssetByIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetById(input.id, ctx.session.organizationId);
 
@@ -58,7 +66,7 @@ export default router({
       return asset;
     }),
   getByRepairId: organizationProcedure
-    .input(assetSchemas.getByRepairId)
+    .input(getAssetByRepairIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetByRepairId(
         input.id,
@@ -75,7 +83,7 @@ export default router({
       return asset;
     }),
   create: organizationProcedure
-    .input(assetSchemas.create)
+    .input(createAssetSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdAsset = await createAsset({
@@ -89,7 +97,7 @@ export default router({
       return createdAsset;
     }),
   update: organizationProcedure
-    .input(assetSchemas.update)
+    .input(updateAssetSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedAsset = await updateAsset(
@@ -101,7 +109,7 @@ export default router({
       return updatedAsset;
     }),
   archive: organizationProcedure
-    .input(assetSchemas.archive)
+    .input(archiveAssetSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
