@@ -2,21 +2,21 @@ import { z } from "zod";
 
 import { partId } from "./ids.validators";
 
-export const create = z.object({
+export const createPartSchema = z.object({
   name: z.string().min(3),
   partNumber: z.string().min(3),
 });
 
-export const update = z.object({
+export const updatePartSchema = z.object({
   id: partId,
   name: z.string().min(3),
   partNumber: z.string().min(3),
 });
 
-export const getById = z.object({
+export const getPartByIdSchema = z.object({
   id: partId,
 });
 
-export const archive = z.object({
+export const archivePartSchema = z.object({
   id: partId,
 });

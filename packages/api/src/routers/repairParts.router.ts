@@ -11,7 +11,13 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairPartSchemas from "@repo/validators/repairParts.validators";
+import {
+  archiveRepairPartSchema,
+  createRepairPartSchema,
+  getAllRepairPartsByRepairIdSchema,
+  getRepairPartByIdSchema,
+  updateRepairPartSchema,
+} from "@repo/validators/repairParts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -33,7 +39,7 @@ export default router({
     return count;
   }),
   getById: organizationProcedure
-    .input(repairPartSchemas.getById)
+    .input(getRepairPartByIdSchema)
     .query(async ({ input }) => {
       const repairPart = await getRepairPartById(input.id);
 
@@ -47,14 +53,14 @@ export default router({
       return repairPart;
     }),
   getAllByRepairId: organizationProcedure
-    .input(repairPartSchemas.getAllByRepairId)
+    .input(getAllRepairPartsByRepairIdSchema)
     .query(async ({ input }) => {
       const allRepairParts = await getAllRepairPartsByRepairId(input.id);
 
       return allRepairParts;
     }),
   create: organizationProcedure
-    .input(repairPartSchemas.create)
+    .input(createRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdRepairPart = await createRepairPart({
@@ -67,7 +73,7 @@ export default router({
       return createdRepairPart;
     }),
   update: organizationProcedure
-    .input(repairPartSchemas.update)
+    .input(updateRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedRepairPart = await updateRepairPart({
@@ -80,7 +86,7 @@ export default router({
       return updatedRepairPart;
     }),
   archive: organizationProcedure
-    .input(repairPartSchemas.archive)
+    .input(archiveRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedRepairPart = await archiveRepairPart({

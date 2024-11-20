@@ -8,15 +8,15 @@ import {
   repairTypeId,
 } from "./ids.validators";
 
-export const getAllByAssetId = z.object({
+export const getAllRepairsByAssetIdSchema = z.object({
   assetId,
 });
 
-export const getById = z.object({
+export const getRepairByIdSchema = z.object({
   id: repairId,
 });
 
-export const create = z.object({
+export const createRepairSchema = z.object({
   fault: z.string().min(3),
   clientReference: z.string().min(3),
   typeId: repairTypeId,
@@ -25,13 +25,15 @@ export const create = z.object({
   assetId,
 });
 
-export const update = create.partial().extend({ id: repairId });
+export const updateRepairSchema = createRepairSchema
+  .partial()
+  .extend({ id: repairId });
 
-export const updateStatus = z.object({
+export const updateRepairStatusSchema = z.object({
   id: repairId,
   statusId: repairStatusTypeId,
 });
 
-export const archive = z.object({
+export const archiveRepairSchema = z.object({
   id: repairId,
 });

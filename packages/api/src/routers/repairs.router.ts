@@ -12,7 +12,12 @@ import {
   getCountSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairSchemas from "@repo/validators/repairs.validators";
+import {
+  archiveRepairSchema,
+  createRepairSchema,
+  getRepairByIdSchema,
+  updateRepairSchema,
+} from "@repo/validators/repairs.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -20,7 +25,6 @@ import {
   createMetadata,
   updateMetadata,
 } from "../helpers/includeMetadata";
-import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -53,7 +57,7 @@ export default router({
     }),
 
   getById: organizationProcedure
-    .input(repairSchemas.getById)
+    .input(getRepairByIdSchema)
     .query(async ({ input }) => {
       const repair = await getRepairsById(input.id);
 
@@ -68,7 +72,7 @@ export default router({
     }),
 
   create: organizationProcedure
-    .input(repairSchemas.create)
+    .input(createRepairSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
 
@@ -84,12 +88,11 @@ export default router({
     }),
 
   update: organizationProcedure
-    .input(repairSchemas.update)
+    .input(updateRepairSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
-      const sanitizedInput = sanitizeUpdateInput(input);
       const updatedRepair = await updateRepair({
-        ...sanitizedInput,
+        ...input,
         ...metadata,
       });
 
@@ -99,7 +102,7 @@ export default router({
     }),
 
   archive: organizationProcedure
-    .input(repairSchemas.archive)
+    .input(archiveRepairSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedRepair = await archiveRepair({

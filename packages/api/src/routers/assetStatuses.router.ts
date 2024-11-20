@@ -7,7 +7,12 @@ import {
   getAssetStatusSelect,
   updateAssetStatus,
 } from "@repo/db/repositories/assetStatus.repository";
-import * as assetStatusesSchema from "@repo/validators/assetStatuses.validators";
+import {
+  archiveAssetStatusSchema,
+  createAssetStatusSchema,
+  getAssetStatusByIdSchema,
+  updateAssetStatusSchema,
+} from "@repo/validators/assetStatuses.validators";
 import {
   getAllSchema,
   getCountSchema,
@@ -37,7 +42,7 @@ export default router({
     return allUserTypes;
   }),
   getById: organizationProcedure
-    .input(assetStatusesSchema.getById)
+    .input(getAssetStatusByIdSchema)
     .query(async ({ input }) => {
       const userType = await getAssetStatusById(input.id);
 
@@ -51,7 +56,7 @@ export default router({
       return userType;
     }),
   create: organizationProcedure
-    .input(assetStatusesSchema.create)
+    .input(createAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdUserType = await createAssetStatus({
@@ -64,7 +69,7 @@ export default router({
       return createdUserType;
     }),
   update: organizationProcedure
-    .input(assetStatusesSchema.update)
+    .input(updateAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedUserType = await updateAssetStatus({
@@ -77,7 +82,7 @@ export default router({
       return updatedUserType;
     }),
   archive: organizationProcedure
-    .input(assetStatusesSchema.archive)
+    .input(archiveAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedUserType = await archiveAssetStatus({

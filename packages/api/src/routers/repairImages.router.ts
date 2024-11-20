@@ -11,7 +11,13 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairImageSchemas from "@repo/validators/repairImages.validators";
+import {
+  archiveRepairImageSchema,
+  createRepairImageSchema,
+  getAllRepairImagesByRepairIdSchema,
+  getRepairImageByIdSchema,
+  updateRepairImageSchema,
+} from "@repo/validators/repairImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -33,13 +39,13 @@ export default router({
     return count;
   }),
   getAllByRepairId: organizationProcedure
-    .input(repairImageSchemas.getAllByRepairId)
+    .input(getAllRepairImagesByRepairIdSchema)
     .query(async ({ input }) => {
       const allRepairImages = getAllRepairImagesByRepairId(input.repairId);
       return allRepairImages;
     }),
   getById: organizationProcedure
-    .input(repairImageSchemas.getById)
+    .input(getRepairImageByIdSchema)
     .query(async ({ input }) => {
       const repairImage = await getRepairImageById(input.id);
 
@@ -53,7 +59,7 @@ export default router({
       return repairImage;
     }),
   create: organizationProcedure
-    .input(repairImageSchemas.create)
+    .input(createRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdRepairImage = await createRepairImage({
@@ -66,7 +72,7 @@ export default router({
       return createdRepairImage;
     }),
   update: organizationProcedure
-    .input(repairImageSchemas.update)
+    .input(updateRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedRepairImage = await updateRepairImage({
@@ -79,7 +85,7 @@ export default router({
       return updatedRepairImage;
     }),
   archive: organizationProcedure
-    .input(repairImageSchemas.archive)
+    .input(archiveRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedRepairImage = await archiveRepairImage({

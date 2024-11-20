@@ -16,19 +16,19 @@ import {
 
 // Data Tables.
 
-export const getAll = getAllSchema.extend({});
-export const getCount = getCountSchema.extend({});
-export const getSelect = getSelectSchema.extend({});
+export const getAllAssetsSchema = getAllSchema.extend({});
+export const getAssetsCountSchema = getCountSchema.extend({});
+export const getAssestsSelectSchema = getSelectSchema.extend({});
 
-export const getById = z.object({
+export const getAssetByIdSchema = z.object({
   id: assetId,
 });
 
-export const getByRepairId = z.object({
+export const getAssetByRepairIdSchema = z.object({
   id: repairId,
 });
 
-export const create = z.object({
+export const createAssetSchema = z.object({
   assetNumber: z.string(),
   serialNumber: z.string().min(3),
   statusId: assetStatusId,
@@ -37,8 +37,10 @@ export const create = z.object({
   clientId,
 });
 
-export const update = create.partial().extend({ id: assetId });
+export const updateAssetSchema = createAssetSchema
+  .partial()
+  .extend({ id: assetId });
 
-export const archive = z.object({
+export const archiveAssetSchema = z.object({
   id: assetId,
 });

@@ -3,24 +3,24 @@ import { z } from "zod";
 import replaceLineBreaks from "../helpers/replaceLineBreaks";
 import { repairCommentId, repairId } from "./ids.validators";
 
-export const getAllByRepairId = z.object({
+export const getAllRepairCommentsByRepairIdSchema = z.object({
   repairId,
 });
 
-export const getById = z.object({
+export const getRepairCommentByIdSchema = z.object({
   id: repairCommentId,
 });
 
-export const create = z.object({
+export const createRepairCommentSchema = z.object({
   comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
   repairId,
 });
 
-export const update = z.object({
+export const updateRepairCommentSchema = z.object({
   id: repairCommentId,
   comment: z.preprocess(replaceLineBreaks, z.string().trim().min(4)),
 });
 
-export const archive = z.object({
+export const archiveRepairCommentSchema = z.object({
   id: repairCommentId,
 });

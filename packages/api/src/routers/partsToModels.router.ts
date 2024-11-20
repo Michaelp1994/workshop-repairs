@@ -9,7 +9,10 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as partsToModelSchemas from "@repo/validators/partsToModel.validators";
+import {
+  archivePartToModelSchema,
+  createPartToModelSchema,
+} from "@repo/validators/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
 import assertDatabaseResult from "../helpers/trpcAssert";
@@ -38,7 +41,7 @@ export default router({
     return allParts;
   }),
   create: organizationProcedure
-    .input(partsToModelSchemas.create)
+    .input(createPartToModelSchema)
     .mutation(async ({ input }) => {
       const createdPartModel = await createPartToModel(input);
 
@@ -47,7 +50,7 @@ export default router({
       return createdPartModel;
     }),
   archive: organizationProcedure
-    .input(partsToModelSchemas.archive)
+    .input(archivePartToModelSchema)
     .mutation(async ({ input }) => {
       const archivedPartModel = await archivePartToModel(input);
 

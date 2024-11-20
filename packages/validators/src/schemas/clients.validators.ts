@@ -2,19 +2,19 @@ import { z } from "zod";
 
 import { clientId } from "./ids.validators";
 
-export const create = z.object({
+export const createClientSchema = z.object({
   name: z.string().min(2),
 });
 
-export const update = z.object({
+export const updateClientSchema = z.object({
   id: clientId,
   name: z.string().min(2),
 });
 
-export const getById = z.object({
+export const getClientByIdSchema = z.object({
   id: clientId,
 });
 
-export const archive = z.object({
+export const archiveClientSchema = z.object({
   id: clientId,
 });

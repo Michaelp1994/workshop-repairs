@@ -1,16 +1,16 @@
 import { z } from "zod";
 
-export const create = z.object({
+export const createOrganizationSchema = z.object({
   name: z.string().min(5),
   logo: z.string().min(1),
 });
 
-export const getById = z.object({});
+export const getOrganizationByIdSchema = z.object({});
 
-export const inviteOthers = z.object({
+export const inviteOthersToOrganizationSchema = z.object({
   emails: z.string().min(5),
 });
 
-export const join = z.object({
+export const joinOrganizationSchema = z.object({
   joinCode: z.string(),
 });

@@ -2,7 +2,7 @@ import type { UserID } from "@repo/validators/ids.validators";
 
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
-import * as authController from "@repo/db/controllers/auth.controller";
+import { createEmailVerificationRequest } from "@repo/db/repositories/auth.repository";
 import { Resource } from "sst";
 
 import assertDatabaseResult from "./trpcAssert";
@@ -15,7 +15,7 @@ export default async function sendVerificationEmail(
 ) {
   const code = generateRandomOTP();
 
-  const request = await authController.create({
+  const request = await createEmailVerificationRequest({
     userId: userId,
     email: email,
     code: code,

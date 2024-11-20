@@ -7,7 +7,12 @@ import {
   getClientsSelect,
   updateClient,
 } from "@repo/db/repositories/client.repository";
-import * as clientSchemas from "@repo/validators/clients.validators";
+import {
+  archiveClientSchema,
+  createClientSchema,
+  getClientByIdSchema,
+  updateClientSchema,
+} from "@repo/validators/clients.validators";
 import {
   getAllSchema,
   getCountSchema,
@@ -48,7 +53,7 @@ export default router({
       return allClients;
     }),
   getById: organizationProcedure
-    .input(clientSchemas.getById)
+    .input(getClientByIdSchema)
     .query(async ({ input }) => {
       const client = await getClientById(input.id);
       if (!client) {
@@ -60,7 +65,7 @@ export default router({
       return client;
     }),
   create: organizationProcedure
-    .input(clientSchemas.create)
+    .input(createClientSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createMetadata(ctx.session);
       const createdClient = await createClient({
@@ -74,7 +79,7 @@ export default router({
       return createdClient;
     }),
   update: organizationProcedure
-    .input(clientSchemas.update)
+    .input(updateClientSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedClient = await updateClient({
@@ -86,7 +91,7 @@ export default router({
       return updatedClient;
     }),
   archive: organizationProcedure
-    .input(clientSchemas.archive)
+    .input(archiveClientSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
       const archivedClient = await archiveClient({

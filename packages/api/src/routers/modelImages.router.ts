@@ -1,4 +1,7 @@
-import * as modelRepository from "@repo/db/repositories/model.repository";
+import {
+  getModelById,
+  updateModel,
+} from "@repo/db/repositories/model.repository";
 import {
   archiveModelImage,
   createModelImage,
@@ -12,7 +15,15 @@ import {
   getAllSchema,
   getCountSchema,
 } from "@repo/validators/dataTables.validators";
-import * as modelImageSchemas from "@repo/validators/modelImages.validators";
+import {
+  archiveModelImageSchema,
+  createModelImageSchema,
+  getAllModelImagesByModelIdSchema,
+  getModelImageByIdSchema,
+  setFavouriteModelImageSchema,
+  updateModelImageSchema,
+  uploadModelImageSchema,
+} from "@repo/validators/modelImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -36,9 +47,9 @@ export default router({
     return count;
   }),
   getAllByModelId: organizationProcedure
-    .input(modelImageSchemas.getAllByModelId)
+    .input(getAllModelImagesByModelIdSchema)
     .query(async ({ input }) => {
-      const model = await modelRepository.getModelById(input.modelId);
+      const model = await getModelById(input.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -55,7 +66,7 @@ export default router({
       }));
     }),
   getById: organizationProcedure
-    .input(modelImageSchemas.getById)
+    .input(getModelImageByIdSchema)
     .query(async ({ input }) => {
       const modelImage = await getModelImageById(input.id);
 
@@ -69,12 +80,12 @@ export default router({
       return modelImage;
     }),
   uploadImage: organizationProcedure
-    .input(modelImageSchemas.uploadImage)
+    .input(uploadModelImageSchema)
     .mutation(async () => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
   create: organizationProcedure
-    .input(modelImageSchemas.create)
+    .input(createModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const modelImages = await getAllModelImagesByModelId(input.modelId);
       const isFirstImage = modelImages.length === 0;
@@ -90,7 +101,7 @@ export default router({
       if (isFirstImage) {
         const modelMetadata = updateMetadata(ctx.session);
 
-        await modelRepository.updateModel({
+        await updateModel({
           id: input.modelId,
           defaultImageId: createdModelImage.id,
           ...modelMetadata,
@@ -100,7 +111,7 @@ export default router({
       return createdModelImage;
     }),
   update: organizationProcedure
-    .input(modelImageSchemas.update)
+    .input(updateModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = updateMetadata(ctx.session);
       const updatedModelImage = await updateModelImage({
@@ -113,7 +124,7 @@ export default router({
       return updatedModelImage;
     }),
   setFavourite: organizationProcedure
-    .input(modelImageSchemas.setFavourite)
+    .input(setFavouriteModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const modelImage = await getModelImageById(input.id);
 
@@ -124,7 +135,7 @@ export default router({
         });
       }
 
-      const model = await modelRepository.getModelById(modelImage.modelId);
+      const model = await getModelById(modelImage.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -133,7 +144,7 @@ export default router({
         });
       }
       const metadata = updateMetadata(ctx.session);
-      await modelRepository.updateModel({
+      await updateModel({
         id: model.id,
         defaultImageId: modelImage.id,
         ...metadata,
@@ -142,7 +153,7 @@ export default router({
       return modelImage;
     }),
   archive: organizationProcedure
-    .input(modelImageSchemas.archive)
+    .input(archiveModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = archiveMetadata(ctx.session);
 
