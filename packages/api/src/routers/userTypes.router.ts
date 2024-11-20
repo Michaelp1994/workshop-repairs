@@ -19,9 +19,9 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
 import { organizationProcedure, router } from "../trpc";
 
@@ -51,7 +51,7 @@ export default router({
   create: organizationProcedure
     .input(createUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
+      const metadata = createInsertMetadata(ctx.session);
       const createdUserType = await createUserType({
         ...input,
         ...metadata,
@@ -68,7 +68,7 @@ export default router({
   update: organizationProcedure
     .input(updateUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
       const updatedUserType = await updateUserType({
         ...input,
         ...metadata,
@@ -86,7 +86,7 @@ export default router({
   archive: organizationProcedure
     .input(archiveUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
       const archivedUserType = await archiveUserType({
         ...input,
         ...metadata,

@@ -27,9 +27,9 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
 import assertDatabaseResult from "../helpers/trpcAssert";
 
@@ -90,7 +90,7 @@ export default router({
       const modelImages = await getAllModelImagesByModelId(input.modelId);
       const isFirstImage = modelImages.length === 0;
 
-      const imageMetadata = createMetadata(ctx.session);
+      const imageMetadata = createInsertMetadata(ctx.session);
       const createdModelImage = await createModelImage({
         ...input,
         ...imageMetadata,
@@ -99,7 +99,7 @@ export default router({
       assertDatabaseResult(createdModelImage);
 
       if (isFirstImage) {
-        const modelMetadata = updateMetadata(ctx.session);
+        const modelMetadata = createUpdateMetadata(ctx.session);
 
         await updateModel({
           id: input.modelId,
@@ -113,7 +113,7 @@ export default router({
   update: organizationProcedure
     .input(updateModelImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
       const updatedModelImage = await updateModelImage({
         ...input,
         ...metadata,
@@ -143,7 +143,7 @@ export default router({
           message: "model not found",
         });
       }
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
       await updateModel({
         id: model.id,
         defaultImageId: modelImage.id,
@@ -155,7 +155,7 @@ export default router({
   archive: organizationProcedure
     .input(archiveModelImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
       const archivedModelImage = await archiveModelImage({
         ...input,

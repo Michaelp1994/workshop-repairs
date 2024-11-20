@@ -30,7 +30,10 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import createSession from "../helpers/createSession";
-import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
+import {
+  createArchiveMetadata,
+  createUpdateMetadata,
+} from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
@@ -123,7 +126,7 @@ export default router({
   update: organizationProcedure
     .input(updateUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
       const updatedUser = await updateUser({
         ...input,
         ...metadata,
@@ -137,7 +140,7 @@ export default router({
   updateCurrent: authedProcedure
     .input(updateCurrentUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
 
       const updatedUser = await updateUser({
         ...input,
@@ -152,7 +155,7 @@ export default router({
   archive: organizationProcedure
     .input(archiveUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
       const archivedUser = await archiveUser({
         ...input,

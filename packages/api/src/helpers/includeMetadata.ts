@@ -1,20 +1,20 @@
 import type { Session } from "../createContext";
 
-export function createMetadata(session: Session) {
+export function createInsertMetadata(session: Session) {
   return {
     createdAt: new Date(),
     createdById: session.userId,
   };
 }
 
-export function updateMetadata(session: Session) {
+export function createUpdateMetadata(session: Session) {
   return {
     updatedAt: new Date(),
     updatedById: session.userId,
   };
 }
 
-export function archiveMetadata(session: Session) {
+export function createArchiveMetadata(session: Session) {
   return {
     deletedAt: new Date(),
     deletedById: session.userId,

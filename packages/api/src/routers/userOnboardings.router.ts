@@ -23,7 +23,7 @@ import { Resource } from "sst";
 import { ZodError } from "zod";
 
 import createSession from "../helpers/createSession";
-import { createMetadata } from "../helpers/includeMetadata";
+import { createInsertMetadata } from "../helpers/includeMetadata";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
@@ -48,7 +48,7 @@ export default router({
   createOrganization: authedProcedure
     .input(createOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
+      const metadata = createInsertMetadata(ctx.session);
       const user = await getUserById(ctx.session.userId);
       assertDatabaseResult(user);
 

@@ -21,9 +21,9 @@ import {
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
@@ -63,7 +63,7 @@ export default router({
   create: organizationProcedure
     .input(createLocationSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
+      const metadata = createInsertMetadata(ctx.session);
       const createdLocation = await createLocation({
         ...input,
         organizationId: ctx.session.organizationId,
@@ -77,7 +77,7 @@ export default router({
   update: organizationProcedure
     .input(updateLocationSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
       const updatedLocation = await updateLocation({
         ...input,
         ...metadata,
@@ -90,7 +90,7 @@ export default router({
   archive: organizationProcedure
     .input(archiveLocationSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
       const archivedLocation = await archiveLocation({
         ...input,
         ...metadata,
