@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 import {
+  getAllSchema,
+  getCountSchema,
+  getSelectSchema,
+} from "./dataTables.validators";
+import {
   assetId,
   assetStatusId,
   clientId,
@@ -8,6 +13,12 @@ import {
   modelId,
   repairId,
 } from "./ids.validators";
+
+// Data Tables.
+
+export const getAll = getAllSchema.extend({});
+export const getCount = getCountSchema.extend({});
+export const getSelect = getSelectSchema.extend({});
 
 export const getById = z.object({
   id: assetId,

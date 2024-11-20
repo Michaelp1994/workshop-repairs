@@ -14,7 +14,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(modelSchemas.getAll)
+    .input(modelSchemas.getAllModels)
     .query(async ({ ctx, input }) => {
       const allModels = modelsController.getAll(
         input,
