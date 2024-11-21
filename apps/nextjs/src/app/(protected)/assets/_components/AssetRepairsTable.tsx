@@ -6,6 +6,7 @@ import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { PlusCircle } from "@repo/ui/icons";
 import Link from "next/link";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "../../repairs/_components/RepairsTable/columns";
@@ -33,17 +34,14 @@ export default function AssetRepairsTable({ assetId }: AssetRepairsTableProps) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row justify-between">
+      <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle>Repairs</CardTitle>
         </div>
         <div>
-          <Button asChild size="sm" variant="ghost">
-            <Link href={`/repairs/new?assetId=${assetId}`}>
-              <PlusCircle className="mr-1 h-4 w-4" />
-              Add Repair
-            </Link>
-          </Button>
+          <IconButton href={`/repairs/new?assetId=${assetId}`} variant="create">
+            Add Repair
+          </IconButton>
         </div>
       </CardHeader>
       <CardContent>

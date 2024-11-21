@@ -1,10 +1,16 @@
 "use client";
-import type { LocationID } from "@repo/validators/ids.validators";
-
-import { Card, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
+  CardTitle,
+} from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
+import { type LocationID } from "@repo/validators/ids.validators";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "../../assets/_components/AssetsTable/columns";
@@ -34,7 +40,18 @@ export default function LocationAssetsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assets</CardTitle>
+        <CardHeaderText>
+          <CardTitle>Assets</CardTitle>
+        </CardHeaderText>
+        <CardHeaderActions>
+          <IconButton
+            href={`/assets/new?locationId=${locationId}`}
+            size="sm"
+            variant="create"
+          >
+            Add
+          </IconButton>
+        </CardHeaderActions>
       </CardHeader>
       <DataTable
         columns={columns}

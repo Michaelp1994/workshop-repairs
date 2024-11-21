@@ -1,10 +1,18 @@
 "use client";
 import type { ClientID } from "@repo/validators/ids.validators";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
+  CardTitle,
+} from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "../../repairs/_components/RepairsTable/columns";
@@ -34,16 +42,25 @@ export default function ClientRepairsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Repairs</CardTitle>
+        <CardHeaderText>
+          <CardTitle>Repairs</CardTitle>
+        </CardHeaderText>
+        <CardHeaderActions>
+          <IconButton
+            href={`/repairs/new?clientId=${clientId}`}
+            size="sm"
+            variant="create"
+          >
+            Add
+          </IconButton>
+        </CardHeaderActions>
       </CardHeader>
-      <CardContent>
-        <DataTable
-          columns={columns}
-          data={repairs}
-          rowCount={rowCount}
-          tableState={tableState}
-        />
-      </CardContent>
+      <DataTable
+        columns={columns}
+        data={repairs}
+        rowCount={rowCount}
+        tableState={tableState}
+      />
     </Card>
   );
 }

@@ -1,10 +1,17 @@
 "use client";
-import type { EquipmentTypeID } from "@repo/validators/ids.validators";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
+  CardTitle,
+} from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
+import { type EquipmentTypeID } from "@repo/validators/ids.validators";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "../../models/_components/ModelsTable/columns";
@@ -35,7 +42,18 @@ export default function EquipmentTypeModelsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Models</CardTitle>
+        <CardHeaderText>
+          <CardTitle>Models</CardTitle>
+        </CardHeaderText>
+        <CardHeaderActions>
+          <IconButton
+            href={`/models/new?equipmentTypeId=${equipmentTypeId}`}
+            size="sm"
+            variant="create"
+          >
+            Add
+          </IconButton>
+        </CardHeaderActions>
       </CardHeader>
       <CardContent>
         <DataTable

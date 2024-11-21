@@ -1,13 +1,7 @@
 "use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import Link from "next/link";
 
 import {
@@ -30,7 +24,6 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
     <Card>
       <CardHeader>
         <CardTitle>Images</CardTitle>
-        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <ImageGrid>

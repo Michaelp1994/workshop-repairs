@@ -22,7 +22,6 @@ import {
   type RepairPartFormInput,
   repairPartFormSchema,
 } from "@repo/validators/client/repairParts.schema";
-import { useRouter } from "next/navigation";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
@@ -30,13 +29,14 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateRepairPartFormProps {
   repairId: RepairID;
+  onFinish(): void;
 }
 
 export default function CreateRepairPartForm({
   repairId,
+  onFinish,
 }: CreateRepairPartFormProps) {
   const utils = api.useUtils();
-  const router = useRouter();
   const [repair] = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
@@ -47,7 +47,7 @@ export default function CreateRepairPartForm({
         id: repairId,
       });
       toast.success(`Part was added to Repair`);
-      router.back();
+      onFinish();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

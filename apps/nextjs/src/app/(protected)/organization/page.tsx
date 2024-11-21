@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
 import { api } from "~/trpc/server";
 
@@ -15,7 +9,6 @@ export default async function OrganizationPage() {
     <Card>
       <CardHeader>
         <CardTitle>{organization.name}</CardTitle>
-        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent></CardContent>
     </Card>

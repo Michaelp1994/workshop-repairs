@@ -3,6 +3,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 
@@ -12,11 +13,13 @@ export default function ForgotPasswordPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Forgot Password</CardTitle>
-        <CardDescription>
-          Enter your email address and we'll send a code so that you can reset
-          your password.
-        </CardDescription>
+        <CardHeaderText>
+          <CardTitle>Forgot Password</CardTitle>
+          <CardDescription>
+            Enter your email address and we&apos;ll send a code so that you can
+            reset your password.
+          </CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
         <ForgotPasswordForm />

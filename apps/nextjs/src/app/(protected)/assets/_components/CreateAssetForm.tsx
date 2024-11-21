@@ -18,7 +18,7 @@ import {
   assetFormSchema,
   defaultAsset,
 } from "@repo/validators/client/assets.schema";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
@@ -28,6 +28,10 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateAssetForm() {
+  const searchParams = useSearchParams();
+  const clientId = searchParams.get("clientId");
+  const locationId = searchParams.get("locationId");
+  const modelId = searchParams.get("modelId");
   const router = useRouter();
   const createMutation = api.assets.create.useMutation({
     onSuccess(data) {
@@ -40,7 +44,12 @@ export default function CreateAssetForm() {
   });
 
   const form = useForm({
-    defaultValues: defaultAsset,
+    defaultValues: {
+      ...defaultAsset,
+      clientId: clientId ? Number(clientId) : defaultAsset.clientId,
+      locationId: locationId ? Number(locationId) : defaultAsset.locationId,
+      modelId: modelId ? Number(modelId) : defaultAsset.modelId,
+    },
     schema: assetFormSchema,
   });
 

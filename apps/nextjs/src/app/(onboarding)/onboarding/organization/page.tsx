@@ -4,6 +4,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 import { UserPlus, Users } from "@repo/ui/icons";
@@ -13,11 +14,13 @@ export default function OnboardingPage() {
   return (
     <Card className="w-[500px]">
       <CardHeader>
-        <CardTitle>Join or Create Organization</CardTitle>
-        <CardDescription>
-          Choose whether you want to join an existing organization or create a
-          new one.
-        </CardDescription>
+        <CardHeaderText>
+          <CardTitle>Join or Create Organization</CardTitle>
+          <CardDescription>
+            Choose whether you want to join an existing organization or create a
+            new one.
+          </CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent className="space-y-4">
         <Button

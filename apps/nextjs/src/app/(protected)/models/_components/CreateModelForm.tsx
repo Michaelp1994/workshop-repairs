@@ -18,7 +18,7 @@ import {
   type ModelFormInput,
   modelFormSchema,
 } from "@repo/validators/client/models.schema";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
@@ -26,6 +26,9 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateModelForm() {
+  const searchParams = useSearchParams();
+  const manufacturerId = searchParams.get("manufacturerId");
+  const equipmentTypeId = searchParams.get("equipmentTypeId");
   const router = useRouter();
   const createMutation = api.models.create.useMutation({
     onSuccess(data) {
@@ -38,7 +41,15 @@ export default function CreateModelForm() {
   });
 
   const form = useForm({
-    defaultValues: defaultModel,
+    defaultValues: {
+      ...defaultModel,
+      manufacturerId: manufacturerId
+        ? Number(manufacturerId)
+        : defaultModel.manufacturerId,
+      equipmentTypeId: equipmentTypeId
+        ? Number(equipmentTypeId)
+        : defaultModel.equipmentTypeId,
+    },
     schema: modelFormSchema,
   });
 

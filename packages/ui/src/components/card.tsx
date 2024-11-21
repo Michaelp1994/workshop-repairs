@@ -2,14 +2,6 @@ import * as React from "react";
 
 import { cn } from "../lib/utils";
 
-export function CardWrapper({ children }: { children: React.ReactNode }) {
-  return <div className="space-y-4">{children}</div>;
-}
-
-export function CardToolbar({ children }: { children: React.ReactNode }) {
-  return <div className="flex items-center justify-between">{children}</div>;
-}
-
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -30,12 +22,32 @@ const CardHeader = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn("flex items-center justify-between p-6", className)}
     ref={ref}
     {...props}
   />
 ));
 CardHeader.displayName = "CardHeader";
+
+const CardHeaderText = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    className={cn("flex flex-col gap-y-1.5", className)}
+    ref={ref}
+    {...props}
+  />
+));
+CardHeaderText.displayName = "CardHeader";
+
+const CardHeaderActions = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div className={cn("", className)} ref={ref} {...props} />
+));
+CardHeaderActions.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
@@ -90,5 +102,7 @@ export {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
   CardTitle,
 };

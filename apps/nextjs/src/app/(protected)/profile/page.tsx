@@ -5,6 +5,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 
@@ -18,10 +19,12 @@ export default function ProfilePage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Profile</CardTitle>
-        <CardDescription>
-          Manage your account settings and set e-mail preferences.
-        </CardDescription>
+        <CardHeaderText>
+          <CardTitle>Profile</CardTitle>
+          <CardDescription>
+            Manage your account settings and set e-mail preferences.
+          </CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
         <ProfileForm />

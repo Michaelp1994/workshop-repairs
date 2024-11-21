@@ -1,8 +1,15 @@
 "use client";
-import { Card, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
+  CardTitle,
+} from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "../../assets/_components/AssetsTable/columns";
@@ -32,8 +39,20 @@ export default function ClientAssetsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assets</CardTitle>
+        <CardHeaderText>
+          <CardTitle>Assets</CardTitle>
+        </CardHeaderText>
+        <CardHeaderActions>
+          <IconButton
+            href={`/assets/new?clientId=${clientId}`}
+            size="sm"
+            variant="create"
+          >
+            Add
+          </IconButton>
+        </CardHeaderActions>
       </CardHeader>
+
       <DataTable
         columns={columns}
         data={assets}

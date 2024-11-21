@@ -8,7 +8,7 @@ import {
 } from "~/components/Page";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
-import RepairCommentsTable from "../_components/RepairComments";
+import RepairComments from "../_components/RepairComments";
 import RepairDetails from "../_components/RepairDetails";
 import RepairImages from "../_components/RepairImages";
 import RepairParts from "../_components/RepairParts";
@@ -35,7 +35,7 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
       </PageHeader>
       <RepairDetails repairId={repairId} />
       <RepairParts repairId={repairId} />
-      <RepairCommentsTable repairId={repairId} />
+      <RepairComments repairId={repairId} />
       <RepairImages repairId={repairId} />
     </PageWrapper>
   );
