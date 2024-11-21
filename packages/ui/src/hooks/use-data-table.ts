@@ -1,3 +1,5 @@
+import type { DataTableInput } from "@repo/validators/dataTables.validators";
+
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -8,21 +10,31 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { useState } from "react";
-
-export function useDataTableState(initial: DataTable) {
+export function useDataTableState(initialState?: DataTableInput) {
+  const init: DataTableInput = initialState ?? {
+    columnFilters: [],
+    columns: {},
+    globalFilter: "",
+    sorting: [],
+    pagination: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  };
   const [pagination, setPagination] = useState<{
     pageIndex: number;
     pageSize: number;
-  }>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  }>(init.pagination);
 
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(init.sorting);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [globalFilter, setGlobalFilter] = useState<string>("");
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState<string>(init.globalFilter);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    init.columns,
+  );
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    init.columnFilters as ColumnFiltersState,
+  );
 
   return {
     dataState: {

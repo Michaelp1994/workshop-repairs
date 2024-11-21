@@ -1,4 +1,6 @@
 "use client";
+import type { DataTableInput } from "@repo/validators/dataTables.validators";
+
 import { Card } from "@repo/ui/card";
 import {
   DataTableCore,
@@ -12,7 +14,21 @@ import { api } from "~/trpc/client";
 import { columns } from "./columns";
 
 export default function RepairsTable() {
-  const { dataState, countState, tableState } = useDataTableState();
+  const initialState: DataTableInput = {
+    columnFilters: [],
+    columns: {
+      assetNumber: false,
+      createdAt: false,
+      updatedAt: false,
+    },
+    globalFilter: "",
+    sorting: [],
+    pagination: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  };
+  const { dataState, countState, tableState } = useDataTableState(initialState);
 
   const [allRepairs] = api.repairs.getAll.useSuspenseQuery(dataState);
 
