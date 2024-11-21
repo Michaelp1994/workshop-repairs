@@ -1,23 +1,24 @@
 "use client";
-import type { RepairID } from "@repo/validators/ids.validators";
+import type { RepairStatusTypeID } from "@repo/validators/ids.validators";
 
 import { Badge } from "@repo/ui/badge";
 
-import { api } from "~/trpc/client";
-
 interface RepairStatusBadgeProps {
-  repairId: RepairID;
+  status: {
+    id: RepairStatusTypeID;
+    name: string;
+    colour: string;
+  };
 }
 
-export default function RepairStatusBadge({
-  repairId,
-}: RepairStatusBadgeProps) {
-  const [repair] = api.repairs.getById.useSuspenseQuery({
-    id: repairId,
-  });
+export default function RepairStatusBadge({ status }: RepairStatusBadgeProps) {
   return (
-    <Badge className="ml-auto sm:ml-0" variant="default">
-      {repair.status.name}
+    <Badge className="ml-auto sm:ml-0" variant="outline">
+      <div
+        className="mr-2 size-3 rounded-full"
+        style={{ backgroundColor: status.colour }}
+      />
+      {status.name}
     </Badge>
   );
 }
