@@ -16,6 +16,7 @@ import {
   getOrderBy,
 } from "../mappings/repairs.mapper";
 import { assetTable } from "../tables/asset.sql";
+import { clientTable } from "../tables/client.sql";
 import { locationTable } from "../tables/location.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
 import { modelTable } from "../tables/model.sql";
@@ -57,9 +58,11 @@ export function getAllRepairs(
       },
       status: repairStatusTypeTable,
       type: repairTypeTable,
+      client: clientTable,
     })
     .from(repairTable)
     .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
+    .innerJoin(clientTable, eq(repairTable.clientId, clientTable.id))
     .innerJoin(repairTypeTable, eq(repairTable.typeId, repairTypeTable.id))
     .innerJoin(
       repairStatusTypeTable,

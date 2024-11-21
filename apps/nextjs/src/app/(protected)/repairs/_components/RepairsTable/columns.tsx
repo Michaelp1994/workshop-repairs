@@ -69,9 +69,16 @@ export const columns = [
   columnHelper.accessor("type", {
     id: "type",
     header: "Type",
-    cell: ({ getValue }) => <Badge>{getValue().name}</Badge>,
+    cell: ({ getValue }) => <Badge variant="outline">{getValue().name}</Badge>,
     meta: {
       name: "Repair Type",
+    },
+  }),
+  columnHelper.accessor("client.name", {
+    id: "client",
+    header: "Client",
+    meta: {
+      name: "Client",
     },
   }),
   columnHelper.accessor("fault", {
