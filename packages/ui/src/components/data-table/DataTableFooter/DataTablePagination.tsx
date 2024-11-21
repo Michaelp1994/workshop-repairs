@@ -65,6 +65,7 @@ function RowsPerPageSelect<T>({ table }: DataTablePaginationProps<T>) {
   const [isPending, startTransition] = useTransition();
   return (
     <Select
+      disabled={isPending}
       onValueChange={(value) => {
         startTransition(() => {
           table.setPageSize(Number(value));
@@ -73,7 +74,11 @@ function RowsPerPageSelect<T>({ table }: DataTablePaginationProps<T>) {
       value={table.getState().pagination.pageSize.toString()}
     >
       <SelectTrigger className="w-24">
-        <SelectValue />
+        {isPending ? (
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+        ) : (
+          <SelectValue />
+        )}
       </SelectTrigger>
       <SelectContent>
         {viewOptions.map((option) => (
@@ -91,7 +96,7 @@ function FirstPageButton<T>({ table }: DataTablePaginationProps<T>) {
 
   return (
     <Button
-      disabled={!table.getCanPreviousPage()}
+      disabled={!table.getCanPreviousPage() || isPending}
       onClick={() => {
         startTransition(() => {
           table.firstPage();
@@ -114,7 +119,7 @@ function PreviousPageButton<T>({ table }: DataTablePaginationProps<T>) {
 
   return (
     <Button
-      disabled={!table.getCanPreviousPage()}
+      disabled={!table.getCanPreviousPage() || isPending}
       onClick={() => {
         startTransition(() => {
           table.previousPage();
@@ -137,7 +142,7 @@ function NextPageButton<T>({ table }: DataTablePaginationProps<T>) {
 
   return (
     <Button
-      disabled={!table.getCanNextPage()}
+      disabled={!table.getCanNextPage() || isPending}
       onClick={() => {
         startTransition(() => {
           table.nextPage();
@@ -160,7 +165,7 @@ function LastPageButton<T>({ table }: DataTablePaginationProps<T>) {
 
   return (
     <Button
-      disabled={!table.getCanNextPage()}
+      disabled={!table.getCanNextPage() || isPending}
       onClick={() => {
         startTransition(() => {
           table.lastPage();
