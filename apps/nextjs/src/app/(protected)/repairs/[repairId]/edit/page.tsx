@@ -9,20 +9,20 @@ import {
 
 import UpdateRepairForm from "../../_components/UpdateRepairForm";
 
-interface EditPartPageProps {
+interface EditRepairPageProps {
   params: {
     repairId: string;
   };
 }
 
-export default function EditPartPage({ params }: EditPartPageProps) {
+export default function EditRepairPage({ params }: EditRepairPageProps) {
   const repairId = Number(params.repairId);
 
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>Edit Part</PageTitle>
+          <PageTitle>Edit Repair</PageTitle>
         </PageHeaderText>
       </PageHeader>
       <Card>
