@@ -1,8 +1,8 @@
+import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  DataTableCountSchema,
-  DataTableInput,
-  GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+  GetAllRepairsInput,
+  GetRepairsCountInput,
+} from "@repo/validators/server/repairs.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -33,7 +33,13 @@ import { repairTypeTable } from "../tables/repair-type.sql";
 const repairFields = getTableColumns(repairTable);
 
 export function getAllRepairs(
-  { globalFilter, sorting, pagination, columnFilters }: DataTableInput,
+  {
+    globalFilter,
+    sorting,
+    pagination,
+    columnFilters,
+    filters,
+  }: GetAllRepairsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -42,27 +48,15 @@ export function getAllRepairs(
 
   const query = db
     .select({
-      id: repairTable.id,
-      fault: repairTable.fault,
-      summary: repairTable.summary,
-      clientReference: repairTable.clientReference,
-      createdAt: repairTable.createdAt,
-      updatedAt: repairTable.updatedAt,
+      ...repairFields,
       asset: {
         id: assetTable.id,
         serialNumber: assetTable.serialNumber,
         assetNumber: assetTable.assetNumber,
         imageUrl: modelImageTable.url,
       },
-      status: {
-        id: repairStatusTypeTable.id,
-        name: repairStatusTypeTable.name,
-        colour: repairStatusTypeTable.colour,
-      },
-      type: {
-        id: repairTypeTable.id,
-        name: repairTypeTable.name,
-      },
+      status: repairStatusTypeTable,
+      type: repairTypeTable,
     })
     .from(repairTable)
     .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
@@ -78,6 +72,10 @@ export function getAllRepairs(
     )
     .where(
       and(
+        filters?.assetId ? eq(repairTable.assetId, filters.assetId) : undefined,
+        filters?.clientId
+          ? eq(repairTable.clientId, filters.clientId)
+          : undefined,
         isNull(repairTable.deletedAt),
         eq(assetTable.organizationId, organizationId),
         globalFilterParams,
@@ -91,7 +89,7 @@ export function getAllRepairs(
 }
 
 export async function getRepairsCount(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters, filters }: GetRepairsCountInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -108,6 +106,10 @@ export async function getRepairsCount(
     )
     .where(
       and(
+        filters?.assetId ? eq(repairTable.assetId, filters.assetId) : undefined,
+        filters?.clientId
+          ? eq(repairTable.clientId, filters.clientId)
+          : undefined,
         isNull(repairTable.deletedAt),
         eq(assetTable.organizationId, organizationId),
         globalFilterParams,

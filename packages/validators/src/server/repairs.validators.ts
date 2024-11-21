@@ -12,7 +12,12 @@ import {
   repairTypeId,
 } from "../isomorphic/ids.validators";
 
-const repairFilters = z.object({}).optional();
+const repairFilters = z
+  .object({
+    clientId: clientId.optional(),
+    assetId: assetId.optional(),
+  })
+  .optional();
 
 export const getAllRepairsSchema = dataTableSchema.extend({
   filters: repairFilters,

@@ -41,7 +41,7 @@ export default async function ViewEquipmentTypePage({
         </PageHeaderActions>
       </PageHeader>
       <EquipmentTypeDetailsSection equipmentTypeId={equipmentTypeId} />
-      {/* <EquipmentTypeModelsTable equipmentTypeId={equipmentTypeId} /> */}
+      <EquipmentTypeModelsTable equipmentTypeId={equipmentTypeId} />
       <EquipmentTypeAssetsSection equipmentTypeId={equipmentTypeId} />
     </PageWrapper>
   );

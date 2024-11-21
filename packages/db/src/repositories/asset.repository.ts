@@ -40,6 +40,16 @@ export async function getAllAssets(
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),
     filters?.modelId ? eq(assetTable.modelId, filters.modelId) : undefined,
+    filters?.clientId ? eq(assetTable.clientId, filters.clientId) : undefined,
+    filters?.locationId
+      ? eq(assetTable.locationId, filters.locationId)
+      : undefined,
+    filters?.manufacturerId
+      ? eq(modelTable.manufacturerId, filters.manufacturerId)
+      : undefined,
+    filters?.equipmentTypeId
+      ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
+      : undefined,
   );
   const res = query.execute();
   return res;
@@ -54,6 +64,16 @@ export async function getAssetsCount(
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),
     filters?.modelId ? eq(assetTable.modelId, filters.modelId) : undefined,
+    filters?.clientId ? eq(assetTable.clientId, filters.clientId) : undefined,
+    filters?.locationId
+      ? eq(assetTable.locationId, filters.locationId)
+      : undefined,
+    filters?.manufacturerId
+      ? eq(modelTable.manufacturerId, filters.manufacturerId)
+      : undefined,
+    filters?.equipmentTypeId
+      ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
+      : undefined,
   );
   const [res] = await query.execute();
   return res?.count;

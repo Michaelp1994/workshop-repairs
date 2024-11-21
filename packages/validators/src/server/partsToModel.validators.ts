@@ -6,19 +6,47 @@ import {
 } from "../isomorphic/dataTables.validators";
 import { modelId, partId } from "../isomorphic/ids.validators";
 
-const partToModelFilters = z.object({}).optional();
-
-export const getAllPartsToModelSchema = dataTableSchema.extend({
-  filters: partToModelFilters,
+const partsByModelIdFilters = z.object({
+  modelId,
 });
-export type GetAllPartsToModelInput = z.infer<typeof getAllPartsToModelSchema>;
 
-export const getPartsToModelCountSchema = dataTableCountSchema.extend({
-  filters: partToModelFilters,
+export const getAllPartsByModelIdSchema = dataTableSchema.extend({
+  filters: partsByModelIdFilters,
 });
-export type GetPartsToModelCountInput = z.infer<
-  typeof getPartsToModelCountSchema
+export type GetAllPartsByModelIdInput = z.infer<
+  typeof getAllPartsByModelIdSchema
 >;
+
+export const getAllPartsByModelIdCountSchema = dataTableCountSchema.extend({
+  filters: partsByModelIdFilters,
+});
+
+export type GetAllPartsByModelIdCountInput = z.infer<
+  typeof getAllPartsByModelIdCountSchema
+>;
+
+/** */
+
+const modelsByPartIdFilters = z.object({
+  partId,
+});
+
+export const getAllModelsByPartIdSchema = dataTableSchema.extend({
+  filters: modelsByPartIdFilters,
+});
+export type GetAllModelsByPartIdInput = z.infer<
+  typeof getAllModelsByPartIdSchema
+>;
+
+export const getAllModelsByPartIdCountSchema = dataTableCountSchema.extend({
+  filters: modelsByPartIdFilters,
+});
+
+export type GetAllModelsByPartIdCountInput = z.infer<
+  typeof getAllModelsByPartIdCountSchema
+>;
+
+/*** */
 
 export const createPartToModelSchema = z.object({
   quantity: z.number().positive(),

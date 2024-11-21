@@ -7,15 +7,13 @@ import {
   getRepairsSelect,
   updateRepair,
 } from "@repo/db/repositories/repair.repository";
-import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
+import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
   archiveRepairSchema,
   createRepairSchema,
+  getAllRepairsSchema,
   getRepairByIdSchema,
+  getRepairsCountSchema,
   updateRepairSchema,
 } from "@repo/validators/server/repairs.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,14 +28,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllRepairsSchema)
     .query(async ({ ctx, input }) => {
       const allRepairs = await getAllRepairs(input, ctx.session.organizationId);
       return allRepairs;
     }),
 
   getCount: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getRepairsCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getRepairsCount(input, ctx.session.organizationId);
       if (count === undefined) {

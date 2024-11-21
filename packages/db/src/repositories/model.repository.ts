@@ -1,8 +1,8 @@
+import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  DataTableCountSchema,
-  GetSelectInput,
-} from "@repo/validators/dataTables.validators";
-import type { GetAllModelsInput } from "@repo/validators/server/models.validators";
+  GetAllModelsInput,
+  GetModelsCountInput,
+} from "@repo/validators/server/models.validators";
 
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -29,25 +29,37 @@ import { modelImageTable } from "../tables/model-image.sql";
 const modelFields = getTableColumns(modelTable);
 
 export function getAllModels(
-  input: GetAllModelsInput,
+  { filters, ...dataTableInput }: GetAllModelsInput,
   organizationId: OrganizationID,
 ) {
   const query = createAllModelsQuery(
-    input,
+    dataTableInput,
     isNull(modelTable.deletedAt),
     eq(modelTable.organizationId, organizationId),
+    filters?.manufacturerId
+      ? eq(modelTable.manufacturerId, filters.manufacturerId)
+      : undefined,
+    filters?.equipmentTypeId
+      ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
+      : undefined,
   );
   return query.execute();
 }
 
 export async function getModelsCount(
-  input: DataTableCountSchema,
+  { filters, ...dataTableInput }: GetModelsCountInput,
   organizationId: OrganizationID,
 ) {
   const query = createModelsCountQuery(
-    input,
+    dataTableInput,
     isNull(modelTable.deletedAt),
     eq(modelTable.organizationId, organizationId),
+    filters?.manufacturerId
+      ? eq(modelTable.manufacturerId, filters.manufacturerId)
+      : undefined,
+    filters?.equipmentTypeId
+      ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
+      : undefined,
   );
   const [res] = await query.execute();
   return res?.count;

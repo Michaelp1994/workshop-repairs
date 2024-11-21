@@ -11,6 +11,7 @@ import generateRepairSlug from "~/utils/generateRepairSlug";
 import RepairCommentsSection from "../_components/RepairCommentsSection";
 import RepairDetailsSection from "../_components/RepairDetailsSection";
 import RepairImagesSection from "../_components/RepairImagesSection";
+import RepairPartsSection from "../_components/RepairPartsSection";
 
 interface ViewRepairPageProps {
   params: {
@@ -33,7 +34,7 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
         </PageHeaderActions>
       </PageHeader>
       <RepairDetailsSection repairId={repairId} />
-      {/* <RepairPartsSection repairId={repairId} /> */}
+      <RepairPartsSection repairId={repairId} />
       <RepairCommentsSection repairId={repairId} />
       <RepairImagesSection repairId={repairId} />
     </PageWrapper>

@@ -9,7 +9,9 @@ import {
   assetId,
   assetStatusId,
   clientId,
+  equipmentTypeId,
   locationId,
+  manufacturerId,
   modelId,
   repairId,
 } from "../isomorphic/ids.validators";
@@ -19,6 +21,10 @@ import {
 const assetFilters = z
   .object({
     modelId: modelId.optional(),
+    clientId: clientId.optional(),
+    locationId: locationId.optional(),
+    manufacturerId: manufacturerId.optional(),
+    equipmentTypeId: equipmentTypeId.optional(),
   })
   .optional();
 

@@ -1,6 +1,6 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -55,7 +55,10 @@ export async function getRepairPartById(input: RepairPartID) {
 
 export async function getAllRepairPartsByRepairId(input: RepairID) {
   const query = db
-    .select()
+    .select({
+      ...repairPartFields,
+      part: partTable,
+    })
     .from(repairPartTable)
     .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
     .where(

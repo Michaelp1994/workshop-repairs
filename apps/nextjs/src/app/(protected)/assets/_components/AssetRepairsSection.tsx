@@ -1,9 +1,14 @@
+"use client";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import DataTable from "@repo/ui/data-table/DataTable";
+import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { PlusCircle } from "@repo/ui/icons";
 import Link from "next/link";
 
-import RepairsTable from "~/app/(protected)/repairs/_components/RepairsTable";
+import { api } from "~/trpc/client";
+
+import { columns } from "../../repairs/_components/RepairsTable/columns";
 
 interface AssetRepairsSectionProps {
   assetId: number;
@@ -12,6 +17,22 @@ interface AssetRepairsSectionProps {
 export default function AssetRepairsSection({
   assetId,
 }: AssetRepairsSectionProps) {
+  const { dataState, countState, tableState } = useDataTableState();
+
+  const [repairs] = api.repairs.getAll.useSuspenseQuery({
+    ...dataState,
+    filters: {
+      assetId,
+    },
+  });
+
+  const [rowCount] = api.repairs.getCount.useSuspenseQuery({
+    ...countState,
+    filters: {
+      assetId,
+    },
+  });
+
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -28,7 +49,12 @@ export default function AssetRepairsSection({
         </div>
       </CardHeader>
       <CardContent>
-        <RepairsTable />
+        <DataTable
+          columns={columns}
+          data={repairs}
+          rowCount={rowCount}
+          tableState={tableState}
+        />
       </CardContent>
     </Card>
   );

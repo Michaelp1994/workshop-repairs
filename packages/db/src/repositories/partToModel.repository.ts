@@ -1,8 +1,10 @@
+import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  DataTableInput,
-  DataTableCountSchema,
-  GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+  GetAllModelsByPartIdCountInput,
+  GetAllModelsByPartIdInput,
+  GetAllPartsByModelIdCountInput,
+  GetAllPartsByModelIdInput,
+} from "@repo/validators/server/partsToModel.validators";
 
 import { and, count, eq, getTableColumns } from "drizzle-orm";
 
@@ -23,43 +25,42 @@ import {
 
 const partsToModelsFields = getTableColumns(partsToModelTable);
 
-export function getAllPartsToModels({
+export function getAllPartsByModelId({
   sorting,
   pagination,
   globalFilter,
   columnFilters,
-}: DataTableInput) {
+  filters,
+}: GetAllPartsByModelIdInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-
   const orderByParams = getOrderBy(sorting);
-
   const query = db
     .select({
       ...partsToModelsFields,
-      part: {
-        name: partTable.name,
-        partNumber: partTable.partNumber,
-      },
-      model: {
-        name: modelTable.name,
-      },
+      part: partTable,
     })
     .from(partsToModelTable)
     .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(and(globalFilterParams, ...columnFilterParams))
-    .orderBy(...orderByParams, partTable.id)
+    .where(
+      and(
+        eq(partsToModelTable.modelId, filters.modelId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    )
+    .orderBy(...orderByParams, partsToModelTable.partId)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   const res = query.execute();
   return res;
 }
 
-export async function getPartsToModelsCount({
+export async function getAllPartsByModelIdCount({
   columnFilters,
   globalFilter,
-}: DataTableCountSchema) {
+  filters,
+}: GetAllPartsByModelIdCountInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -68,8 +69,68 @@ export async function getPartsToModelsCount({
     })
     .from(partsToModelTable)
     .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .where(
+      and(
+        eq(partsToModelTable.modelId, filters.modelId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    );
+  const [res] = await query.execute();
+  return res?.count;
+}
+
+export function getAllModelsByPartId({
+  sorting,
+  pagination,
+  globalFilter,
+  columnFilters,
+  filters,
+}: GetAllModelsByPartIdInput) {
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
+  const orderByParams = getOrderBy(sorting);
+  const query = db
+    .select({
+      ...partsToModelsFields,
+      model: modelTable,
+    })
+    .from(partsToModelTable)
     .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(and(globalFilterParams, ...columnFilterParams));
+    .where(
+      and(
+        eq(partsToModelTable.partId, filters.partId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    )
+    .orderBy(...orderByParams, partsToModelTable.partId)
+    .limit(pagination.pageSize)
+    .offset(pagination.pageIndex * pagination.pageSize);
+  const res = query.execute();
+  return res;
+}
+
+export async function getAllModelsByPartIdCount({
+  columnFilters,
+  globalFilter,
+  filters,
+}: GetAllModelsByPartIdCountInput) {
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
+  const query = db
+    .select({
+      count: count(),
+    })
+    .from(partsToModelTable)
+    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
+    .where(
+      and(
+        eq(partsToModelTable.partId, filters.partId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    );
   const [res] = await query.execute();
   return res?.count;
 }

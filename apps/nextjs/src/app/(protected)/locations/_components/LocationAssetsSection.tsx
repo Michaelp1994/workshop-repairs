@@ -1,8 +1,13 @@
+"use client";
 import type { LocationID } from "@repo/validators/ids.validators";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardHeader, CardTitle } from "@repo/ui/card";
+import DataTable from "@repo/ui/data-table/DataTable";
+import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
-import AssetsTable from "~/app/(protected)/assets/_components/AssetsTable";
+import { api } from "~/trpc/client";
+
+import { columns } from "../../assets/_components/AssetsTable/columns";
 
 interface LocationAssetsSectionProps {
   locationId: LocationID;
@@ -11,14 +16,32 @@ interface LocationAssetsSectionProps {
 export default function LocationRepairsSection({
   locationId,
 }: LocationAssetsSectionProps) {
+  const { dataState, countState, tableState } = useDataTableState();
+
+  const [assets] = api.assets.getAll.useSuspenseQuery({
+    ...dataState,
+    filters: {
+      locationId,
+    },
+  });
+
+  const [rowCount] = api.assets.getCount.useSuspenseQuery({
+    ...countState,
+    filters: {
+      locationId,
+    },
+  });
   return (
     <Card>
       <CardHeader>
         <CardTitle>Assets</CardTitle>
       </CardHeader>
-      <CardContent>
-        <AssetsTable />
-      </CardContent>
+      <DataTable
+        columns={columns}
+        data={assets}
+        rowCount={rowCount}
+        tableState={tableState}
+      />
     </Card>
   );
 }

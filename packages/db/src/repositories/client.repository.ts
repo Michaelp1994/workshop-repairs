@@ -1,8 +1,8 @@
+import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  DataTableCountSchema,
-  DataTableInput,
-  GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+  GetAllClientsInput,
+  GetClientsCountInput,
+} from "@repo/validators/server/clients.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -26,7 +26,7 @@ import {
 const clientFields = getTableColumns(clientTable);
 
 export function getAllClients(
-  { pagination, sorting, globalFilter, columnFilters }: DataTableInput,
+  { pagination, sorting, globalFilter, columnFilters }: GetAllClientsInput,
   organizationId: OrganizationID,
 ) {
   const orderBys = getOrderBy(sorting);
@@ -51,7 +51,7 @@ export function getAllClients(
 }
 
 export async function getClientsCount(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters }: GetClientsCountInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

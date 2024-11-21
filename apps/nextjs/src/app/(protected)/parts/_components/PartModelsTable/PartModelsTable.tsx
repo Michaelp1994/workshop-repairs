@@ -1,42 +1,44 @@
 "use client";
+import type { PartID } from "@repo/validators/ids.validators";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
 import { api } from "~/trpc/client";
 
-import { columns } from "../../assets/_components/AssetsTable/columns";
+import { columns } from "./columns";
 
-interface ClientAssetsSectionProps {
-  clientId: number;
+interface PartModelsTableProps {
+  partId: PartID;
 }
 
-export default function ClientAssetsSection({
-  clientId,
-}: ClientAssetsSectionProps) {
+export default function PartModelsTable({ partId }: PartModelsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
-  const [assets] = api.assets.getAll.useSuspenseQuery({
+  const [models] = api.partsToModels.getAllModelsByPartId.useSuspenseQuery({
     ...dataState,
     filters: {
-      clientId,
+      partId,
     },
   });
 
-  const [rowCount] = api.assets.getCount.useSuspenseQuery({
+  const [rowCount] = api.partsToModels.getCountModelsByPartId.useSuspenseQuery({
     ...countState,
     filters: {
-      clientId,
+      partId,
     },
   });
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assets</CardTitle>
+        <CardTitle>Models</CardTitle>
       </CardHeader>
       <DataTable
         columns={columns}
-        data={assets}
+        data={models}
+        getRowId={(row) => row.modelId.toString()}
         rowCount={rowCount}
         tableState={tableState}
       />

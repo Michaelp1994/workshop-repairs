@@ -21,7 +21,7 @@ interface RepairPartsTableProps {
 }
 
 export default function RepairPartsTable({ repairId }: RepairPartsTableProps) {
-  const [data] = api.repairParts.getAllByRepairId.useSuspenseQuery({
+  const [repairParts] = api.repairParts.getAllByRepairId.useSuspenseQuery({
     id: repairId,
   });
 
@@ -37,19 +37,17 @@ export default function RepairPartsTable({ repairId }: RepairPartsTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((repairPart) => (
-          <TableRow key={repairPart.repair_parts.id}>
+        {repairParts.map((repairPart) => (
+          <TableRow key={repairPart.id}>
             <TableCell className="font-semibold">
-              <span className="mr-2">{repairPart.parts.partNumber}</span>
+              <span className="mr-2">{repairPart.part.partNumber}</span>
             </TableCell>
             <TableCell>
-              <span>{repairPart.parts.name}</span>
+              <span>{repairPart.part.name}</span>
             </TableCell>
+            <TableCell className="text-center">{repairPart.quantity}</TableCell>
             <TableCell className="text-center">
-              {repairPart.repair_parts.quantity}
-            </TableCell>
-            <TableCell className="text-center">
-              {repairPart.repair_parts.installed && (
+              {repairPart.installed && (
                 <div className="flex items-center justify-center">
                   <CheckIcon className="h-5 w-5" />
                 </div>
@@ -58,14 +56,14 @@ export default function RepairPartsTable({ repairId }: RepairPartsTableProps) {
             <TableCell>
               <Button asChild variant="link">
                 <Link
-                  href={`${getBaseUrl()}/repairs/${repairId}/parts/${repairPart.repair_parts.id}`}
+                  href={`${getBaseUrl()}/repairs/${repairId}/parts/${repairPart.id}`}
                 >
                   <Pencil className="h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild variant="link">
                 <Link
-                  href={`${getBaseUrl()}/repairs/${repairId}/parts/${repairPart.repair_parts.id}/archive`}
+                  href={`${getBaseUrl()}/repairs/${repairId}/parts/${repairPart.id}/archive`}
                 >
                   <Trash2 className="h-5 w-5" />
                 </Link>

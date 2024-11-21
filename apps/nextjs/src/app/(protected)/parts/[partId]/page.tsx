@@ -11,7 +11,7 @@ import {
 import { api } from "~/trpc/server";
 
 import PartDetailsSection from "../_components/PartDetailsSection";
-import PartModelSection from "../_components/PartModelSection";
+import PartModelsTable from "../_components/PartModelsTable";
 
 interface ViewPartPageProps {
   params: {
@@ -37,7 +37,7 @@ export default async function ViewPartPage({ params }: ViewPartPageProps) {
         </PageHeaderActions>
       </PageHeader>
       <PartDetailsSection partId={partId} />
-      <PartModelSection partId={partId} />
+      <PartModelsTable partId={partId} />
     </PageWrapper>
   );
 }

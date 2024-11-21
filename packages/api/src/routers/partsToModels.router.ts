@@ -1,17 +1,20 @@
 import {
   archivePartToModel,
   createPartToModel,
-  getAllPartsToModels,
-  getPartsToModelsCount,
+  getAllModelsByPartId,
+  getAllModelsByPartIdCount,
+  getAllPartsByModelId,
+  getAllPartsByModelIdCount,
   getPartsToModelsSelect,
 } from "@repo/db/repositories/partToModel.repository";
-import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "@repo/validators/dataTables.validators";
+import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
   archivePartToModelSchema,
   createPartToModelSchema,
+  getAllModelsByPartIdCountSchema,
+  getAllModelsByPartIdSchema,
+  getAllPartsByModelIdCountSchema,
+  getAllPartsByModelIdSchema,
 } from "@repo/validators/server/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
@@ -19,14 +22,17 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(dataTableSchema).query(({ input }) => {
-    const allParts = getAllPartsToModels(input);
-    return allParts;
-  }),
-  getCount: organizationProcedure
-    .input(dataTableCountSchema)
+  getAllPartsByModelId: organizationProcedure
+    .input(getAllPartsByModelIdSchema)
+    .query(({ input }) => {
+      const allParts = getAllPartsByModelId(input);
+      return allParts;
+    }),
+
+  getCountPartsByModelId: organizationProcedure
+    .input(getAllPartsByModelIdCountSchema)
     .query(async ({ input }) => {
-      const count = await getPartsToModelsCount(input);
+      const count = await getAllPartsByModelIdCount(input);
 
       if (count === undefined) {
         throw new TRPCError({
@@ -36,12 +42,29 @@ export default router({
       }
       return count;
     }),
-  getSelect: organizationProcedure
-    .input(dataTableCountSchema)
+  getAllModelsByPartId: organizationProcedure
+    .input(getAllModelsByPartIdSchema)
     .query(({ input }) => {
-      const allParts = getPartsToModelsSelect(input);
-      return allParts;
+      const allModels = getAllModelsByPartId(input);
+      return allModels;
     }),
+  getCountModelsByPartId: organizationProcedure
+    .input(getAllModelsByPartIdCountSchema)
+    .query(async ({ input }) => {
+      const count = await getAllModelsByPartIdCount(input);
+      if (count === undefined) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "can't get count",
+        });
+      }
+      return count;
+    }),
+
+  getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
+    const allParts = getPartsToModelsSelect(input);
+    return allParts;
+  }),
   create: organizationProcedure
     .input(createPartToModelSchema)
     .mutation(async ({ input }) => {

@@ -18,14 +18,18 @@ export default function EquipmentTypeAssetsSection({
 }: EquipmentTypeAssetsSectionProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
-  const [models] = api.models.getAll.useSuspenseQuery({
+  const [assets] = api.assets.getAll.useSuspenseQuery({
     ...dataState,
-    equipmentTypeId,
+    filters: {
+      equipmentTypeId,
+    },
   });
 
-  const [rowCount] = api.models.getCount.useSuspenseQuery({
+  const [rowCount] = api.assets.getCount.useSuspenseQuery({
     ...countState,
-    equipmentTypeId,
+    filters: {
+      equipmentTypeId,
+    },
   });
 
   return (
@@ -36,7 +40,7 @@ export default function EquipmentTypeAssetsSection({
       <CardContent>
         <DataTable
           columns={columns}
-          data={models}
+          data={assets}
           rowCount={rowCount}
           tableState={tableState}
         />

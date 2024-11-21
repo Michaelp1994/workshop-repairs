@@ -20,12 +20,16 @@ export default function ManufacturerModelsSection({
 
   const [models] = api.models.getAll.useSuspenseQuery({
     ...dataState,
-    manufacturerId,
+    filters: {
+      manufacturerId,
+    },
   });
 
   const [rowCount] = api.models.getCount.useSuspenseQuery({
     ...countState,
-    manufacturerId,
+    filters: {
+      manufacturerId,
+    },
   });
 
   return (

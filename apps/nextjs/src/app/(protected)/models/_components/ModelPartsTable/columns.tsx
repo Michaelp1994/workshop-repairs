@@ -8,7 +8,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import { getBaseUrl } from "~/utils/getBaseUrl";
 const columnHelper =
-  createColumnHelper<RouterOutputs["partsToModels"]["getAll"][number]>();
+  createColumnHelper<
+    RouterOutputs["partsToModels"]["getAllPartsByModelId"][number]
+  >();
 
 export const columns = [
   columnHelper.display({
@@ -33,14 +35,22 @@ export const columns = [
       name: "Name",
     },
   }),
-  columnHelper.display({
-    id: "id",
-    enableHiding: false,
-    cell: ({ row }) => (
-      <DataTableRowActions
-        generateUrl={(row) => `${getBaseUrl()}/parts/${row.original.partId}`}
-        row={row}
-      />
+  columnHelper.accessor("quantity", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Quantity" />
     ),
+    meta: {
+      name: "Quantity",
+    },
   }),
+  // columnHelper.display({
+  //   id: "id",
+  //   enableHiding: false,
+  //   cell: ({ row }) => (
+  //     <DataTableRowActions
+  //       generateUrl={(row) => `${getBaseUrl()}/parts/${row.original.partId}`}
+  //       row={row}
+  //     />
+  //   ),
+  // }),
 ];
