@@ -10,9 +10,9 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import ModelAssetsSection from "../_components/ModelAssetsSection";
-import ModelDetailsSection from "../_components/ModelDetailsSection";
-import ModelImagesSection from "../_components/ModelImagesSection";
+import ModelAssetsTable from "../_components/ModelAssetsTable";
+import ModelDetails from "../_components/ModelDetails";
+import ModelImages from "../_components/ModelImages";
 import ModelPartsTable from "../_components/ModelPartsTable";
 
 interface ViewModelPageProps {
@@ -36,10 +36,10 @@ export default async function ViewModelPage({ params }: ViewModelPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <ModelDetailsSection modelId={modelId} />
-      <ModelAssetsSection modelId={modelId} />
+      <ModelDetails modelId={modelId} />
+      <ModelAssetsTable modelId={modelId} />
       <ModelPartsTable modelId={modelId} />
-      <ModelImagesSection modelId={modelId} />
+      <ModelImages modelId={modelId} />
     </PageWrapper>
   );
 }

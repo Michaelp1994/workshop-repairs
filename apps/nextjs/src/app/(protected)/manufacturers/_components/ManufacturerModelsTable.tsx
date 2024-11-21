@@ -9,13 +9,13 @@ import { api } from "~/trpc/client";
 
 import { columns } from "../../models/_components/ModelsTable/columns";
 
-interface ManufacturerModelsSectionProps {
+interface ManufacturerModelsTableProps {
   manufacturerId: ManufacturerID;
 }
 
-export default function ManufacturerModelsSection({
+export default function ManufacturerModelsTable({
   manufacturerId,
-}: ManufacturerModelsSectionProps) {
+}: ManufacturerModelsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
   const [models] = api.models.getAll.useSuspenseQuery({

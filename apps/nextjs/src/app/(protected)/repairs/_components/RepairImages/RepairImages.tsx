@@ -17,13 +17,11 @@ import {
 } from "~/components/ImageGrid";
 import { api } from "~/trpc/client";
 
-interface RepairImageSectionProps {
+interface RepairImagesProps {
   repairId: RepairID;
 }
 
-export default function RepairImageSection({
-  repairId,
-}: RepairImageSectionProps) {
+export default function RepairImages({ repairId }: RepairImagesProps) {
   const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
     repairId,
   });

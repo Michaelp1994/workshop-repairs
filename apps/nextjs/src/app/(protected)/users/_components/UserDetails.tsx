@@ -1,17 +1,17 @@
 "use client";
+import type { UserID } from "@repo/validators/ids.validators";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { DetailsLabel, DetailsList, DetailsValue } from "@repo/ui/details-list";
 
 import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
-interface UserDetailsSectionProps {
-  userId: number;
+interface UserDetailsProps {
+  userId: UserID;
 }
 
-export default function UserDetailsSection({
-  userId,
-}: UserDetailsSectionProps) {
+export default function UserDetails({ userId }: UserDetailsProps) {
   const [user] = api.users.getById.useSuspenseQuery({ id: userId });
   return (
     <Card>

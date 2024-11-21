@@ -9,13 +9,13 @@ import { api } from "~/trpc/client";
 
 import { columns } from "../../repairs/_components/RepairsTable/columns";
 
-interface ClientRepairsSectionProps {
+interface ClientRepairsTableProps {
   clientId: ClientID;
 }
 
-export default function ClientRepairsSection({
+export default function ClientRepairsTable({
   clientId,
-}: ClientRepairsSectionProps) {
+}: ClientRepairsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
   const [repairs] = api.repairs.getAll.useSuspenseQuery({

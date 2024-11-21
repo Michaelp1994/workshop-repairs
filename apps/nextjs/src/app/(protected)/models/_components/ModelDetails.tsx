@@ -5,13 +5,11 @@ import { DetailsLabel, DetailsList, DetailsValue } from "@repo/ui/details-list";
 import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
-interface ModelDetailsSectionProps {
+interface ModelDetailsProps {
   modelId: number;
 }
 
-export default function ModelDetailsSection({
-  modelId,
-}: ModelDetailsSectionProps) {
+export default function ModelDetails({ modelId }: ModelDetailsProps) {
   const [model] = api.models.getById.useSuspenseQuery({ id: modelId });
   return (
     <Card>

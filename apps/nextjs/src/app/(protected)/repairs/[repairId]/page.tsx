@@ -8,10 +8,10 @@ import {
 } from "~/components/Page";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
-import RepairCommentsSection from "../_components/RepairCommentsSection";
-import RepairDetailsSection from "../_components/RepairDetailsSection";
-import RepairImagesSection from "../_components/RepairImagesSection";
-import RepairPartsSection from "../_components/RepairPartsSection";
+import RepairCommentsTable from "../_components/RepairComments";
+import RepairDetails from "../_components/RepairDetails";
+import RepairImages from "../_components/RepairImages";
+import RepairParts from "../_components/RepairParts";
 
 interface ViewRepairPageProps {
   params: {
@@ -33,10 +33,10 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <RepairDetailsSection repairId={repairId} />
-      <RepairPartsSection repairId={repairId} />
-      <RepairCommentsSection repairId={repairId} />
-      <RepairImagesSection repairId={repairId} />
+      <RepairDetails repairId={repairId} />
+      <RepairParts repairId={repairId} />
+      <RepairCommentsTable repairId={repairId} />
+      <RepairImages repairId={repairId} />
     </PageWrapper>
   );
 }

@@ -1,12 +1,9 @@
 "use client";
 import type { RouterOutputs } from "@repo/api/router";
-import type { RepairID } from "@repo/validators/ids.validators";
 
 import { Avatar, AvatarFallback } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
-import { Pencil, Trash2, User } from "@repo/ui/icons";
+import { User } from "@repo/ui/icons";
 import { formatRelative } from "date-fns";
-import Link from "next/link";
 
 import { CommentText } from "./CommentText";
 
@@ -14,10 +11,9 @@ type Comment = RouterOutputs["repairComments"]["getAllByRepairId"][number];
 
 interface RepairCommentProps {
   comment: Comment;
-  repairId: RepairID;
 }
 
-export function RepairComment({ comment, repairId }: RepairCommentProps) {
+export function RepairComment({ comment }: RepairCommentProps) {
   return (
     <div className="mt-4 flex gap-4 rounded-lg p-4">
       <Avatar className="h-10 w-10 border">

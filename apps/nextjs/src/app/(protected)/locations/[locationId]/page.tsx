@@ -10,8 +10,8 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import LocationAssetsSection from "../_components/LocationAssetsSection";
-import LocationDetailsSection from "../_components/LocationDetailsSection";
+import LocationAssetsTable from "../_components/LocationAssetsTable";
+import LocationDetails from "../_components/LocationDetails";
 
 interface ViewLocationPageProps {
   params: {
@@ -36,8 +36,8 @@ export default async function ViewLocationPage({
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <LocationDetailsSection locationId={locationId} />
-      <LocationAssetsSection locationId={locationId} />
+      <LocationDetails locationId={locationId} />
+      <LocationAssetsTable locationId={locationId} />
     </PageWrapper>
   );
 }

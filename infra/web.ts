@@ -14,6 +14,7 @@ export const nextjs = new sst.aws.Nextjs("MyWeb", {
   path: "apps/nextjs",
   domain: "workshop-repairs.click",
   environment: {
+    REACT_EDITOR: "code",
     NEXT_PUBLIC_AWS_REGION: region,
     NEXT_PUBLIC_AWS_BUCKET: bucket.name,
     NEXT_PUBLIC_URL:

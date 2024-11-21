@@ -8,9 +8,9 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import ClientAssetsSection from "../_components/ClientAssetsTable";
-import ClientDetailsSection from "../_components/ClientDetailsSection";
-import ClientRepairsSection from "../_components/ClientRepairsTable";
+import ClientAssetsTable from "../_components/ClientAssetsTable";
+import ClientDetails from "../_components/ClientDetails";
+import ClientRepairsTable from "../_components/ClientRepairsTable";
 
 interface ViewClientPageProps {
   params: {
@@ -34,9 +34,9 @@ export default async function ViewClientPage({ params }: ViewClientPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <ClientDetailsSection clientId={clientId} />
-      <ClientAssetsSection clientId={clientId} />
-      <ClientRepairsSection clientId={clientId} />
+      <ClientDetails clientId={clientId} />
+      <ClientAssetsTable clientId={clientId} />
+      <ClientRepairsTable clientId={clientId} />
     </PageWrapper>
   );
 }

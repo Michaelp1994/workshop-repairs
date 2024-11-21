@@ -10,8 +10,8 @@ import {
 } from "~/components/Page";
 import generateAssetSlug from "~/utils/generateAssetSlug";
 
-import AssetDetailsSection from "../_components/AssetDetailsSection";
-import AssetRepairsSection from "../_components/AssetRepairsSection";
+import AssetDetails from "../_components/AssetDetails";
+import AssetRepairsTable from "../_components/AssetRepairsTable";
 
 interface ViewAssetPageProps {
   params: {
@@ -39,8 +39,8 @@ export default function ViewAssetPage({ params }: ViewAssetPageProps) {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <AssetDetailsSection assetId={assetId} />
-      <AssetRepairsSection assetId={assetId} />
+      <AssetDetails assetId={assetId} />
+      <AssetRepairsTable assetId={assetId} />
     </PageWrapper>
   );
 }

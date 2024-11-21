@@ -10,13 +10,11 @@ import {
 } from "~/components/ImageGrid";
 import { api } from "~/trpc/client";
 
-interface ModelImagesSectionProps {
+interface ModelImagesProps {
   modelId: ModelID;
 }
 
-export default function ModelImagesSection({
-  modelId,
-}: ModelImagesSectionProps) {
+export default function ModelImages({ modelId }: ModelImagesProps) {
   const [data] = api.modelImages.getAllByModelId.useSuspenseQuery({
     modelId,
   });

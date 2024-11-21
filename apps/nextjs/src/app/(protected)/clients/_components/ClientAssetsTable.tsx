@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
@@ -7,13 +7,13 @@ import { api } from "~/trpc/client";
 
 import { columns } from "../../assets/_components/AssetsTable/columns";
 
-interface ClientAssetsSectionProps {
+interface ClientAssetsTableProps {
   clientId: number;
 }
 
-export default function ClientAssetsSection({
+export default function ClientAssetsTable({
   clientId,
-}: ClientAssetsSectionProps) {
+}: ClientAssetsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
   const [assets] = api.assets.getAll.useSuspenseQuery({

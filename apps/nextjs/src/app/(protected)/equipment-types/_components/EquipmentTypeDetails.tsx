@@ -5,24 +5,26 @@ import { DetailsLabel, DetailsList, DetailsValue } from "@repo/ui/details-list";
 import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
-interface LocationDetailsSectionProps {
-  locationId: number;
+interface EquipmentTypeDetailsProps {
+  equipmentTypeId: number;
 }
 
-export default function LocationDetailsSection({
-  locationId,
-}: LocationDetailsSectionProps) {
-  const [location] = api.locations.getById.useSuspenseQuery({ id: locationId });
+export default function EquipmentTypeDetails({
+  equipmentTypeId,
+}: EquipmentTypeDetailsProps) {
+  const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
+    id: equipmentTypeId,
+  });
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Location Details</CardTitle>
+        <CardTitle>Equipment Type Details</CardTitle>
       </CardHeader>
       <CardContent>
         <DetailsList>
           <DetailsLabel>Name:</DetailsLabel>
-          <DetailsValue>{location.name}</DetailsValue>
-          <MetadataFields metadata={location} />
+          <DetailsValue>{equipmentType.name}</DetailsValue>
+          <MetadataFields metadata={equipmentType} />
         </DetailsList>
       </CardContent>
     </Card>

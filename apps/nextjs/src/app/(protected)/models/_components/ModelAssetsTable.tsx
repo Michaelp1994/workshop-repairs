@@ -8,13 +8,11 @@ import { api } from "~/trpc/client";
 
 import { columns } from "../../assets/_components/AssetsTable/columns";
 
-interface ModelAssetsSectionProps {
+interface ModelAssetsTableProps {
   modelId: ModelID;
 }
 
-export default function ModelAssetsSection({
-  modelId,
-}: ModelAssetsSectionProps) {
+export default function ModelAssetsTable({ modelId }: ModelAssetsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
   const [assets] = api.assets.getAll.useSuspenseQuery({

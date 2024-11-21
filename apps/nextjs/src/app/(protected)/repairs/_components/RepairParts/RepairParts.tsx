@@ -14,13 +14,11 @@ import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import RepairPartsTable from "./RepairPartsTable";
 
-interface RepairPartsSectionProps {
+interface RepairPartsProps {
   repairId: RepairID;
 }
 
-export default function RepairPartsSection({
-  repairId,
-}: RepairPartsSectionProps) {
+export default function RepairParts({ repairId }: RepairPartsProps) {
   return (
     <Card>
       <CardHeader>

@@ -1,7 +1,7 @@
 "use client";
-import type { LocationID } from "@repo/validators/ids.validators";
+import type { EquipmentTypeID } from "@repo/validators/ids.validators";
 
-import { Card, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
@@ -9,39 +9,42 @@ import { api } from "~/trpc/client";
 
 import { columns } from "../../assets/_components/AssetsTable/columns";
 
-interface LocationAssetsSectionProps {
-  locationId: LocationID;
+interface EquipmentTypeAssetsTableProps {
+  equipmentTypeId: EquipmentTypeID;
 }
 
-export default function LocationRepairsSection({
-  locationId,
-}: LocationAssetsSectionProps) {
+export default function EquipmentTypeAssetsTable({
+  equipmentTypeId,
+}: EquipmentTypeAssetsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
   const [assets] = api.assets.getAll.useSuspenseQuery({
     ...dataState,
     filters: {
-      locationId,
+      equipmentTypeId,
     },
   });
 
   const [rowCount] = api.assets.countAll.useSuspenseQuery({
     ...countState,
     filters: {
-      locationId,
+      equipmentTypeId,
     },
   });
+
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between">
         <CardTitle>Assets</CardTitle>
       </CardHeader>
-      <DataTable
-        columns={columns}
-        data={assets}
-        rowCount={rowCount}
-        tableState={tableState}
-      />
+      <CardContent>
+        <DataTable
+          columns={columns}
+          data={assets}
+          rowCount={rowCount}
+          tableState={tableState}
+        />
+      </CardContent>
     </Card>
   );
 }

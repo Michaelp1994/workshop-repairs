@@ -10,8 +10,8 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import ManufacturerModelsSection from "../_components/ManufacturerModelsSection";
-import ManufacturerDetailsSection from "../_components/ManufacturersDetailsSection";
+import ManufacturerModelsTable from "../_components/ManufacturerModelsTable";
+import ManufacturerDetails from "../_components/ManufacturersDetails";
 
 interface ViewManufacturerPageProps {
   params: {
@@ -37,8 +37,8 @@ export default async function ViewManufacturerPage({
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <ManufacturerDetailsSection manufacturerId={manufacturerId} />
-      <ManufacturerModelsSection manufacturerId={manufacturerId} />
+      <ManufacturerDetails manufacturerId={manufacturerId} />
+      <ManufacturerModelsTable manufacturerId={manufacturerId} />
     </PageWrapper>
   );
 }

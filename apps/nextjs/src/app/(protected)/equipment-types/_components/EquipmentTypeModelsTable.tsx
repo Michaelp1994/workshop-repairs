@@ -9,13 +9,13 @@ import { api } from "~/trpc/client";
 
 import { columns } from "../../models/_components/ModelsTable/columns";
 
-interface EquipmentTypeModelsSectionProps {
+interface EquipmentTypeModelsTableProps {
   equipmentTypeId: EquipmentTypeID;
 }
 
 export default function EquipmentTypeModelsTable({
   equipmentTypeId,
-}: EquipmentTypeModelsSectionProps) {
+}: EquipmentTypeModelsTableProps) {
   const { dataState, countState, tableState } = useDataTableState();
 
   const [models] = api.models.getAll.useSuspenseQuery({
