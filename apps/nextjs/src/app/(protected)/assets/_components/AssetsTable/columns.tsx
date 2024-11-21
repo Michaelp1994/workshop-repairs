@@ -1,12 +1,17 @@
 import type { RouterOutputs } from "@repo/api/router";
 
 import { Badge } from "@repo/ui/badge";
-import { DataTableColumnHeader } from "@repo/ui/data-table";
+import {
+  DataTableColumnHeader,
+  DataTableHeaderCheckbox,
+  DataTableLinkCell,
+  DataTableRowCheckbox,
+} from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
-import { DataTableImageCell } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
+import generateAssetSlug from "~/utils/generateAssetSlug";
 import { getBaseUrl } from "~/utils/getBaseUrl";
 
 type Row = RouterOutputs["assets"]["getAll"][number];
@@ -14,22 +19,29 @@ type Row = RouterOutputs["assets"]["getAll"][number];
 const columnHelper = createColumnHelper<Row>();
 
 export const columns = [
-  // columnHelper.display({
-  //   id: "selection",
-  //   enableHiding: false,
-  //   header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
-  //   cell: ({ row }) => <DataTableRowCheckbox row={row} />,
-  // }),
-  columnHelper.accessor("model.imageUrl", {
-    id: "image",
-    header: "",
-    cell: ({ getValue }) => (
-      <DataTableImageCell alt="" url={getValue() ?? "/placeholder.svg"} />
+  columnHelper.display({
+    id: "selection",
+    enableHiding: false,
+    header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
+    cell: ({ row }) => <DataTableRowCheckbox row={row} />,
+  }),
+  columnHelper.accessor("id", {
+    id: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Asset" />
     ),
+    cell: ({ getValue }) => {
+      return (
+        <DataTableLinkCell href={`/assets/${getValue()}`}>
+          {generateAssetSlug(getValue())}
+        </DataTableLinkCell>
+      );
+    },
     meta: {
-      name: "Image",
+      name: "Asset",
     },
   }),
+
   columnHelper.accessor("assetNumber", {
     id: "assetNumber",
     header: ({ column }) => (
@@ -62,28 +74,28 @@ export const columns = [
       name: "Status",
     },
   }),
-  columnHelper.accessor("model.nickname", {
+  columnHelper.accessor("model", {
     id: "model",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Model" />
     ),
+    cell: ({ getValue }) => {
+      const model = getValue();
+      return (
+        <>
+          <div className="font-semibold">{model.name}</div>
+          <div className="text-muted-foreground">{model.manufacturer}</div>
+        </>
+      );
+    },
     meta: {
       name: "Model",
-    },
-  }),
-  columnHelper.accessor("manufacturer.name", {
-    id: "manufacturer",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Manufacturer" />
-    ),
-    meta: {
-      name: "Manufacturer",
     },
   }),
   columnHelper.accessor("client.name", {
     id: "client",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Client" />
+      <DataTableColumnHeader column={column} title="Owner" />
     ),
     meta: {
       name: "Client",

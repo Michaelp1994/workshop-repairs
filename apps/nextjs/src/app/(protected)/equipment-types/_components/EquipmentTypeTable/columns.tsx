@@ -1,6 +1,6 @@
 import type { RouterOutputs } from "@repo/api/router";
 
-import { DataTableColumnHeader } from "@repo/ui/data-table";
+import { DataTableColumnHeader, DataTableLinkCell } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
@@ -21,6 +21,11 @@ export const columns = [
   columnHelper.accessor("name", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
+    ),
+    cell: ({ getValue, row }) => (
+      <DataTableLinkCell href={`equipment-types/${row.original.id}`}>
+        {getValue()}
+      </DataTableLinkCell>
     ),
     meta: {
       name: "Name",

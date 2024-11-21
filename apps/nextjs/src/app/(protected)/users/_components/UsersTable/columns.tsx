@@ -1,7 +1,7 @@
 import type { RouterOutputs } from "@repo/api/router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { DataTableColumnHeader } from "@repo/ui/data-table";
+import { DataTableColumnHeader, DataTableLinkCell } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
@@ -33,7 +33,9 @@ export const columns = [
         </Avatar>
         <div>
           <div className="font-bold">
-            {row.original.firstName} {row.original.lastName}
+            <DataTableLinkCell href={`users/${row.original.id}`}>
+              {row.original.firstName} {row.original.lastName}
+            </DataTableLinkCell>
           </div>
           <div className="text-muted-foreground">{row.original.email}</div>
         </div>

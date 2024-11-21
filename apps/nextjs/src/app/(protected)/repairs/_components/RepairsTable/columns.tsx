@@ -1,14 +1,17 @@
 import type { RouterOutputs } from "@repo/api/router";
 
 import { Badge } from "@repo/ui/badge";
-import { DataTableColumnHeader, DataTableImageCell } from "@repo/ui/data-table";
+import { DataTableColumnHeader, DataTableLinkCell } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
+import generateRepairSlug from "~/utils/generateRepairSlug";
 import { getBaseUrl } from "~/utils/getBaseUrl";
+
+import RepairStatusBadge from "../RepairStatusBadge";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["repairs"]["getAll"][number]>();
@@ -20,17 +23,25 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("asset.imageUrl", {
-    id: "image",
-    header: "",
-    cell: ({ getValue }) => (
-      <DataTableImageCell alt="" url={getValue() ?? "/placeholder.svg"} />
+  columnHelper.accessor("id", {
+    id: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Repair" />
     ),
+    cell: ({ getValue }) => {
+      return (
+        <DataTableLinkCell href={`/repairs/${getValue()}`}>
+          {generateRepairSlug(getValue())}
+        </DataTableLinkCell>
+      );
+    },
     meta: {
-      name: "Image",
+      name: "Repair",
     },
   }),
+
   columnHelper.accessor("asset.assetNumber", {
+    id: "assetNumber",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Asset Number" />
     ),
@@ -39,6 +50,7 @@ export const columns = [
     },
   }),
   columnHelper.accessor("asset.serialNumber", {
+    id: "serialNumber",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Serial Number" />
     ),
@@ -47,13 +59,15 @@ export const columns = [
     },
   }),
   columnHelper.accessor("status", {
+    id: "status",
     header: "Current Status",
-    cell: ({ getValue }) => <Badge>{getValue().name}</Badge>,
+    cell: ({ getValue }) => <RepairStatusBadge status={getValue()} />,
     meta: {
       name: "Current Status",
     },
   }),
   columnHelper.accessor("type", {
+    id: "type",
     header: "Type",
     cell: ({ getValue }) => <Badge>{getValue().name}</Badge>,
     meta: {
@@ -90,7 +104,7 @@ export const columns = [
   }),
 
   columnHelper.display({
-    id: "id",
+    id: "actions",
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
