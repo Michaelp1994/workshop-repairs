@@ -8,6 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
+import generateAssetSlug from "~/utils/generateAssetSlug";
 
 import AssetDetailsSection from "../_components/AssetDetailsSection";
 import AssetRepairsSection from "../_components/AssetRepairsSection";
@@ -30,7 +31,7 @@ export default function ViewAssetPage({ params }: ViewAssetPageProps) {
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>{assetId}</PageTitle>
+          <PageTitle>{generateAssetSlug(assetId)}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton href={`${assetId}/edit`} variant="update">

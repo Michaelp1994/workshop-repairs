@@ -6,7 +6,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-import { api } from "~/trpc/server";
+import generateRepairSlug from "~/utils/generateRepairSlug";
 
 import RepairCommentsSection from "../_components/RepairCommentsSection";
 import RepairDetailsSection from "../_components/RepairDetailsSection";
@@ -20,14 +20,11 @@ interface ViewRepairPageProps {
 
 export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
   const repairId = Number(params.repairId);
-  const repair = await api.repairs.getById({
-    id: repairId,
-  });
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>{repair.id}</PageTitle>
+          <PageTitle>{generateRepairSlug(repairId)}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton href={`/repairs/${repairId}/edit`} variant="update">
