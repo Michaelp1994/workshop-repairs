@@ -43,6 +43,7 @@ export const columns = [
     },
   }),
   columnHelper.accessor("equipmentType.name", {
+    id: "equipmentType",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Equipment Type" />
     ),
@@ -51,6 +52,7 @@ export const columns = [
     },
   }),
   columnHelper.accessor("manufacturer.name", {
+    id: "manufacturer",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Manufacturer" />
     ),
@@ -60,6 +62,7 @@ export const columns = [
   }),
 
   columnHelper.accessor("createdAt", {
+    id: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Created" />
     ),
@@ -70,6 +73,7 @@ export const columns = [
   }),
 
   columnHelper.accessor("updatedAt", {
+    id: "updatedAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Updated" />
     ),

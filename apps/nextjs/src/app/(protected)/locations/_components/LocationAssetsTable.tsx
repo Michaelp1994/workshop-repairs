@@ -22,7 +22,18 @@ interface LocationAssetsTableProps {
 export default function LocationAssetsTable({
   locationId,
 }: LocationAssetsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      createdAt: false,
+      assetNumber: false,
+      updatedAt: false,
+      location: false,
+    },
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [assets] = api.assets.getAll.useSuspenseQuery({
     ...dataState,

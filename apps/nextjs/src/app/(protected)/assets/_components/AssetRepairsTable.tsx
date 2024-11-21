@@ -16,7 +16,17 @@ interface AssetRepairsTableProps {
 }
 
 export default function AssetRepairsTable({ assetId }: AssetRepairsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      assetNumber: false,
+      createdAt: false,
+      updatedAt: false,
+    },
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [repairs] = api.repairs.getAll.useSuspenseQuery({
     ...dataState,

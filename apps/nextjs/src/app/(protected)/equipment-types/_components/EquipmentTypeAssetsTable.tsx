@@ -16,7 +16,17 @@ interface EquipmentTypeAssetsTableProps {
 export default function EquipmentTypeAssetsTable({
   equipmentTypeId,
 }: EquipmentTypeAssetsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      assetNumber: false,
+      createdAt: false,
+      updatedAt: false,
+    },
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [assets] = api.assets.getAll.useSuspenseQuery({
     ...dataState,

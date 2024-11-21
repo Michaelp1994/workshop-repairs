@@ -24,7 +24,18 @@ interface ClientRepairsTableProps {
 export default function ClientRepairsTable({
   clientId,
 }: ClientRepairsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      createdAt: false,
+      assetNumber: false,
+      updatedAt: false,
+      client: false,
+    },
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [repairs] = api.repairs.getAll.useSuspenseQuery({
     ...dataState,

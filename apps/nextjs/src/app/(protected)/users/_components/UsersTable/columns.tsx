@@ -7,6 +7,7 @@ import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { DataTableRowActions } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import { formatDate } from "~/utils/formatDate";
 import getInitials from "~/utils/getInitials";
 
 const columnHelper =
@@ -52,6 +53,26 @@ export const columns = [
     ),
     meta: {
       name: "Role",
+    },
+  }),
+
+  columnHelper.accessor("createdAt", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date Created" />
+    ),
+    meta: {
+      name: "Date Created",
+    },
+    cell: (info) => formatDate(info.getValue()),
+  }),
+
+  columnHelper.accessor("updatedAt", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date Updated" />
+    ),
+    cell: (info) => formatDate(info.getValue()),
+    meta: {
+      name: "Date Updated",
     },
   }),
 

@@ -23,7 +23,16 @@ interface EquipmentTypeModelsTableProps {
 export default function EquipmentTypeModelsTable({
   equipmentTypeId,
 }: EquipmentTypeModelsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      createdAt: false,
+      updatedAt: false,
+    },
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [models] = api.models.getAll.useSuspenseQuery({
     ...dataState,

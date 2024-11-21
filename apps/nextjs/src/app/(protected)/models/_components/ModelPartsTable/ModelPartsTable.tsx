@@ -16,7 +16,12 @@ interface ModelPartsTableProps {
 }
 
 export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [parts] = api.partsToModels.getAllPartsByModelId.useSuspenseQuery({
     ...dataState,

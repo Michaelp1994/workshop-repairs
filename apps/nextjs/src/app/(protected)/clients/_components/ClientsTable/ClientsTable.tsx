@@ -11,7 +11,11 @@ import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 export default function ClientsTable() {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      updatedAt: false,
+    },
+  });
 
   const [allClients] = api.clients.getAll.useSuspenseQuery(dataState);
 

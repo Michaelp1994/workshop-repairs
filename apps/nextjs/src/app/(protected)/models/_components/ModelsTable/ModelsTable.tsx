@@ -8,7 +8,12 @@ import { api } from "~/trpc/client";
 import { columns } from "./columns";
 
 export default function ModelsTable() {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      createdAt: false,
+      updatedAt: false,
+    },
+  });
 
   const [models] = api.models.getAll.useSuspenseQuery(dataState);
 

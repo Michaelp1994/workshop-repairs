@@ -45,7 +45,8 @@ export const dataTableSchema = z.object({
   columnFilters: columnFiltersSchema.default([]),
 });
 
-export type DataTableInput = z.infer<typeof dataTableSchema>;
+export type DataTableInput = z.input<typeof dataTableSchema>;
+export type DataTableOutput = z.output<typeof dataTableSchema>;
 
 export const dataTableCountSchema = z.object({
   globalFilter: globalFilterSchema.default(""),

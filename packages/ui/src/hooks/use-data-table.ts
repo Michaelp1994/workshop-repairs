@@ -1,4 +1,7 @@
-import type { DataTableInput } from "@repo/validators/dataTables.validators";
+import type {
+  DataTableInput,
+  DataTableOutput,
+} from "@repo/validators/dataTables.validators";
 
 import {
   ColumnFiltersState,
@@ -12,12 +15,12 @@ import {
 import { useDebounce } from "@uidotdev/usehooks";
 import { useState } from "react";
 export function useDataTableState(initialState?: DataTableInput) {
-  const init: DataTableInput = initialState ?? {
-    columnFilters: [],
-    columns: {},
-    globalFilter: "",
-    sorting: [],
-    pagination: {
+  const init: DataTableOutput = {
+    columnFilters: initialState?.columnFilters ?? [],
+    columns: initialState?.columns ?? {},
+    globalFilter: initialState?.globalFilter ?? "",
+    sorting: initialState?.sorting ?? [],
+    pagination: initialState?.pagination ?? {
       pageIndex: 0,
       pageSize: 10,
     },

@@ -8,7 +8,11 @@ import { api } from "~/trpc/client";
 import { columns } from "./columns";
 
 export default function ManufacturersTable() {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      createdAt: false,
+    },
+  });
 
   const [manufacturers] = api.manufacturers.getAll.useSuspenseQuery(dataState);
 

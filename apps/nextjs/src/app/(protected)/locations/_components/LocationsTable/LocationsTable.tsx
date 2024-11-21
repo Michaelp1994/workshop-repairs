@@ -12,7 +12,11 @@ import { api } from "~/trpc/client";
 import { columns } from "./columns";
 
 export default function LocationsTable() {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      updatedAt: false,
+    },
+  });
 
   const [locations] = api.locations.getAll.useSuspenseQuery(dataState);
 

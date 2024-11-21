@@ -19,6 +19,7 @@ export const columns = [
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
   columnHelper.accessor("name", {
+    id: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
@@ -33,6 +34,7 @@ export const columns = [
   }),
 
   columnHelper.accessor("createdAt", {
+    id: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Created" />
     ),
@@ -43,6 +45,7 @@ export const columns = [
   }),
 
   columnHelper.accessor("updatedAt", {
+    id: "updatedAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Updated" />
     ),

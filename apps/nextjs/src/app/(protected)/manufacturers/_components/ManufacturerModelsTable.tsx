@@ -23,7 +23,17 @@ interface ManufacturerModelsTableProps {
 export default function ManufacturerModelsTable({
   manufacturerId,
 }: ManufacturerModelsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+    columns: {
+      manufacturer: false,
+      createdAt: false,
+      updatedAt: false,
+    },
+  });
 
   const [models] = api.models.getAll.useSuspenseQuery({
     ...dataState,

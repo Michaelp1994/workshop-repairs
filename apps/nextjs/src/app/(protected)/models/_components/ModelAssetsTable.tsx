@@ -20,7 +20,17 @@ interface ModelAssetsTableProps {
 }
 
 export default function ModelAssetsTable({ modelId }: ModelAssetsTableProps) {
-  const { dataState, countState, tableState } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      model: false,
+      createdAt: false,
+      updatedAt: false,
+    },
+    pagination: {
+      pageSize: 5,
+      pageIndex: 0,
+    },
+  });
 
   const [assets] = api.assets.getAll.useSuspenseQuery({
     ...dataState,
