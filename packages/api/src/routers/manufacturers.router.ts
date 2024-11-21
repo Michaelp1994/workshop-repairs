@@ -1,9 +1,9 @@
 import {
   archiveManufacturer,
+  countManufacturers,
   createManufacturer,
   getAllManufacturers,
   getManufacturerById,
-  getManufacturersCount,
   getManufacturersSelect,
   updateManufacturer,
 } from "@repo/db/repositories/manufacturer.repository";
@@ -42,7 +42,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
-      const count = getManufacturersCount(input, ctx.session.organizationId);
+      const count = countManufacturers(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure

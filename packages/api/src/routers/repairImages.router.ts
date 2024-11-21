@@ -4,7 +4,7 @@ import {
   getAllRepairImages,
   getAllRepairImagesByRepairId,
   getRepairImageById,
-  getRepairImagesCount,
+  countRepairImages,
   updateRepairImage,
 } from "@repo/db/repositories/repairImage.repository";
 import {
@@ -39,7 +39,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
-      const count = getRepairImagesCount(input);
+      const count = countRepairImages(input);
       return count;
     }),
   getAllByRepairId: organizationProcedure

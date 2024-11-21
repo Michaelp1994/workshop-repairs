@@ -1,6 +1,6 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -29,7 +29,7 @@ export function getAllRepairComments({ pagination }: DataTableInput) {
   return query.execute();
 }
 
-export async function getRepairCommentsCount(_input: DataTableCountSchema) {
+export async function countRepairComments(_input: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(repairCommentTable)

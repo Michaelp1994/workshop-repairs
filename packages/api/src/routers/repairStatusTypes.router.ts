@@ -3,7 +3,7 @@ import {
   createRepairStatus,
   getAllRepairStatusTypes,
   getRepairStatusById,
-  getRepairStatusTypesCount,
+  countRepairStatusTypes,
   getRepairStatusTypesSelect,
   updateRepairStatus,
 } from "@repo/db/repositories/repairStatusType.repository";
@@ -45,7 +45,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
-      const count = getRepairStatusTypesCount(input);
+      const count = countRepairStatusTypes(input);
       return count;
     }),
   getById: organizationProcedure

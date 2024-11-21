@@ -55,7 +55,7 @@ export async function getAllAssets(
   return res;
 }
 
-export async function getAssetsCount(
+export async function countAssets(
   { filters, ...dataTableInput }: GetAssetsCountInput,
   organizationId: OrganizationID,
 ) {

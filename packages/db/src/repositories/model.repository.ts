@@ -46,7 +46,7 @@ export function getAllModels(
   return query.execute();
 }
 
-export async function getModelsCount(
+export async function countModels(
   { filters, ...dataTableInput }: GetModelsCountInput,
   organizationId: OrganizationID,
 ) {

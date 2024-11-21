@@ -50,7 +50,7 @@ export function getAllManufacturers(
   return query.execute();
 }
 
-export async function getManufacturersCount(
+export async function countManufacturers(
   { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {

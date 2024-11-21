@@ -4,11 +4,11 @@ import {
 } from "@repo/db/repositories/model.repository";
 import {
   archiveModelImage,
+  countModelImages,
   createModelImage,
   getAllModelImages,
   getAllModelImagesByModelId,
   getModelImageById,
-  getModelImagesCount,
   updateModelImage,
 } from "@repo/db/repositories/modelImage.repository";
 import {
@@ -47,7 +47,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
-      const count = getModelImagesCount(input);
+      const count = countModelImages(input);
       return count;
     }),
   getAllByModelId: organizationProcedure

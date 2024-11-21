@@ -1,10 +1,10 @@
 import {
   archivePartToModel,
+  countAllModelsByPartId,
+  countAllPartsByModelId,
   createPartToModel,
   getAllModelsByPartId,
-  getAllModelsByPartIdCount,
   getAllPartsByModelId,
-  getAllPartsByModelIdCount,
   getPartsToModelsSelect,
 } from "@repo/db/repositories/partToModel.repository";
 import { getSelectSchema } from "@repo/validators/dataTables.validators";
@@ -32,7 +32,7 @@ export default router({
   countAllPartsByModelId: organizationProcedure
     .input(getAllPartsByModelIdCountSchema)
     .query(async ({ input }) => {
-      const count = await getAllPartsByModelIdCount(input);
+      const count = await countAllPartsByModelId(input);
 
       if (count === undefined) {
         throw new TRPCError({
@@ -51,7 +51,7 @@ export default router({
   countAllModelsByPartId: organizationProcedure
     .input(getAllModelsByPartIdCountSchema)
     .query(async ({ input }) => {
-      const count = await getAllModelsByPartIdCount(input);
+      const count = await countAllModelsByPartId(input);
       if (count === undefined) {
         throw new TRPCError({
           code: "NOT_FOUND",

@@ -1,10 +1,10 @@
 import {
   archiveRepairComment,
+  countRepairComments,
   createRepairComment,
   getAllRepairComments,
   getAllRepairCommentsByRepairId,
   getRepairCommentById,
-  getRepairCommentsCount,
   updateRepairComment,
 } from "@repo/db/repositories/repairComment.repository";
 import {
@@ -39,7 +39,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
-      const count = getRepairCommentsCount(input);
+      const count = countRepairComments(input);
       return count;
     }),
   getById: organizationProcedure

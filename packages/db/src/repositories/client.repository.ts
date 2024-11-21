@@ -50,7 +50,7 @@ export function getAllClients(
   return query.execute();
 }
 
-export async function getClientsCount(
+export async function countClients(
   { globalFilter, columnFilters }: GetClientsCountInput,
   organizationId: OrganizationID,
 ) {

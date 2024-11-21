@@ -1,9 +1,9 @@
 import {
   archiveEquipmentType,
+  countEquipmentTypes,
   createEquipmentType,
   getAllEquipmentTypes,
   getEquipmentTypeById,
-  getEquipmentTypesCount,
   getEquipmentTypesSelect,
   updateEquipmentType,
 } from "@repo/db/repositories/equipmentType.repository";
@@ -42,7 +42,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
-      const count = getEquipmentTypesCount(input, ctx.session.organizationId);
+      const count = countEquipmentTypes(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure

@@ -1,9 +1,9 @@
 import {
   archiveRepair,
+  countRepairs,
   createRepair,
   getAllRepairs,
   getRepairById,
-  getRepairsCount,
   getRepairsSelect,
   updateRepair,
 } from "@repo/db/repositories/repair.repository";
@@ -37,7 +37,7 @@ export default router({
   countAll: organizationProcedure
     .input(getRepairsCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await getRepairsCount(input, ctx.session.organizationId);
+      const count = await countRepairs(input, ctx.session.organizationId);
       if (count === undefined) {
         throw new TRPCError({
           code: "NOT_FOUND",

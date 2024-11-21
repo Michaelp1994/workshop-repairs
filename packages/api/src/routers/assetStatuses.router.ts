@@ -1,9 +1,9 @@
 import {
   archiveAssetStatus,
+  countAssetStatuses,
   createAssetStatus,
   getAllAssetStatuses,
   getAssetStatusById,
-  getAssetStatusesCount,
   getAssetStatusSelect,
   updateAssetStatus,
 } from "@repo/db/repositories/assetStatus.repository";
@@ -38,7 +38,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
-      const count = getAssetStatusesCount(input);
+      const count = countAssetStatuses(input);
       return count;
     }),
   getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {

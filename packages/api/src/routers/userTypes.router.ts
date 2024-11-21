@@ -3,7 +3,7 @@ import {
   createUserType,
   getAllUserTypes,
   getUserTypeById,
-  getUserTypesCount,
+  countUserTypes,
   getUserTypesSelect,
   updateUserType,
 } from "@repo/db/repositories/userType.repository";
@@ -37,7 +37,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
-      const count = getUserTypesCount(input);
+      const count = countUserTypes(input);
       return count;
     }),
   getSelect: organizationProcedure

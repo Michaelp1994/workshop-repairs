@@ -1,10 +1,10 @@
 import { getAssetById } from "@repo/db/repositories/asset.repository";
 import {
   archiveModel,
+  countModels,
   createModel,
   getAllModels,
   getModelById,
-  getModelsCount,
   getModelsSelect,
   updateModel,
 } from "@repo/db/repositories/model.repository";
@@ -39,7 +39,7 @@ export default router({
   countAll: organizationProcedure
     .input(getModelsCountSchema)
     .query(({ ctx, input }) => {
-      const count = getModelsCount(input, ctx.session.organizationId);
+      const count = countModels(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure

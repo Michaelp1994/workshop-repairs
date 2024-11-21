@@ -49,7 +49,7 @@ export function getAllParts(
   return query.execute();
 }
 
-export async function getPartsCount(
+export async function countParts(
   { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {

@@ -88,7 +88,7 @@ export function getAllRepairs(
   return query.execute();
 }
 
-export async function getRepairsCount(
+export async function countRepairs(
   { globalFilter, columnFilters, filters }: GetRepairsCountInput,
   organizationId: OrganizationID,
 ) {

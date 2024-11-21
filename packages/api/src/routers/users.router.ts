@@ -7,7 +7,7 @@ import {
   getAllUsers,
   getUserByEmail,
   getUserById,
-  getUsersCount,
+  countUsers,
   setUserEmailVerified,
   updateUser,
 } from "@repo/db/repositories/user.repository";
@@ -49,7 +49,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input, ctx }) => {
-      const count = getUsersCount(input, ctx.session.organizationId);
+      const count = countUsers(input, ctx.session.organizationId);
       return count;
     }),
   resetPassword: authedProcedure

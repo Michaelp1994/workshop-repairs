@@ -49,7 +49,7 @@ export function getAllLocations(
   return query.execute();
 }
 
-export async function getLocationsCount(
+export async function countLocations(
   { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {

@@ -1,9 +1,9 @@
 import {
   archiveClient,
+  countClients,
   createClient,
   getAllClients,
   getClientById,
-  getClientsCount,
   getClientsSelect,
   updateClient,
 } from "@repo/db/repositories/client.repository";
@@ -38,7 +38,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await getClientsCount(input, ctx.session.organizationId);
+      const count = await countClients(input, ctx.session.organizationId);
       assertDatabaseResult(count);
       return count;
     }),

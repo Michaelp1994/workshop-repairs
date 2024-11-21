@@ -30,7 +30,7 @@ export function getAllRepairParts({ pagination }: DataTableInput) {
   return query.execute();
 }
 
-export async function getRepairPartsCount(_: DataTableCountSchema) {
+export async function countRepairParts(_: DataTableCountSchema) {
   const query = db
     .select({ count: count() })
     .from(repairPartTable)

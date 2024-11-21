@@ -56,7 +56,7 @@ export function createAllModelsQuery(
 
 export function createModelsCountQuery(
   { globalFilter, columnFilters }: DataTableCountSchema,
-  ...filters: SQL[]
+  ...filters: (SQL | undefined)[]
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);
   const columnFilterParams = createColumnFilters(columnFilters);

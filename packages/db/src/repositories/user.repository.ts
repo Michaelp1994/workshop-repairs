@@ -51,7 +51,7 @@ export function getAllUsers(
   return query.execute();
 }
 
-export async function getUsersCount(
+export async function countUsers(
   { globalFilter, columnFilters }: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {

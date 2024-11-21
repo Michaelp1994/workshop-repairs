@@ -1,9 +1,9 @@
 import {
   archivePart,
+  countParts,
   createPart,
   getAllParts,
   getPartById,
-  getPartsCount,
   getPartsSelect,
   updatePart,
 } from "@repo/db/repositories/part.repository";
@@ -39,7 +39,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await getPartsCount(input, ctx.session.organizationId);
+      const count = await countParts(input, ctx.session.organizationId);
 
       return count;
     }),

@@ -56,7 +56,7 @@ export function getAllPartsByModelId({
   return res;
 }
 
-export async function getAllPartsByModelIdCount({
+export async function countAllPartsByModelId({
   columnFilters,
   globalFilter,
   filters,
@@ -111,7 +111,7 @@ export function getAllModelsByPartId({
   return res;
 }
 
-export async function getAllModelsByPartIdCount({
+export async function countAllModelsByPartId({
   columnFilters,
   globalFilter,
   filters,

@@ -1,9 +1,9 @@
 import {
   archiveLocation,
+  countLocations,
   createLocation,
   getAllLocations,
   getLocationById,
-  getLocationsCount,
   getLocationsSelect,
   updateLocation,
 } from "@repo/db/repositories/location.repository";
@@ -39,7 +39,7 @@ export default router({
   countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
-      const count = getLocationsCount(input, ctx.session.organizationId);
+      const count = countLocations(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure

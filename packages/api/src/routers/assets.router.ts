@@ -1,10 +1,10 @@
 import {
   archiveAsset,
+  countAssets,
   createAsset,
   getAllAssets,
   getAssetById,
   getAssetByRepairId,
-  getAssetsCount,
   getAssetsSelect,
   updateAsset,
 } from "@repo/db/repositories/asset.repository";
@@ -38,7 +38,7 @@ export default router({
   countAll: organizationProcedure
     .input(getAssetsCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await getAssetsCount(input, ctx.session.organizationId);
+      const count = await countAssets(input, ctx.session.organizationId);
       assertDatabaseResult(count);
       return count;
     }),

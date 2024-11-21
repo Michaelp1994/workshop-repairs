@@ -39,7 +39,7 @@ export function getAllEquipmentTypes(
   return query.execute();
 }
 
-export async function getEquipmentTypesCount(
+export async function countEquipmentTypes(
   _: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
