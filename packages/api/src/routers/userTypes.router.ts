@@ -8,8 +8,8 @@ import {
   updateUserType,
 } from "@repo/db/repositories/userType.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {

@@ -8,16 +8,16 @@ import {
   updateClient,
 } from "@repo/db/repositories/client.repository";
 import {
+  dataTableCountSchema,
+  dataTableSchema,
+  getSelectSchema,
+} from "@repo/validators/dataTables.validators";
+import {
   archiveClientSchema,
   createClientSchema,
   getClientByIdSchema,
   updateClientSchema,
 } from "@repo/validators/server/clients.validators";
-import {
-  dataTableSchema,
-  dataTableCountSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

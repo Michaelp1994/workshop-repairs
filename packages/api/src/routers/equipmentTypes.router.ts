@@ -8,8 +8,8 @@ import {
   updateEquipmentType,
 } from "@repo/db/repositories/equipmentType.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {

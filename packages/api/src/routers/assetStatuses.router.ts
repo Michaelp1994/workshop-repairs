@@ -8,16 +8,16 @@ import {
   updateAssetStatus,
 } from "@repo/db/repositories/assetStatus.repository";
 import {
+  dataTableCountSchema,
+  dataTableSchema,
+  getSelectSchema,
+} from "@repo/validators/dataTables.validators";
+import {
   archiveAssetStatusSchema,
   createAssetStatusSchema,
   getAssetStatusByIdSchema,
   updateAssetStatusSchema,
 } from "@repo/validators/server/assetStatuses.validators";
-import {
-  dataTableSchema,
-  dataTableCountSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
 import { TRPCError } from "@trpc/server";
 
 import {

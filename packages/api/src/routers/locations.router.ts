@@ -8,8 +8,8 @@ import {
   updateLocation,
 } from "@repo/db/repositories/location.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {

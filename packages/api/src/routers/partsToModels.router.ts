@@ -6,8 +6,8 @@ import {
   getPartsToModelsSelect,
 } from "@repo/db/repositories/partToModel.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archivePartToModelSchema,

@@ -2,14 +2,14 @@ import {
   archiveRepair,
   createRepair,
   getAllRepairs,
-  getRepairsById,
+  getRepairById,
   getRepairsCount,
   getRepairsSelect,
   updateRepair,
 } from "@repo/db/repositories/repair.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
 import {
@@ -59,7 +59,7 @@ export default router({
   getById: organizationProcedure
     .input(getRepairByIdSchema)
     .query(async ({ input }) => {
-      const repair = await getRepairsById(input.id);
+      const repair = await getRepairById(input.id);
 
       if (!repair) {
         throw new TRPCError({

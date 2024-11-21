@@ -12,8 +12,8 @@ import {
   updateModelImage,
 } from "@repo/db/repositories/modelImage.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveModelImageSchema,

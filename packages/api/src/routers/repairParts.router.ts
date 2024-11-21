@@ -8,8 +8,8 @@ import {
   updateRepairPart,
 } from "@repo/db/repositories/repairPart.repository";
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
 } from "@repo/validators/dataTables.validators";
 import {
   archiveRepairPartSchema,

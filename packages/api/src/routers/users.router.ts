@@ -12,13 +12,13 @@ import {
   updateUser,
 } from "@repo/db/repositories/user.repository";
 import {
+  dataTableCountSchema,
+  dataTableSchema,
+} from "@repo/validators/dataTables.validators";
+import {
   confirmEmailSchema,
   resetPasswordSchema,
 } from "@repo/validators/server/auth.validators";
-import {
-  dataTableSchema,
-  dataTableCountSchema,
-} from "@repo/validators/dataTables.validators";
 import {
   archiveUserSchema,
   createUserSchema,
