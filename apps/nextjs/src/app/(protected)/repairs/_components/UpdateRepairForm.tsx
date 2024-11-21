@@ -21,7 +21,9 @@ import {
   repairFormSchema,
 } from "@repo/validators/client/repair.schema";
 
+import AssetSelect from "~/components/selects/AssetSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
+import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect";
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
@@ -78,7 +80,21 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
             );
           }}
         />
-
+        <FormField
+          control={form.control}
+          name="assetId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Asset</FormLabel>
+                <FormControl>
+                  <AssetSelect {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <div className="flex gap-4">
           <FormField
             control={form.control}
@@ -88,7 +104,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
                 <FormItem>
                   <FormLabel>Client</FormLabel>
                   <FormControl>
-                    <ClientSelect className="w-[200px]" {...field} />
+                    <ClientSelect className="min-w-[300px]" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,6 +127,21 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
             }}
           />
         </div>
+        <FormField
+          control={form.control}
+          name="statusId"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Current Status</FormLabel>
+                <FormControl>
+                  <RepairStatusTypeSelect {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <FormField
           control={form.control}
           name="fault"
