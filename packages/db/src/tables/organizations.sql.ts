@@ -7,7 +7,6 @@ import type {
   InferUpdateModel,
 } from "../types";
 
-
 export const organizations = pgTable("organizations", {
   id: serial("id").primaryKey(),
   name: varchar("name").notNull().unique(),
