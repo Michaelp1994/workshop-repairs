@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { DetailsLabel, DetailsList, DetailsValue } from "@repo/ui/details-list";
 
+import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
 interface AssetDetailsSectionProps {
@@ -35,6 +36,7 @@ export default function AssetDetailsSection({
           <DetailsValue>{asset.model.manufacturer}</DetailsValue>
           <DetailsLabel>Status:</DetailsLabel>
           <DetailsValue>{asset.status.name}</DetailsValue>
+          <MetadataFields metadata={asset} />
         </DetailsList>
       </CardContent>
     </Card>
