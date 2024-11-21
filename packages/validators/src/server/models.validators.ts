@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
 } from "../isomorphic/dataTables.validators";
 import {
   assetId,
@@ -11,19 +11,22 @@ import {
   modelId,
 } from "../isomorphic/ids.validators";
 
-export const getAllModelsSchema = dataTableSchema.extend({
-  equipmentTypeId: equipmentTypeId.optional(),
-  manufacturerId: manufacturerId.optional(),
-});
+const modelFilters = z
+  .object({
+    manufacturerId: manufacturerId.optional(),
+    equipmentTypeId: equipmentTypeId.optional(),
+  })
+  .optional();
 
+export const getAllModelsSchema = dataTableSchema.extend({
+  filters: modelFilters,
+});
 export type GetAllModelsInput = z.infer<typeof getAllModelsSchema>;
 
 export const getModelsCountSchema = dataTableCountSchema.extend({
-  equipmentTypeId: equipmentTypeId.optional(),
-  manufacturerId: manufacturerId.optional(),
+  filters: modelFilters,
 });
-
-export type GetCountModelsInput = z.infer<typeof getModelsCountSchema>;
+export type GetModelsCountInput = z.infer<typeof getModelsCountSchema>;
 
 export const createModelSchema = z.object({
   name: z.string().min(3),

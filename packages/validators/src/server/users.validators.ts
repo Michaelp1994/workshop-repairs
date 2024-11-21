@@ -1,6 +1,22 @@
 import { z } from "zod";
 
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+} from "../isomorphic/dataTables.validators";
 import { userId, userTypeId } from "../isomorphic/ids.validators";
+
+const userFilters = z.object({}).optional();
+
+export const getAllUsersSchema = dataTableSchema.extend({
+  filters: userFilters,
+});
+export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
+
+export const getUsersCountSchema = dataTableCountSchema.extend({
+  filters: userFilters,
+});
+export type GetUsersCountInput = z.infer<typeof getUsersCountSchema>;
 
 export const registerUserSchema = z.object({
   firstName: z.string().min(3),

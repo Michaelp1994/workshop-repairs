@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import {
-  dataTableSchema,
   dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import {
@@ -16,9 +16,24 @@ import {
 
 // Data Tables.
 
-export const getAllAssetsSchema = dataTableSchema.extend({});
-export const getAssetsCountSchema = dataTableCountSchema.extend({});
+const assetFilters = z
+  .object({
+    modelId: modelId.optional(),
+  })
+  .optional();
+
+export const getAllAssetsSchema = dataTableSchema.extend({
+  filters: assetFilters,
+});
+export type GetAllAssetsInput = z.infer<typeof getAllAssetsSchema>;
+
+export const getAssetsCountSchema = dataTableCountSchema.extend({
+  filters: assetFilters,
+});
+export type GetAssetsCountInput = z.infer<typeof getAssetsCountSchema>;
+
 export const getAssestsSelectSchema = getSelectSchema.extend({});
+export type GetAssetsSelectSchema = z.infer<typeof getAssestsSelectSchema>;
 
 export const getAssetByIdSchema = z.object({
   id: assetId,

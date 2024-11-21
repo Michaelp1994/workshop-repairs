@@ -1,6 +1,24 @@
 import { z } from "zod";
 
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+} from "../isomorphic/dataTables.validators";
 import { repairId, repairImageId } from "../isomorphic/ids.validators";
+
+const repairImageFilters = z.object({}).optional();
+
+export const getAllRepairImagesSchema = dataTableSchema.extend({
+  filters: repairImageFilters,
+});
+export type GetAllRepairImagesInput = z.infer<typeof getAllRepairImagesSchema>;
+
+export const getRepairImagesCountSchema = dataTableCountSchema.extend({
+  filters: repairImageFilters,
+});
+export type GetRepairImagesCountInput = z.infer<
+  typeof getRepairImagesCountSchema
+>;
 
 export const getAllRepairImagesByRepairIdSchema = z.object({
   repairId,

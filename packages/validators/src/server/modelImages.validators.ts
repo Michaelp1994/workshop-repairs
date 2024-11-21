@@ -1,6 +1,24 @@
 import { z } from "zod";
 
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+} from "../isomorphic/dataTables.validators";
 import { modelId, modelImageId } from "../isomorphic/ids.validators";
+
+const modelImageFilters = z.object({}).optional();
+
+export const getAllModelImagesSchema = dataTableSchema.extend({
+  filters: modelImageFilters,
+});
+export type GetAllModelImagesInput = z.infer<typeof getAllModelImagesSchema>;
+
+export const getModelImagesCountSchema = dataTableCountSchema.extend({
+  filters: modelImageFilters,
+});
+export type GetModelImagesCountInput = z.infer<
+  typeof getModelImagesCountSchema
+>;
 
 export const createModelImageSchema = z.object({
   caption: z.string().min(3),
