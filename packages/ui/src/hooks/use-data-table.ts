@@ -9,6 +9,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useState } from "react";
 export function useDataTableState(initialState?: DataTableInput) {
   const init: DataTableInput = initialState ?? {
@@ -29,6 +30,7 @@ export function useDataTableState(initialState?: DataTableInput) {
   const [sorting, setSorting] = useState<SortingState>(init.sorting);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilter] = useState<string>(init.globalFilter);
+  const debouncedGlobalFilter = useDebounce(globalFilter, 300);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     init.columns,
   );
@@ -39,13 +41,13 @@ export function useDataTableState(initialState?: DataTableInput) {
   return {
     dataState: {
       pagination,
-      globalFilter: globalFilter,
+      globalFilter: debouncedGlobalFilter,
       columns: columnVisibility,
       columnFilters,
       sorting,
     },
     countState: {
-      globalFilter: globalFilter,
+      globalFilter: debouncedGlobalFilter,
       columnFilters,
       columns: columnVisibility,
     },
