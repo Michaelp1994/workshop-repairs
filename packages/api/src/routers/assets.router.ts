@@ -35,7 +35,7 @@ export default router({
       const allAssets = await getAllAssets(input, ctx.session.organizationId);
       return allAssets;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(getAssetsCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getAssetsCount(input, ctx.session.organizationId);

@@ -36,7 +36,7 @@ export default router({
 
       return allLocations;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
       const count = getLocationsCount(input, ctx.session.organizationId);

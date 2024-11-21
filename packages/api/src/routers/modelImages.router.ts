@@ -44,7 +44,7 @@ export default router({
 
       return allModelImages;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
       const count = getModelImagesCount(input);

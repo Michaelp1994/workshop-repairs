@@ -36,7 +36,7 @@ export default router({
 
       return allRepairComments;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
       const count = getRepairCommentsCount(input);

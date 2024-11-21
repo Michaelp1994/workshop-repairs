@@ -35,7 +35,7 @@ export default router({
       const allUserTypes = getAllAssetStatuses(input);
       return allUserTypes;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
       const count = getAssetStatusesCount(input);

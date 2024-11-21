@@ -25,7 +25,7 @@ export default function EquipmentTypeAssetsSection({
     },
   });
 
-  const [rowCount] = api.assets.getCount.useSuspenseQuery({
+  const [rowCount] = api.assets.countAll.useSuspenseQuery({
     ...countState,
     filters: {
       equipmentTypeId,

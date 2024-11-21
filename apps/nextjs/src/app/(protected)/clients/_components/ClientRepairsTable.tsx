@@ -25,7 +25,7 @@ export default function ClientRepairsSection({
     },
   });
 
-  const [rowCount] = api.repairs.getCount.useSuspenseQuery({
+  const [rowCount] = api.repairs.countAll.useSuspenseQuery({
     ...countState,
     filters: {
       clientId,

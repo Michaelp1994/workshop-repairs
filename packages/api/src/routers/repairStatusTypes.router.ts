@@ -42,7 +42,7 @@ export default router({
       const allRepairStatusTypes = await getRepairStatusTypesSelect(input);
       return allRepairStatusTypes;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
       const count = getRepairStatusTypesCount(input);

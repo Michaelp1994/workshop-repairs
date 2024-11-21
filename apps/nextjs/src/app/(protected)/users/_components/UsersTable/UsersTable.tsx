@@ -16,7 +16,7 @@ export default function UsersTable() {
 
   const [users] = api.users.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.users.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.users.countAll.useSuspenseQuery(countState);
   const table = useDataTable({
     columns,
     data: users,

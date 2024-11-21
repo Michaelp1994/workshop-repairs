@@ -46,7 +46,7 @@ export default router({
 
       return allUsers;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input, ctx }) => {
       const count = getUsersCount(input, ctx.session.organizationId);

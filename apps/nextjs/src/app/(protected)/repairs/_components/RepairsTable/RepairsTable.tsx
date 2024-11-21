@@ -32,7 +32,7 @@ export default function RepairsTable() {
 
   const [allRepairs] = api.repairs.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.repairs.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.repairs.countAll.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,

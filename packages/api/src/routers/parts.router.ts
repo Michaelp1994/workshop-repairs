@@ -36,7 +36,7 @@ export default router({
 
       return allParts;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getPartsCount(input, ctx.session.organizationId);

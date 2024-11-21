@@ -16,7 +16,7 @@ export default function PartsTable() {
 
   const [parts] = api.parts.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.parts.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.parts.countAll.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,

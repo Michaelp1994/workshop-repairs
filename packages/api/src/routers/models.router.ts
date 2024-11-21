@@ -36,7 +36,7 @@ export default router({
       return allModels;
     }),
 
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(getModelsCountSchema)
     .query(({ ctx, input }) => {
       const count = getModelsCount(input, ctx.session.organizationId);

@@ -25,7 +25,7 @@ export default function ManufacturerModelsSection({
     },
   });
 
-  const [rowCount] = api.models.getCount.useSuspenseQuery({
+  const [rowCount] = api.models.countAll.useSuspenseQuery({
     ...countState,
     filters: {
       manufacturerId,

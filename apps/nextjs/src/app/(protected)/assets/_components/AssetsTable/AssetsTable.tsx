@@ -28,7 +28,7 @@ export default function AssetsTable() {
 
   const [allAssets] = api.assets.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.assets.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.assets.countAll.useSuspenseQuery(countState);
 
   return (
     <Card>

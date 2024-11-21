@@ -16,7 +16,7 @@ export default function LocationsTable() {
 
   const [locations] = api.locations.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.locations.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.locations.countAll.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,

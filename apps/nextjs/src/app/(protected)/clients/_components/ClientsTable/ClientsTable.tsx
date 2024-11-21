@@ -15,7 +15,7 @@ export default function ClientsTable() {
 
   const [allClients] = api.clients.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.clients.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.clients.countAll.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,

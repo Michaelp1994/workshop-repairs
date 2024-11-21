@@ -12,7 +12,7 @@ export default function ManufacturersTable() {
 
   const [manufacturers] = api.manufacturers.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.manufacturers.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.manufacturers.countAll.useSuspenseQuery(countState);
 
   return (
     <Card>

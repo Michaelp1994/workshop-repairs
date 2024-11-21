@@ -39,7 +39,7 @@ export default router({
 
       return allEquipmentTypes;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
       const count = getEquipmentTypesCount(input, ctx.session.organizationId);

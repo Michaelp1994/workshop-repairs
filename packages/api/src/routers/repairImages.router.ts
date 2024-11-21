@@ -36,7 +36,7 @@ export default router({
 
       return allRepairImages;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ input }) => {
       const count = getRepairImagesCount(input);

@@ -5,7 +5,7 @@ import { Wrench } from "@repo/ui/icons";
 import { api } from "~/trpc/client";
 
 export default function OngoingRepairsCard() {
-  const [totalRepairs] = api.repairs.getCount.useSuspenseQuery({
+  const [totalRepairs] = api.repairs.countAll.useSuspenseQuery({
     columnFilters: [
       {
         id: "status",

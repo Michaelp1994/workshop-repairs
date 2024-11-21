@@ -34,7 +34,7 @@ export default router({
       return allRepairs;
     }),
 
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(getRepairsCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getRepairsCount(input, ctx.session.organizationId);

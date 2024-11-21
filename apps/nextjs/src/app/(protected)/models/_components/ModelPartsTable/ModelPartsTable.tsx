@@ -25,7 +25,7 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
     },
   });
 
-  const [rowCount] = api.partsToModels.getCountPartsByModelId.useSuspenseQuery({
+  const [rowCount] = api.partsToModels.countAllPartsByModelId.useSuspenseQuery({
     ...countState,
     filters: {
       modelId,

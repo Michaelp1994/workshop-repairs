@@ -39,7 +39,7 @@ export default router({
 
       return allManufacturers;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
       const count = getManufacturersCount(input, ctx.session.organizationId);

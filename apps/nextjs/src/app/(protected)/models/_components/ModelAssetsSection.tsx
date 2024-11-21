@@ -24,7 +24,7 @@ export default function ModelAssetsSection({
     },
   });
 
-  const [rowCount] = api.assets.getCount.useSuspenseQuery({
+  const [rowCount] = api.assets.countAll.useSuspenseQuery({
     ...countState,
     filters: {
       modelId,

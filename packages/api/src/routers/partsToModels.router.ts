@@ -29,7 +29,7 @@ export default router({
       return allParts;
     }),
 
-  getCountPartsByModelId: organizationProcedure
+  countAllPartsByModelId: organizationProcedure
     .input(getAllPartsByModelIdCountSchema)
     .query(async ({ input }) => {
       const count = await getAllPartsByModelIdCount(input);
@@ -48,7 +48,7 @@ export default router({
       const allModels = getAllModelsByPartId(input);
       return allModels;
     }),
-  getCountModelsByPartId: organizationProcedure
+  countAllModelsByPartId: organizationProcedure
     .input(getAllModelsByPartIdCountSchema)
     .query(async ({ input }) => {
       const count = await getAllModelsByPartIdCount(input);

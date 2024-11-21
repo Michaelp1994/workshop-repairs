@@ -5,7 +5,7 @@ import { Laptop } from "@repo/ui/icons";
 import { api } from "~/trpc/client";
 
 export default function ActiveAssetsCard() {
-  const [totalAssets] = api.assets.getCount.useSuspenseQuery({});
+  const [totalAssets] = api.assets.countAll.useSuspenseQuery({});
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

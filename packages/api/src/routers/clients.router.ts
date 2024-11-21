@@ -35,7 +35,7 @@ export default router({
       const allClients = await getAllClients(input, ctx.session.organizationId);
       return allClients;
     }),
-  getCount: organizationProcedure
+  countAll: organizationProcedure
     .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
       const count = await getClientsCount(input, ctx.session.organizationId);

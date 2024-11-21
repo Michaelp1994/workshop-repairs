@@ -12,7 +12,7 @@ export default function ModelsTable() {
 
   const [models] = api.models.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.models.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.models.countAll.useSuspenseQuery(countState);
 
   return (
     <Card>

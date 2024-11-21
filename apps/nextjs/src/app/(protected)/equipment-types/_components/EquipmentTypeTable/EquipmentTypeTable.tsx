@@ -17,7 +17,7 @@ export default function EquipmentTypeTable() {
   const [equipmentTypes] =
     api.equipmentTypes.getAll.useSuspenseQuery(dataState);
 
-  const [rowCount] = api.equipmentTypes.getCount.useSuspenseQuery(countState);
+  const [rowCount] = api.equipmentTypes.countAll.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,

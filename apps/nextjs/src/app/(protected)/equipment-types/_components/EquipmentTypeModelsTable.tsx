@@ -25,7 +25,7 @@ export default function EquipmentTypeModelsTable({
     },
   });
 
-  const [rowCount] = api.models.getCount.useSuspenseQuery({
+  const [rowCount] = api.models.countAll.useSuspenseQuery({
     ...countState,
     filters: {
       equipmentTypeId,
