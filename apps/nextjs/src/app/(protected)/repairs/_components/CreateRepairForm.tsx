@@ -120,7 +120,6 @@ export default function CreateRepairForm() {
                   <FormControl>
                     <Input className="w-[500px]" {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               );
@@ -136,7 +135,7 @@ export default function CreateRepairForm() {
               <FormItem>
                 <FormLabel>Current Status</FormLabel>
                 <FormControl>
-                  {<RepairStatusTypeSelect {...field} />}
+                  <RepairStatusTypeSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

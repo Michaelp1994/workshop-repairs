@@ -1,7 +1,7 @@
 "use client";
 import { Card } from "@repo/ui/card";
-import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import DataTable from "@repo/ui/data-table/DataTable";
+import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
 import { api } from "~/trpc/client";
 

@@ -8,9 +8,9 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/server";
 
-import ClientAssetsSection from "../_components/ClientAssetsSection";
+import ClientAssetsSection from "../_components/ClientAssetsTable";
 import ClientDetailsSection from "../_components/ClientDetailsSection";
-import ClientRepairsSection from "../_components/ClientRepairsSection";
+import ClientRepairsSection from "../_components/ClientRepairsTable";
 
 interface ViewClientPageProps {
   params: {
