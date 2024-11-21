@@ -1,13 +1,14 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -21,6 +22,8 @@ import {
   partTable,
   type UpdatePart,
 } from "../tables/part.sql";
+
+const partFields = getTableColumns(partTable);
 
 export function getAllParts(
   { pagination, globalFilter, sorting, columnFilters }: DataTableInput,
@@ -82,7 +85,18 @@ export async function getPartsSelect(_props: GetSelectInput) {
 }
 
 export async function getPartById(id: PartID) {
-  const query = db.select().from(partTable).where(eq(partTable.id, id));
+  const { createdByTable, updatedByTable, deletedByTable, metadata } =
+    createMetadataFields();
+  const query = db
+    .select({
+      ...partFields,
+      ...metadata,
+    })
+    .from(partTable)
+    .innerJoin(createdByTable, eq(partTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(partTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(partTable.deletedById, deletedByTable.id))
+    .where(eq(partTable.id, id));
   const [res] = await query.execute();
   return res;
 }

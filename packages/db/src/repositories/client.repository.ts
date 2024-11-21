@@ -1,13 +1,14 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -21,6 +22,8 @@ import {
   type CreateClient,
   type UpdateClient,
 } from "../tables/client.sql";
+
+const clientFields = getTableColumns(clientTable);
 
 export function getAllClients(
   { pagination, sorting, globalFilter, columnFilters }: DataTableInput,
@@ -89,7 +92,18 @@ export function getClientsSelect(
 }
 
 export async function getClientById(id: ClientID) {
-  const query = db.select().from(clientTable).where(eq(clientTable.id, id));
+  const { createdByTable, updatedByTable, deletedByTable, metadata } =
+    createMetadataFields();
+  const query = db
+    .select({
+      ...clientFields,
+      ...metadata,
+    })
+    .from(clientTable)
+    .innerJoin(createdByTable, eq(clientTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(clientTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(clientTable.deletedById, deletedByTable.id))
+    .where(eq(clientTable.id, id));
   const [res] = await query.execute();
   return res;
 }

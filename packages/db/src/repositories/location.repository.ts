@@ -1,13 +1,14 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -21,6 +22,8 @@ import {
   locationTable,
   type UpdateLocation,
 } from "../tables/location.sql";
+
+const locationFields = getTableColumns(locationTable);
 
 export function getAllLocations(
   { pagination, globalFilter, sorting, columnFilters }: DataTableInput,
@@ -90,7 +93,18 @@ export function getLocationsSelect(
 }
 
 export async function getLocationById(id: LocationID) {
-  const query = db.select().from(locationTable).where(eq(locationTable.id, id));
+  const { metadata, createdByTable, deletedByTable, updatedByTable } =
+    createMetadataFields();
+  const query = db
+    .select({
+      ...locationFields,
+      ...metadata,
+    })
+    .from(locationTable)
+    .innerJoin(createdByTable, eq(locationTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(locationTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(locationTable.deletedById, deletedByTable.id))
+    .where(eq(locationTable.id, id));
   const [res] = await query.execute();
   return res;
 }

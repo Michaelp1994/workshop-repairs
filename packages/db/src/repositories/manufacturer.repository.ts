@@ -1,13 +1,14 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -21,6 +22,8 @@ import {
   manufacturerTable,
   type UpdateManufacturer,
 } from "../tables/manufacturer.sql";
+
+const manufacturerFields = getTableColumns(manufacturerTable);
 
 export function getAllManufacturers(
   { pagination, sorting, globalFilter, columnFilters }: DataTableInput,
@@ -71,9 +74,26 @@ export async function getManufacturersCount(
 }
 
 export async function getManufacturerById(id: ManufacturerID) {
+  const { metadata, createdByTable, deletedByTable, updatedByTable } =
+    createMetadataFields();
   const query = db
-    .select()
+    .select({
+      ...manufacturerFields,
+      ...metadata,
+    })
     .from(manufacturerTable)
+    .innerJoin(
+      createdByTable,
+      eq(manufacturerTable.createdById, createdByTable.id),
+    )
+    .leftJoin(
+      updatedByTable,
+      eq(manufacturerTable.updatedById, updatedByTable.id),
+    )
+    .leftJoin(
+      deletedByTable,
+      eq(manufacturerTable.deletedById, deletedByTable.id),
+    )
     .where(eq(manufacturerTable.id, id));
   const [res] = await query.execute();
   return res;

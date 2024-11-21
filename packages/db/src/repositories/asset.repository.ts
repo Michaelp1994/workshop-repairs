@@ -1,18 +1,19 @@
+import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  DataTableInput,
-  DataTableCountSchema,
-  GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+  GetAllAssetsInput,
+  GetAssetsCountInput,
+} from "@repo/validators/server/assets.validators";
 
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
-  createCountTableQuery,
-  createDataTableQuery,
-} from "../mappings/assets.mapper";
+  createAllAssetsQuery,
+  createAssetsCountQuery,
+} from "../queries/asset.query";
 import {
   type ArchiveAsset,
   type AssetID,
@@ -31,33 +32,33 @@ import { type RepairID, repairTable } from "../tables/repair.sql";
 const assetFields = getTableColumns(assetTable);
 
 export async function getAllAssets(
-  dataTableParams: DataTableInput,
+  { filters, ...dataTableInput }: GetAllAssetsInput,
   organizationId: OrganizationID,
 ) {
-  const query = createDataTableQuery(
-    dataTableParams,
+  const query = createAllAssetsQuery(
+    dataTableInput,
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),
+    filters?.modelId ? eq(assetTable.modelId, filters.modelId) : undefined,
   );
-
   const res = query.execute();
-
   return res;
 }
 
 export async function getAssetsCount(
-  dataTableParams: DataTableCountSchema,
+  { filters, ...dataTableInput }: GetAssetsCountInput,
   organizationId: OrganizationID,
 ) {
-  const query = createCountTableQuery(
-    dataTableParams,
+  const query = createAssetsCountQuery(
+    dataTableInput,
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),
+    filters?.modelId ? eq(assetTable.modelId, filters.modelId) : undefined,
   );
-
   const [res] = await query.execute();
   return res?.count;
 }
+
 export async function getAssetsSelect(
   _: GetSelectInput,
   organizationId: OrganizationID,
@@ -101,6 +102,8 @@ export async function getAssetById(
   id: AssetID,
   organizationId: OrganizationID,
 ) {
+  const { createdByTable, deletedByTable, metadata, updatedByTable } =
+    createMetadataFields();
   const query = db
     .select({
       ...assetFields,
@@ -113,8 +116,12 @@ export async function getAssetById(
         image: modelImageTable.url,
       },
       client: clientTable,
+      ...metadata,
     })
     .from(assetTable)
+    .innerJoin(createdByTable, eq(assetTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(assetTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(assetTable.deletedById, deletedByTable.id))
     .innerJoin(locationTable, eq(assetTable.locationId, locationTable.id))
     .innerJoin(assetStatusTable, eq(assetTable.statusId, assetStatusTable.id))
     .innerJoin(clientTable, eq(assetTable.clientId, clientTable.id))

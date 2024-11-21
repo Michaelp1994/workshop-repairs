@@ -1,13 +1,14 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
-import { and, count, eq, isNull } from "drizzle-orm";
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   type ArchiveEquipmentType,
@@ -16,6 +17,8 @@ import {
   equipmentTypeTable,
   type UpdateEquipmentType,
 } from "../tables/equipment-type.sql";
+
+const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
 export function getAllEquipmentTypes(
   { pagination }: DataTableInput,
@@ -73,9 +76,26 @@ export async function getEquipmentTypesSelect(
 }
 
 export async function getEquipmentTypeById(input: EquipmentTypeID) {
+  const { createdByTable, updatedByTable, deletedByTable, metadata } =
+    createMetadataFields();
   const query = db
-    .select()
+    .select({
+      ...equipmentTypeFields,
+      ...metadata,
+    })
     .from(equipmentTypeTable)
+    .innerJoin(
+      createdByTable,
+      eq(equipmentTypeTable.createdById, createdByTable.id),
+    )
+    .leftJoin(
+      updatedByTable,
+      eq(equipmentTypeTable.updatedById, updatedByTable.id),
+    )
+    .leftJoin(
+      deletedByTable,
+      eq(equipmentTypeTable.deletedById, deletedByTable.id),
+    )
     .where(eq(equipmentTypeTable.id, input));
   const [res] = await query.execute();
   return res;

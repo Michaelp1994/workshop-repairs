@@ -1,12 +1,13 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -72,9 +73,14 @@ export async function getUsersCount(
 }
 
 export async function getUserById(input: UserID) {
+  const { createdByTable, updatedByTable, deletedByTable, metadata } =
+    createMetadataFields();
   const query = db
-    .select({ ...publicUserColumns, type: userTypeTable })
+    .select({ ...publicUserColumns, type: userTypeTable, ...metadata })
     .from(userTable)
+    .leftJoin(createdByTable, eq(userTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(userTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(userTable.deletedById, deletedByTable.id))
     .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
     .where(eq(userTable.id, input));
   const [res] = await query.execute();

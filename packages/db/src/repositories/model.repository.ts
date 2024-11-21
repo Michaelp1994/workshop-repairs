@@ -8,12 +8,13 @@ import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
+import { createGlobalFilters } from "../mappings/model.mapper";
 import {
-  createCountQuery,
-  createDataTableQuery,
-  createGlobalFilters,
-} from "../mappings/model.mapper";
+  createAllModelsQuery,
+  createModelsCountQuery,
+} from "../queries/model.query";
 import { equipmentTypeTable } from "../tables/equipment-type.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
 import {
@@ -31,7 +32,7 @@ export function getAllModels(
   input: GetAllModelsInput,
   organizationId: OrganizationID,
 ) {
-  const query = createDataTableQuery(
+  const query = createAllModelsQuery(
     input,
     isNull(modelTable.deletedAt),
     eq(modelTable.organizationId, organizationId),
@@ -43,7 +44,7 @@ export async function getModelsCount(
   input: DataTableCountSchema,
   organizationId: OrganizationID,
 ) {
-  const query = createCountQuery(
+  const query = createModelsCountQuery(
     input,
     isNull(modelTable.deletedAt),
     eq(modelTable.organizationId, organizationId),
@@ -76,14 +77,21 @@ export function getModelsSelect(
 }
 
 export async function getModelById(id: ModelID) {
+  const { createdByTable, deletedByTable, metadata, updatedByTable } =
+    createMetadataFields();
+
   const query = db
     .select({
       ...modelFields,
       manufacturer: manufacturerTable,
       equipmentType: equipmentTypeTable,
       imageUrl: modelImageTable.url,
+      ...metadata,
     })
     .from(modelTable)
+    .innerJoin(createdByTable, eq(modelTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(modelTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(modelTable.deletedById, deletedByTable.id))
     .innerJoin(
       manufacturerTable,
       eq(modelTable.manufacturerId, manufacturerTable.id),

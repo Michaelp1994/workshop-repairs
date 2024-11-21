@@ -1,6 +1,6 @@
 import type {
-  DataTableInput,
   DataTableCountSchema,
+  DataTableInput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -8,6 +8,7 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
 
+import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -129,7 +130,9 @@ export async function getRepairsSelect(_: GetSelectInput) {
   return query.execute();
 }
 
-export async function getRepairsById(input: RepairID) {
+export async function getRepairById(input: RepairID) {
+  const { createdByTable, deletedByTable, metadata, updatedByTable } =
+    createMetadataFields();
   const query = db
     .select({
       ...repairFields,
@@ -143,8 +146,12 @@ export async function getRepairsById(input: RepairID) {
       manufacturer: manufacturerTable,
       type: repairTypeTable,
       status: repairStatusTypeTable,
+      ...metadata,
     })
     .from(repairTable)
+    .innerJoin(createdByTable, eq(repairTable.createdById, createdByTable.id))
+    .leftJoin(updatedByTable, eq(repairTable.updatedById, updatedByTable.id))
+    .leftJoin(deletedByTable, eq(repairTable.deletedById, deletedByTable.id))
     .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
     .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
     .leftJoin(
