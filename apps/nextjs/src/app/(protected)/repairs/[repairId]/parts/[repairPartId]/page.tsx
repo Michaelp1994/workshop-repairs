@@ -31,7 +31,7 @@ export default function UpdateRepairPartModal({
       </CardHeader>
 
       <CardContent>
-        <UpdateRepairPartForm repairId={repairId} repairPartId={repairPartId} />
+        <UpdateRepairPartForm repairPartId={repairPartId} />
       </CardContent>
     </Card>
   );

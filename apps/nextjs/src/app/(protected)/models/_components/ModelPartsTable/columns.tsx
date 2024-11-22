@@ -1,12 +1,13 @@
 import type { RouterOutputs } from "@repo/api/router";
 
+import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
-import { DataTableRowActions } from "@repo/ui/data-table";
+import { Pencil, Trash2 } from "@repo/ui/icons";
 import { createColumnHelper } from "@tanstack/react-table";
+import Link from "next/link";
 
-import { getBaseUrl } from "~/utils/getBaseUrl";
 const columnHelper =
   createColumnHelper<
     RouterOutputs["partsToModels"]["getAllPartsByModelId"][number]
@@ -43,14 +44,28 @@ export const columns = [
       name: "Quantity",
     },
   }),
-  // columnHelper.display({
-  //   id: "id",
-  //   enableHiding: false,
-  //   cell: ({ row }) => (
-  //     <DataTableRowActions
-  //       generateUrl={(row) => `${getBaseUrl()}/parts/${row.original.partId}`}
-  //       row={row}
-  //     />
-  //   ),
-  // }),
+  columnHelper.display({
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => (
+      <>
+        <Button asChild size="sm" variant="link">
+          <Link
+            href={`${row.original.modelId}/parts/${row.original.partId}`}
+            scroll={false}
+          >
+            <Pencil className="h-5 w-5" />
+          </Link>
+        </Button>
+        <Button asChild size="sm" variant="link">
+          <Link
+            href={`${row.original.modelId}/parts/${row.original.partId}/archive`}
+            scroll={false}
+          >
+            <Trash2 className="h-5 w-5" />
+          </Link>
+        </Button>
+      </>
+    ),
+  }),
 ];

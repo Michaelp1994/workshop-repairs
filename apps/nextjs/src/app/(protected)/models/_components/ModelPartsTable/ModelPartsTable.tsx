@@ -1,12 +1,10 @@
 "use client";
-import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
-import { PlusCircle } from "@repo/ui/icons";
 import { type ModelID } from "@repo/validators/ids.validators";
-import Link from "next/link";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
@@ -41,11 +39,13 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Parts</CardTitle>
-        <Button asChild size="icon" variant="link">
-          <Link href={`/models/${modelId}/parts/new`}>
-            <PlusCircle />
-          </Link>
-        </Button>
+        <IconButton
+          href={`/models/${modelId}/parts/new`}
+          scroll={false}
+          variant="create"
+        >
+          Add
+        </IconButton>
       </CardHeader>
       <CardContent>
         <DataTable

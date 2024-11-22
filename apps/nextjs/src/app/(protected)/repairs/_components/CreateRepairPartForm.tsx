@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface CreateRepairPartFormProps {
   repairId: RepairID;
@@ -42,9 +43,10 @@ export default function CreateRepairPartForm({
   });
 
   const createMutation = api.repairParts.create.useMutation({
-    async onSuccess() {
+    async onSuccess(data) {
       await utils.repairParts.getAll.invalidate();
-      toast.success(`Part was added to Repair`);
+      await utils.repairParts.countAll.invalidate();
+      toast.success(`Part was added to ${generateRepairSlug(data.repairId)}`);
       router.back();
     },
     onError(errors) {
@@ -126,7 +128,7 @@ export default function CreateRepairPartForm({
 
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

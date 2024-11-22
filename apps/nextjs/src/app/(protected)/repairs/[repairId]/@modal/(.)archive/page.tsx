@@ -1,15 +1,24 @@
 "use client";
-import type { RepairID } from "@repo/validators/ids.validators";
 
-import { toast } from "@repo/ui/sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+} from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
 
-import ArchiveModal from "~/components/ArchiveModal";
-import { api } from "~/trpc/client";
-0;
+import { BackButton } from "~/components/BackButton";
+import generateRepairSlug from "~/utils/generateRepairSlug";
+
+import ArchiveRepairButton from "../../../_components/ArchiveRepairButton";
 
 interface ArchiveRepairModalProps {
-  params: { repairId: RepairID };
+  params: { repairId: string };
 }
 
 export default function ArchiveRepairModal({
@@ -17,20 +26,25 @@ export default function ArchiveRepairModal({
 }: ArchiveRepairModalProps) {
   const repairId = Number(params.repairId);
   const router = useRouter();
-  const archiveMutation = api.repairs.archive.useMutation({});
-  async function archiveRepair() {
-    await archiveMutation.mutateAsync({ id: repairId });
-    toast.success("Repair has been archived.");
-    router.back();
-  }
   return (
-    <ArchiveModal
-      description="Are you sure you wish to archive this repair?"
-      onCancel={() => {
-        router.back();
-      }}
-      onConfirm={() => void archiveRepair()}
-      title="Archive Repair"
-    />
+    <Dialog defaultOpen onOpenChange={() => router.back()} open>
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Archive {generateRepairSlug(repairId)}</DialogTitle>
+            <DialogDescription>
+              Are you sure you wish to archive this repair?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <BackButton>No</BackButton>
+            <ArchiveRepairButton repairId={repairId}>
+              Yes, I am sure
+            </ArchiveRepairButton>
+          </DialogFooter>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   );
 }

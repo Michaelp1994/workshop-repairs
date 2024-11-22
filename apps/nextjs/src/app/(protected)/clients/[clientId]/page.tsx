@@ -32,6 +32,9 @@ export default async function ViewClientPage({ params }: ViewClientPageProps) {
           <IconButton href={`${clientId}/edit`} variant="update">
             Edit
           </IconButton>
+          <IconButton href={`${clientId}/archive`} variant="delete">
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <ClientDetails clientId={clientId} />

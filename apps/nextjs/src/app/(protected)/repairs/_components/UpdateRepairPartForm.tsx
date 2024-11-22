@@ -40,11 +40,10 @@ export default function UpdateRepairPartForm({
   const router = useRouter();
   const utils = api.useUtils();
   const updateMutation = api.repairParts.update.useMutation({
-    async onSuccess(data) {
-      await utils.repairParts.getAllByRepairId.invalidate({
-        id: data.repairId,
-      });
-      toast.success(`Repair Part updated`);
+    async onSuccess() {
+      await utils.repairParts.getAll.invalidate();
+      await utils.repairParts.getById.invalidate({ id: repairPartId });
+      toast.success(`Part updated`);
       router.back();
     },
     onError(errors) {

@@ -20,6 +20,7 @@ import {
   type ModelPartFormInput,
   modelPartFormSchema,
 } from "@repo/validators/client/partsToModels.schema";
+import { useRouter } from "next/navigation";
 
 import PartSelect from "~/components/selects/PartSelect";
 import { api } from "~/trpc/client";
@@ -33,9 +34,17 @@ export default function CreateModelPartForm({
   modelId,
 }: CreateModelPartFormProps) {
   const utils = api.useUtils();
+  const router = useRouter();
   const createMutation = api.partsToModels.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
+      await utils.partsToModels.getByIds.invalidate({
+        modelId,
+        partId: data.partId,
+      });
+      await utils.partsToModels.getAllPartsByModelId.invalidate();
+      await utils.partsToModels.getAllModelsByPartId.invalidate();
       toast.success("Model Part Created");
+      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -53,6 +62,7 @@ export default function CreateModelPartForm({
   return (
     <Form {...form}>
       <form
+        className="space-y-4"
         onReset={() => form.reset()}
         onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >

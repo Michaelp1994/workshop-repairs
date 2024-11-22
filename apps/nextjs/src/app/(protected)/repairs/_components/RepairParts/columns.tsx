@@ -6,6 +6,7 @@ import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { CheckIcon, Pencil, Trash2 } from "@repo/ui/icons";
 import { createColumnHelper } from "@tanstack/react-table";
+import Link from "next/link";
 
 import { formatDate } from "~/utils/formatDate";
 
@@ -123,11 +124,21 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <>
-        <Button size="sm" variant="link">
-          <Pencil className="h-5 w-5" />
+        <Button asChild size="sm" variant="link">
+          <Link
+            href={`${row.original.repairId}/parts/${row.original.id}`}
+            scroll={false}
+          >
+            <Pencil className="h-5 w-5" />
+          </Link>
         </Button>
-        <Button size="sm" variant="link">
-          <Trash2 className="h-5 w-5" />
+        <Button asChild size="sm" variant="link">
+          <Link
+            href={`${row.original.repairId}/parts/${row.original.id}/archive`}
+            scroll={false}
+          >
+            <Trash2 className="h-5 w-5" />
+          </Link>
         </Button>
       </>
     ),

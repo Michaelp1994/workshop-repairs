@@ -34,6 +34,9 @@ export default async function ViewModelPage({ params }: ViewModelPageProps) {
           <IconButton href={`${modelId}/edit`} variant="update">
             Update
           </IconButton>
+          <IconButton href={`${modelId}/archive`} variant="delete">
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <ModelDetails modelId={modelId} />

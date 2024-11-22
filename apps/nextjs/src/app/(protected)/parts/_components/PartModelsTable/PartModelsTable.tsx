@@ -1,10 +1,17 @@
 "use client";
 import type { PartID } from "@repo/validators/ids.validators";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
+  CardTitle,
+} from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
@@ -33,7 +40,18 @@ export default function PartModelsTable({ partId }: PartModelsTableProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Models</CardTitle>
+        <CardHeaderText>
+          <CardTitle>Models</CardTitle>
+        </CardHeaderText>
+        <CardHeaderActions>
+          <IconButton
+            href={`/parts/${partId}/models/new`}
+            scroll={false}
+            variant="create"
+          >
+            Add
+          </IconButton>
+        </CardHeaderActions>
       </CardHeader>
       <DataTable
         columns={columns}

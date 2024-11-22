@@ -35,6 +35,9 @@ export default async function ViewManufacturerPage({
           <IconButton href={`${manufacturerId}/edit`} variant="update">
             Update
           </IconButton>
+          <IconButton href={`${manufacturerId}/archive`} variant="delete">
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <ManufacturerDetails manufacturerId={manufacturerId} />
