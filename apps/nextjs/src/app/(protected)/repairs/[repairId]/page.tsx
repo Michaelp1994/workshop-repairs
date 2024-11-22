@@ -28,6 +28,9 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
           <PageTitle>{generateRepairSlug(repairId)}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
+          <IconButton href={`/repairs/${repairId}/archive`} variant="delete">
+            Delete
+          </IconButton>
           <IconButton href={`/repairs/${repairId}/edit`} variant="update">
             Update
           </IconButton>

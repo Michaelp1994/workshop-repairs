@@ -1,9 +1,18 @@
 "use client";
-import { toast } from "@repo/ui/sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+} from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
 
-import ArchiveModal from "~/components/ArchiveModal";
-import { api } from "~/trpc/client";
+import ArchiveRepairCommentButton from "~/app/(protected)/repairs/_components/ArchiveRepairCommentButton";
+import { BackButton } from "~/components/BackButton";
 
 interface ArchiveCommentModalProps {
   params: {
@@ -16,33 +25,27 @@ export default function ArchiveCommentModal({
   params,
 }: ArchiveCommentModalProps) {
   const router = useRouter();
-  const utils = api.useUtils();
-
-  const repairId = Number(params.repairId);
   const repairCommentId = Number(params.repairCommentId);
 
-  const archiveMutation = api.repairComments.archive.useMutation({
-    async onSuccess() {
-      await utils.repairComments.getAllByRepairId.invalidate({
-        repairId,
-      });
-      toast.success("Repair Comment has been archived.");
-      router.back();
-    },
-  });
-
-  async function archiveRepairComment() {
-    await archiveMutation.mutateAsync({ id: repairCommentId });
-  }
-
   return (
-    <ArchiveModal
-      description="Are you sure you wish to archive this comment?"
-      onCancel={() => {
-        router.back();
-      }}
-      onConfirm={() => void archiveRepairComment()}
-      title="Archive Repair Comment"
-    />
+    <Dialog defaultOpen onOpenChange={() => router.back()} open>
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Archive Repair Comment</DialogTitle>
+            <DialogDescription>
+              Are you sure you wish to archive this comment?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <BackButton>No</BackButton>
+            <ArchiveRepairCommentButton repairCommentId={repairCommentId}>
+              Yes, I am sure
+            </ArchiveRepairCommentButton>
+          </DialogFooter>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   );
 }

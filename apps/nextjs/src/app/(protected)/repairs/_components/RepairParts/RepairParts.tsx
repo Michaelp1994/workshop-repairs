@@ -60,7 +60,11 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
           <CardTitle>Parts</CardTitle>
         </CardHeaderText>
         <CardHeaderActions>
-          <IconButton href={`/repairs/${repairId}/parts/new`} variant="create">
+          <IconButton
+            href={`/repairs/${repairId}/parts/new`}
+            scroll={false}
+            variant="create"
+          >
             Add Part
           </IconButton>
         </CardHeaderActions>

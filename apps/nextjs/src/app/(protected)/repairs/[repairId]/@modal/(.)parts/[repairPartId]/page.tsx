@@ -2,7 +2,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogOverlay,
   DialogPortal,
@@ -38,9 +37,6 @@ export default function UpdateRepairPartModal({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Update Repair Part</DialogTitle>
-            <DialogDescription>
-              Update Repair Part {repairPartId}
-            </DialogDescription>
           </DialogHeader>
           <UpdateRepairPartForm repairPartId={repairPartId} />
         </DialogContent>

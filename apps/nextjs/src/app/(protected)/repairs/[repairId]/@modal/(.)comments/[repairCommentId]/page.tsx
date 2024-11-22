@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import UpdateRepairCommentForm from "~/app/(protected)/repairs/_components/UpdateRepairCommentForm";
+import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface RepairImagesModalProps {
   params: { repairId: RepairID; repairCommentId: string };
@@ -38,13 +39,10 @@ export default function UpdateRepairCommentModal({
           <DialogHeader>
             <DialogTitle>Update Repair Comment</DialogTitle>
             <DialogDescription>
-              Update repair comment for repair {repairId}
+              Update repair comment for repair {generateRepairSlug(repairId)}
             </DialogDescription>
           </DialogHeader>
-          <UpdateRepairCommentForm
-            repairCommentId={repairCommentId}
-            repairId={repairId}
-          />
+          <UpdateRepairCommentForm repairCommentId={repairCommentId} />
         </DialogContent>
       </DialogPortal>
     </Dialog>

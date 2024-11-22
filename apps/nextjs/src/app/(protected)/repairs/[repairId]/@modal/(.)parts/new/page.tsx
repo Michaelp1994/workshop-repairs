@@ -12,6 +12,8 @@ import {
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
 
+import generateRepairSlug from "~/utils/generateRepairSlug";
+
 import CreateRepairPartForm from "../../../../_components/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps {
@@ -38,7 +40,7 @@ export default function CreateRepairPartModal({
           <DialogHeader>
             <DialogTitle>Create Repair Part</DialogTitle>
             <DialogDescription>
-              Add a part to repair {repairId}
+              Add a part to {generateRepairSlug(repairId)}
             </DialogDescription>
           </DialogHeader>
           <CreateRepairPartForm repairId={repairId} />

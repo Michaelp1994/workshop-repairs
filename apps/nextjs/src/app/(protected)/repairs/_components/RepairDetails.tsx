@@ -13,7 +13,6 @@ interface RepairDetailsProps {
 
 export default function RepairDetails({ repairId }: RepairDetailsProps) {
   const [repair] = api.repairs.getById.useSuspenseQuery({ id: repairId });
-  console.log({ repair });
   return (
     <Card>
       <CardHeader>

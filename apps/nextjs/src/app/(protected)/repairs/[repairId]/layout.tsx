@@ -1,4 +1,4 @@
-interface RepairLayoutProps {
+interface ViewRepairLayoutProps {
   children: React.ReactNode;
   modal: React.ReactNode;
   params: {
@@ -6,16 +6,14 @@ interface RepairLayoutProps {
   };
 }
 
-export default function RepairLayout({
+export default function ViewRepairLayout({
   children,
   modal,
-  params,
-}: RepairLayoutProps) {
-  // const repairId = Number(params.repairId);
+}: ViewRepairLayoutProps) {
   return (
     <>
-      {children}
       {modal}
+      {children}
     </>
   );
 }
