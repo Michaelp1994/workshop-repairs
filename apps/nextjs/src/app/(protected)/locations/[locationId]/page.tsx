@@ -34,6 +34,9 @@ export default async function ViewLocationPage({
           <IconButton href={`${locationId}/edit`} variant="update">
             Edit
           </IconButton>
+          <IconButton href={`${locationId}/archive`} variant="delete">
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <LocationDetails locationId={locationId} />
