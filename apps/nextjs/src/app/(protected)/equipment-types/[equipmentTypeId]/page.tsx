@@ -38,6 +38,12 @@ export default async function ViewEquipmentTypePage({
           >
             Update
           </IconButton>
+          <IconButton
+            href={`/equipment-types/${equipmentTypeId}/archive`}
+            variant="delete"
+          >
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <EquipmentTypeDetails equipmentTypeId={equipmentTypeId} />
