@@ -37,6 +37,9 @@ export default function ViewAssetPage({ params }: ViewAssetPageProps) {
           <IconButton href={`${assetId}/edit`} variant="update">
             Edit
           </IconButton>
+          <IconButton href={`${assetId}/archive`} variant="delete">
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <AssetDetails assetId={assetId} />
