@@ -35,6 +35,8 @@ export default function RepairDetails({ repairId }: RepairDetailsProps) {
           <DetailsValue>{repair.asset.serialNumber}</DetailsValue>
           <DetailsLabel>Location:</DetailsLabel>
           <DetailsValue>{repair.location.name}</DetailsValue>
+          <DetailsLabel>Client:</DetailsLabel>
+          <DetailsValue>{repair.client.name}</DetailsValue>
           <DetailsLabel>Model:</DetailsLabel>
           <DetailsValue>{repair.model.name}</DetailsValue>
           <MetadataFields metadata={repair} />

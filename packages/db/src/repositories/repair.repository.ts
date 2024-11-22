@@ -151,12 +151,14 @@ export async function getRepairById(input: RepairID) {
       manufacturer: manufacturerTable,
       type: repairTypeTable,
       status: repairStatusTypeTable,
+      client: clientTable,
       ...metadata,
     })
     .from(repairTable)
     .innerJoin(createdByTable, eq(repairTable.createdById, createdByTable.id))
     .leftJoin(updatedByTable, eq(repairTable.updatedById, updatedByTable.id))
     .leftJoin(deletedByTable, eq(repairTable.deletedById, deletedByTable.id))
+    .innerJoin(clientTable, eq(repairTable.clientId, clientTable.id))
     .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
     .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
     .leftJoin(
