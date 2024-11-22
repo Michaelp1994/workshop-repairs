@@ -81,6 +81,43 @@ export const columns = [
       name: "Date Updated",
     },
   }),
+  columnHelper.accessor("createdBy", {
+    id: "createdBy",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created By" />
+    ),
+    cell: (info) => {
+      const createdBy = info.getValue();
+      return (
+        <>
+          {createdBy.firstName} {createdBy.lastName}
+        </>
+      );
+    },
+    meta: {
+      name: "Created By",
+    },
+  }),
+  columnHelper.accessor("updatedBy", {
+    id: "updatedBy",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Updated By" />
+    ),
+    cell: (info) => {
+      const createdBy = info.getValue();
+      if (!createdBy) {
+        return "N/A";
+      }
+      return (
+        <>
+          {createdBy?.firstName} {createdBy.lastName}
+        </>
+      );
+    },
+    meta: {
+      name: "Updated By",
+    },
+  }),
   columnHelper.display({
     id: "actions",
     enableHiding: false,

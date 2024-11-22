@@ -14,10 +14,10 @@ import {
 import { useDataTable, useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { type RepairID } from "@repo/validators/ids.validators";
 
+import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
-import CreateRepairPartModal from "./CreateRepairPartModal";
 
 interface RepairPartsProps {
   repairId: RepairID;
@@ -26,9 +26,10 @@ interface RepairPartsProps {
 export default function RepairParts({ repairId }: RepairPartsProps) {
   const { dataState, countState, tableState } = useDataTableState({
     columns: {
-      assetNumber: false,
       createdAt: false,
       updatedAt: false,
+      createdBy: false,
+      updatedBy: false,
     },
   });
 
@@ -59,7 +60,9 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
           <CardTitle>Parts</CardTitle>
         </CardHeaderText>
         <CardHeaderActions>
-          <CreateRepairPartModal repairId={repairId} />
+          <IconButton href={`/repairs/${repairId}/parts/new`} variant="create">
+            Add Part
+          </IconButton>
         </CardHeaderActions>
       </CardHeader>
       <DataTableToolbar table={table} />

@@ -6,6 +6,7 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { db } from "..";
+import createMetadataFields from "../helpers/createMetadataFields";
 import {
   getColumnFilters,
   getGlobalFilters,
@@ -34,14 +35,25 @@ export function getAllRepairParts({
   const orderByParams = getOrderBy(sorting);
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-
+  const { createdByTable, deletedByTable, metadata, updatedByTable } =
+    createMetadataFields();
   const query = db
     .select({
       ...repairPartFields,
       part: partTable,
+      ...metadata,
     })
     .from(repairPartTable)
     .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
+    .innerJoin(
+      createdByTable,
+      eq(repairPartTable.createdById, createdByTable.id),
+    )
+    .leftJoin(
+      updatedByTable,
+      eq(repairPartTable.updatedById, updatedByTable.id),
+    )
+    .leftJoin(deletedByTable, eq(deletedByTable.deletedById, deletedByTable.id))
     .where(
       and(
         isNull(repairPartTable.deletedAt),
