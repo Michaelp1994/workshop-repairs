@@ -40,6 +40,17 @@ export function TRPCProvider({ children }: TRPCReactProviderProps) {
       links: [
         httpBatchLink({
           url: getUrl(),
+          headers: async () => {
+            let heads;
+            if (typeof window == "undefined") {
+              const headers = await import("next/headers");
+              heads = new Map(headers.headers());
+            } else {
+              heads = new Headers();
+            }
+            heads.set("x-trpc-source", "nextjs-react");
+            return Object.fromEntries(heads);
+          },
         }),
       ],
     }),

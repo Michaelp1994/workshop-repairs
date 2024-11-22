@@ -43,7 +43,7 @@ export async function createTRPCContext(
       session: session,
     };
   } catch {
-    console.log("BAD TOKEN");
+    console.log(`Bad token: ${token}`);
     return {
       db,
       setCookie,

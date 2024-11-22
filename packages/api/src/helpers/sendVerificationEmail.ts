@@ -24,7 +24,7 @@ export default async function sendVerificationEmail(
 
   assertDatabaseResult(request);
 
-  if (process.env["NODE_ENV"] === "production ") {
+  if (process.env["NODE_ENV"] === "production") {
     await client.send(
       new SendEmailCommand({
         FromEmailAddress: Resource.Email1.sender,
