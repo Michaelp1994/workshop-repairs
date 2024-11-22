@@ -34,6 +34,9 @@ export default async function ViewPartPage({ params }: ViewPartPageProps) {
           <IconButton href={`/parts/${partId}/edit`} variant="update">
             Update
           </IconButton>
+          <IconButton href={`/parts/${partId}/archive`} variant="delete">
+            Archive
+          </IconButton>
         </PageHeaderActions>
       </PageHeader>
       <PartDetails partId={partId} />

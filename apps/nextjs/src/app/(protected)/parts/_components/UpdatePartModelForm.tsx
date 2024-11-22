@@ -1,6 +1,6 @@
-import type { PartID } from "@repo/validators/ids.validators";
+"use client";
+import type { ModelID, PartID } from "@repo/validators/ids.validators";
 
-import { Button } from "@repo/ui/button";
 import {
   Form,
   FormControl,
@@ -16,23 +16,37 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
-  defaultPartsToModels,
-  type PartsToModelFormInput,
-  partsToModelsFormSchema,
+  partModelFormSchema,
+  type PartsModelFormInput,
 } from "@repo/validators/client/partsToModels.schema";
+import { useRouter } from "next/navigation";
 
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
-interface AddPartModelFormProps {
+interface UpdatePartModelFormProps {
   partId: PartID;
+  modelId: ModelID;
 }
 
-export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
-  const createMutation = api.partsToModels.create.useMutation({
-    onSuccess() {
-      toast.success(`Part To Model relationship created`);
+export default function UpdatePartModelForm({
+  partId,
+  modelId,
+}: UpdatePartModelFormProps) {
+  const router = useRouter();
+  const utils = api.useUtils();
+  const [partModel] = api.partsToModels.getByIds.useSuspenseQuery({
+    partId,
+    modelId,
+  });
+  const createMutation = api.partsToModels.update.useMutation({
+    async onSuccess() {
+      await utils.partsToModels.getByIds.invalidate({ modelId, partId });
+      await utils.partsToModels.getAllPartsByModelId.invalidate();
+      await utils.partsToModels.getAllModelsByPartId.invalidate();
+      toast.success(`Part To Model relationship updated`);
+      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -40,26 +54,29 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
   });
 
   const form = useForm({
-    defaultValues: defaultPartsToModels,
-    schema: partsToModelsFormSchema,
+    values: partModel,
+    schema: partModelFormSchema,
   });
 
-  function handleValid(values: PartsToModelFormInput) {
-    createMutation.mutate({ ...values, partId });
+  function handleValid(values: PartsModelFormInput) {
+    createMutation.mutate({ ...values, partId, modelId });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={(e) => void form.handleSubmit(handleValid)(e)}>
+      <form
+        className="space-y-4"
+        onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
+      >
         <FormField
           control={form.control}
           name="modelId"
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Model</FormLabel>
                 <FormControl>
-                  <ModelSelect {...field} />
+                  <ModelSelect disabled {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,7 +101,7 @@ export default function AddPartModelForm({ partId }: AddPartModelFormProps) {
 
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>
