@@ -1,5 +1,5 @@
 "use client";
-import type { ModelID } from "@repo/validators/ids.validators";
+import type { ModelID, PartID } from "@repo/validators/ids.validators";
 
 import {
   Form,
@@ -16,7 +16,6 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
-  defaultModelPart,
   type ModelPartFormInput,
   modelPartFormSchema,
 } from "@repo/validators/client/partsToModels.schema";
@@ -26,24 +25,27 @@ import PartSelect from "~/components/selects/PartSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
-interface CreateModelPartFormProps {
+interface UpdateModelPartFormProps {
   modelId: ModelID;
+  partId: PartID;
 }
 
-export default function CreateModelPartForm({
+export default function UpdateModelPartForm({
   modelId,
-}: CreateModelPartFormProps) {
+  partId,
+}: UpdateModelPartFormProps) {
   const utils = api.useUtils();
   const router = useRouter();
-  const createMutation = api.partsToModels.create.useMutation({
+  const [partToModel] = api.partsToModels.getByIds.useSuspenseQuery({
+    modelId,
+    partId,
+  });
+  const updateMutation = api.partsToModels.update.useMutation({
     async onSuccess(data) {
-      await utils.partsToModels.getByIds.invalidate({
-        modelId,
-        partId: data.partId,
-      });
+      await utils.partsToModels.getByIds.invalidate({ modelId, partId });
       await utils.partsToModels.getAllPartsByModelId.invalidate();
       await utils.partsToModels.getAllModelsByPartId.invalidate();
-      toast.success("Model Part Created");
+      toast.success("Model Part Updated");
       router.back();
     },
     onError(errors) {
@@ -52,11 +54,11 @@ export default function CreateModelPartForm({
   });
   const form = useForm({
     schema: modelPartFormSchema,
-    defaultValues: defaultModelPart,
+    values: partToModel,
   });
 
   function handleValid(data: ModelPartFormInput) {
-    createMutation.mutate({ ...data, modelId });
+    updateMutation.mutate({ ...data, modelId, partId });
   }
 
   return (
@@ -74,7 +76,7 @@ export default function CreateModelPartForm({
               <FormItem>
                 <FormLabel>Part</FormLabel>
                 <FormControl>
-                  <PartSelect {...field} />
+                  <PartSelect disabled {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -98,7 +100,7 @@ export default function CreateModelPartForm({
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton isLoading={createMutation.isPending} />
+          <SubmitButton isLoading={updateMutation.isPending} />
         </FormFooter>
       </form>
     </Form>
