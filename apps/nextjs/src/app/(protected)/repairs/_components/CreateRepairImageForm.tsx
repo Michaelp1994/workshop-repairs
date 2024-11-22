@@ -64,7 +64,7 @@ export default function CreateRepairImageForm({
     schema: repairImageFormSchema,
   });
 
-  function handleValid(values: RepairImageFormInput) {
+  async function handleValid(values: RepairImageFormInput) {
     const image = await convertToBase64(values.image);
     console.log(image);
     // createMutation.mutate({ ...values, image, repairId });
