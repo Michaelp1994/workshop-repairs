@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import isAuthenticated from "~/auth/isAuthenticated";
 
 import AppSidebar from "./_components/AppSideBar";
-import Breadcrumbs from "./_components/Breadcrumbs";
 import NavBar from "./_components/NavBar";
 
 interface ProtectedLayoutProps {

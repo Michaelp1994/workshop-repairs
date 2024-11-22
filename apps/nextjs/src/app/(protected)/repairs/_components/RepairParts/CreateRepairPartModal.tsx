@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@repo/ui/dialog";
+import { PlusCircle } from "@repo/ui/icons";
 import { useState } from "react";
 
 import CreateRepairPartForm from "../CreateRepairPartForm";
@@ -24,7 +25,10 @@ export default function CreateRepairPartModal({
   return (
     <Dialog onOpenChange={(state) => setIsOpen(state)} open={isOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost">Add Part</Button>
+        <Button>
+          <PlusCircle className="mr-2 size-4" />
+          Add Part
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

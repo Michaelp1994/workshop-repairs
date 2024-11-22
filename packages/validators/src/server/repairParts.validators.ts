@@ -6,7 +6,11 @@ import {
 } from "../isomorphic/dataTables.validators";
 import { partId, repairId, repairPartId } from "../isomorphic/ids.validators";
 
-const repairPartFilters = z.object({}).optional();
+const repairPartFilters = z
+  .object({
+    repairId: repairId.optional(),
+  })
+  .optional();
 
 export const getAllRepairPartsSchema = dataTableSchema.extend({
   filters: repairPartFilters,
@@ -16,13 +20,10 @@ export type GetAllRepairPartsInput = z.infer<typeof getAllRepairPartsSchema>;
 export const getRepairPartsCountSchema = dataTableCountSchema.extend({
   filters: repairPartFilters,
 });
+
 export type GetRepairPartsCountInput = z.infer<
   typeof getRepairPartsCountSchema
 >;
-
-export const getAllRepairPartsByRepairIdSchema = z.object({
-  id: repairId,
-});
 
 export const getRepairPartByIdSchema = z.object({
   id: repairPartId,

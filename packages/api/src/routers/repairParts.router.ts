@@ -1,21 +1,17 @@
 import {
   archiveRepairPart,
+  countRepairParts,
   createRepairPart,
   getAllRepairParts,
-  getAllRepairPartsByRepairId,
   getRepairPartById,
-  countRepairParts,
   updateRepairPart,
 } from "@repo/db/repositories/repairPart.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveRepairPartSchema,
   createRepairPartSchema,
-  getAllRepairPartsByRepairIdSchema,
+  getAllRepairPartsSchema,
   getRepairPartByIdSchema,
+  getRepairPartsCountSchema,
   updateRepairPartSchema,
 } from "@repo/validators/server/repairParts.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,14 +26,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllRepairPartsSchema)
     .query(async ({ input }) => {
       const allRepairParts = getAllRepairParts(input);
 
       return allRepairParts;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getRepairPartsCountSchema)
     .query(({ input }) => {
       const count = countRepairParts(input);
       return count;
@@ -55,13 +51,6 @@ export default router({
       }
 
       return repairPart;
-    }),
-  getAllByRepairId: organizationProcedure
-    .input(getAllRepairPartsByRepairIdSchema)
-    .query(async ({ input }) => {
-      const allRepairParts = await getAllRepairPartsByRepairId(input.id);
-
-      return allRepairParts;
     }),
   create: organizationProcedure
     .input(createRepairPartSchema)
