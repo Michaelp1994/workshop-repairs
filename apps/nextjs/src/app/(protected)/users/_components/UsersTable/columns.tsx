@@ -34,7 +34,7 @@ export const columns = [
         </Avatar>
         <div>
           <div className="font-bold">
-            <DataTableLinkCell href={`users/${row.original.id}`}>
+            <DataTableLinkCell href={`/users/${row.original.id}`}>
               {row.original.firstName} {row.original.lastName}
             </DataTableLinkCell>
           </div>

@@ -12,7 +12,6 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 import generateAssetSlug from "~/utils/generateAssetSlug";
-import { getBaseUrl } from "~/utils/getBaseUrl";
 
 type Row = RouterOutputs["assets"]["getAll"][number];
 
@@ -138,7 +137,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) => `${getBaseUrl()}/assets/${row.original.id}`}
+        generateUrl={(row) => `/assets/${row.original.id}`}
         row={row}
       />
     ),

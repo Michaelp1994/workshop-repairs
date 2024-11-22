@@ -7,7 +7,6 @@ import { DataTableRowActions } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-import { getBaseUrl } from "~/utils/getBaseUrl";
 const columnHelper =
   createColumnHelper<RouterOutputs["locations"]["getAll"][number]>();
 
@@ -56,7 +55,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) => `${getBaseUrl()}/locations/${row.original.id}`}
+        generateUrl={(row) => `/locations/${row.original.id}`}
         row={row}
       />
     ),
