@@ -1,51 +1,59 @@
-import * as partsController from "@repo/db/controllers/parts.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archivePart,
+  countParts,
+  createPart,
+  getAllParts,
+  getPartById,
+  getPartsSelect,
+  updatePart,
+} from "@repo/db/repositories/part.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as partSchemas from "@repo/validators/parts.validators";
+import {
+  archivePartSchema,
+  createPartSchema,
+  getPartByIdSchema,
+  updatePartSchema,
+} from "@repo/validators/server/parts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
-      const allParts = partsController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allParts = getAllParts(input, ctx.session.organizationId);
 
       return allParts;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await partsController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
+      const count = await countParts(input, ctx.session.organizationId);
 
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allParts = await partsController.getSelect(input, ctx.db);
+    .query(async ({ input }) => {
+      const allParts = await getPartsSelect(input);
 
       return allParts;
     }),
   getById: organizationProcedure
-    .input(partSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const part = await partsController.getById(input.id, ctx.db);
+    .input(getPartByIdSchema)
+    .query(async ({ input }) => {
+      const part = await getPartById(input.id);
 
       if (!part) {
         throw new TRPCError({
@@ -57,57 +65,43 @@ export default router({
       return part;
     }),
   create: organizationProcedure
-    .input(partSchemas.create)
+    .input(createPartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdPart = await partsController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdPart = await createPart({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
-      if (!createdPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create part",
-        });
-      }
+      assertDatabaseResult(createdPart);
 
       return createdPart;
     }),
   update: organizationProcedure
-    .input(partSchemas.update)
+    .input(updatePartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedPart = await partsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedPart = await updatePart({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update part",
-        });
-      }
+      assertDatabaseResult(updatedPart);
 
       return updatedPart;
     }),
   archive: organizationProcedure
-    .input(partSchemas.archive)
+    .input(archivePartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedPart = await partsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedPart = await archivePart({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive part",
-        });
-      }
+      assertDatabaseResult(archivedPart);
 
       return archivedPart;
     }),

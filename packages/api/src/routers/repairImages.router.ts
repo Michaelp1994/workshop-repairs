@@ -1,48 +1,57 @@
-import * as repairImagesController from "@repo/db/controllers/repairImages.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveRepairImage,
+  createRepairImage,
+  getAllRepairImages,
+  getAllRepairImagesByRepairId,
+  getRepairImageById,
+  countRepairImages,
+  updateRepairImage,
+} from "@repo/db/repositories/repairImage.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairImageSchemas from "@repo/validators/repairImages.validators";
+import {
+  archiveRepairImageSchema,
+  createRepairImageSchema,
+  getAllRepairImagesByRepairIdSchema,
+  getRepairImageByIdSchema,
+  updateRepairImageSchema,
+} from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairImages = repairImagesController.getAll(input, ctx.db);
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairImages = getAllRepairImages(input);
 
       return allRepairImages;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = repairImagesController.getCount(input, ctx.db);
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = countRepairImages(input);
       return count;
     }),
   getAllByRepairId: organizationProcedure
-    .input(repairImageSchemas.getAllByRepairId)
-    .query(async ({ ctx, input }) => {
-      const allRepairImages = repairImagesController.getAllByRepairId(
-        input.repairId,
-        ctx.db,
-      );
+    .input(getAllRepairImagesByRepairIdSchema)
+    .query(async ({ input }) => {
+      const allRepairImages = getAllRepairImagesByRepairId(input.repairId);
       return allRepairImages;
     }),
   getById: organizationProcedure
-    .input(repairImageSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairImage = await repairImagesController.getById(
-        input.id,
-        ctx.db,
-      );
+    .input(getRepairImageByIdSchema)
+    .query(async ({ input }) => {
+      const repairImage = await getRepairImageById(input.id);
 
       if (!repairImage) {
         throw new TRPCError({
@@ -54,56 +63,41 @@ export default router({
       return repairImage;
     }),
   create: organizationProcedure
-    .input(repairImageSchemas.create)
+    .input(createRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdRepairImage = await repairImagesController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdRepairImage = await createRepairImage({
+        ...input,
+        ...metadata,
+      });
 
-      if (!createdRepairImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair image",
-        });
-      }
+      assertDatabaseResult(createdRepairImage);
 
       return createdRepairImage;
     }),
   update: organizationProcedure
-    .input(repairImageSchemas.update)
+    .input(updateRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedRepairImage = await repairImagesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedRepairImage = await updateRepairImage({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedRepairImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair image",
-        });
-      }
+      assertDatabaseResult(updatedRepairImage);
 
       return updatedRepairImage;
     }),
   archive: organizationProcedure
-    .input(repairImageSchemas.archive)
+    .input(archiveRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedRepairImage = await repairImagesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedRepairImage = await archiveRepairImage({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedRepairImage) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair image",
-        });
-      }
+      assertDatabaseResult(archivedRepairImage);
 
       return archivedRepairImage;
     }),

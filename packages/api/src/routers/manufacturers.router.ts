@@ -1,43 +1,54 @@
-import * as manufacturersController from "@repo/db/controllers/manufacturers.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveManufacturer,
+  countManufacturers,
+  createManufacturer,
+  getAllManufacturers,
+  getManufacturerById,
+  getManufacturersSelect,
+  updateManufacturer,
+} from "@repo/db/repositories/manufacturer.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as manufacturerSchemas from "@repo/validators/manufacturers.validators";
+import {
+  archiveManufacturerSchema,
+  createManufacturerSchema,
+  getManufacturerByIdSchema,
+  updateManufacturerSchema,
+} from "@repo/validators/server/manufacturers.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
-      const allManufacturers = await manufacturersController.getAll(
+      const allManufacturers = await getAllManufacturers(
         input,
         ctx.session.organizationId,
       );
 
       return allManufacturers;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
-      const count = manufacturersController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
+      const count = countManufacturers(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const manufacturers = await manufacturersController.getSelect(
+      const manufacturers = await getManufacturersSelect(
         input,
         ctx.session.organizationId,
       );
@@ -45,12 +56,9 @@ export default router({
       return manufacturers;
     }),
   getById: organizationProcedure
-    .input(manufacturerSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const manufacturer = await manufacturersController.getById(
-        input.id,
-        ctx.db,
-      );
+    .input(getManufacturerByIdSchema)
+    .query(async ({ input }) => {
+      const manufacturer = await getManufacturerById(input.id);
 
       if (!manufacturer) {
         throw new TRPCError({
@@ -62,56 +70,42 @@ export default router({
       return manufacturer;
     }),
   create: organizationProcedure
-    .input(manufacturerSchemas.create)
+    .input(createManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdManufacturer = await manufacturersController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdManufacturer = await createManufacturer({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
-      if (!createdManufacturer) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create manufacturer",
-        });
-      }
+      assertDatabaseResult(createdManufacturer);
 
       return createdManufacturer;
     }),
   update: organizationProcedure
-    .input(manufacturerSchemas.update)
+    .input(updateManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedManufacturer = await manufacturersController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedManufacturer = await updateManufacturer({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedManufacturer) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update manufacturer",
-        });
-      }
+      assertDatabaseResult(updatedManufacturer);
 
       return updatedManufacturer;
     }),
   archive: organizationProcedure
-    .input(manufacturerSchemas.archive)
+    .input(archiveManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedManufacturer = await manufacturersController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedManufacturer = await archiveManufacturer({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedManufacturer) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive manufacturer",
-        });
-      }
+      assertDatabaseResult(archivedManufacturer);
 
       return archivedManufacturer;
     }),

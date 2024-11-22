@@ -1,16 +1,29 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/card";
+
+import { IconButton } from "~/components/IconButton";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import CreateModelForm from "../_components/CreateModelForm";
 
 export default function CreateModelPage() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Model</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CreateModelForm />
-      </CardContent>
-    </Card>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>New Model</PageTitle>
+        </PageHeaderText>
+      </PageHeader>
+      <Card>
+        <CardContent>
+          <CreateModelForm />
+        </CardContent>
+      </Card>
+    </PageWrapper>
   );
 }

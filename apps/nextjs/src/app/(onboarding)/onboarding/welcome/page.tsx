@@ -4,6 +4,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 
@@ -12,12 +13,14 @@ import CompleteStepButton from "../components/CompleteStepButton";
 export default function OnboardingPage() {
   return (
     <Card className="w-[500px]">
-      <CardHeader className="text-center">
-        <CardTitle>Welcome to AssetRx</CardTitle>
-        <CardDescription>
-          AssetRx is a platform that helps you manage your assets, repairs, and
-          maintenance in one place.
-        </CardDescription>
+      <CardHeader>
+        <CardHeaderText>
+          <CardTitle>Welcome to AssetRx</CardTitle>
+          <CardDescription>
+            AssetRx is a platform that helps you manage your assets, repairs,
+            and maintenance in one place.
+          </CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
         <p>

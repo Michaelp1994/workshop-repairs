@@ -1,9 +1,10 @@
-import { type PgSelectQueryBuilder } from "drizzle-orm/pg-core";
+import { type PgSelect } from "drizzle-orm/pg-core";
 
-export function withPagination<T extends PgSelectQueryBuilder>(
+export function withPagination<T extends PgSelect>(
   query: T,
-  pageIndex: number,
-  pageSize: number,
+  pagination: { pageIndex: number; pageSize: number },
 ) {
-  return query.limit(pageSize).offset(pageIndex * pageSize);
+  return query
+    .limit(pagination.pageSize)
+    .offset(pagination.pageIndex * pagination.pageSize);
 }

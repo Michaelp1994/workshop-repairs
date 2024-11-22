@@ -1,15 +1,17 @@
-import ArchiveSection from "~/components/ArchiveSection";
-import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
+import type { Metadata } from "next";
 
-import AssetDetailsSection from "../_components/AssetDetailsSection";
-// import AssetLocationSection from "../_components/AssetLocationSection";
-import ModelDetailsSection from "../_components/AssetModelSection";
-import AssetRepairsSection from "../_components/AssetRepairsSection";
-import AssetStatusSection from "../_components/AssetStatusSection";
+import { IconButton } from "~/components/IconButton";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
+import generateAssetSlug from "~/utils/generateAssetSlug";
+
+import AssetDetails from "../_components/AssetDetails";
+import AssetRepairsTable from "../_components/AssetRepairsTable";
 
 interface ViewAssetPageProps {
   params: {
@@ -17,20 +19,28 @@ interface ViewAssetPageProps {
   };
 }
 
+export const metadata: Metadata = {
+  title: "View Asset",
+  description: "Create a new asset",
+};
+
 export default function ViewAssetPage({ params }: ViewAssetPageProps) {
   const assetId = Number(params.assetId);
+
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <AssetDetailsSection assetId={assetId} />
-        <AssetRepairsSection assetId={assetId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn>
-        <AssetStatusSection assetId={assetId} />
-        <ModelDetailsSection assetId={assetId} />
-        {/* <AssetLocationSection assetId={assetId} /> */}
-        <ArchiveSection description="" href="" title="Archive Asset" />
-      </DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{generateAssetSlug(assetId)}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`${assetId}/edit`} variant="update">
+            Edit
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <AssetDetails assetId={assetId} />
+      <AssetRepairsTable assetId={assetId} />
+    </PageWrapper>
   );
 }

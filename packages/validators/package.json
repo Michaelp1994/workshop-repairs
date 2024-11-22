@@ -7,8 +7,9 @@
   "author": "",
   "type": "module",
   "exports": {
-    "./*": "./src/schemas/*.ts",
-    "./forms/*": "./src/forms/*.ts",
+    "./server/*": "./src/server/*.ts",
+    "./client/*": "./src/client/*.ts",
+    "./*": "./src/isomorphic/*.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {
@@ -20,16 +21,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "sst": "^3.3.21",
+    "sst": "^3.3.27",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.9.0",
-    "eslint": "^9.14.0",
+    "@types/node": "^22.9.1",
+    "eslint": "^9.15.0",
     "tsc-alias": "^1.8.10",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.5"
   }
 }

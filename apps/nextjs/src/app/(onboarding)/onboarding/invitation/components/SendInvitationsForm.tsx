@@ -15,26 +15,23 @@ import {
   defaultInviteOthers,
   type InviteOthersInput,
   inviteOthersSchema,
-} from "@repo/validators/forms/organization.schema";
+} from "@repo/validators/client/organization.schema";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "~/auth/AuthContext";
 import { api } from "~/trpc/client";
-import displayFormErrors from "~/utils/displayFormErrors";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function SendInvitationsForm() {
   const router = useRouter();
-  const { setAuth } = useAuth();
   const utils = api.useUtils();
   const inviteMutation = api.userOnboardings.sendInvitations.useMutation({
     async onSuccess(values) {
       toast.success("Your invitations have been sent.");
-      await setAuth(values);
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");
     },
-    async onError(errors) {
-      displayFormErrors(errors, form);
+    onError(errors) {
+      displayMutationErrors(errors, form);
     },
   });
 
@@ -43,8 +40,8 @@ export default function SendInvitationsForm() {
     defaultValues: defaultInviteOthers,
   });
 
-  async function handleValid(data: InviteOthersInput) {
-    await inviteMutation.mutateAsync({
+  function handleValid(data: InviteOthersInput) {
+    inviteMutation.mutate({
       emails: data.email,
     });
   }

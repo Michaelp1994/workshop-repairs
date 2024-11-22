@@ -1,74 +1,99 @@
-import * as authController from "@repo/db/controllers/auth.controller";
-import * as usersController from "@repo/db/controllers/users.controller";
-import * as authSchemas from "@repo/validators/auth.validators";
 import {
-  getAllSchema,
-  getCountSchema,
+  deleteEmailConfirmationRequestById,
+  getEmailVerificationRequest,
+} from "@repo/db/repositories/auth.repository";
+import {
+  archiveUser,
+  getAllUsers,
+  getUserByEmail,
+  getUserById,
+  countUsers,
+  setUserEmailVerified,
+  updateUser,
+} from "@repo/db/repositories/user.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
 } from "@repo/validators/dataTables.validators";
-import * as userSchemas from "@repo/validators/users.validators";
+import {
+  confirmEmailSchema,
+  resetPasswordSchema,
+} from "@repo/validators/server/auth.validators";
+import {
+  archiveUserSchema,
+  createUserSchema,
+  getCurrentUserSchema,
+  getUserByIdSchema,
+  updateCurrentUserSchema,
+  updateUserSchema,
+} from "@repo/validators/server/users.validators";
 import { TRPCError } from "@trpc/server";
 
 import createSession from "../helpers/createSession";
-import { archiveMetadata, updateMetadata } from "../helpers/includeMetadata";
+import {
+  createArchiveMetadata,
+  createUpdateMetadata,
+} from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ input, ctx }) => {
-      const allUsers = usersController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allUsers = getAllUsers(input, ctx.session.organizationId);
 
       return allUsers;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
     .query(({ input, ctx }) => {
-      const count = usersController.getCount(input, ctx.session.organizationId);
+      const count = countUsers(input, ctx.session.organizationId);
       return count;
     }),
   resetPassword: authedProcedure
-    .input(authSchemas.resetPassword)
+    .input(resetPasswordSchema)
     .mutation(async () => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
   sendEmailConfirmation: authedProcedure
-    .input(authSchemas.confirmEmail)
+    .input(confirmEmailSchema)
     .mutation(async ({ ctx, input }) => {
       await sendVerificationEmail(ctx.session.userId, input.email);
     }),
   confirmEmail: authedProcedure
-    .input(authSchemas.confirmEmail)
+    .input(confirmEmailSchema)
     .mutation(async ({ input }) => {
-      const user = await usersController.getByEmail(input.email);
+      const user = await getUserByEmail(input.email);
       if (!user) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Cannot find user.",
         });
       }
-      const request = await authController.getByEmail(input.email, input.code);
+      const request = await getEmailVerificationRequest(
+        input.email,
+        input.code,
+      );
       if (!request) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Token is not correct.",
         });
       }
-      await usersController.setEmailVerified(user.id);
+      await setUserEmailVerified(user.id);
 
-      await authController.deleteConfirmationRequest(request.id);
+      await deleteEmailConfirmationRequestById(request.id);
 
       const session = await createSession(user);
       return session;
     }),
 
   getCurrentUser: authedProcedure
-    .input(userSchemas.getCurrent)
+    .input(getCurrentUserSchema)
     .query(async ({ ctx }) => {
-      const user = await usersController.getById(ctx.session.userId);
+      const user = await getUserById(ctx.session.userId);
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -80,9 +105,9 @@ export default router({
     }),
 
   getById: organizationProcedure
-    .input(userSchemas.getById)
+    .input(getUserByIdSchema)
     .query(async ({ input }) => {
-      const user = await usersController.getById(input.id);
+      const user = await getUserById(input.id);
 
       if (!user) {
         throw new TRPCError({
@@ -93,66 +118,51 @@ export default router({
 
       return user;
     }),
-  create: organizationProcedure.input(userSchemas.create).mutation(async () => {
+  create: organizationProcedure.input(createUserSchema).mutation(async () => {
     throw new TRPCError({
       code: "NOT_IMPLEMENTED",
     });
   }),
   update: organizationProcedure
-    .input(userSchemas.update)
+    .input(updateUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedUser = await usersController.update({
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedUser = await updateUser({
         ...input,
         ...metadata,
       });
 
-      if (!updatedUser) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Can't update user",
-        });
-      }
+      assertDatabaseResult(updatedUser);
 
       return updatedUser;
     }),
 
   updateCurrent: authedProcedure
-    .input(userSchemas.updateCurrent)
+    .input(updateCurrentUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedUser = await usersController.update({
+      const updatedUser = await updateUser({
         ...input,
         ...metadata,
         id: ctx.session.userId,
       });
 
-      if (!updatedUser) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Can't update user",
-        });
-      }
+      assertDatabaseResult(updatedUser);
 
       return updatedUser;
     }),
   archive: organizationProcedure
-    .input(userSchemas.archive)
+    .input(archiveUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedUser = await usersController.archive({
+      const archivedUser = await archiveUser({
         ...input,
         ...metadata,
       });
 
-      if (!archivedUser) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't archive user",
-        });
-      }
+      assertDatabaseResult(archivedUser);
 
       return archivedUser;
     }),

@@ -1,17 +1,17 @@
-import ArchiveSection from "~/components/ArchiveSection";
+import { IconButton } from "~/components/IconButton";
 import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
-import { getBaseUrl } from "~/utils/getBaseUrl";
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
+import generateRepairSlug from "~/utils/generateRepairSlug";
 
-import AssetDetailsSection from "../_components/AssetDetailsSection";
-import RepairCommentsSection from "../_components/RepairCommentsSection";
-import RepairDetailsSection from "../_components/RepairDetailsSection";
-import RepairImagesSection from "../_components/RepairImagesSection";
-import RepairPartsSection from "../_components/RepairPartsSection";
-import RepairStatusDetails from "../_components/RepairStatusDetails";
+import RepairComments from "../_components/RepairComments";
+import RepairDetails from "../_components/RepairDetails";
+import RepairImages from "../_components/RepairImages";
+import RepairParts from "../_components/RepairParts";
 
 interface ViewRepairPageProps {
   params: {
@@ -19,26 +19,24 @@ interface ViewRepairPageProps {
   };
 }
 
-export default function ViewRepairPage({ params }: ViewRepairPageProps) {
+export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
   const repairId = Number(params.repairId);
-
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <RepairDetailsSection repairId={repairId} />
-        <RepairPartsSection repairId={repairId} />
-        <RepairCommentsSection repairId={repairId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn>
-        <RepairStatusDetails repairId={repairId} />
-        <AssetDetailsSection repairId={repairId} />
-        <RepairImagesSection repairId={repairId} />
-        <ArchiveSection
-          description="This will archive the repair and prevent any future updates."
-          href={`${getBaseUrl()}/repairs/${repairId}/archive`}
-          title="Archive Repair"
-        />
-      </DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{generateRepairSlug(repairId)}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`/repairs/${repairId}/edit`} variant="update">
+            Update
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <RepairDetails repairId={repairId} />
+      <RepairParts repairId={repairId} />
+      <RepairComments repairId={repairId} />
+      <RepairImages repairId={repairId} />
+    </PageWrapper>
   );
 }

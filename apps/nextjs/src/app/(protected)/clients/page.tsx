@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 
+import { IconButton } from "~/components/IconButton";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
-import { CreateLink } from "~/components/ButtonLink";
-
-import ClientsTable from "../../../components/tables/ClientsTable";
+import ClientsTable from "./_components/ClientsTable";
 
 export const metadata: Metadata = {
   title: "Clients",
@@ -19,18 +17,18 @@ export const metadata: Metadata = {
 
 export default function AllClientsPage() {
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/clients/new">Create Client</CreateLink>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Clients</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ClientsTable />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Clients</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href="/clients/new" variant="create">
+            Create
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <ClientsTable />
+    </PageWrapper>
   );
 }

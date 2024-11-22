@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Card, CardContent } from "@repo/ui/card";
 
-import { BackButton } from "~/components/BackButton";
-import { DetailsPage, DetailsPageToolbar } from "~/components/DetailsPage";
+import {
+  PageHeader,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 import CreateAssetForm from "../_components/CreateAssetForm";
 
@@ -14,18 +18,17 @@ export const metadata: Metadata = {
 
 export default function CreateAssetPage() {
   return (
-    <DetailsPage>
-      <DetailsPageToolbar>
-        <BackButton />
-      </DetailsPageToolbar>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>New Asset</PageTitle>
+        </PageHeaderText>
+      </PageHeader>
       <Card>
-        <CardHeader>
-          <CardTitle>Create Asset</CardTitle>
-        </CardHeader>
         <CardContent>
           <CreateAssetForm />
         </CardContent>
       </Card>
-    </DetailsPage>
+    </PageWrapper>
   );
 }

@@ -1,39 +1,51 @@
-import * as repairCommentsController from "@repo/db/controllers/repairComments.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveRepairComment,
+  countRepairComments,
+  createRepairComment,
+  getAllRepairComments,
+  getAllRepairCommentsByRepairId,
+  getRepairCommentById,
+  updateRepairComment,
+} from "@repo/db/repositories/repairComment.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairCommentSchemas from "@repo/validators/repairComments.validators";
+import {
+  archiveRepairCommentSchema,
+  createRepairCommentSchema,
+  getAllRepairCommentsByRepairIdSchema,
+  getRepairCommentByIdSchema,
+  updateRepairCommentSchema,
+} from "@repo/validators/server/repairComments.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairComments = repairCommentsController.getAll(input, ctx.db);
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairComments = getAllRepairComments(input);
 
       return allRepairComments;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = repairCommentsController.getCount(input, ctx.db);
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = countRepairComments(input);
       return count;
     }),
   getById: organizationProcedure
-    .input(repairCommentSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairComment = await repairCommentsController.getById(
-        input.id,
-        ctx.db,
-      );
+    .input(getRepairCommentByIdSchema)
+    .query(async ({ input }) => {
+      const repairComment = await getRepairCommentById(input.id);
 
       if (!repairComment) {
         throw new TRPCError({
@@ -45,66 +57,48 @@ export default router({
       return repairComment;
     }),
   getAllByRepairId: organizationProcedure
-    .input(repairCommentSchemas.getAllByRepairId)
-    .query(async ({ input, ctx }) => {
-      const allRepairParts = repairCommentsController.getAllByRepairId(
-        input.repairId,
-        ctx.db,
-      );
+    .input(getAllRepairCommentsByRepairIdSchema)
+    .query(async ({ input }) => {
+      const allRepairParts = getAllRepairCommentsByRepairId(input.repairId);
 
       return allRepairParts;
     }),
   create: organizationProcedure
-    .input(repairCommentSchemas.create)
+    .input(createRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdRepairComment = await repairCommentsController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdRepairComment = await createRepairComment({
+        ...input,
+        ...metadata,
+      });
 
-      if (!createdRepairComment) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Comment",
-        });
-      }
+      assertDatabaseResult(createdRepairComment);
 
       return createdRepairComment;
     }),
   update: organizationProcedure
-    .input(repairCommentSchemas.update)
+    .input(updateRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedRepairComment = await repairCommentsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedRepairComment = await updateRepairComment({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedRepairComment) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update Repair Comment",
-        });
-      }
+      assertDatabaseResult(updatedRepairComment);
 
       return updatedRepairComment;
     }),
   archive: organizationProcedure
-    .input(repairCommentSchemas.archive)
+    .input(archiveRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedRepairComment = await repairCommentsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedRepairComment = await archiveRepairComment({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedRepairComment) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive Repair Comment",
-        });
-      }
+      assertDatabaseResult(archivedRepairComment);
 
       return archivedRepairComment;
     }),

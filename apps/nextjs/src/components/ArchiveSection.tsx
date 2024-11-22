@@ -5,6 +5,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 import Link from "next/link";
@@ -24,8 +25,10 @@ export default function ArchiveSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardHeaderText>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
         <Button asChild variant="destructive">

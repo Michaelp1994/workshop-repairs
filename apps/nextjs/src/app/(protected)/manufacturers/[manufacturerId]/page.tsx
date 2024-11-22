@@ -1,13 +1,17 @@
 import type { ManufacturerID } from "@repo/validators/ids.validators";
 
+import { IconButton } from "~/components/IconButton";
 import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
+import { api } from "~/trpc/server";
 
-import ManufacturerDetailsSection from "../_components/ManufacturerDetailsSection";
-import ManufacturerModelsSection from "../_components/ManufacturerModelsSection";
+import ManufacturerModelsTable from "../_components/ManufacturerModelsTable";
+import ManufacturerDetails from "../_components/ManufacturersDetails";
 
 interface ViewManufacturerPageProps {
   params: {
@@ -15,18 +19,26 @@ interface ViewManufacturerPageProps {
   };
 }
 
-export default function ViewManufacturerPage({
+export default async function ViewManufacturerPage({
   params,
 }: ViewManufacturerPageProps) {
   const manufacturerId = Number(params.manufacturerId);
+  const manufacturer = await api.manufacturers.getById({ id: manufacturerId });
 
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <ManufacturerDetailsSection manufacturerId={manufacturerId} />
-        <ManufacturerModelsSection manufacturerId={manufacturerId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn></DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{manufacturer.name}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`${manufacturerId}/edit`} variant="update">
+            Update
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <ManufacturerDetails manufacturerId={manufacturerId} />
+      <ManufacturerModelsTable manufacturerId={manufacturerId} />
+    </PageWrapper>
   );
 }

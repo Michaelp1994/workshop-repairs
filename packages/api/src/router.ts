@@ -22,7 +22,7 @@ import repairTypes from "./routers/repairTypes.router";
 import userOnboardings from "./routers/userOnboardings.router";
 import users from "./routers/users.router";
 import userTypes from "./routers/userTypes.router";
-import { router } from "./trpc";
+import { createCallerFactory, router } from "./trpc";
 
 export const appRouter = router({
   auth,
@@ -48,6 +48,8 @@ export const appRouter = router({
   userOnboardings,
   userTypes,
 });
+
+export const createCaller = createCallerFactory(appRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

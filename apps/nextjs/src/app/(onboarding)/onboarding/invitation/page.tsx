@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 
-import InvitationLink from "./components/InvitationLink";
 import SendInvitationsForm from "./components/SendInvitationsForm";
 import SkipButton from "./components/SkipButton";
 
@@ -16,7 +15,6 @@ export default function InvitationPage() {
     <Card className="w-[500px]">
       <CardHeader>
         <CardTitle>Invite Others</CardTitle>
-        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <SendInvitationsForm />

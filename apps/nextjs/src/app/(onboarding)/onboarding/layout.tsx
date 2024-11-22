@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { redirect } from "next/navigation";
 
-import { isAuthenticated, onboardingCompleted } from "~/auth/cookies";
+import isAuthenticated from "~/auth/isAuthenticated";
 import Logo from "~/components/Logo";
 import ProfileAvatar from "~/components/ProfileAvatar";
 
@@ -16,9 +16,7 @@ export default function OnboardingLayout({
   if (!isAuthenticated()) {
     redirect("/login");
   }
-  if (onboardingCompleted()) {
-    redirect("/dashboard");
-  }
+
   return (
     <div className="bg-muted/40 flex h-full min-h-screen flex-col">
       <div className="container flex justify-between pb-10 pt-10">

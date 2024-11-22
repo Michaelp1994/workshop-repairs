@@ -1,36 +1,47 @@
-import * as repairPartsController from "@repo/db/controllers/repairParts.controller";
 import {
-  getAllSchema,
-  getCountSchema,
-} from "@repo/validators/dataTables.validators";
-import * as repairPartSchemas from "@repo/validators/repairParts.validators";
+  archiveRepairPart,
+  countRepairParts,
+  createRepairPart,
+  getAllRepairParts,
+  getRepairPartById,
+  updateRepairPart,
+} from "@repo/db/repositories/repairPart.repository";
+import {
+  archiveRepairPartSchema,
+  createRepairPartSchema,
+  getAllRepairPartsSchema,
+  getRepairPartByIdSchema,
+  getRepairPartsCountSchema,
+  updateRepairPartSchema,
+} from "@repo/validators/server/repairParts.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairParts = repairPartsController.getAll(input, ctx.db);
+    .input(getAllRepairPartsSchema)
+    .query(async ({ input }) => {
+      const allRepairParts = getAllRepairParts(input);
 
       return allRepairParts;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = repairPartsController.getCount(input, ctx.db);
+  countAll: organizationProcedure
+    .input(getRepairPartsCountSchema)
+    .query(({ input }) => {
+      const count = countRepairParts(input);
       return count;
     }),
   getById: organizationProcedure
-    .input(repairPartSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairPart = await repairPartsController.getById(input.id, ctx.db);
+    .input(getRepairPartByIdSchema)
+    .query(async ({ input }) => {
+      const repairPart = await getRepairPartById(input.id);
 
       if (!repairPart) {
         throw new TRPCError({
@@ -41,67 +52,42 @@ export default router({
 
       return repairPart;
     }),
-  getAllByRepairId: organizationProcedure
-    .input(repairPartSchemas.getAllByRepairId)
-    .query(async ({ input, ctx }) => {
-      const allRepairParts = await repairPartsController.getAllByRepairId(
-        input.id,
-        ctx.db,
-      );
-
-      return allRepairParts;
-    }),
   create: organizationProcedure
-    .input(repairPartSchemas.create)
+    .input(createRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdRepairPart = await repairPartsController.create(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdRepairPart = await createRepairPart({
+        ...input,
+        ...metadata,
+      });
 
-      if (!createdRepairPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Part",
-        });
-      }
+      assertDatabaseResult(createdRepairPart);
 
       return createdRepairPart;
     }),
   update: organizationProcedure
-    .input(repairPartSchemas.update)
+    .input(updateRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedRepairPart = await repairPartsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedRepairPart = await updateRepairPart({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedRepairPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repairPart",
-        });
-      }
+      assertDatabaseResult(updatedRepairPart);
 
       return updatedRepairPart;
     }),
   archive: organizationProcedure
-    .input(repairPartSchemas.archive)
+    .input(archiveRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedRepairPart = await repairPartsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedRepairPart = await archiveRepairPart({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedRepairPart) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair Part",
-        });
-      }
+      assertDatabaseResult(archivedRepairPart);
 
       return archivedRepairPart;
     }),

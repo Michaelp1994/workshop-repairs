@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 
+import { IconButton } from "~/components/IconButton";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
-import { CreateLink } from "~/components/ButtonLink";
-
-import LocationsTable from "../../../components/tables/LocationsTable";
+import LocationsTable from "./_components/LocationsTable";
 
 export const metadata: Metadata = {
   title: "Locations",
@@ -19,18 +17,18 @@ export const metadata: Metadata = {
 
 export default function AllLocationsPage() {
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/locations/new">Create Location</CreateLink>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Locations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LocationsTable />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Locations</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href="/locations/new" variant="create">
+            Create
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <LocationsTable />
+    </PageWrapper>
   );
 }

@@ -1,38 +1,56 @@
-import * as repairTypesController from "@repo/db/controllers/repairTypes.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveRepairType,
+  createRepairType,
+  getAllRepairTypes,
+  getRepairTypeById,
+  countRepairTypes,
+  getRepairTypesSelect,
+  updateRepairType,
+} from "@repo/db/repositories/repairType.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as repairTypeSchemas from "@repo/validators/repairTypes.validators";
+import {
+  archiveRepairTypeSchema,
+  createRepairTypeSchema,
+  getRepairTypeByIdSchema,
+  updateRepairTypeSchema,
+} from "@repo/validators/server/repairTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
-  getAll: organizationProcedure.input(getAllSchema).query(async ({ input }) => {
-    const allRepairTypes = repairTypesController.getAll(input);
-    return allRepairTypes;
-  }),
-  getCount: organizationProcedure.input(getCountSchema).query(({ input }) => {
-    const count = repairTypesController.getCount(input);
-    return count;
-  }),
+  getAll: organizationProcedure
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allRepairTypes = getAllRepairTypes(input);
+      return allRepairTypes;
+    }),
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = countRepairTypes(input);
+      return count;
+    }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ input }) => {
-      const allRepairTypes = await repairTypesController.getSelect(input);
+      const allRepairTypes = await getRepairTypesSelect(input);
       return allRepairTypes;
     }),
   getById: organizationProcedure
-    .input(repairTypeSchemas.getById)
+    .input(getRepairTypeByIdSchema)
     .query(async ({ input }) => {
-      const repairType = await repairTypesController.getById(input.id);
+      const repairType = await getRepairTypeById(input.id);
 
       if (!repairType) {
         throw new TRPCError({
@@ -44,57 +62,42 @@ export default router({
       return repairType;
     }),
   create: organizationProcedure
-    .input(repairTypeSchemas.create)
+    .input(createRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdRepairType = await repairTypesController.create({
+      const metadata = createInsertMetadata(ctx.session);
+      const createdRepairType = await createRepairType({
         ...input,
         ...metadata,
       });
 
-      if (!createdRepairType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Type",
-        });
-      }
+      assertDatabaseResult(createdRepairType);
 
       return createdRepairType;
     }),
   update: organizationProcedure
-    .input(repairTypeSchemas.update)
+    .input(updateRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedRepairType = await repairTypesController.update({
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedRepairType = await updateRepairType({
         ...input,
         ...metadata,
       });
 
-      if (!updatedRepairType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair Type",
-        });
-      }
+      assertDatabaseResult(updatedRepairType);
 
       return updatedRepairType;
     }),
   archive: organizationProcedure
-    .input(repairTypeSchemas.archive)
+    .input(archiveRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedRepairType = await repairTypesController.archive({
+      const archivedRepairType = await archiveRepairType({
         ...input,
         ...metadata,
       });
 
-      if (!archivedRepairType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair Type",
-        });
-      }
+      assertDatabaseResult(archivedRepairType);
 
       return archivedRepairType;
     }),

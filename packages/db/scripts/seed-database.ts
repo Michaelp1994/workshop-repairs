@@ -2,7 +2,7 @@ import { eq, getTableColumns, sql } from "drizzle-orm";
 import { getTableName } from "drizzle-orm";
 
 import { db } from "../src/index";
-import { schema } from "../src/schemas/index";
+import { schema } from "../src/tables/index";
 import assetStatusesData from "./seeds/asset_statuses.json";
 import assetsData from "./seeds/assets.json";
 import clientsData from "./seeds/clients.json";

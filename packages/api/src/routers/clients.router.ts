@@ -1,49 +1,51 @@
-import * as clientsController from "@repo/db/controllers/clients.controller";
-import * as clientSchemas from "@repo/validators/clients.validators";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveClient,
+  countClients,
+  createClient,
+  getAllClients,
+  getClientById,
+  getClientsSelect,
+  updateClient,
+} from "@repo/db/repositories/client.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
+import {
+  archiveClientSchema,
+  createClientSchema,
+  getClientByIdSchema,
+  updateClientSchema,
+} from "@repo/validators/server/clients.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allClients = await getAllClients(input, ctx.session.organizationId);
       return allClients;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await clientsController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
-
-      if (count === undefined) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't count clients",
-        });
-      }
+      const count = await countClients(input, ctx.session.organizationId);
+      assertDatabaseResult(count);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await clientsController.getSelect(
+      const allClients = await getClientsSelect(
         input,
         ctx.session.organizationId,
       );
@@ -51,70 +53,53 @@ export default router({
       return allClients;
     }),
   getById: organizationProcedure
-    .input(clientSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const client = await clientsController.getById(input.id, ctx.db);
-
+    .input(getClientByIdSchema)
+    .query(async ({ input }) => {
+      const client = await getClientById(input.id);
       if (!client) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "client not found",
+          message: "can't find client",
         });
       }
-
       return client;
     }),
   create: organizationProcedure
-    .input(clientSchemas.create)
+    .input(createClientSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdClient = await clientsController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdClient = await createClient({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
-      if (!createdClient) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create client",
-        });
-      }
+      assertDatabaseResult(createdClient);
 
       return createdClient;
     }),
   update: organizationProcedure
-    .input(clientSchemas.update)
+    .input(updateClientSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedClient = await clientsController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedClient = await updateClient({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedClient) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update client",
-        });
-      }
-
+      assertDatabaseResult(updatedClient);
       return updatedClient;
     }),
   archive: organizationProcedure
-    .input(clientSchemas.archive)
+    .input(archiveClientSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedClient = await clientsController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedClient = await archiveClient({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedClient) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive client",
-        });
-      }
+      assertDatabaseResult(archivedClient);
 
       return archivedClient;
     }),

@@ -1,35 +1,55 @@
-import * as userTypesController from "@repo/db/controllers/userTypes.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveUserType,
+  createUserType,
+  getAllUserTypes,
+  getUserTypeById,
+  countUserTypes,
+  getUserTypesSelect,
+  updateUserType,
+} from "@repo/db/repositories/userType.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+  getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as userTypeSchemas from "@repo/validators/userTypes.validators";
+import {
+  archiveUserTypeSchema,
+  createUserTypeSchema,
+  getUserTypeByIdSchema,
+  updateUserTypeSchema,
+} from "@repo/validators/server/userTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allUserTypes = userTypesController.getAll(input, ctx.db);
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allUserTypes = getAllUserTypes(input);
       return allUserTypes;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = userTypesController.getCount(input, ctx.db);
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = countUserTypes(input);
       return count;
     }),
+  getSelect: organizationProcedure
+    .input(getSelectSchema)
+    .query(async ({ input }) => {
+      const allUserTypes = getUserTypesSelect(input);
+      return allUserTypes;
+    }),
   getById: organizationProcedure
-    .input(userTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const userType = await userTypesController.getById(input.id, ctx.db);
+    .input(getUserTypeByIdSchema)
+    .query(async ({ input }) => {
+      const userType = await getUserTypeById(input.id);
 
       if (!userType) {
         throw new TRPCError({
@@ -41,16 +61,13 @@ export default router({
       return userType;
     }),
   create: organizationProcedure
-    .input(userTypeSchemas.create)
+    .input(createUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdUserType = await userTypesController.create(
-        {
-          ...input,
-          ...metadata,
-        },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdUserType = await createUserType({
+        ...input,
+        ...metadata,
+      });
       if (!createdUserType) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -61,13 +78,13 @@ export default router({
       return createdUserType;
     }),
   update: organizationProcedure
-    .input(userTypeSchemas.update)
+    .input(updateUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedUserType = await userTypesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedUserType = await updateUserType({
+        ...input,
+        ...metadata,
+      });
 
       if (!updatedUserType) {
         throw new TRPCError({
@@ -79,13 +96,13 @@ export default router({
       return updatedUserType;
     }),
   archive: organizationProcedure
-    .input(userTypeSchemas.archive)
+    .input(archiveUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedUserType = await userTypesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedUserType = await archiveUserType({
+        ...input,
+        ...metadata,
+      });
 
       if (!archivedUserType) {
         throw new TRPCError({

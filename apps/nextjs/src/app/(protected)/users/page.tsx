@@ -1,29 +1,28 @@
+import UsersTable from "~/app/(protected)/users/_components/UsersTable";
+import { IconButton } from "~/components/IconButton";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
-
-import { CreateLink } from "~/components/ButtonLink";
-import UsersTable from "~/components/tables/UsersTable";
+  PageDescription,
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
 export default function UsersPage() {
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/users/new">Create User</CreateLink>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Users</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <UsersTable />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Users</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href="/users/new" variant="create">
+            Create
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <UsersTable />
+    </PageWrapper>
   );
 }

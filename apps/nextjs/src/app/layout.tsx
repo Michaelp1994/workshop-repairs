@@ -4,8 +4,7 @@ import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
-import { AuthProvider } from "~/auth/AuthContext";
-import { TRPCReactProvider } from "~/trpc/client";
+import { TRPCProvider } from "~/trpc/client";
 
 const fontHeading = Inter({
   subsets: ["latin"],
@@ -36,20 +35,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       className={cn(
-        "min-h-screen w-full scroll-smooth antialiased",
+        "min-h-screen scroll-smooth antialiased",
         fontHeading.variable,
         fontBody.variable,
       )}
       lang="en"
     >
-      <AuthProvider>
-        <TRPCReactProvider>
-          <body className="min-h-screen w-full">
-            {children}
-            <Toaster closeButton richColors />
-          </body>
-        </TRPCReactProvider>
-      </AuthProvider>
+      <TRPCProvider>
+        <body className="min-h-screen">
+          {children}
+          <Toaster closeButton richColors />
+        </body>
+      </TRPCProvider>
     </html>
   );
 }

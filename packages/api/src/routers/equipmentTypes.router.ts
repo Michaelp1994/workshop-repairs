@@ -1,43 +1,54 @@
-import * as equipmentTypesController from "@repo/db/controllers/equipmentTypes.controller";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveEquipmentType,
+  countEquipmentTypes,
+  createEquipmentType,
+  getAllEquipmentTypes,
+  getEquipmentTypeById,
+  getEquipmentTypesSelect,
+  updateEquipmentType,
+} from "@repo/db/repositories/equipmentType.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
-import * as equipmentTypeSchemas from "@repo/validators/equipmentTypes.validators";
+import {
+  archiveEquipmentTypeSchema,
+  createEquipmentTypeSchema,
+  getEquipmentTypeByIdSchema,
+  updateEquipmentTypeSchema,
+} from "@repo/validators/server/equipmentTypes.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(dataTableSchema)
     .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = equipmentTypesController.getAll(
+      const allEquipmentTypes = getAllEquipmentTypes(
         input,
         ctx.session.organizationId,
       );
 
       return allEquipmentTypes;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
     .query(({ ctx, input }) => {
-      const count = equipmentTypesController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
+      const count = countEquipmentTypes(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allEquipmentTypes = await equipmentTypesController.getSelect(
+      const allEquipmentTypes = await getEquipmentTypesSelect(
         input,
         ctx.session.organizationId,
       );
@@ -45,12 +56,9 @@ export default router({
       return allEquipmentTypes;
     }),
   getById: organizationProcedure
-    .input(equipmentTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const repairType = await equipmentTypesController.getById(
-        input.id,
-        ctx.db,
-      );
+    .input(getEquipmentTypeByIdSchema)
+    .query(async ({ input }) => {
+      const repairType = await getEquipmentTypeById(input.id);
 
       if (!repairType) {
         throw new TRPCError({
@@ -62,57 +70,43 @@ export default router({
       return repairType;
     }),
   create: organizationProcedure
-    .input(equipmentTypeSchemas.create)
+    .input(createEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdEquipmentType = await equipmentTypesController.create(
-        { ...input, organizationId: ctx.session.organizationId, ...metadata },
-        ctx.db,
-      );
+      const metadata = createInsertMetadata(ctx.session);
+      const createdEquipmentType = await createEquipmentType({
+        ...input,
+        organizationId: ctx.session.organizationId,
+        ...metadata,
+      });
 
-      if (!createdEquipmentType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create repair Type",
-        });
-      }
+      assertDatabaseResult(createdEquipmentType);
 
       return createdEquipmentType;
     }),
   update: organizationProcedure
-    .input(equipmentTypeSchemas.update)
+    .input(updateEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedEquipmentType = await equipmentTypesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedEquipmentType = await updateEquipmentType({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedEquipmentType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update repair Type",
-        });
-      }
+      assertDatabaseResult(updatedEquipmentType);
 
       return updatedEquipmentType;
     }),
   archive: organizationProcedure
-    .input(equipmentTypeSchemas.archive)
+    .input(archiveEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedEquipmentType = await equipmentTypesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const archivedEquipmentType = await archiveEquipmentType({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedEquipmentType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive repair Type",
-        });
-      }
+      assertDatabaseResult(archivedEquipmentType);
 
       return archivedEquipmentType;
     }),

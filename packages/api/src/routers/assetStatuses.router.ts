@@ -1,42 +1,54 @@
-import * as assetStatusesController from "@repo/db/controllers/assetStatuses.controller";
-import * as userTypeSchemas from "@repo/validators/assetStatuses.validators";
 import {
-  getAllSchema,
-  getCountSchema,
+  archiveAssetStatus,
+  countAssetStatuses,
+  createAssetStatus,
+  getAllAssetStatuses,
+  getAssetStatusById,
+  getAssetStatusSelect,
+  updateAssetStatus,
+} from "@repo/db/repositories/assetStatus.repository";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
   getSelectSchema,
 } from "@repo/validators/dataTables.validators";
+import {
+  archiveAssetStatusSchema,
+  createAssetStatusSchema,
+  getAssetStatusByIdSchema,
+  updateAssetStatusSchema,
+} from "@repo/validators/server/assetStatuses.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
-    .query(async ({ ctx, input }) => {
-      const allUserTypes = assetStatusesController.getAll(input, ctx.db);
+    .input(dataTableSchema)
+    .query(async ({ input }) => {
+      const allUserTypes = getAllAssetStatuses(input);
       return allUserTypes;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = assetStatusesController.getCount(input, ctx.db);
+  countAll: organizationProcedure
+    .input(dataTableCountSchema)
+    .query(({ input }) => {
+      const count = countAssetStatuses(input);
       return count;
     }),
-  getSelect: organizationProcedure
-    .input(getSelectSchema)
-    .query(({ ctx, input }) => {
-      const allUserTypes = assetStatusesController.getSelect(input, ctx.db);
-      return allUserTypes;
-    }),
+  getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
+    const allUserTypes = getAssetStatusSelect(input);
+    return allUserTypes;
+  }),
   getById: organizationProcedure
-    .input(userTypeSchemas.getById)
-    .query(async ({ input, ctx }) => {
-      const userType = await assetStatusesController.getById(input.id, ctx.db);
+    .input(getAssetStatusByIdSchema)
+    .query(async ({ input }) => {
+      const userType = await getAssetStatusById(input.id);
 
       if (!userType) {
         throw new TRPCError({
@@ -48,58 +60,41 @@ export default router({
       return userType;
     }),
   create: organizationProcedure
-    .input(userTypeSchemas.create)
+    .input(createAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdUserType = await assetStatusesController.create(
-        {
-          ...input,
-          ...metadata,
-        },
-        ctx.db,
-      );
-      if (!createdUserType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create user Type",
-        });
-      }
+      const metadata = createInsertMetadata(ctx.session);
+      const createdUserType = await createAssetStatus({
+        ...input,
+        ...metadata,
+      });
+
+      assertDatabaseResult(createdUserType);
 
       return createdUserType;
     }),
   update: organizationProcedure
-    .input(userTypeSchemas.update)
+    .input(updateAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const updatedUserType = await assetStatusesController.update(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedUserType = await updateAssetStatus({
+        ...input,
+        ...metadata,
+      });
 
-      if (!updatedUserType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update user Type",
-        });
-      }
+      assertDatabaseResult(updatedUserType);
 
       return updatedUserType;
     }),
   archive: organizationProcedure
-    .input(userTypeSchemas.archive)
+    .input(archiveAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
-      const archivedUserType = await assetStatusesController.archive(
-        { ...input, ...metadata },
-        ctx.db,
-      );
+      const metadata = createArchiveMetadata(ctx.session);
+      const archivedUserType = await archiveAssetStatus({
+        ...input,
+        ...metadata,
+      });
 
-      if (!archivedUserType) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive user Type",
-        });
-      }
+      assertDatabaseResult(archivedUserType);
 
       return archivedUserType;
     }),

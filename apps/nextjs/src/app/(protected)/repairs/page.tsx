@@ -1,45 +1,38 @@
 import type { Metadata } from "next";
 
+import { IconButton } from "~/components/IconButton";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardToolbar,
-  CardWrapper,
-} from "@repo/ui/card";
-import { type InitialDataTableState } from "@repo/ui/data-table";
+  PageDescription,
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
 
-import { CreateLink } from "~/components/ButtonLink";
-
-import RepairsTable from "../../../components/tables/RepairsTable";
+import RepairsTable from "./_components/RepairsTable";
 
 export const metadata: Metadata = {
   title: "Repairs",
 };
 
 export default function AllRepairsPage() {
-  const initialState: InitialDataTableState = {
-    columnFilters: [{ id: "status", value: [1, 2, 3, 4, 5, 6] }],
-    columnVisibility: {
-      asset_assetNumber: false,
-      createdAt: false,
-      updatedAt: false,
-    },
-  };
   return (
-    <CardWrapper>
-      <CardToolbar>
-        <CreateLink href="/repairs/new">Create Repair</CreateLink>
-      </CardToolbar>
-      <Card>
-        <CardHeader>
-          <CardTitle>Repairs</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RepairsTable initialState={initialState} />
-        </CardContent>
-      </Card>
-    </CardWrapper>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>Repairs</PageTitle>
+          <PageDescription>
+            Manage and track all equipment repairs
+          </PageDescription>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href="/repairs/new" variant="create">
+            Create
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <RepairsTable />
+    </PageWrapper>
   );
 }

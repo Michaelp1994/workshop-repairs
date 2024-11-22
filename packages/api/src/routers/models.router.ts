@@ -1,52 +1,61 @@
-import * as assetsController from "@repo/db/controllers/assets.controller";
-import * as modelsController from "@repo/db/controllers/models.controller";
+import { getAssetById } from "@repo/db/repositories/asset.repository";
 import {
-  getAllSchema,
-  getCountSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
-import * as modelSchemas from "@repo/validators/models.validators";
+  archiveModel,
+  countModels,
+  createModel,
+  getAllModels,
+  getModelById,
+  getModelsSelect,
+  updateModel,
+} from "@repo/db/repositories/model.repository";
+import { getSelectSchema } from "@repo/validators/dataTables.validators";
+import {
+  archiveModelSchema,
+  createModelSchema,
+  getAllModelsSchema,
+  getModelByAssetIdSchema,
+  getModelByIdSchema,
+  getModelsCountSchema,
+  updateModelSchema,
+} from "@repo/validators/server/models.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(getAllModelsSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = modelsController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allModels = getAllModels(input, ctx.session.organizationId);
       return allModels;
+    }),
+
+  countAll: organizationProcedure
+    .input(getModelsCountSchema)
+    .query(({ ctx, input }) => {
+      const count = countModels(input, ctx.session.organizationId);
+      return count;
     }),
   getSelect: organizationProcedure
     .input(getSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = await modelsController.getSelect(
+      const allModels = await getModelsSelect(
         input,
         ctx.session.organizationId,
       );
       return allModels;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
-    .query(({ ctx, input }) => {
-      const count = modelsController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
-      return count;
-    }),
+
   getByAssetId: organizationProcedure
-    .input(modelSchemas.getByAssetId)
+    .input(getModelByAssetIdSchema)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getById(
+      const asset = await getAssetById(
         input.assetId,
         ctx.session.organizationId,
       );
@@ -58,7 +67,7 @@ export default router({
         });
       }
 
-      const model = await modelsController.getById(asset.modelId);
+      const model = await getModelById(asset.modelId);
 
       if (!model) {
         throw new TRPCError({
@@ -70,9 +79,9 @@ export default router({
       return model;
     }),
   getById: organizationProcedure
-    .input(modelSchemas.getById)
+    .input(getModelByIdSchema)
     .query(async ({ input }) => {
-      const model = await modelsController.getById(input.id);
+      const model = await getModelById(input.id);
 
       if (!model) {
         throw new TRPCError({
@@ -84,60 +93,45 @@ export default router({
       return model;
     }),
   create: organizationProcedure
-    .input(modelSchemas.create)
+    .input(createModelSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
+      const metadata = createInsertMetadata(ctx.session);
 
-      const createdModel = await modelsController.create({
+      const createdModel = await createModel({
         ...input,
         organizationId: ctx.session.organizationId,
         ...metadata,
       });
 
-      if (!createdModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create model",
-        });
-      }
+      assertDatabaseResult(createdModel);
 
       return createdModel;
     }),
   update: organizationProcedure
-    .input(modelSchemas.update)
+    .input(updateModelSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
+      const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedModel = await modelsController.update({
+      const updatedModel = await updateModel({
         ...input,
         ...metadata,
       });
 
-      if (!updatedModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update model",
-        });
-      }
+      assertDatabaseResult(updatedModel);
 
       return updatedModel;
     }),
   archive: organizationProcedure
-    .input(modelSchemas.archive)
+    .input(archiveModelSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedModel = await modelsController.archive({
+      const archivedModel = await archiveModel({
         ...input,
         ...metadata,
       });
 
-      if (!archivedModel) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive model",
-        });
-      }
+      assertDatabaseResult(archivedModel);
 
       return archivedModel;
     }),

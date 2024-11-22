@@ -12,12 +12,13 @@ import {
 import { BadgeCheck, Bell, CircleUser, CreditCard } from "@repo/ui/icons";
 
 import { api } from "~/trpc/server";
+import getInitials from "~/utils/getInitials";
 
 import LogoutButton from "./LogoutButton";
 
 export default async function ProfileButton() {
-  const user = await api.users.getCurrentUser.query({});
-  const initials = user.firstName[0] + user.lastName[0];
+  const user = await api.users.getCurrentUser({});
+  const initials = getInitials(user.firstName, user.lastName);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

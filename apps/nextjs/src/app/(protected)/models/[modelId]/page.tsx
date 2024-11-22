@@ -1,17 +1,19 @@
 import { type ModelID } from "@repo/validators/ids.validators";
 
-import ArchiveSection from "~/components/ArchiveSection";
+import { IconButton } from "~/components/IconButton";
 import {
-  DetailsPageGrid,
-  DetailsPageMainColumn,
-  DetailsPageSecondaryColumn,
-} from "~/components/DetailsPage";
-import { getBaseUrl } from "~/utils/getBaseUrl";
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderText,
+  PageTitle,
+  PageWrapper,
+} from "~/components/Page";
+import { api } from "~/trpc/server";
 
-import ModelAssetsSection from "../_components/ModelAssetsSection";
-import ModelDetailsSection from "../_components/ModelDetailsSection";
-import ModelImagesSection from "../_components/ModelImagesSection";
-import ModelPartsSection from "../_components/ModelPartsSection";
+import ModelAssetsTable from "../_components/ModelAssetsTable";
+import ModelDetails from "../_components/ModelDetails";
+import ModelImages from "../_components/ModelImages";
+import ModelPartsTable from "../_components/ModelPartsTable";
 
 interface ViewModelPageProps {
   params: {
@@ -19,23 +21,25 @@ interface ViewModelPageProps {
   };
 }
 
-export default function ViewModelPage({ params }: ViewModelPageProps) {
+export default async function ViewModelPage({ params }: ViewModelPageProps) {
   const modelId = Number(params.modelId);
+  const model = await api.models.getById({ id: modelId });
   return (
-    <DetailsPageGrid>
-      <DetailsPageMainColumn>
-        <ModelDetailsSection modelId={modelId} />
-        <ModelAssetsSection modelId={modelId} />
-        <ModelPartsSection modelId={modelId} />
-      </DetailsPageMainColumn>
-      <DetailsPageSecondaryColumn>
-        <ModelImagesSection modelId={modelId} />
-        <ArchiveSection
-          description="This will archive the model and prevent any future updates."
-          href={`${getBaseUrl()}/models/${modelId}/archive`}
-          title="Archive Model"
-        />
-      </DetailsPageSecondaryColumn>
-    </DetailsPageGrid>
+    <PageWrapper>
+      <PageHeader>
+        <PageHeaderText>
+          <PageTitle>{model.name}</PageTitle>
+        </PageHeaderText>
+        <PageHeaderActions>
+          <IconButton href={`${modelId}/edit`} variant="update">
+            Update
+          </IconButton>
+        </PageHeaderActions>
+      </PageHeader>
+      <ModelDetails modelId={modelId} />
+      <ModelAssetsTable modelId={modelId} />
+      <ModelPartsTable modelId={modelId} />
+      <ModelImages modelId={modelId} />
+    </PageWrapper>
   );
 }

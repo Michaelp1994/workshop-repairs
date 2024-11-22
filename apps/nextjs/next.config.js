@@ -1,4 +1,3 @@
-
 /** @type {import("next").NextConfig} */
 const config = {
   eslint: {
@@ -6,6 +5,9 @@ const config = {
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  experimental: {
+    serverComponentsExternalPackages: ["@node-rs/argon2"],
   },
 };
 

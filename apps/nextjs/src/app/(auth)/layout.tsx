@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { redirect } from "next/navigation";
 
-import { isAuthenticated } from "~/auth/cookies";
+import isAuthenticated from "~/auth/isAuthenticated";
 
 interface AuthLayout {
   children: ReactNode;

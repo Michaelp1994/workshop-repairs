@@ -1,71 +1,60 @@
-import * as assetsController from "@repo/db/controllers/assets.controller";
-import * as assetSchemas from "@repo/validators/assets.validators";
 import {
-  getAllSchema,
-  getCountSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
+  archiveAsset,
+  countAssets,
+  createAsset,
+  getAllAssets,
+  getAssetById,
+  getAssetByRepairId,
+  getAssetsSelect,
+  updateAsset,
+} from "@repo/db/repositories/asset.repository";
+import {
+  archiveAssetSchema,
+  createAssetSchema,
+  getAllAssetsSchema,
+  getAssestsSelectSchema,
+  getAssetByIdSchema,
+  getAssetByRepairIdSchema,
+  getAssetsCountSchema,
+  updateAssetSchema,
+} from "@repo/validators/server/assets.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
-  archiveMetadata,
-  createMetadata,
-  updateMetadata,
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
 } from "../helpers/includeMetadata";
-import { sanitizeUpdateInput } from "../helpers/sanitizeUpdateInput";
+import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllSchema)
+    .input(getAllAssetsSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getAll(
-        input,
-        ctx.session.organizationId,
-      );
+      const allAssets = await getAllAssets(input, ctx.session.organizationId);
       return allAssets;
     }),
-  getCount: organizationProcedure
-    .input(getCountSchema)
+  countAll: organizationProcedure
+    .input(getAssetsCountSchema)
     .query(async ({ ctx, input }) => {
-      const count = await assetsController.getCount(
-        input,
-        ctx.session.organizationId,
-      );
-
-      if (count === undefined) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't get count for total assets",
-        });
-      }
+      const count = await countAssets(input, ctx.session.organizationId);
+      assertDatabaseResult(count);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getAssestsSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getSelect(
-        input,
-        ctx.session.organizationId,
-      );
-      return allAssets;
-    }),
-  getSimpleSelect: organizationProcedure
-    .input(getSelectSchema)
-    .query(async ({ ctx, input }) => {
-      const allAssets = await assetsController.getSimpleSelect(
+      const allAssets = await getAssetsSelect(
         input,
         ctx.session.organizationId,
       );
       return allAssets;
     }),
   getById: organizationProcedure
-    .input(assetSchemas.getById)
+    .input(getAssetByIdSchema)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getById(
-        input.id,
-        ctx.session.organizationId,
-      );
+      const asset = await getAssetById(input.id, ctx.session.organizationId);
 
       if (!asset) {
         throw new TRPCError({
@@ -77,9 +66,9 @@ export default router({
       return asset;
     }),
   getByRepairId: organizationProcedure
-    .input(assetSchemas.getByRepairId)
+    .input(getAssetByRepairIdSchema)
     .query(async ({ input, ctx }) => {
-      const asset = await assetsController.getByRepairId(
+      const asset = await getAssetByRepairId(
         input.id,
         ctx.session.organizationId,
       );
@@ -94,60 +83,41 @@ export default router({
       return asset;
     }),
   create: organizationProcedure
-    .input(assetSchemas.create)
+    .input(createAssetSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const createdAsset = await assetsController.create({
+      const metadata = createInsertMetadata(ctx.session);
+      const createdAsset = await createAsset({
         ...input,
         ...metadata,
         organizationId: ctx.session.organizationId,
         statusId: 1,
       });
 
-      if (!createdAsset) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't create asset",
-        });
-      }
-
+      assertDatabaseResult(createdAsset);
       return createdAsset;
     }),
   update: organizationProcedure
-    .input(assetSchemas.update)
+    .input(updateAssetSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = updateMetadata(ctx.session);
-      const sanitizedInput = sanitizeUpdateInput(input);
-      const updatedAsset = await assetsController.update(
-        { ...sanitizedInput, ...metadata },
+      const metadata = createUpdateMetadata(ctx.session);
+      const updatedAsset = await updateAsset(
+        { ...input, ...metadata },
         ctx.session.organizationId,
       );
-
-      if (!updatedAsset) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't update asset",
-        });
-      }
+      assertDatabaseResult(updatedAsset);
 
       return updatedAsset;
     }),
   archive: organizationProcedure
-    .input(assetSchemas.archive)
+    .input(archiveAssetSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = archiveMetadata(ctx.session);
+      const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedAsset = await assetsController.archive(
+      const archivedAsset = await archiveAsset(
         { ...input, ...metadata },
         ctx.session.organizationId,
       );
-
-      if (!archivedAsset) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive asset",
-        });
-      }
+      assertDatabaseResult(archivedAsset);
 
       return archivedAsset;
     }),

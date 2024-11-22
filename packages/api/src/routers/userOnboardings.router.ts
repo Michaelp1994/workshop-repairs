@@ -1,23 +1,35 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import * as organizationsController from "@repo/db/controllers/organization.controller";
-import * as userOnboardingsController from "@repo/db/controllers/userOnboardings.controller";
-import * as usersController from "@repo/db/controllers/users.controller";
-import * as organizationsSchemas from "@repo/validators/organization.validators";
+import {
+  createInvitation,
+  createOrganization,
+  getOrganizationByInvitationCode,
+  getOrganizationByName,
+} from "@repo/db/repositories/organization.repository";
+import { getUserById } from "@repo/db/repositories/user.repository";
+import {
+  getUserOnboardingByUserId,
+  setInvitations,
+  setOrganization,
+  updateUserOnboardingByUserId,
+} from "@repo/db/repositories/userOnboarding.repository";
+import {
+  createOrganizationSchema,
+  inviteOthersToOrganizationSchema,
+  joinOrganizationSchema,
+} from "@repo/validators/server/organization.validators";
 import { TRPCError } from "@trpc/server";
 import { Resource } from "sst";
 import { ZodError } from "zod";
 
 import createSession from "../helpers/createSession";
-import { createMetadata } from "../helpers/includeMetadata";
+import { createInsertMetadata } from "../helpers/includeMetadata";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
   getStatus: authedProcedure.query(async ({ ctx }) => {
-    const user = await userOnboardingsController.getByUserId(
-      ctx.session.userId,
-    );
+    const user = await getUserOnboardingByUserId(ctx.session.userId);
     assertDatabaseResult(user);
     return {
       welcomed: user.onboarding?.welcomed,
@@ -27,17 +39,17 @@ export default router({
     };
   }),
   markUserAsWelcomed: authedProcedure.mutation(async ({ ctx }) => {
-    const onboarding = await userOnboardingsController.updateByUserId({
+    const onboarding = await updateUserOnboardingByUserId({
       userId: ctx.session.userId,
       welcomed: true,
     });
     assertDatabaseResult(onboarding);
   }),
   createOrganization: authedProcedure
-    .input(organizationsSchemas.create)
+    .input(createOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createMetadata(ctx.session);
-      const user = await usersController.getById(ctx.session.userId);
+      const metadata = createInsertMetadata(ctx.session);
+      const user = await getUserById(ctx.session.userId);
       assertDatabaseResult(user);
 
       if (user.organizationId) {
@@ -47,9 +59,7 @@ export default router({
         });
       }
 
-      const organizationExists = await organizationsController.getByName(
-        input.name,
-      );
+      const organizationExists = await getOrganizationByName(input.name);
 
       if (organizationExists) {
         throw new ZodError([
@@ -61,13 +71,13 @@ export default router({
         ]);
       }
 
-      const createdOrganization = await organizationsController.create({
+      const createdOrganization = await createOrganization({
         ...input,
         ...metadata,
       });
       assertDatabaseResult(createdOrganization);
 
-      const updatedUser = await userOnboardingsController.setOrganization(
+      const updatedUser = await setOrganization(
         ctx.session.userId,
         createdOrganization.id,
       );
@@ -85,11 +95,9 @@ export default router({
       return { url, ...session };
     }),
   joinOrganization: authedProcedure
-    .input(organizationsSchemas.join)
+    .input(joinOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
-      const user = await userOnboardingsController.getByUserId(
-        ctx.session.userId,
-      );
+      const user = await getUserOnboardingByUserId(ctx.session.userId);
       assertDatabaseResult(user);
 
       if (user.organizationId) {
@@ -99,7 +107,7 @@ export default router({
         });
       }
 
-      const organization = await organizationsController.getByInvitationCode(
+      const organization = await getOrganizationByInvitationCode(
         input.joinCode,
       );
       if (!organization) {
@@ -113,13 +121,13 @@ export default router({
         ]);
       }
 
-      const updatedUser = await userOnboardingsController.setOrganization(
+      const updatedUser = await setOrganization(
         ctx.session.userId,
         organization.id,
       );
       assertDatabaseResult(updatedUser);
 
-      await userOnboardingsController.setInvitations(ctx.session.userId);
+      await setInvitations(ctx.session.userId);
 
       const session = await createSession(updatedUser);
       return {
@@ -128,14 +136,14 @@ export default router({
       };
     }),
   sendInvitations: organizationProcedure
-    .input(organizationsSchemas.inviteOthers)
+    .input(inviteOthersToOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const emails = input.emails.split(/[, \n]/);
       const emailPromises = emails.map((unprocessedEmail) => {
         const email = unprocessedEmail.trim();
         // TODO: Check if valid email.
         console.log({ email });
-        return organizationsController.createInvitation({
+        return createInvitation({
           email,
           organizationId: ctx.session.organizationId,
           emailSentAt: null,
@@ -143,17 +151,13 @@ export default router({
       });
       await Promise.all(emailPromises);
 
-      const user = await userOnboardingsController.setInvitations(
-        ctx.session.userId,
-      );
+      const user = await setInvitations(ctx.session.userId);
       assertDatabaseResult(user);
       const session = await createSession(user);
       return session;
     }),
   skipInvitations: organizationProcedure.mutation(async ({ ctx }) => {
-    const user = await userOnboardingsController.setInvitations(
-      ctx.session.userId,
-    );
+    const user = await setInvitations(ctx.session.userId);
     assertDatabaseResult(user);
     const session = await createSession(user);
     return session;

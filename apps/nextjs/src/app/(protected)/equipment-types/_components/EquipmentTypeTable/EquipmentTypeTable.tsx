@@ -1,42 +1,40 @@
 "use client";
+import { Card } from "@repo/ui/card";
 import {
-  DataTable,
+  DataTableCore,
   DataTableFooter,
   DataTableToolbar,
-  useDataTable,
-  useDataTableState,
 } from "@repo/ui/data-table";
+import { useDataTable, useDataTableState } from "@repo/ui/hooks/use-data-table";
 
 import { api } from "~/trpc/client";
 
 import { columns } from "./columns";
 
 export default function EquipmentTypeTable() {
-  const { dataState, countState, tableOptions } = useDataTableState();
+  const { dataState, countState, tableState } = useDataTableState({
+    columns: {
+      updatedAt: false,
+    },
+  });
 
-  const { data, isLoading, isError } =
-    api.equipmentTypes.getAll.useQuery(dataState);
+  const [equipmentTypes] =
+    api.equipmentTypes.getAll.useSuspenseQuery(dataState);
 
-  const { data: rowCount } = api.equipmentTypes.getCount.useQuery(countState);
+  const [rowCount] = api.equipmentTypes.countAll.useSuspenseQuery(countState);
 
   const table = useDataTable({
     columns,
-    data,
+    data: equipmentTypes,
     rowCount,
-    ...tableOptions,
+    ...tableState,
   });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error loading manufacturers</div>;
-  }
 
   return (
-    <>
+    <Card>
       <DataTableToolbar table={table} />
-      <DataTable table={table} />
+      <DataTableCore table={table} />
       <DataTableFooter table={table} />
-    </>
+    </Card>
   );
 }

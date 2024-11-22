@@ -3,9 +3,17 @@ import {
   verifyPasswordHash,
   verifyPasswordStrength,
 } from "@repo/auth/password";
-import * as userOnboardingsController from "@repo/db/controllers/userOnboardings.controller";
-import * as usersController from "@repo/db/controllers/users.controller";
-import * as authSchemas from "@repo/validators/auth.validators";
+import {
+  createUser,
+  getUserByEmail,
+} from "@repo/db/repositories/user.repository";
+import { createUserOnboarding } from "@repo/db/repositories/userOnboarding.repository";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  logoutSchema,
+  registerSchema,
+} from "@repo/validators/server/auth.validators";
 import { TRPCError } from "@trpc/server";
 import { ZodError, type ZodIssue } from "zod";
 
@@ -15,38 +23,42 @@ import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, publicProcedure, router } from "../trpc";
 
 export default router({
-  login: publicProcedure
-    .input(authSchemas.login)
-    .mutation(async ({ input }) => {
-      const user = await usersController.getByEmail(input.email);
-      if (!user) {
-        throw new ZodError([
-          {
-            code: "custom",
-            path: ["root"],
-            message: "Login details are not correct.",
-          },
-        ]);
-      }
-      const passwordCorrect = await verifyPasswordHash(
-        user?.password,
-        input.password,
-      );
-      if (!passwordCorrect) {
-        throw new ZodError([
-          {
-            code: "custom",
-            path: ["root"],
-            message: "Login details are not correct.",
-          },
-        ]);
-      }
-      const session = await createSession(user);
-      return session;
-    }),
+  login: publicProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
+    const user = await getUserByEmail(input.email);
+    if (!user) {
+      throw new ZodError([
+        {
+          code: "custom",
+          path: ["root"],
+          message: "Login details are not correct.",
+        },
+      ]);
+    }
+    const passwordCorrect = await verifyPasswordHash(
+      user?.password,
+      input.password,
+    );
+    if (!passwordCorrect) {
+      throw new ZodError([
+        {
+          code: "custom",
+          path: ["root"],
+          message: "Login details are not correct.",
+        },
+      ]);
+    }
+    const session = await createSession(user);
+    ctx.setCookie("Authorization", `Bearer ${session.token}`, {
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    return session;
+  }),
   register: publicProcedure
-    .input(authSchemas.register)
-    .mutation(async ({ input }) => {
+    .input(registerSchema)
+    .mutation(async ({ input, ctx }) => {
       const issues: ZodIssue[] = [];
       const passwordStrongEnough = await verifyPasswordStrength(input.password);
 
@@ -58,7 +70,7 @@ export default router({
             "Your password has been found in a data breach. Please choose a different password",
         });
       }
-      const emailExists = await usersController.getByEmail(input.email);
+      const emailExists = await getUserByEmail(input.email);
 
       if (emailExists) {
         issues.push({
@@ -73,7 +85,7 @@ export default router({
       }
 
       const hash = await hashPassword(input.password);
-      const user = await usersController.create({
+      const user = await createUser({
         ...input,
         typeId: 1,
         password: hash,
@@ -82,7 +94,7 @@ export default router({
       });
       assertDatabaseResult(user);
 
-      const onboarding = await userOnboardingsController.create({
+      const onboarding = await createUserOnboarding({
         userId: user.id,
         invitedUsers: false,
         welcomed: false,
@@ -91,14 +103,19 @@ export default router({
 
       await sendVerificationEmail(user.id, user.email);
       const session = await createSession(user);
-
+      ctx.setCookie("Authorization", `Bearer ${session.token}`, {
+        secure: false,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30,
+      });
       return session;
     }),
-  logout: authedProcedure.input(authSchemas.logout).mutation(async () => {
+  logout: authedProcedure.input(logoutSchema).mutation(async () => {
     throw new TRPCError({ code: "NOT_IMPLEMENTED" });
   }),
   forgotPassword: publicProcedure
-    .input(authSchemas.forgotPassword)
+    .input(forgotPasswordSchema)
     .mutation(async () => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
