@@ -64,7 +64,7 @@ export function getAllRepairParts({
           : undefined,
       ),
     )
-    .orderBy(...orderByParams)
+    .orderBy(...orderByParams, repairPartTable.createdAt)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
