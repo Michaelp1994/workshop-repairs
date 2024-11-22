@@ -5,7 +5,7 @@ import {
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 
 import UpdateModelForm from "../../_components/UpdateModelForm";
 

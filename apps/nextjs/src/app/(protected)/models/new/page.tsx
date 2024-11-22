@@ -1,13 +1,13 @@
 import { Card, CardContent } from "@repo/ui/card";
 
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
   PageHeader,
   PageHeaderActions,
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 
 import CreateModelForm from "../_components/CreateModelForm";
 
