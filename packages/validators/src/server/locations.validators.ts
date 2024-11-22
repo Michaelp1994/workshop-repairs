@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import { locationId } from "../isomorphic/ids.validators";
 
@@ -17,6 +18,10 @@ export const getLocationsCountSchema = dataTableCountSchema.extend({
   filters: locationFilters,
 });
 export type GetLocationsCountInput = z.infer<typeof getLocationsCountSchema>;
+
+export const getLocationsSelectSchema = getSelectSchema.extend({});
+
+export type GetLocationsSelectInput = z.infer<typeof getLocationsSelectSchema>;
 
 export const createLocationSchema = z.object({
   name: z.string().min(3),

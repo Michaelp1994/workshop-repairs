@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import { modelId, modelImageId } from "../isomorphic/ids.validators";
 
@@ -18,6 +19,12 @@ export const getModelImagesCountSchema = dataTableCountSchema.extend({
 });
 export type GetModelImagesCountInput = z.infer<
   typeof getModelImagesCountSchema
+>;
+
+export const getModelImagesSelectSchema = getSelectSchema.extend({});
+
+export type GetModelImagesSelectInput = z.infer<
+  typeof getModelImagesSelectSchema
 >;
 
 export const createModelImageSchema = z.object({

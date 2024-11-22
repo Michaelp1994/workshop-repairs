@@ -1,21 +1,19 @@
 import {
   archiveUserType,
+  countUserTypes,
   createUserType,
   getAllUserTypes,
   getUserTypeById,
-  countUserTypes,
   getUserTypesSelect,
   updateUserType,
 } from "@repo/db/repositories/userType.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveUserTypeSchema,
   createUserTypeSchema,
+  getAllUserTypesSchema,
   getUserTypeByIdSchema,
+  getUserTypesCountSchema,
+  getUserTypeSelectSchema,
   updateUserTypeSchema,
 } from "@repo/validators/server/userTypes.validators";
 import { TRPCError } from "@trpc/server";
@@ -29,19 +27,19 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllUserTypesSchema)
     .query(async ({ input }) => {
       const allUserTypes = getAllUserTypes(input);
       return allUserTypes;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getUserTypesCountSchema)
     .query(({ input }) => {
       const count = countUserTypes(input);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getUserTypeSelectSchema)
     .query(async ({ input }) => {
       const allUserTypes = getUserTypesSelect(input);
       return allUserTypes;

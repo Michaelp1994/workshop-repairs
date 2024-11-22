@@ -5,11 +5,11 @@ import {
   createPartToModel,
   getAllModelsByPartId,
   getAllPartsByModelId,
-  getPartsToModelsSelect,
+  getModelsByPartIdSelect,
+  getPartsByModelIdSelect,
   getPartToModelById,
   updatePartToModel,
 } from "@repo/db/repositories/partToModel.repository";
-import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
   archivePartToModelSchema,
   createPartToModelSchema,
@@ -17,6 +17,8 @@ import {
   getAllModelsByPartIdSchema,
   getAllPartsByModelIdCountSchema,
   getAllPartsByModelIdSchema,
+  getModelsByPartIdSelectSchema,
+  getPartsByModelIdSelectSchema,
   getPartToModelByIdSchema,
   updatePartToModelSchema,
 } from "@repo/validators/server/partsToModel.validators";
@@ -65,10 +67,18 @@ export default router({
       return count;
     }),
 
-  getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
-    const allParts = getPartsToModelsSelect(input);
-    return allParts;
-  }),
+  getModelsByPartIdSelect: organizationProcedure
+    .input(getModelsByPartIdSelectSchema)
+    .query(({ input }) => {
+      const allModels = getModelsByPartIdSelect(input, input.partId);
+      return allModels;
+    }),
+  getPartsByModelIdSelect: organizationProcedure
+    .input(getPartsByModelIdSelectSchema)
+    .query(({ input }) => {
+      const allParts = getPartsByModelIdSelect(input, input.modelId);
+      return allParts;
+    }),
   getByIds: organizationProcedure
     .input(getPartToModelByIdSchema)
     .query(async ({ input }) => {

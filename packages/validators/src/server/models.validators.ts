@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import {
   assetId,
@@ -27,6 +28,10 @@ export const getModelsCountSchema = dataTableCountSchema.extend({
   filters: modelFilters,
 });
 export type GetModelsCountInput = z.infer<typeof getModelsCountSchema>;
+
+export const getModelsSelectSchema = getSelectSchema.extend({});
+
+export type GetModelsSelectInput = z.infer<typeof getModelsSelectSchema>;
 
 export const createModelSchema = z.object({
   name: z.string().min(3),

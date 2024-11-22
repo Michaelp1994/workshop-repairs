@@ -8,14 +8,12 @@ import {
   updateRepairComment,
 } from "@repo/db/repositories/repairComment.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveRepairCommentSchema,
   createRepairCommentSchema,
   getAllRepairCommentsByRepairIdSchema,
+  getAllRepairCommentsSchema,
   getRepairCommentByIdSchema,
+  getRepairCommentsCountSchema,
   updateRepairCommentSchema,
 } from "@repo/validators/server/repairComments.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,14 +28,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllRepairCommentsSchema)
     .query(async ({ input }) => {
       const allRepairComments = getAllRepairComments(input);
 
       return allRepairComments;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getRepairCommentsCountSchema)
     .query(({ input }) => {
       const count = countRepairComments(input);
       return count;

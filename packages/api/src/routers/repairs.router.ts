@@ -7,13 +7,13 @@ import {
   getRepairsSelect,
   updateRepair,
 } from "@repo/db/repositories/repair.repository";
-import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
   archiveRepairSchema,
   createRepairSchema,
   getAllRepairsSchema,
   getRepairByIdSchema,
   getRepairsCountSchema,
+  getRepairsSelectSchema,
   updateRepairSchema,
 } from "@repo/validators/server/repairs.validators";
 import { TRPCError } from "@trpc/server";
@@ -48,7 +48,7 @@ export default router({
     }),
 
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getRepairsSelectSchema)
     .query(async ({ input }) => {
       const allRepairs = await getRepairsSelect(input);
       return allRepairs;

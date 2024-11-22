@@ -8,14 +8,12 @@ import {
   updateEquipmentType,
 } from "@repo/db/repositories/equipmentType.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveEquipmentTypeSchema,
   createEquipmentTypeSchema,
+  getAllEquipmentTypesSchema,
   getEquipmentTypeByIdSchema,
+  getEquipmentTypesCountSchema,
+  getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
 } from "@repo/validators/server/equipmentTypes.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,7 +28,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllEquipmentTypesSchema)
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = getAllEquipmentTypes(
         input,
@@ -40,13 +38,13 @@ export default router({
       return allEquipmentTypes;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getEquipmentTypesCountSchema)
     .query(({ ctx, input }) => {
       const count = countEquipmentTypes(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getEquipmentTypesSelectSchema)
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = await getEquipmentTypesSelect(
         input,

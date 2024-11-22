@@ -8,7 +8,6 @@ import {
   getModelsSelect,
   updateModel,
 } from "@repo/db/repositories/model.repository";
-import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
   archiveModelSchema,
   createModelSchema,
@@ -16,6 +15,7 @@ import {
   getModelByAssetIdSchema,
   getModelByIdSchema,
   getModelsCountSchema,
+  getModelsSelectSchema,
   updateModelSchema,
 } from "@repo/validators/server/models.validators";
 import { TRPCError } from "@trpc/server";
@@ -43,7 +43,7 @@ export default router({
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getModelsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allModels = await getModelsSelect(
         input,

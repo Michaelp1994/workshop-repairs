@@ -1,7 +1,4 @@
-import type {
-  DataTableInput,
-  DataTableOutput,
-} from "@repo/validators/dataTables.validators";
+import type { DataTableOutput } from "@repo/validators/dataTables.validators";
 
 import {
   ColumnFiltersState,
@@ -14,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useState } from "react";
-export function useDataTableState(initialState?: DataTableInput) {
+export function useDataTableState(initialState?: DataTableOutput) {
   const init: DataTableOutput = {
     columnFilters: initialState?.columnFilters ?? [],
     columns: initialState?.columns ?? {},

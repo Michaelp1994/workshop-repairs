@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -27,7 +27,7 @@ const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
 export function getAllUsers(
-  { globalFilter, sorting, pagination, columnFilters }: DataTableInput,
+  { globalFilter, sorting, pagination, columnFilters }: DataTableOutput,
   organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderBy(sorting);

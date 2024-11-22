@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, isNull } from "drizzle-orm";
@@ -16,7 +16,7 @@ import {
   type UpdateRepairImage,
 } from "../tables/repair-image.sql";
 
-export function getAllRepairImages({ pagination }: DataTableInput) {
+export function getAllRepairImages({ pagination }: DataTableOutput) {
   const query = db
     .select()
     .from(repairImageTable)

@@ -1,7 +1,7 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
-  GetSelectInput,
+  DataTableOutput,
+  GetSelectOutput,
 } from "@repo/validators/dataTables.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
@@ -15,7 +15,7 @@ import {
   userTypeTable,
 } from "../tables/user-type.sql";
 
-export function getAllUserTypes({ pagination }: DataTableInput) {
+export function getAllUserTypes({ pagination }: DataTableOutput) {
   const query = db
     .select()
     .from(userTypeTable)

@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import { equipmentTypeId } from "../isomorphic/ids.validators";
 
@@ -20,6 +21,12 @@ export const getEquipmentTypesCountSchema = dataTableCountSchema.extend({
 });
 export type GetEquipmentTypesCountInput = z.infer<
   typeof getEquipmentTypesCountSchema
+>;
+
+export const getEquipmentTypesSelectSchema = getSelectSchema.extend({});
+
+export type GetEquipmentTypesSelectInput = z.infer<
+  typeof getEquipmentTypesSelectSchema
 >;
 
 export const createEquipmentTypeSchema = z.object({

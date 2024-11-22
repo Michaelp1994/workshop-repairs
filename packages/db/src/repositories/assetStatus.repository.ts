@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -15,7 +15,7 @@ import {
   type UpdateAssetStatus,
 } from "../tables/asset-status.sql";
 
-export function getAllAssetStatuses({ pagination }: DataTableInput) {
+export function getAllAssetStatuses({ pagination }: DataTableOutput) {
   const query = db
     .select()
     .from(assetStatusTable)

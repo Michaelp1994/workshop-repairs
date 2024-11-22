@@ -8,14 +8,12 @@ import {
   updateAssetStatus,
 } from "@repo/db/repositories/assetStatus.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveAssetStatusSchema,
   createAssetStatusSchema,
+  getAllAssetStatusesSchema,
   getAssetStatusByIdSchema,
+  getAssetStatusesCountSchema,
+  getAssetStatusesSelectSchema,
   updateAssetStatusSchema,
 } from "@repo/validators/server/assetStatuses.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,21 +28,23 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllAssetStatusesSchema)
     .query(async ({ input }) => {
       const allUserTypes = getAllAssetStatuses(input);
       return allUserTypes;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getAssetStatusesCountSchema)
     .query(({ input }) => {
       const count = countAssetStatuses(input);
       return count;
     }),
-  getSelect: organizationProcedure.input(getSelectSchema).query(({ input }) => {
-    const allUserTypes = getAssetStatusSelect(input);
-    return allUserTypes;
-  }),
+  getSelect: organizationProcedure
+    .input(getAssetStatusesSelectSchema)
+    .query(({ input }) => {
+      const allUserTypes = getAssetStatusSelect(input);
+      return allUserTypes;
+    }),
   getById: organizationProcedure
     .input(getAssetStatusByIdSchema)
     .query(async ({ input }) => {

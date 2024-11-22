@@ -12,14 +12,12 @@ import {
   updateModelImage,
 } from "@repo/db/repositories/modelImage.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveModelImageSchema,
   createModelImageSchema,
   getAllModelImagesByModelIdSchema,
+  getAllModelImagesSchema,
   getModelImageByIdSchema,
+  getModelImagesCountSchema,
   setFavouriteModelImageSchema,
   updateModelImageSchema,
   uploadModelImageSchema,
@@ -38,14 +36,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllModelImagesSchema)
     .query(async ({ input }) => {
       const allModelImages = getAllModelImages(input);
 
       return allModelImages;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getModelImagesCountSchema)
     .query(({ input }) => {
       const count = countModelImages(input);
       return count;

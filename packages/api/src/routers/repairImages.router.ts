@@ -1,21 +1,19 @@
 import {
   archiveRepairImage,
+  countRepairImages,
   createRepairImage,
   getAllRepairImages,
   getAllRepairImagesByRepairId,
   getRepairImageById,
-  countRepairImages,
   updateRepairImage,
 } from "@repo/db/repositories/repairImage.repository";
-import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "@repo/validators/dataTables.validators";
 import {
   archiveRepairImageSchema,
   createRepairImageSchema,
   getAllRepairImagesByRepairIdSchema,
+  getAllRepairImagesSchema,
   getRepairImageByIdSchema,
+  getRepairImagesCountSchema,
   updateRepairImageSchema,
 } from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,14 +28,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllRepairImagesSchema)
     .query(async ({ input }) => {
       const allRepairImages = getAllRepairImages(input);
 
       return allRepairImages;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(getRepairImagesCountSchema)
     .query(({ input }) => {
       const count = countRepairImages(input);
       return count;
