@@ -6,6 +6,8 @@ import {
   getAllModelsByPartId,
   getAllPartsByModelId,
   getPartsToModelsSelect,
+  getPartToModelById,
+  updatePartToModel,
 } from "@repo/db/repositories/partToModel.repository";
 import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
@@ -15,6 +17,8 @@ import {
   getAllModelsByPartIdSchema,
   getAllPartsByModelIdCountSchema,
   getAllPartsByModelIdSchema,
+  getPartToModelByIdSchema,
+  updatePartToModelSchema,
 } from "@repo/validators/server/partsToModel.validators";
 import { TRPCError } from "@trpc/server";
 
@@ -65,6 +69,15 @@ export default router({
     const allParts = getPartsToModelsSelect(input);
     return allParts;
   }),
+  getByIds: organizationProcedure
+    .input(getPartToModelByIdSchema)
+    .query(async ({ input }) => {
+      const partModel = await getPartToModelById(input);
+
+      assertDatabaseResult(partModel);
+
+      return partModel;
+    }),
   create: organizationProcedure
     .input(createPartToModelSchema)
     .mutation(async ({ input }) => {
@@ -73,6 +86,15 @@ export default router({
       assertDatabaseResult(createdPartModel);
 
       return createdPartModel;
+    }),
+  update: organizationProcedure
+    .input(updatePartToModelSchema)
+    .mutation(async ({ input }) => {
+      const updatedPartToModel = await updatePartToModel(input);
+
+      assertDatabaseResult(updatedPartToModel);
+
+      return updatedPartToModel;
     }),
   archive: organizationProcedure
     .input(archivePartToModelSchema)
