@@ -11,7 +11,7 @@ import {
   createRepairPartSchema,
   getAllRepairPartsSchema,
   getRepairPartByIdSchema,
-  getRepairPartsCountSchema,
+  countRepairPartsSchema,
   updateRepairPartSchema,
 } from "@repo/validators/server/repairParts.validators";
 import { TRPCError } from "@trpc/server";
@@ -33,7 +33,7 @@ export default router({
       return allRepairParts;
     }),
   countAll: organizationProcedure
-    .input(getRepairPartsCountSchema)
+    .input(countRepairPartsSchema)
     .query(({ input }) => {
       const count = countRepairParts(input);
       return count;

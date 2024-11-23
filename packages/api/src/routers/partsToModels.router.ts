@@ -13,9 +13,9 @@ import {
 import {
   archivePartToModelSchema,
   createPartToModelSchema,
-  getAllModelsByPartIdCountSchema,
+  countAllModelsByPartIdSchema,
   getAllModelsByPartIdSchema,
-  getAllPartsByModelIdCountSchema,
+  countAllPartsByModelIdSchema,
   getAllPartsByModelIdSchema,
   getModelsByPartIdSelectSchema,
   getPartsByModelIdSelectSchema,
@@ -36,7 +36,7 @@ export default router({
     }),
 
   countAllPartsByModelId: organizationProcedure
-    .input(getAllPartsByModelIdCountSchema)
+    .input(countAllPartsByModelIdSchema)
     .query(async ({ input }) => {
       const count = await countAllPartsByModelId(input);
 
@@ -55,7 +55,7 @@ export default router({
       return allModels;
     }),
   countAllModelsByPartId: organizationProcedure
-    .input(getAllModelsByPartIdCountSchema)
+    .input(countAllModelsByPartIdSchema)
     .query(async ({ input }) => {
       const count = await countAllModelsByPartId(input);
       if (count === undefined) {

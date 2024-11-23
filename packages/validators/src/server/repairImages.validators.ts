@@ -13,12 +13,10 @@ export const getAllRepairImagesSchema = dataTableSchema.extend({
 });
 export type GetAllRepairImagesInput = z.infer<typeof getAllRepairImagesSchema>;
 
-export const getRepairImagesCountSchema = dataTableCountSchema.extend({
+export const countRepairImagesSchema = dataTableCountSchema.extend({
   filters: repairImageFilters,
 });
-export type GetRepairImagesCountInput = z.infer<
-  typeof getRepairImagesCountSchema
->;
+export type GetRepairImagesCountInput = z.infer<typeof countRepairImagesSchema>;
 
 export const getAllRepairImagesByRepairIdSchema = z.object({
   repairId,

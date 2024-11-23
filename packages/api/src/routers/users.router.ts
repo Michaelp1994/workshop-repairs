@@ -21,7 +21,7 @@ import {
   getAllUsersSchema,
   getCurrentUserSchema,
   getUserByIdSchema,
-  getUsersCountSchema,
+  countUsersSchema,
   updateCurrentUserSchema,
   updateUserSchema,
 } from "@repo/validators/server/users.validators";
@@ -45,7 +45,7 @@ export default router({
       return allUsers;
     }),
   countAll: organizationProcedure
-    .input(getUsersCountSchema)
+    .input(countUsersSchema)
     .query(({ input, ctx }) => {
       const count = countUsers(input, ctx.session.organizationId);
       return count;

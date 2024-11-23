@@ -14,12 +14,10 @@ export const getAllRepairTypesSchema = dataTableSchema.extend({
 });
 export type GetAllRepairTypesInput = z.infer<typeof getAllRepairTypesSchema>;
 
-export const getRepairTypesCountSchema = dataTableCountSchema.extend({
+export const countRepairTypesSchema = dataTableCountSchema.extend({
   filters: repairTypeFilters,
 });
-export type GetRepairTypesCountInput = z.infer<
-  typeof getRepairTypesCountSchema
->;
+export type GetRepairTypesCountInput = z.infer<typeof countRepairTypesSchema>;
 
 export const getRepairTypesSelectSchema = getSelectSchema.extend({});
 

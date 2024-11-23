@@ -14,10 +14,10 @@ export const getAllClientsSchema = dataTableSchema.extend({
 });
 export type GetAllClientsInput = z.infer<typeof getAllClientsSchema>;
 
-export const getClientsCountSchema = dataTableCountSchema.extend({
+export const countClientsSchema = dataTableCountSchema.extend({
   filters: clientFilters,
 });
-export type GetClientsCountInput = z.infer<typeof getClientsCountSchema>;
+export type GetClientsCountInput = z.infer<typeof countClientsSchema>;
 
 export const getClientsSelectSchema = getSelectSchema.extend({});
 

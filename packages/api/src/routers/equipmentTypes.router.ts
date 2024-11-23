@@ -12,7 +12,7 @@ import {
   createEquipmentTypeSchema,
   getAllEquipmentTypesSchema,
   getEquipmentTypeByIdSchema,
-  getEquipmentTypesCountSchema,
+  countEquipmentTypesSchema,
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
 } from "@repo/validators/server/equipmentTypes.validators";
@@ -38,7 +38,7 @@ export default router({
       return allEquipmentTypes;
     }),
   countAll: organizationProcedure
-    .input(getEquipmentTypesCountSchema)
+    .input(countEquipmentTypesSchema)
     .query(({ ctx, input }) => {
       const count = countEquipmentTypes(input, ctx.session.organizationId);
       return count;

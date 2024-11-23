@@ -14,7 +14,7 @@ import {
   getAllModelsSchema,
   getModelByAssetIdSchema,
   getModelByIdSchema,
-  getModelsCountSchema,
+  countModelsSchema,
   getModelsSelectSchema,
   updateModelSchema,
 } from "@repo/validators/server/models.validators";
@@ -37,7 +37,7 @@ export default router({
     }),
 
   countAll: organizationProcedure
-    .input(getModelsCountSchema)
+    .input(countModelsSchema)
     .query(({ ctx, input }) => {
       const count = countModels(input, ctx.session.organizationId);
       return count;

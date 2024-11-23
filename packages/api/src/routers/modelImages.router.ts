@@ -17,7 +17,7 @@ import {
   getAllModelImagesByModelIdSchema,
   getAllModelImagesSchema,
   getModelImageByIdSchema,
-  getModelImagesCountSchema,
+  countModelImagesSchema,
   setFavouriteModelImageSchema,
   updateModelImageSchema,
   uploadModelImageSchema,
@@ -43,7 +43,7 @@ export default router({
       return allModelImages;
     }),
   countAll: organizationProcedure
-    .input(getModelImagesCountSchema)
+    .input(countModelImagesSchema)
     .query(({ input }) => {
       const count = countModelImages(input);
       return count;

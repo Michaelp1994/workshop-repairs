@@ -13,7 +13,7 @@ import {
   getAllRepairStatusTypesSchema,
   getRepairStatusSelectSchema,
   getRepairStatusTypeByIdSchema,
-  getRepairStatusTypesCountSchema,
+  countRepairStatusTypesSchema,
   updateRepairStatusTypeSchema,
 } from "@repo/validators/server/repairStatusTypes.validators";
 import { TRPCError } from "@trpc/server";
@@ -35,7 +35,7 @@ export default router({
       return allRepairStatusTypes;
     }),
   countAll: organizationProcedure
-    .input(getRepairStatusTypesCountSchema)
+    .input(countRepairStatusTypesSchema)
     .query(({ input }) => {
       const count = countRepairStatusTypes(input);
       return count;

@@ -12,7 +12,7 @@ import {
   createAssetStatusSchema,
   getAllAssetStatusesSchema,
   getAssetStatusByIdSchema,
-  getAssetStatusesCountSchema,
+  countAssetStatusesSchema,
   getAssetStatusesSelectSchema,
   updateAssetStatusSchema,
 } from "@repo/validators/server/assetStatuses.validators";
@@ -34,7 +34,7 @@ export default router({
       return allUserTypes;
     }),
   countAll: organizationProcedure
-    .input(getAssetStatusesCountSchema)
+    .input(countAssetStatusesSchema)
     .query(({ input }) => {
       const count = countAssetStatuses(input);
       return count;

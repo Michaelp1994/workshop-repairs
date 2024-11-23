@@ -12,7 +12,7 @@ import {
   createRepairSchema,
   getAllRepairsSchema,
   getRepairByIdSchema,
-  getRepairsCountSchema,
+  countRepairsSchema,
   getRepairsSelectSchema,
   updateRepairSchema,
 } from "@repo/validators/server/repairs.validators";
@@ -35,7 +35,7 @@ export default router({
     }),
 
   countAll: organizationProcedure
-    .input(getRepairsCountSchema)
+    .input(countRepairsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countRepairs(input, ctx.session.organizationId);
       if (count === undefined) {

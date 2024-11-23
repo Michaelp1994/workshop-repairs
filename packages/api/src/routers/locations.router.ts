@@ -12,7 +12,7 @@ import {
   createLocationSchema,
   getAllLocationsSchema,
   getLocationByIdSchema,
-  getLocationsCountSchema,
+  countLocationsSchema,
   getLocationsSelectSchema,
   updateLocationSchema,
 } from "@repo/validators/server/locations.validators";
@@ -35,7 +35,7 @@ export default router({
       return allLocations;
     }),
   countAll: organizationProcedure
-    .input(getLocationsCountSchema)
+    .input(countLocationsSchema)
     .query(({ ctx, input }) => {
       const count = countLocations(input, ctx.session.organizationId);
       return count;

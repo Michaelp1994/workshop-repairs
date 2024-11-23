@@ -13,7 +13,7 @@ import {
   getAllRepairCommentsByRepairIdSchema,
   getAllRepairCommentsSchema,
   getRepairCommentByIdSchema,
-  getRepairCommentsCountSchema,
+  countRepairCommentsSchema,
   updateRepairCommentSchema,
 } from "@repo/validators/server/repairComments.validators";
 import { TRPCError } from "@trpc/server";
@@ -35,7 +35,7 @@ export default router({
       return allRepairComments;
     }),
   countAll: organizationProcedure
-    .input(getRepairCommentsCountSchema)
+    .input(countRepairCommentsSchema)
     .query(({ input }) => {
       const count = countRepairComments(input);
       return count;

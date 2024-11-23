@@ -13,7 +13,7 @@ import {
   getAllRepairImagesByRepairIdSchema,
   getAllRepairImagesSchema,
   getRepairImageByIdSchema,
-  getRepairImagesCountSchema,
+  countRepairImagesSchema,
   updateRepairImageSchema,
 } from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";
@@ -35,7 +35,7 @@ export default router({
       return allRepairImages;
     }),
   countAll: organizationProcedure
-    .input(getRepairImagesCountSchema)
+    .input(countRepairImagesSchema)
     .query(({ input }) => {
       const count = countRepairImages(input);
       return count;

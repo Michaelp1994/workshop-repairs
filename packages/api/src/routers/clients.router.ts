@@ -12,7 +12,7 @@ import {
   createClientSchema,
   getAllClientsSchema,
   getClientByIdSchema,
-  getClientsCountSchema,
+  countClientsSchema,
   getClientsSelectSchema,
   updateClientSchema,
 } from "@repo/validators/server/clients.validators";
@@ -34,7 +34,7 @@ export default router({
       return allClients;
     }),
   countAll: organizationProcedure
-    .input(getClientsCountSchema)
+    .input(countClientsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countClients(input, ctx.session.organizationId);
       assertDatabaseResult(count);

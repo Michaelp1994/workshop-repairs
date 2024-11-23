@@ -18,12 +18,12 @@ export type GetAllPartsByModelIdInput = z.infer<
   typeof getAllPartsByModelIdSchema
 >;
 
-export const getAllPartsByModelIdCountSchema = dataTableCountSchema.extend({
+export const countAllPartsByModelIdSchema = dataTableCountSchema.extend({
   filters: partsByModelIdFilters,
 });
 
 export type GetAllPartsByModelIdCountInput = z.infer<
-  typeof getAllPartsByModelIdCountSchema
+  typeof countAllPartsByModelIdSchema
 >;
 
 /** */
@@ -39,12 +39,12 @@ export type GetAllModelsByPartIdInput = z.infer<
   typeof getAllModelsByPartIdSchema
 >;
 
-export const getAllModelsByPartIdCountSchema = dataTableCountSchema.extend({
+export const countAllModelsByPartIdSchema = dataTableCountSchema.extend({
   filters: modelsByPartIdFilters,
 });
 
 export type GetAllModelsByPartIdCountInput = z.infer<
-  typeof getAllModelsByPartIdCountSchema
+  typeof countAllModelsByPartIdSchema
 >;
 
 export const getModelsByPartIdSelectSchema = getSelectSchema.extend({

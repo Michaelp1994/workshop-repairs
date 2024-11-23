@@ -14,11 +14,11 @@ export type GetAllOrganizationsInput = z.infer<
   typeof getAllOrganizationsSchema
 >;
 
-export const getOrganizationsCountSchema = dataTableCountSchema.extend({
+export const countOrganizationsSchema = dataTableCountSchema.extend({
   filters: organizationFilters,
 });
 export type GetOrganizationsCountInput = z.infer<
-  typeof getOrganizationsCountSchema
+  typeof countOrganizationsSchema
 >;
 
 export const createOrganizationSchema = z.object({

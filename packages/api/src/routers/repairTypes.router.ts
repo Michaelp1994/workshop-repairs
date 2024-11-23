@@ -12,7 +12,7 @@ import {
   createRepairTypeSchema,
   getAllRepairTypesSchema,
   getRepairTypeByIdSchema,
-  getRepairTypesCountSchema,
+  countRepairTypesSchema,
   getRepairTypesSelectSchema,
   updateRepairTypeSchema,
 } from "@repo/validators/server/repairTypes.validators";
@@ -34,7 +34,7 @@ export default router({
       return allRepairTypes;
     }),
   countAll: organizationProcedure
-    .input(getRepairTypesCountSchema)
+    .input(countRepairTypesSchema)
     .query(({ input }) => {
       const count = countRepairTypes(input);
       return count;

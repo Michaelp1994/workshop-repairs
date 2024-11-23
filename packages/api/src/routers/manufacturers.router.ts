@@ -12,7 +12,7 @@ import {
   createManufacturerSchema,
   getAllManufacturersSchema,
   getManufacturerByIdSchema,
-  getManufacturersCountSchema,
+  countManufacturersSchema,
   getManufacturersSelectSchema,
   updateManufacturerSchema,
 } from "@repo/validators/server/manufacturers.validators";
@@ -38,7 +38,7 @@ export default router({
       return allManufacturers;
     }),
   countAll: organizationProcedure
-    .input(getManufacturersCountSchema)
+    .input(countManufacturersSchema)
     .query(({ ctx, input }) => {
       const count = countManufacturers(input, ctx.session.organizationId);
       return count;

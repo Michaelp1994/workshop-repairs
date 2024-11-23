@@ -16,11 +16,11 @@ export type GetAllManufacturersInput = z.infer<
   typeof getAllManufacturersSchema
 >;
 
-export const getManufacturersCountSchema = dataTableCountSchema.extend({
+export const countManufacturersSchema = dataTableCountSchema.extend({
   filters: manufacturerFilters,
 });
 export type GetManufacturersCountInput = z.infer<
-  typeof getManufacturersCountSchema
+  typeof countManufacturersSchema
 >;
 
 export const getManufacturersSelectSchema = getSelectSchema.extend({});

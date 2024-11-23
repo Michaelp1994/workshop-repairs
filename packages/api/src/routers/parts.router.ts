@@ -12,7 +12,7 @@ import {
   createPartSchema,
   getAllPartsSchema,
   getPartByIdSchema,
-  getPartsCountSchema,
+  countPartsSchema,
   getPartsSelectSchema,
   updatePartSchema,
 } from "@repo/validators/server/parts.validators";
@@ -35,7 +35,7 @@ export default router({
       return allParts;
     }),
   countAll: organizationProcedure
-    .input(getPartsCountSchema)
+    .input(countPartsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countParts(input, ctx.session.organizationId);
 

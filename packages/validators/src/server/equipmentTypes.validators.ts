@@ -16,11 +16,11 @@ export type GetAllEquipmentTypesInput = z.infer<
   typeof getAllEquipmentTypesSchema
 >;
 
-export const getEquipmentTypesCountSchema = dataTableCountSchema.extend({
+export const countEquipmentTypesSchema = dataTableCountSchema.extend({
   filters: equipmentTypeFilters,
 });
 export type GetEquipmentTypesCountInput = z.infer<
-  typeof getEquipmentTypesCountSchema
+  typeof countEquipmentTypesSchema
 >;
 
 export const getEquipmentTypesSelectSchema = getSelectSchema.extend({});
