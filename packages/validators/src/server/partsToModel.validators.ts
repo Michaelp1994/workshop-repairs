@@ -22,7 +22,7 @@ export const countAllPartsByModelIdSchema = dataTableCountSchema.extend({
   filters: partsByModelIdFilters,
 });
 
-export type GetAllPartsByModelIdCountInput = z.infer<
+export type CountAllPartsByModelIdInput = z.infer<
   typeof countAllPartsByModelIdSchema
 >;
 
@@ -43,7 +43,7 @@ export const countAllModelsByPartIdSchema = dataTableCountSchema.extend({
   filters: modelsByPartIdFilters,
 });
 
-export type GetAllModelsByPartIdCountInput = z.infer<
+export type CountAllModelsByPartIdInput = z.infer<
   typeof countAllModelsByPartIdSchema
 >;
 

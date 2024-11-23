@@ -36,7 +36,7 @@ export type GetAllAssetsInput = z.infer<typeof getAllAssetsSchema>;
 export const countAssetsSchema = dataTableCountSchema.extend({
   filters: assetFilters,
 });
-export type GetAssetsCountInput = z.infer<typeof countAssetsSchema>;
+export type CountAssetsInput = z.infer<typeof countAssetsSchema>;
 
 export const getAssestsSelectSchema = getSelectSchema.extend({});
 export type GetAssetsSelectSchema = z.infer<typeof getAssestsSelectSchema>;

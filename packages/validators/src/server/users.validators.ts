@@ -16,7 +16,7 @@ export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
 export const countUsersSchema = dataTableCountSchema.extend({
   filters: userFilters,
 });
-export type GetUsersCountInput = z.infer<typeof countUsersSchema>;
+export type CountUsersInput = z.infer<typeof countUsersSchema>;
 
 export const registerUserSchema = z.object({
   firstName: z.string().min(3),

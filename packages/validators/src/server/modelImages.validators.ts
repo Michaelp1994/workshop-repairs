@@ -17,7 +17,7 @@ export type GetAllModelImagesInput = z.infer<typeof getAllModelImagesSchema>;
 export const countModelImagesSchema = dataTableCountSchema.extend({
   filters: modelImageFilters,
 });
-export type GetModelImagesCountInput = z.infer<typeof countModelImagesSchema>;
+export type CountModelImagesInput = z.infer<typeof countModelImagesSchema>;
 
 export const getModelImagesSelectSchema = getSelectSchema.extend({});
 

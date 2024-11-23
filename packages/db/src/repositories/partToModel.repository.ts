@@ -1,8 +1,8 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  GetAllModelsByPartIdCountInput,
+  CountAllModelsByPartIdInput,
   GetAllModelsByPartIdInput,
-  GetAllPartsByModelIdCountInput,
+  CountAllPartsByModelIdInput,
   GetAllPartsByModelIdInput,
 } from "@repo/validators/server/partsToModel.validators";
 
@@ -60,7 +60,7 @@ export async function countAllPartsByModelId({
   columnFilters,
   globalFilter,
   filters,
-}: GetAllPartsByModelIdCountInput) {
+}: CountAllPartsByModelIdInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -115,7 +115,7 @@ export async function countAllModelsByPartId({
   columnFilters,
   globalFilter,
   filters,
-}: GetAllModelsByPartIdCountInput) {
+}: CountAllModelsByPartIdInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db

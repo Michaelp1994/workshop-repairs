@@ -1,7 +1,7 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
   GetAllClientsInput,
-  GetClientsCountInput,
+  CountClientsInput,
 } from "@repo/validators/server/clients.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -51,7 +51,7 @@ export function getAllClients(
 }
 
 export async function countClients(
-  { globalFilter, columnFilters }: GetClientsCountInput,
+  { globalFilter, columnFilters }: CountClientsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

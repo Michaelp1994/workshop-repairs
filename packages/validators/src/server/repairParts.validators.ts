@@ -21,7 +21,7 @@ export const countRepairPartsSchema = dataTableCountSchema.extend({
   filters: repairPartFilters,
 });
 
-export type GetRepairPartsCountInput = z.infer<typeof countRepairPartsSchema>;
+export type CountRepairPartsInput = z.infer<typeof countRepairPartsSchema>;
 
 export const getRepairPartByIdSchema = z.object({
   id: repairPartId,

@@ -27,7 +27,7 @@ export type GetAllModelsInput = z.infer<typeof getAllModelsSchema>;
 export const countModelsSchema = dataTableCountSchema.extend({
   filters: modelFilters,
 });
-export type GetModelsCountInput = z.infer<typeof countModelsSchema>;
+export type CountModelsInput = z.infer<typeof countModelsSchema>;
 
 export const getModelsSelectSchema = getSelectSchema.extend({});
 

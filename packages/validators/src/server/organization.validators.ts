@@ -17,9 +17,7 @@ export type GetAllOrganizationsInput = z.infer<
 export const countOrganizationsSchema = dataTableCountSchema.extend({
   filters: organizationFilters,
 });
-export type GetOrganizationsCountInput = z.infer<
-  typeof countOrganizationsSchema
->;
+export type CountOrganizationsInput = z.infer<typeof countOrganizationsSchema>;
 
 export const createOrganizationSchema = z.object({
   name: z.string().min(5),

@@ -17,7 +17,7 @@ export type GetAllUserTypesInput = z.infer<typeof getAllUserTypesSchema>;
 export const countUserTypesSchema = dataTableCountSchema.extend({
   filters: userTypeFilters,
 });
-export type GetUserTypesCountInput = z.infer<typeof countUserTypesSchema>;
+export type CountUserTypesInput = z.infer<typeof countUserTypesSchema>;
 
 export const getUserTypeSelectSchema = getSelectSchema.extend({});
 export type GetUserTypeSelectInput = z.infer<typeof getUserTypeSelectSchema>;

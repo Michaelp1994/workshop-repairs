@@ -1,6 +1,6 @@
 import type {
   GetAllRepairPartsInput,
-  GetRepairPartsCountInput,
+  CountRepairPartsInput,
 } from "@repo/validators/server/repairParts.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -74,7 +74,7 @@ export async function countRepairParts({
   filters,
   columnFilters,
   globalFilter,
-}: GetRepairPartsCountInput) {
+}: CountRepairPartsInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db

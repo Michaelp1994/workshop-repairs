@@ -17,7 +17,7 @@ export type GetAllPartsInput = z.infer<typeof getAllPartsSchema>;
 export const countPartsSchema = dataTableCountSchema.extend({
   filters: partFilters,
 });
-export type GetPartsCountInput = z.infer<typeof countPartsSchema>;
+export type CountPartsInput = z.infer<typeof countPartsSchema>;
 
 export const getPartsSelectSchema = getSelectSchema.extend({});
 export type GetPartsSelectInput = z.infer<typeof getPartsSelectSchema>;

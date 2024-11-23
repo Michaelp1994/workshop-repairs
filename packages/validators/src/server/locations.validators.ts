@@ -17,7 +17,7 @@ export type GetAllLocationsInput = z.infer<typeof getAllLocationsSchema>;
 export const countLocationsSchema = dataTableCountSchema.extend({
   filters: locationFilters,
 });
-export type GetLocationsCountInput = z.infer<typeof countLocationsSchema>;
+export type CountLocationsInput = z.infer<typeof countLocationsSchema>;
 
 export const getLocationsSelectSchema = getSelectSchema.extend({});
 

@@ -19,9 +19,7 @@ export type GetAllAssetStatusesInput = z.infer<
 export const countAssetStatusesSchema = dataTableCountSchema.extend({
   filters: assetStatusFilters,
 });
-export type GetAssetStatusesCountInput = z.infer<
-  typeof countAssetStatusesSchema
->;
+export type CountAssetStatusesInput = z.infer<typeof countAssetStatusesSchema>;
 
 export const getAssetStatusesSelectSchema = getSelectSchema.extend({});
 

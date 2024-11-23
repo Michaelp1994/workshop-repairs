@@ -1,7 +1,7 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
   GetAllAssetsInput,
-  GetAssetsCountInput,
+  CountAssetsInput,
 } from "@repo/validators/server/assets.validators";
 
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -56,7 +56,7 @@ export async function getAllAssets(
 }
 
 export async function countAssets(
-  { filters, ...dataTableInput }: GetAssetsCountInput,
+  { filters, ...dataTableInput }: CountAssetsInput,
   organizationId: OrganizationID,
 ) {
   const query = createAssetsCountQuery(
