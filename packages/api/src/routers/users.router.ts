@@ -17,11 +17,11 @@ import {
 } from "@repo/validators/server/auth.validators";
 import {
   archiveUserSchema,
+  countUsersSchema,
   createUserSchema,
   getAllUsersSchema,
   getCurrentUserSchema,
   getUserByIdSchema,
-  countUsersSchema,
   updateCurrentUserSchema,
   updateUserSchema,
 } from "@repo/validators/server/users.validators";

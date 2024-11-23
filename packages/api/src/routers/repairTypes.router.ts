@@ -9,10 +9,10 @@ import {
 } from "@repo/db/repositories/repairType.repository";
 import {
   archiveRepairTypeSchema,
+  countRepairTypesSchema,
   createRepairTypeSchema,
   getAllRepairTypesSchema,
   getRepairTypeByIdSchema,
-  countRepairTypesSchema,
   getRepairTypesSelectSchema,
   updateRepairTypeSchema,
 } from "@repo/validators/server/repairTypes.validators";

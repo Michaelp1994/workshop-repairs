@@ -10,12 +10,12 @@ import {
 } from "@repo/db/repositories/asset.repository";
 import {
   archiveAssetSchema,
+  countAssetsSchema,
   createAssetSchema,
   getAllAssetsSchema,
   getAssestsSelectSchema,
   getAssetByIdSchema,
   getAssetByRepairIdSchema,
-  countAssetsSchema,
   updateAssetSchema,
 } from "@repo/validators/server/assets.validators";
 import { TRPCError } from "@trpc/server";

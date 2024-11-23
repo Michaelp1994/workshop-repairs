@@ -9,10 +9,10 @@ import {
 } from "@repo/db/repositories/part.repository";
 import {
   archivePartSchema,
+  countPartsSchema,
   createPartSchema,
   getAllPartsSchema,
   getPartByIdSchema,
-  countPartsSchema,
   getPartsSelectSchema,
   updatePartSchema,
 } from "@repo/validators/server/parts.validators";

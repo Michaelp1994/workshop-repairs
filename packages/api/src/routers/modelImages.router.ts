@@ -13,11 +13,11 @@ import {
 } from "@repo/db/repositories/modelImage.repository";
 import {
   archiveModelImageSchema,
+  countModelImagesSchema,
   createModelImageSchema,
   getAllModelImagesByModelIdSchema,
   getAllModelImagesSchema,
   getModelImageByIdSchema,
-  countModelImagesSchema,
   setFavouriteModelImageSchema,
   updateModelImageSchema,
   uploadModelImageSchema,

@@ -9,10 +9,10 @@ import {
 } from "@repo/db/repositories/location.repository";
 import {
   archiveLocationSchema,
+  countLocationsSchema,
   createLocationSchema,
   getAllLocationsSchema,
   getLocationByIdSchema,
-  countLocationsSchema,
   getLocationsSelectSchema,
   updateLocationSchema,
 } from "@repo/validators/server/locations.validators";

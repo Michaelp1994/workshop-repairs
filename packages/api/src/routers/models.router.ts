@@ -10,11 +10,11 @@ import {
 } from "@repo/db/repositories/model.repository";
 import {
   archiveModelSchema,
+  countModelsSchema,
   createModelSchema,
   getAllModelsSchema,
   getModelByAssetIdSchema,
   getModelByIdSchema,
-  countModelsSchema,
   getModelsSelectSchema,
   updateModelSchema,
 } from "@repo/validators/server/models.validators";

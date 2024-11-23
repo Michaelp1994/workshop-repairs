@@ -9,10 +9,10 @@ import {
 } from "@repo/db/repositories/userType.repository";
 import {
   archiveUserTypeSchema,
+  countUserTypesSchema,
   createUserTypeSchema,
   getAllUserTypesSchema,
   getUserTypeByIdSchema,
-  getUserTypesCountSchema,
   getUserTypeSelectSchema,
   updateUserTypeSchema,
 } from "@repo/validators/server/userTypes.validators";
@@ -33,7 +33,7 @@ export default router({
       return allUserTypes;
     }),
   countAll: organizationProcedure
-    .input(getUserTypesCountSchema)
+    .input(countUserTypesSchema)
     .query(({ input }) => {
       const count = countUserTypes(input);
       return count;

@@ -9,11 +9,11 @@ import {
 } from "@repo/db/repositories/repairImage.repository";
 import {
   archiveRepairImageSchema,
+  countRepairImagesSchema,
   createRepairImageSchema,
   getAllRepairImagesByRepairIdSchema,
   getAllRepairImagesSchema,
   getRepairImageByIdSchema,
-  countRepairImagesSchema,
   updateRepairImageSchema,
 } from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";

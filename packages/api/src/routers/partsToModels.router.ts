@@ -12,10 +12,10 @@ import {
 } from "@repo/db/repositories/partToModel.repository";
 import {
   archivePartToModelSchema,
-  createPartToModelSchema,
   countAllModelsByPartIdSchema,
-  getAllModelsByPartIdSchema,
   countAllPartsByModelIdSchema,
+  createPartToModelSchema,
+  getAllModelsByPartIdSchema,
   getAllPartsByModelIdSchema,
   getModelsByPartIdSelectSchema,
   getPartsByModelIdSelectSchema,

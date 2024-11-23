@@ -9,10 +9,10 @@ import {
 } from "@repo/db/repositories/equipmentType.repository";
 import {
   archiveEquipmentTypeSchema,
+  countEquipmentTypesSchema,
   createEquipmentTypeSchema,
   getAllEquipmentTypesSchema,
   getEquipmentTypeByIdSchema,
-  countEquipmentTypesSchema,
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
 } from "@repo/validators/server/equipmentTypes.validators";

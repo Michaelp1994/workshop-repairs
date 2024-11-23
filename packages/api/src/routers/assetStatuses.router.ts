@@ -9,10 +9,10 @@ import {
 } from "@repo/db/repositories/assetStatus.repository";
 import {
   archiveAssetStatusSchema,
+  countAssetStatusesSchema,
   createAssetStatusSchema,
   getAllAssetStatusesSchema,
   getAssetStatusByIdSchema,
-  countAssetStatusesSchema,
   getAssetStatusesSelectSchema,
   updateAssetStatusSchema,
 } from "@repo/validators/server/assetStatuses.validators";
