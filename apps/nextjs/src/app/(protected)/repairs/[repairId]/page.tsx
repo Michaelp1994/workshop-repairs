@@ -29,7 +29,7 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton href={`/repairs/${repairId}/archive`} variant="delete">
-            Delete
+            Archive
           </IconButton>
           <IconButton href={`/repairs/${repairId}/edit`} variant="update">
             Update

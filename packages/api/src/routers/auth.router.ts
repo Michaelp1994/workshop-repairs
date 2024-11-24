@@ -48,9 +48,18 @@ export default router({
       ]);
     }
     const session = await createSession(user);
+
     ctx.setCookie("Authorization", `Bearer ${session.token}`, {
       secure: false,
       sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    ctx.setCookie("userId", user.id.toString(), {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
     });

@@ -8,6 +8,8 @@ import { formatRelative } from "date-fns";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useSession } from "~/app/SessionProvider";
+
 import { CommentText } from "./CommentText";
 
 type Comment = RouterOutputs["repairComments"]["getAllByRepairId"][number];
@@ -18,6 +20,10 @@ interface RepairCommentProps {
 
 export function RepairComment({ comment }: RepairCommentProps) {
   const pathName = usePathname();
+  const session = useSession();
+  console.log({ session });
+  console.log({ createdById: comment.createdById });
+
   return (
     <div className="mt-4 flex gap-4 rounded-lg p-4">
       <Avatar className="h-10 w-10 border">
@@ -38,23 +44,25 @@ export function RepairComment({ comment }: RepairCommentProps) {
         <div>
           <CommentText>{comment.comment}</CommentText>
         </div>
-        <div>
-          <Button asChild size="sm" variant="ghost">
-            <Link href={`${pathName}/comments/${comment.id}`} scroll={false}>
-              <Pencil className="mr-1 h-4 w-4" />
-              Edit
-            </Link>
-          </Button>
-          <Button asChild size="sm" variant="ghost">
-            <Link
-              href={`${pathName}/comments/${comment.id}/archive`}
-              scroll={false}
-            >
-              <Trash2 className="mr-1 h-4 w-4" />
-              Delete
-            </Link>
-          </Button>
-        </div>
+        {session.userId === comment.createdById && (
+          <div>
+            <Button asChild size="sm" variant="ghost">
+              <Link href={`${pathName}/comments/${comment.id}`} scroll={false}>
+                <Pencil className="mr-1 h-4 w-4" />
+                Edit
+              </Link>
+            </Button>
+            <Button asChild size="sm" variant="ghost">
+              <Link
+                href={`${pathName}/comments/${comment.id}/archive`}
+                scroll={false}
+              >
+                <Trash2 className="mr-1 h-4 w-4" />
+                Archive
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

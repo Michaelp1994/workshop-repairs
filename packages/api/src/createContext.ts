@@ -19,7 +19,7 @@ export async function createTRPCContext(
   resHeaders: Headers,
 ) {
   function setCookie(name: string, value: string, options: SerializeOptions) {
-    resHeaders.set("Set-Cookie", serialize(name, value, options));
+    resHeaders.append("Set-Cookie", serialize(name, value, options));
   }
   const authCookie = getCookie(opts.headers, "Authorization");
   const token = authCookie?.split(" ")[1];
