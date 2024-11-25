@@ -4,7 +4,6 @@ import {
   foreignKey,
   integer,
   pgTable,
-  pgView,
   serial,
   text,
   timestamp,
@@ -65,10 +64,7 @@ export const userTable = pgTable(
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
-export const userView = pgView("user_view").as((qb) =>
-  qb.select({ ...publicUserColumns }).from(userTable),
-);
-
+export { publicUserColumns };
 export type User = InferModel<typeof userTable>;
 export type UserID = User["id"];
 export type CreateUser = InferCreateModel<typeof userTable>;
