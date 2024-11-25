@@ -6,7 +6,7 @@ export const assetFormSchema = z.object(
     serialNumber: z
       .string()
       .min(3, "Serial Number must be at least 3 characters"),
-    softwareVersion: z.string().optional(),
+    softwareVersion: z.string(),
     statusId: z
       .number({
         message: "Status is required",
@@ -42,6 +42,7 @@ export type AssetFormInput = z.infer<typeof assetFormSchema>;
 export const defaultAsset: AssetFormInput = {
   assetNumber: "",
   serialNumber: "",
+  softwareVersion: "",
   modelId: 0,
   statusId: 0,
   locationId: 0,

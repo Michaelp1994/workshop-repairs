@@ -52,7 +52,7 @@ export default function EquipmentTypeAssetsTable({
           columns={columns}
           data={assets}
           rowCount={rowCount}
-          tableState={tableState}
+          {...tableState}
         />
       </CardContent>
     </Card>

@@ -32,6 +32,7 @@ type UpdateAssetStatusFormInput = z.infer<typeof schema>;
 export default function UpdateAssetStatusForm({
   assetId,
 }: UpdateAssetStatusFormProps) {
+  const utils = api.useUtils();
   const [asset] = api.assets.getById.useSuspenseQuery({
     id: assetId,
   });
@@ -39,7 +40,7 @@ export default function UpdateAssetStatusForm({
   const updateMutation = api.assets.update.useMutation({
     async onSuccess() {
       toast.success(`Asset ${assetId} updated`);
-      await refetch();
+      await utils.assets.getById.invalidate({ id: assetId });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

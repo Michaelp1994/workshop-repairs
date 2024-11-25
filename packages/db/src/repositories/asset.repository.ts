@@ -185,27 +185,10 @@ export async function getAssetsSelect(
 ) {
   const query = db
     .select({
-      ...assetFields,
-      model: {
-        id: modelTable.id,
-        name: modelTable.name,
-        imageUrl: modelImageTable.url,
-      },
-      manufacturer: {
-        id: manufacturerTable.id,
-        name: manufacturerTable.name,
-      },
+      value: assetTable.id,
+      label: assetTable.serialNumber,
     })
     .from(assetTable)
-    .innerJoin(modelTable, eq(assetTable.modelId, modelTable.id))
-    .innerJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .leftJoin(
-      modelImageTable,
-      eq(modelTable.defaultImageId, modelImageTable.id),
-    )
     .where(
       and(
         eq(assetTable.organizationId, organizationId),

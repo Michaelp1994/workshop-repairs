@@ -66,7 +66,7 @@ export default function ModelAssetsTable({ modelId }: ModelAssetsTableProps) {
         columns={columns}
         data={assets}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

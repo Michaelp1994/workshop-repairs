@@ -19,7 +19,7 @@ export const assetTable = pgTable(
     id: serial().primaryKey(),
     serialNumber: varchar().notNull(),
     assetNumber: varchar().notNull(),
-    softwareVersion: varchar(),
+    softwareVersion: varchar().notNull(),
     statusId: integer()
       .notNull()
       .references(() => assetStatusTable.id),

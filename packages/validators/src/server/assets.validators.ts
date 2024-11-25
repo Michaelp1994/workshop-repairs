@@ -51,6 +51,7 @@ export const getAssetByRepairIdSchema = z.object({
 
 export const createAssetSchema = z.object({
   assetNumber: z.string(),
+  softwareVersion: z.string(),
   serialNumber: z.string().min(3),
   statusId: assetStatusId,
   modelId,

@@ -68,7 +68,7 @@ export default function LocationAssetsTable({
         columns={columns}
         data={assets}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

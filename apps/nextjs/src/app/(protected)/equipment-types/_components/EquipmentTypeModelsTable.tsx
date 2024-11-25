@@ -69,7 +69,7 @@ export default function EquipmentTypeModelsTable({
           columns={columns}
           data={models}
           rowCount={rowCount}
-          tableState={tableState}
+          {...tableState}
         />
       </CardContent>
     </Card>

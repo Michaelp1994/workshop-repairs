@@ -56,7 +56,7 @@ export default function AssetRepairsTable({ assetId }: AssetRepairsTableProps) {
           columns={columns}
           data={repairs}
           rowCount={rowCount}
-          tableState={tableState}
+          {...tableState}
         />
       </CardContent>
     </Card>

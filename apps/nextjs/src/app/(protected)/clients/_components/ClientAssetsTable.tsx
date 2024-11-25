@@ -68,7 +68,7 @@ export default function ClientAssetsTable({
         columns={columns}
         data={assets}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

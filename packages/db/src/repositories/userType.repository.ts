@@ -1,6 +1,7 @@
 import type {
   DataTableCountSchema,
   DataTableOutput,
+  GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
 import { count, eq, isNull } from "drizzle-orm";

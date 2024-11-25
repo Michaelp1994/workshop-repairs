@@ -24,7 +24,7 @@ export default function ManufacturersTable() {
         columns={columns}
         data={manufacturers}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

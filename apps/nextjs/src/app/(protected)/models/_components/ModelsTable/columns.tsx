@@ -21,8 +21,11 @@ export const columns = [
   }),
   columnHelper.accessor("defaultImageUrl", {
     header: "",
-    cell: ({ getValue }) => (
-      <DataTableImageCell url={getValue() ?? "/placeholder.svg"} />
+    cell: ({ getValue, row }) => (
+      <DataTableImageCell
+        alt={row.original.name}
+        url={getValue() ?? "/placeholder.svg"}
+      />
     ),
     meta: {
       name: "Image",

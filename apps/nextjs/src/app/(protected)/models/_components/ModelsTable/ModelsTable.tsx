@@ -25,7 +25,7 @@ export default function ModelsTable() {
         columns={columns}
         data={models}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

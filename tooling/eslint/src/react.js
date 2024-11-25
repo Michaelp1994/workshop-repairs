@@ -10,11 +10,11 @@ export default [
         version: "detect",
       },
     },
-    ...reactPlugin.configs.flat.recommended,
+    ...reactPlugin.configs.flat?.["recommended"],
   },
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
-    ...reactPlugin.configs.flat["jsx-runtime"],
+    ...reactPlugin.configs.flat?.["jsx-runtime"],
   },
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],

@@ -69,7 +69,7 @@ export default function ClientRepairsTable({
         columns={columns}
         data={repairs}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );
