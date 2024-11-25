@@ -120,8 +120,21 @@ export default router({
       });
       return session;
     }),
-  logout: authedProcedure.input(logoutSchema).mutation(async () => {
-    throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+  logout: authedProcedure.input(logoutSchema).mutation(async ({ ctx }) => {
+    ctx.setCookie("Authorization", "", {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      maxAge: 0,
+    });
+    ctx.setCookie("userId", "", {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      maxAge: 0,
+    });
   }),
   forgotPassword: publicProcedure
     .input(forgotPasswordSchema)
