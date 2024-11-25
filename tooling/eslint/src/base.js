@@ -12,6 +12,7 @@ export default [
       "perfectionist/sort-object-types": "off",
       "perfectionist/sort-interfaces": "off",
       "perfectionist/sort-union-types": "off",
+      "perfectionist/sort-modules": "off",
       "perfectionist/sort-intersection-types": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",

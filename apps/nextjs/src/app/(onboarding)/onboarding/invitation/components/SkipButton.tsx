@@ -9,7 +9,7 @@ export default function SkipButton() {
   const router = useRouter();
   const utils = api.useUtils();
   const skipMutation = api.userOnboardings.skipInvitations.useMutation({
-    async onSuccess(values) {
+    async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");
     },

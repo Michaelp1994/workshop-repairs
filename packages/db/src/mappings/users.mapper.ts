@@ -1,8 +1,8 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { userTable } from "../tables/user.sql";
 import { userTypeTable } from "../tables/user-type.sql";
+import { userTable } from "../tables/user.sql";
 
 export const orderMapping = {
   firstName: userTable.firstName,

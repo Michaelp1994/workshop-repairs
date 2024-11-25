@@ -41,7 +41,7 @@ export default function UpdateModelPartForm({
     partId,
   });
   const updateMutation = api.partsToModels.update.useMutation({
-    async onSuccess(data) {
+    async onSuccess() {
       await utils.partsToModels.getByIds.invalidate({ modelId, partId });
       await utils.partsToModels.getAllPartsByModelId.invalidate();
       await utils.partsToModels.getAllModelsByPartId.invalidate();

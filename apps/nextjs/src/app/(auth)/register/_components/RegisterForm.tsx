@@ -1,5 +1,6 @@
 "use client";
 import { Checkbox } from "@repo/ui/checkbox";
+import { ErrorAlert } from "@repo/ui/error-alert";
 import {
   Form,
   FormControl,
@@ -21,7 +22,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 

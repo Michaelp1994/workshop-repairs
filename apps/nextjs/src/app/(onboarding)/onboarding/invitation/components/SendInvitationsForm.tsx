@@ -25,7 +25,7 @@ export default function SendInvitationsForm() {
   const router = useRouter();
   const utils = api.useUtils();
   const inviteMutation = api.userOnboardings.sendInvitations.useMutation({
-    async onSuccess(values) {
+    async onSuccess() {
       toast.success("Your invitations have been sent.");
       await utils.userOnboardings.getStatus.invalidate();
       router.push("/dashboard");

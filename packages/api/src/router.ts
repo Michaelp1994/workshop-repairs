@@ -53,5 +53,5 @@ export const createCaller = createCallerFactory(appRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
-export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;
+export type RouterOutputs = inferRouterOutputs<AppRouter>;

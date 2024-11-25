@@ -5,6 +5,11 @@ import globals from "globals";
 export default [
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
     ...reactPlugin.configs.flat.recommended,
   },
   {

@@ -1,7 +1,6 @@
 import type {
   DataTableCountSchema,
   DataTableOutput,
-  GetSelectOutput,
 } from "@repo/validators/dataTables.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
@@ -15,6 +14,31 @@ import {
   userTypeTable,
 } from "../tables/user-type.sql";
 
+export async function archiveUserType(input: ArchiveUserType) {
+  const query = db
+    .update(userTypeTable)
+    .set(input)
+    .where(eq(userTypeTable.id, input.id))
+    .returning();
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function countUserTypes(_: DataTableCountSchema) {
+  const query = db
+    .select({ count: count() })
+    .from(userTypeTable)
+    .where(isNull(userTypeTable.deletedAt));
+  const [res] = await query.execute();
+  return res?.count;
+}
+
+export async function createUserType(input: CreateUserType) {
+  const query = db.insert(userTypeTable).values(input).returning();
+  const [res] = await query.execute();
+  return res;
+}
+
 export function getAllUserTypes({ pagination }: DataTableOutput) {
   const query = db
     .select()
@@ -26,13 +50,13 @@ export function getAllUserTypes({ pagination }: DataTableOutput) {
   return query.execute();
 }
 
-export async function countUserTypes(_: DataTableCountSchema) {
+export async function getUserTypeById(input: UserTypeID) {
   const query = db
-    .select({ count: count() })
+    .select()
     .from(userTypeTable)
-    .where(isNull(userTypeTable.deletedAt));
+    .where(eq(userTypeTable.id, input));
   const [res] = await query.execute();
-  return res?.count;
+  return res;
 }
 
 export async function getUserTypesSelect(_: GetSelectInput) {
@@ -46,32 +70,7 @@ export async function getUserTypesSelect(_: GetSelectInput) {
   return query.execute();
 }
 
-export async function getUserTypeById(input: UserTypeID) {
-  const query = db
-    .select()
-    .from(userTypeTable)
-    .where(eq(userTypeTable.id, input));
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function createUserType(input: CreateUserType) {
-  const query = db.insert(userTypeTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
-
 export async function updateUserType(input: UpdateUserType) {
-  const query = db
-    .update(userTypeTable)
-    .set(input)
-    .where(eq(userTypeTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function archiveUserType(input: ArchiveUserType) {
   const query = db
     .update(userTypeTable)
     .set(input)

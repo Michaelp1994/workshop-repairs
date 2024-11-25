@@ -2,6 +2,8 @@ import { verifyToken } from "@repo/auth/tokens";
 import { db } from "@repo/db";
 import { parse, serialize, type SerializeOptions } from "cookie";
 
+export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
+
 export interface Session {
   userId: number;
   organizationId: number | null;
@@ -51,5 +53,3 @@ export async function createTRPCContext(
     };
   }
 }
-
-export type Context = Awaited<ReturnType<typeof createTRPCContext>>;

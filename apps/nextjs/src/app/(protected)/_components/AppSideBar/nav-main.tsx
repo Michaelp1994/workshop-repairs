@@ -1,15 +1,9 @@
 "use client";
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@repo/ui/collapsible";
-import {
   BriefcaseMedical,
   Building,
   ChartLine,
-  ChevronRight,
   Cog,
   Handshake,
   Layers,
@@ -21,12 +15,8 @@ import {
 import {
   SidebarGroup,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@repo/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

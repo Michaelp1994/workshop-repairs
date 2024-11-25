@@ -3,7 +3,6 @@ import type { ClientID } from "@repo/validators/ids.validators";
 
 import {
   Card,
-  CardContent,
   CardHeader,
   CardHeaderActions,
   CardHeaderText,

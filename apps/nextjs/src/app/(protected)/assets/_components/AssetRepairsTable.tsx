@@ -1,10 +1,7 @@
 "use client";
-import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
-import { PlusCircle } from "@repo/ui/icons";
-import Link from "next/link";
 
 import { IconButton } from "~/app/(protected)/_components/IconButton";
 import { api } from "~/trpc/client";

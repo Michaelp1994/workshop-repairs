@@ -1,13 +1,12 @@
-import UsersTable from "~/app/(protected)/users/_components/UsersTable";
 import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
-  PageDescription,
   PageHeader,
   PageHeaderActions,
   PageHeaderText,
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
+import UsersTable from "~/app/(protected)/users/_components/UsersTable";
 
 export default function UsersPage() {
   return (

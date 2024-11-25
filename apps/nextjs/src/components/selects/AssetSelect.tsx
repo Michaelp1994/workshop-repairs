@@ -16,7 +16,7 @@ const AssetSelect = forwardRef<
     "data" | "fetchNextPage" | "isFetchingNextPage" | "isLoading"
   >
 >((props, ref) => {
-  const [filter, setFilter] = useState("");
+  const [filter] = useState("");
   const [data] = api.assets.getSelect.useSuspenseQuery({
     globalFilter: filter,
   });

@@ -8,14 +8,14 @@ import {
   type ZodTypeDef,
 } from "zod";
 
-type ZodFileCheck =
-  | { kind: "mimeType"; allowedTypes: string[]; message?: string }
-  | { kind: "size"; size: number; message?: string };
-
 export interface ZodFileDef extends ZodTypeDef {
   checks: ZodFileCheck[];
   typeName: "file";
 }
+
+type ZodFileCheck =
+  | { kind: "mimeType"; allowedTypes: string[]; message?: string }
+  | { kind: "size"; size: number; message?: string };
 
 class ZodFile extends z.ZodType<File, ZodFileDef, File> {
   _addCheck(check: ZodFileCheck) {

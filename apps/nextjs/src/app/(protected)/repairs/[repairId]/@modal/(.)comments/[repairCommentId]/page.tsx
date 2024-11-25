@@ -1,5 +1,4 @@
 "use client";
-import type { RepairID } from "@repo/validators/ids.validators";
 
 import {
   Dialog,
@@ -16,7 +15,7 @@ import UpdateRepairCommentForm from "~/app/(protected)/repairs/_components/Updat
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface RepairImagesModalProps {
-  params: { repairId: RepairID; repairCommentId: string };
+  params: { repairId: string; repairCommentId: string };
 }
 
 export default function UpdateRepairCommentModal({

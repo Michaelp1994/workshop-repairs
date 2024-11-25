@@ -12,13 +12,13 @@ import {
   createGlobalFilters,
   createSortOrder,
 } from "../mappings/assets.mapper";
-import { assetTable } from "../tables/asset.sql";
 import { assetStatusTable } from "../tables/asset-status.sql";
+import { assetTable } from "../tables/asset.sql";
 import { clientTable } from "../tables/client.sql";
 import { locationTable } from "../tables/location.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelTable } from "../tables/model.sql";
 import { modelImageTable } from "../tables/model-image.sql";
+import { modelTable } from "../tables/model.sql";
 
 const assetFields = getTableColumns(assetTable);
 
