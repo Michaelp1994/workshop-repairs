@@ -9,7 +9,7 @@ import { cookies } from "next/headers";
 
 import { TRPCProvider } from "~/trpc/client";
 
-import { SessionProvider } from "./SessionProvider";
+import { SessionProvider } from "../auth/SessionProvider";
 
 const fontHeading = Inter({
   subsets: ["latin"],
