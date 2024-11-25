@@ -2,7 +2,7 @@
 
 import { type AppRouter } from "@repo/api/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { type ReactNode, useState } from "react";
 
@@ -13,6 +13,7 @@ interface TRPCReactProviderProps {
 }
 
 export const api = createTRPCReact<AppRouter>();
+
 let clientQueryClientSingleton: QueryClient;
 function getQueryClient() {
   if (typeof window === "undefined") {
@@ -38,6 +39,15 @@ export function TRPCProvider({ children }: TRPCReactProviderProps) {
   const [trpcClient] = useState(() =>
     api.createClient({
       links: [
+        loggerLink({
+          enabled: (op) => {
+            if (typeof window === "undefined") return false;
+            return (
+              process.env.NODE_ENV === "development" ||
+              (op.direction === "down" && op.result instanceof Error)
+            );
+          },
+        }),
         httpBatchLink({
           url: getUrl(),
           headers: async () => {
