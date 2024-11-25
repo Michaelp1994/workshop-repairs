@@ -28,8 +28,13 @@ export const getRepairImageByIdSchema = z.object({
 
 export const createRepairImageSchema = z.object({
   caption: z.string().min(3),
-  url: z.string().min(3),
+  fileName: z.string(),
   repairId,
+});
+
+export const requestUploadRepairImageSchema = z.object({
+  fileType: z.string(),
+  fileSize: z.number().int().min(1),
 });
 
 export const updateRepairImageSchema = z.object({

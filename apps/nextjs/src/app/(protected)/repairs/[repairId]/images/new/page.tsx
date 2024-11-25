@@ -4,6 +4,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 
@@ -21,8 +22,10 @@ export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Image</CardTitle>
-        <CardDescription>Add image to repair {repairId}</CardDescription>
+        <CardHeaderText>
+          <CardTitle>Image</CardTitle>
+          <CardDescription>Add image to repair {repairId}</CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
         <CreateRepairImageForm repairId={repairId} />

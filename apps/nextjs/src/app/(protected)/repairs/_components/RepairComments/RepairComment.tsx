@@ -8,7 +8,7 @@ import { formatRelative } from "date-fns";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { useSession } from "~/app/SessionProvider";
+import { useSession } from "~/auth/SessionProvider";
 
 import { CommentText } from "./CommentText";
 
@@ -21,8 +21,6 @@ interface RepairCommentProps {
 export function RepairComment({ comment }: RepairCommentProps) {
   const pathName = usePathname();
   const session = useSession();
-  console.log({ session });
-  console.log({ createdById: comment.createdById });
 
   return (
     <div className="mt-4 flex gap-4 rounded-lg p-4">

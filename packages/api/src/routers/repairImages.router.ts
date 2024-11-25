@@ -14,15 +14,23 @@ import {
   getAllRepairImagesByRepairIdSchema,
   getAllRepairImagesSchema,
   getRepairImageByIdSchema,
+  requestUploadRepairImageSchema,
   updateRepairImageSchema,
 } from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";
+import { randomUUID } from "crypto";
+import { Resource } from "sst";
 
 import {
   createArchiveMetadata,
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import {
+  createPresignedUrl,
+  fileExistsInS3,
+  getFileExtension,
+} from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -43,8 +51,13 @@ export default router({
   getAllByRepairId: organizationProcedure
     .input(getAllRepairImagesByRepairIdSchema)
     .query(async ({ input }) => {
-      const allRepairImages = getAllRepairImagesByRepairId(input.repairId);
-      return allRepairImages;
+      const allRepairImages = await getAllRepairImagesByRepairId(
+        input.repairId,
+      );
+      return allRepairImages.map((repairImage) => ({
+        ...repairImage,
+        url: `${Resource.MyRouter.url}/repairImages/${repairImage.url}`,
+      }));
     }),
   getById: organizationProcedure
     .input(getRepairImageByIdSchema)
@@ -60,17 +73,34 @@ export default router({
 
       return repairImage;
     }),
+  requestUpload: organizationProcedure
+    .input(requestUploadRepairImageSchema)
+    .mutation(async ({ input }) => {
+      const uuid = randomUUID();
+      const fileExt = getFileExtension(input.fileType);
+      const fileName = `${uuid}.${fileExt}`;
+      const presignedUrl = await createPresignedUrl({
+        Key: `repairImages/${fileName}`,
+      });
+      return { url: presignedUrl, fileName };
+    }),
   create: organizationProcedure
     .input(createRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
+      const fileExists = await fileExistsInS3(`repairImages/${input.fileName}`);
+      if (!fileExists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "File does not exist.",
+        });
+      }
       const createdRepairImage = await createRepairImage({
         ...input,
+        url: input.fileName,
         ...metadata,
       });
-
       assertDatabaseResult(createdRepairImage);
-
       return createdRepairImage;
     }),
   update: organizationProcedure
