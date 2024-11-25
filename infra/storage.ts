@@ -1,6 +1,16 @@
 export const bucket = new sst.aws.Bucket("Bucket1", {
-  access: "public",
+  access: "cloudfront",
 });
+
+export const router = new sst.aws.Router("MyRouter", {
+  domain: "images.workshop-repairs.click",
+  routes: {
+    "/*": {
+      bucket,
+    },
+  },
+});
+
 export const vpc = new sst.aws.Vpc("Vpc1", { bastion: true, nat: "ec2" });
 
 const password = process.env.POSTGRES_PASSWORD;

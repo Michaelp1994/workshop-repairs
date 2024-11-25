@@ -1,11 +1,8 @@
-// import { identityPool, userPool, userPoolClient } from "./auth";
 import { jwtSecret } from "./env";
-import { bucket, rds, vpc } from "./storage";
-
-const region = aws.getRegionOutput().name;
+import { bucket, rds, vpc, router } from "./storage";
 
 export const nextjs = new sst.aws.Nextjs("MyWeb", {
-  link: [bucket, rds, jwtSecret],
+  link: [bucket, router, rds, jwtSecret],
   dev: {
     directory: "./apps/nextjs",
     command: "pnpm run dev",
@@ -15,8 +12,7 @@ export const nextjs = new sst.aws.Nextjs("MyWeb", {
   domain: "workshop-repairs.click",
   environment: {
     REACT_EDITOR: "code",
-    NEXT_PUBLIC_AWS_REGION: region,
-    NEXT_PUBLIC_AWS_BUCKET: bucket.name,
+
     NEXT_PUBLIC_URL:
       $app.stage === "production"
         ? "https://workshop-repairs.click"
