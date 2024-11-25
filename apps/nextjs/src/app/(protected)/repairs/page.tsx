@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
   PageDescription,
   PageHeader,
@@ -8,7 +8,7 @@ import {
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 
 import RepairsTable from "./_components/RepairsTable";
 

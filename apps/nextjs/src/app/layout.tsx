@@ -1,10 +1,15 @@
 import { Toaster } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
 import { type Metadata } from "next";
-import { Inter } from "next/font/google";
 
 import "~/styles/globals.css";
+
+import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
+
 import { TRPCProvider } from "~/trpc/client";
+
+import { SessionProvider } from "../auth/SessionProvider";
 
 const fontHeading = Inter({
   subsets: ["latin"],
@@ -31,7 +36,8 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const userId = cookies().get("userId")?.value;
   return (
     <html
       className={cn(
@@ -41,12 +47,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       )}
       lang="en"
     >
-      <TRPCProvider>
-        <body className="min-h-screen">
-          {children}
-          <Toaster closeButton richColors />
-        </body>
-      </TRPCProvider>
+      <SessionProvider session={{ userId: Number(userId) }}>
+        <TRPCProvider>
+          <body className="min-h-screen">
+            {children}
+            <Toaster closeButton richColors />
+          </body>
+        </TRPCProvider>
+      </SessionProvider>
     </html>
   );
 }

@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -21,7 +21,7 @@ import {
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
 export function getAllEquipmentTypes(
-  { pagination }: DataTableInput,
+  { pagination }: DataTableOutput,
   organizationId: OrganizationID,
 ) {
   const query = db

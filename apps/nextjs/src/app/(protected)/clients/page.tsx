@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
   PageHeader,
   PageHeaderActions,
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 
 import ClientsTable from "./_components/ClientsTable";
 

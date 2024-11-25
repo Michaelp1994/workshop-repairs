@@ -7,7 +7,7 @@ import {
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 
 import UpdatePartForm from "../../_components/UpdatePartForm";
 

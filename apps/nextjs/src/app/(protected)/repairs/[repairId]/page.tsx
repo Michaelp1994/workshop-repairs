@@ -1,11 +1,11 @@
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
   PageHeader,
   PageHeaderActions,
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
 import RepairComments from "../_components/RepairComments";
@@ -29,7 +29,7 @@ export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton href={`/repairs/${repairId}/archive`} variant="delete">
-            Delete
+            Archive
           </IconButton>
           <IconButton href={`/repairs/${repairId}/edit`} variant="update">
             Update

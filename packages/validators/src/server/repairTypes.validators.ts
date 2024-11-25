@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import { repairTypeId } from "../isomorphic/ids.validators";
 
@@ -13,11 +14,15 @@ export const getAllRepairTypesSchema = dataTableSchema.extend({
 });
 export type GetAllRepairTypesInput = z.infer<typeof getAllRepairTypesSchema>;
 
-export const getRepairTypesCountSchema = dataTableCountSchema.extend({
+export const countRepairTypesSchema = dataTableCountSchema.extend({
   filters: repairTypeFilters,
 });
-export type GetRepairTypesCountInput = z.infer<
-  typeof getRepairTypesCountSchema
+export type CountRepairTypesInput = z.infer<typeof countRepairTypesSchema>;
+
+export const getRepairTypesSelectSchema = getSelectSchema.extend({});
+
+export type GetRepairTypesSelectInput = z.infer<
+  typeof getRepairTypesSelectSchema
 >;
 
 export const createRepairTypeSchema = z.object({

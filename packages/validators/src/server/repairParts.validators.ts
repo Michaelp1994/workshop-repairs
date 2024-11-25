@@ -17,13 +17,11 @@ export const getAllRepairPartsSchema = dataTableSchema.extend({
 });
 export type GetAllRepairPartsInput = z.infer<typeof getAllRepairPartsSchema>;
 
-export const getRepairPartsCountSchema = dataTableCountSchema.extend({
+export const countRepairPartsSchema = dataTableCountSchema.extend({
   filters: repairPartFilters,
 });
 
-export type GetRepairPartsCountInput = z.infer<
-  typeof getRepairPartsCountSchema
->;
+export type CountRepairPartsInput = z.infer<typeof countRepairPartsSchema>;
 
 export const getRepairPartByIdSchema = z.object({
   id: repairPartId,

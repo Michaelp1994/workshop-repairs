@@ -10,12 +10,12 @@ import {
 } from "@repo/db/repositories/asset.repository";
 import {
   archiveAssetSchema,
+  countAssetsSchema,
   createAssetSchema,
   getAllAssetsSchema,
   getAssestsSelectSchema,
   getAssetByIdSchema,
   getAssetByRepairIdSchema,
-  getAssetsCountSchema,
   updateAssetSchema,
 } from "@repo/validators/server/assets.validators";
 import { TRPCError } from "@trpc/server";
@@ -36,7 +36,7 @@ export default router({
       return allAssets;
     }),
   countAll: organizationProcedure
-    .input(getAssetsCountSchema)
+    .input(countAssetsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countAssets(input, ctx.session.organizationId);
       assertDatabaseResult(count);

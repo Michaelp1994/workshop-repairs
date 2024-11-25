@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
 
-import RepairImageCarousel from "../../../_components/RepairImageCarousel";
+import RepairImageCarousel from "../../../_components/RepairImages/RepairImageCarousel";
 
 interface RepairImagesModalProps {
   params: { repairId: RepairID };

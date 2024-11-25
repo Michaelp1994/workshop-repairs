@@ -8,14 +8,12 @@ import {
   updateClient,
 } from "@repo/db/repositories/client.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveClientSchema,
+  countClientsSchema,
   createClientSchema,
+  getAllClientsSchema,
   getClientByIdSchema,
+  getClientsSelectSchema,
   updateClientSchema,
 } from "@repo/validators/server/clients.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,20 +28,20 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllClientsSchema)
     .query(async ({ ctx, input }) => {
       const allClients = await getAllClients(input, ctx.session.organizationId);
       return allClients;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(countClientsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countClients(input, ctx.session.organizationId);
       assertDatabaseResult(count);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getClientsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allClients = await getClientsSelect(
         input,

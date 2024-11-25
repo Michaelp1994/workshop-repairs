@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -26,7 +26,7 @@ import {
 const locationFields = getTableColumns(locationTable);
 
 export function getAllLocations(
-  { pagination, globalFilter, sorting, columnFilters }: DataTableInput,
+  { pagination, globalFilter, sorting, columnFilters }: DataTableOutput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

@@ -8,14 +8,14 @@ import {
   getModelsSelect,
   updateModel,
 } from "@repo/db/repositories/model.repository";
-import { getSelectSchema } from "@repo/validators/dataTables.validators";
 import {
   archiveModelSchema,
+  countModelsSchema,
   createModelSchema,
   getAllModelsSchema,
   getModelByAssetIdSchema,
   getModelByIdSchema,
-  getModelsCountSchema,
+  getModelsSelectSchema,
   updateModelSchema,
 } from "@repo/validators/server/models.validators";
 import { TRPCError } from "@trpc/server";
@@ -25,6 +25,7 @@ import {
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import { getModelImageUrlFromKey } from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -32,18 +33,22 @@ export default router({
   getAll: organizationProcedure
     .input(getAllModelsSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = getAllModels(input, ctx.session.organizationId);
-      return allModels;
+      const allModels = await getAllModels(input, ctx.session.organizationId);
+      return allModels.map((model) => ({
+        ...model,
+        defaultImageUrl: model.defaultImageUrl
+          ? getModelImageUrlFromKey(model.defaultImageUrl)
+          : null,
+      }));
     }),
-
   countAll: organizationProcedure
-    .input(getModelsCountSchema)
+    .input(countModelsSchema)
     .query(({ ctx, input }) => {
       const count = countModels(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getModelsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allModels = await getModelsSelect(
         input,

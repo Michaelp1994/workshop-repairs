@@ -16,11 +16,11 @@ export type GetAllRepairCommentsInput = z.infer<
   typeof getAllRepairCommentsSchema
 >;
 
-export const getRepairCommentsCountSchema = dataTableCountSchema.extend({
+export const countRepairCommentsSchema = dataTableCountSchema.extend({
   filters: repairCommentFilters,
 });
-export type GetRepairCommentsCountInput = z.infer<
-  typeof getRepairCommentsCountSchema
+export type CountRepairCommentsInput = z.infer<
+  typeof countRepairCommentsSchema
 >;
 
 export const getAllRepairCommentsByRepairIdSchema = z.object({

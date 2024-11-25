@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import { manufacturerId } from "../isomorphic/ids.validators";
 
@@ -15,11 +16,15 @@ export type GetAllManufacturersInput = z.infer<
   typeof getAllManufacturersSchema
 >;
 
-export const getManufacturersCountSchema = dataTableCountSchema.extend({
+export const countManufacturersSchema = dataTableCountSchema.extend({
   filters: manufacturerFilters,
 });
-export type GetManufacturersCountInput = z.infer<
-  typeof getManufacturersCountSchema
+export type CountManufacturersInput = z.infer<typeof countManufacturersSchema>;
+
+export const getManufacturersSelectSchema = getSelectSchema.extend({});
+
+export type GetManufacturersSelectInput = z.infer<
+  typeof getManufacturersSelectSchema
 >;
 
 export const createManufacturerSchema = z.object({

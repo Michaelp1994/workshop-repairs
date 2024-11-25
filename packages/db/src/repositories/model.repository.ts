@@ -1,7 +1,7 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
+  CountModelsInput,
   GetAllModelsInput,
-  GetModelsCountInput,
 } from "@repo/validators/server/models.validators";
 
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -47,7 +47,7 @@ export function getAllModels(
 }
 
 export async function countModels(
-  { filters, ...dataTableInput }: GetModelsCountInput,
+  { filters, ...dataTableInput }: CountModelsInput,
   organizationId: OrganizationID,
 ) {
   const query = createModelsCountQuery(

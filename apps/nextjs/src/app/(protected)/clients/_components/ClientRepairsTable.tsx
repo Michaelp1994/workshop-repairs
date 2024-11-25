@@ -12,7 +12,7 @@ import {
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import { api } from "~/trpc/client";
 
 import { columns } from "../../repairs/_components/RepairsTable/columns";

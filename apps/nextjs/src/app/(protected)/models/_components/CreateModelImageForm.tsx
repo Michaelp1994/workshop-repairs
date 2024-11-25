@@ -11,16 +11,21 @@ import {
   SubmitButton,
   useForm,
 } from "@repo/ui/form";
+import { ImageInput } from "@repo/ui/image-input";
 import { Input } from "@repo/ui/input";
+import { toast } from "@repo/ui/sonner";
 import {
   defaultModelImage,
   type ModelImageFormInput,
   modelImageFormSchema,
 } from "@repo/validators/client/modelImages.schema";
 import { type ModelID } from "@repo/validators/ids.validators";
-import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-// import { uploadModelImage } from "~/app/actions";
+import { api } from "~/trpc/client";
+import { uploadImageToS3 } from "~/utils/awsLib";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateModelImageFormProps {
   modelId: ModelID;
@@ -29,44 +34,67 @@ interface CreateModelImageFormProps {
 export default function CreateModelImageForm({
   modelId,
 }: CreateModelImageFormProps) {
-  // const uploadModelImageWithId = uploadModelImage.bind(null, modelId);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { mutateAsync: requestUpload } =
+    api.modelImages.requestUpload.useMutation();
+  const router = useRouter();
+  const utils = api.useUtils();
 
+  const createMutation = api.modelImages.create.useMutation({
+    async onSuccess() {
+      await utils.modelImages.getAllByModelId.invalidate({
+        modelId,
+      });
+      toast.success(`Model Image uploaded`);
+      router.back();
+    },
+    onError(errors) {
+      displayMutationErrors(errors, form);
+    },
+  });
   const form = useForm({
     defaultValues: defaultModelImage,
     schema: modelImageFormSchema,
   });
 
-  function handleValid(values: ModelImageFormInput) {
-    formRef.current?.submit();
+  async function handleValid(values: ModelImageFormInput) {
+    setIsLoading(true);
+    const { url, fileName } = await requestUpload({
+      fileType: values.image.type,
+      fileSize: values.image.size,
+    });
+    try {
+      await uploadImageToS3(values.image, url);
+      await createMutation.mutateAsync({
+        caption: values.caption,
+        fileName,
+        modelId,
+      });
+    } catch {
+      toast.error("Failed to upload image");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <Form {...form}>
       <form
-        action={uploadModelImageWithId}
         className="space-y-8"
         onReset={() => {
           form.reset();
         }}
         onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
-        ref={formRef}
       >
         <FormField
           control={form.control}
           name="image"
           render={({ field }) => {
-            const { value, onChange, ...rest } = field;
             return (
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <Input
-                    {...rest}
-                    onChange={(e) => onChange(e.target.files[0])}
-                    type="file"
-                    value={value?.fileName}
-                  />
+                  <ImageInput {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,7 +118,7 @@ export default function CreateModelImageForm({
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={isLoading} />
         </FormFooter>
       </form>
     </Form>

@@ -13,10 +13,10 @@ export const getAllUsersSchema = dataTableSchema.extend({
 });
 export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
 
-export const getUsersCountSchema = dataTableCountSchema.extend({
+export const countUsersSchema = dataTableCountSchema.extend({
   filters: userFilters,
 });
-export type GetUsersCountInput = z.infer<typeof getUsersCountSchema>;
+export type CountUsersInput = z.infer<typeof countUsersSchema>;
 
 export const registerUserSchema = z.object({
   firstName: z.string().min(3),

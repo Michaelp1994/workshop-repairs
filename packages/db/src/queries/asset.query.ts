@@ -1,16 +1,9 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
 } from "@repo/validators/dataTables.validators";
 
-import {
-  and,
-  count,
-  eq,
-  getTableColumns,
-  type SQL,
-  type SQLWrapper,
-} from "drizzle-orm";
+import { and, count, eq, getTableColumns, type SQLWrapper } from "drizzle-orm";
 
 import { db } from "..";
 import { withPagination } from "../helpers/withPagination";
@@ -30,7 +23,7 @@ import { modelImageTable } from "../tables/model-image.sql";
 const assetFields = getTableColumns(assetTable);
 
 export function createAllAssetsQuery(
-  { globalFilter, sorting, columnFilters, pagination }: DataTableInput,
+  { globalFilter, sorting, columnFilters, pagination }: DataTableOutput,
   ...filters: (SQLWrapper | undefined)[]
 ) {
   const query = db

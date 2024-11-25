@@ -7,7 +7,6 @@ import { DataTableRowActions } from "@repo/ui/data-table";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-import { getBaseUrl } from "~/utils/getBaseUrl";
 const columnHelper =
   createColumnHelper<RouterOutputs["equipmentTypes"]["getAll"][number]>();
 
@@ -23,7 +22,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ getValue, row }) => (
-      <DataTableLinkCell href={`equipment-types/${row.original.id}`}>
+      <DataTableLinkCell href={`/equipment-types/${row.original.id}`}>
         {getValue()}
       </DataTableLinkCell>
     ),
@@ -56,9 +55,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) =>
-          `${getBaseUrl()}/equipment-types/${row.original.id}`
-        }
+        generateUrl={(row) => `/equipment-types/${row.original.id}`}
         row={row}
       />
     ),

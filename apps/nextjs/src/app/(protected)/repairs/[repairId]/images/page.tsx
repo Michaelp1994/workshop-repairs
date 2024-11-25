@@ -5,10 +5,11 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
 
-import RepairImageCarousel from "../../_components/RepairImageCarousel";
+import RepairImageCarousel from "../../_components/RepairImages/RepairImageCarousel";
 
 interface RepairImageGalleryPageProps {
   params: {
@@ -24,10 +25,12 @@ export default function RepairImageGalleryPage({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Gallery</CardTitle>
-        <CardDescription>
-          Photos associated with repair {repairId}
-        </CardDescription>
+        <CardHeaderText>
+          <CardTitle>Gallery</CardTitle>
+          <CardDescription>
+            Photos associated with repair {repairId}
+          </CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
         <RepairImageCarousel repairId={repairId} />

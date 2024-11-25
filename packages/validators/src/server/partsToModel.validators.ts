@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   dataTableCountSchema,
   dataTableSchema,
+  getSelectSchema,
 } from "../isomorphic/dataTables.validators";
 import { modelId, partId } from "../isomorphic/ids.validators";
 
@@ -17,12 +18,12 @@ export type GetAllPartsByModelIdInput = z.infer<
   typeof getAllPartsByModelIdSchema
 >;
 
-export const getAllPartsByModelIdCountSchema = dataTableCountSchema.extend({
+export const countAllPartsByModelIdSchema = dataTableCountSchema.extend({
   filters: partsByModelIdFilters,
 });
 
-export type GetAllPartsByModelIdCountInput = z.infer<
-  typeof getAllPartsByModelIdCountSchema
+export type CountAllPartsByModelIdInput = z.infer<
+  typeof countAllPartsByModelIdSchema
 >;
 
 /** */
@@ -38,13 +39,21 @@ export type GetAllModelsByPartIdInput = z.infer<
   typeof getAllModelsByPartIdSchema
 >;
 
-export const getAllModelsByPartIdCountSchema = dataTableCountSchema.extend({
+export const countAllModelsByPartIdSchema = dataTableCountSchema.extend({
   filters: modelsByPartIdFilters,
 });
 
-export type GetAllModelsByPartIdCountInput = z.infer<
-  typeof getAllModelsByPartIdCountSchema
+export type CountAllModelsByPartIdInput = z.infer<
+  typeof countAllModelsByPartIdSchema
 >;
+
+export const getModelsByPartIdSelectSchema = getSelectSchema.extend({
+  partId,
+});
+
+export const getPartsByModelIdSelectSchema = getSelectSchema.extend({
+  modelId,
+});
 
 /*** */
 

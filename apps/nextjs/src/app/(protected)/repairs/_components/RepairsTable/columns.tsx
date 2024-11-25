@@ -9,7 +9,6 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 import generateRepairSlug from "~/utils/generateRepairSlug";
-import { getBaseUrl } from "~/utils/getBaseUrl";
 
 import RepairStatusBadge from "../RepairStatusBadge";
 
@@ -115,7 +114,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) => `${getBaseUrl()}/repairs/${row.original.id}`}
+        generateUrl={(row) => `/repairs/${row.original.id}`}
         row={row}
       />
     ),

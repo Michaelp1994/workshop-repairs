@@ -1,5 +1,5 @@
 import UsersTable from "~/app/(protected)/users/_components/UsersTable";
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
   PageDescription,
   PageHeader,
@@ -7,7 +7,7 @@ import {
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 
 export default function UsersPage() {
   return (

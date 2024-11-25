@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
   GetSelectInput,
 } from "@repo/validators/dataTables.validators";
 
@@ -15,7 +15,7 @@ import {
   type UpdateRepairType,
 } from "../tables/repair-type.sql";
 
-export function getAllRepairTypes({ pagination }: DataTableInput) {
+export function getAllRepairTypes({ pagination }: DataTableOutput) {
   const query = db
     .select()
     .from(repairTypeTable)

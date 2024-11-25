@@ -1,12 +1,12 @@
 import { z } from "zod";
 
+import { zFile } from "../helpers/files.schema";
+const TEN_MEGABYTES = 10_000_000;
 export const createOrganizationSchema = z.object({
   name: z.string().min(5, {
     message: "Organization name must be atleast 5 characters.",
   }),
-  logo: z.string().min(1, {
-    message: "Please upload your logo.",
-  }),
+  logo: zFile().size(TEN_MEGABYTES).mimeType(["image/png", "image/jpeg"]),
 });
 
 export type CreateOrganizationInput = z.infer<typeof createOrganizationSchema>;
@@ -25,7 +25,7 @@ export const defaultJoinOrganization: JoinOrganizationInput = {
 
 export const defaultOrganization: CreateOrganizationInput = {
   name: "",
-  logo: "",
+  logo: null as unknown as File,
 };
 
 export const inviteOthersSchema = z.object({

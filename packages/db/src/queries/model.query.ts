@@ -1,6 +1,6 @@
 import type {
   DataTableCountSchema,
-  DataTableInput,
+  DataTableOutput,
 } from "@repo/validators/dataTables.validators";
 
 import { and, count, eq, getTableColumns, type SQL } from "drizzle-orm";
@@ -20,7 +20,7 @@ import { modelImageTable } from "../tables/model-image.sql";
 const modelFields = getTableColumns(modelTable);
 
 export function createAllModelsQuery(
-  { pagination, globalFilter, sorting, columnFilters }: DataTableInput,
+  { pagination, globalFilter, sorting, columnFilters }: DataTableOutput,
   ...filters: (SQL | undefined)[]
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);

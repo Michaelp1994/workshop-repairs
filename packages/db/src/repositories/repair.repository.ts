@@ -1,7 +1,7 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
   GetAllRepairsInput,
-  GetRepairsCountInput,
+  CountRepairsInput,
 } from "@repo/validators/server/repairs.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -92,7 +92,7 @@ export function getAllRepairs(
 }
 
 export async function countRepairs(
-  { globalFilter, columnFilters, filters }: GetRepairsCountInput,
+  { globalFilter, columnFilters, filters }: CountRepairsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

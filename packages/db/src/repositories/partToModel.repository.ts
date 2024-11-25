@@ -1,8 +1,8 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  GetAllModelsByPartIdCountInput,
+  CountAllModelsByPartIdInput,
   GetAllModelsByPartIdInput,
-  GetAllPartsByModelIdCountInput,
+  CountAllPartsByModelIdInput,
   GetAllPartsByModelIdInput,
 } from "@repo/validators/server/partsToModel.validators";
 
@@ -60,7 +60,7 @@ export async function countAllPartsByModelId({
   columnFilters,
   globalFilter,
   filters,
-}: GetAllPartsByModelIdCountInput) {
+}: CountAllPartsByModelIdInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -115,7 +115,7 @@ export async function countAllModelsByPartId({
   columnFilters,
   globalFilter,
   filters,
-}: GetAllModelsByPartIdCountInput) {
+}: CountAllModelsByPartIdInput) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -135,10 +135,10 @@ export async function countAllModelsByPartId({
   return res?.count;
 }
 
-export function getPartsToModelsSelect({
-  globalFilter,
-  columnFilters,
-}: GetSelectInput) {
+export function getPartsByModelIdSelect(
+  { globalFilter, columnFilters }: GetSelectInput,
+  modelId: ModelID,
+) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
@@ -149,7 +149,38 @@ export function getPartsToModelsSelect({
     .from(partsToModelTable)
     .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
     .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(and(globalFilterParams, ...columnFilterParams));
+    .where(
+      and(
+        eq(partsToModelTable.modelId, modelId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    );
+
+  return query.execute();
+}
+
+export function getModelsByPartIdSelect(
+  { globalFilter, columnFilters }: GetSelectInput,
+  partId: PartID,
+) {
+  const globalFilterParams = getGlobalFilters(globalFilter);
+  const columnFilterParams = getColumnFilters(columnFilters);
+  const query = db
+    .select({
+      value: modelTable.id,
+      label: modelTable.name,
+    })
+    .from(partsToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
+    .where(
+      and(
+        eq(partsToModelTable.partId, partId),
+        globalFilterParams,
+        ...columnFilterParams,
+      ),
+    );
 
   return query.execute();
 }

@@ -8,14 +8,12 @@ import {
   updateLocation,
 } from "@repo/db/repositories/location.repository";
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "@repo/validators/dataTables.validators";
-import {
   archiveLocationSchema,
+  countLocationsSchema,
   createLocationSchema,
+  getAllLocationsSchema,
   getLocationByIdSchema,
+  getLocationsSelectSchema,
   updateLocationSchema,
 } from "@repo/validators/server/locations.validators";
 import { TRPCError } from "@trpc/server";
@@ -30,20 +28,20 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(dataTableSchema)
+    .input(getAllLocationsSchema)
     .query(({ ctx, input }) => {
       const allLocations = getAllLocations(input, ctx.session.organizationId);
 
       return allLocations;
     }),
   countAll: organizationProcedure
-    .input(dataTableCountSchema)
+    .input(countLocationsSchema)
     .query(({ ctx, input }) => {
       const count = countLocations(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getSelectSchema)
+    .input(getLocationsSelectSchema)
     .query(({ ctx, input }) => {
       const locations = getLocationsSelect(input, ctx.session.organizationId);
       return locations;

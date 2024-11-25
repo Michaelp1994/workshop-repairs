@@ -1,13 +1,13 @@
 import type { ManufacturerID } from "@repo/validators/ids.validators";
 
-import { IconButton } from "~/components/IconButton";
+import { IconButton } from "~/app/(protected)/_components/IconButton";
 import {
   PageHeader,
   PageHeaderActions,
   PageHeaderText,
   PageTitle,
   PageWrapper,
-} from "~/components/Page";
+} from "~/app/(protected)/_components/Page";
 import { api } from "~/trpc/server";
 
 import ManufacturerModelsTable from "../_components/ManufacturerModelsTable";

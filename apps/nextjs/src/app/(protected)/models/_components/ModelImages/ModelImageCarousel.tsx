@@ -1,4 +1,6 @@
 "use client";
+import type { ModelID, ModelImageID } from "@repo/validators/ids.validators";
+
 import { Button } from "@repo/ui/button";
 import {
   Carousel,
@@ -6,31 +8,37 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  CarouselProps,
 } from "@repo/ui/carousel";
 import { Star } from "@repo/ui/icons";
 import { toast } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
+import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
-interface ModelImageCarouselProps extends CarouselProps {
-  images: {
-    id: number;
-    url: string;
-    caption: string | null;
-    favourite: boolean;
-  }[];
+interface ModelImageCarouselProps {
+  modelId: ModelID;
+  imageId?: ModelImageID;
 }
 
 export default function ModelImageCarousel({
-  images,
-  ...props
+  modelId,
 }: ModelImageCarouselProps) {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const modelImageId = id ? Number(id) : undefined;
+  const [repairImages] = api.modelImages.getAllByModelId.useSuspenseQuery({
+    modelId,
+  });
+
+  const startIndex = modelImageId
+    ? repairImages.findIndex((image) => image.id === modelImageId)
+    : 0;
+
   return (
-    <Carousel className="mx-auto max-w-[500px]" {...props}>
+    <Carousel className="mx-auto max-w-[500px]" opts={{ startIndex }}>
       <CarouselContent>
-        {images.map((image) => (
+        {repairImages.map((image) => (
           <CarouselItem key={image.id}>
             <div className="relative">
               <img
@@ -40,6 +48,7 @@ export default function ModelImageCarousel({
               />
               <FavouriteButton favourite={image.favourite} id={image.id} />
             </div>
+            <div className="text-center">{image.caption}</div>
           </CarouselItem>
         ))}
       </CarouselContent>

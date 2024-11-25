@@ -48,9 +48,18 @@ export default router({
       ]);
     }
     const session = await createSession(user);
+
     ctx.setCookie("Authorization", `Bearer ${session.token}`, {
       secure: false,
       sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    ctx.setCookie("userId", user.id.toString(), {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
     });
@@ -111,8 +120,21 @@ export default router({
       });
       return session;
     }),
-  logout: authedProcedure.input(logoutSchema).mutation(async () => {
-    throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+  logout: authedProcedure.input(logoutSchema).mutation(async ({ ctx }) => {
+    ctx.setCookie("Authorization", "", {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      maxAge: 0,
+    });
+    ctx.setCookie("userId", "", {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
+      path: "/",
+      maxAge: 0,
+    });
   }),
   forgotPassword: publicProcedure
     .input(forgotPasswordSchema)

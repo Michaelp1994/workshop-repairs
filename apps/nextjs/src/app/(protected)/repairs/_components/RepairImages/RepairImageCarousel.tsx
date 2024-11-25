@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
   CarouselProps,
 } from "@repo/ui/carousel";
+import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
@@ -19,22 +20,21 @@ interface RepairImageCarouselProps extends CarouselProps {
 export default function RepairImageCarousel({
   repairId,
 }: RepairImageCarouselProps) {
-  // const searchParams = useSearchParams();
-  // const id = searchParams.get("id");
-  // const repairImageId = id ? Number(id) : undefined;
-  const repairImageId = undefined;
-  const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
+  const [repairImages] = api.repairImages.getAllByRepairId.useSuspenseQuery({
     repairId,
   });
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const repairImageId = id ? Number(id) : undefined;
 
   const startIndex = repairImageId
-    ? data.findIndex((image) => image.id === repairImageId)
+    ? repairImages.findIndex((image) => image.id === repairImageId)
     : 0;
 
   return (
     <Carousel className="mx-auto max-w-[500px]" opts={{ startIndex }}>
       <CarouselContent>
-        {data.map((image) => (
+        {repairImages.map((image) => (
           <CarouselItem key={image.id}>
             <div className="relative">
               <img
@@ -43,6 +43,7 @@ export default function RepairImageCarousel({
                 src={image.url}
               />
             </div>
+            <div className="text-center">{image.caption}</div>
           </CarouselItem>
         ))}
       </CarouselContent>
