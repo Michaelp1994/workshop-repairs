@@ -1,59 +1,37 @@
-"use client";
-import type { ModelID } from "@repo/validators/ids.validators";
-
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
+  CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
-
-import { api } from "~/trpc/client";
 
 import ModelImageCarousel from "../../_components/ModelImages/ModelImageCarousel";
 
 interface ModelImageGalleryModalProps {
   params: {
-    modelId: ModelID;
+    modelId: string;
   };
 }
 
 export default function ModelImageGalleryModal({
   params,
 }: ModelImageGalleryModalProps) {
-  // const searchParams = useSearchParams();
   const modelId = Number(params.modelId);
-  // const id = searchParams.get("id");
-  // const modelImageId = id ? Number(id) : undefined;
-  const modelImageId = undefined;
-
-  const { data, isLoading, isError } = api.modelImages.getAllByModelId.useQuery(
-    {
-      modelId,
-    },
-  );
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError || !data) {
-    return <div>Error loading model images</div>;
-  }
-
-  const startIndex = modelImageId
-    ? data.findIndex((image) => image.id === modelImageId)
-    : 0;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Gallery</CardTitle>
-        <CardDescription>
-          Photos associated with model {modelId}
-        </CardDescription>
+        <CardHeaderText>
+          <CardTitle>Gallery</CardTitle>
+          <CardDescription>
+            Photos associated with model {modelId}
+          </CardDescription>
+        </CardHeaderText>
       </CardHeader>
       <CardContent>
-        <ModelImageCarousel images={data} opts={{ startIndex }} />
+        <ModelImageCarousel modelId={modelId} />
       </CardContent>
     </Card>
   );

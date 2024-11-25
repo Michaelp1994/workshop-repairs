@@ -25,6 +25,7 @@ import {
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import { getModelImageUrlFromKey } from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -32,10 +33,14 @@ export default router({
   getAll: organizationProcedure
     .input(getAllModelsSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = getAllModels(input, ctx.session.organizationId);
-      return allModels;
+      const allModels = await getAllModels(input, ctx.session.organizationId);
+      return allModels.map((model) => ({
+        ...model,
+        defaultImageUrl: model.defaultImageUrl
+          ? getModelImageUrlFromKey(model.defaultImageUrl)
+          : null,
+      }));
     }),
-
   countAll: organizationProcedure
     .input(countModelsSchema)
     .query(({ ctx, input }) => {

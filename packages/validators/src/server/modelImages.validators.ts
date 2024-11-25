@@ -27,13 +27,7 @@ export type GetModelImagesSelectInput = z.infer<
 
 export const createModelImageSchema = z.object({
   caption: z.string().min(3),
-  url: z.string().min(3),
-  modelId,
-});
-
-export const uploadModelImageSchema = z.object({
-  caption: z.string().min(3),
-  image: z.instanceof(File),
+  fileName: z.string(),
   modelId,
 });
 
@@ -45,6 +39,11 @@ export const updateModelImageSchema = z.object({
   id: modelImageId,
   caption: z.string().min(3),
   url: z.string().min(3),
+});
+
+export const requestUploadModelImageSchema = z.object({
+  fileType: z.string(),
+  fileSize: z.number().int().min(1),
 });
 
 export const getAllModelImagesByModelIdSchema = z.object({

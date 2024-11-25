@@ -18,17 +18,25 @@ import {
   getAllModelImagesByModelIdSchema,
   getAllModelImagesSchema,
   getModelImageByIdSchema,
+  requestUploadModelImageSchema,
   setFavouriteModelImageSchema,
   updateModelImageSchema,
-  uploadModelImageSchema,
 } from "@repo/validators/server/modelImages.validators";
 import { TRPCError } from "@trpc/server";
+import { randomUUID } from "crypto";
 
 import {
   createArchiveMetadata,
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import {
+  createModelImageKeyFromFileName,
+  createPresignedUrl,
+  fileExistsInS3,
+  getFileExtension,
+  getModelImageUrlFromKey,
+} from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
 
 // import { uploadImageS3 } from "../helpers/s3";
@@ -64,9 +72,11 @@ export default router({
 
       return allModelImages.map((modelImage) => ({
         ...modelImage,
+        url: getModelImageUrlFromKey(modelImage.url),
         favourite: modelImage.id === model.defaultImageId,
       }));
     }),
+
   getById: organizationProcedure
     .input(getModelImageByIdSchema)
     .query(async ({ input }) => {
@@ -81,21 +91,38 @@ export default router({
 
       return modelImage;
     }),
-  uploadImage: organizationProcedure
-    .input(uploadModelImageSchema)
-    .mutation(async () => {
-      throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+  requestUpload: organizationProcedure
+    .input(requestUploadModelImageSchema)
+    .mutation(async ({ input }) => {
+      const uuid = randomUUID();
+      const fileExt = getFileExtension(input.fileType);
+      const fileName = `${uuid}.${fileExt}`;
+      const presignedUrl = await createPresignedUrl({
+        Key: createModelImageKeyFromFileName(fileName),
+      });
+      return { url: presignedUrl, fileName };
     }),
   create: organizationProcedure
     .input(createModelImageSchema)
     .mutation(async ({ input, ctx }) => {
+      const fileExists = await fileExistsInS3(
+        createModelImageKeyFromFileName(input.fileName),
+      );
+      if (!fileExists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "File does not exist.",
+        });
+      }
+
       const modelImages = await getAllModelImagesByModelId(input.modelId);
       const isFirstImage = modelImages.length === 0;
 
-      const imageMetadata = createInsertMetadata(ctx.session);
+      const metadata = createInsertMetadata(ctx.session);
       const createdModelImage = await createModelImage({
         ...input,
-        ...imageMetadata,
+        url: input.fileName,
+        ...metadata,
       });
 
       assertDatabaseResult(createdModelImage);
