@@ -1,5 +1,3 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
   createInvitation,
   createOrganization,
@@ -17,13 +15,20 @@ import {
   createOrganizationSchema,
   inviteOthersToOrganizationSchema,
   joinOrganizationSchema,
+  requestUploadOrganizationLogoSchema,
 } from "@repo/validators/server/organization.validators";
 import { TRPCError } from "@trpc/server";
-import { Resource } from "sst";
+import { randomUUID } from "crypto";
 import { ZodError } from "zod";
 
 import createSession from "../helpers/createSession";
 import { createInsertMetadata } from "../helpers/includeMetadata";
+import {
+  createOrganizationLogoKeyFromFileName,
+  createPresignedUrl,
+  fileExistsInS3,
+  getFileExtension,
+} from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
@@ -45,9 +50,49 @@ export default router({
     });
     assertDatabaseResult(onboarding);
   }),
+  requestUpload: authedProcedure
+    .input(requestUploadOrganizationLogoSchema)
+    .mutation(async ({ input, ctx }) => {
+      const user = await getUserById(ctx.session.userId);
+      assertDatabaseResult(user);
+      if (user.organizationId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You already belong to an organization",
+        });
+      }
+      const organizationExists = await getOrganizationByName(input.name);
+
+      if (organizationExists) {
+        throw new ZodError([
+          {
+            code: "custom",
+            path: ["name"],
+            message: "This name is already taken.",
+          },
+        ]);
+      }
+      const uuid = randomUUID();
+      const fileExt = getFileExtension(input.fileType);
+      const fileName = `${uuid}.${fileExt}`;
+      const presignedUrl = await createPresignedUrl({
+        Key: createOrganizationLogoKeyFromFileName(fileName),
+      });
+      return { url: presignedUrl, fileName };
+    }),
   createOrganization: authedProcedure
     .input(createOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
+      const fileExists = await fileExistsInS3(
+        createOrganizationLogoKeyFromFileName(input.logo),
+      );
+      if (!fileExists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "File does not exist.",
+        });
+      }
+
       const metadata = createInsertMetadata(ctx.session);
       const user = await getUserById(ctx.session.userId);
       assertDatabaseResult(user);
@@ -83,16 +128,9 @@ export default router({
       );
       assertDatabaseResult(updatedUser);
 
-      const fileType = input.logo.split(".").pop();
-      const fileName = `organizations/logos/logo-${createdOrganization.id}.${fileType}`;
-      const command = new PutObjectCommand({
-        Key: fileName,
-        Bucket: Resource.Bucket1.name,
-      });
-      const url = await getSignedUrl(new S3Client({}), command);
       const session = await createSession(updatedUser);
 
-      return { url, ...session };
+      return { ...session };
     }),
   joinOrganization: authedProcedure
     .input(joinOrganizationSchema)

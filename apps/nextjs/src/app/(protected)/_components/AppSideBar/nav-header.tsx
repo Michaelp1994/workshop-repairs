@@ -17,9 +17,17 @@ export default async function NavHeader() {
         <SidebarMenuItem>
           <SidebarMenuButton asChild size="lg">
             <Link href="/organization">
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <Activity className="size-4" />
-              </div>
+              {organization.logo ? (
+                <img
+                  className="size-8 object-contain"
+                  src={organization.logo}
+                />
+              ) : (
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <Activity className="size-4" />
+                </div>
+              )}
+
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
                   {organization.name}

@@ -19,9 +19,15 @@ export const countOrganizationsSchema = dataTableCountSchema.extend({
 });
 export type CountOrganizationsInput = z.infer<typeof countOrganizationsSchema>;
 
+export const requestUploadOrganizationLogoSchema = z.object({
+  name: z.string().min(5),
+  fileType: z.string(),
+  fileSize: z.number().int().min(1),
+});
+
 export const createOrganizationSchema = z.object({
   name: z.string().min(5),
-  logo: z.string().min(1),
+  logo: z.string(),
 });
 
 export const getOrganizationByIdSchema = z.object({});

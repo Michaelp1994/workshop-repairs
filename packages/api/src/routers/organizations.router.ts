@@ -1,6 +1,7 @@
 import { getOrganizationById } from "@repo/db/repositories/organization.repository";
 import { getOrganizationByIdSchema } from "@repo/validators/server/organization.validators";
 
+import { getOrganizationLogoUrlFromKey } from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -12,6 +13,11 @@ export default router({
         ctx.session.organizationId,
       );
       assertDatabaseResult(organization);
-      return organization;
+      return {
+        ...organization,
+        logo: organization.logo
+          ? getOrganizationLogoUrlFromKey(organization.logo)
+          : null,
+      };
     }),
 });

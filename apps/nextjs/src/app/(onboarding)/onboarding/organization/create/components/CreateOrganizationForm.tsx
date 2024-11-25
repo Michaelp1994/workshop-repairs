@@ -9,6 +9,7 @@ import {
   SubmitButton,
   useForm,
 } from "@repo/ui/form";
+import { ImageInput } from "@repo/ui/image-input";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
@@ -20,27 +21,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/client";
+import { uploadImageToS3 } from "~/utils/awsLib";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
-import FileInput from "./FileInput";
-
 export default function CreateOrganizationForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { mutateAsync: requestUpload } =
+    api.userOnboardings.requestUpload.useMutation();
   const router = useRouter();
   const utils = api.useUtils();
-  const [file, setFile] = useState<null | File>(null);
   const createMutation = api.userOnboardings.createOrganization.useMutation({
-    async onSuccess({ url, ...session }) {
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type,
-        },
-        body: file,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload logo.");
-      }
+    async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
       toast.success("Organization created.");
       router.push("/onboarding/invitation");
@@ -54,16 +45,24 @@ export default function CreateOrganizationForm() {
     defaultValues: defaultOrganization,
   });
 
-  function handleValid(values: CreateOrganizationInput) {
-    if (!file) {
-      return form.setError("logo", {
-        message: "Please upload your logo again.",
+  async function handleValid(values: CreateOrganizationInput) {
+    setIsLoading(true);
+    try {
+      const { url, fileName } = await requestUpload({
+        name: values.name,
+        fileType: values.logo.type,
+        fileSize: values.logo.size,
       });
+      await uploadImageToS3(values.logo, url);
+      await createMutation.mutateAsync({
+        name: values.name,
+        logo: fileName,
+      });
+    } catch {
+      toast.error("Failed to upload image");
+    } finally {
+      setIsLoading(false);
     }
-    createMutation.mutate({
-      name: values.name,
-      logo: file?.name,
-    });
   }
 
   return (
@@ -93,13 +92,13 @@ export default function CreateOrganizationForm() {
               <FormItem>
                 <FormLabel>Logo</FormLabel>
                 <FormControl>
-                  <FileInput {...field} setFile={setFile} />
+                  <ImageInput {...field} />
                 </FormControl>
               </FormItem>
             );
           }}
         />
-        <SubmitButton isLoading={createMutation.isPending} />
+        <SubmitButton isLoading={isLoading} />
       </form>
     </Form>
   );
