@@ -7,6 +7,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "sst-env.d.ts", "*.config.ts", "vitest.config.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src", "sst-env.d.ts", "*.config.*", "vitest.config.ts"],
+  "exclude": ["node_modules", "eslint.config.js"]
 }

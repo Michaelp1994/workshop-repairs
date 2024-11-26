@@ -10,6 +10,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "*.config.ts", "sst-env.d.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src", "*.config.*", "sst-env.d.ts"],
+  "exclude": ["node_modules", "eslint.config.js"]
 }

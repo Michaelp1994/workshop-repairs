@@ -33,11 +33,10 @@
     "next-env.d.ts",
     "src",
     "tests",
-    "*.config.ts",
-    "*.config.js",
+    "*.config.*",
     ".next/types/**/*.ts",
     "sst-env.d.ts",
     "../../packages/ui/src/tanstack-table.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "eslint.config.js"]
 }

@@ -5,15 +5,16 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .sst",
+    "commitlint": "commitlint --edit",
     "db": "sst shell drizzle-kit",
     "db:seed": "sst shell -- pnpm -F db db:seed",
     "db:wipe": "sst shell -- pnpm -F db db:wipe",
     "dev": "sst shell -- pnpm -F nextjs dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier . --write",
     "lint": "turbo lint",
     "prepare": "husky",
     "start": "turbo start",
-    "test": "sst shell -- pnpm vitest",
+    "test": "sst shell -- pnpm vitest run",
     "test:e2e": "sst shell -- pnpm -F nextjs test:e2e",
     "typecheck": "turbo typecheck"
   },
@@ -23,18 +24,21 @@
   "devDependencies": {
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
+    "@repo/eslint-config": "workspace:*",
     "@types/aws-lambda": "8.10.145",
     "commitizen": "^4.3.1",
     "commitlint": "^19.6.0",
     "drizzle-kit": "0.28.1",
     "eslint": "^9.15.0",
     "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.9",
+    "semantic-release": "^24.2.0",
     "sst": "^3.3.28",
     "turbo": "^2.3.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.5"
   },
-  "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
+  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
 }
