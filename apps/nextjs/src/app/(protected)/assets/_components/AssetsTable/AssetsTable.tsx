@@ -27,7 +27,7 @@ export default function AssetsTable() {
         columns={columns}
         data={allAssets}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

@@ -3,7 +3,6 @@ import type { ClientID } from "@repo/validators/ids.validators";
 
 import {
   Card,
-  CardContent,
   CardHeader,
   CardHeaderActions,
   CardHeaderText,
@@ -70,7 +69,7 @@ export default function ClientRepairsTable({
         columns={columns}
         data={repairs}
         rowCount={rowCount}
-        tableState={tableState}
+        {...tableState}
       />
     </Card>
   );

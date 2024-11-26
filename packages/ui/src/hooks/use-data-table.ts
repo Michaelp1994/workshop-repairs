@@ -1,18 +1,16 @@
-import type { DataTableOutput } from "@repo/validators/dataTables.validators";
+import type { DataTableInput } from "@repo/validators/dataTables.validators";
 
 import {
   ColumnFiltersState,
-  getCoreRowModel,
   RowSelectionState,
   SortingState,
-  TableOptions,
-  useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useState } from "react";
-export function useDataTableState(initialState?: DataTableOutput) {
-  const init: DataTableOutput = {
+
+export function useDataTableState(initialState?: DataTableInput) {
+  const init = {
     columnFilters: initialState?.columnFilters ?? [],
     columns: initialState?.columns ?? {},
     globalFilter: initialState?.globalFilter ?? "",
@@ -68,30 +66,4 @@ export function useDataTableState(initialState?: DataTableOutput) {
       onSortingChange: setSorting,
     },
   };
-}
-
-interface BaseData {
-  id: number;
-  [key: string]: unknown;
-}
-
-type RedactedTableOptions<TData extends BaseData> = Omit<
-  TableOptions<TData>,
-  "getCoreRowModel" | "manualPagination" | "manualSorting" | "manualFiltering"
->;
-
-export function useDataTable<TData extends BaseData>({
-  rowCount,
-  getRowId,
-  ...otherProps
-}: RedactedTableOptions<TData>) {
-  return useReactTable({
-    getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    manualSorting: true,
-    manualFiltering: true,
-    getRowId: getRowId ? getRowId : (row) => row["id"].toString(),
-    rowCount: rowCount ?? -1,
-    ...otherProps,
-  });
 }

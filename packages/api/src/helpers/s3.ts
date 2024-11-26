@@ -11,6 +11,14 @@ import { Resource } from "sst";
 const s3 = new S3Client({});
 const ONE_MINUTE = 60 * 1000;
 
+export function createModelImageKeyFromFileName(fileName: string) {
+  return `modelImages/${fileName}`;
+}
+
+export function createOrganizationLogoKeyFromFileName(fileName: string) {
+  return `organizations/logos/${fileName}`;
+}
+
 export async function createPresignedUrl(
   opts: Omit<PutObjectCommandInput, "Bucket">,
 ) {
@@ -21,6 +29,10 @@ export async function createPresignedUrl(
   return await getSignedUrl(s3, command, {
     expiresIn: ONE_MINUTE,
   });
+}
+
+export function createRepairImageKeyFromFileName(fileName: string) {
+  return `repairImages/${fileName}`;
 }
 
 export async function fileExistsInS3(key: string) {
@@ -57,22 +69,10 @@ export function getModelImageUrlFromKey(key: string) {
   return `${Resource.MyRouter.url}/modelImages/${key}`;
 }
 
-export function getRepairImageUrlFromKey(key: string) {
-  return `${Resource.MyRouter.url}/repairImages/${key}`;
-}
-
 export function getOrganizationLogoUrlFromKey(key: string) {
   return `${Resource.MyRouter.url}/organizations/logos/${key}`;
 }
 
-export function createModelImageKeyFromFileName(fileName: string) {
-  return `modelImages/${fileName}`;
-}
-
-export function createRepairImageKeyFromFileName(fileName: string) {
-  return `repairImages/${fileName}`;
-}
-
-export function createOrganizationLogoKeyFromFileName(fileName: string) {
-  return `organizations/logos/${fileName}`;
+export function getRepairImageUrlFromKey(key: string) {
+  return `${Resource.MyRouter.url}/repairImages/${key}`;
 }

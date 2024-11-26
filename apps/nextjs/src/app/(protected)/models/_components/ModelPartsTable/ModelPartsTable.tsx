@@ -53,7 +53,7 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
           data={parts}
           getRowId={(row) => row.partId.toString()}
           rowCount={rowCount}
-          tableState={tableState}
+          {...tableState}
         />
       </CardContent>
     </Card>

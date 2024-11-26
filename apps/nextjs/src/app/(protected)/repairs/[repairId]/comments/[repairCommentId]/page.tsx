@@ -18,7 +18,6 @@ interface ViewRepairCommentPageProps {
 export default function ViewRepairCommentPage({
   params,
 }: ViewRepairCommentPageProps) {
-  const repairId = Number(params.repairId);
   const repairCommentId = Number(params.repairCommentId);
 
   return (

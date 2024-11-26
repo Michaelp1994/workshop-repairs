@@ -1,8 +1,8 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
   CountAllModelsByPartIdInput,
-  GetAllModelsByPartIdInput,
   CountAllPartsByModelIdInput,
+  GetAllModelsByPartIdInput,
   GetAllPartsByModelIdInput,
 } from "@repo/validators/server/partsToModel.validators";
 

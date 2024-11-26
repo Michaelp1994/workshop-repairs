@@ -15,7 +15,6 @@ export default function NavBar() {
       </div>
       <div className="flex items-center gap-2">
         <SearchBar />
-
         <ProfileButton />
       </div>
     </header>

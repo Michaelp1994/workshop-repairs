@@ -27,7 +27,7 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex gap-2">
         <Avatar>
-          <AvatarImage src={row.original.image} />
+          <AvatarImage src={row.original.image ?? undefined} />
           <AvatarFallback>
             {getInitials(row.original.firstName, row.original.lastName)}
           </AvatarFallback>

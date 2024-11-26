@@ -6,7 +6,6 @@ import type {
 import { and, count, eq, isNull } from "drizzle-orm";
 
 import { db } from "../index";
-import { type ModelID } from "../tables/model.sql";
 import {
   type ArchiveModelImage,
   type CreateModelImage,
@@ -14,6 +13,7 @@ import {
   modelImageTable,
   type UpdateModelImage,
 } from "../tables/model-image.sql";
+import { type ModelID } from "../tables/model.sql";
 
 export function getAllModelImages({ pagination }: DataTableOutput) {
   const query = db

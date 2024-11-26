@@ -25,7 +25,7 @@ export default function JoinOrganizationForm() {
   const router = useRouter();
   const utils = api.useUtils();
   const joinMutation = api.userOnboardings.joinOrganization.useMutation({
-    async onSuccess({ organization, ...values }) {
+    async onSuccess({ organization }) {
       await utils.userOnboardings.getStatus.invalidate();
       toast.success(`You have succesfully joined ${organization.name}!`);
       router.push("/dashboard");

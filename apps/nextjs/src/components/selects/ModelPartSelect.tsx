@@ -12,11 +12,11 @@ const ModelPartSelect = forwardRef<
   ElementRef<typeof Combobox>,
   ModelPartSelectProps
 >(({ modelId, ...props }, ref) => {
-  const [data] = api.partsToModels.getSelect.useSuspenseQuery({
-    columnFilters: [{ id: "model_id", value: modelId }],
+  const [parts] = api.partsToModels.getPartsByModelIdSelect.useSuspenseQuery({
+    modelId,
   });
 
-  return <Combobox data={data} ref={ref} {...props} />;
+  return <Combobox data={parts} ref={ref} {...props} />;
 });
 
 ModelPartSelect.displayName = "ModelPartSelect";

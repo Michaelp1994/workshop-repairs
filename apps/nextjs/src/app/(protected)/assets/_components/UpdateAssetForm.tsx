@@ -37,7 +37,7 @@ export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
   });
 
   const updateMutation = api.assets.update.useMutation({
-    async onSuccess(values) {
+    async onSuccess() {
       toast.success(`Asset updated`);
     },
     onError(errors) {

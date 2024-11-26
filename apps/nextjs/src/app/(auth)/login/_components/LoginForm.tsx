@@ -1,4 +1,5 @@
 "use client";
+import { ErrorAlert } from "@repo/ui/error-alert";
 import {
   Form,
   FormControl,
@@ -18,7 +19,6 @@ import {
 } from "@repo/validators/client/auth.schema";
 import { useRouter } from "next/navigation";
 
-import ErrorAlert from "~/components/ErrorAlert";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 

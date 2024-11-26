@@ -4,12 +4,12 @@ import { eq, getTableColumns } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import { db } from "../index";
-import { type UserID, userTable } from "../tables/user.sql";
 import {
   type CreateUserOnboarding,
   type UpdateUserOnboarding,
   userOnboardingTable,
 } from "../tables/user-onboarding.sql";
+import { type UserID, userTable } from "../tables/user.sql";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);

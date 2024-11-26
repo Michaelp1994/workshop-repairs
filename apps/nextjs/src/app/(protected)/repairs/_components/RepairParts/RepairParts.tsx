@@ -6,12 +6,8 @@ import {
   CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
-import {
-  DataTableCore,
-  DataTableFooter,
-  DataTableToolbar,
-} from "@repo/ui/data-table";
-import { useDataTable, useDataTableState } from "@repo/ui/hooks/use-data-table";
+import DataTable from "@repo/ui/data-table/DataTable";
+import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { type RepairID } from "@repo/validators/ids.validators";
 
 import { IconButton } from "~/app/(protected)/_components/IconButton";
@@ -47,12 +43,6 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
     },
   });
 
-  const table = useDataTable({
-    columns,
-    data: allRepairParts,
-    rowCount,
-    ...tableState,
-  });
   return (
     <Card>
       <CardHeader>
@@ -69,9 +59,12 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
           </IconButton>
         </CardHeaderActions>
       </CardHeader>
-      <DataTableToolbar table={table} />
-      <DataTableCore table={table} />
-      <DataTableFooter table={table} />
+      <DataTable
+        columns={columns}
+        data={allRepairParts}
+        rowCount={rowCount}
+        {...tableState}
+      />
     </Card>
   );
 }

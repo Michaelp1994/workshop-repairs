@@ -1,7 +1,7 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  GetAllRepairsInput,
   CountRepairsInput,
+  GetAllRepairsInput,
 } from "@repo/validators/server/repairs.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -19,8 +19,10 @@ import { assetTable } from "../tables/asset.sql";
 import { clientTable } from "../tables/client.sql";
 import { locationTable } from "../tables/location.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelTable } from "../tables/model.sql";
 import { modelImageTable } from "../tables/model-image.sql";
+import { modelTable } from "../tables/model.sql";
+import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
+import { repairTypeTable } from "../tables/repair-type.sql";
 import {
   type ArchiveRepair,
   type CreateRepair,
@@ -28,8 +30,6 @@ import {
   repairTable,
   type UpdateRepair,
 } from "../tables/repair.sql";
-import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
-import { repairTypeTable } from "../tables/repair-type.sql";
 
 const repairFields = getTableColumns(repairTable);
 

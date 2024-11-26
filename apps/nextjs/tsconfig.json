@@ -30,14 +30,13 @@
     }
   },
   "include": [
-    ".eslintrc.cjs",
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.js",
+    "src",
+    "tests",
+    "*.config.ts",
     ".next/types/**/*.ts",
-    "sst-env.d.ts"
+    "sst-env.d.ts",
+    "../../packages/ui/src/tanstack-table.d.ts"
   ],
   "exclude": ["node_modules"]
 }

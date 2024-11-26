@@ -1,17 +1,43 @@
 import { Upload, X } from "lucide-react";
 import { forwardRef, useRef } from "react";
+import { type MutableRefObject, type RefCallback } from "react";
 
 import { Button } from "./button";
 import { FileInput, type FileInputProps } from "./file-input";
 
+type MutableRefList<T> = (
+  | RefCallback<T>
+  | MutableRefObject<T>
+  | undefined
+  | null
+)[];
+
+export function mergeRefs<T>(...refs: MutableRefList<T>): RefCallback<T> {
+  return (val: T) => {
+    setRef(val, ...refs);
+  };
+}
+
+export function setRef<T>(val: T, ...refs: MutableRefList<T>): void {
+  refs.forEach((ref) => {
+    if (typeof ref === "function") {
+      ref(val);
+    } else if (ref != null) {
+      ref.current = val;
+    }
+  });
+}
+
 const ImageInput = forwardRef<HTMLInputElement, FileInputProps>(
   ({ ...props }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const validFile = props.value?.type.startsWith("image/");
-    const preview = validFile ? URL.createObjectURL(props.value) : null;
+    const preview =
+      props.value && props.value?.type.startsWith("image/")
+        ? URL.createObjectURL(props.value)
+        : null;
     return (
       <div className="flex flex-row items-center gap-2 pb-2 pt-2">
-        {validFile ? (
+        {preview ? (
           <div className="relative">
             <img
               alt="Profile Photo"
@@ -41,10 +67,7 @@ const ImageInput = forwardRef<HTMLInputElement, FileInputProps>(
         <div className="space-y-2">
           <FileInput
             accept="image/*"
-            ref={(e) => {
-              ref(e);
-              inputRef.current = e;
-            }}
+            ref={mergeRefs(ref, inputRef)}
             {...props}
           />
         </div>

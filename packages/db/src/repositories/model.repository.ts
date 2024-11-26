@@ -17,6 +17,7 @@ import {
 } from "../queries/model.query";
 import { equipmentTypeTable } from "../tables/equipment-type.sql";
 import { manufacturerTable } from "../tables/manufacturer.sql";
+import { modelImageTable } from "../tables/model-image.sql";
 import {
   type ArchiveModel,
   type CreateModel,
@@ -24,7 +25,6 @@ import {
   modelTable,
   type UpdateModel,
 } from "../tables/model.sql";
-import { modelImageTable } from "../tables/model-image.sql";
 
 const modelFields = getTableColumns(modelTable);
 

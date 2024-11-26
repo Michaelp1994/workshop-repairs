@@ -2,14 +2,14 @@ import { eq } from "drizzle-orm";
 
 import { db } from "..";
 import {
+  type CreateOrganizationInvitation,
+  organizationInvitationTable,
+} from "../tables/organization-invitation.sql";
+import {
   type CreateOrganization,
   type OrganizationID,
   organizationTable,
 } from "../tables/organization.sql";
-import {
-  type CreateOrganizationInvitation,
-  organizationInvitationTable,
-} from "../tables/organization-invitation.sql";
 
 export async function getOrganizationById(id: OrganizationID) {
   const query = db

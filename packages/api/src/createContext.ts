@@ -2,6 +2,8 @@ import { verifyToken } from "@repo/auth/tokens";
 import { db } from "@repo/db";
 import { parse, serialize, type SerializeOptions } from "cookie";
 
+export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
+
 export interface Session {
   userId: number;
   organizationId: number | null;
@@ -16,10 +18,10 @@ function getCookie(headers: Headers, name: string) {
 
 export async function createTRPCContext(
   opts: { headers: Headers },
-  resHeaders: Headers,
+  resHeaders?: Headers,
 ) {
   function setCookie(name: string, value: string, options: SerializeOptions) {
-    resHeaders.append("Set-Cookie", serialize(name, value, options));
+    resHeaders?.append("Set-Cookie", serialize(name, value, options));
   }
   const authCookie = getCookie(opts.headers, "Authorization");
   const token = authCookie?.split(" ")[1];
@@ -51,5 +53,3 @@ export async function createTRPCContext(
     };
   }
 }
-
-export type Context = Awaited<ReturnType<typeof createTRPCContext>>;

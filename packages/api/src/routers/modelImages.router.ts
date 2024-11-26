@@ -38,8 +38,6 @@ import {
   getModelImageUrlFromKey,
 } from "../helpers/s3";
 import assertDatabaseResult from "../helpers/trpcAssert";
-
-// import { uploadImageS3 } from "../helpers/s3";
 import { organizationProcedure, router } from "../trpc";
 
 export default router({

@@ -1,21 +1,42 @@
-import { useDataTable } from "../../hooks/use-data-table";
+import {
+  getCoreRowModel,
+  type TableOptions,
+  useReactTable,
+} from "@tanstack/react-table";
+
 import { DataTableCore } from "./DataTableCore/DataTableCore";
 import { DataTableFooter } from "./DataTableFooter";
 import { DataTableToolbar } from "./DataTableToolbar";
 
-export default function DataTable({
-  columns,
-  data,
-  rowCount,
-  tableState,
+type BaseData = Record<string, unknown>;
+
+type RedactedTableOptions<TData extends BaseData> = Omit<
+  TableOptions<TData>,
+  "getCoreRowModel" | "manualPagination" | "manualSorting" | "manualFiltering"
+>;
+
+export default function DataTable<TData extends BaseData>({
   getRowId,
-}) {
-  const table = useDataTable({
-    columns,
-    data,
-    rowCount,
-    getRowId,
-    ...tableState,
+  rowCount,
+  ...otherProps
+}: RedactedTableOptions<TData>) {
+  const table = useReactTable({
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
+    getRowId: getRowId
+      ? getRowId
+      : (row) => {
+          if ("id" in row && typeof row["id"] === "number") {
+            return row["id"].toString();
+          }
+          throw new Error(
+            "getRowId must be provided if the row does not have an 'id' field",
+          );
+        },
+    rowCount: rowCount ?? -1,
+    ...otherProps,
   });
 
   return (

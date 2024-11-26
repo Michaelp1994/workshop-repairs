@@ -1,6 +1,6 @@
 import type {
-  GetAllRepairPartsInput,
   CountRepairPartsInput,
+  GetAllRepairPartsInput,
 } from "@repo/validators/server/repairParts.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -14,7 +14,6 @@ import {
 } from "../mappings/repairParts.mapper";
 import { assetTable } from "../tables/asset.sql";
 import { partTable } from "../tables/part.sql";
-import { repairTable } from "../tables/repair.sql";
 import {
   type ArchiveRepairPart,
   type CreateRepairPart,
@@ -22,6 +21,7 @@ import {
   repairPartTable,
   type UpdateRepairPart,
 } from "../tables/repair-part.sql";
+import { repairTable } from "../tables/repair.sql";
 
 const repairPartFields = getTableColumns(repairPartTable);
 

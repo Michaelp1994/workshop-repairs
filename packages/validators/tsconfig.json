@@ -1,13 +1,12 @@
 {
   "extends": "@repo/typescript-config/internal-package.json",
   "compilerOptions": {
-    "rootDir": "src",
     "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "sst-env.d.ts"],
+  "include": ["src", "*.config.ts", "sst-env.d.ts"],
   "exclude": ["node_modules"]
 }

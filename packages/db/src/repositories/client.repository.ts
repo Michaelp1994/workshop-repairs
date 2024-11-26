@@ -1,7 +1,7 @@
 import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
-  GetAllClientsInput,
   CountClientsInput,
+  GetAllClientsInput,
 } from "@repo/validators/server/clients.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";

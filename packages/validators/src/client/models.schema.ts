@@ -1,5 +1,6 @@
-import { equipmentTypeId, manufacturerId } from "../isomorphic/ids.validators";
 import { z } from "zod";
+
+import { equipmentTypeId, manufacturerId } from "../isomorphic/ids.validators";
 
 export const modelFormSchema = z.object({
   name: z.string().min(3),
