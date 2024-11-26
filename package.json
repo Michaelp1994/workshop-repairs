@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean && rm -rf .turbo node_modules .sst",
+    "commitlint": "commitlint --edit",
     "db": "sst shell drizzle-kit",
     "db:seed": "sst shell -- pnpm -F db db:seed",
     "db:wipe": "sst shell -- pnpm -F db db:wipe",
