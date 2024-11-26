@@ -34,6 +34,7 @@
     "src",
     "tests",
     "*.config.ts",
+    "*.config.js",
     ".next/types/**/*.ts",
     "sst-env.d.ts",
     "../../packages/ui/src/tanstack-table.d.ts"

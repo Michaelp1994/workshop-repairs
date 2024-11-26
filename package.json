@@ -8,7 +8,7 @@
     "db": "sst shell drizzle-kit",
     "db:seed": "sst shell -- pnpm -F db db:seed",
     "db:wipe": "sst shell -- pnpm -F db db:wipe",
-    "dev": "sst dev",
+    "dev": "sst shell -- pnpm -F nextjs dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
     "prepare": "husky",

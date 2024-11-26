@@ -30,6 +30,12 @@ export default [
   },
   ...tseslint.config(...tseslint.configs.strict, ...tseslint.configs.stylistic),
   {
+    files: ["**/*.d.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  {
     ignores: [
       "dist/",
       "sst-env.d.ts",
