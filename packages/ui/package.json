@@ -14,7 +14,7 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

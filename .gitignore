@@ -9,6 +9,7 @@
 # testing
 /coverage
 .open-next
+
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
@@ -44,9 +45,16 @@ sst-env.d.ts
 
 # typescript
 *.tsbuildinfo
-/**/dist/
+dist/
 # idea files
 .idea
 
 # sst
 .sst
+
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

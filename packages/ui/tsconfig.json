@@ -1,7 +1,6 @@
 {
   "extends": "@repo/typescript-config/internal-package.json",
   "compilerOptions": {
-    "rootDir": "src",
     "outDir": "dist",
     "lib": ["dom", "dom.iterable", "ES2022"],
     "jsx": "preserve",
@@ -10,6 +9,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "sst-env.d.ts", "src/tanstack-table.ts"],
+  "include": ["src", "sst-env.d.ts", "*.config.ts", "src/tanstack-table.ts"],
   "exclude": ["node_modules"]
 }
