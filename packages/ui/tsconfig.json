@@ -11,5 +11,5 @@
     "resolveFullPaths": true
   },
   "include": ["src", "sst-env.d.ts", "*.config.*", "src/tanstack-table.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "eslint.config.js"]
 }

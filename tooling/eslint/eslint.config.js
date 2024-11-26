@@ -1,4 +1,4 @@
 import js from "@eslint/js";
 
-/** @type {import("eslint").Linter.FlatConfig[]} */
+/** @type {import('typescript-eslint').Config} */
 export default [js.configs.recommended];

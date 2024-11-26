@@ -8,5 +8,5 @@
     "resolveFullPaths": true
   },
   "include": ["src", "sst-env.d.ts", "*.config.*", "vitest.config.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "eslint.config.js"]
 }

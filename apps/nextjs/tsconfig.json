@@ -38,5 +38,5 @@
     "sst-env.d.ts",
     "../../packages/ui/src/tanstack-table.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "eslint.config.js"]
 }

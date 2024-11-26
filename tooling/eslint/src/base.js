@@ -2,12 +2,13 @@ import eslint from "@eslint/js";
 import perfectionist from "eslint-plugin-perfectionist";
 import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
   eslint.configs.recommended,
+  tseslint.configs.strict,
+  tseslint.configs.stylistic,
+  perfectionist.configs["recommended-natural"],
   {
-    ...perfectionist.configs["recommended-natural"],
     rules: {
-      ...perfectionist.configs["recommended-natural"].rules,
       "perfectionist/sort-objects": "off",
       "perfectionist/sort-object-types": "off",
       "perfectionist/sort-interfaces": "off",
@@ -28,7 +29,6 @@ export default [
       ],
     },
   },
-  ...tseslint.config(...tseslint.configs.strict, ...tseslint.configs.stylistic),
   {
     files: ["**/*.d.ts"],
     rules: {
@@ -38,12 +38,12 @@ export default [
   {
     ignores: [
       "dist/",
-      "sst-env.d.ts",
       "eslint.config.js",
+      "sst-env.d.ts",
       ".open-next/",
       ".next/",
       "node_modules/",
       ".turbo/",
     ],
   },
-];
+);
