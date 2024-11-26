@@ -83,13 +83,13 @@ importers:
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/client':
         specifier: 11.0.0-rc.643
-        version: 11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2)
+        version: 11.0.0-rc.643(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(typescript@5.7.2)
       '@trpc/react-query':
         specifier: 11.0.0-rc.643
-        version: 11.0.0-rc.643(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)
+        version: 11.0.0-rc.643(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)
       '@trpc/server':
-        specifier: 11.0.0-rc.643
-        version: 11.0.0-rc.643(typescript@5.7.2)
+        specifier: 11.0.0-rc.645
+        version: 11.0.0-rc.645(typescript@5.7.2)
       '@uidotdev/usehooks':
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -197,8 +197,8 @@ importers:
         specifier: workspace:*
         version: link:../validators
       '@trpc/server':
-        specifier: 11.0.0-rc.643
-        version: 11.0.0-rc.643(typescript@5.7.2)
+        specifier: 11.0.0-rc.645
+        version: 11.0.0-rc.645(typescript@5.7.2)
       cookie:
         specifier: ^1.0.2
         version: 1.0.2
@@ -2810,8 +2810,8 @@ packages:
       react-dom: '>=18.2.0'
       typescript: '>=5.6.2'
 
-  '@trpc/server@11.0.0-rc.643':
-    resolution: {integrity: sha512-w8qPtnbvKF441erzLjDX55AcgrC+5wXT3VCyBp8HMCUKJS4Q7LSEmig02Kva+gJ3E6cYTahsQFTDWaVnr26YZA==}
+  '@trpc/server@11.0.0-rc.645':
+    resolution: {integrity: sha512-DbAp3kzYceem6getORJh55a6ZRt6gIy69xJV3cxYyZ9Xx1MV3PwL27qXGNrprPO0c+kPnnIIu/iGB0d90LSZOA==}
     peerDependencies:
       typescript: '>=5.6.2'
 
@@ -8372,21 +8372,21 @@ snapshots:
       '@types/react': 18.3.12
       '@types/react-dom': 18.3.1
 
-  '@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2)':
+  '@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(typescript@5.7.2)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.643(typescript@5.7.2)
+      '@trpc/server': 11.0.0-rc.645(typescript@5.7.2)
       typescript: 5.7.2
 
-  '@trpc/react-query@11.0.0-rc.643(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)':
+  '@trpc/react-query@11.0.0-rc.643(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)':
     dependencies:
       '@tanstack/react-query': 5.61.3(react@18.3.1)
-      '@trpc/client': 11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2)
-      '@trpc/server': 11.0.0-rc.643(typescript@5.7.2)
+      '@trpc/client': 11.0.0-rc.643(@trpc/server@11.0.0-rc.645(typescript@5.7.2))(typescript@5.7.2)
+      '@trpc/server': 11.0.0-rc.645(typescript@5.7.2)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       typescript: 5.7.2
 
-  '@trpc/server@11.0.0-rc.643(typescript@5.7.2)':
+  '@trpc/server@11.0.0-rc.645(typescript@5.7.2)':
     dependencies:
       typescript: 5.7.2
 
