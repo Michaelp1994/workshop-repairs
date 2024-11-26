@@ -11,7 +11,7 @@ importers:
       '@node-rs/argon2':
         specifier: ^2.0.0
         version: 2.0.0
-    devDependencies: 
+    devDependencies:
       '@commitlint/cli':
         specifier: ^19.6.0
         version: 19.6.0(@types/node@22.9.3)(typescript@5.7.2)
@@ -94,8 +94,8 @@ importers:
         specifier: 11.0.0-rc.643
         version: 11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.643
-        version: 11.0.0-rc.643(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)
+        specifier: 11.0.0-rc.648
+        version: 11.0.0-rc.648(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)
       '@trpc/server':
         specifier: 11.0.0-rc.643
         version: 11.0.0-rc.643(typescript@5.7.2)
@@ -122,7 +122,7 @@ importers:
         version: 0.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@14.2.18(@babel/core@7.26.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.2.3(next@14.2.18(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -459,7 +459,7 @@ importers:
         version: 0.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@14.2.18(@babel/core@7.26.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.2.3(next@14.2.18(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react-day-picker:
         specifier: ^9.4.0
         version: 9.4.0(react@18.3.1)
@@ -2926,12 +2926,12 @@ packages:
       '@trpc/server': 11.0.0-rc.643+0914e43c5
       typescript: '>=5.6.2'
 
-  '@trpc/react-query@11.0.0-rc.643':
-    resolution: {integrity: sha512-uLXdWprp2IgpxSpUaAKBRgge0vzVlDCS9F4ivG+LErUM05+hAOMS2iVeNDyR4uvVfdYj9i2nNeGB+7lmZDT2Ww==}
+  '@trpc/react-query@11.0.0-rc.648':
+    resolution: {integrity: sha512-U3H6o/aN3umEA2QNDGRsaJb6M7zrffor2NQl2UaHOiLBHuXZ3ISI2fJXay7e32s1l6z5F5PGMGwTQtUedzWI2w==}
     peerDependencies:
       '@tanstack/react-query': ^5.59.15
-      '@trpc/client': 11.0.0-rc.643+0914e43c5
-      '@trpc/server': 11.0.0-rc.643+0914e43c5
+      '@trpc/client': 11.0.0-rc.648+77b4d8920
+      '@trpc/server': 11.0.0-rc.648+77b4d8920
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
       typescript: '>=5.6.2'
@@ -9403,7 +9403,7 @@ snapshots:
       '@trpc/server': 11.0.0-rc.643(typescript@5.7.2)
       typescript: 5.7.2
 
-  '@trpc/react-query@11.0.0-rc.643(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)':
+  '@trpc/react-query@11.0.0-rc.648(@tanstack/react-query@5.61.3(react@18.3.1))(@trpc/client@11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2))(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.2)':
     dependencies:
       '@tanstack/react-query': 5.61.3(react@18.3.1)
       '@trpc/client': 11.0.0-rc.643(@trpc/server@11.0.0-rc.643(typescript@5.7.2))(typescript@5.7.2)
@@ -11766,7 +11766,7 @@ snapshots:
 
   npm@10.9.1: {}
 
-  nuqs@2.2.3(next@14.2.18(@babel/core@7.26.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  nuqs@2.2.3(next@14.2.18(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
       react: 18.3.1
