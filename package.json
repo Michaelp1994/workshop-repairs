@@ -14,7 +14,7 @@
     "lint": "turbo lint",
     "prepare": "husky",
     "start": "turbo start",
-    "test": "sst shell -- pnpm vitest",
+    "test": "sst shell -- pnpm vitest run",
     "test:e2e": "sst shell -- pnpm -F nextjs test:e2e",
     "typecheck": "turbo typecheck"
   },
