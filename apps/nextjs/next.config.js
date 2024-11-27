@@ -9,7 +9,11 @@ const config = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    serverComponentsExternalPackages: ["@node-rs/argon2"],
+    serverComponentsExternalPackages: [
+      "@node-rs/argon2",
+      "@highlight-run/node",
+      "require-in-the-middle",
+    ],
     instrumentationHook: true,
   },
 };
