@@ -1,4 +1,3 @@
-import { getTableColumns } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -61,10 +60,6 @@ export const userTable = pgTable(
   },
 );
 
-const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
-  getTableColumns(userTable);
-
-export { publicUserColumns };
 export type User = InferModel<typeof userTable>;
 export type UserID = User["id"];
 export type CreateUser = InferCreateModel<typeof userTable>;
