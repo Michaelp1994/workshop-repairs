@@ -128,7 +128,7 @@ importers:
         version: 0.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@14.2.18(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.2.3(next@14.2.18(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -319,6 +319,9 @@ importers:
       drizzle-kit:
         specifier: ^0.28.1
         version: 0.28.1
+      drizzle-seed:
+        specifier: ^0.1.2
+        version: 0.1.2(drizzle-orm@0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(@vercel/postgres@0.9.0)(pg@8.13.1)(postgres@3.4.5)(react@18.3.1))
       eslint:
         specifier: ^9.15.0
         version: 9.15.0(jiti@1.21.6)
@@ -465,7 +468,7 @@ importers:
         version: 0.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@14.2.18(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.2.3(next@14.2.18(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react-day-picker:
         specifier: ^9.4.0
         version: 9.4.0(react@18.3.1)
@@ -4071,6 +4074,14 @@ packages:
       sqlite3:
         optional: true
 
+  drizzle-seed@0.1.2:
+    resolution: {integrity: sha512-F7+1tK/f5SHXK75ISH1zKUZWslW18dr9gbYB9tQHx7t5Wm82481OE5HGKFIjWuGV1VS0eFVr7+uXl8PFwPJjPA==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.4'
+    peerDependenciesMeta:
+      drizzle-orm:
+        optional: true
+
   duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
 
@@ -5929,6 +5940,9 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  pure-rand@6.1.0:
+    resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
 
   queue-lit@1.5.2:
     resolution: {integrity: sha512-tLc36IOPeMAubu8BkW8YDBV+WyIgKlYU7zUNs0J5Vk9skSZ4JfGlPOqplP0aHdfv7HL0B2Pg6nwiq60Qc6M2Hw==}
@@ -10826,6 +10840,12 @@ snapshots:
       postgres: 3.4.5
       react: 18.3.1
 
+  drizzle-seed@0.1.2(drizzle-orm@0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(@vercel/postgres@0.9.0)(pg@8.13.1)(postgres@3.4.5)(react@18.3.1)):
+    dependencies:
+      pure-rand: 6.1.0
+    optionalDependencies:
+      drizzle-orm: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(@vercel/postgres@0.9.0)(pg@8.13.1)(postgres@3.4.5)(react@18.3.1)
+
   duplexer2@0.1.4:
     dependencies:
       readable-stream: 2.3.8
@@ -12277,7 +12297,7 @@ snapshots:
 
   npm@10.9.1: {}
 
-  nuqs@2.2.3(next@14.2.18(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  nuqs@2.2.3(next@14.2.18(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
       react: 18.3.1
@@ -12691,6 +12711,8 @@ snapshots:
       long: 5.2.3
 
   punycode@2.3.1: {}
+
+  pure-rand@6.1.0: {}
 
   queue-lit@1.5.2: {}
 
