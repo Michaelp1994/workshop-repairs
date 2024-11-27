@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -29,7 +30,7 @@ export const userTable = pgTable(
     typeId: integer().notNull(),
     emailVerified: boolean().notNull().default(false),
     onboardingCompleted: boolean().notNull().default(false),
-    organizationId: integer().references(() => organizationTable.id),
+    organizationId: integer(),
     image: text(),
     createdAt: timestamp().notNull().defaultNow(),
     updatedAt: timestamp().$onUpdate(() => new Date()),
@@ -38,27 +39,40 @@ export const userTable = pgTable(
     updatedById: integer(),
     deletedById: integer(),
   },
-  (t) => {
-    return {
-      type: foreignKey({
-        columns: [t.typeId],
-        foreignColumns: [userTypeTable.id],
-      }),
-      createdBy: foreignKey({
-        columns: [t.createdById],
-        foreignColumns: [t.id],
-      }),
-      updatedBy: foreignKey({
-        columns: [t.updatedById],
-        foreignColumns: [t.id],
-      }),
-      deletedBy: foreignKey({
-        columns: [t.deletedById],
-        foreignColumns: [t.id],
-      }),
-    };
-  },
+  (t) => [
+    foreignKey({
+      columns: [t.organizationId],
+      foreignColumns: [organizationTable.id],
+    }),
+    foreignKey({
+      columns: [t.typeId],
+      foreignColumns: [userTypeTable.id],
+    }),
+    foreignKey({
+      columns: [t.createdById],
+      foreignColumns: [t.id],
+    }),
+    foreignKey({
+      columns: [t.updatedById],
+      foreignColumns: [t.id],
+    }),
+    foreignKey({
+      columns: [t.deletedById],
+      foreignColumns: [t.id],
+    }),
+  ],
 );
+
+export const userRelations = relations(userTable, ({ one }) => ({
+  userType: one(userTypeTable, {
+    fields: [userTable.typeId],
+    references: [userTypeTable.id],
+  }),
+  organization: one(organizationTable, {
+    fields: [userTable.organizationId],
+    references: [organizationTable.id],
+  }),
+}));
 
 export type User = InferModel<typeof userTable>;
 export type UserID = User["id"];

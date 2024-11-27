@@ -3,10 +3,6 @@ import { seed } from "drizzle-seed";
 import { db } from "../src/index";
 import { schema } from "../src/tables";
 
-async function main() {
-  console.log("seeding database...");
-  await seed(db, schema);
-  console.log("db seeded.");
-}
-
-main();
+console.log("seeding database...");
+await seed(db, schema);
+console.log("db seeded.");
