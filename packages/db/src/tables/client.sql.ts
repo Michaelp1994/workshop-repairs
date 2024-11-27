@@ -7,7 +7,7 @@ import type {
   InferUpdateModel,
 } from "../types";
 
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 
 export const clientTable = pgTable(
@@ -18,7 +18,8 @@ export const clientTable = pgTable(
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
-    ...metadataColumns,
+    ...timestamps,
+    ...auditing,
   },
   (t) => [unique().on(t.name, t.organizationId)],
 );

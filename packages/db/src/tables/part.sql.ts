@@ -6,7 +6,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 
 export const partTable = pgTable("part", {
@@ -17,7 +17,8 @@ export const partTable = pgTable("part", {
     .notNull()
     .references(() => organizationTable.id),
   info: varchar(),
-  ...metadataColumns,
+  ...timestamps,
+  ...auditing,
 });
 
 export type Part = InferModel<typeof partTable>;

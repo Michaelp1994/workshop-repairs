@@ -14,11 +14,7 @@ export const partsToModelTable = pgTable(
       .notNull()
       .references(() => modelTable.id),
   },
-  (t) => {
-    return {
-      pk: primaryKey({ columns: [t.partId, t.modelId] }),
-    };
-  },
+  (t) => [primaryKey({ columns: [t.partId, t.modelId] })],
 );
 
 export type PartToModel = typeof partsToModelTable.$inferSelect;

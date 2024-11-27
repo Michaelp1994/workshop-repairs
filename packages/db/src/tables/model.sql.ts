@@ -13,9 +13,9 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { auditing, timestamps } from "./columns.helpers";
 import { equipmentTypeTable } from "./equipment-type.sql";
 import { manufacturerTable } from "./manufacturer.sql";
-import metadataColumns from "./metadata-columns";
 import { modelImageTable } from "./model-image.sql";
 import { organizationTable } from "./organization.sql";
 
@@ -35,7 +35,8 @@ export const modelTable = pgTable(
       .notNull()
       .references(() => equipmentTypeTable.id),
     defaultImageId: integer(),
-    ...metadataColumns,
+    ...timestamps,
+    ...auditing,
   },
   (table) => [
     unique().on(table.name, table.organizationId),

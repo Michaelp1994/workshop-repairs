@@ -6,7 +6,6 @@ import {
   pgTable,
   serial,
   text,
-  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -16,6 +15,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 import { userTypeTable } from "./user-type.sql";
 
@@ -32,9 +32,7 @@ export const userTable = pgTable(
     onboardingCompleted: boolean().notNull().default(false),
     organizationId: integer(),
     image: text(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().$onUpdate(() => new Date()),
-    deletedAt: timestamp(),
+    ...timestamps,
     createdById: integer(),
     updatedById: integer(),
     deletedById: integer(),

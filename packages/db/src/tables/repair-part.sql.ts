@@ -6,7 +6,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 import { partTable } from "./part.sql";
 import { repairTable } from "./repair.sql";
 
@@ -20,7 +20,8 @@ export const repairPartTable = pgTable("repair_part", {
   partId: integer()
     .notNull()
     .references(() => partTable.id),
-  ...metadataColumns,
+  ...timestamps,
+  ...auditing,
 });
 
 export type RepairPart = InferModel<typeof repairPartTable>;

@@ -12,7 +12,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
 
 export const modelImageTable = pgTable("model_image", {
@@ -22,7 +22,8 @@ export const modelImageTable = pgTable("model_image", {
   modelId: integer()
     .notNull()
     .references((): AnyPgColumn => modelTable.id),
-  ...metadataColumns,
+  ...timestamps,
+  ...auditing,
 });
 
 export type ModelImage = InferModel<typeof modelImageTable>;

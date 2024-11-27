@@ -6,12 +6,13 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 
 export const repairTypeTable = pgTable("repair_type", {
   id: serial().primaryKey(),
   name: text().notNull().unique(),
-  ...metadataColumns,
+  ...timestamps,
+  ...auditing,
 });
 
 export type RepairType = InferModel<typeof repairTypeTable>;

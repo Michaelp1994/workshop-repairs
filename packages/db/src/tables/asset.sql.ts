@@ -8,8 +8,8 @@ import type {
 } from "../types";
 
 import { assetStatusTable } from "./asset-status.sql";
+import { auditing, timestamps } from "./columns.helpers";
 import { locationTable } from "./location.sql";
-import metadataColumns from "./metadata-columns";
 import { modelTable } from "./model.sql";
 import { organizationTable } from "./organization.sql";
 
@@ -35,7 +35,8 @@ export const assetTable = pgTable(
     locationId: integer()
       .notNull()
       .references(() => locationTable.id),
-    ...metadataColumns,
+    ...timestamps,
+    ...auditing,
   },
   (t) => [unique().on(t.serialNumber, t.organizationId)],
 );

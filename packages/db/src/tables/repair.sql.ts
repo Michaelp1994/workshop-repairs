@@ -8,7 +8,7 @@ import {
 } from "../types";
 import { assetTable } from "./asset.sql";
 import { clientTable } from "./client.sql";
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 import { repairStatusTypeTable } from "./repair-status-type.sql";
 import { repairTypeTable } from "./repair-type.sql";
@@ -33,7 +33,8 @@ export const repairTable = pgTable("repair", {
   assetId: integer()
     .notNull()
     .references(() => assetTable.id),
-  ...metadataColumns,
+  ...timestamps,
+  ...auditing,
 });
 
 export type Repair = InferModel<typeof repairTable>;

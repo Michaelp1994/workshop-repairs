@@ -6,12 +6,13 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import { auditing, timestamps } from "./columns.helpers";
 
 export const assetStatusTable = pgTable("asset_status", {
   id: serial().primaryKey(),
   name: text().notNull().unique(),
-  ...metadataColumns,
+  ...timestamps,
+  ...auditing,
 });
 
 export type AssetStatus = InferModel<typeof assetStatusTable>;
