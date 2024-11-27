@@ -8,6 +8,10 @@ on:
 
 jobs:
   release:
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
