@@ -1,3 +1,5 @@
+import { withHighlightConfig } from "@highlight-run/next/config";
+
 /** @type import("next").NextConfig */
 const config = {
   eslint: {
@@ -8,7 +10,8 @@ const config = {
   },
   experimental: {
     serverComponentsExternalPackages: ["@node-rs/argon2"],
+    instrumentationHook: true,
   },
 };
 
-export default config;
+export default withHighlightConfig(config);
