@@ -9,7 +9,7 @@ async function handler(req: NextRequest) {
     endpoint: "/api/trpc",
     req,
     router: appRouter,
-    createContext: ({ resHeaders }) => createTRPCContext(req, resHeaders),
+    createContext: createTRPCContext,
   });
   return results;
 }

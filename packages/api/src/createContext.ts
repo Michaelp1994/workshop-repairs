@@ -1,5 +1,4 @@
 import { verifyToken } from "@repo/auth/tokens";
-import { db } from "@repo/db";
 import { parse, serialize, type SerializeOptions } from "cookie";
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
@@ -16,19 +15,25 @@ function getCookie(headers: Headers, name: string) {
   return cookies[name];
 }
 
-export async function createTRPCContext(
-  opts: { headers: Headers },
-  resHeaders?: Headers,
-) {
+interface CreateTRPCContextOptions {
+  req: {
+    headers: Headers;
+  };
+  resHeaders?: Headers;
+}
+
+export async function createTRPCContext({
+  req,
+  resHeaders,
+}: CreateTRPCContextOptions) {
   function setCookie(name: string, value: string, options: SerializeOptions) {
     resHeaders?.append("Set-Cookie", serialize(name, value, options));
   }
-  const authCookie = getCookie(opts.headers, "Authorization");
+  const authCookie = getCookie(req.headers, "Authorization");
   const token = authCookie?.split(" ")[1];
   if (!token) {
     console.log("no token");
     return {
-      db,
       setCookie,
       session: null,
     };
@@ -40,14 +45,12 @@ export async function createTRPCContext(
       organizationId: verifiedToken.payload.organizationId,
     };
     return {
-      db,
       setCookie,
       session: session,
     };
   } catch {
     console.log(`Bad token: ${token}`);
     return {
-      db,
       setCookie,
       session: null,
     };
