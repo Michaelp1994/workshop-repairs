@@ -1,3 +1,5 @@
+import { withHighlightConfig } from "@highlight-run/next/config";
+
 /** @type import("next").NextConfig */
 const config = {
   eslint: {
@@ -7,8 +9,13 @@ const config = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    serverComponentsExternalPackages: ["@node-rs/argon2"],
+    serverComponentsExternalPackages: [
+      "@node-rs/argon2",
+      "@highlight-run/node",
+      "require-in-the-middle",
+    ],
+    instrumentationHook: true,
   },
 };
 
-export default config;
+export default withHighlightConfig(config);

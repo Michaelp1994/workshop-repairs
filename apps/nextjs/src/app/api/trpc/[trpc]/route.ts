@@ -4,14 +4,21 @@ import { createTRPCContext } from "@repo/api/createContext";
 import { appRouter } from "@repo/api/router";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
-async function handler(req: NextRequest) {
-  const results = await fetchRequestHandler({
+import { withServerTelemetry } from "~/telemetry/withServerTelemetry";
+
+const handler = withServerTelemetry(async function GET(req: NextRequest) {
+  const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
     req,
     router: appRouter,
-    createContext: ({ resHeaders }) => createTRPCContext(req, resHeaders),
+    createContext: createTRPCContext,
+    onError: ({ error }) => {
+      throw error;
+    },
   });
-  return results;
-}
+  return response;
+});
+
+export const runtime = "nodejs";
 
 export { handler as GET, handler as POST };
