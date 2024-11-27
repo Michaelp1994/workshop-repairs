@@ -1,3 +1,5 @@
+import type React from "react";
+
 import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 import { redirect } from "next/navigation";
 
@@ -8,9 +10,13 @@ import NavBar from "./_components/NavBar";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
+  breadcrumbs: React.ReactNode;
 }
 
-export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
+export default function ProtectedLayout({
+  children,
+  breadcrumbs,
+}: ProtectedLayoutProps) {
   if (!isAuthenticated()) {
     redirect("/login");
   }
@@ -18,7 +24,7 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <NavBar />
+        <NavBar>{breadcrumbs}</NavBar>
         <div className="mx-auto w-full max-w-6xl">
           <div className="h-full p-4">{children}</div>
         </div>
