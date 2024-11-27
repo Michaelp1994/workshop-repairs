@@ -9,7 +9,6 @@ export default $config({
     };
   },
   async run() {
-    const env = await import("./infra/env");
     const email = await import("./infra/email");
     const storage = await import("./infra/storage");
     const web = await import("./infra/web");

@@ -15,10 +15,6 @@ declare module "sst" {
       sender: string;
       type: "sst.aws.Email";
     };
-    JWT_SECRET: {
-      type: "sst.sst.Secret";
-      value: string;
-    };
     MyRouter: {
       type: "sst.aws.Router";
       url: string;

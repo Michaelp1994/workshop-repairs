@@ -1,8 +1,7 @@
-import { jwtSecret } from "./env";
 import { bucket, rds, vpc, router } from "./storage";
 
 export const nextjs = new sst.aws.Nextjs("MyWeb", {
-  link: [bucket, router, rds, jwtSecret],
+  link: [bucket, router, rds],
   dev: {
     directory: "./apps/nextjs",
     command: "pnpm run dev",
