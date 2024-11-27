@@ -3,7 +3,8 @@ name: Versioning
 on:
   push:
     branches:
-      - main, ci/test
+      - main
+      - ci/test
 
 jobs:
   release:
