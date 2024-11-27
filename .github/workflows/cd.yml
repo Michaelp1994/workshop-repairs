@@ -31,3 +31,6 @@ jobs:
 
       - name: Deploy
         run: pnpm sst deploy --stage production
+
+      - name: Run any migrations on Database
+        run: pnpm db migrate --stage production
