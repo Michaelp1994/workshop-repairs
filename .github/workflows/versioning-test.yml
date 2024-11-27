@@ -1,4 +1,4 @@
-name: Testing CI
+name: Testing versioning
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - ci/test
 
 jobs:
-  release:
+  release-test:
     permissions:
       contents: write
 
