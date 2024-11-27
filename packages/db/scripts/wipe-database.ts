@@ -1,13 +1,12 @@
-import { sql } from "drizzle-orm";
+import { reset } from "drizzle-seed";
 
 import { db } from "../src/index";
 import { schema } from "../src/tables";
 
-await db.transaction(async (tx) => {
-  await tx.execute(sql`SET CONSTRAINTS ALL DEFERRED;`);
-  for await (const table of Object.values(schema)) {
-    await tx.execute(sql`DROP TABLE IF EXISTS ${table} CASCADE;`);
-  }
-});
+async function main() {
+  console.log("wiping database...");
+  await reset(db, schema);
+  console.log("db wiped.");
+}
 
-console.log("done cleaning");
+main();
