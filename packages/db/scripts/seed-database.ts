@@ -1,30 +1,25 @@
-import { reset, seed } from "drizzle-seed";
-
+import asset_statuses from "../seed/asset_statuses.json";
+import repair_status_types from "../seed/repair_status_types.json";
+import repair_types from "../seed/repair_types.json";
+import user_types from "../seed/user_types.json";
 import { db } from "../src/index";
-import { schema } from "../src/tables";
+import { assetStatusTable } from "../src/tables/asset-status.sql";
+import { repairStatusTypeTable } from "../src/tables/repair-status-type.sql";
+import { repairTypeTable } from "../src/tables/repair-type.sql";
+import { userTypeTable } from "../src/tables/user-type.sql";
 
-// TODO: these tables don't work for now as model and modelImage are cyclically dependent
-// https://github.com/drizzle-team/drizzle-orm/issues/3635
+console.log("Seeding database...");
 
-const {
-  assetTable,
-  modelImageTable,
-  modelTable,
-  partsToModelTable,
-  repairCommentTable,
-  repairImageTable,
-  repairPartTable,
-  repairTable,
-  userOnboardingTable,
-  ...selectedSchema
-} = schema;
-
-console.log("resetting database...");
-await reset(db, selectedSchema);
-console.log("db reset.");
-
-console.log("seeding database...");
-await seed(db, selectedSchema);
-console.log("db seeded.");
-
-process.exit();
+try {
+  await db.transaction(async (t) => {
+    await t.insert(assetStatusTable).values(asset_statuses);
+    await t.insert(repairStatusTypeTable).values(repair_status_types);
+    await t.insert(repairTypeTable).values(repair_types);
+    await t.insert(userTypeTable).values(user_types);
+    console.log("Database seeded successfully!");
+  });
+} catch (e) {
+  console.error("Failed to seed database!");
+  console.log(e);
+  process.exit(1);
+}
