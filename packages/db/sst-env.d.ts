@@ -32,6 +32,7 @@ declare module "sst" {
       username: string;
     };
     Vpc1: {
+      bastion: string;
       type: "sst.aws.Vpc";
     };
   }

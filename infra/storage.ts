@@ -12,7 +12,7 @@ export const router = new sst.aws.Router("MyRouter", {
   },
 });
 
-export const vpc = new sst.aws.Vpc("Vpc1", { nat: "ec2" });
+export const vpc = new sst.aws.Vpc("Vpc1", { nat: "ec2", bastion: true });
 
 const password = process.env.DEV_POSTGRES_PASSWORD;
 const username = process.env.DEV_POSTGRES_USER;
@@ -28,6 +28,7 @@ if ($dev) {
 
 export const rds = new sst.aws.Postgres("Postgres", {
   vpc,
+  proxy: true,
   dev: {
     username,
     password,
