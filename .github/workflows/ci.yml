@@ -35,19 +35,15 @@ jobs:
         run: pnpm run lint
 
       - name: Test
+        id: test
         run: pnpm run test
-        continue-on-error: true
 
       - name: Upload log file if tests fail
-        if: failure() # This condition checks if the previous step failed
+        if: steps.test.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: sst-log.log
           path: "./.sst/log/sst.log"
-
-      - name: Stop execution if tests fail
-        if: failure()
-        run: exit 1 # Explicitly fail the workflow
 
       - name: Deploy
         run: pnpm sst deploy --stage pr-${{ github.event.number }}
