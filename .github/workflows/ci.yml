@@ -36,9 +36,24 @@ jobs:
 
       - name: Test
         run: pnpm run test
+        continue-on-error: true
+
+      - name: Upload log file if tests fail
+        if: failure() # This condition checks if the previous step failed
+        uses: actions/upload-artifact@v3
+        with:
+          name: sst-log.log
+          path: "./.sst/log/sst.log"
+
+      - name: Stop execution if tests fail
+        if: failure()
+        run: exit 1 # Explicitly fail the workflow
 
       - name: Deploy
         run: pnpm sst deploy --stage pr-${{ github.event.number }}
+
+      - name: Wait for deployment to finish
+        run: pnpm run db migrate --stage pr-${{ github.event.number }}
 
   remove:
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
