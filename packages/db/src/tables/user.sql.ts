@@ -17,6 +17,7 @@ import {
 } from "../types";
 import { timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
+import { userOnboardingTable } from "./user-onboarding.sql";
 import { userTypeTable } from "./user-type.sql";
 
 export const userTable = pgTable(
@@ -62,6 +63,7 @@ export const userTable = pgTable(
 );
 
 export const userRelations = relations(userTable, ({ one }) => ({
+  userOnboarding: one(userOnboardingTable),
   userType: one(userTypeTable, {
     fields: [userTable.typeId],
     references: [userTypeTable.id],

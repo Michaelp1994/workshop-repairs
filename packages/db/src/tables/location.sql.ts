@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
@@ -6,6 +7,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { assetTable } from "./asset.sql";
 import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 
@@ -23,6 +25,14 @@ export const locationTable = pgTable(
   },
   (t) => [unique().on(t.name, t.organizationId)],
 );
+
+export const locationRelations = relations(locationTable, ({ one, many }) => ({
+  organization: one(organizationTable, {
+    fields: [locationTable.organizationId],
+    references: [organizationTable.id],
+  }),
+  assets: many(assetTable),
+}));
 
 export type Location = InferModel<typeof locationTable>;
 export type LocationID = Location["id"];

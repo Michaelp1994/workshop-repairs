@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
 import {
@@ -19,6 +20,13 @@ export const repairImageTable = pgTable("repair_image", {
   ...timestamps,
   ...auditing,
 });
+
+export const repairImageRelations = relations(repairImageTable, ({ one }) => ({
+  repair: one(repairTable, {
+    fields: [repairImageTable.repairId],
+    references: [repairTable.id],
+  }),
+}));
 
 export type RepairImage = InferModel<typeof repairImageTable>;
 export type RepairImageID = RepairImage["id"];

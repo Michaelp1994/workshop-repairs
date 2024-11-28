@@ -7,6 +7,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { organizationInvitationTable } from "./organization-invitation.sql";
 import { userTable } from "./user.sql";
 
 export const organizationTable = pgTable("organization", {
@@ -20,6 +21,7 @@ export const organizationRelations = relations(
   organizationTable,
   ({ many }) => ({
     users: many(userTable),
+    invitations: many(organizationInvitationTable),
   }),
 );
 

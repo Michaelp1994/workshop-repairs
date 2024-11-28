@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
 
 import type {
@@ -12,6 +13,7 @@ import { auditing, timestamps } from "./columns.helpers";
 import { locationTable } from "./location.sql";
 import { modelTable } from "./model.sql";
 import { organizationTable } from "./organization.sql";
+import { repairTable } from "./repair.sql";
 
 export const assetTable = pgTable(
   "asset",
@@ -40,6 +42,30 @@ export const assetTable = pgTable(
   },
   (t) => [unique().on(t.serialNumber, t.organizationId)],
 );
+
+export const assetRelations = relations(assetTable, ({ one, many }) => ({
+  repair: many(repairTable),
+  organization: one(organizationTable, {
+    fields: [assetTable.organizationId],
+    references: [organizationTable.id],
+  }),
+  status: one(assetStatusTable, {
+    fields: [assetTable.statusId],
+    references: [assetStatusTable.id],
+  }),
+  model: one(modelTable, {
+    fields: [assetTable.modelId],
+    references: [modelTable.id],
+  }),
+  client: one(modelTable, {
+    fields: [assetTable.modelId],
+    references: [modelTable.id],
+  }),
+  location: one(locationTable, {
+    fields: [assetTable.locationId],
+    references: [locationTable.id],
+  }),
+}));
 
 export type Asset = InferModel<typeof assetTable>;
 export type AssetID = Asset["id"];

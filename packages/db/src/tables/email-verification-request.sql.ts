@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -30,6 +31,13 @@ export const emailVerificationRequestTable = pgTable(
     emailVerified: boolean().notNull().default(false),
     twoFactorVerified: boolean().notNull().default(false),
   },
+);
+
+export const emailVerificationRequestRelations = relations(
+  emailVerificationRequestTable,
+  ({ many }) => ({
+    users: many(userTable),
+  }),
 );
 
 export type EmailVerificationRequest = InferModel<

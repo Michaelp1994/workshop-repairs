@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
   integer,
@@ -25,6 +26,13 @@ export const modelImageTable = pgTable("model_image", {
   ...timestamps,
   ...auditing,
 });
+
+export const modelImageRelations = relations(modelImageTable, ({ one }) => ({
+  model: one(modelTable, {
+    fields: [modelImageTable.modelId],
+    references: [modelTable.id],
+  }),
+}));
 
 export type ModelImage = InferModel<typeof modelImageTable>;
 export type ModelImageID = ModelImage["id"];

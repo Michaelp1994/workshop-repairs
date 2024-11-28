@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
 import {
@@ -7,6 +8,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { auditing, timestamps } from "./columns.helpers";
+import { repairTable } from "./repair.sql";
 
 export const repairStatusTypeTable = pgTable("repair_status_type", {
   id: serial().primaryKey(),
@@ -15,6 +17,13 @@ export const repairStatusTypeTable = pgTable("repair_status_type", {
   ...timestamps,
   ...auditing,
 });
+
+export const repairStatusTypeRelations = relations(
+  repairStatusTypeTable,
+  ({ many }) => ({
+    repairs: many(repairTable),
+  }),
+);
 
 export type RepairStatusType = InferModel<typeof repairStatusTypeTable>;
 export type RepairStatusTypeID = RepairStatusType["id"];

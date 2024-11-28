@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 import {
@@ -18,6 +19,16 @@ export const repairCommentTable = pgTable("repair_comment", {
   ...timestamps,
   ...auditing,
 });
+
+export const repairCommentRelations = relations(
+  repairCommentTable,
+  ({ one }) => ({
+    repair: one(repairTable, {
+      fields: [repairCommentTable.repairId],
+      references: [repairTable.id],
+    }),
+  }),
+);
 
 export type RepairComment = InferModel<typeof repairCommentTable>;
 export type RepairCommentID = RepairComment["id"];

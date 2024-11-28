@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
@@ -21,6 +22,17 @@ export const manufacturerTable = pgTable(
     ...auditing,
   },
   (t) => [unique().on(t.name, t.organizationId)],
+);
+
+export const manufacturerRelations = relations(
+  manufacturerTable,
+  ({ one, many }) => ({
+    organization: one(organizationTable, {
+      fields: [manufacturerTable.organizationId],
+      references: [organizationTable.id],
+    }),
+    models: many(manufacturerTable),
+  }),
 );
 
 export type Manufacturer = InferModel<typeof manufacturerTable>;

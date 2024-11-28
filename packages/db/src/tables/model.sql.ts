@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   foreignKey,
   integer,
@@ -47,6 +48,26 @@ export const modelTable = pgTable(
     }),
   ],
 );
+
+export const modelRelations = relations(modelTable, ({ one, many }) => ({
+  images: many(modelImageTable),
+  manufacturer: one(manufacturerTable, {
+    fields: [modelTable.manufacturerId],
+    references: [manufacturerTable.id],
+  }),
+  organization: one(organizationTable, {
+    fields: [modelTable.organizationId],
+    references: [organizationTable.id],
+  }),
+  equipmentType: one(equipmentTypeTable, {
+    fields: [modelTable.equipmentTypeId],
+    references: [equipmentTypeTable.id],
+  }),
+  defaultImage: one(modelImageTable, {
+    fields: [modelTable.defaultImageId],
+    references: [modelImageTable.id],
+  }),
+}));
 
 export type Model = InferModel<typeof modelTable>;
 export type ModelID = Model["id"];
