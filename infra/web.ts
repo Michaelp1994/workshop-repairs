@@ -1,5 +1,10 @@
 import { bucket, rds, router, vpc } from "./storage";
 
+const domain =
+  $app.stage === "production"
+    ? "workshop-repairs.click"
+    : `${$app.stage}.workshop-repairs.click`;
+
 export const nextjs = new sst.aws.Nextjs("MyWeb", {
   link: [bucket, router, rds],
   dev: {
@@ -8,7 +13,7 @@ export const nextjs = new sst.aws.Nextjs("MyWeb", {
   },
   vpc: vpc,
   path: "apps/nextjs",
-  domain: "workshop-repairs.click",
+  domain,
   environment: {
     REACT_EDITOR: "code",
     NEXT_PUBLIC_URL:
