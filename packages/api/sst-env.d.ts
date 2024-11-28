@@ -23,16 +23,15 @@ declare module "sst" {
       type: "sst.aws.Nextjs";
       url: string;
     };
-    Postgres1: {
+    Postgres: {
       database: string;
       host: string;
       password: string;
       port: number;
-      type: "sst.sst.Linkable";
+      type: "sst.aws.Postgres";
       username: string;
     };
     Vpc1: {
-      bastion: string;
       type: "sst.aws.Vpc";
     };
   }

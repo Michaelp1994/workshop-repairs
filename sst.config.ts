@@ -15,6 +15,8 @@ export default $config({
     return {
       Region: aws.getRegionOutput().name,
       nextjs: web.nextjs.url,
+      bucket: storage.router.url,
+      email: email.email.sender,
     };
   },
 });
