@@ -39,7 +39,7 @@ jobs:
         run: pnpm run test
 
       - name: Upload log file if tests fail
-        if: steps.test.outcome == 'failure'
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: sst-log.log
