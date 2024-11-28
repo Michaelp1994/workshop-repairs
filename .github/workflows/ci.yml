@@ -43,6 +43,8 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Wait for deployment to finish
         run: pnpm run db migrate --stage pr-${{ github.event.number }}
