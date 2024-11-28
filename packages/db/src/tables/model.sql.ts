@@ -14,6 +14,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 import { equipmentTypeTable } from "./equipment-type.sql";
 import { manufacturerTable } from "./manufacturer.sql";
@@ -39,11 +40,12 @@ export const modelTable = pgTable(
     ...timestamps,
     ...auditing,
   },
-  (table) => [
-    unique().on(table.name, table.organizationId),
-    unique().on(table.nickname, table.organizationId),
+  (t) => [
+    ...auditConstraints(t),
+    unique().on(t.name, t.organizationId),
+    unique().on(t.nickname, t.organizationId),
     foreignKey({
-      columns: [table.defaultImageId],
+      columns: [t.defaultImageId],
       foreignColumns: [modelImageTable.id],
     }),
   ],

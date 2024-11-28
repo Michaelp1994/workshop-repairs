@@ -7,19 +7,24 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 import { repairTable } from "./repair.sql";
 
-export const repairImageTable = pgTable("repair_image", {
-  id: serial().primaryKey(),
-  caption: varchar().notNull(),
-  url: varchar().notNull(),
-  repairId: integer()
-    .notNull()
-    .references(() => repairTable.id),
-  ...timestamps,
-  ...auditing,
-});
+export const repairImageTable = pgTable(
+  "repair_image",
+  {
+    id: serial().primaryKey(),
+    caption: varchar().notNull(),
+    url: varchar().notNull(),
+    repairId: integer()
+      .notNull()
+      .references(() => repairTable.id),
+    ...timestamps,
+    ...auditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
 
 export const repairImageRelations = relations(repairImageTable, ({ one }) => ({
   repair: one(repairTable, {

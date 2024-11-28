@@ -8,6 +8,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { assetTable } from "./asset.sql";
+import auditConstraints from "./audit-constraints.helpers";
 import { clientTable } from "./client.sql";
 import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
@@ -17,29 +18,33 @@ import { repairPartTable } from "./repair-part.sql";
 import { repairStatusTypeTable } from "./repair-status-type.sql";
 import { repairTypeTable } from "./repair-type.sql";
 
-export const repairTable = pgTable("repair", {
-  id: serial().primaryKey(),
-  fault: varchar().notNull(),
-  summary: varchar(),
-  clientId: integer()
-    .notNull()
-    .references(() => clientTable.id),
-  organizationId: integer()
-    .notNull()
-    .references(() => organizationTable.id),
-  clientReference: varchar().notNull(),
-  typeId: integer()
-    .notNull()
-    .references(() => repairTypeTable.id),
-  statusId: integer()
-    .notNull()
-    .references(() => repairStatusTypeTable.id),
-  assetId: integer()
-    .notNull()
-    .references(() => assetTable.id),
-  ...timestamps,
-  ...auditing,
-});
+export const repairTable = pgTable(
+  "repair",
+  {
+    id: serial().primaryKey(),
+    fault: varchar().notNull(),
+    summary: varchar(),
+    clientId: integer()
+      .notNull()
+      .references(() => clientTable.id),
+    organizationId: integer()
+      .notNull()
+      .references(() => organizationTable.id),
+    clientReference: varchar().notNull(),
+    typeId: integer()
+      .notNull()
+      .references(() => repairTypeTable.id),
+    statusId: integer()
+      .notNull()
+      .references(() => repairStatusTypeTable.id),
+    assetId: integer()
+      .notNull()
+      .references(() => assetTable.id),
+    ...timestamps,
+    ...auditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
 
 export const repairRelations = relations(repairTable, ({ one, many }) => ({
   images: many(repairImageTable),

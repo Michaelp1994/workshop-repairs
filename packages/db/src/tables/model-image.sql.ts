@@ -13,19 +13,24 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
 
-export const modelImageTable = pgTable("model_image", {
-  id: serial().primaryKey(),
-  url: varchar().notNull(),
-  caption: varchar(),
-  modelId: integer()
-    .notNull()
-    .references((): AnyPgColumn => modelTable.id),
-  ...timestamps,
-  ...auditing,
-});
+export const modelImageTable = pgTable(
+  "model_image",
+  {
+    id: serial().primaryKey(),
+    url: varchar().notNull(),
+    caption: varchar(),
+    modelId: integer()
+      .notNull()
+      .references((): AnyPgColumn => modelTable.id),
+    ...timestamps,
+    ...auditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
 
 export const modelImageRelations = relations(modelImageTable, ({ one }) => ({
   model: one(modelTable, {

@@ -9,6 +9,8 @@ import type {
 } from "../types";
 
 import { assetStatusTable } from "./asset-status.sql";
+import auditConstraints from "./audit-constraints.helpers";
+import { clientTable } from "./client.sql";
 import { auditing, timestamps } from "./columns.helpers";
 import { locationTable } from "./location.sql";
 import { modelTable } from "./model.sql";
@@ -40,7 +42,10 @@ export const assetTable = pgTable(
     ...timestamps,
     ...auditing,
   },
-  (t) => [unique().on(t.serialNumber, t.organizationId)],
+  (t) => [
+    unique().on(t.serialNumber, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export const assetRelations = relations(assetTable, ({ one, many }) => ({
@@ -57,9 +62,9 @@ export const assetRelations = relations(assetTable, ({ one, many }) => ({
     fields: [assetTable.modelId],
     references: [modelTable.id],
   }),
-  client: one(modelTable, {
-    fields: [assetTable.modelId],
-    references: [modelTable.id],
+  client: one(clientTable, {
+    fields: [assetTable.clientId],
+    references: [clientTable.id],
   }),
   location: one(locationTable, {
     fields: [assetTable.locationId],

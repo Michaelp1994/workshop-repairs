@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, unique } from "drizzle-orm/pg-core";
+import { pgTable, serial, text } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -8,6 +8,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { assetTable } from "./asset.sql";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 
 export const assetStatusTable = pgTable(
@@ -18,7 +19,7 @@ export const assetStatusTable = pgTable(
     ...timestamps,
     ...auditing,
   },
-  (t) => [unique().on(t.name)],
+  (t) => [...auditConstraints(t)],
 );
 
 export const assetStatusRelations = relations(assetStatusTable, ({ many }) => ({

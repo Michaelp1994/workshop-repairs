@@ -7,21 +7,26 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 import { partsToModelTable } from "./parts-to-model.sql";
 
-export const partTable = pgTable("part", {
-  id: serial().primaryKey(),
-  name: varchar().notNull(),
-  partNumber: varchar().notNull(),
-  organizationId: integer()
-    .notNull()
-    .references(() => organizationTable.id),
-  info: varchar(),
-  ...timestamps,
-  ...auditing,
-});
+export const partTable = pgTable(
+  "part",
+  {
+    id: serial().primaryKey(),
+    name: varchar().notNull(),
+    partNumber: varchar().notNull(),
+    organizationId: integer()
+      .notNull()
+      .references(() => organizationTable.id),
+    info: varchar(),
+    ...timestamps,
+    ...auditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
 
 export const partRelations = relations(partTable, ({ one, many }) => ({
   organization: one(organizationTable, {

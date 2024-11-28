@@ -8,6 +8,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { assetTable } from "./asset.sql";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 
@@ -23,7 +24,7 @@ export const locationTable = pgTable(
     ...timestamps,
     ...auditing,
   },
-  (t) => [unique().on(t.name, t.organizationId)],
+  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
 );
 
 export const locationRelations = relations(locationTable, ({ one, many }) => ({

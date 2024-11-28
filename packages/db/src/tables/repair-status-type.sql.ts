@@ -7,16 +7,21 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
 import { auditing, timestamps } from "./columns.helpers";
 import { repairTable } from "./repair.sql";
 
-export const repairStatusTypeTable = pgTable("repair_status_type", {
-  id: serial().primaryKey(),
-  name: varchar().notNull().unique(),
-  colour: varchar().notNull(),
-  ...timestamps,
-  ...auditing,
-});
+export const repairStatusTypeTable = pgTable(
+  "repair_status_type",
+  {
+    id: serial().primaryKey(),
+    name: varchar().notNull().unique(),
+    colour: varchar().notNull(),
+    ...timestamps,
+    ...auditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
 
 export const repairStatusTypeRelations = relations(
   repairStatusTypeTable,

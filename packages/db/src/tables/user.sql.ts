@@ -16,6 +16,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { timestamps } from "./columns.helpers";
+import { emailVerificationRequestTable } from "./email-verification-request.sql";
 import { organizationTable } from "./organization.sql";
 import { userOnboardingTable } from "./user-onboarding.sql";
 import { userTypeTable } from "./user-type.sql";
@@ -62,8 +63,9 @@ export const userTable = pgTable(
   ],
 );
 
-export const userRelations = relations(userTable, ({ one }) => ({
+export const userRelations = relations(userTable, ({ one, many }) => ({
   userOnboarding: one(userOnboardingTable),
+  emailVerificationRequests: many(emailVerificationRequestTable),
   userType: one(userTypeTable, {
     fields: [userTable.typeId],
     references: [userTypeTable.id],
