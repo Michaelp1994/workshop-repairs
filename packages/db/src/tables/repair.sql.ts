@@ -10,7 +10,7 @@ import {
 import { assetTable } from "./asset.sql";
 import auditConstraints from "./audit-constraints.helpers";
 import { clientTable } from "./client.sql";
-import { auditing, timestamps } from "./columns.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 import { repairCommentTable } from "./repair-comment.sql";
 import { repairImageTable } from "./repair-image.sql";
@@ -41,7 +41,7 @@ export const repairTable = pgTable(
       .notNull()
       .references(() => assetTable.id),
     ...timestamps,
-    ...auditing,
+    ...strictAuditing,
   },
   (t) => [...auditConstraints(t)],
 );

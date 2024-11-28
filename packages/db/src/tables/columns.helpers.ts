@@ -6,8 +6,14 @@ export const timestamps = {
   deletedAt: timestamp(),
 };
 
-export const auditing = {
+export const strictAuditing = {
   createdById: integer().notNull(),
+  updatedById: integer(),
+  deletedById: integer(),
+};
+
+export const laxAuditing = {
+  createdById: integer(),
   updatedById: integer(),
   deletedById: integer(),
 };

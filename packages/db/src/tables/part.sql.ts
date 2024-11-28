@@ -8,7 +8,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
-import { auditing, timestamps } from "./columns.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 import { partsToModelTable } from "./parts-to-model.sql";
 
@@ -23,7 +23,7 @@ export const partTable = pgTable(
       .references(() => organizationTable.id),
     info: varchar(),
     ...timestamps,
-    ...auditing,
+    ...strictAuditing,
   },
   (t) => [...auditConstraints(t)],
 );

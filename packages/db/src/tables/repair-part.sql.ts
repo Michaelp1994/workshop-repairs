@@ -8,7 +8,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
-import { auditing, timestamps } from "./columns.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { partTable } from "./part.sql";
 import { repairTable } from "./repair.sql";
 
@@ -25,7 +25,7 @@ export const repairPartTable = pgTable(
       .notNull()
       .references(() => partTable.id),
     ...timestamps,
-    ...auditing,
+    ...strictAuditing,
   },
   (t) => [...auditConstraints(t)],
 );

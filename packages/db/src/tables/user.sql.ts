@@ -15,7 +15,7 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { timestamps } from "./columns.helpers";
+import { laxAuditing, timestamps } from "./columns.helpers";
 import { emailVerificationRequestTable } from "./email-verification-request.sql";
 import { organizationTable } from "./organization.sql";
 import { userOnboardingTable } from "./user-onboarding.sql";
@@ -35,9 +35,7 @@ export const userTable = pgTable(
     organizationId: integer(),
     image: text(),
     ...timestamps,
-    createdById: integer(),
-    updatedById: integer(),
-    deletedById: integer(),
+    ...laxAuditing,
   },
   (t) => [
     foreignKey({

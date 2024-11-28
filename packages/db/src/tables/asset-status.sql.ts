@@ -9,7 +9,7 @@ import {
 } from "../types";
 import { assetTable } from "./asset.sql";
 import auditConstraints from "./audit-constraints.helpers";
-import { auditing, timestamps } from "./columns.helpers";
+import { laxAuditing, timestamps } from "./columns.helpers";
 
 export const assetStatusTable = pgTable(
   "asset_status",
@@ -17,7 +17,7 @@ export const assetStatusTable = pgTable(
     id: serial().primaryKey(),
     name: text().notNull().unique(),
     ...timestamps,
-    ...auditing,
+    ...laxAuditing,
   },
   (t) => [...auditConstraints(t)],
 );

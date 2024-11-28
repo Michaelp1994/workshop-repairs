@@ -7,13 +7,14 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import { timestamps } from "./columns.helpers";
+import { laxAuditing, timestamps } from "./columns.helpers";
 import { userTable } from "./user.sql";
 
 export const userTypeTable = pgTable("user_type", {
   id: serial().primaryKey(),
   name: varchar().notNull().unique(),
   ...timestamps,
+  ...laxAuditing,
 });
 
 export const userTypeRelations = relations(userTypeTable, ({ many }) => ({

@@ -11,7 +11,7 @@ import type {
 import { assetStatusTable } from "./asset-status.sql";
 import auditConstraints from "./audit-constraints.helpers";
 import { clientTable } from "./client.sql";
-import { auditing, timestamps } from "./columns.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { locationTable } from "./location.sql";
 import { modelTable } from "./model.sql";
 import { organizationTable } from "./organization.sql";
@@ -40,7 +40,7 @@ export const assetTable = pgTable(
       .notNull()
       .references(() => locationTable.id),
     ...timestamps,
-    ...auditing,
+    ...strictAuditing,
   },
   (t) => [
     unique().on(t.serialNumber, t.organizationId),

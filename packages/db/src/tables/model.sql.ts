@@ -15,7 +15,7 @@ import {
   type InferUpdateModel,
 } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
-import { auditing, timestamps } from "./columns.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { equipmentTypeTable } from "./equipment-type.sql";
 import { manufacturerTable } from "./manufacturer.sql";
 import { modelImageTable } from "./model-image.sql";
@@ -38,7 +38,7 @@ export const modelTable = pgTable(
       .references(() => equipmentTypeTable.id),
     defaultImageId: integer(),
     ...timestamps,
-    ...auditing,
+    ...strictAuditing,
   },
   (t) => [
     ...auditConstraints(t),

@@ -10,7 +10,7 @@ import type {
 
 import { assetTable } from "./asset.sql";
 import auditConstraints from "./audit-constraints.helpers";
-import { auditing, timestamps } from "./columns.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
 import { repairTable } from "./repair.sql";
 
@@ -23,7 +23,7 @@ export const clientTable = pgTable(
       .notNull()
       .references(() => organizationTable.id),
     ...timestamps,
-    ...auditing,
+    ...strictAuditing,
   },
   (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
 );
