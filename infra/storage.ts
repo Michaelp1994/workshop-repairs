@@ -13,11 +13,11 @@ export const router = new sst.aws.Router("MyRouter", {
 
 export const vpc = new sst.aws.Vpc("Vpc1", { nat: "ec2" });
 
-const password = process.env.POSTGRES_PASSWORD;
-const username = process.env.POSTGRES_USER;
-const host = process.env.POSTGRES_HOST;
-const database = process.env.POSTGRES_DB;
-const port = Number(process.env.POSTGRES_PORT);
+const password = process.env.DEV_POSTGRES_PASSWORD;
+const username = process.env.DEV_POSTGRES_USER;
+const host = process.env.DEV_POSTGRES_HOST;
+const database = process.env.DEV_POSTGRES_DB;
+const port = Number(process.env.DEV_POSTGRES_PORT);
 
 if ($dev) {
   if (!password || !username || !database || !port) {
