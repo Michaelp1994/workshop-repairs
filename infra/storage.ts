@@ -3,7 +3,8 @@ export const bucket = new sst.aws.Bucket("Bucket1", {
 });
 
 export const router = new sst.aws.Router("MyRouter", {
-  domain: "images.workshop-repairs.click",
+  domain:
+    $app.stage === "production" ? "images.workshop-repairs.click" : undefined,
   routes: {
     "/*": {
       bucket,
