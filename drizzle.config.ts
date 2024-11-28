@@ -4,7 +4,7 @@ import { Resource } from "sst";
 export default defineConfig({
   dialect: "postgresql",
   schema: "./packages/db/src/tables/*.sql.ts",
-  out: "./migrations",
+  out: "./packages/db/migrations",
   casing: "snake_case",
   dbCredentials: {
     host: Resource.Postgres.host,
