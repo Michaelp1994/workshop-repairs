@@ -5,11 +5,9 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  ci:
-    if: github.event.action != 'closed'
+  integration:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -70,25 +68,6 @@ jobs:
 
       - name: Reset and Seed Database
         run: pnpm sst shell --stage pr-${{ github.event.number }} -- pnpm -F db db:seed
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-  remove:
-    if: github.event.action == 'closed' && github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Remove
-        run: pnpm sst remove --stage pr-${{ github.event.number }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
