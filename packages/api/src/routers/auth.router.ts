@@ -118,6 +118,13 @@ export default router({
         path: "/",
         maxAge: 60 * 60 * 24 * 30,
       });
+      ctx.setCookie("userId", user.id.toString(), {
+        secure: false,
+        sameSite: "lax",
+        httpOnly: true,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30,
+      });
       return session;
     }),
   logout: authedProcedure.input(logoutSchema).mutation(async ({ ctx }) => {
