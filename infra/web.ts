@@ -1,3 +1,4 @@
+import { email } from "./email";
 import { bucket, rds, router, vpc } from "./storage";
 
 const domain =
@@ -6,7 +7,7 @@ const domain =
     : `${$app.stage}.workshop-repairs.click`;
 
 export const nextjs = new sst.aws.Nextjs("MyWeb", {
-  link: [bucket, router, rds],
+  link: [bucket, router, rds, email],
   dev: {
     directory: "./apps/nextjs",
     command: "pnpm run dev",
