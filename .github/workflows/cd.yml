@@ -9,9 +9,6 @@ jobs:
   deploy:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
       - name: Check out code
@@ -31,3 +28,14 @@ jobs:
 
       - name: Deploy
         run: pnpm sst deploy --stage production
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Migrate Database
+        run: pnpm sst shell --stage production -- pnpm -F db db:migrate
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -15,9 +15,9 @@ declare module "sst" {
       sender: string;
       type: "sst.aws.Email";
     };
-    JWT_SECRET: {
-      type: "sst.sst.Secret";
-      value: string;
+    MigrationLambda: {
+      name: string;
+      type: "sst.aws.Function";
     };
     MyRouter: {
       type: "sst.aws.Router";
@@ -27,13 +27,17 @@ declare module "sst" {
       type: "sst.aws.Nextjs";
       url: string;
     };
-    Postgres1: {
+    Postgres: {
       database: string;
       host: string;
       password: string;
       port: number;
-      type: "sst.sst.Linkable";
+      type: "sst.aws.Postgres";
       username: string;
+    };
+    SeedLambda: {
+      name: string;
+      type: "sst.aws.Function";
     };
     Vpc1: {
       bastion: string;

@@ -3,7 +3,8 @@ export const bucket = new sst.aws.Bucket("Bucket1", {
 });
 
 export const router = new sst.aws.Router("MyRouter", {
-  domain: "images.workshop-repairs.click",
+  domain:
+    $app.stage === "production" ? "images.workshop-repairs.click" : undefined,
   routes: {
     "/*": {
       bucket,
@@ -11,58 +12,44 @@ export const router = new sst.aws.Router("MyRouter", {
   },
 });
 
-export const vpc = new sst.aws.Vpc("Vpc1", { bastion: true, nat: "ec2" });
+export const vpc = new sst.aws.Vpc("Vpc1", { nat: "ec2", bastion: true });
 
-const password = process.env.POSTGRES_PASSWORD;
-const username = process.env.POSTGRES_USERNAME;
-const database = process.env.POSTGRES_DATABASE;
-const port = Number(process.env.POSTGRES_PORT);
+const password = process.env.DEV_POSTGRES_PASSWORD;
+const username = process.env.DEV_POSTGRES_USER;
+const host = process.env.DEV_POSTGRES_HOST;
+const database = process.env.DEV_POSTGRES_DB;
+const port = Number(process.env.DEV_POSTGRES_PORT);
 
 if ($dev) {
   if (!password || !username || !database || !port) {
     throw new Error("Please check your .env file for postgres credentials.");
   }
-  const container = docker.Container.get(
-    "LocalPostgres1",
-    "ee2b2ed8e5cc29eebe64bcfd01f47abbc01651f6f73028967c890d2ae4608468",
-  );
-  // const container = new docker.Container("LocalPostgres1", {
-  //   // Unique container name
-  //   name: `postgres-${$app.name}-dev`,
-  //   restart: "always",
-  //   image: "postgres:16.4",
-  //   ports: [
-  //     {
-  //       internal: 5432,
-  //       external: port,
-  //     },
-  //   ],
-  //   envs: [
-  //     `POSTGRES_PASSWORD=${password}`,
-  //     `POSTGRES_USER=${username}`,
-  //     `POSTGRES_DB=${database}`,
-  //   ],
-  //   volumes: [
-  //     {
-  //       // Where to store the data locally
-  //       hostPath: "/tmp/postgres-data",
-  //       containerPath: "/var/lib/postgresql/data",
-  //     },
-  //   ],
-  // });
 }
 
-export const rds = $dev
-  ? new sst.Linkable("Postgres1", {
-      properties: {
-        host: "localhost",
-        port,
-        username,
-        password,
-        database,
-      },
-    })
-  : new sst.aws.Postgres("Postgres1", { vpc, proxy: true });
+export const rds = new sst.aws.Postgres("Postgres", {
+  vpc,
+  proxy: true,
+  dev: {
+    username,
+    password,
+    database,
+    port,
+    host,
+  },
+});
+
+export const migrationLambda = new sst.aws.Function("MigrationLambda", {
+  handler: "packages/db/src/migrate.handler",
+  copyFiles: [{ from: "packages/db/migrations", to: "migrations" }],
+  link: [rds],
+  vpc,
+});
+
+export const seedLambda = new sst.aws.Function("SeedLambda", {
+  handler: "packages/db/src/seed.handler",
+  link: [rds],
+  vpc,
+});
 
 export const devCommand = new sst.x.DevCommand("Studio", {
   link: [rds],

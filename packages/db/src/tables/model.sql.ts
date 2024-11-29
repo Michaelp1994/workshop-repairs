@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   foreignKey,
   integer,
@@ -13,9 +14,10 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { equipmentTypeTable } from "./equipment-type.sql";
 import { manufacturerTable } from "./manufacturer.sql";
-import metadataColumns from "./metadata-columns";
 import { modelImageTable } from "./model-image.sql";
 import { organizationTable } from "./organization.sql";
 
@@ -35,17 +37,39 @@ export const modelTable = pgTable(
       .notNull()
       .references(() => equipmentTypeTable.id),
     defaultImageId: integer(),
-    ...metadataColumns,
+    ...timestamps,
+    ...strictAuditing,
   },
-  (table) => [
-    unique().on(table.name, table.organizationId),
-    unique().on(table.nickname, table.organizationId),
+  (t) => [
+    ...auditConstraints(t),
+    unique().on(t.name, t.organizationId),
+    unique().on(t.nickname, t.organizationId),
     foreignKey({
-      columns: [table.defaultImageId],
+      columns: [t.defaultImageId],
       foreignColumns: [modelImageTable.id],
     }),
   ],
 );
+
+export const modelRelations = relations(modelTable, ({ one, many }) => ({
+  images: many(modelImageTable),
+  manufacturer: one(manufacturerTable, {
+    fields: [modelTable.manufacturerId],
+    references: [manufacturerTable.id],
+  }),
+  organization: one(organizationTable, {
+    fields: [modelTable.organizationId],
+    references: [organizationTable.id],
+  }),
+  equipmentType: one(equipmentTypeTable, {
+    fields: [modelTable.equipmentTypeId],
+    references: [equipmentTypeTable.id],
+  }),
+  defaultImage: one(modelImageTable, {
+    fields: [modelTable.defaultImageId],
+    references: [modelImageTable.id],
+  }),
+}));
 
 export type Model = InferModel<typeof modelTable>;
 export type ModelID = Model["id"];

@@ -1,3 +1,4 @@
+"use client";
 import type { RepairCommentID } from "@repo/validators/ids.validators";
 import type { ReactNode } from "react";
 

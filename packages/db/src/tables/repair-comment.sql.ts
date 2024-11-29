@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 import {
@@ -6,17 +7,33 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { repairTable } from "./repair.sql";
 
-export const repairCommentTable = pgTable("repair_comment", {
-  id: serial().primaryKey(),
-  comment: text().notNull(),
-  repairId: integer()
-    .notNull()
-    .references(() => repairTable.id),
-  ...metadataColumns,
-});
+export const repairCommentTable = pgTable(
+  "repair_comment",
+  {
+    id: serial().primaryKey(),
+    comment: text().notNull(),
+    repairId: integer()
+      .notNull()
+      .references(() => repairTable.id),
+    ...timestamps,
+    ...strictAuditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
+
+export const repairCommentRelations = relations(
+  repairCommentTable,
+  ({ one }) => ({
+    repair: one(repairTable, {
+      fields: [repairCommentTable.repairId],
+      references: [repairTable.id],
+    }),
+  }),
+);
 
 export type RepairComment = InferModel<typeof repairCommentTable>;
 export type RepairCommentID = RepairComment["id"];

@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
   integer,
@@ -12,18 +13,31 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
 
-export const modelImageTable = pgTable("model_image", {
-  id: serial().primaryKey(),
-  url: varchar().notNull(),
-  caption: varchar(),
-  modelId: integer()
-    .notNull()
-    .references((): AnyPgColumn => modelTable.id),
-  ...metadataColumns,
-});
+export const modelImageTable = pgTable(
+  "model_image",
+  {
+    id: serial().primaryKey(),
+    url: varchar().notNull(),
+    caption: varchar(),
+    modelId: integer()
+      .notNull()
+      .references((): AnyPgColumn => modelTable.id),
+    ...timestamps,
+    ...strictAuditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
+
+export const modelImageRelations = relations(modelImageTable, ({ one }) => ({
+  model: one(modelTable, {
+    fields: [modelImageTable.modelId],
+    references: [modelTable.id],
+  }),
+}));
 
 export type ModelImage = InferModel<typeof modelImageTable>;
 export type ModelImageID = ModelImage["id"];

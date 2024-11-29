@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -24,6 +25,16 @@ export const organizationInvitationTable = pgTable("organization_invitation", {
     .notNull()
     .references(() => organizationTable.id),
 });
+
+export const organizationInvitationRelations = relations(
+  organizationInvitationTable,
+  ({ one }) => ({
+    organization: one(organizationTable, {
+      fields: [organizationInvitationTable.organizationId],
+      references: [organizationTable.id],
+    }),
+  }),
+);
 
 export type OrganizationInvitation = InferModel<
   typeof organizationInvitationTable

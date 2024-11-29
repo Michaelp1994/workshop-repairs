@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
@@ -6,7 +7,9 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
+import { modelTable } from "./model.sql";
 import { organizationTable } from "./organization.sql";
 
 export const manufacturerTable = pgTable(
@@ -17,9 +20,21 @@ export const manufacturerTable = pgTable(
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
-    ...metadataColumns,
+    ...timestamps,
+    ...strictAuditing,
   },
-  (t) => [unique().on(t.name, t.organizationId)],
+  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
+);
+
+export const manufacturerRelations = relations(
+  manufacturerTable,
+  ({ one, many }) => ({
+    organization: one(organizationTable, {
+      fields: [manufacturerTable.organizationId],
+      references: [organizationTable.id],
+    }),
+    models: many(modelTable),
+  }),
 );
 
 export type Manufacturer = InferModel<typeof manufacturerTable>;
