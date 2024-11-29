@@ -63,13 +63,13 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Migrate Database
-        run: pnpm db:migrate
+        run: pnpm sst shell --stage pr-${{ github.event.number }} -- pnpm -F db db:migrate
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Seed Database
-        run: pnpm db:seed
+        run: pnpm sst shell --stage pr-${{ github.event.number }} -- pnpm -F db db:seed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
