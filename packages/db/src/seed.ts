@@ -20,11 +20,12 @@ export async function handler() {
       await t.insert(repairStatusTypeTable).values(repair_status_types);
       await t.insert(repairTypeTable).values(repair_types);
       await t.insert(userTypeTable).values(user_types);
-      return "Database seeded successfully!";
+      console.log("Database seeded successfully!");
     });
+    return "Database seeded successfully.";
   } catch (e) {
-    console.error("Failed to seed database!");
+    console.error("Failed to seed database.");
     console.log(e);
-    process.exit(1);
+    return "Failed to seed database.";
   }
 }

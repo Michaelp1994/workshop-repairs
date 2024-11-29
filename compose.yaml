@@ -1,5 +1,6 @@
-version: "3.9" # Latest version of Docker Compose
-
+version:
+  "3.9"
+  # This is a simple docker container for running a postgres database in the local dev environment.
 services:
   db:
     image: postgres:latest
