@@ -46,8 +46,14 @@ jobs:
           NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
-      - name: Wait for deployment to finish
-        run: pnpm run db migrate --stage pr-${{ github.event.number }}
+      - name: Migrate Database
+        run: pnpm db:migrate
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Seed Database
+        run: pnpm db:seed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -57,10 +63,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
 
       - name: Install dependencies
         run: pnpm install

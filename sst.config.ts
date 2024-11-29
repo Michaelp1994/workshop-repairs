@@ -1,4 +1,5 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+
 export default $config({
   app(input) {
     return {
@@ -17,6 +18,8 @@ export default $config({
       nextjs: web.nextjs.url,
       bucket: storage.router.url,
       email: email.email.sender,
+      migrate: storage.migrationLambda.name,
+      seed: storage.seedLambda.name,
     };
   },
 });

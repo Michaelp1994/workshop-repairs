@@ -38,6 +38,19 @@ export const rds = new sst.aws.Postgres("Postgres", {
   },
 });
 
+export const migrationLambda = new sst.aws.Function("MigrationLambda", {
+  handler: "packages/db/src/migrate.handler",
+  copyFiles: [{ from: "packages/db/migrations", to: "migrations" }],
+  link: [rds],
+  vpc,
+});
+
+export const seedLambda = new sst.aws.Function("SeedLambda", {
+  handler: "packages/db/src/seed.handler",
+  link: [rds],
+  vpc,
+});
+
 export const devCommand = new sst.x.DevCommand("Studio", {
   link: [rds],
   dev: {
