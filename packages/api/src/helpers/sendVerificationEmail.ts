@@ -23,22 +23,21 @@ export default async function sendVerificationEmail(
   });
 
   assertDatabaseResult(request);
-
   if (process.env["NODE_ENV"] === "production") {
     await client.send(
       new SendEmailCommand({
-        FromEmailAddress: Resource.Email1.sender,
+        FromEmailAddress: `no-reply@${Resource.Email1.sender}`,
         Destination: {
           ToAddresses: [email],
         },
         Content: {
           Simple: {
             Subject: {
-              Data: "Verify your email address",
+              Data: "Verify your email address - AssetRx",
             },
             Body: {
               Text: {
-                Data: `Verification Code: ${code}`,
+                Data: `Your verification code is ${code}. This code will expire in 10 minutes. Please don't share this code with anyone.`,
               },
             },
           },

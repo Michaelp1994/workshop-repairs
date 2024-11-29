@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo build",
+    "build": "sst shell -- pnpm -F nextjs build",
     "clean": "turbo clean && rm -rf .turbo node_modules .sst",
     "commitlint": "commitlint --edit",
     "db": "sst shell drizzle-kit",
@@ -14,7 +14,7 @@
     "format": "prettier . --write",
     "lint": "turbo lint",
     "prepare": "husky",
-    "start": "turbo start",
+    "start": "sst shell -- pnpm -F nextjs start",
     "test": "pnpm vitest run",
     "test:e2e": "sst shell -- pnpm -F nextjs test:e2e",
     "typecheck": "turbo typecheck"
