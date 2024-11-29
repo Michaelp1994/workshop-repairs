@@ -16,6 +16,9 @@ export const nextjs = new sst.aws.Nextjs("MyWeb", {
   domain,
   environment: {
     REACT_EDITOR: "code",
+    JWT_SECRET: process.env["JWT_SECRET"],
+    NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID:
+      process.env["NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID"],
     NEXT_PUBLIC_URL:
       $app.stage === "production"
         ? "https://workshop-repairs.click"
