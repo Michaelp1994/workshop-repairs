@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Unassessed",
+    "colour": "#FF0000"
+  },
+  {
+    "id": 2,
+    "name": "Awaiting Parts",
+    "colour": "#FF0000"
+  },
+  {
+    "id": 3,
+    "name": "Awaiting Requote",
+    "colour": "#FFFFFF"
+  },
+  {
+    "id": 4,
+    "name": "Paperwork",
+    "colour": "#FFFFFF"
+  },
+  {
+    "id": 5,
+    "name": "Battery Calibration",
+    "colour": "#FFFFFF"
+  },
+  {
+    "id": 6,
+    "name": "Finished",
+    "colour": "#000000"
+  }
+]

@@ -1,0 +1,19 @@
+version:
+  "3.9"
+  # This is a simple docker container for running a postgres database in the local dev environment.
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres-dev
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

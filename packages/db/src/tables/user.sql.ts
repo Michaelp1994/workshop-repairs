@@ -1,4 +1,4 @@
-import { getTableColumns } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -6,7 +6,6 @@ import {
   pgTable,
   serial,
   text,
-  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -16,7 +15,10 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
+import { laxAuditing, timestamps } from "./columns.helpers";
+import { emailVerificationRequestTable } from "./email-verification-request.sql";
 import { organizationTable } from "./organization.sql";
+import { userOnboardingTable } from "./user-onboarding.sql";
 import { userTypeTable } from "./user-type.sql";
 
 export const userTable = pgTable(
@@ -30,41 +32,48 @@ export const userTable = pgTable(
     typeId: integer().notNull(),
     emailVerified: boolean().notNull().default(false),
     onboardingCompleted: boolean().notNull().default(false),
-    organizationId: integer().references(() => organizationTable.id),
+    organizationId: integer(),
     image: text(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().$onUpdate(() => new Date()),
-    deletedAt: timestamp(),
-    createdById: integer(),
-    updatedById: integer(),
-    deletedById: integer(),
+    ...timestamps,
+    ...laxAuditing,
   },
-  (t) => {
-    return {
-      type: foreignKey({
-        columns: [t.typeId],
-        foreignColumns: [userTypeTable.id],
-      }),
-      createdBy: foreignKey({
-        columns: [t.createdById],
-        foreignColumns: [t.id],
-      }),
-      updatedBy: foreignKey({
-        columns: [t.updatedById],
-        foreignColumns: [t.id],
-      }),
-      deletedBy: foreignKey({
-        columns: [t.deletedById],
-        foreignColumns: [t.id],
-      }),
-    };
-  },
+  (t) => [
+    foreignKey({
+      columns: [t.organizationId],
+      foreignColumns: [organizationTable.id],
+    }),
+    foreignKey({
+      columns: [t.typeId],
+      foreignColumns: [userTypeTable.id],
+    }),
+    foreignKey({
+      columns: [t.createdById],
+      foreignColumns: [t.id],
+    }),
+    foreignKey({
+      columns: [t.updatedById],
+      foreignColumns: [t.id],
+    }),
+    foreignKey({
+      columns: [t.deletedById],
+      foreignColumns: [t.id],
+    }),
+  ],
 );
 
-const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
-  getTableColumns(userTable);
+export const userRelations = relations(userTable, ({ one, many }) => ({
+  userOnboarding: one(userOnboardingTable),
+  emailVerificationRequests: many(emailVerificationRequestTable),
+  userType: one(userTypeTable, {
+    fields: [userTable.typeId],
+    references: [userTypeTable.id],
+  }),
+  organization: one(organizationTable, {
+    fields: [userTable.organizationId],
+    references: [organizationTable.id],
+  }),
+}));
 
-export { publicUserColumns };
 export type User = InferModel<typeof userTable>;
 export type UserID = User["id"];
 export type CreateUser = InferCreateModel<typeof userTable>;

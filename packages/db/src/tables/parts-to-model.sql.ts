@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 
 import { modelTable } from "./model.sql";
@@ -14,11 +15,21 @@ export const partsToModelTable = pgTable(
       .notNull()
       .references(() => modelTable.id),
   },
-  (t) => {
-    return {
-      pk: primaryKey({ columns: [t.partId, t.modelId] }),
-    };
-  },
+  (t) => [primaryKey({ columns: [t.partId, t.modelId] })],
+);
+
+export const partsToModelRelations = relations(
+  partsToModelTable,
+  ({ one }) => ({
+    part: one(partTable, {
+      fields: [partsToModelTable.partId],
+      references: [partTable.id],
+    }),
+    model: one(modelTable, {
+      fields: [partsToModelTable.modelId],
+      references: [modelTable.id],
+    }),
+  }),
 );
 
 export type PartToModel = typeof partsToModelTable.$inferSelect;

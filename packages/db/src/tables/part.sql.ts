@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
 import {
@@ -6,19 +7,34 @@ import {
   type InferModel,
   type InferUpdateModel,
 } from "../types";
-import metadataColumns from "./metadata-columns";
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
+import { partsToModelTable } from "./parts-to-model.sql";
 
-export const partTable = pgTable("part", {
-  id: serial().primaryKey(),
-  name: varchar().notNull(),
-  partNumber: varchar().notNull(),
-  organizationId: integer()
-    .notNull()
-    .references(() => organizationTable.id),
-  info: varchar(),
-  ...metadataColumns,
-});
+export const partTable = pgTable(
+  "part",
+  {
+    id: serial().primaryKey(),
+    name: varchar().notNull(),
+    partNumber: varchar().notNull(),
+    organizationId: integer()
+      .notNull()
+      .references(() => organizationTable.id),
+    info: varchar(),
+    ...timestamps,
+    ...strictAuditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
+
+export const partRelations = relations(partTable, ({ one, many }) => ({
+  organization: one(organizationTable, {
+    fields: [partTable.organizationId],
+    references: [organizationTable.id],
+  }),
+  models: many(partsToModelTable),
+}));
 
 export type Part = InferModel<typeof partTable>;
 export type PartID = Part["id"];
