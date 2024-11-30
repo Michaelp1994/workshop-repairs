@@ -28,7 +28,7 @@ if ($dev) {
 
 export const rds = new sst.aws.Postgres("Postgres", {
   vpc,
-  proxy: true,
+  proxy: $app.stage === "production" ? true : false,
   dev: {
     username,
     password,
@@ -51,15 +51,6 @@ export const migrationLambda = new sst.aws.Function(
   },
 );
 
-if (!$dev) {
-  new aws.lambda.Invocation("MigratorInvocation", {
-    functionName: migrationLambda.name,
-    input: JSON.stringify({
-      now: new Date().toISOString(),
-    }),
-  });
-}
-
 export const seedLambda = new sst.aws.Function(
   "SeedLambda",
   {
@@ -72,13 +63,22 @@ export const seedLambda = new sst.aws.Function(
   },
 );
 
-if (!$dev && $app.stage.startsWith("pr-")) {
-  new aws.lambda.Invocation("SeedInvocation", {
-    functionName: seedLambda.name,
+if (!$dev) {
+  new aws.lambda.Invocation("MigratorInvocation", {
+    functionName: migrationLambda.name,
     input: JSON.stringify({
       now: new Date().toISOString(),
     }),
   });
+
+  if ($app.stage.startsWith("pr-")) {
+    new aws.lambda.Invocation("SeedInvocation", {
+      functionName: seedLambda.name,
+      input: JSON.stringify({
+        now: new Date().toISOString(),
+      }),
+    });
+  }
 }
 
 export const devCommand = new sst.x.DevCommand("Studio", {

@@ -10,6 +10,7 @@ const pool = new pg.Pool({
   user: Resource.Postgres.username,
   password: Resource.Postgres.password,
   database: Resource.Postgres.database,
+  connectionTimeoutMillis: 5000,
 });
 
 export const db = drizzle(pool, { schema, casing: "snake_case" });
