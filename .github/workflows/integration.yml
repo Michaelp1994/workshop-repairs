@@ -16,26 +16,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ env.STORE_PATH }}
-            ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
       - name: Install dependencies
         run: pnpm install
@@ -51,23 +37,3 @@ jobs:
         run: pnpm run test
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-      - name: Deploy
-        run: pnpm sst deploy --stage pr-${{ github.event.number }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-      - name: Migrate Database
-        run: pnpm sst shell --stage pr-${{ github.event.number }} -- pnpm -F db db:migrate
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Reset and Seed Database
-        run: pnpm sst shell --stage pr-${{ github.event.number }} -- pnpm -F db db:seed
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
