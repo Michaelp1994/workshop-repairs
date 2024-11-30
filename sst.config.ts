@@ -6,7 +6,6 @@ export default $config({
       name: "workshop-repairs",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
-      providers: { docker: "4.5.7" },
     };
   },
   async run() {
