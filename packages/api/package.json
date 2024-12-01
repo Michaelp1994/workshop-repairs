@@ -20,7 +20,6 @@
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
     "@trpc/server": "11.0.0-rc.648",
-    "cookie": "^1.0.2",
     "sst": "^3.3.30",
     "zod": "^3.23.8"
   },

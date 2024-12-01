@@ -27,7 +27,6 @@ import {
 } from "@repo/validators/server/users.validators";
 import { TRPCError } from "@trpc/server";
 
-import createSession from "../helpers/createSession";
 import {
   createArchiveMetadata,
   createUpdateMetadata,
@@ -84,8 +83,7 @@ export default router({
 
       await deleteEmailConfirmationRequestById(request.id);
 
-      const session = await createSession(user);
-      return session;
+      return true;
     }),
 
   getCurrentUser: authedProcedure

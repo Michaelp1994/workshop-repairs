@@ -21,7 +21,6 @@ import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
 import { ZodError } from "zod";
 
-import createSession from "../helpers/createSession";
 import { createInsertMetadata } from "../helpers/includeMetadata";
 import {
   createOrganizationLogoKeyFromFileName,
@@ -127,10 +126,7 @@ export default router({
         createdOrganization.id,
       );
       assertDatabaseResult(updatedUser);
-
-      const session = await createSession(updatedUser);
-
-      return { ...session };
+      return true;
     }),
   joinOrganization: authedProcedure
     .input(joinOrganizationSchema)
@@ -164,14 +160,8 @@ export default router({
         organization.id,
       );
       assertDatabaseResult(updatedUser);
-
       await setInvitations(ctx.session.userId);
-
-      const session = await createSession(updatedUser);
-      return {
-        ...session,
-        organization,
-      };
+      return organization;
     }),
   sendInvitations: organizationProcedure
     .input(inviteOthersToOrganizationSchema)
@@ -191,13 +181,11 @@ export default router({
 
       const user = await setInvitations(ctx.session.userId);
       assertDatabaseResult(user);
-      const session = await createSession(user);
-      return session;
+      return true;
     }),
   skipInvitations: organizationProcedure.mutation(async ({ ctx }) => {
     const user = await setInvitations(ctx.session.userId);
     assertDatabaseResult(user);
-    const session = await createSession(user);
-    return session;
+    return true;
   }),
 });
