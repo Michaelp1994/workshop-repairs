@@ -22,7 +22,6 @@ export default function OngoingRepairsCard() {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{totalRepairs}</div>
-        <p className="text-muted-foreground text-xs">+20.1% from last month</p>
       </CardContent>
     </Card>
   );

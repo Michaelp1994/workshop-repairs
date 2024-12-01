@@ -14,7 +14,6 @@ export default function ActiveAssetsCard() {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{totalAssets}</div>
-        <p className="text-muted-foreground text-xs">+40.1% from last month</p>
       </CardContent>
     </Card>
   );

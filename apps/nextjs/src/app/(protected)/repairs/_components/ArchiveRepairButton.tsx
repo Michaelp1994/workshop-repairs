@@ -24,7 +24,7 @@ export default function ArchiveRepairButton({
     async onSuccess() {
       await utils.repairs.getAll.invalidate();
       await utils.repairs.countAll.invalidate();
-      toast.success("Repair Comment has been archived.");
+      toast.success("Repair has been archived.");
       router.back();
     },
     onError(errors) {

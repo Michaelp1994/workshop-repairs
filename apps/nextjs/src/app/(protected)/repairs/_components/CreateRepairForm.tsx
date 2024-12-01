@@ -161,7 +161,7 @@ export default function CreateRepairForm() {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

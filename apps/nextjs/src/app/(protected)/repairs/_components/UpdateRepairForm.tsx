@@ -20,6 +20,7 @@ import {
   type RepairFormInput,
   repairFormSchema,
 } from "@repo/validators/client/repair.schema";
+import { useRouter } from "next/navigation";
 
 import AssetSelect from "~/components/selects/AssetSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
@@ -34,6 +35,7 @@ interface UpdateRepairFormProps {
 
 export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   const utils = api.useUtils();
+  const router = useRouter();
   const [repair] = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
@@ -41,6 +43,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
     async onSuccess() {
       await utils.repairs.getById.invalidate({ id: repairId });
       toast.success("Repair updated successfully");
+      router.push(`/repairs/${repairId}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);

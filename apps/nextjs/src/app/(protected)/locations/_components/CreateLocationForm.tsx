@@ -18,14 +18,19 @@ import {
   type LocationFormInput,
   locationFormSchema,
 } from "@repo/validators/client/locations.schema";
+import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateLocationForm() {
+  const router = useRouter();
+  const utils = api.useUtils();
   const createMutation = api.locations.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
+      await utils.locations.getAll.invalidate();
       toast.success(`Location ${data.name} created`);
+      router.push(`/locations/${data.id}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);
