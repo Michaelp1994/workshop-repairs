@@ -1,4 +1,4 @@
-import type { Session } from "../createContext";
+import type { Session } from "@repo/auth/sessions";
 
 export function createArchiveMetadata(session: Session) {
   return {
