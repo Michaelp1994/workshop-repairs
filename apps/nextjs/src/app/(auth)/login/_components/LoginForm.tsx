@@ -28,10 +28,10 @@ export default function LoginForm() {
   const loginMutation = api.auth.login.useMutation({
     async onSuccess(values) {
       await utils.invalidate();
-      if (values.onboardingCompleted) {
-        router.push("/dashboard");
-      } else {
+      if (!values.onboardingCompleted) {
         router.push("/onboarding");
+      } else {
+        router.push("/dashboard");
       }
       toast.success("Logged in!");
     },

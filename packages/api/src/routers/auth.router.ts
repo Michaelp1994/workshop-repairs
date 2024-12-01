@@ -48,7 +48,10 @@ export default router({
     }
 
     await ctx.setSession(user);
-    return true;
+    return {
+      onboardingCompleted: user.onboardingCompleted,
+      emailVerified: user.emailVerified,
+    };
   }),
   register: publicProcedure
     .input(registerSchema)
