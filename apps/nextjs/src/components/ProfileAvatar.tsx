@@ -10,16 +10,27 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu";
 import { LogOut } from "@repo/ui/icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
+import displayMutationErrors from "~/utils/displayMutationErrors";
 import getInitials from "~/utils/getInitials";
 
 export default function ProfileAvatar() {
   const router = useRouter();
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
   const [user] = api.users.getCurrentUser.useSuspenseQuery({});
-
+  const logoutMutation = api.auth.logout.useMutation({
+    async onSuccess() {
+      queryClient.clear();
+      router.push("/");
+      router.refresh();
+    },
+    async onError(errors) {
+      displayMutationErrors(errors);
+    },
+  });
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,12 +55,7 @@ export default function ProfileAvatar() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={async () => {
-            await utils.invalidate();
-            router.push("/");
-          }}
-        >
+        <DropdownMenuItem onClick={() => logoutMutation.mutate({})}>
           <LogOut />
           <span>Log out</span>
         </DropdownMenuItem>

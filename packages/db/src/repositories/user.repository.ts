@@ -87,6 +87,18 @@ export async function getUserById(input: UserID) {
   return res;
 }
 
+export async function getCredentialsByUserId(input: UserID) {
+  const query = db
+    .select({
+      typeId: userTable.typeId,
+      organizationId: userTable.organizationId,
+    })
+    .from(userTable)
+    .where(eq(userTable.id, input));
+  const [res] = await query.execute();
+  return res;
+}
+
 export async function getUserByEmail(input: string) {
   const query = db.select().from(userTable).where(eq(userTable.email, input));
   const [res] = await query.execute();

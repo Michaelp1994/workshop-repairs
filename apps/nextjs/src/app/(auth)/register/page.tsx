@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { buttonVariants } from "@repo/ui/button";
 import { cn } from "@repo/ui/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+import isAuthenticated from "~/auth/isAuthenticated";
 import Logo from "~/components/Logo";
 
 import RegisterForm from "./_components/RegisterForm";
@@ -13,6 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
+  if (isAuthenticated()) {
+    redirect("/dashboard");
+  }
   return (
     <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link

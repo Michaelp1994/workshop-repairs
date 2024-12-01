@@ -19,6 +19,7 @@ import {
   type ManufacturerFormInput,
   manufacturerFormSchema,
 } from "@repo/validators/client/manufacturers.schema";
+import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
@@ -30,13 +31,17 @@ interface UpdateManufacturerFormProps {
 export default function UpdateManufacturerForm({
   manufacturerId,
 }: UpdateManufacturerFormProps) {
+  const router = useRouter();
+  const utils = api.useUtils();
   const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
     id: manufacturerId,
   });
 
   const updateMutation = api.manufacturers.update.useMutation({
-    onSuccess(values) {
+    async onSuccess(values) {
+      await utils.manufacturers.getById.invalidate({ id: values.id });
       toast.success(`Manufacturer ${values.name} updated`);
+      router.push(`/manufacturers/${values.id}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);

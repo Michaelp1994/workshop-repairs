@@ -13,4 +13,5 @@ export default async function OnboardingPage() {
   if (!data.invitedUsers) {
     redirect("/onboarding/invitation");
   }
+  redirect("/dashboard");
 }

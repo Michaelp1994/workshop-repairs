@@ -1,6 +1,6 @@
 import {
-  createInvitation,
   createOrganization,
+  getOrganizationById,
   getOrganizationByInvitationCode,
   getOrganizationByName,
 } from "@repo/db/repositories/organization.repository";
@@ -21,7 +21,6 @@ import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
 import { ZodError } from "zod";
 
-import createSession from "../helpers/createSession";
 import { createInsertMetadata } from "../helpers/includeMetadata";
 import {
   createOrganizationLogoKeyFromFileName,
@@ -29,6 +28,7 @@ import {
   fileExistsInS3,
   getFileExtension,
 } from "../helpers/s3";
+import sendInvitationEmail from "../helpers/sendInvitationEmail";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
@@ -127,10 +127,7 @@ export default router({
         createdOrganization.id,
       );
       assertDatabaseResult(updatedUser);
-
-      const session = await createSession(updatedUser);
-
-      return { ...session };
+      return true;
     }),
   joinOrganization: authedProcedure
     .input(joinOrganizationSchema)
@@ -164,40 +161,32 @@ export default router({
         organization.id,
       );
       assertDatabaseResult(updatedUser);
-
       await setInvitations(ctx.session.userId);
-
-      const session = await createSession(updatedUser);
-      return {
-        ...session,
-        organization,
-      };
+      return organization;
     }),
   sendInvitations: organizationProcedure
     .input(inviteOthersToOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const emails = input.emails.split(/[, \n]/);
+      const organization = await getOrganizationById(
+        ctx.session.organizationId,
+      );
+      assertDatabaseResult(organization);
       const emailPromises = emails.map((unprocessedEmail) => {
         const email = unprocessedEmail.trim();
         // TODO: Check if valid email.
-        console.log({ email });
-        return createInvitation({
-          email,
-          organizationId: ctx.session.organizationId,
-          emailSentAt: null,
-        });
+        return sendInvitationEmail(email, organization);
       });
+
       await Promise.all(emailPromises);
 
       const user = await setInvitations(ctx.session.userId);
       assertDatabaseResult(user);
-      const session = await createSession(user);
-      return session;
+      return true;
     }),
   skipInvitations: organizationProcedure.mutation(async ({ ctx }) => {
     const user = await setInvitations(ctx.session.userId);
     assertDatabaseResult(user);
-    const session = await createSession(user);
-    return session;
+    return true;
   }),
 });
