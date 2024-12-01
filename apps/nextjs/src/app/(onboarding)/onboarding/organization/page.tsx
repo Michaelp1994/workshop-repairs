@@ -28,14 +28,12 @@ export default function OnboardingPage() {
           className="h-auto w-full justify-start py-4 text-left"
           variant="outline"
         >
-          <Link href="/onboarding/organization/join">
-            <Users className="mr-2 h-5 w-5" />
+          <Link href="/onboarding/organization/create">
+            <UserPlus className="mr-2 h-5 w-5" />
             <div className="flex flex-col items-start">
-              <span className="font-semibold">
-                Join an existing organization
-              </span>
+              <span className="font-semibold">Create a new organization</span>
               <span className="text-muted-foreground text-sm">
-                You&apos;ll be added to an existing team
+                Start fresh with a new team
               </span>
             </div>
           </Link>
@@ -45,12 +43,14 @@ export default function OnboardingPage() {
           className="h-auto w-full justify-start py-4 text-left"
           variant="outline"
         >
-          <Link href="/onboarding/organization/create">
-            <UserPlus className="mr-2 h-5 w-5" />
+          <Link href="/onboarding/organization/join">
+            <Users className="mr-2 h-5 w-5" />
             <div className="flex flex-col items-start">
-              <span className="font-semibold">Create a new organization</span>
+              <span className="font-semibold">
+                Join an existing organization
+              </span>
               <span className="text-muted-foreground text-sm">
-                Start fresh with a new team
+                You&apos;ll be added to an existing team
               </span>
             </div>
           </Link>
