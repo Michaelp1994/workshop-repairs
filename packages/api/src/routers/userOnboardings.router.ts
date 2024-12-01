@@ -1,6 +1,6 @@
 import {
-  createInvitation,
   createOrganization,
+  getOrganizationById,
   getOrganizationByInvitationCode,
   getOrganizationByName,
 } from "@repo/db/repositories/organization.repository";
@@ -28,6 +28,7 @@ import {
   fileExistsInS3,
   getFileExtension,
 } from "../helpers/s3";
+import sendInvitationEmail from "../helpers/sendInvitationEmail";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, organizationProcedure, router } from "../trpc";
 
@@ -167,16 +168,16 @@ export default router({
     .input(inviteOthersToOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const emails = input.emails.split(/[, \n]/);
+      const organization = await getOrganizationById(
+        ctx.session.organizationId,
+      );
+      assertDatabaseResult(organization);
       const emailPromises = emails.map((unprocessedEmail) => {
         const email = unprocessedEmail.trim();
         // TODO: Check if valid email.
-        console.log({ email });
-        return createInvitation({
-          email,
-          organizationId: ctx.session.organizationId,
-          emailSentAt: null,
-        });
+        return sendInvitationEmail(email, organization);
       });
+
       await Promise.all(emailPromises);
 
       const user = await setInvitations(ctx.session.userId);
