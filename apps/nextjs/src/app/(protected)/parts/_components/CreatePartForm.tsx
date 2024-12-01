@@ -18,13 +18,16 @@ import {
   type PartFormInput,
   partFormSchema,
 } from "@repo/validators/client/parts.schema";
+import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreatePartForm() {
+  const router = useRouter();
   const createMutation = api.parts.create.useMutation({
     onSuccess(data) {
+      router.push(`/parts/${data.id}`);
       toast.success(`Part ${data.name} created`);
     },
     onError(errors) {

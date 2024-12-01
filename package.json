@@ -10,7 +10,7 @@
     "db:migrate": "sst shell -- pnpm -F db db:migrate",
     "db:reset": "sst shell -- pnpm -F db db:reset",
     "db:seed": "sst shell -- pnpm -F db db:seed",
-    "dev": "sst shell -- pnpm -F nextjs dev",
+    "dev": "sst dev",
     "format": "prettier . --write",
     "lint": "turbo lint",
     "prepare": "husky",

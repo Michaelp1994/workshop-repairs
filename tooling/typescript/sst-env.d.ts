@@ -27,7 +27,7 @@ declare module "sst" {
       "type": "sst.aws.Nextjs"
       "url": string
     }
-    "Postgres": {
+    "Postgres1": {
       "database": string
       "host": string
       "password": string
@@ -39,7 +39,7 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Function"
     }
-    "Vpc1": {
+    "Vpc": {
       "bastion": string
       "type": "sst.aws.Vpc"
     }

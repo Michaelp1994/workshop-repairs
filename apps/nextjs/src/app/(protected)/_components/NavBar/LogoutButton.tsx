@@ -15,6 +15,7 @@ export default function LogoutButton() {
     async onSuccess() {
       queryClient.clear();
       router.push("/");
+      router.refresh();
     },
     async onError(errors) {
       displayMutationErrors(errors);
@@ -22,7 +23,7 @@ export default function LogoutButton() {
   });
 
   return (
-    <DropdownMenuItem onClick={async () => logoutMutation.mutate({})}>
+    <DropdownMenuItem onClick={() => logoutMutation.mutate({})}>
       <LogOut />
       Log out
     </DropdownMenuItem>

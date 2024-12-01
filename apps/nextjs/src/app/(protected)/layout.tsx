@@ -2,6 +2,7 @@ import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 import { redirect } from "next/navigation";
 
 import isAuthenticated from "~/auth/isAuthenticated";
+import { api } from "~/trpc/server";
 
 import AppSidebar from "./_components/AppSideBar";
 import NavBar from "./_components/NavBar";
@@ -10,9 +11,15 @@ interface ProtectedLayoutProps {
   children: React.ReactNode;
 }
 
-export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
+export default async function ProtectedLayout({
+  children,
+}: ProtectedLayoutProps) {
   if (!isAuthenticated()) {
     redirect("/login");
+  }
+  const user = await api.users.getCurrentUser({});
+  if (!user.onboardingCompleted) {
+    redirect("/onboarding");
   }
   return (
     <SidebarProvider>

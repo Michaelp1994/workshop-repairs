@@ -17,7 +17,6 @@ import {
 import { TRPCError } from "@trpc/server";
 import { ZodError, type ZodIssue } from "zod";
 
-import createSession from "../helpers/createSession";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { authedProcedure, publicProcedure, router } from "../trpc";
@@ -47,23 +46,12 @@ export default router({
         },
       ]);
     }
-    const session = await createSession(user);
 
-    ctx.setCookie("Authorization", `Bearer ${session.token}`, {
-      secure: false,
-      sameSite: "lax",
-      httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    ctx.setCookie("userId", user.id.toString(), {
-      secure: false,
-      sameSite: "lax",
-      httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    return session;
+    await ctx.setSession(user);
+    return {
+      onboardingCompleted: user.onboardingCompleted,
+      emailVerified: user.emailVerified,
+    };
   }),
   register: publicProcedure
     .input(registerSchema)
@@ -111,37 +99,12 @@ export default router({
       assertDatabaseResult(onboarding);
 
       await sendVerificationEmail(user.id, user.email);
-      const session = await createSession(user);
-      ctx.setCookie("Authorization", `Bearer ${session.token}`, {
-        secure: false,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30,
-      });
-      ctx.setCookie("userId", user.id.toString(), {
-        secure: false,
-        sameSite: "lax",
-        httpOnly: true,
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30,
-      });
-      return session;
+      await ctx.setSession(user);
+      return true;
     }),
   logout: authedProcedure.input(logoutSchema).mutation(async ({ ctx }) => {
-    ctx.setCookie("Authorization", "", {
-      secure: false,
-      sameSite: "lax",
-      httpOnly: true,
-      path: "/",
-      maxAge: 0,
-    });
-    ctx.setCookie("userId", "", {
-      secure: false,
-      sameSite: "lax",
-      httpOnly: true,
-      path: "/",
-      maxAge: 0,
-    });
+    ctx.clearSession();
+    return true;
   }),
   forgotPassword: publicProcedure
     .input(forgotPasswordSchema)

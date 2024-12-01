@@ -1,6 +1,6 @@
-import type { OrganizationID, UserID } from "@repo/validators/ids.validators";
-
 import { jwtVerify, SignJWT } from "jose";
+
+import type { Session } from "./sessions";
 
 if (!process.env["JWT_SECRET"]) {
   throw new Error("JWT_SECRET environment variable is required");
@@ -8,15 +8,9 @@ if (!process.env["JWT_SECRET"]) {
 
 const secret = new TextEncoder().encode(process.env["JWT_SECRET"]);
 
-export interface JWTPayload {
-  userId: UserID;
-  organizationId: OrganizationID | null;
-}
-
-export async function generateToken(jwtPayload: JWTPayload) {
+export async function generateToken(jwtPayload: Session) {
   const jwtToken = await new SignJWT({
     userId: jwtPayload.userId,
-    organizationId: jwtPayload.organizationId,
   })
     .setProtectedHeader({
       alg: "HS256",
@@ -26,5 +20,5 @@ export async function generateToken(jwtPayload: JWTPayload) {
 }
 
 export async function verifyToken(token: string) {
-  return await jwtVerify<JWTPayload>(token, secret);
+  return await jwtVerify<Session>(token, secret);
 }

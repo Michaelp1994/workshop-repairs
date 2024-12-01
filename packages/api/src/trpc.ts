@@ -1,3 +1,4 @@
+import { getCredentialsByUserId } from "@repo/db/repositories/user.repository";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { ZodError } from "zod";
 
@@ -19,6 +20,7 @@ const t = initTRPC.context<Context>().create({
 export const { router, createCallerFactory } = t;
 
 export const publicProcedure = t.procedure;
+
 export const authedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.userId) {
     throw new TRPCError({
@@ -30,14 +32,20 @@ export const authedProcedure = t.procedure.use(({ ctx, next }) => {
     ctx: {
       session: {
         userId: ctx.session.userId,
-        organizationId: ctx.session.organizationId,
       },
     },
   });
 });
 
-export const organizationProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.userId || !ctx.session.organizationId) {
+export const organizationProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
+
+  const user = await getCredentialsByUserId(ctx.session.userId);
+  if (!user || !user.organizationId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
@@ -47,7 +55,8 @@ export const organizationProcedure = t.procedure.use(({ ctx, next }) => {
     ctx: {
       session: {
         userId: ctx.session.userId,
-        organizationId: ctx.session.organizationId,
+        organizationId: user.organizationId,
+        userType: user.typeId,
       },
     },
   });

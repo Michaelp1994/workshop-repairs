@@ -5,14 +5,6 @@ export const loginSchema = z.object({
   password: z.string(),
 });
 
-export const sessionSchema = z.object({
-  token: z.string(),
-  onboardingCompleted: z.boolean(),
-  emailVerified: z.boolean(),
-});
-
-export type Session = z.infer<typeof sessionSchema>;
-
 export const logoutSchema = z.object({});
 
 export const registerSchema = z.object({

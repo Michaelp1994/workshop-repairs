@@ -27,7 +27,11 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 export default function CreateOrganizationForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: requestUpload } =
-    api.userOnboardings.requestUpload.useMutation();
+    api.userOnboardings.requestUpload.useMutation({
+      onError(errors) {
+        displayMutationErrors(errors, form);
+      },
+    });
   const router = useRouter();
   const utils = api.useUtils();
   const createMutation = api.userOnboardings.createOrganization.useMutation({
