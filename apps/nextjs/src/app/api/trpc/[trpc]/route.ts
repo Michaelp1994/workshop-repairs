@@ -13,6 +13,7 @@ const handler = withServerTelemetry(async function GET(req: NextRequest) {
     router: appRouter,
     createContext: createTRPCContext,
     onError: ({ error }) => {
+      console.log({ error });
       throw error;
     },
   });
