@@ -131,7 +131,7 @@ importers:
         version: 0.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@14.2.18(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.2.3(next@14.2.18(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -300,9 +300,6 @@ importers:
       '@aws-sdk/client-lambda':
         specifier: ^3.699.0
         version: 3.699.0
-      '@softwaretechnik/dbml-renderer':
-        specifier: ^1.0.30
-        version: 1.0.30
       drizzle-orm:
         specifier: ^0.36.4
         version: 0.36.4(@opentelemetry/api@1.9.0)(@types/pg@8.11.10)(@types/react@18.3.12)(@vercel/postgres@0.9.0)(pg@8.13.1)(postgres@3.4.5)(react@18.3.1)
@@ -319,6 +316,9 @@ importers:
       '@repo/validators':
         specifier: workspace:*
         version: link:../validators
+      '@softwaretechnik/dbml-renderer':
+        specifier: ^1.0.30
+        version: 1.0.30
       '@types/node':
         specifier: ^22.10.0
         version: 22.10.0
@@ -480,7 +480,7 @@ importers:
         version: 0.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@14.2.18(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 2.2.3(next@14.2.18(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react-day-picker:
         specifier: ^9.4.0
         version: 9.4.0(react@18.3.1)
@@ -12388,7 +12388,7 @@ snapshots:
 
   npm@10.9.1: {}
 
-  nuqs@2.2.3(next@14.2.18(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  nuqs@2.2.3(next@14.2.18(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
       react: 18.3.1
