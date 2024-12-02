@@ -22,6 +22,8 @@ export default function PartDetails({ partId }: PartDetailsProps) {
           <DetailsValue>{part.name}</DetailsValue>
           <DetailsLabel>Part Number:</DetailsLabel>
           <DetailsValue>{part.partNumber}</DetailsValue>
+          <DetailsLabel>Part Description:</DetailsLabel>
+          <DetailsValue>{part.description}</DetailsValue>
           <MetadataFields metadata={part} />
         </DetailsList>
       </CardContent>
