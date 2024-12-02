@@ -107,6 +107,7 @@ Here are some features and enhancements planned for future releases:
 - Servicing and Job Tracking: Add support for keeping track of annual servicing of equipment.
 - Localization Support: Add internationalization.
 - Audit Logs: Track user actions and system changes for improved accountability.
+- Inventory System: keep track of part inventory and automate/ease resupply.
 - Client Portal: Ability to invite clients to view a subset of records such as asset records for their equipment.
 
 ## Contributing
