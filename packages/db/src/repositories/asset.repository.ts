@@ -1,8 +1,8 @@
 import type {
   CountAssetsInput,
   GetAllAssetsInput,
+  GetAssetsSelectSchema,
 } from "@repo/validators/server/assets.validators";
-import type { GetSelectInput } from "@repo/validators/server/dataTables.validators";
 
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -180,7 +180,7 @@ export async function getAssetByRepairId(
 }
 
 export async function getAssetsSelect(
-  _: GetSelectInput,
+  _: GetAssetsSelectSchema,
   organizationId: OrganizationID,
 ) {
   const query = db

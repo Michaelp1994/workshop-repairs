@@ -1,8 +1,8 @@
 import type {
-  DataTableCountOutput,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/server/dataTables.validators";
+  CountLocationsInput,
+  GetAllLocationsInput,
+  GetLocationsSelectInput,
+} from "@repo/validators/server/locations.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -26,7 +26,7 @@ import {
 const locationFields = getTableColumns(locationTable);
 
 export function getAllLocations(
-  { pagination, globalFilter, sorting, columnFilters }: DataTableOutput,
+  { pagination, globalFilter, sorting, columnFilters }: GetAllLocationsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -50,7 +50,7 @@ export function getAllLocations(
 }
 
 export async function countLocations(
-  { globalFilter, columnFilters }: DataTableCountOutput,
+  { globalFilter, columnFilters }: CountLocationsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -73,7 +73,7 @@ export async function countLocations(
 }
 
 export function getLocationsSelect(
-  _: GetSelectInput,
+  _: GetLocationsSelectInput,
   organizationId: OrganizationID,
 ) {
   const query = db

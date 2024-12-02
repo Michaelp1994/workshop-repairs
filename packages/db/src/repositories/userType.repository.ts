@@ -1,8 +1,8 @@
 import type {
-  DataTableCountOutput,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/server/dataTables.validators";
+  CountUserTypesInput,
+  GetAllUserTypesInput,
+  GetUserTypeSelectInput,
+} from "@repo/validators/server/userTypes.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
 
@@ -25,7 +25,7 @@ export async function archiveUserType(input: ArchiveUserType) {
   return res;
 }
 
-export async function countUserTypes(_: DataTableCountOutput) {
+export async function countUserTypes(_: CountUserTypesInput) {
   const query = db
     .select({ count: count() })
     .from(userTypeTable)
@@ -40,7 +40,7 @@ export async function createUserType(input: CreateUserType) {
   return res;
 }
 
-export function getAllUserTypes({ pagination }: DataTableOutput) {
+export function getAllUserTypes({ pagination }: GetAllUserTypesInput) {
   const query = db
     .select()
     .from(userTypeTable)
@@ -60,7 +60,7 @@ export async function getUserTypeById(input: UserTypeID) {
   return res;
 }
 
-export async function getUserTypesSelect(_: GetSelectInput) {
+export async function getUserTypesSelect(_: GetUserTypeSelectInput) {
   const query = db
     .select({
       value: userTypeTable.id,

@@ -1,8 +1,8 @@
 import type {
-  DataTableCountOutput,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/server/dataTables.validators";
+  CountAssetStatusesInput,
+  GetAllAssetStatusesInput,
+  GetAssetStatusesSelectInput,
+} from "@repo/validators/server/assetStatuses.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
 
@@ -15,7 +15,7 @@ import {
   type UpdateAssetStatus,
 } from "../tables/asset-status.sql";
 
-export function getAllAssetStatuses({ pagination }: DataTableOutput) {
+export function getAllAssetStatuses({ pagination }: GetAllAssetStatusesInput) {
   const query = db
     .select()
     .from(assetStatusTable)
@@ -26,7 +26,7 @@ export function getAllAssetStatuses({ pagination }: DataTableOutput) {
   return query.execute();
 }
 
-export async function countAssetStatuses(_: DataTableCountOutput) {
+export async function countAssetStatuses(_: CountAssetStatusesInput) {
   const query = db
     .select({ count: count() })
     .from(assetStatusTable)
@@ -44,7 +44,7 @@ export async function getAssetStatusById(input: AssetStatusID) {
   return res;
 }
 
-export function getAssetStatusSelect(_: GetSelectInput) {
+export function getAssetStatusSelect(_: GetAssetStatusesSelectInput) {
   const query = db
     .select({
       value: assetStatusTable.id,

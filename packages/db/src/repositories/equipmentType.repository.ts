@@ -1,8 +1,8 @@
 import type {
-  DataTableCountOutput,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/server/dataTables.validators";
+  CountEquipmentTypesInput,
+  GetAllEquipmentTypesInput,
+  GetEquipmentTypesSelectInput,
+} from "@repo/validators/server/equipmentTypes.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -25,7 +25,7 @@ import {
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
 export function getAllEquipmentTypes(
-  { pagination, globalFilter, sorting }: DataTableOutput,
+  { pagination, globalFilter, sorting }: GetAllEquipmentTypesInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);
@@ -47,7 +47,7 @@ export function getAllEquipmentTypes(
 }
 
 export async function countEquipmentTypes(
-  { globalFilter }: DataTableCountOutput,
+  { globalFilter }: CountEquipmentTypesInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);
@@ -66,7 +66,7 @@ export async function countEquipmentTypes(
 }
 
 export async function getEquipmentTypesSelect(
-  _: GetSelectInput,
+  _: GetEquipmentTypesSelectInput,
   organizationId: OrganizationID,
 ) {
   const query = db

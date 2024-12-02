@@ -1,8 +1,8 @@
 import type {
   CountClientsInput,
   GetAllClientsInput,
+  GetClientSelectInput,
 } from "@repo/validators/server/clients.validators";
-import type { GetSelectInput } from "@repo/validators/server/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -72,7 +72,7 @@ export async function countClients(
 }
 
 export function getClientsSelect(
-  _: GetSelectInput,
+  _: GetClientSelectInput,
   organizationId: OrganizationID,
 ) {
   const query = db
