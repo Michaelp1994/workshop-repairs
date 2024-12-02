@@ -1,5 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { ChevronRight, Home, MoreHorizontal } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "../lib/utils";
@@ -104,12 +104,55 @@ const BreadcrumbEllipsis = ({
 );
 BreadcrumbEllipsis.displayName = "BreadcrumbElipssis";
 
-export {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-};
+interface BreadcrumbProps {
+  routes: {
+    label: string;
+    href: string;
+  }[];
+}
+
+function Breadcrumbs({ routes = [] }: BreadcrumbProps) {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        {routes.length > 0 ? (
+          <>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink href="/dashboard">
+                <Home className="size-4" />
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="hidden md:block" />
+          </>
+        ) : (
+          <BreadcrumbItem className="hidden md:block">
+            <BreadcrumbPage>
+              <Home className="size-4" />
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        )}
+        {routes.map(({ label, href }, index) => {
+          if (index === routes.length - 1) {
+            return (
+              <BreadcrumbPage className="capitalize" key={href}>
+                {label}
+              </BreadcrumbPage>
+            );
+          }
+          return (
+            <React.Fragment key={href}>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink className="capitalize" href={href}>
+                  {label}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+            </React.Fragment>
+          );
+        })}
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
+export { Breadcrumbs };
