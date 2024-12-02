@@ -1,2 +1,2 @@
 pnpm-lock.yaml
-sst-env.d.ts
+**/sst-env.d.ts
