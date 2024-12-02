@@ -66,12 +66,15 @@ export const seedLambda = new sst.aws.Function(
 if (!$dev) {
   new aws.lambda.Invocation("MigratorInvocation", {
     functionName: migrationLambda.name,
+    triggers: {
+      now: new Date().toISOString(),
+    },
     input: JSON.stringify({
       now: new Date().toISOString(),
     }),
   });
 
-  if ($app.stage.startsWith("pr-")) {
+  if ($app.stage.startsWith("staging")) {
     new aws.lambda.Invocation("SeedInvocation", {
       functionName: seedLambda.name,
       input: JSON.stringify({
