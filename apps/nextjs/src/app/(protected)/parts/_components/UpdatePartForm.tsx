@@ -83,6 +83,21 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
             );
           }}
         />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <FormFooter>
           <ResetButton />
           <SubmitButton />
