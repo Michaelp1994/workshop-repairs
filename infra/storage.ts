@@ -66,8 +66,9 @@ export const seedLambda = new sst.aws.Function(
 if (!$dev) {
   new aws.lambda.Invocation("MigratorInvocation", {
     functionName: migrationLambda.name,
-    lifecycleScope: "CRUD",
-
+    triggers: {
+      now: new Date().toISOString(),
+    },
     input: JSON.stringify({
       now: new Date().toISOString(),
     }),
