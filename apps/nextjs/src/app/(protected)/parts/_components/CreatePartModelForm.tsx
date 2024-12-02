@@ -34,8 +34,12 @@ export default function CreatePartModelForm({
   partId,
 }: CreatePartModelFormProps) {
   const router = useRouter();
+  const utils = api.useUtils();
   const createMutation = api.partsToModels.create.useMutation({
-    onSuccess() {
+    async onSuccess() {
+      await utils.partsToModels.getAllModelsByPartId.invalidate({
+        filters: { partId },
+      });
       toast.success(`Part To Model relationship created`);
       router.back();
     },
