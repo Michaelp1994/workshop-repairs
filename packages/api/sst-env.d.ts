@@ -27,14 +27,6 @@ declare module "sst" {
       type: "sst.aws.Nextjs";
       url: string;
     };
-    Postgres: {
-      database: string;
-      host: string;
-      password: string;
-      port: number;
-      type: "sst.aws.Postgres";
-      username: string;
-    };
     Postgres1: {
       database: string;
       host: string;
@@ -48,10 +40,6 @@ declare module "sst" {
       type: "sst.aws.Function";
     };
     Vpc: {
-      bastion: string;
-      type: "sst.aws.Vpc";
-    };
-    Vpc1: {
       bastion: string;
       type: "sst.aws.Vpc";
     };
