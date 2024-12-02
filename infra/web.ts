@@ -4,7 +4,9 @@ import { bucket, rds, router, vpc } from "./storage";
 const domain =
   $app.stage === "production"
     ? "workshop-repairs.click"
-    : `${$app.stage}.workshop-repairs.click`;
+    : $app.stage === "staging"
+      ? `staging.workshop-repairs.click`
+      : undefined;
 
 export const nextjs = new sst.aws.Nextjs("MyWeb", {
   link: [bucket, router, rds, email],

@@ -19,6 +19,7 @@ import {
   type PartFormInput,
   partFormSchema,
 } from "@repo/validators/client/parts.schema";
+import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
@@ -28,12 +29,14 @@ interface UpdatePartFormProps {
 }
 
 export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
+  const router = useRouter();
   const [part] = api.parts.getById.useSuspenseQuery({
     id: partId,
   });
 
   const updateMutation = api.parts.update.useMutation({
     onSuccess(values) {
+      router.push(`/parts/${values.id}`);
       toast.success(`Part ${values.name} updated`);
     },
     onError(errors) {
@@ -83,9 +86,24 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
             );
           }}
         />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={updateMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

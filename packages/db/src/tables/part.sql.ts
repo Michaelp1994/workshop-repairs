@@ -18,6 +18,7 @@ export const partTable = pgTable(
     id: serial().primaryKey(),
     name: varchar().notNull(),
     partNumber: varchar().notNull(),
+    description: varchar().notNull(),
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
