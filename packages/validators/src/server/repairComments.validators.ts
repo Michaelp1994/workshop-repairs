@@ -1,11 +1,8 @@
 import { z } from "zod";
 
 import replaceLineBreaks from "../helpers/replaceLineBreaks";
-import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "../isomorphic/dataTables.validators";
 import { repairCommentId, repairId } from "../isomorphic/ids.validators";
+import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
 const repairCommentFilters = z.object({}).optional();
 

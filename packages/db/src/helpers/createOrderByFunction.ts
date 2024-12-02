@@ -1,4 +1,4 @@
-import { SortingInput } from "@repo/validators/dataTables.validators";
+import { SortingInput } from "@repo/validators/dataTables.schema";
 import { asc, desc } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
 

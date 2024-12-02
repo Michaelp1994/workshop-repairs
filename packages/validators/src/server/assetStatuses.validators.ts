@@ -1,11 +1,11 @@
 import { z } from "zod";
 
+import { assetStatusId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
   getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import { assetStatusId } from "../isomorphic/ids.validators";
+} from "./dataTables.validators";
 
 const assetStatusFilters = z.object({}).optional();
 

@@ -1,8 +1,8 @@
 import type {
-  DataTableCountSchema,
+  DataTableCountOutput,
   DataTableOutput,
   GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+} from "@repo/validators/server/dataTables.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
 
@@ -26,7 +26,7 @@ export function getAllRepairTypes({ pagination }: DataTableOutput) {
   return query.execute();
 }
 
-export async function countRepairTypes(_: DataTableCountSchema) {
+export async function countRepairTypes(_: DataTableCountOutput) {
   const query = db
     .select({ count: count() })
     .from(repairTypeTable)

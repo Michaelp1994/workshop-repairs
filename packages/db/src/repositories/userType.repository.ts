@@ -1,8 +1,8 @@
 import type {
-  DataTableCountSchema,
+  DataTableCountOutput,
   DataTableOutput,
   GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+} from "@repo/validators/server/dataTables.validators";
 
 import { count, eq, isNull } from "drizzle-orm";
 
@@ -25,7 +25,7 @@ export async function archiveUserType(input: ArchiveUserType) {
   return res;
 }
 
-export async function countUserTypes(_: DataTableCountSchema) {
+export async function countUserTypes(_: DataTableCountOutput) {
   const query = db
     .select({ count: count() })
     .from(userTypeTable)

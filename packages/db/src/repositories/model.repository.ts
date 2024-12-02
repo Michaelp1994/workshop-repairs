@@ -1,4 +1,4 @@
-import type { GetSelectInput } from "@repo/validators/dataTables.validators";
+import type { GetSelectInput } from "@repo/validators/server/dataTables.validators";
 import type {
   CountModelsInput,
   GetAllModelsInput,

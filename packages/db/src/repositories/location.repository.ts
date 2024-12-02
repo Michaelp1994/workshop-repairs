@@ -1,8 +1,8 @@
 import type {
-  DataTableCountSchema,
+  DataTableCountOutput,
   DataTableOutput,
   GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+} from "@repo/validators/server/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -50,7 +50,7 @@ export function getAllLocations(
 }
 
 export async function countLocations(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters }: DataTableCountOutput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

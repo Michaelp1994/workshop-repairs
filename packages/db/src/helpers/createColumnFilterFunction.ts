@@ -1,4 +1,4 @@
-import { ColumnFilters } from "@repo/validators/dataTables.validators";
+import { ColumnFilters } from "@repo/validators/dataTables.schema";
 import assert from "assert";
 import { eq, inArray } from "drizzle-orm";
 

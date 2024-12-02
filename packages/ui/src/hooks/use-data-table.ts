@@ -1,7 +1,12 @@
-import type { DataTableInput } from "@repo/validators/dataTables.validators";
+import type { DataTableInput } from "@repo/validators/client/dataTables.schema";
+import type {
+  DataTableCountInput,
+  DataTableInput as ServerDataTableInput,
+} from "@repo/validators/server/dataTables.validators";
 
 import {
   ColumnFiltersState,
+  PaginationState,
   RowSelectionState,
   SortingState,
   VisibilityState,
@@ -20,10 +25,9 @@ export function useDataTableState(initialState?: DataTableInput) {
       pageSize: 10,
     },
   };
-  const [pagination, setPagination] = useState<{
-    pageIndex: number;
-    pageSize: number;
-  }>(init.pagination);
+  const [pagination, setPagination] = useState<PaginationState>(
+    init.pagination,
+  );
 
   const [sorting, setSorting] = useState<SortingState>(init.sorting);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -36,19 +40,21 @@ export function useDataTableState(initialState?: DataTableInput) {
     init.columnFilters as ColumnFiltersState,
   );
 
+  const dataState: ServerDataTableInput = {
+    pagination,
+    globalFilter: debouncedGlobalFilter,
+    columnFilters,
+    sorting,
+  };
+
+  const countState: DataTableCountInput = {
+    globalFilter: debouncedGlobalFilter,
+    columnFilters,
+  };
+
   return {
-    dataState: {
-      pagination,
-      globalFilter: debouncedGlobalFilter,
-      columns: columnVisibility,
-      columnFilters,
-      sorting,
-    },
-    countState: {
-      globalFilter: debouncedGlobalFilter,
-      columnFilters,
-      columns: columnVisibility,
-    },
+    dataState,
+    countState,
     tableState: {
       state: {
         columnVisibility,

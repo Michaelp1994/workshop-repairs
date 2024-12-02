@@ -1,16 +1,16 @@
 import { z } from "zod";
 
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import {
   assetId,
   equipmentTypeId,
   manufacturerId,
   modelId,
 } from "../isomorphic/ids.validators";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+  getSelectSchema,
+} from "./dataTables.validators";
 
 const modelFilters = z
   .object({

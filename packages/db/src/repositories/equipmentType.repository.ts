@@ -1,8 +1,8 @@
 import type {
-  DataTableCountSchema,
+  DataTableCountOutput,
   DataTableOutput,
   GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+} from "@repo/validators/server/dataTables.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -10,6 +10,10 @@ import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
 import { db } from "../index";
+import {
+  createGlobalFilters,
+  createSortOrder,
+} from "../mappings/equipmentType.mapper";
 import {
   type ArchiveEquipmentType,
   type CreateEquipmentType,
@@ -21,33 +25,38 @@ import {
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
 export function getAllEquipmentTypes(
-  { pagination }: DataTableOutput,
+  { pagination, globalFilter, sorting }: DataTableOutput,
   organizationId: OrganizationID,
 ) {
+  const globalFilterParams = createGlobalFilters(globalFilter);
+  const orderByParams = createSortOrder(sorting);
   const query = db
     .select()
     .from(equipmentTypeTable)
     .where(
       and(
+        globalFilterParams,
         isNull(equipmentTypeTable.deletedAt),
         eq(equipmentTypeTable.organizationId, organizationId),
       ),
     )
-    .orderBy(equipmentTypeTable.id)
+    .orderBy(...orderByParams, equipmentTypeTable.id)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
 
 export async function countEquipmentTypes(
-  _: DataTableCountSchema,
+  { globalFilter }: DataTableCountOutput,
   organizationId: OrganizationID,
 ) {
+  const globalFilterParams = createGlobalFilters(globalFilter);
   const query = db
     .select({ count: count() })
     .from(equipmentTypeTable)
     .where(
       and(
+        globalFilterParams,
         isNull(equipmentTypeTable.deletedAt),
         eq(equipmentTypeTable.organizationId, organizationId),
       ),

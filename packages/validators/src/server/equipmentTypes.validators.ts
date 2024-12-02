@@ -1,11 +1,11 @@
 import { z } from "zod";
 
+import { equipmentTypeId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
   getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import { equipmentTypeId } from "../isomorphic/ids.validators";
+} from "./dataTables.validators";
 
 const equipmentTypeFilters = z.object({}).optional();
 

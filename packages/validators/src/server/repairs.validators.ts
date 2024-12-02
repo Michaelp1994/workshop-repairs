@@ -1,17 +1,17 @@
 import { z } from "zod";
 
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import {
   assetId,
   clientId,
   repairId,
   repairStatusTypeId,
   repairTypeId,
 } from "../isomorphic/ids.validators";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+  getSelectSchema,
+} from "./dataTables.validators";
 
 const repairFilters = z
   .object({

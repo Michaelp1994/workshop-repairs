@@ -27,7 +27,6 @@ export type GlobalFilter = z.infer<typeof globalFilterSchema>;
 export const columnFiltersSchema = z
   .object({
     id: z.string(),
-    // value: z.union([z.number(), z.string(), z.number().array()]),
     value: z.unknown(),
   })
   .array();
@@ -54,7 +53,7 @@ export const dataTableCountSchema = z.object({
   columnFilters: columnFiltersSchema.default([]),
 });
 
-export type DataTableCountSchema = z.infer<typeof dataTableCountSchema>;
+export type DataTableCountInput = z.infer<typeof dataTableCountSchema>;
 
 export const getSelectSchema = z.object({
   limit: z.number().min(1).max(100).optional().default(10),

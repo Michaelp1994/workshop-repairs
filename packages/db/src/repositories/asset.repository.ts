@@ -1,8 +1,8 @@
-import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
   CountAssetsInput,
   GetAllAssetsInput,
 } from "@repo/validators/server/assets.validators";
+import type { GetSelectInput } from "@repo/validators/server/dataTables.validators";
 
 import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 
