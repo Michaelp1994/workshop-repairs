@@ -1,3 +1,5 @@
+import { readdir } from "fs/promises";
+
 export const bucket = new sst.aws.Bucket("Bucket1", {
   access: "cloudfront",
 });
@@ -66,12 +68,14 @@ export const seedLambda = new sst.aws.Function(
 if (!$dev) {
   new aws.lambda.Invocation("MigratorInvocation", {
     functionName: migrationLambda.name,
+    lifecycleScope: "CRUD",
+
     input: JSON.stringify({
       now: new Date().toISOString(),
     }),
   });
 
-  if ($app.stage.startsWith("pr-")) {
+  if ($app.stage.startsWith("staging")) {
     new aws.lambda.Invocation("SeedInvocation", {
       functionName: seedLambda.name,
       input: JSON.stringify({
