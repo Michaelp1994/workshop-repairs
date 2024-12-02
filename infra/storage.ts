@@ -1,5 +1,3 @@
-import { readdir } from "fs/promises";
-
 export const bucket = new sst.aws.Bucket("Bucket1", {
   access: "cloudfront",
 });
