@@ -1,18 +1,5 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-} from "@repo/ui/breadcrumb";
+import Breadcrumbs from "../_components/Breadcrumbs";
 
 export default function BreadcrumbSlot() {
-  return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
-  );
+  return <Breadcrumbs routes={[]} />;
 }
