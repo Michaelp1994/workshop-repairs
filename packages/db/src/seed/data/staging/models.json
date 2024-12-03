@@ -1,0 +1,443 @@
+[
+  {
+    "id": 2,
+    "name": "Alaris GS",
+    "nickname": "GS",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 8,
+    "name": "Alaris GH Guardrails",
+    "nickname": "GH G/R",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 9,
+    "name": "Alaris CC Guardrails",
+    "nickname": "CC G/R",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 10,
+    "name": "Alaris GH (with Plus Software)",
+    "nickname": "GH +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 11,
+    "name": "Alaris CC (with Plus Software)",
+    "nickname": "CC +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 13,
+    "name": "Alaris CC Guardrails (with Plus Software)",
+    "nickname": "CC G/R +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 14,
+    "name": "Alaris GP Guardrails",
+    "nickname": "GP G/R",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 15,
+    "name": "Alaris GP (with Plus Software)",
+    "nickname": "GP +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 16,
+    "name": "Alaris GP Guardrails (with Plus Software)",
+    "nickname": "GP G/R +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 17,
+    "name": "Alaris VP Plus Guardrails",
+    "nickname": "VP G/R +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 19,
+    "name": "Alaris Pump Module",
+    "nickname": "8100",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 20,
+    "name": "Alaris Syringe Module",
+    "nickname": "8110",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 21,
+    "name": "Alaris PCA Module",
+    "nickname": "8120",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 22,
+    "name": "Pyxis MedStation 4000 System",
+    "nickname": "Pyxis 4000",
+    "manufacturerId": 1,
+    "equipmentTypeId": 8
+  },
+  {
+    "id": 23,
+    "name": "Pyxis Medstation ES",
+    "nickname": "Pyxis ES",
+    "manufacturerId": 1,
+    "equipmentTypeId": 8
+  },
+  {
+    "id": 24,
+    "name": "IVAC PCAM",
+    "nickname": "PCAM",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 25,
+    "name": "Alaris EtCO2 module",
+    "nickname": "8300",
+    "manufacturerId": 1,
+    "equipmentTypeId": 9
+  },
+  {
+    "id": 26,
+    "name": "Alaris GH (with Plus Software) MK4",
+    "nickname": "GH + MK4",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 27,
+    "name": "Alaris CC (with Plus Software) MK4",
+    "nickname": "CC + MK4",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 28,
+    "name": "Alaris GH Guardrails (with Plus Software) MK4",
+    "nickname": "GH G/R + MK4",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 29,
+    "name": "Alaris CC Guardrails (with Plus Software) MK4",
+    "nickname": "CC G/R + MK4",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 30,
+    "name": "Alaris PK Plus MK4",
+    "nickname": "PK + MK4",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 31,
+    "name": "Alaris Enteral Plus MK4",
+    "nickname": "Ent + MK4",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 33,
+    "name": "Oxylog 3000",
+    "nickname": "Oxylog 3000",
+    "manufacturerId": 4,
+    "equipmentTypeId": 3
+  },
+  {
+    "id": 34,
+    "name": "Lifepak 12",
+    "nickname": "LP12",
+    "manufacturerId": 3,
+    "equipmentTypeId": 4
+  },
+  {
+    "id": 35,
+    "name": "Lifepak 20",
+    "nickname": "LP20",
+    "manufacturerId": 3,
+    "equipmentTypeId": 4
+  },
+  {
+    "id": 36,
+    "name": "Lifepak 15",
+    "nickname": "LP15",
+    "manufacturerId": 3,
+    "equipmentTypeId": 4
+  },
+  {
+    "id": 37,
+    "name": "Alaris Gateway Workstation",
+    "nickname": "AGW",
+    "manufacturerId": 1,
+    "equipmentTypeId": 11
+  },
+  {
+    "id": 38,
+    "name": "Alaris Pump Module (BD)",
+    "nickname": "BD8100",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 39,
+    "name": "Alaris PC Unit (BD)",
+    "nickname": "BD8015",
+    "manufacturerId": 1,
+    "equipmentTypeId": 10
+  },
+  {
+    "id": 40,
+    "name": "Infusomat Space",
+    "nickname": "Infusomat",
+    "manufacturerId": 5,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 41,
+    "name": "Perfusor Space",
+    "nickname": "Perfusor",
+    "manufacturerId": 5,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 42,
+    "name": "T1",
+    "nickname": "T1",
+    "manufacturerId": 6,
+    "equipmentTypeId": 3
+  },
+  {
+    "id": 43,
+    "name": "MR1",
+    "nickname": "MR1",
+    "manufacturerId": 6,
+    "equipmentTypeId": 3
+  },
+  {
+    "id": 44,
+    "name": "Thermoscan",
+    "nickname": "Thermoscan",
+    "manufacturerId": 7,
+    "equipmentTypeId": 12
+  },
+  {
+    "id": 45,
+    "name": "Alaris GP NeXus Pump",
+    "nickname": "NeXus GP",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 46,
+    "name": "Alaris SP NeXus Pump",
+    "nickname": "NeXus SP",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 47,
+    "name": "Medumat Standard A",
+    "nickname": "Medumat Standard A",
+    "manufacturerId": 8,
+    "equipmentTypeId": 3
+  },
+  {
+    "id": 48,
+    "name": "Medumat Standard2",
+    "nickname": "Medumat Standard 2",
+    "manufacturerId": 8,
+    "equipmentTypeId": 3
+  },
+  {
+    "id": 49,
+    "name": "Versana Essential",
+    "nickname": "Versana Essential",
+    "manufacturerId": 12,
+    "equipmentTypeId": 6
+  },
+  {
+    "id": 50,
+    "name": "Versana Premier",
+    "nickname": "Versana",
+    "manufacturerId": 12,
+    "equipmentTypeId": 6
+  },
+  {
+    "id": 51,
+    "name": "Tempus IC",
+    "nickname": "",
+    "manufacturerId": 9,
+    "equipmentTypeId": 13
+  },
+  {
+    "id": 52,
+    "name": "H900",
+    "nickname": "H900",
+    "manufacturerId": 6,
+    "equipmentTypeId": 14
+  },
+  {
+    "id": 53,
+    "name": "Compact Suction Unit 4",
+    "nickname": "LCSU4",
+    "manufacturerId": 10,
+    "equipmentTypeId": 7
+  },
+  {
+    "id": 54,
+    "name": "Heartstart",
+    "nickname": "Heartstart",
+    "manufacturerId": 9,
+    "equipmentTypeId": 15
+  },
+  {
+    "id": 55,
+    "name": "C6",
+    "nickname": "C6",
+    "manufacturerId": 6,
+    "equipmentTypeId": 3
+  },
+  {
+    "id": 56,
+    "name": "Compact Suction Unit 3",
+    "nickname": "LCSU3",
+    "manufacturerId": 10,
+    "equipmentTypeId": 7
+  },
+  {
+    "id": 57,
+    "name": "Intellivue MP50 Monitor",
+    "nickname": "MP50",
+    "manufacturerId": 9,
+    "equipmentTypeId": 5
+  },
+  {
+    "id": 58,
+    "name": "AER Defense",
+    "nickname": "AER Defense",
+    "manufacturerId": 11,
+    "equipmentTypeId": 16
+  },
+  {
+    "id": 59,
+    "name": "Dash 4000",
+    "nickname": "Dash 4000",
+    "manufacturerId": 12,
+    "equipmentTypeId": 5
+  },
+  {
+    "id": 60,
+    "name": "Suresigns Monitor VS2+",
+    "nickname": "VS2+",
+    "manufacturerId": 9,
+    "equipmentTypeId": 13
+  },
+  {
+    "id": 61,
+    "name": "M3A",
+    "nickname": "M3A",
+    "manufacturerId": 14,
+    "equipmentTypeId": 13
+  },
+  {
+    "id": 62,
+    "name": "V100 Carescape",
+    "nickname": "V100",
+    "manufacturerId": 12,
+    "equipmentTypeId": 13
+  },
+  {
+    "id": 63,
+    "name": "Surgistat II",
+    "nickname": "Surgistat II",
+    "manufacturerId": 13,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 18,
+    "name": "Alaris PC Unit",
+    "nickname": "8015",
+    "manufacturerId": 1,
+    "equipmentTypeId": 10
+  },
+  {
+    "id": 32,
+    "name": "X Series",
+    "nickname": "ZOLL",
+    "manufacturerId": 2,
+    "equipmentTypeId": 4
+  },
+  {
+    "id": 12,
+    "name": "Alaris GH Guardrails (with Plus Software)",
+    "nickname": "GH G/R +",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 1,
+    "name": "Alaris GP",
+    "nickname": "GP",
+    "manufacturerId": 1,
+    "equipmentTypeId": 2
+  },
+  {
+    "id": 3,
+    "name": "Alaris GH",
+    "nickname": "GH",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 4,
+    "name": "Alaris CC",
+    "nickname": "CC",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 5,
+    "name": "Alaris TIVA",
+    "nickname": "TIVA",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 6,
+    "name": "Alaris PK",
+    "nickname": "PK",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  },
+  {
+    "id": 7,
+    "name": "Alaris Enteral",
+    "nickname": "ENT",
+    "manufacturerId": 1,
+    "equipmentTypeId": 1
+  }
+]
