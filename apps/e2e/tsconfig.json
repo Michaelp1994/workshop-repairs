@@ -37,9 +37,7 @@
     ".next/types/**/*.ts",
     "sst-env.d.ts",
     "../../packages/ui/src/tanstack-table.d.ts",
-    "../e2e/playwright.config.ts",
-    "../e2e/src/onboarding.e2e.ts",
-    "../e2e/src/public.e2e.ts"
+    "../e2e/playwright.config.ts"
   ],
   "exclude": ["node_modules", "eslint.config.js"]
 }

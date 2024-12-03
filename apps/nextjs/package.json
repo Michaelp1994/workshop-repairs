@@ -10,7 +10,6 @@
     "lint": "eslint .",
     "start": "next start",
     "test": "vitest",
-    "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -45,8 +44,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.2.0",
-    "@playwright/test": "^1.49.0",
     "@repo/eslint-config": "workspace:*",
     "@types/node": "^22.10.0",
     "@types/react": "^18.3.12",
