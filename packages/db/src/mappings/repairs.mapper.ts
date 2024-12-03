@@ -7,12 +7,13 @@ import { repairTypeTable } from "../tables/repair-type.sql";
 import { repairTable } from "../tables/repair.sql";
 
 const orderMapping = {
+  id: repairTable.id,
   fault: repairTable.fault,
   summary: repairTable.summary,
   type_name: repairTypeTable.name,
   status_name: repairStatusTypeTable.name,
-  asset_assetNumber: assetTable.assetNumber,
-  asset_serialNumber: assetTable.serialNumber,
+  assetNumber: assetTable.assetNumber,
+  serialNumber: assetTable.serialNumber,
   clientReference: repairTable.clientReference,
   createdAt: repairTable.createdAt,
   updatedAt: repairTable.updatedAt,
