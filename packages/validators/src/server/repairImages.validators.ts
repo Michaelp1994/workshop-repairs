@@ -1,10 +1,7 @@
 import { z } from "zod";
 
-import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "../isomorphic/dataTables.validators";
 import { repairId, repairImageId } from "../isomorphic/ids.validators";
+import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
 const repairImageFilters = z.object({}).optional();
 

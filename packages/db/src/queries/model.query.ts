@@ -1,7 +1,7 @@
 import type {
-  DataTableCountSchema,
+  DataTableCountOutput,
   DataTableOutput,
-} from "@repo/validators/dataTables.validators";
+} from "@repo/validators/server/dataTables.validators";
 
 import { and, count, eq, getTableColumns, type SQL } from "drizzle-orm";
 
@@ -55,7 +55,7 @@ export function createAllModelsQuery(
 }
 
 export function createModelsCountQuery(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters }: DataTableCountOutput,
   ...filters: (SQL | undefined)[]
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);

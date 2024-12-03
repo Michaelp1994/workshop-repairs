@@ -1,11 +1,11 @@
 import { z } from "zod";
 
+import { modelId, modelImageId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
   getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import { modelId, modelImageId } from "../isomorphic/ids.validators";
+} from "./dataTables.validators";
 
 const modelImageFilters = z.object({}).optional();
 

@@ -1,7 +1,7 @@
 import type {
-  DataTableCountSchema,
-  DataTableOutput,
-} from "@repo/validators/dataTables.validators";
+  CountUsersInput,
+  GetAllUsersInput,
+} from "@repo/validators/server/users.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -27,7 +27,7 @@ const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
 export function getAllUsers(
-  { globalFilter, sorting, pagination, columnFilters }: DataTableOutput,
+  { globalFilter, sorting, pagination, columnFilters }: GetAllUsersInput,
   organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderBy(sorting);
@@ -52,7 +52,7 @@ export function getAllUsers(
 }
 
 export async function countUsers(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters }: CountUsersInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);

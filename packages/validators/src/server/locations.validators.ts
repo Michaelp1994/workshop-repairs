@@ -1,11 +1,11 @@
 import { z } from "zod";
 
+import { locationId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
   getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import { locationId } from "../isomorphic/ids.validators";
+} from "./dataTables.validators";
 
 const locationFilters = z.object({}).optional();
 

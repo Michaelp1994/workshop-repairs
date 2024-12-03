@@ -1,11 +1,6 @@
 import { z } from "zod";
 
 import {
-  dataTableCountSchema,
-  dataTableSchema,
-  getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import {
   assetId,
   assetStatusId,
   clientId,
@@ -15,6 +10,11 @@ import {
   modelId,
   repairId,
 } from "../isomorphic/ids.validators";
+import {
+  dataTableCountSchema,
+  dataTableSchema,
+  getSelectSchema,
+} from "./dataTables.validators";
 
 // Data Tables.
 

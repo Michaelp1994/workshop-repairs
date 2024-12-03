@@ -1,8 +1,7 @@
-import type {
-  DataTableCountSchema,
-  DataTableOutput,
-} from "@repo/validators/dataTables.validators";
-
+import {
+  CountRepairImagesInput,
+  GetAllRepairImagesInput,
+} from "@repo/validators/server/repairImages.validators";
 import { and, count, eq, isNull } from "drizzle-orm";
 
 import type { RepairID } from "../tables/repair.sql";
@@ -16,7 +15,7 @@ import {
   type UpdateRepairImage,
 } from "../tables/repair-image.sql";
 
-export function getAllRepairImages({ pagination }: DataTableOutput) {
+export function getAllRepairImages({ pagination }: GetAllRepairImagesInput) {
   const query = db
     .select()
     .from(repairImageTable)
@@ -26,7 +25,7 @@ export function getAllRepairImages({ pagination }: DataTableOutput) {
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
-export async function countRepairImages(_: DataTableCountSchema) {
+export async function countRepairImages(_: CountRepairImagesInput) {
   const query = db
     .select({ count: count() })
     .from(repairImageTable)

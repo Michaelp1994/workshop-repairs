@@ -1,11 +1,11 @@
 import { z } from "zod";
 
+import { clientId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
   getSelectSchema,
-} from "../isomorphic/dataTables.validators";
-import { clientId } from "../isomorphic/ids.validators";
+} from "./dataTables.validators";
 
 const clientFilters = z.object({}).optional();
 

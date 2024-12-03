@@ -1,7 +1,7 @@
-import type { GetSelectInput } from "@repo/validators/dataTables.validators";
 import type {
   CountRepairsInput,
   GetAllRepairsInput,
+  GetRepairsSelectInput,
 } from "@repo/validators/server/repairs.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
@@ -124,7 +124,7 @@ export async function countRepairs(
   return res?.value;
 }
 
-export async function getRepairsSelect(_: GetSelectInput) {
+export async function getRepairsSelect(_: GetRepairsSelectInput) {
   const query = db
     .select({
       value: repairTable.id,

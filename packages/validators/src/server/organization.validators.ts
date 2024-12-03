@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-import {
-  dataTableCountSchema,
-  dataTableSchema,
-} from "../isomorphic/dataTables.validators";
+import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
 const organizationFilters = z.object({}).optional();
 

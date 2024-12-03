@@ -1,7 +1,7 @@
 import type {
-  DataTableCountSchema,
+  DataTableCountOutput,
   DataTableOutput,
-} from "@repo/validators/dataTables.validators";
+} from "@repo/validators/server/dataTables.validators";
 
 import { and, count, eq, getTableColumns, type SQLWrapper } from "drizzle-orm";
 
@@ -66,7 +66,7 @@ export function createAllAssetsQuery(
 }
 
 export function createAssetsCountQuery(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters }: DataTableCountOutput,
   ...filters: (SQLWrapper | undefined)[]
 ) {
   const query = db

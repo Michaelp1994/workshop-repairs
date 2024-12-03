@@ -1,8 +1,7 @@
-import type {
-  DataTableCountSchema,
-  DataTableOutput,
-} from "@repo/validators/dataTables.validators";
-
+import {
+  CountRepairCommentsInput,
+  GetAllRepairCommentsInput,
+} from "@repo/validators/server/repairComments.validators";
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import { db } from "..";
@@ -18,7 +17,9 @@ import { userTable } from "../tables/user.sql";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
-export function getAllRepairComments({ pagination }: DataTableOutput) {
+export function getAllRepairComments({
+  pagination,
+}: GetAllRepairCommentsInput) {
   const query = db
     .select()
     .from(repairCommentTable)
@@ -29,7 +30,7 @@ export function getAllRepairComments({ pagination }: DataTableOutput) {
   return query.execute();
 }
 
-export async function countRepairComments(_input: DataTableCountSchema) {
+export async function countRepairComments(_input: CountRepairCommentsInput) {
   const query = db
     .select({ count: count() })
     .from(repairCommentTable)

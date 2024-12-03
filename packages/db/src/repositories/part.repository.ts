@@ -1,8 +1,8 @@
 import type {
-  DataTableCountSchema,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/dataTables.validators";
+  CountPartsInput,
+  GetAllPartsInput,
+  GetPartsSelectInput,
+} from "@repo/validators/server/parts.validators";
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
@@ -26,7 +26,7 @@ import {
 const partFields = getTableColumns(partTable);
 
 export function getAllParts(
-  { pagination, globalFilter, sorting, columnFilters }: DataTableOutput,
+  { pagination, globalFilter, sorting, columnFilters }: GetAllPartsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -50,7 +50,7 @@ export function getAllParts(
 }
 
 export async function countParts(
-  { globalFilter, columnFilters }: DataTableCountSchema,
+  { globalFilter, columnFilters }: CountPartsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
@@ -72,7 +72,7 @@ export async function countParts(
   return res?.count;
 }
 
-export async function getPartsSelect(_props: GetSelectInput) {
+export async function getPartsSelect(_props: GetPartsSelectInput) {
   const query = db
     .select({
       value: partTable.id,
