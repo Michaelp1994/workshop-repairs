@@ -58,7 +58,7 @@ export default function ModelAssetsTable({ modelId }: ModelAssetsTableProps) {
             size="sm"
             variant="create"
           >
-            Add
+            Add Asset
           </IconButton>
         </CardHeaderActions>
       </CardHeader>
