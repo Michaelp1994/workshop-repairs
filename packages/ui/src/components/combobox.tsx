@@ -56,6 +56,7 @@ export const Combobox = React.forwardRef<
           aria-expanded={open}
           className={cn("flex w-full justify-between", className)}
           role="combobox"
+          type="button"
           variant="outline"
           {...props}
           ref={ref}
