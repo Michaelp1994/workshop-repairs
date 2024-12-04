@@ -30,12 +30,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "assets" })
     .input(getAllAssetsSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await getAllAssets(input, ctx.session.organizationId);
       return allAssets;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "assets" })
     .input(countAssetsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countAssets(input, ctx.session.organizationId);
@@ -43,6 +45,7 @@ export default router({
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "assets" })
     .input(getAssestsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allAssets = await getAssetsSelect(
@@ -52,6 +55,7 @@ export default router({
       return allAssets;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "assets" })
     .input(getAssetByIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetById(input.id, ctx.session.organizationId);
@@ -66,6 +70,7 @@ export default router({
       return asset;
     }),
   getByRepairId: organizationProcedure
+    .meta({ action: "read", entity: "assets" })
     .input(getAssetByRepairIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetByRepairId(
@@ -83,6 +88,7 @@ export default router({
       return asset;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "assets" })
     .input(createAssetSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -97,6 +103,7 @@ export default router({
       return createdAsset;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "assets" })
     .input(updateAssetSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -109,6 +116,7 @@ export default router({
       return updatedAsset;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "assets" })
     .input(archiveAssetSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

@@ -37,6 +37,7 @@ import { authedProcedure, organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "users" })
     .input(getAllUsersSchema)
     .query(async ({ input, ctx }) => {
       const allUsers = getAllUsers(input, ctx.session.organizationId);
@@ -44,6 +45,7 @@ export default router({
       return allUsers;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "users" })
     .input(countUsersSchema)
     .query(({ input, ctx }) => {
       const count = countUsers(input, ctx.session.organizationId);
@@ -101,6 +103,7 @@ export default router({
     }),
 
   getById: organizationProcedure
+    .meta({ action: "read", entity: "users" })
     .input(getUserByIdSchema)
     .query(async ({ input }) => {
       const user = await getUserById(input.id);
@@ -114,12 +117,16 @@ export default router({
 
       return user;
     }),
-  create: organizationProcedure.input(createUserSchema).mutation(async () => {
-    throw new TRPCError({
-      code: "NOT_IMPLEMENTED",
-    });
-  }),
+  create: organizationProcedure
+    .meta({ action: "create", entity: "users" })
+    .input(createUserSchema)
+    .mutation(async () => {
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+      });
+    }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "users" })
     .input(updateUserSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -149,6 +156,7 @@ export default router({
       return updatedUser;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "users" })
     .input(archiveUserSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

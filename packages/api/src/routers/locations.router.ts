@@ -28,6 +28,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "locations" })
     .input(getAllLocationsSchema)
     .query(({ ctx, input }) => {
       const allLocations = getAllLocations(input, ctx.session.organizationId);
@@ -35,18 +36,21 @@ export default router({
       return allLocations;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "locations" })
     .input(countLocationsSchema)
     .query(({ ctx, input }) => {
       const count = countLocations(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "locations" })
     .input(getLocationsSelectSchema)
     .query(({ ctx, input }) => {
       const locations = getLocationsSelect(input, ctx.session.organizationId);
       return locations;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "locations" })
     .input(getLocationByIdSchema)
     .query(async ({ input }) => {
       const location = await getLocationById(input.id);
@@ -61,6 +65,7 @@ export default router({
       return location;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "locations" })
     .input(createLocationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -75,6 +80,7 @@ export default router({
       return createdLocation;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "locations" })
     .input(updateLocationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -88,6 +94,7 @@ export default router({
       return updatedLocation;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "locations" })
     .input(archiveLocationSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

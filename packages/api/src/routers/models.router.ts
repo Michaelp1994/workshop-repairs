@@ -31,6 +31,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getAllModelsSchema)
     .query(async ({ ctx, input }) => {
       const allModels = await getAllModels(input, ctx.session.organizationId);
@@ -42,12 +43,14 @@ export default router({
       }));
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(countModelsSchema)
     .query(({ ctx, input }) => {
       const count = countModels(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getModelsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allModels = await getModelsSelect(
@@ -58,6 +61,7 @@ export default router({
     }),
 
   getByAssetId: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getModelByAssetIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetById(
@@ -84,6 +88,7 @@ export default router({
       return model;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getModelByIdSchema)
     .query(async ({ input }) => {
       const model = await getModelById(input.id);
@@ -98,6 +103,7 @@ export default router({
       return model;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "models" })
     .input(createModelSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -113,6 +119,7 @@ export default router({
       return createdModel;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "models" })
     .input(updateModelSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -127,6 +134,7 @@ export default router({
       return updatedModel;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "models" })
     .input(archiveModelSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

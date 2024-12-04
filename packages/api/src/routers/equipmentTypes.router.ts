@@ -28,6 +28,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "equipment-types" })
     .input(getAllEquipmentTypesSchema)
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = getAllEquipmentTypes(
@@ -38,12 +39,14 @@ export default router({
       return allEquipmentTypes;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "equipment-types" })
     .input(countEquipmentTypesSchema)
     .query(({ ctx, input }) => {
       const count = countEquipmentTypes(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "equipment-types" })
     .input(getEquipmentTypesSelectSchema)
     .query(async ({ ctx, input }) => {
       const allEquipmentTypes = await getEquipmentTypesSelect(
@@ -54,6 +57,7 @@ export default router({
       return allEquipmentTypes;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "equipment-types" })
     .input(getEquipmentTypeByIdSchema)
     .query(async ({ input }) => {
       const repairType = await getEquipmentTypeById(input.id);
@@ -68,6 +72,7 @@ export default router({
       return repairType;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "equipment-types" })
     .input(createEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -82,6 +87,7 @@ export default router({
       return createdEquipmentType;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "equipment-types" })
     .input(updateEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -95,6 +101,7 @@ export default router({
       return updatedEquipmentType;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "equipment-types" })
     .input(archiveEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

@@ -42,6 +42,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getAllModelImagesSchema)
     .query(async ({ input }) => {
       const allModelImages = getAllModelImages(input);
@@ -49,12 +50,14 @@ export default router({
       return allModelImages;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(countModelImagesSchema)
     .query(({ input }) => {
       const count = countModelImages(input);
       return count;
     }),
   getAllByModelId: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getAllModelImagesByModelIdSchema)
     .query(async ({ input }) => {
       const model = await getModelById(input.modelId);
@@ -76,6 +79,7 @@ export default router({
     }),
 
   getById: organizationProcedure
+    .meta({ action: "read", entity: "models" })
     .input(getModelImageByIdSchema)
     .query(async ({ input }) => {
       const modelImage = await getModelImageById(input.id);
@@ -90,6 +94,7 @@ export default router({
       return modelImage;
     }),
   requestUpload: organizationProcedure
+    .meta({ action: "create", entity: "models" })
     .input(requestUploadModelImageSchema)
     .mutation(async ({ input }) => {
       const uuid = randomUUID();
@@ -101,6 +106,7 @@ export default router({
       return { url: presignedUrl, fileName };
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "models" })
     .input(createModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const fileExists = await fileExistsInS3(
@@ -138,6 +144,7 @@ export default router({
       return createdModelImage;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "models" })
     .input(updateModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -151,6 +158,7 @@ export default router({
       return updatedModelImage;
     }),
   setFavourite: organizationProcedure
+    .meta({ action: "update", entity: "models" })
     .input(setFavouriteModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const modelImage = await getModelImageById(input.id);
@@ -180,6 +188,7 @@ export default router({
       return modelImage;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "models" })
     .input(archiveModelImageSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

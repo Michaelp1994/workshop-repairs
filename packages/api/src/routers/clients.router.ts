@@ -28,12 +28,14 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "clients" })
     .input(getAllClientsSchema)
     .query(async ({ ctx, input }) => {
       const allClients = await getAllClients(input, ctx.session.organizationId);
       return allClients;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "clients" })
     .input(countClientsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countClients(input, ctx.session.organizationId);
@@ -41,6 +43,7 @@ export default router({
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "clients" })
     .input(getClientsSelectSchema)
     .query(async ({ ctx, input }) => {
       const allClients = await getClientsSelect(
@@ -51,6 +54,7 @@ export default router({
       return allClients;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "clients" })
     .input(getClientByIdSchema)
     .query(async ({ input }) => {
       const client = await getClientById(input.id);
@@ -63,6 +67,7 @@ export default router({
       return client;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "clients" })
     .input(createClientSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -77,6 +82,7 @@ export default router({
       return createdClient;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "clients" })
     .input(updateClientSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -89,6 +95,7 @@ export default router({
       return updatedClient;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "clients" })
     .input(archiveClientSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

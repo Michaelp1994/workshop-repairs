@@ -28,6 +28,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(getAllPartsSchema)
     .query(async ({ ctx, input }) => {
       const allParts = getAllParts(input, ctx.session.organizationId);
@@ -35,6 +36,7 @@ export default router({
       return allParts;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(countPartsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countParts(input, ctx.session.organizationId);
@@ -42,6 +44,7 @@ export default router({
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(getPartsSelectSchema)
     .query(async ({ input }) => {
       const allParts = await getPartsSelect(input);
@@ -49,6 +52,7 @@ export default router({
       return allParts;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(getPartByIdSchema)
     .query(async ({ input }) => {
       const part = await getPartById(input.id);
@@ -63,6 +67,7 @@ export default router({
       return part;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "manufacturers" })
     .input(createPartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -77,6 +82,7 @@ export default router({
       return createdPart;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "manufacturers" })
     .input(updatePartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -90,6 +96,7 @@ export default router({
       return updatedPart;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "manufacturers" })
     .input(archivePartSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

@@ -28,6 +28,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(getAllManufacturersSchema)
     .query(async ({ ctx, input }) => {
       const allManufacturers = await getAllManufacturers(
@@ -38,12 +39,14 @@ export default router({
       return allManufacturers;
     }),
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(countManufacturersSchema)
     .query(({ ctx, input }) => {
       const count = countManufacturers(input, ctx.session.organizationId);
       return count;
     }),
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(getManufacturersSelectSchema)
     .query(async ({ ctx, input }) => {
       const manufacturers = await getManufacturersSelect(
@@ -54,6 +57,7 @@ export default router({
       return manufacturers;
     }),
   getById: organizationProcedure
+    .meta({ action: "read", entity: "manufacturers" })
     .input(getManufacturerByIdSchema)
     .query(async ({ input }) => {
       const manufacturer = await getManufacturerById(input.id);
@@ -68,6 +72,7 @@ export default router({
       return manufacturer;
     }),
   create: organizationProcedure
+    .meta({ action: "create", entity: "manufacturers" })
     .input(createManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -82,6 +87,7 @@ export default router({
       return createdManufacturer;
     }),
   update: organizationProcedure
+    .meta({ action: "update", entity: "manufacturers" })
     .input(updateManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -95,6 +101,7 @@ export default router({
       return updatedManufacturer;
     }),
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "manufacturers" })
     .input(archiveManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);

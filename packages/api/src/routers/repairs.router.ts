@@ -28,6 +28,7 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
+    .meta({ action: "read", entity: "repairs" })
     .input(getAllRepairsSchema)
     .query(async ({ ctx, input }) => {
       const allRepairs = await getAllRepairs(input, ctx.session.organizationId);
@@ -35,6 +36,7 @@ export default router({
     }),
 
   countAll: organizationProcedure
+    .meta({ action: "read", entity: "repairs" })
     .input(countRepairsSchema)
     .query(async ({ ctx, input }) => {
       const count = await countRepairs(input, ctx.session.organizationId);
@@ -48,6 +50,7 @@ export default router({
     }),
 
   getSelect: organizationProcedure
+    .meta({ action: "read", entity: "repairs" })
     .input(getRepairsSelectSchema)
     .query(async ({ input }) => {
       const allRepairs = await getRepairsSelect(input);
@@ -55,6 +58,7 @@ export default router({
     }),
 
   getById: organizationProcedure
+    .meta({ action: "read", entity: "repairs" })
     .input(getRepairByIdSchema)
     .query(async ({ input }) => {
       const repair = await getRepairById(input.id);
@@ -70,6 +74,7 @@ export default router({
     }),
 
   create: organizationProcedure
+    .meta({ action: "create", entity: "repairs" })
     .input(createRepairSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
@@ -86,6 +91,7 @@ export default router({
     }),
 
   update: organizationProcedure
+    .meta({ action: "update", entity: "repairs" })
     .input(updateRepairSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
@@ -100,6 +106,7 @@ export default router({
     }),
 
   archive: organizationProcedure
+    .meta({ action: "delete", entity: "repairs" })
     .input(archiveRepairSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
