@@ -10,7 +10,7 @@
     "db:migrate": "sst shell -- pnpm -F db db:migrate",
     "db:reset": "sst shell -- pnpm -F db db:reset",
     "db:seed": "sst shell -- pnpm -F db db:seed",
-    "dev": "sst dev",
+    "dev": "sst shell -- pnpm -F nextjs dev",
     "format": "prettier . --write",
     "lint": "turbo lint",
     "prepare": "husky",
@@ -18,6 +18,7 @@
     "test": "pnpm vitest run",
     "test:coverage": "pnpm vitest --continue --coverage",
     "test:e2e": "sst shell -- pnpm -F e2e test:e2e",
+    "test:gen": "sst shell -- pnpm -F e2e test:gen",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
