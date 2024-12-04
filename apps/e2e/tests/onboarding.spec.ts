@@ -38,5 +38,7 @@ test("onboarding process", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Invite Others" }),
   ).toBeVisible();
-  // await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await expect(page).toHaveURL("http://localhost:3000/dashboard");
 });
