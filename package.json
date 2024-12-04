@@ -17,7 +17,7 @@
     "prepare": "husky",
     "start": "sst shell -- pnpm -F nextjs start",
     "test": "pnpm vitest run",
-    "test:coverage": "pnpm vitest --continue --coverage",
+    "test:coverage": "pnpm vitest run --coverage",
     "test:e2e": "sst shell -- pnpm -F e2e test:e2e",
     "test:gen": "sst shell -- pnpm -F e2e test:gen",
     "typecheck": "turbo typecheck"
