@@ -42,7 +42,6 @@ export async function fileExistsInS3(key: string) {
   });
   const result = await s3.send(command);
   const exists = result.$metadata.httpStatusCode === 200;
-  console.log({ exists });
   return exists;
 }
 
