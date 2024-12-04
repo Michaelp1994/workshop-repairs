@@ -69,7 +69,7 @@ export default function CreatePartModelForm({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Model</FormLabel>
                 <FormControl>
                   <ModelSelect {...field} />
                 </FormControl>

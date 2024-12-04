@@ -44,7 +44,7 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
           scroll={false}
           variant="create"
         >
-          Add
+          Add Part
         </IconButton>
       </CardHeader>
       <CardContent>

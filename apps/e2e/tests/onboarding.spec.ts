@@ -6,7 +6,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 const testLogoPath = path.join(import.meta.dirname, "files/test-logo.jpg");
 
-test("if onboarding process works.", async ({ page }) => {
+test("onboarding process", async ({ page }) => {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const password = faker.internet.password();
@@ -38,5 +38,7 @@ test("if onboarding process works.", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Invite Others" }),
   ).toBeVisible();
-  // await page.getByRole("button", { name: "Skip" }).click();
+  await page.getByRole("button", { name: "Skip" }).click();
+
+  await expect(page).toHaveURL("http://localhost:3000/dashboard");
 });

@@ -1,7 +1,15 @@
 import { expect, test } from "@playwright/test";
+import { existsSync } from "fs";
 import path from "path";
 
-const authFile = path.join(import.meta.dirname, "./.auth/user.json");
+const authFile = path.join(
+  import.meta.dirname,
+  "../playwright/.auth/user.json",
+);
+
+test.skip(existsSync(authFile));
+
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test("Authenticate User", async ({ page }) => {
   if (!process.env.TEST_USER_EMAIL || !process.env.TEST_USER_PASSWORD) {

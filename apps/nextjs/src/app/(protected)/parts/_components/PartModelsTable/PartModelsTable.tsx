@@ -49,7 +49,7 @@ export default function PartModelsTable({ partId }: PartModelsTableProps) {
             scroll={false}
             variant="create"
           >
-            Add
+            Add Model
           </IconButton>
         </CardHeaderActions>
       </CardHeader>

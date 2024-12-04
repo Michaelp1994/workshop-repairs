@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "Syringe Driver"
+  },
+  {
+    "id": 2,
+    "name": "Infusion Pump"
+  },
+  {
+    "id": 3,
+    "name": "Ventilator"
+  },
+  {
+    "id": 4,
+    "name": "Defibrillator"
+  },
+  {
+    "id": 5,
+    "name": "Patient Monitor"
+  },
+  {
+    "id": 6,
+    "name": "Ultrasound"
+  },
+  {
+    "id": 7,
+    "name": "Suction Unit"
+  },
+  {
+    "id": 8,
+    "name": "Medication Dispensing System"
+  },
+  {
+    "id": 9,
+    "name": "EtCO2 Monitor"
+  },
+  {
+    "id": 10,
+    "name": "Infusion System Controller"
+  },
+  {
+    "id": 11,
+    "name": "Docking Station"
+  },
+  {
+    "id": 12,
+    "name": "Thermometer"
+  },
+  {
+    "id": 13,
+    "name": "Vital Signs Monitor"
+  },
+  {
+    "id": 14,
+    "name": "Humidifier"
+  },
+  {
+    "id": 15,
+    "name": "Automated External Defibrillator"
+  },
+  {
+    "id": 16,
+    "name": "Smoke Evacuator System"
+  }
+]

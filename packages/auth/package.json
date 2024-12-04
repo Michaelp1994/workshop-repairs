@@ -21,10 +21,9 @@
     "@node-rs/argon2": "^2.0.0",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
-    "@repo/db": "workspace:^",
     "@repo/validators": "workspace:^",
-    "jose": "^5.9.6",
-    "cookie": "^1.0.2"
+    "cookie": "^1.0.2",
+    "jose": "^5.9.6"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

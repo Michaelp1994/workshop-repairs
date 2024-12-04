@@ -81,7 +81,7 @@ export default function CreateLocationForm() {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={createMutation.isPending} />
         </FormFooter>
       </form>
     </Form>
