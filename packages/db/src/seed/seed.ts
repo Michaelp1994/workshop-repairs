@@ -2,6 +2,8 @@ import { hashPassword } from "@repo/auth/password";
 import { getTableColumns, getTableName, sql } from "drizzle-orm";
 import { reset } from "drizzle-seed";
 
+import type { UserRolePermission } from "../tables/user-role-permission.sql";
+
 import { db } from "../index";
 import { schema } from "../tables";
 import asset_statuses from "./data/staging/asset_statuses.json";
@@ -15,6 +17,7 @@ import parts from "./data/staging/parts.json";
 import parts_to_models from "./data/staging/parts_to_models.json";
 import repair_status_types from "./data/staging/repair_status_types.json";
 import repair_types from "./data/staging/repair_types.json";
+import user_roles_permissions from "./data/staging/user_role_permissions.json";
 import user_roles from "./data/staging/user_roles.json";
 
 console.log("Seeding database...");
@@ -40,6 +43,22 @@ try {
     if (!organization) {
       throw Error("Failed to create organization");
     }
+
+    await t.insert(schema.userRoleTable).values(
+      user_roles.map((user_role) => ({
+        organizationId: organization.id,
+        ...user_role,
+      })),
+    );
+
+    await t.insert(schema.userRolePermissionTable).values(
+      user_roles_permissions.map((user_role_permission) => ({
+        roleId: user_role_permission.roleId,
+        entity: user_role_permission.entity as UserRolePermission["entity"],
+        action: user_role_permission.action as UserRolePermission["action"],
+      })),
+    );
+
     const [user] = await t
       .insert(schema.userTable)
       .values({
@@ -47,7 +66,7 @@ try {
         password: await hashPassword(password),
         firstName: "Test",
         lastName: "User",
-        roleId: 1,
+        roleId: 4,
         onboardingCompleted: true,
         organizationId: organization.id,
       })
@@ -56,13 +75,6 @@ try {
     if (!user) {
       throw Error("Failed to create user");
     }
-
-    await t.insert(schema.userRoleTable).values(
-      user_roles.map((user_role) => ({
-        organizationId: organization.id,
-        ...user_role,
-      })),
-    );
 
     await t.insert(schema.clientTable).values(
       clients.map((client) => ({

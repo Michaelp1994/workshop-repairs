@@ -1,0 +1,182 @@
+[
+  {
+    "roleId": 4,
+    "entity": "assets",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "assets",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "assets",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "assets",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "clients",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "clients",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "clients",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "clients",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "repairs",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "repairs",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "repairs",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "repairs",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "locations",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "locations",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "locations",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "locations",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "models",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "models",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "models",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "models",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "manufacturers",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "manufacturers",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "manufacturers",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "manufacturers",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "equipment-types",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "equipment-types",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "equipment-types",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "equipment-types",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "parts",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "parts",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "parts",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "parts",
+    "action": "delete"
+  },
+  {
+    "roleId": 4,
+    "entity": "users",
+    "action": "create"
+  },
+  {
+    "roleId": 4,
+    "entity": "users",
+    "action": "read"
+  },
+  {
+    "roleId": 4,
+    "entity": "users",
+    "action": "update"
+  },
+  {
+    "roleId": 4,
+    "entity": "users",
+    "action": "delete"
+  }
+]
