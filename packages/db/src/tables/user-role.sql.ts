@@ -9,6 +9,7 @@ import {
 } from "../types";
 import { laxAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
+import { userRolePermissionTable } from "./user-role-permission.sql";
 import { userTable } from "./user.sql";
 
 export const userRoleTable = pgTable(
@@ -27,6 +28,7 @@ export const userRoleTable = pgTable(
 
 export const userRoleRelations = relations(userRoleTable, ({ many }) => ({
   users: many(userTable),
+  permissions: many(userRolePermissionTable),
 }));
 
 export type UserRole = InferModel<typeof userRoleTable>;
