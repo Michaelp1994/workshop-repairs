@@ -29,7 +29,6 @@ try {
     await t.insert(schema.assetStatusTable).values(asset_statuses);
     await t.insert(schema.repairStatusTypeTable).values(repair_status_types);
     await t.insert(schema.repairTypeTable).values(repair_types);
-    await t.insert(schema.userRoleTable).values(user_roles);
     const [organization] = await t
       .insert(schema.organizationTable)
       .values(
@@ -57,6 +56,14 @@ try {
     if (!user) {
       throw Error("Failed to create user");
     }
+
+    await t.insert(schema.userRoleTable).values(
+      user_roles.map((user_role) => ({
+        organizationId: organization.id,
+        ...user_role,
+      })),
+    );
+
     await t.insert(schema.clientTable).values(
       clients.map((client) => ({
         ...client,

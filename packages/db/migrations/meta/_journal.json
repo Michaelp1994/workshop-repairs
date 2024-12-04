@@ -22,6 +22,20 @@
       "when": 1733291287364,
       "tag": "0002_cynical_blackheart",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1733292467274,
+      "tag": "0003_round_justin_hammer",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1733293112570,
+      "tag": "0004_lonely_prism",
+      "breakpoints": true
     }
   ]
 }

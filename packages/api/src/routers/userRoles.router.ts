@@ -64,6 +64,7 @@ export default router({
       const metadata = createInsertMetadata(ctx.session);
       const createdUserRole = await createUserRole({
         ...input,
+        organizationId: ctx.session.organizationId,
         ...metadata,
       });
       if (!createdUserRole) {

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -8,14 +8,22 @@ import {
   type InferUpdateModel,
 } from "../types";
 import { laxAuditing, timestamps } from "./columns.helpers";
+import { organizationTable } from "./organization.sql";
 import { userTable } from "./user.sql";
 
-export const userRoleTable = pgTable("user_role", {
-  id: serial().primaryKey(),
-  name: varchar().notNull().unique(),
-  ...timestamps,
-  ...laxAuditing,
-});
+export const userRoleTable = pgTable(
+  "user_role",
+  {
+    id: serial().primaryKey(),
+    name: varchar().notNull(),
+    organizationId: integer()
+      .notNull()
+      .references(() => organizationTable.id),
+    ...timestamps,
+    ...laxAuditing,
+  },
+  (t) => [unique().on(t.name, t.organizationId)],
+);
 
 export const userRoleRelations = relations(userRoleTable, ({ many }) => ({
   users: many(userTable),
