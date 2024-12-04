@@ -1,21 +1,21 @@
 import {
-  archiveUserType,
-  countUserTypes,
-  createUserType,
-  getAllUserTypes,
-  getUserTypeById,
-  getUserTypesSelect,
-  updateUserType,
-} from "@repo/db/repositories/userType.repository";
+  archiveUserRole,
+  countUserRoles,
+  createUserRole,
+  getAllUserRoles,
+  getUserRoleById,
+  getUserRolesSelect,
+  updateUserRole,
+} from "@repo/db/repositories/userRole.repository";
 import {
-  archiveUserTypeSchema,
-  countUserTypesSchema,
-  createUserTypeSchema,
-  getAllUserTypesSchema,
-  getUserTypeByIdSchema,
-  getUserTypeSelectSchema,
-  updateUserTypeSchema,
-} from "@repo/validators/server/userTypes.validators";
+  archiveUserRoleSchema,
+  countUserRolesSchema,
+  createUserRoleSchema,
+  getAllUserRolesSchema,
+  getUserRoleByIdSchema,
+  getUserRoleSelectSchema,
+  updateUserRoleSchema,
+} from "@repo/validators/server/userRoles.validators";
 import { TRPCError } from "@trpc/server";
 
 import {
@@ -27,88 +27,88 @@ import { organizationProcedure, router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
-    .input(getAllUserTypesSchema)
+    .input(getAllUserRolesSchema)
     .query(async ({ input }) => {
-      const allUserTypes = getAllUserTypes(input);
-      return allUserTypes;
+      const allUserRoles = getAllUserRoles(input);
+      return allUserRoles;
     }),
   countAll: organizationProcedure
-    .input(countUserTypesSchema)
+    .input(countUserRolesSchema)
     .query(({ input }) => {
-      const count = countUserTypes(input);
+      const count = countUserRoles(input);
       return count;
     }),
   getSelect: organizationProcedure
-    .input(getUserTypeSelectSchema)
+    .input(getUserRoleSelectSchema)
     .query(async ({ input }) => {
-      const allUserTypes = getUserTypesSelect(input);
-      return allUserTypes;
+      const allUserRoles = getUserRolesSelect(input);
+      return allUserRoles;
     }),
   getById: organizationProcedure
-    .input(getUserTypeByIdSchema)
+    .input(getUserRoleByIdSchema)
     .query(async ({ input }) => {
-      const userType = await getUserTypeById(input.id);
+      const userRole = await getUserRoleById(input.id);
 
-      if (!userType) {
+      if (!userRole) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "userType not found",
+          message: "userRole not found",
         });
       }
 
-      return userType;
+      return userRole;
     }),
   create: organizationProcedure
-    .input(createUserTypeSchema)
+    .input(createUserRoleSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
-      const createdUserType = await createUserType({
+      const createdUserRole = await createUserRole({
         ...input,
         ...metadata,
       });
-      if (!createdUserType) {
+      if (!createdUserRole) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't create user Type",
+          message: "can't create User Role",
         });
       }
 
-      return createdUserType;
+      return createdUserRole;
     }),
   update: organizationProcedure
-    .input(updateUserTypeSchema)
+    .input(updateUserRoleSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedUserType = await updateUserType({
+      const updatedUserRole = await updateUserRole({
         ...input,
         ...metadata,
       });
 
-      if (!updatedUserType) {
+      if (!updatedUserRole) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't update user Type",
+          message: "can't update User Role",
         });
       }
 
-      return updatedUserType;
+      return updatedUserRole;
     }),
   archive: organizationProcedure
-    .input(archiveUserTypeSchema)
+    .input(archiveUserRoleSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedUserType = await archiveUserType({
+      const archivedUserRole = await archiveUserRole({
         ...input,
         ...metadata,
       });
 
-      if (!archivedUserType) {
+      if (!archivedUserRole) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "can't archive user Type",
+          message: "can't archive User Role",
         });
       }
 
-      return archivedUserType;
+      return archivedUserRole;
     }),
 });

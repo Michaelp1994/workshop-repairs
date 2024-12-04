@@ -47,7 +47,7 @@ export const columns = [
     },
   }),
 
-  columnHelper.accessor("type.name", {
+  columnHelper.accessor("role.name", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
     ),

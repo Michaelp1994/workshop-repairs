@@ -10,25 +10,25 @@ import {
 import { laxAuditing, timestamps } from "./columns.helpers";
 import { userTable } from "./user.sql";
 
-export const userTypeTable = pgTable("user_type", {
+export const userRoleTable = pgTable("user_role", {
   id: serial().primaryKey(),
   name: varchar().notNull().unique(),
   ...timestamps,
   ...laxAuditing,
 });
 
-export const userTypeRelations = relations(userTypeTable, ({ many }) => ({
+export const userRoleRelations = relations(userRoleTable, ({ many }) => ({
   users: many(userTable),
 }));
 
-export type UserType = InferModel<typeof userTypeTable>;
-export type UserTypeID = UserType["id"];
-export type CreateUserType = InferCreateModel<typeof userTypeTable>;
-export type UpdateUserType = Omit<
-  InferUpdateModel<typeof userTypeTable>,
+export type UserRole = InferModel<typeof userRoleTable>;
+export type UserRoleID = UserRole["id"];
+export type CreateUserRole = InferCreateModel<typeof userRoleTable>;
+export type UpdateUserRole = Omit<
+  InferUpdateModel<typeof userRoleTable>,
   "updatedById"
 >;
-export type ArchiveUserType = Omit<
-  InferArchiveModel<typeof userTypeTable>,
+export type ArchiveUserRole = Omit<
+  InferArchiveModel<typeof userRoleTable>,
   "deletedById"
 >;

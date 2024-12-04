@@ -14,7 +14,7 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/users.mapper";
-import { userTypeTable } from "../tables/user-type.sql";
+import { userRoleTable } from "../tables/user-role.sql";
 import {
   type ArchiveUser,
   type CreateUser,
@@ -34,9 +34,9 @@ export function getAllUsers(
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const query = db
-    .select({ ...publicUserColumns, type: userTypeTable })
+    .select({ ...publicUserColumns, role: userRoleTable })
     .from(userTable)
-    .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
+    .innerJoin(userRoleTable, eq(userRoleTable.id, userTable.roleId))
     .where(
       and(
         isNull(userTable.deletedAt),
@@ -76,12 +76,12 @@ export async function getUserById(input: UserID) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
   const query = db
-    .select({ ...publicUserColumns, type: userTypeTable, ...metadata })
+    .select({ ...publicUserColumns, type: userRoleTable, ...metadata })
     .from(userTable)
     .leftJoin(createdByTable, eq(userTable.createdById, createdByTable.id))
     .leftJoin(updatedByTable, eq(userTable.updatedById, updatedByTable.id))
     .leftJoin(deletedByTable, eq(userTable.deletedById, deletedByTable.id))
-    .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
+    .innerJoin(userRoleTable, eq(userRoleTable.id, userTable.roleId))
     .where(eq(userTable.id, input));
   const [res] = await query.execute();
   return res;
@@ -90,7 +90,7 @@ export async function getUserById(input: UserID) {
 export async function getCredentialsByUserId(input: UserID) {
   const query = db
     .select({
-      typeId: userTable.typeId,
+      roleId: userTable.roleId,
       organizationId: userTable.organizationId,
     })
     .from(userTable)

@@ -1,19 +1,19 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { userTypeTable } from "../tables/user-type.sql";
+import { userRoleTable } from "../tables/user-role.sql";
 import { userTable } from "../tables/user.sql";
 
 export const orderMapping = {
   firstName: userTable.firstName,
   email: userTable.email,
-  type_name: userTypeTable.name,
+  role_name: userRoleTable.name,
   createdAt: userTable.createdAt,
   updatedAt: userTable.updatedAt,
 };
 
 export const filterMapping = {
-  type: userTypeTable.id,
+  role: userRoleTable.id,
 };
 
 const globalFilterColumns = [userTable.firstName, userTable.email];

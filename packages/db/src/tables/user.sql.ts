@@ -19,7 +19,7 @@ import { laxAuditing, timestamps } from "./columns.helpers";
 import { emailVerificationRequestTable } from "./email-verification-request.sql";
 import { organizationTable } from "./organization.sql";
 import { userOnboardingTable } from "./user-onboarding.sql";
-import { userTypeTable } from "./user-type.sql";
+import { userRoleTable } from "./user-role.sql";
 
 export const userTable = pgTable(
   "user",
@@ -29,7 +29,7 @@ export const userTable = pgTable(
     lastName: varchar().notNull(),
     email: varchar({ length: 255 }).notNull().unique(),
     password: varchar().notNull(),
-    typeId: integer().notNull(),
+    roleId: integer().notNull(),
     emailVerified: boolean().notNull().default(false),
     onboardingCompleted: boolean().notNull().default(false),
     organizationId: integer(),
@@ -43,8 +43,8 @@ export const userTable = pgTable(
       foreignColumns: [organizationTable.id],
     }),
     foreignKey({
-      columns: [t.typeId],
-      foreignColumns: [userTypeTable.id],
+      columns: [t.roleId],
+      foreignColumns: [userRoleTable.id],
     }),
     foreignKey({
       columns: [t.createdById],
@@ -64,9 +64,9 @@ export const userTable = pgTable(
 export const userRelations = relations(userTable, ({ one, many }) => ({
   userOnboarding: one(userOnboardingTable),
   emailVerificationRequests: many(emailVerificationRequestTable),
-  userType: one(userTypeTable, {
-    fields: [userTable.typeId],
-    references: [userTypeTable.id],
+  userRole: one(userRoleTable, {
+    fields: [userTable.roleId],
+    references: [userRoleTable.id],
   }),
   organization: one(organizationTable, {
     fields: [userTable.organizationId],

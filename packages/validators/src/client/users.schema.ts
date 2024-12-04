@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { userTypeId } from "../isomorphic/ids.validators";
+import { userRoleId } from "../isomorphic/ids.validators";
 
 export const userFormSchema = z.object({
   firstName: z.string().min(3, {
@@ -9,7 +9,7 @@ export const userFormSchema = z.object({
   lastName: z.string().min(3, {
     message: "Last name must be atleast 3 characters.",
   }),
-  typeId: userTypeId,
+  roleId: userRoleId,
   email: z.string().email({
     message: "Please enter a valid email",
   }),

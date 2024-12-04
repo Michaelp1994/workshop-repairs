@@ -15,7 +15,7 @@ import parts from "./data/staging/parts.json";
 import parts_to_models from "./data/staging/parts_to_models.json";
 import repair_status_types from "./data/staging/repair_status_types.json";
 import repair_types from "./data/staging/repair_types.json";
-import user_types from "./data/staging/user_types.json";
+import user_roles from "./data/staging/user_roles.json";
 
 console.log("Seeding database...");
 const email = process.env["TEST_USER_EMAIL"];
@@ -29,7 +29,7 @@ try {
     await t.insert(schema.assetStatusTable).values(asset_statuses);
     await t.insert(schema.repairStatusTypeTable).values(repair_status_types);
     await t.insert(schema.repairTypeTable).values(repair_types);
-    await t.insert(schema.userTypeTable).values(user_types);
+    await t.insert(schema.userRoleTable).values(user_roles);
     const [organization] = await t
       .insert(schema.organizationTable)
       .values(
@@ -48,7 +48,7 @@ try {
         password: await hashPassword(password),
         firstName: "Test",
         lastName: "User",
-        typeId: 1,
+        roleId: 1,
         onboardingCompleted: true,
         organizationId: organization.id,
       })

@@ -21,7 +21,7 @@ import {
 } from "@repo/validators/client/users.schema";
 import { useRouter } from "next/navigation";
 
-import UserTypeSelect from "~/components/selects/UserTypeSelect";
+import UserRoleSelect from "~/components/selects/UserRoleSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
@@ -91,13 +91,13 @@ export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
         />
         <FormField
           control={form.control}
-          name="typeId"
+          name="roleId"
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>User Type</FormLabel>
+                <FormLabel>User Role</FormLabel>
                 <FormControl>
-                  <UserTypeSelect {...field} />
+                  <UserRoleSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

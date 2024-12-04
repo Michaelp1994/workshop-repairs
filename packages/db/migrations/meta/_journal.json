@@ -15,6 +15,13 @@
       "when": 1733115330552,
       "tag": "0001_loving_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1733291287364,
+      "tag": "0002_cynical_blackheart",
+      "breakpoints": true
     }
   ]
 }

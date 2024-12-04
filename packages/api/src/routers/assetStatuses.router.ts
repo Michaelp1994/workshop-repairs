@@ -30,8 +30,8 @@ export default router({
   getAll: organizationProcedure
     .input(getAllAssetStatusesSchema)
     .query(async ({ input }) => {
-      const allUserTypes = getAllAssetStatuses(input);
-      return allUserTypes;
+      const allAssetStatuses = getAllAssetStatuses(input);
+      return allAssetStatuses;
     }),
   countAll: organizationProcedure
     .input(countAssetStatusesSchema)
@@ -42,60 +42,60 @@ export default router({
   getSelect: organizationProcedure
     .input(getAssetStatusesSelectSchema)
     .query(({ input }) => {
-      const allUserTypes = getAssetStatusSelect(input);
-      return allUserTypes;
+      const allAssetStatuses = getAssetStatusSelect(input);
+      return allAssetStatuses;
     }),
   getById: organizationProcedure
     .input(getAssetStatusByIdSchema)
     .query(async ({ input }) => {
-      const userType = await getAssetStatusById(input.id);
+      const AssetStatus = await getAssetStatusById(input.id);
 
-      if (!userType) {
+      if (!AssetStatus) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "userType not found",
+          message: "User Status not found",
         });
       }
 
-      return userType;
+      return AssetStatus;
     }),
   create: organizationProcedure
     .input(createAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createInsertMetadata(ctx.session);
-      const createdUserType = await createAssetStatus({
+      const createdAssetStatus = await createAssetStatus({
         ...input,
         ...metadata,
       });
 
-      assertDatabaseResult(createdUserType);
+      assertDatabaseResult(createdAssetStatus);
 
-      return createdUserType;
+      return createdAssetStatus;
     }),
   update: organizationProcedure
     .input(updateAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedUserType = await updateAssetStatus({
+      const updatedAssetStatus = await updateAssetStatus({
         ...input,
         ...metadata,
       });
 
-      assertDatabaseResult(updatedUserType);
+      assertDatabaseResult(updatedAssetStatus);
 
-      return updatedUserType;
+      return updatedAssetStatus;
     }),
   archive: organizationProcedure
     .input(archiveAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedUserType = await archiveAssetStatus({
+      const archivedAssetStatus = await archiveAssetStatus({
         ...input,
         ...metadata,
       });
 
-      assertDatabaseResult(archivedUserType);
+      assertDatabaseResult(archivedAssetStatus);
 
-      return archivedUserType;
+      return archivedAssetStatus;
     }),
 });

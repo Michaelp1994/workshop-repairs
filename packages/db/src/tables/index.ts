@@ -36,7 +36,7 @@ import {
   userOnboardingRelations,
   userOnboardingTable,
 } from "./user-onboarding.sql";
-import { userTypeRelations, userTypeTable } from "./user-type.sql";
+import { userRoleRelations, userRoleTable } from "./user-role.sql";
 import { userRelations, userTable } from "./user.sql";
 
 export const schema = {
@@ -61,7 +61,7 @@ export const schema = {
   repairTypeTable,
   userOnboardingTable,
   userTable,
-  userTypeTable,
+  userRoleTable,
 };
 
 export const relations = {
@@ -86,5 +86,5 @@ export const relations = {
   repairTypeRelations,
   userOnboardingRelations,
   userRelations,
-  userTypeRelations,
+  userRoleRelations,
 };

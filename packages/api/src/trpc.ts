@@ -56,7 +56,7 @@ export const organizationProcedure = t.procedure.use(async ({ ctx, next }) => {
       session: {
         userId: ctx.session.userId,
         organizationId: user.organizationId,
-        userType: user.typeId,
+        roleId: user.roleId,
       },
     },
   });

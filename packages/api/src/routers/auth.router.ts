@@ -84,7 +84,7 @@ export default router({
       const hash = await hashPassword(input.password);
       const user = await createUser({
         ...input,
-        typeId: 1,
+        roleId: 1,
         password: hash,
         emailVerified: false,
         organizationId: null,
