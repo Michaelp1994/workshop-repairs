@@ -15,6 +15,7 @@
     "db:migrate": "tsx ./scripts/invoke-migration.ts",
     "db:reset": "tsx ./scripts/reset-database.ts",
     "db:seed": "tsx ./src/seed/seed.ts",
+    "db:sequence": "tsx ./scripts/reset-sequences.ts",
     "dbml:generate": "tsx ./scripts/create-dbml.ts",
     "dbml:render": "dbml-renderer -i schema.dbml -o schema.svg",
     "lint": "eslint .",

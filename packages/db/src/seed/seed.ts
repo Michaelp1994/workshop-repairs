@@ -1,4 +1,5 @@
 import { hashPassword } from "@repo/auth/password";
+import { getTableColumns, getTableName, sql } from "drizzle-orm";
 import { reset } from "drizzle-seed";
 
 import { db } from "../index";
@@ -107,6 +108,22 @@ try {
         organizationId: organization.id,
       })),
     );
+
+    await t.execute(sql`SET CONSTRAINTS ALL DEFERRED;`);
+
+    for await (const table of Object.values(schema)) {
+      const tableName = getTableName(table);
+      const columns = getTableColumns(table);
+      if ("id" in columns) {
+        await t.execute(
+          sql`SELECT pg_catalog.setval(pg_get_serial_sequence('${table}', 'id'), MAX(id)) FROM ${table};`,
+        );
+        console.log(`reset ${tableName}`);
+      } else {
+        console.log(`skipped ${tableName}`);
+      }
+    }
+    await t.execute(sql`SET CONSTRAINTS ALL IMMEDIATE;`);
 
     console.log("Database seeded successfully!");
   });
