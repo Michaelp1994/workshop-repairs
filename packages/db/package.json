@@ -37,7 +37,7 @@
     "drizzle-dbml-generator": "^0.9.0",
     "drizzle-kit": "^0.28.1",
     "drizzle-seed": "^0.1.2",
-    "eslint": "^9.15.0",
+    "eslint": "^9.21.0",
     "sst": "3.3.30",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",

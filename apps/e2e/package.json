@@ -14,7 +14,7 @@
     "@repo/eslint-config": "workspace:*",
     "@types/node": "^22.10.0",
     "dotenv": "^16.4.6",
-    "eslint": "^9.15.0",
+    "eslint": "^9.21.0",
     "typescript": "^5.7.2"
   }
 }
