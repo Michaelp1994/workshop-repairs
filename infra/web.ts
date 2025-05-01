@@ -1,12 +1,12 @@
 import { email } from "./email";
 import { bucket, rds, router, vpc } from "./storage";
 
-const domain =
-  $app.stage === "production"
-    ? "workshop-repairs.click"
-    : $app.stage === "staging"
-      ? `staging.workshop-repairs.click`
-      : undefined;
+// const domain =
+//   $app.stage === "production"
+//     ? "workshop-repairs.click"
+//     : $app.stage === "staging"
+//       ? `staging.workshop-repairs.click`
+//       : undefined;
 
 export const nextjs = new sst.aws.Nextjs("MyWeb", {
   link: [bucket, router, rds, email],
@@ -16,7 +16,7 @@ export const nextjs = new sst.aws.Nextjs("MyWeb", {
   },
   vpc: vpc,
   path: "apps/nextjs",
-  domain,
+  // domain,
   environment: {
     REACT_EDITOR: "code",
     JWT_SECRET: process.env["JWT_SECRET"],
