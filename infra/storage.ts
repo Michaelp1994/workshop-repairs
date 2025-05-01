@@ -3,8 +3,8 @@ export const bucket = new sst.aws.Bucket("Bucket1", {
 });
 
 export const router = new sst.aws.Router("MyRouter", {
-  domain:
-    $app.stage === "production" ? "images.workshop-repairs.click" : undefined,
+  // domain:
+  //   $app.stage === "production" ? "images.workshop-repairs.click" : undefined,
   routes: {
     "/*": {
       bucket,
@@ -38,51 +38,51 @@ export const rds = new sst.aws.Postgres("Postgres1", {
   },
 });
 
-export const migrationLambda = new sst.aws.Function(
-  "MigrationLambda",
-  {
-    handler: "packages/db/src/migrate.handler",
-    copyFiles: [{ from: "packages/db/migrations", to: "migrations" }],
-    link: [rds],
-    vpc,
-  },
-  {
-    dependsOn: [rds],
-  },
-);
+// export const migrationLambda = new sst.aws.Function(
+//   "MigrationLambda",
+//   {
+//     handler: "packages/db/src/migrate.handler",
+//     copyFiles: [{ from: "packages/db/migrations", to: "migrations" }],
+//     link: [rds],
+//     vpc,
+//   },
+//   {
+//     dependsOn: [rds],
+//   },
+// );
 
-export const seedLambda = new sst.aws.Function(
-  "SeedLambda",
-  {
-    handler: "packages/db/src/seed.handler",
-    link: [rds],
-    vpc,
-  },
-  {
-    dependsOn: [rds],
-  },
-);
+// export const seedLambda = new sst.aws.Function(
+//   "SeedLambda",
+//   {
+//     handler: "packages/db/src/seed.handler",
+//     link: [rds],
+//     vpc,
+//   },
+//   {
+//     dependsOn: [rds],
+//   },
+// );
 
-if (!$dev) {
-  new aws.lambda.Invocation("MigratorInvocation", {
-    functionName: migrationLambda.name,
-    triggers: {
-      now: new Date().toISOString(),
-    },
-    input: JSON.stringify({
-      now: new Date().toISOString(),
-    }),
-  });
+// if (!$dev) {
+//   new aws.lambda.Invocation("MigratorInvocation", {
+//     functionName: migrationLambda.name,
+//     triggers: {
+//       now: new Date().toISOString(),
+//     },
+//     input: JSON.stringify({
+//       now: new Date().toISOString(),
+//     }),
+//   });
 
-  if ($app.stage.startsWith("staging")) {
-    new aws.lambda.Invocation("SeedInvocation", {
-      functionName: seedLambda.name,
-      input: JSON.stringify({
-        now: new Date().toISOString(),
-      }),
-    });
-  }
-}
+//   if ($app.stage.startsWith("staging")) {
+//     new aws.lambda.Invocation("SeedInvocation", {
+//       functionName: seedLambda.name,
+//       input: JSON.stringify({
+//         now: new Date().toISOString(),
+//       }),
+//     });
+//   }
+// }
 
 export const devCommand = new sst.x.DevCommand("Studio", {
   link: [rds],

@@ -15,10 +15,6 @@ declare module "sst" {
       "sender": string
       "type": "sst.aws.Email"
     }
-    "MigrationLambda": {
-      "name": string
-      "type": "sst.aws.Function"
-    }
     "MyRouter": {
       "type": "sst.aws.Router"
       "url": string
@@ -34,10 +30,6 @@ declare module "sst" {
       "port": number
       "type": "sst.aws.Postgres"
       "username": string
-    }
-    "SeedLambda": {
-      "name": string
-      "type": "sst.aws.Function"
     }
     "Vpc": {
       "bastion": string

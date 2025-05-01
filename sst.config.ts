@@ -31,8 +31,6 @@ export default $config({
       nextjs: web.nextjs.url,
       bucket: storage.router.url,
       email: email.email.sender,
-      migrate: storage.migrationLambda.name,
-      seed: storage.seedLambda.name,
     };
   },
 });
