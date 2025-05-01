@@ -1,6 +1,6 @@
 export const email =
   $app.stage === "production"
     ? new sst.aws.Email("Email1", {
-        sender: "workshop-repairs.click",
+        sender: "michael.poulgrain.aws@gmail.com",
       })
-    : sst.aws.Email.get("Email1", "workshop-repairs.click");
+    : sst.aws.Email.get("Email1", "michael.poulgrain.aws@gmail.com");

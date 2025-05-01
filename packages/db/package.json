@@ -12,7 +12,6 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
-    "db:migrate": "tsx ./scripts/invoke-migration.ts",
     "db:reset": "tsx ./scripts/reset-database.ts",
     "db:seed": "tsx ./src/seed/seed.ts",
     "db:sequence": "tsx ./scripts/reset-sequences.ts",

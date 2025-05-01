@@ -19,6 +19,12 @@ export default $config({
       name: "workshop-repairs",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
+      providers: {
+        aws: {
+          region: "ap-southeast-2",
+          profile: "workshop-repairs",
+        },
+      },
     };
   },
   async run() {
@@ -31,8 +37,6 @@ export default $config({
       nextjs: web.nextjs.url,
       bucket: storage.router.url,
       email: email.email.sender,
-      migrate: storage.migrationLambda.name,
-      seed: storage.seedLambda.name,
     };
   },
 });
