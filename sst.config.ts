@@ -19,6 +19,12 @@ export default $config({
       name: "workshop-repairs",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
+      providers: {
+        aws: {
+          region: "ap-southeast-2",
+          profile: "workshop-repairs",
+        },
+      },
     };
   },
   async run() {
