@@ -9,12 +9,12 @@
     "test:gen": "playwright codegen"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.2.0",
-    "@playwright/test": "^1.49.0",
+    "@faker-js/faker": "^9.7.0",
+    "@playwright/test": "^1.52.0",
     "@repo/eslint-config": "workspace:*",
-    "@types/node": "^22.10.0",
-    "dotenv": "^16.4.6",
-    "eslint": "^9.15.0",
-    "typescript": "^5.7.2"
+    "@types/node": "^22.15.3",
+    "dotenv": "^16.5.0",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
   }
 }

@@ -18,18 +18,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@node-rs/argon2": "^2.0.0",
+    "@node-rs/argon2": "^2.0.2",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@repo/validators": "workspace:^",
     "cookie": "^1.0.2",
-    "jose": "^5.9.6"
+    "jose": "^5.10.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "eslint": "^9.15.0",
+    "eslint": "^9.25.1",
     "sst": "3.3.30",
-    "vitest": "^2.1.6"
+    "vitest": "^2.1.9"
   }
 }
