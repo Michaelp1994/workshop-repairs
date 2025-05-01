@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "sst shell -- pnpm -F nextjs build",
-    "clean": "turbo clean && rm -rf .turbo node_modules .sst",
+    "clean": "turbo clean && rm -rf .turbo node_modules .sst coverage",
     "commitlint": "commitlint --edit",
     "db": "sst shell drizzle-kit",
     "db:migrate": "sst shell -- pnpm -F db db:migrate",
@@ -47,5 +47,5 @@
     "vite": "^6.0.1",
     "vitest": "^2.1.6"
   },
-  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
