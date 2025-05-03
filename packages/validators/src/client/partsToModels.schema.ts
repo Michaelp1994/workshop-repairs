@@ -4,7 +4,7 @@ import { modelId, partId } from "../isomorphic/ids.validators";
 
 export const modelPartFormSchema = z.object({
   partId,
-  quantity: z.coerce.number().int().positive(),
+  quantity: z.number().int().positive(),
 });
 
 export type ModelPartFormInput = z.infer<typeof modelPartFormSchema>;
@@ -15,7 +15,7 @@ export const defaultModelPart: ModelPartFormInput = {
 };
 
 export const partModelFormSchema = z.object({
-  quantity: z.coerce.number().int().positive(),
+  quantity: z.number().int().positive(),
   modelId,
 });
 
