@@ -4,7 +4,6 @@ import {
   foreignKey,
   integer,
   pgTable,
-  serial,
   text,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -24,7 +23,7 @@ import { userTypeTable } from "./user-type.sql";
 export const userTable = pgTable(
   "user",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     firstName: varchar().notNull(),
     lastName: varchar().notNull(),
     email: varchar({ length: 255 }).notNull().unique(),

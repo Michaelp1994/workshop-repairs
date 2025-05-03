@@ -3,7 +3,6 @@ import {
   foreignKey,
   integer,
   pgTable,
-  serial,
   unique,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -24,7 +23,7 @@ import { organizationTable } from "./organization.sql";
 export const modelTable = pgTable(
   "model",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar().notNull(),
     nickname: varchar().notNull(),
     manufacturerId: integer()

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, serial } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -15,7 +15,7 @@ import { repairTable } from "./repair.sql";
 export const repairPartTable = pgTable(
   "repair_part",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     quantity: integer().notNull(),
     installed: boolean("installed").notNull().default(false),
     repairId: integer()

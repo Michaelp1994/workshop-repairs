@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, serial, unique, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -15,7 +15,7 @@ import { organizationTable } from "./organization.sql";
 export const locationTable = pgTable(
   "location",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar().notNull(),
     address: varchar().notNull(),
     organizationId: integer()

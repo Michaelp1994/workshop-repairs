@@ -3,7 +3,6 @@ import {
   boolean,
   integer,
   pgTable,
-  serial,
   text,
   timestamp,
   varchar,
@@ -21,7 +20,7 @@ import { userTable } from "./user.sql";
 export const emailVerificationRequestTable = pgTable(
   "email_verification_request",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     userId: integer()
       .notNull()
       .references(() => userTable.id),

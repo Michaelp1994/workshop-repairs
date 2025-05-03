@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -14,7 +14,7 @@ import { laxAuditing, timestamps } from "./columns.helpers";
 export const assetStatusTable = pgTable(
   "asset_status",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: text().notNull().unique(),
     ...timestamps,
     ...laxAuditing,

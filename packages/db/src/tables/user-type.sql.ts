@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -11,7 +11,7 @@ import { laxAuditing, timestamps } from "./columns.helpers";
 import { userTable } from "./user.sql";
 
 export const userTypeTable = pgTable("user_type", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar().notNull().unique(),
   ...timestamps,
   ...laxAuditing,
