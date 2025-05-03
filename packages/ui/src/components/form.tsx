@@ -1,9 +1,9 @@
 "use client";
 
 import type * as LabelPrimitive from "@radix-ui/react-label";
-import type { ZodErrorMap, ZodSchema } from "zod";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Slot } from "@radix-ui/react-slot";
 import { LoaderCircle } from "lucide-react";
 import * as React from "react";
@@ -28,22 +28,35 @@ const Form = FormProvider;
 interface UseFormProps<
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
-> extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
-  schema: ZodSchema<TFieldValues>;
-  errorMap?: ZodErrorMap;
+  TTransformedValues = FieldValues,
+> extends Omit<
+    _UseFormProps<TFieldValues, TContext, TTransformedValues>,
+    "resolver"
+  > {
+  schema: StandardSchemaV1<TFieldValues, TTransformedValues>;
   values?: NoInfer<TFieldValues>;
 }
 
 function useForm<
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
-  TTransformedValues extends FieldValues | undefined = undefined,
->({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
+  TTransformedValues = FieldValues,
+>({
+  schema,
+  ...props
+}: UseFormProps<TFieldValues, TContext, TTransformedValues>) {
   return _useForm<TFieldValues, TContext, TTransformedValues>({
     ...props,
-    resolver: zodResolver(schema),
+    resolver: standardSchemaResolver<
+      TFieldValues,
+      TContext,
+      TTransformedValues
+    >(schema),
   });
 }
+
+// const useForm = ({ schema, ...props }: UseFormProps) =>
+//   _useForm({ ...props, resolver: standardSchemaResolver(schema) });
 
 interface FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
