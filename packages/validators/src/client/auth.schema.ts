@@ -26,9 +26,7 @@ export const registerFormSchema = z.object({
     message: "Your password must be atleast 8 characters.",
   }),
   acceptToS: z.literal<boolean>(true, {
-    errorMap: () => ({
-      message: "Please accept the Terms and Services.",
-    }),
+    error: "Please accept the Terms and Services.",
   }),
 });
 

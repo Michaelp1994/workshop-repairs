@@ -66,6 +66,7 @@ export default router({
       if (organizationExists) {
         throw new ZodError([
           {
+            input: null,
             code: "custom",
             path: ["name"],
             message: "This name is already taken.",
@@ -109,6 +110,7 @@ export default router({
       if (organizationExists) {
         throw new ZodError([
           {
+            input: null,
             code: "custom",
             path: ["name"],
             message: "This name is already taken.",
@@ -148,6 +150,7 @@ export default router({
       if (!organization) {
         throw new ZodError([
           {
+            input: null,
             code: "custom",
             path: ["joinCode"],
             message:
