@@ -23,7 +23,7 @@
     "@oslojs/encoding": "^1.1.0",
     "@repo/validators": "workspace:^",
     "cookie": "^1.0.2",
-    "jose": "^5.10.0"
+    "jose": "^6.0.10"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

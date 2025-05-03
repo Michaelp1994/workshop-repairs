@@ -294,8 +294,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       jose:
-        specifier: ^5.10.0
-        version: 5.10.0
+        specifier: ^6.0.10
+        version: 6.0.10
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -5015,9 +5015,6 @@ packages:
 
   jose@4.15.9:
     resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
-
-  jose@5.10.0:
-    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
 
   jose@5.2.3:
     resolution: {integrity: sha512-KUXdbctm1uHVL8BYhnyHkgp3zDX5KW8ZhAKVFEfUbU2P8Alpzjb+48hHvjOdQIyPshoblhzsuqOwEEAbtHVirA==}
@@ -12419,8 +12416,6 @@ snapshots:
   jmespath@0.16.0: {}
 
   jose@4.15.9: {}
-
-  jose@5.10.0: {}
 
   jose@5.2.3: {}
 
