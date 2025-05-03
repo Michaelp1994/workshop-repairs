@@ -19,7 +19,7 @@
     "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
-    "@trpc/server": "11.0.0-rc.648",
+    "@trpc/server": "^11.1.2",
     "sst": "^3.14.11",
     "zod": "4.0.0-beta.20250430T185432"
   },
