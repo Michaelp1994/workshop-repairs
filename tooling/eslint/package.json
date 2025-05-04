@@ -14,10 +14,10 @@
     "sst": "^3.14.11"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.1",
+    "@eslint/js": "^9.26.0",
     "@repo/typescript-config": "workspace:*",
     "@types/eslint": "^9.6.1",
-    "eslint": "^9.25.1",
+    "eslint": "^9.26.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-perfectionist": "^4.12.3",
     "eslint-plugin-playwright": "^2.2.0",
