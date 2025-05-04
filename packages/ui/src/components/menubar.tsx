@@ -40,9 +40,7 @@ const Menubar = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Root> & {
-  ref: React.RefObject<React.ComponentRef<typeof Root>>;
-}) => (
+}: React.ComponentProps<typeof Root>) => (
   <Root
     className={cn(
       "bg-background flex h-10 items-center space-x-1 rounded-md border p-1",
@@ -58,9 +56,7 @@ const MenubarTrigger = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Trigger> & {
-  ref: React.RefObject<React.ComponentRef<typeof Trigger>>;
-}) => (
+}: React.ComponentProps<typeof Trigger>) => (
   <Trigger
     className={cn(
       "focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none",
@@ -72,7 +68,15 @@ const MenubarTrigger = ({
 );
 MenubarTrigger.displayName = Trigger.displayName;
 
-const MenubarSubTrigger = ({ ref, className, inset, children, ...props }) => (
+const MenubarSubTrigger = ({
+  ref,
+  className,
+  inset,
+  children,
+  ...props
+}: React.ComponentProps<typeof SubTrigger> & {
+  inset?: boolean;
+}) => (
   <SubTrigger
     className={cn(
       "focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
@@ -92,9 +96,7 @@ const MenubarSubContent = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof SubContent> & {
-  ref: React.RefObject<React.ComponentRef<typeof SubContent>>;
-}) => (
+}: React.ComponentProps<typeof SubContent>) => (
   <SubContent
     className={cn(
       "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border p-1",
@@ -113,9 +115,7 @@ const MenubarContent = ({
   alignOffset = -4,
   sideOffset = 8,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Content> & {
-  ref: React.RefObject<React.ComponentRef<typeof Content>>;
-}) => (
+}: React.ComponentProps<typeof Content>) => (
   <Portal>
     <Content
       align={align}
@@ -132,7 +132,14 @@ const MenubarContent = ({
 );
 MenubarContent.displayName = Content.displayName;
 
-const MenubarItem = ({ ref, className, inset, ...props }) => (
+const MenubarItem = ({
+  ref,
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<typeof Item> & {
+  inset?: boolean;
+}) => (
   <Item
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -151,9 +158,7 @@ const MenubarCheckboxItem = ({
   children,
   checked,
   ...props
-}: React.ComponentPropsWithoutRef<typeof CheckboxItem> & {
-  ref: React.RefObject<React.ComponentRef<typeof CheckboxItem>>;
-}) => (
+}: React.ComponentProps<typeof CheckboxItem>) => (
   <CheckboxItem
     checked={checked as CheckedState}
     className={cn(
@@ -178,9 +183,7 @@ const MenubarRadioItem = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<typeof RadioItem> & {
-  ref: React.RefObject<React.ComponentRef<typeof RadioItem>>;
-}) => (
+}: React.ComponentProps<typeof RadioItem>) => (
   <RadioItem
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -199,7 +202,14 @@ const MenubarRadioItem = ({
 );
 MenubarRadioItem.displayName = RadioItem.displayName;
 
-const MenubarLabel = ({ ref, className, inset, ...props }) => (
+const MenubarLabel = ({
+  ref,
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<typeof Label> & {
+  inset?: boolean;
+}) => (
   <Label
     className={cn(
       "px-2 py-1.5 text-sm font-semibold",
@@ -216,9 +226,7 @@ const MenubarSeparator = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Separator> & {
-  ref: React.RefObject<React.ComponentRef<typeof Separator>>;
-}) => (
+}: React.ComponentProps<typeof Separator>) => (
   <Separator
     className={cn("bg-muted -mx-1 my-1 h-px", className)}
     ref={ref}
@@ -230,7 +238,7 @@ MenubarSeparator.displayName = Separator.displayName;
 const MenubarShortcut = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+}: React.ComponentProps<"span">) => {
   return (
     <span
       className={cn(

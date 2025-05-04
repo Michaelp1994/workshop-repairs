@@ -117,9 +117,7 @@ const FormItem = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   const id = React.useId();
 
   return (
@@ -134,9 +132,7 @@ const FormLabel = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
-  ref: React.RefObject<React.ComponentRef<typeof LabelPrimitive.Root>>;
-}) => {
+}: React.ComponentProps<typeof LabelPrimitive.Root>) => {
   const { error, formItemId } = useFormField();
 
   return (
@@ -150,12 +146,7 @@ const FormLabel = ({
 };
 FormLabel.displayName = "FormLabel";
 
-const FormControl = ({
-  ref,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof Slot> & {
-  ref: React.RefObject<React.ComponentRef<typeof Slot>>;
-}) => {
+const FormControl = ({ ref, ...props }: React.ComponentProps<typeof Slot>) => {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
@@ -177,9 +168,7 @@ const FormDescription = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLParagraphElement> & {
-  ref: React.RefObject<HTMLParagraphElement>;
-}) => {
+}: React.ComponentProps<"p">) => {
   const { formDescriptionId } = useFormField();
 
   return (
@@ -198,9 +187,7 @@ const FormMessage = ({
   className,
   children,
   ...props
-}: React.HTMLAttributes<HTMLParagraphElement> & {
-  ref: React.RefObject<HTMLParagraphElement>;
-}) => {
+}: React.ComponentProps<"p">) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error.message) : children;
 
@@ -225,9 +212,7 @@ const FormFooter = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn("mt-4 flex justify-end gap-2", className)}
@@ -239,7 +224,7 @@ const FormFooter = ({
 FormFooter.displayName = "FormFooter";
 
 interface SubmitButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  extends Omit<React.ComponentProps<"button">, "type"> {
   isLoading?: boolean;
 }
 
@@ -248,9 +233,7 @@ const SubmitButton = ({
   isLoading,
   children,
   ...buttonProps
-}: SubmitButtonProps & {
-  ref: React.RefObject<HTMLButtonElement>;
-}) => (
+}: SubmitButtonProps) => (
   <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
     {isLoading ? (
       <LoaderCircle className="animate-spin" />
@@ -267,9 +250,7 @@ SubmitButton.displayName = "SubmitButton";
 const ResetButton = ({
   ref,
   ...props
-}: Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children"> & {
-  ref: React.RefObject<HTMLButtonElement>;
-}) => (
+}: Omit<React.ComponentProps<"button">, "type" | "children">) => (
   <Button ref={ref} type="reset" variant="ghost" {...props}>
     Reset
   </Button>

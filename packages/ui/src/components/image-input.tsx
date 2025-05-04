@@ -28,12 +28,7 @@ export function setRef<T>(val: T, ...refs: MutableRefList<T>): void {
   });
 }
 
-const ImageInput = ({
-  ref,
-  ...props
-}: FileInputProps & {
-  ref: React.RefObject<HTMLInputElement>;
-}) => {
+const ImageInput = ({ ref, ...props }: FileInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const preview =
     props.value && props.value?.type.startsWith("image/")

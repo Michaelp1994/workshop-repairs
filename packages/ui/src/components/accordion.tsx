@@ -12,9 +12,7 @@ const AccordionItem = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> & {
-  ref: React.RefObject<React.ComponentRef<typeof AccordionPrimitive.Item>>;
-}) => (
+}: React.ComponentProps<typeof AccordionPrimitive.Item>) => (
   <AccordionPrimitive.Item
     className={cn("border-b", className)}
     ref={ref}
@@ -28,9 +26,7 @@ const AccordionTrigger = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
-  ref: React.RefObject<React.ComponentRef<typeof AccordionPrimitive.Trigger>>;
-}) => (
+}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) => (
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       className={cn(
@@ -52,9 +48,7 @@ const AccordionContent = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> & {
-  ref: React.RefObject<React.ComponentRef<typeof AccordionPrimitive.Content>>;
-}) => (
+}: React.ComponentProps<typeof AccordionPrimitive.Content>) => (
   <AccordionPrimitive.Content
     className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all"
     ref={ref}

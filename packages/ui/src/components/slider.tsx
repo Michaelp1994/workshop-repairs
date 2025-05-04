@@ -9,9 +9,7 @@ const Slider = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
-  ref: React.RefObject<React.ComponentRef<typeof SliderPrimitive.Root>>;
-}) => (
+}: React.ComponentProps<typeof SliderPrimitive.Root>) => (
   <SliderPrimitive.Root
     className={cn(
       "relative flex w-full touch-none select-none items-center",

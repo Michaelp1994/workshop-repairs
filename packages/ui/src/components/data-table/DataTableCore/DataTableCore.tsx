@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "../../table";
 
-interface DataTableCoreProps<T> extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableCoreProps<T> extends React.ComponentProps<"div"> {
   table: iTable<T>;
   noResultsText?: string;
 }
@@ -18,7 +18,6 @@ interface DataTableCoreProps<T> extends React.HTMLAttributes<HTMLDivElement> {
 export function DataTableCore<T>({
   table,
   noResultsText = "No Results!",
-
   className,
   ...props
 }: DataTableCoreProps<T>) {

@@ -51,7 +51,7 @@ const Carousel = ({
   className,
   children,
   ...props
-}) => {
+}: React.ComponentProps<"div"> & CarouselProps) => {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -147,9 +147,7 @@ const CarouselContent = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   const { carouselRef, orientation } = useCarousel();
 
   return (
@@ -172,9 +170,7 @@ const CarouselItem = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   const { orientation } = useCarousel();
 
   return (
@@ -199,9 +195,7 @@ const CarouselPrevious = ({
   variant = "outline",
   size = "icon",
   ...props
-}: React.ComponentProps<typeof Button> & {
-  ref: React.RefObject<HTMLButtonElement>;
-}) => {
+}: React.ComponentProps<typeof Button>) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
@@ -233,9 +227,7 @@ const CarouselNext = ({
   variant = "outline",
   size = "icon",
   ...props
-}: React.ComponentProps<typeof Button> & {
-  ref: React.RefObject<HTMLButtonElement>;
-}) => {
+}: React.ComponentProps<typeof Button>) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (

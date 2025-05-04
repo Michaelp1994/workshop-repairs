@@ -6,7 +6,7 @@ export function DetailsList({
   children,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDListElement>) {
+}: React.ComponentProps<"dl">) {
   return (
     <dl
       className={cn("grid grid-cols-[auto_1fr] items-start gap-4", className)}
@@ -21,7 +21,7 @@ export function DetailsLabel({
   children,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.ComponentProps<"div">) {
   return (
     <dt className={cn("font-bold", className)} {...props}>
       {children}
@@ -33,7 +33,7 @@ export function DetailsValue({
   children,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.ComponentProps<"div">) {
   return (
     <dd className={cn(className)} {...props}>
       {children}

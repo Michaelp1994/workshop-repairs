@@ -31,7 +31,7 @@ interface Data {
 }
 
 export interface ComboboxProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  extends Omit<React.ComponentProps<"button">, "onChange"> {
   data: Data | undefined;
   onChange: (value: string | number | null) => void;
   isLoading?: boolean;
@@ -50,13 +50,10 @@ export const InfiniteCombobox = ({
   className,
   data,
   ...props
-}: ComboboxProps & {
-  ref: React.RefObject<React.ComponentRef<typeof Button>>;
-}) => {
+}: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
   const parentRef = React.useRef<HTMLDivElement | null>(null);
   const allRows = data ? data.pages.flatMap((d) => d.data) : [];
-  console.log(allRows);
   // The virtualizer
   const rowVirtualizer = useVirtualizer({
     count: allRows.length,

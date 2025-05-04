@@ -248,9 +248,7 @@ const SidebarTrigger = ({
   className,
   onClick,
   ...props
-}: React.ComponentProps<typeof Button> & {
-  ref: React.RefObject<React.ComponentRef<typeof Button>>;
-}) => {
+}: React.ComponentProps<typeof Button>) => {
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -277,9 +275,7 @@ const SidebarRail = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"button"> & {
-  ref: React.RefObject<HTMLButtonElement>;
-}) => {
+}: React.ComponentProps<"button">) => {
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -309,9 +305,7 @@ const SidebarInset = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"main"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"main">) => {
   return (
     <main
       className={cn(
@@ -330,9 +324,7 @@ const SidebarInput = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<typeof Input> & {
-  ref: React.RefObject<React.ComponentRef<typeof Input>>;
-}) => {
+}: React.ComponentProps<typeof Input>) => {
   return (
     <Input
       className={cn(
@@ -351,9 +343,7 @@ const SidebarHeader = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn("flex flex-col gap-2 p-2", className)}
@@ -369,9 +359,7 @@ const SidebarFooter = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn("flex flex-col gap-2 p-2", className)}
@@ -387,9 +375,7 @@ const SidebarSeparator = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<typeof Separator> & {
-  ref: React.RefObject<React.ComponentRef<typeof Separator>>;
-}) => {
+}: React.ComponentProps<typeof Separator>) => {
   return (
     <Separator
       className={cn("bg-sidebar-border mx-2 w-auto", className)}
@@ -405,9 +391,7 @@ const SidebarContent = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn(
@@ -426,9 +410,7 @@ const SidebarGroup = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+}: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
@@ -492,9 +474,7 @@ const SidebarGroupContent = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => (
+}: React.ComponentProps<"div">) => (
   <div
     className={cn("w-full text-sm", className)}
     data-sidebar="group-content"
@@ -508,9 +488,7 @@ const SidebarMenu = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"ul"> & {
-  ref: React.RefObject<HTMLUListElement>;
-}) => (
+}: React.ComponentProps<"ul">) => (
   <ul
     className={cn("flex w-full min-w-0 flex-col gap-1", className)}
     data-sidebar="menu"
@@ -524,9 +502,7 @@ const SidebarMenuItem = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"li"> & {
-  ref: React.RefObject<HTMLLIElement>;
-}) => (
+}: React.ComponentProps<"li">) => (
   <li
     className={cn("group/menu-item relative", className)}
     data-sidebar="menu-item"
@@ -645,9 +621,7 @@ const SidebarMenuBadge = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => (
+}: React.ComponentProps<"div">) => (
   <div
     className={cn(
       "text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums",
@@ -709,9 +683,7 @@ const SidebarMenuSub = ({
   ref,
   className,
   ...props
-}: React.ComponentProps<"ul"> & {
-  ref: React.RefObject<HTMLUListElement>;
-}) => (
+}: React.ComponentProps<"ul">) => (
   <ul
     className={cn(
       "border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
@@ -725,12 +697,9 @@ const SidebarMenuSub = ({
 );
 SidebarMenuSub.displayName = "SidebarMenuSub";
 
-const SidebarMenuSubItem = ({
-  ref,
-  ...props
-}: React.ComponentProps<"li"> & {
-  ref: React.RefObject<HTMLLIElement>;
-}) => <li ref={ref} {...props} />;
+const SidebarMenuSubItem = ({ ref, ...props }: React.ComponentProps<"li">) => (
+  <li ref={ref} {...props} />
+);
 SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 
 const SidebarMenuSubButton = ({

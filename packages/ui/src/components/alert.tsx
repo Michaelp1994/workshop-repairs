@@ -38,9 +38,7 @@ const AlertTitle = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLHeadingElement> & {
-  ref: React.RefObject<HTMLParagraphElement>;
-}) => (
+}: React.ComponentProps<"h5">) => (
   <h5
     className={cn("mb-1 font-medium leading-none tracking-tight", className)}
     ref={ref}
@@ -53,9 +51,7 @@ const AlertDescription = ({
   ref,
   className,
   ...props
-}: React.HTMLAttributes<HTMLParagraphElement> & {
-  ref: React.RefObject<HTMLParagraphElement>;
-}) => (
+}: React.ComponentProps<"div">) => (
   <div
     className={cn("text-sm [&_p]:leading-relaxed", className)}
     ref={ref}

@@ -35,7 +35,19 @@ function useChart() {
   return context;
 }
 
-const ChartContainer = ({ ref, id, className, children, config, ...props }) => {
+const ChartContainer = ({
+  ref,
+  id,
+  className,
+  children,
+  config,
+  ...props
+}: React.ComponentProps<"div"> & {
+  config: ChartConfig;
+  children: React.ComponentProps<
+    typeof RechartsPrimitive.ResponsiveContainer
+  >["children"];
+}) => {
   const uniqueId = React.useId();
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;
 
@@ -110,7 +122,14 @@ const ChartTooltipContent = ({
   color,
   nameKey,
   labelKey,
-}) => {
+}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+  React.ComponentProps<"div"> & {
+    hideLabel?: boolean;
+    hideIndicator?: boolean;
+    indicator?: "line" | "dot" | "dashed";
+    nameKey?: string;
+    labelKey?: string;
+  }) => {
   const { config } = useChart();
 
   const tooltipLabel = React.useMemo(() => {
@@ -247,7 +266,11 @@ const ChartLegendContent = ({
   payload,
   verticalAlign = "bottom",
   nameKey,
-}) => {
+}: React.ComponentProps<"div"> &
+  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+    hideIcon?: boolean;
+    nameKey?: string;
+  }) => {
   const { config } = useChart();
 
   if (!payload?.length) {

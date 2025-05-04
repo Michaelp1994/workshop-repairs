@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "../lib/utils";
 
-const Breadcrumb = ({ ref, ...props }) => (
+const Breadcrumb = ({ ref, ...props }: React.ComponentProps<"nav">) => (
   <nav aria-label="breadcrumb" ref={ref} {...props} />
 );
 Breadcrumb.displayName = "Breadcrumb";
@@ -13,9 +13,7 @@ const BreadcrumbList = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"ol"> & {
-  ref: React.RefObject<HTMLOListElement>;
-}) => (
+}: React.ComponentProps<"ol">) => (
   <ol
     className={cn(
       "text-muted-foreground flex flex-wrap items-center gap-1.5 break-words text-sm sm:gap-2.5",
@@ -31,9 +29,7 @@ const BreadcrumbItem = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"li"> & {
-  ref: React.RefObject<HTMLLIElement>;
-}) => (
+}: React.ComponentProps<"li">) => (
   <li
     className={cn("inline-flex items-center gap-1.5", className)}
     ref={ref}
@@ -42,7 +38,14 @@ const BreadcrumbItem = ({
 );
 BreadcrumbItem.displayName = "BreadcrumbItem";
 
-const BreadcrumbLink = ({ ref, asChild, className, ...props }) => {
+const BreadcrumbLink = ({
+  ref,
+  asChild,
+  className,
+  ...props
+}: React.ComponentProps<"a"> & {
+  asChild?: boolean;
+}) => {
   const Comp = asChild ? Slot : "a";
 
   return (
@@ -59,9 +62,7 @@ const BreadcrumbPage = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"span"> & {
-  ref: React.RefObject<HTMLSpanElement>;
-}) => (
+}: React.ComponentProps<"span">) => (
   <span
     aria-current="page"
     aria-disabled="true"

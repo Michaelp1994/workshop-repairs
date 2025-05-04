@@ -9,9 +9,7 @@ const Avatar = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & {
-  ref: React.RefObject<React.ComponentRef<typeof AvatarPrimitive.Root>>;
-}) => (
+}: React.ComponentProps<typeof AvatarPrimitive.Root>) => (
   <AvatarPrimitive.Root
     className={cn(
       "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
@@ -27,9 +25,7 @@ const AvatarImage = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> & {
-  ref: React.RefObject<React.ComponentRef<typeof AvatarPrimitive.Image>>;
-}) => (
+}: React.ComponentProps<typeof AvatarPrimitive.Image>) => (
   <AvatarPrimitive.Image
     className={cn("aspect-square h-full w-full", className)}
     ref={ref}
@@ -42,9 +38,7 @@ const AvatarFallback = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> & {
-  ref: React.RefObject<React.ComponentRef<typeof AvatarPrimitive.Fallback>>;
-}) => (
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) => (
   <AvatarPrimitive.Fallback
     className={cn(
       "bg-muted flex h-full w-full items-center justify-center rounded-full",

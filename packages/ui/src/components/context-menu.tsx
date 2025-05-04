@@ -26,6 +26,8 @@ const ContextMenuSubTrigger = ({
   inset,
   children,
   ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
+  inset?: boolean;
 }) => (
   <ContextMenuPrimitive.SubTrigger
     className={cn(
@@ -46,11 +48,7 @@ const ContextMenuSubContent = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent> & {
-  ref: React.RefObject<
-    React.ComponentRef<typeof ContextMenuPrimitive.SubContent>
-  >;
-}) => (
+}: React.ComponentProps<typeof ContextMenuPrimitive.SubContent>) => (
   <ContextMenuPrimitive.SubContent
     className={cn(
       "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md",
@@ -66,9 +64,7 @@ const ContextMenuContent = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content> & {
-  ref: React.RefObject<React.ComponentRef<typeof ContextMenuPrimitive.Content>>;
-}) => (
+}: React.ComponentProps<typeof ContextMenuPrimitive.Content>) => (
   <ContextMenuPrimitive.Portal>
     <ContextMenuPrimitive.Content
       className={cn(
@@ -82,7 +78,14 @@ const ContextMenuContent = ({
 );
 ContextMenuContent.displayName = ContextMenuPrimitive.Content.displayName;
 
-const ContextMenuItem = ({ ref, className, inset, ...props }) => (
+const ContextMenuItem = ({
+  ref,
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.Item> & {
+  inset?: boolean;
+}) => (
   <ContextMenuPrimitive.Item
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -101,11 +104,7 @@ const ContextMenuCheckboxItem = ({
   children,
   checked,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem> & {
-  ref: React.RefObject<
-    React.ComponentRef<typeof ContextMenuPrimitive.CheckboxItem>
-  >;
-}) => (
+}: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem>) => (
   <ContextMenuPrimitive.CheckboxItem
     checked={checked as CheckedState}
     className={cn(
@@ -131,11 +130,7 @@ const ContextMenuRadioItem = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem> & {
-  ref: React.RefObject<
-    React.ComponentRef<typeof ContextMenuPrimitive.RadioItem>
-  >;
-}) => (
+}: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem>) => (
   <ContextMenuPrimitive.RadioItem
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -154,7 +149,14 @@ const ContextMenuRadioItem = ({
 );
 ContextMenuRadioItem.displayName = ContextMenuPrimitive.RadioItem.displayName;
 
-const ContextMenuLabel = ({ ref, className, inset, ...props }) => (
+const ContextMenuLabel = ({
+  ref,
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.Label> & {
+  inset?: boolean;
+}) => (
   <ContextMenuPrimitive.Label
     className={cn(
       "text-foreground px-2 py-1.5 text-sm font-semibold",
@@ -171,11 +173,7 @@ const ContextMenuSeparator = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator> & {
-  ref: React.RefObject<
-    React.ComponentRef<typeof ContextMenuPrimitive.Separator>
-  >;
-}) => (
+}: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) => (
   <ContextMenuPrimitive.Separator
     className={cn("bg-border -mx-1 my-1 h-px", className)}
     ref={ref}
@@ -187,7 +185,7 @@ ContextMenuSeparator.displayName = ContextMenuPrimitive.Separator.displayName;
 const ContextMenuShortcut = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+}: React.ComponentProps<"span">) => {
   return (
     <span
       className={cn(

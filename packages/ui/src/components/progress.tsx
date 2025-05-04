@@ -10,9 +10,7 @@ const Progress = ({
   className,
   value,
   ...props
-}: React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & {
-  ref: React.RefObject<React.ComponentRef<typeof ProgressPrimitive.Root>>;
-}) => (
+}: React.ComponentProps<typeof ProgressPrimitive.Root>) => (
   <ProgressPrimitive.Root
     className={cn(
       "bg-secondary relative h-4 w-full overflow-hidden rounded-full",
