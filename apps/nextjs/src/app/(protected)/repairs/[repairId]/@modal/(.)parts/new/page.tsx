@@ -11,18 +11,20 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
 import CreateRepairPartForm from "../../../../_components/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps {
-  params: { repairId: RepairID };
+  params: Promise<{ repairId: RepairID }>;
 }
 
-export default function CreateRepairPartModal({
-  params,
-}: CreateRepairPartModalProps) {
+export default function CreateRepairPartModal(
+  props: CreateRepairPartModalProps,
+) {
+  const params = use(props.params);
   const repairId = Number(params.repairId);
   const router = useRouter();
 

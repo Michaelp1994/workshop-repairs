@@ -16,12 +16,13 @@ import ModelImages from "../_components/ModelImages";
 import ModelPartsTable from "../_components/ModelPartsTable";
 
 interface ViewModelPageProps {
-  params: {
+  params: Promise<{
     modelId: ModelID;
-  };
+  }>;
 }
 
-export default async function ViewModelPage({ params }: ViewModelPageProps) {
+export default async function ViewModelPage(props: ViewModelPageProps) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
   const model = await api.models.getById({ id: modelId });
   return (

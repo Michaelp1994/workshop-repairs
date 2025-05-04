@@ -14,9 +14,9 @@ import AssetDetails from "../_components/AssetDetails";
 import AssetRepairsTable from "../_components/AssetRepairsTable";
 
 interface ViewAssetPageProps {
-  params: {
+  params: Promise<{
     assetId: string;
-  };
+  }>;
 }
 
 export const metadata: Metadata = {
@@ -24,7 +24,8 @@ export const metadata: Metadata = {
   description: "Create a new asset",
 };
 
-export default function ViewAssetPage({ params }: ViewAssetPageProps) {
+export default async function ViewAssetPage(props: ViewAssetPageProps) {
+  const params = await props.params;
   const assetId = Number(params.assetId);
 
   return (

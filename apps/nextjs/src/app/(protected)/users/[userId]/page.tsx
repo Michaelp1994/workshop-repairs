@@ -13,12 +13,13 @@ import { api } from "~/trpc/server";
 import UserDetails from "../_components/UserDetails";
 
 interface ViewUserPageProps {
-  params: {
+  params: Promise<{
     userId: UserID;
-  };
+  }>;
 }
 
-export default async function ViewUserPage({ params }: ViewUserPageProps) {
+export default async function ViewUserPage(props: ViewUserPageProps) {
+  const params = await props.params;
   const userId = Number(params.userId);
   const user = await api.users.getById({
     id: userId,

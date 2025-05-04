@@ -11,14 +11,15 @@ import {
 import CreateModelImageForm from "../../../_components/CreateModelImageForm";
 
 interface CreateModelImagePageProps {
-  params: {
+  params: Promise<{
     modelId: ModelID;
-  };
+  }>;
 }
 
-export default function CreateModelImagePage({
-  params,
-}: CreateModelImagePageProps) {
+export default async function CreateModelImagePage(
+  props: CreateModelImagePageProps,
+) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
   return (
     <Card>

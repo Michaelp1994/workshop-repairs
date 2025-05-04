@@ -10,12 +10,13 @@ import {
 import UpdateModelForm from "../../_components/UpdateModelForm";
 
 interface EditModelPageProps {
-  params: {
+  params: Promise<{
     modelId: string;
-  };
+  }>;
 }
 
-export default function EditModelPage({ params }: EditModelPageProps) {
+export default async function EditModelPage(props: EditModelPageProps) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
 
   return (

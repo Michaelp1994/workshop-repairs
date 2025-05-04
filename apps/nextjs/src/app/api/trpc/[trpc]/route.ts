@@ -1,12 +1,10 @@
-import type { NextRequest } from "next/server";
-
 import { createTRPCContext } from "@repo/api/createContext";
 import { appRouter } from "@repo/api/router";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
 import { withServerTelemetry } from "~/telemetry/withServerTelemetry";
 
-const handler = withServerTelemetry(async function GET(req: NextRequest) {
+const handler = withServerTelemetry(async function GET(req: Request) {
   const response = await fetchRequestHandler({
     endpoint: "/api/trpc",
     req,

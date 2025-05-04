@@ -9,19 +9,19 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import UpdatePartModelForm from "~/app/(protected)/parts/_components/UpdatePartModelForm";
 
 interface UpdatePartModelModalProps {
-  params: {
+  params: Promise<{
     modelId: string;
     partId: string;
-  };
+  }>;
 }
 
-export default function UpdatePartModelModal({
-  params,
-}: UpdatePartModelModalProps) {
+export default function UpdatePartModelModal(props: UpdatePartModelModalProps) {
+  const params = use(props.params);
   const modelId = Number(params.modelId);
   const partId = Number(params.partId);
   const router = useRouter();

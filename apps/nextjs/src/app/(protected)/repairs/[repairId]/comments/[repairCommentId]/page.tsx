@@ -9,15 +9,16 @@ import {
 import UpdateRepairCommentForm from "../../../_components/UpdateRepairCommentForm";
 
 interface ViewRepairCommentPageProps {
-  params: {
+  params: Promise<{
     repairId: string;
     repairCommentId: string;
-  };
+  }>;
 }
 
-export default function ViewRepairCommentPage({
-  params,
-}: ViewRepairCommentPageProps) {
+export default async function ViewRepairCommentPage(
+  props: ViewRepairCommentPageProps,
+) {
+  const params = await props.params;
   const repairCommentId = Number(params.repairCommentId);
 
   return (

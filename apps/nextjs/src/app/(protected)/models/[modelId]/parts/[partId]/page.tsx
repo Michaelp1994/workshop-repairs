@@ -3,15 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import UpdateModelPartForm from "../../../_components/UpdateModelPartForm";
 
 interface UpdateModelPartPageProps {
-  params: {
+  params: Promise<{
     modelId: string;
     partId: string;
-  };
+  }>;
 }
 
-export default function UpdateModelPartPage({
-  params,
-}: UpdateModelPartPageProps) {
+export default async function UpdateModelPartPage(
+  props: UpdateModelPartPageProps,
+) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
   const partId = Number(params.partId);
   return (

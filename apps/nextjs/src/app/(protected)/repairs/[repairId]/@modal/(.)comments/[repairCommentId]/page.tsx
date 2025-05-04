@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Dialog,
   DialogContent,
@@ -10,17 +9,19 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import UpdateRepairCommentForm from "~/app/(protected)/repairs/_components/UpdateRepairCommentForm";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface RepairImagesModalProps {
-  params: { repairId: string; repairCommentId: string };
+  params: Promise<{ repairId: string; repairCommentId: string }>;
 }
 
-export default function UpdateRepairCommentModal({
-  params,
-}: RepairImagesModalProps) {
+export default function UpdateRepairCommentModal(
+  props: RepairImagesModalProps,
+) {
+  const params = use(props.params);
   const repairId = Number(params.repairId);
   const repairCommentId = Number(params.repairCommentId);
   const router = useRouter();

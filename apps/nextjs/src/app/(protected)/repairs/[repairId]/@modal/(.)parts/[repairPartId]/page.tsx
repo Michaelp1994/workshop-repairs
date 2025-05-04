@@ -8,19 +8,21 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import UpdateRepairPartForm from "~/app/(protected)/repairs/_components/UpdateRepairPartForm";
 
 interface UpdateRepairPartModalProps {
-  params: {
+  params: Promise<{
     repairId: string;
     repairPartId: string;
-  };
+  }>;
 }
 
-export default function UpdateRepairPartModal({
-  params,
-}: UpdateRepairPartModalProps) {
+export default function UpdateRepairPartModal(
+  props: UpdateRepairPartModalProps,
+) {
+  const params = use(props.params);
   const router = useRouter();
   const repairPartId = Number(params.repairPartId);
 

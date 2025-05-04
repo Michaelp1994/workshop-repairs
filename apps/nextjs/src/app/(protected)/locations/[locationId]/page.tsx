@@ -14,14 +14,13 @@ import LocationAssetsTable from "../_components/LocationAssetsTable";
 import LocationDetails from "../_components/LocationDetails";
 
 interface ViewLocationPageProps {
-  params: {
+  params: Promise<{
     locationId: LocationID;
-  };
+  }>;
 }
 
-export default async function ViewLocationPage({
-  params,
-}: ViewLocationPageProps) {
+export default async function ViewLocationPage(props: ViewLocationPageProps) {
+  const params = await props.params;
   const locationId = Number(params.locationId);
   const location = await api.locations.getById({ id: locationId });
   return (

@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   title: "Sign In",
 };
 
-export default function LoginPage() {
-  if (isAuthenticated()) {
+export default async function LoginPage() {
+  if (await isAuthenticated()) {
     redirect("/dashboard");
   }
   return (

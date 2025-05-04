@@ -3,14 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import CreatePartModelForm from "../../../_components/CreatePartModelForm";
 
 interface CreateModelPartPageProps {
-  params: {
+  params: Promise<{
     partId: string;
-  };
+  }>;
 }
 
-export default function CreatePartModelPage({
-  params,
-}: CreateModelPartPageProps) {
+export default async function CreatePartModelPage(
+  props: CreateModelPartPageProps,
+) {
+  const params = await props.params;
   const partId = Number(params.partId);
   return (
     <Card>

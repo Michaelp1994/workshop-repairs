@@ -11,16 +11,16 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import CreateRepairImageForm from "../../../../_components/CreateRepairImageForm";
 
 interface ArchiveRepairModalProps {
-  params: { repairId: RepairID };
+  params: Promise<{ repairId: RepairID }>;
 }
 
-export default function ArchiveRepairModal({
-  params,
-}: ArchiveRepairModalProps) {
+export default function ArchiveRepairModal(props: ArchiveRepairModalProps) {
+  const params = use(props.params);
   const repairId = Number(params.repairId);
   const router = useRouter();
 

@@ -3,12 +3,13 @@ import { Breadcrumbs } from "@repo/ui/breadcrumb";
 import { api } from "~/trpc/server";
 
 interface BreadcrumbSlotProps {
-  params: {
+  params: Promise<{
     equipmentTypeId: string;
-  };
+  }>;
 }
 
-export default async function BreadcrumbSlot({ params }: BreadcrumbSlotProps) {
+export default async function BreadcrumbSlot(props: BreadcrumbSlotProps) {
+  const params = await props.params;
   const equipmentTypeId = Number(params.equipmentTypeId);
   const equipmentType = await api.equipmentTypes.getById({
     id: equipmentTypeId,

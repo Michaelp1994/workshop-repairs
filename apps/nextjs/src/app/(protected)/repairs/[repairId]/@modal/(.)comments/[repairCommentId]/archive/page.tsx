@@ -10,20 +10,20 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import ArchiveRepairCommentButton from "~/app/(protected)/repairs/_components/ArchiveRepairCommentButton";
 import { BackButton } from "~/components/BackButton";
 
 interface ArchiveCommentModalProps {
-  params: {
+  params: Promise<{
     repairId: string;
     repairCommentId: string;
-  };
+  }>;
 }
 
-export default function ArchiveCommentModal({
-  params,
-}: ArchiveCommentModalProps) {
+export default function ArchiveCommentModal(props: ArchiveCommentModalProps) {
+  const params = use(props.params);
   const router = useRouter();
   const repairCommentId = Number(params.repairCommentId);
 

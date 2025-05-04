@@ -13,12 +13,13 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveUserButton from "../../_components/ArchiveUserButton";
 
 interface ArchiveUserPageProps {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
-export default function ArchiveUserPage({ params }: ArchiveUserPageProps) {
+export default async function ArchiveUserPage(props: ArchiveUserPageProps) {
+  const params = await props.params;
   const userId = Number(params.userId);
 
   return (

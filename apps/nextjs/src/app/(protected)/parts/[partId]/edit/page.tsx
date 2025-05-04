@@ -12,12 +12,13 @@ import {
 import UpdatePartForm from "../../_components/UpdatePartForm";
 
 interface EditPartPageProps {
-  params: {
+  params: Promise<{
     partId: PartID;
-  };
+  }>;
 }
 
-export default function EditPartPage({ params }: EditPartPageProps) {
+export default async function EditPartPage(props: EditPartPageProps) {
+  const params = await props.params;
   const partId = Number(params.partId);
 
   return (

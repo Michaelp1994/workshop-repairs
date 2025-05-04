@@ -39,7 +39,7 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const userId = cookies().get("userId")?.value;
+  const userId = (await cookies()).get("userId")?.value;
   return (
     <ErrorBoundary>
       <ClientTelemetry />

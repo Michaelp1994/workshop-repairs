@@ -11,14 +11,16 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import RepairImageCarousel from "../../../_components/RepairImages/RepairImageCarousel";
 
 interface RepairImagesModalProps {
-  params: { repairId: RepairID };
+  params: Promise<{ repairId: RepairID }>;
 }
 
-export default function RepairImagesModal({ params }: RepairImagesModalProps) {
+export default function RepairImagesModal(props: RepairImagesModalProps) {
+  const params = use(props.params);
   const repairId = Number(params.repairId);
   const router = useRouter();
   return (

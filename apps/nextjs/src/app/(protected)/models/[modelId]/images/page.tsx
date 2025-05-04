@@ -10,14 +10,15 @@ import {
 import ModelImageCarousel from "../../_components/ModelImages/ModelImageCarousel";
 
 interface ModelImageGalleryModalProps {
-  params: {
+  params: Promise<{
     modelId: string;
-  };
+  }>;
 }
 
-export default function ModelImageGalleryModal({
-  params,
-}: ModelImageGalleryModalProps) {
+export default async function ModelImageGalleryModal(
+  props: ModelImageGalleryModalProps,
+) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
 
   return (

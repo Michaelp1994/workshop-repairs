@@ -16,14 +16,11 @@ const config = {
     );
     return config;
   },
-  experimental: {
-    serverComponentsExternalPackages: [
-      "@node-rs/argon2",
-      "@highlight-run/node",
-      "require-in-the-middle",
-    ],
-    instrumentationHook: true,
-  },
+  serverExternalPackages: [
+    "@node-rs/argon2",
+    "@highlight-run/node",
+    "require-in-the-middle",
+  ],
 };
 
 export default withHighlightConfig(config);

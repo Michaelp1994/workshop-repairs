@@ -9,15 +9,16 @@ import {
 import UpdateRepairPartForm from "../../../_components/UpdateRepairPartForm";
 
 interface UpdateRepairPartModalProps {
-  params: {
+  params: Promise<{
     repairId: string;
     repairPartId: string;
-  };
+  }>;
 }
 
-export default function UpdateRepairPartModal({
-  params,
-}: UpdateRepairPartModalProps) {
+export default async function UpdateRepairPartModal(
+  props: UpdateRepairPartModalProps,
+) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
   const repairPartId = Number(params.repairPartId);
 

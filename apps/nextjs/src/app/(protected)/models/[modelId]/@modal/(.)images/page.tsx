@@ -10,18 +10,20 @@ import {
 } from "@repo/ui/dialog";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import ModelImageCarousel from "../../../_components/ModelImages/ModelImageCarousel";
 
 interface ModelImageGalleryPageProps {
-  params: {
+  params: Promise<{
     modelId: ModelID;
-  };
+  }>;
 }
 
-export default function ModelImageGalleryPage({
-  params,
-}: ModelImageGalleryPageProps) {
+export default function ModelImageGalleryPage(
+  props: ModelImageGalleryPageProps,
+) {
+  const params = use(props.params);
   const modelId = Number(params.modelId);
   const router = useRouter();
   return (

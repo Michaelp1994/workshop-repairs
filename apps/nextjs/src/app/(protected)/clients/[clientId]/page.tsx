@@ -13,12 +13,13 @@ import ClientDetails from "../_components/ClientDetails";
 import ClientRepairsTable from "../_components/ClientRepairsTable";
 
 interface ViewClientPageProps {
-  params: {
+  params: Promise<{
     clientId: string;
-  };
+  }>;
 }
 
-export default async function ViewClientPage({ params }: ViewClientPageProps) {
+export default async function ViewClientPage(props: ViewClientPageProps) {
+  const params = await props.params;
   const clientId = Number(params.clientId);
   const client = await api.clients.getById({ id: clientId });
 

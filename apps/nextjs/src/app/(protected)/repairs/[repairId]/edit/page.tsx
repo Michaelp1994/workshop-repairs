@@ -10,12 +10,13 @@ import {
 import UpdateRepairForm from "../../_components/UpdateRepairForm";
 
 interface EditRepairPageProps {
-  params: {
+  params: Promise<{
     repairId: string;
-  };
+  }>;
 }
 
-export default function EditRepairPage({ params }: EditRepairPageProps) {
+export default async function EditRepairPage(props: EditRepairPageProps) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
 
   return (

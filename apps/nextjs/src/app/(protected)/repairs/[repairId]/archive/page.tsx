@@ -13,12 +13,13 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveRepairButton from "../../_components/ArchiveRepairButton";
 
 interface ArchiveRepairPageProps {
-  params: {
+  params: Promise<{
     repairId: string;
-  };
+  }>;
 }
 
-export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
+export default async function ArchiveRepairPage(props: ArchiveRepairPageProps) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
 
   return (

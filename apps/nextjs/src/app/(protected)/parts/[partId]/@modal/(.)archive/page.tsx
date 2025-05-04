@@ -10,18 +10,20 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
 import ArchivePartButton from "../../../_components/ArchivePartButton";
 
 interface ArchivePartModalProps {
-  params: {
+  params: Promise<{
     partId: string;
-  };
+  }>;
 }
 
-export default function ArchivePartModal({ params }: ArchivePartModalProps) {
+export default function ArchivePartModal(props: ArchivePartModalProps) {
+  const params = use(props.params);
   const router = useRouter();
   const partId = Number(params.partId);
 

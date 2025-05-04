@@ -13,12 +13,13 @@ import { BackButton } from "~/components/BackButton";
 import ArchivePartButton from "../../_components/ArchivePartButton";
 
 interface ArchivePartPageProps {
-  params: {
+  params: Promise<{
     partId: string;
-  };
+  }>;
 }
 
-export default function ArchivePartPage({ params }: ArchivePartPageProps) {
+export default async function ArchivePartPage(props: ArchivePartPageProps) {
+  const params = await props.params;
   const partId = Number(params.partId);
 
   return (

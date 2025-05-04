@@ -10,12 +10,13 @@ import {
 import UpdateLocationForm from "../../_components/UpdateLocationForm";
 
 interface EditLocationPageProps {
-  params: {
+  params: Promise<{
     locationId: string;
-  };
+  }>;
 }
 
-export default function EditLocationPage({ params }: EditLocationPageProps) {
+export default async function EditLocationPage(props: EditLocationPageProps) {
+  const params = await props.params;
   const locationId = Number(params.locationId);
 
   return (

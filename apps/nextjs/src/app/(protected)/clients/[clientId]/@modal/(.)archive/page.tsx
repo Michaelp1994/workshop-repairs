@@ -10,20 +10,20 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
 import ArchiveClientButton from "../../../_components/ArchiveClientButton";
 
 interface ArchiveClientModalProps {
-  params: {
+  params: Promise<{
     clientId: string;
-  };
+  }>;
 }
 
-export default function ArchiveClientModal({
-  params,
-}: ArchiveClientModalProps) {
+export default function ArchiveClientModal(props: ArchiveClientModalProps) {
+  const params = use(props.params);
   const router = useRouter();
   const clientId = Number(params.clientId);
 

@@ -13,14 +13,15 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveEquipmentTypeButton from "../../_components/ArchiveEquipmentTypeButton";
 
 interface ArchiveEquipmentTypePageProps {
-  params: {
+  params: Promise<{
     equipmentTypeId: string;
-  };
+  }>;
 }
 
-export default function ArchiveEquipmentTypePage({
-  params,
-}: ArchiveEquipmentTypePageProps) {
+export default async function ArchiveEquipmentTypePage(
+  props: ArchiveEquipmentTypePageProps,
+) {
+  const params = await props.params;
   const equipmentTypeId = Number(params.equipmentTypeId);
 
   return (

@@ -12,14 +12,15 @@ import {
 import RepairImageCarousel from "../../_components/RepairImages/RepairImageCarousel";
 
 interface RepairImageGalleryPageProps {
-  params: {
+  params: Promise<{
     repairId: RepairID;
-  };
+  }>;
 }
 
-export default function RepairImageGalleryPage({
-  params,
-}: RepairImageGalleryPageProps) {
+export default async function RepairImageGalleryPage(
+  props: RepairImageGalleryPageProps,
+) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
 
   return (

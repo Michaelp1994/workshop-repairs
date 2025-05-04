@@ -12,15 +12,16 @@ import ArchiveModelPartButton from "~/app/(protected)/models/_components/Archive
 import { BackButton } from "~/components/BackButton";
 
 interface ArchiveModelPartPageProps {
-  params: {
+  params: Promise<{
     modelId: string;
     partId: string;
-  };
+  }>;
 }
 
-export default function ArchiveModelPartPage({
-  params,
-}: ArchiveModelPartPageProps) {
+export default async function ArchiveModelPartPage(
+  props: ArchiveModelPartPageProps,
+) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
   const partId = Number(params.partId);
 

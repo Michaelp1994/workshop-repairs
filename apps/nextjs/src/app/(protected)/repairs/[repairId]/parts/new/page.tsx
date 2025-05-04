@@ -11,14 +11,15 @@ import {
 import CreateRepairPartForm from "../../../_components/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps {
-  params: {
+  params: Promise<{
     repairId: RepairID;
-  };
+  }>;
 }
 
-export default function CreateRepairPartModal({
-  params,
-}: CreateRepairPartModalProps) {
+export default async function CreateRepairPartModal(
+  props: CreateRepairPartModalProps,
+) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
 
   return (
