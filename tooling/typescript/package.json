@@ -7,6 +7,6 @@
     "access": "public"
   },
   "dependencies": {
-    "sst": "^3.3.30"
+    "sst": "^3.14.11"
   }
 }

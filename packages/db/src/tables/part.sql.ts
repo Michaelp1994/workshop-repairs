@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -15,7 +15,7 @@ import { partsToModelTable } from "./parts-to-model.sql";
 export const partTable = pgTable(
   "part",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar().notNull(),
     partNumber: varchar().notNull(),
     description: varchar().notNull(),

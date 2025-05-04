@@ -12,9 +12,9 @@ import {
 import UpdateAssetForm from "../../_components/UpdateAssetForm";
 
 interface EditAssetPageProps {
-  params: {
+  params: Promise<{
     assetId: string;
-  };
+  }>;
 }
 
 export const metadata: Metadata = {
@@ -22,7 +22,8 @@ export const metadata: Metadata = {
   description: "Create a new asset",
 };
 
-export default function EditAssetPage({ params }: EditAssetPageProps) {
+export default async function EditAssetPage(props: EditAssetPageProps) {
+  const params = await props.params;
   const assetId = Number(params.assetId);
   return (
     <PageWrapper>

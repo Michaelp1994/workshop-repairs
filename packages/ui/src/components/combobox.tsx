@@ -23,16 +23,21 @@ interface ComboboxOption {
 }
 
 export interface ComboboxProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+  extends Omit<React.ComponentProps<"button">, "onChange"> {
   data: ComboboxOption[] | undefined;
   onChange: (value: string | number | null) => void;
   isLoading?: boolean;
 }
 
-export const Combobox = React.forwardRef<
-  React.ElementRef<typeof Button>,
-  ComboboxProps
->(({ onChange, value, isLoading, className, data = [], ...props }, ref) => {
+export const Combobox = ({
+  ref,
+  onChange,
+  value,
+  isLoading,
+  className,
+  data = [],
+  ...props
+}: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
 
   function handleSelect(newValue: string) {
@@ -96,6 +101,6 @@ export const Combobox = React.forwardRef<
       </PopoverContent>
     </Popover>
   );
-});
+};
 
 Combobox.displayName = "Combobox";

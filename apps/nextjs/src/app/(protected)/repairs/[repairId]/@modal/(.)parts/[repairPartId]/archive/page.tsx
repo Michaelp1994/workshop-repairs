@@ -10,20 +10,22 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import ArchiveRepairPartButton from "~/app/(protected)/repairs/_components/ArchiveRepairPartButton";
 import { BackButton } from "~/components/BackButton";
 
 interface ArchiveRepairPartModalProps {
-  params: {
+  params: Promise<{
     repairId: string;
     repairPartId: string;
-  };
+  }>;
 }
 
-export default function ArchiveRepairPartModal({
-  params,
-}: ArchiveRepairPartModalProps) {
+export default function ArchiveRepairPartModal(
+  props: ArchiveRepairPartModalProps,
+) {
+  const params = use(props.params);
   const router = useRouter();
 
   const repairPartId = Number(params.repairPartId);

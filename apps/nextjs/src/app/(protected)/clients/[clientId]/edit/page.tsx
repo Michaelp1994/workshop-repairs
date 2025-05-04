@@ -10,12 +10,13 @@ import {
 import UpdateClientForm from "../../_components/UpdateClientForm";
 
 interface EditClientPageProps {
-  params: {
+  params: Promise<{
     clientId: string;
-  };
+  }>;
 }
 
-export default function EditClientPage({ params }: EditClientPageProps) {
+export default async function EditClientPage(props: EditClientPageProps) {
+  const params = await props.params;
   const clientId = Number(params.clientId);
 
   return (

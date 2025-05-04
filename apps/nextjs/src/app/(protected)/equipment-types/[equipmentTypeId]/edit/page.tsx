@@ -10,14 +10,15 @@ import {
 import UpdatEquipmentTypeForm from "../../_components/UpdateEquipmentTypeForm";
 
 interface EditEquipmentTypePageProps {
-  params: {
+  params: Promise<{
     equipmentTypeId: string;
-  };
+  }>;
 }
 
-export default function EditEquipmentTypePage({
-  params,
-}: EditEquipmentTypePageProps) {
+export default async function EditEquipmentTypePage(
+  props: EditEquipmentTypePageProps,
+) {
+  const params = await props.params;
   const equipmentTypeId = Number(params.equipmentTypeId);
 
   return (

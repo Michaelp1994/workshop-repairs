@@ -4,12 +4,13 @@ import { api } from "~/trpc/server";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface BreadcrumbSlotProps {
-  params: {
+  params: Promise<{
     repairId: string;
-  };
+  }>;
 }
 
-export default async function BreadcrumbSlot({ params }: BreadcrumbSlotProps) {
+export default async function BreadcrumbSlot(props: BreadcrumbSlotProps) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
   const repair = await api.repairs.getById({ id: repairId });
   const routes = [

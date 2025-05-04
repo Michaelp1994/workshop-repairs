@@ -1,9 +1,9 @@
 "use client";
 
 import type * as LabelPrimitive from "@radix-ui/react-label";
-import type { ZodErrorMap, ZodSchema } from "zod";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Slot } from "@radix-ui/react-slot";
 import { LoaderCircle } from "lucide-react";
 import * as React from "react";
@@ -28,22 +28,35 @@ const Form = FormProvider;
 interface UseFormProps<
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
-> extends Omit<_UseFormProps<TFieldValues, TContext>, "resolver"> {
-  schema: ZodSchema<TFieldValues>;
-  errorMap?: ZodErrorMap;
+  TTransformedValues = FieldValues,
+> extends Omit<
+    _UseFormProps<TFieldValues, TContext, TTransformedValues>,
+    "resolver"
+  > {
+  schema: StandardSchemaV1<TFieldValues, TTransformedValues>;
   values?: NoInfer<TFieldValues>;
 }
 
 function useForm<
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
-  TTransformedValues extends FieldValues | undefined = undefined,
->({ schema, ...props }: UseFormProps<TFieldValues, TContext>) {
+  TTransformedValues = FieldValues,
+>({
+  schema,
+  ...props
+}: UseFormProps<TFieldValues, TContext, TTransformedValues>) {
   return _useForm<TFieldValues, TContext, TTransformedValues>({
     ...props,
-    resolver: zodResolver(schema),
+    resolver: standardSchemaResolver<
+      TFieldValues,
+      TContext,
+      TTransformedValues
+    >(schema),
   });
 }
+
+// const useForm = ({ schema, ...props }: UseFormProps) =>
+//   _useForm({ ...props, resolver: standardSchemaResolver(schema) });
 
 interface FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -100,10 +113,11 @@ const FormItemContext = React.createContext<FormItemContextValue>(
   {} as FormItemContextValue,
 );
 
-const FormItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+const FormItem = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentProps<"div">) => {
   const id = React.useId();
 
   return (
@@ -111,13 +125,14 @@ const FormItem = React.forwardRef<
       <div className={cn("space-y-2", className)} ref={ref} {...props} />
     </FormItemContext.Provider>
   );
-});
+};
 FormItem.displayName = "FormItem";
 
-const FormLabel = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+const FormLabel = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentProps<typeof LabelPrimitive.Root>) => {
   const { error, formItemId } = useFormField();
 
   return (
@@ -128,13 +143,10 @@ const FormLabel = React.forwardRef<
       {...props}
     />
   );
-});
+};
 FormLabel.displayName = "FormLabel";
 
-const FormControl = React.forwardRef<
-  React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
+const FormControl = ({ ref, ...props }: React.ComponentProps<typeof Slot>) => {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
@@ -149,13 +161,14 @@ const FormControl = React.forwardRef<
       {...props}
     />
   );
-});
+};
 FormControl.displayName = "FormControl";
 
-const FormDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
+const FormDescription = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentProps<"p">) => {
   const { formDescriptionId } = useFormField();
 
   return (
@@ -166,13 +179,15 @@ const FormDescription = React.forwardRef<
       {...props}
     />
   );
-});
+};
 FormDescription.displayName = "FormDescription";
 
-const FormMessage = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
+const FormMessage = ({
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"p">) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error.message) : children;
 
@@ -190,13 +205,14 @@ const FormMessage = React.forwardRef<
       {body}
     </p>
   );
-});
+};
 FormMessage.displayName = "FormMessage";
 
-const FormFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+const FormFooter = ({
+  ref,
+  className,
+  ...props
+}: React.ComponentProps<"div">) => {
   return (
     <div
       className={cn("mt-4 flex justify-end gap-2", className)}
@@ -204,38 +220,41 @@ const FormFooter = React.forwardRef<
       {...props}
     />
   );
-});
+};
 FormFooter.displayName = "FormFooter";
 
 interface SubmitButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  extends Omit<React.ComponentProps<"button">, "type"> {
   isLoading?: boolean;
 }
 
-const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
-  ({ isLoading, children, ...buttonProps }, ref) => (
-    <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
-      {isLoading ? (
-        <LoaderCircle className="animate-spin" />
-      ) : children ? (
-        children
-      ) : (
-        "Submit"
-      )}
-    </Button>
-  ),
+const SubmitButton = ({
+  ref,
+  isLoading,
+  children,
+  ...buttonProps
+}: SubmitButtonProps) => (
+  <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
+    {isLoading ? (
+      <LoaderCircle className="animate-spin" />
+    ) : children ? (
+      children
+    ) : (
+      "Submit"
+    )}
+  </Button>
 );
 
 SubmitButton.displayName = "SubmitButton";
 
-const ResetButton = React.forwardRef<
-  HTMLButtonElement,
-  Omit<React.HTMLAttributes<HTMLButtonElement>, "type" | "children">
->((props, ref) => (
+const ResetButton = ({
+  ref,
+  ...props
+}: Omit<React.ComponentProps<"button">, "type" | "children">) => (
   <Button ref={ref} type="reset" variant="ghost" {...props}>
     Reset
   </Button>
-));
+);
 
 ResetButton.displayName = "ResetButton";
 

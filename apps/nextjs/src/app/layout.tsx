@@ -1,9 +1,8 @@
 import { Toaster } from "@repo/ui/sonner";
-
-import "~/styles/globals.css";
-
+import "@repo/ui/globals.css";
 import { cn } from "@repo/ui/utils";
 import { type Metadata } from "next";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
@@ -39,7 +38,7 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const userId = cookies().get("userId")?.value;
+  const userId = (await cookies()).get("userId")?.value;
   return (
     <ErrorBoundary>
       <ClientTelemetry />
@@ -54,8 +53,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <SessionProvider session={{ userId: Number(userId) }}>
           <TRPCProvider>
             <body className="min-h-screen">
-              {children}
-              <Toaster closeButton richColors />
+              <NextThemesProvider
+                attribute="class"
+                defaultTheme="system"
+                disableTransitionOnChange
+                enableColorScheme
+                enableSystem
+              >
+                {children}
+                <Toaster closeButton richColors />
+              </NextThemesProvider>
             </body>
           </TRPCProvider>
         </SessionProvider>

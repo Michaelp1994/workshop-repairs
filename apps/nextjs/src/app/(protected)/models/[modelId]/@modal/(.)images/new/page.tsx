@@ -11,14 +11,16 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import CreateModelImageForm from "../../../../_components/CreateModelImageForm";
 
 interface ArchiveModelModalProps {
-  params: { modelId: ModelID };
+  params: Promise<{ modelId: ModelID }>;
 }
 
-export default function ArchiveModelModal({ params }: ArchiveModelModalProps) {
+export default function ArchiveModelModal(props: ArchiveModelModalProps) {
+  const params = use(props.params);
   const modelId = Number(params.modelId);
   const router = useRouter();
 

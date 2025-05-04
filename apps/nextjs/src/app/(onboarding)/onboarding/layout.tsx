@@ -8,12 +8,12 @@ import ProfileAvatar from "~/components/ProfileAvatar";
 
 import OnboardingProgress from "./components/OnboardingProgress";
 
-export default function OnboardingLayout({
+export default async function OnboardingLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  if (!isAuthenticated()) {
+  if (!(await isAuthenticated())) {
     redirect("/login");
   }
 

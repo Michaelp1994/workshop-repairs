@@ -13,12 +13,13 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveAssetButton from "../../_components/ArchiveAssetButton";
 
 interface ArchiveAssetPageProps {
-  params: {
+  params: Promise<{
     assetId: string;
-  };
+  }>;
 }
 
-export default function ArchiveAssetPage({ params }: ArchiveAssetPageProps) {
+export default async function ArchiveAssetPage(props: ArchiveAssetPageProps) {
+  const params = await props.params;
   const assetId = Number(params.assetId);
 
   return (

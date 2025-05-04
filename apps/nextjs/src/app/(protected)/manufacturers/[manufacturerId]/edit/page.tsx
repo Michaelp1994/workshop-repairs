@@ -10,14 +10,15 @@ import {
 import UpdateManufacturerForm from "../../_components/UpdateManufacturerForm";
 
 interface EditManufacturerPageProps {
-  params: {
+  params: Promise<{
     manufacturerId: string;
-  };
+  }>;
 }
 
-export default function EditManufacturerPage({
-  params,
-}: EditManufacturerPageProps) {
+export default async function EditManufacturerPage(
+  props: EditManufacturerPageProps,
+) {
+  const params = await props.params;
   const manufacturerId = Number(params.manufacturerId);
 
   return (

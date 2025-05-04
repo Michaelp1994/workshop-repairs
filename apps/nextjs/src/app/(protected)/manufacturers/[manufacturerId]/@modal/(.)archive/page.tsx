@@ -10,20 +10,22 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
 import ArchiveManufacturerButton from "../../../_components/ArchiveManufacturerButton";
 
 interface ArchiveManufacturerModalProps {
-  params: {
+  params: Promise<{
     manufacturerId: string;
-  };
+  }>;
 }
 
-export default function ArchiveManufacturerModal({
-  params,
-}: ArchiveManufacturerModalProps) {
+export default function ArchiveManufacturerModal(
+  props: ArchiveManufacturerModalProps,
+) {
+  const params = use(props.params);
   const router = useRouter();
   const manufacturerId = Number(params.manufacturerId);
 

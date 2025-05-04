@@ -14,12 +14,13 @@ import RepairImages from "../_components/RepairImages";
 import RepairParts from "../_components/RepairParts";
 
 interface ViewRepairPageProps {
-  params: {
+  params: Promise<{
     repairId: string;
-  };
+  }>;
 }
 
-export default async function ViewRepairPage({ params }: ViewRepairPageProps) {
+export default async function ViewRepairPage(props: ViewRepairPageProps) {
+  const params = await props.params;
   const repairId = Number(params.repairId);
   return (
     <PageWrapper>

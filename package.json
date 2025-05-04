@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "sst shell -- pnpm -F nextjs build",
-    "clean": "turbo clean && rm -rf .turbo node_modules .sst",
+    "clean": "turbo clean && rm -rf .turbo node_modules .sst coverage",
     "commitlint": "commitlint --edit",
     "db": "sst shell drizzle-kit",
     "db:migrate": "sst shell -- pnpm -F db db:migrate",
@@ -24,28 +24,34 @@
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
-    "@node-rs/argon2": "^2.0.0"
+    "@node-rs/argon2": "^2.0.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.0",
-    "@commitlint/config-conventional": "^19.6.0",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@repo/eslint-config": "workspace:*",
-    "@types/aws-lambda": "8.10.146",
-    "@vitest/coverage-v8": "2.1.6",
+    "@types/aws-lambda": "^8.10.149",
+    "@vitest/coverage-v8": "^3.1.2",
     "commitizen": "^4.3.1",
-    "commitlint": "^19.6.0",
-    "drizzle-kit": "0.28.1",
-    "eslint": "^9.15.0",
+    "commitlint": "^19.8.0",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.26.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.4.1",
-    "prettier-plugin-tailwindcss": "^0.6.9",
-    "semantic-release": "^24.2.0",
-    "sst": "^3.3.30",
-    "turbo": "^2.3.3",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.1",
-    "vitest": "^2.1.6"
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "semantic-release": "^24.2.3",
+    "sst": "^3.14.11",
+    "turbo": "^2.5.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4",
+    "vitest": "^3.1.2"
   },
-  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.1.2",
+      "@types/react-dom": "19.1.3"
+    }
+  }
 }

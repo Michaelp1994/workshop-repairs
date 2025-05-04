@@ -10,20 +10,22 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
 import ArchiveEquipmentTypeButton from "../../../_components/ArchiveEquipmentTypeButton";
 
 interface ArchiveEquipmentTypeModalProps {
-  params: {
+  params: Promise<{
     equipmentTypeId: string;
-  };
+  }>;
 }
 
-export default function ArchiveEquipmentTypeModal({
-  params,
-}: ArchiveEquipmentTypeModalProps) {
+export default function ArchiveEquipmentTypeModal(
+  props: ArchiveEquipmentTypeModalProps,
+) {
+  const params = use(props.params);
   const router = useRouter();
   const equipmentTypeId = Number(params.equipmentTypeId);
 

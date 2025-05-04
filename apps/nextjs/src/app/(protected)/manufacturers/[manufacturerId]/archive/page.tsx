@@ -13,14 +13,15 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveManufacturerButton from "../../_components/ArchiveManufacturerButton";
 
 interface ArchiveManufacturerPageProps {
-  params: {
+  params: Promise<{
     manufacturerId: string;
-  };
+  }>;
 }
 
-export default function ArchiveManufacturerPage({
-  params,
-}: ArchiveManufacturerPageProps) {
+export default async function ArchiveManufacturerPage(
+  props: ArchiveManufacturerPageProps,
+) {
+  const params = await props.params;
   const manufacturerId = Number(params.manufacturerId);
 
   return (

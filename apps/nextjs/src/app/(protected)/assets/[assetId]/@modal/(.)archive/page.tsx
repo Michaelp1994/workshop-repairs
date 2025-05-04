@@ -10,18 +10,20 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
 import ArchiveAssetButton from "../../../_components/ArchiveAssetButton";
 
 interface ArchiveAssetModalProps {
-  params: {
+  params: Promise<{
     assetId: string;
-  };
+  }>;
 }
 
-export default function ArchiveAssetModal({ params }: ArchiveAssetModalProps) {
+export default function ArchiveAssetModal(props: ArchiveAssetModalProps) {
+  const params = use(props.params);
   const router = useRouter();
   const assetId = Number(params.assetId);
 

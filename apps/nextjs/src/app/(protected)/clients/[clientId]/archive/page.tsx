@@ -13,12 +13,13 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveClientButton from "../../_components/ArchiveClientButton";
 
 interface ArchiveClientPageProps {
-  params: {
+  params: Promise<{
     clientId: string;
-  };
+  }>;
 }
 
-export default function ArchiveClientPage({ params }: ArchiveClientPageProps) {
+export default async function ArchiveClientPage(props: ArchiveClientPageProps) {
+  const params = await props.params;
   const clientId = Number(params.clientId);
 
   return (

@@ -27,6 +27,7 @@ export default router({
     if (!user) {
       throw new ZodError([
         {
+          input: null,
           code: "custom",
           path: ["root"],
           message: "Login details are not correct.",
@@ -40,6 +41,7 @@ export default router({
     if (!passwordCorrect) {
       throw new ZodError([
         {
+          input: null,
           code: "custom",
           path: ["root"],
           message: "Login details are not correct.",
@@ -61,6 +63,7 @@ export default router({
 
       if (!passwordStrongEnough) {
         issues.push({
+          input: null,
           code: "custom",
           path: ["password"],
           message:
@@ -71,6 +74,7 @@ export default router({
 
       if (emailExists) {
         issues.push({
+          input: null,
           code: "custom",
           path: ["email"],
           message: "This email has already been registered with an account",

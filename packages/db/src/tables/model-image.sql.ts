@@ -3,7 +3,6 @@ import {
   type AnyPgColumn,
   integer,
   pgTable,
-  serial,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -20,7 +19,7 @@ import { modelTable } from "./model.sql";
 export const modelImageTable = pgTable(
   "model_image",
   {
-    id: serial().primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     url: varchar().notNull(),
     caption: varchar(),
     modelId: integer()

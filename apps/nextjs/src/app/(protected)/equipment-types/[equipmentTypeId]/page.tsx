@@ -13,14 +13,15 @@ import EquipmentTypeDetails from "../_components/EquipmentTypeDetails";
 import EquipmentTypeModelsTable from "../_components/EquipmentTypeModelsTable";
 
 interface ViewEquipmentTypePageProps {
-  params: {
+  params: Promise<{
     equipmentTypeId: string;
-  };
+  }>;
 }
 
-export default async function ViewEquipmentTypePage({
-  params,
-}: ViewEquipmentTypePageProps) {
+export default async function ViewEquipmentTypePage(
+  props: ViewEquipmentTypePageProps,
+) {
+  const params = await props.params;
   const equipmentTypeId = Number(params.equipmentTypeId);
   const equipmentType = await api.equipmentTypes.getById({
     id: equipmentTypeId,

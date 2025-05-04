@@ -14,14 +14,15 @@ import ManufacturerModelsTable from "../_components/ManufacturerModelsTable";
 import ManufacturerDetails from "../_components/ManufacturersDetails";
 
 interface ViewManufacturerPageProps {
-  params: {
+  params: Promise<{
     manufacturerId: ManufacturerID;
-  };
+  }>;
 }
 
-export default async function ViewManufacturerPage({
-  params,
-}: ViewManufacturerPageProps) {
+export default async function ViewManufacturerPage(
+  props: ViewManufacturerPageProps,
+) {
+  const params = await props.params;
   const manufacturerId = Number(params.manufacturerId);
   const manufacturer = await api.manufacturers.getById({ id: manufacturerId });
 

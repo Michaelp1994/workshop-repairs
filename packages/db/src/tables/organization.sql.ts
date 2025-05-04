@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -11,7 +11,7 @@ import { organizationInvitationTable } from "./organization-invitation.sql";
 import { userTable } from "./user.sql";
 
 export const organizationTable = pgTable("organization", {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text().notNull().unique(),
   logo: text(),
   invitationCode: uuid().defaultRandom(),

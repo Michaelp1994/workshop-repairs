@@ -8,14 +8,20 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    serverComponentsExternalPackages: [
-      "@node-rs/argon2",
-      "@highlight-run/node",
-      "require-in-the-middle",
-    ],
-    instrumentationHook: true,
+  transpilePackages: ["@workspace/ui"],
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+      }),
+    );
+    return config;
   },
+  serverExternalPackages: [
+    "@node-rs/argon2",
+    "@highlight-run/node",
+    "require-in-the-middle",
+  ],
 };
 
 export default withHighlightConfig(config);

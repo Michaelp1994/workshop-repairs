@@ -1,7 +1,9 @@
 "use client";
 import { type RefObject, useLayoutEffect, useState } from "react";
 
-export const useTruncatedElement = (ref: RefObject<HTMLParagraphElement>) => {
+export const useTruncatedElement = (
+  ref: RefObject<HTMLParagraphElement | null>,
+) => {
   const [isTruncated, setIsTruncated] = useState(false);
   const [isReadingMore, setIsReadingMore] = useState(false);
 

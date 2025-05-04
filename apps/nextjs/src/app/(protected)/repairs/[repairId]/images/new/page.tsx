@@ -7,16 +7,18 @@ import {
   CardHeaderText,
   CardTitle,
 } from "@repo/ui/card";
+import { use } from "react";
 
 import CreateRepairImageForm from "../../../_components/CreateRepairImageForm";
 
 interface ArchiveRepairPageProps {
-  params: {
+  params: Promise<{
     repairId: string;
-  };
+  }>;
 }
 
-export default function ArchiveRepairPage({ params }: ArchiveRepairPageProps) {
+export default function ArchiveRepairPage(props: ArchiveRepairPageProps) {
+  const params = use(props.params);
   const repairId = Number(params.repairId);
 
   return (

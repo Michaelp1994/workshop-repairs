@@ -54,7 +54,7 @@ export function TRPCProvider({ children }: TRPCReactProviderProps) {
             let heads;
             if (typeof window == "undefined") {
               const headers = await import("next/headers");
-              heads = new Map(headers.headers());
+              heads = new Map(await headers.headers());
             } else {
               heads = new Headers();
             }

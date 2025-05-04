@@ -12,15 +12,16 @@ import ArchiveRepairCommentButton from "~/app/(protected)/repairs/_components/Ar
 import { BackButton } from "~/components/BackButton";
 
 interface ArchiveRepairCommentPageProps {
-  params: {
+  params: Promise<{
     repairId: string;
     repairCommentId: string;
-  };
+  }>;
 }
 
-export default function ArchiveRepairCommentPage({
-  params,
-}: ArchiveRepairCommentPageProps) {
+export default async function ArchiveRepairCommentPage(
+  props: ArchiveRepairCommentPageProps,
+) {
+  const params = await props.params;
   const repairCommentId = Number(params.repairCommentId);
 
   return (

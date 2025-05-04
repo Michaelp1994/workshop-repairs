@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,7 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 import generateRepairSlug from "~/utils/generateRepairSlug";
@@ -18,12 +18,11 @@ import generateRepairSlug from "~/utils/generateRepairSlug";
 import ArchiveRepairButton from "../../../_components/ArchiveRepairButton";
 
 interface ArchiveRepairModalProps {
-  params: { repairId: string };
+  params: Promise<{ repairId: string }>;
 }
 
-export default function ArchiveRepairModal({
-  params,
-}: ArchiveRepairModalProps) {
+export default function ArchiveRepairModal(props: ArchiveRepairModalProps) {
+  const params = use(props.params);
   const repairId = Number(params.repairId);
   const router = useRouter();
   return (

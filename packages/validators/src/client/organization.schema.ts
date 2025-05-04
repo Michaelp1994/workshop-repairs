@@ -1,12 +1,11 @@
 import { z } from "zod";
 
-import { zFile } from "../helpers/files.schema";
 const TEN_MEGABYTES = 10_000_000;
 export const createOrganizationSchema = z.object({
   name: z.string().min(5, {
     message: "Organization name must be atleast 5 characters.",
   }),
-  logo: zFile().size(TEN_MEGABYTES).mimeType(["image/png", "image/jpeg"]),
+  logo: z.file().max(TEN_MEGABYTES), //.type(["image/png", "image/jpeg"])
 });
 
 export type CreateOrganizationInput = z.infer<typeof createOrganizationSchema>;

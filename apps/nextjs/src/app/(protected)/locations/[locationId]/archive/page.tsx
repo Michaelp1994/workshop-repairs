@@ -13,14 +13,15 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveLocationButton from "../../_components/ArchiveLocationButton";
 
 interface ArchiveLocationPageProps {
-  params: {
+  params: Promise<{
     locationId: string;
-  };
+  }>;
 }
 
-export default function ArchiveLocationPage({
-  params,
-}: ArchiveLocationPageProps) {
+export default async function ArchiveLocationPage(
+  props: ArchiveLocationPageProps,
+) {
+  const params = await props.params;
   const locationId = Number(params.locationId);
 
   return (

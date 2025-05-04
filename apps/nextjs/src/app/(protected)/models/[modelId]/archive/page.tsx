@@ -13,12 +13,13 @@ import { BackButton } from "~/components/BackButton";
 import ArchiveModelButton from "../../_components/ArchiveModelButton";
 
 interface ArchiveModelPageProps {
-  params: {
+  params: Promise<{
     modelId: string;
-  };
+  }>;
 }
 
-export default function ArchiveModelPage({ params }: ArchiveModelPageProps) {
+export default async function ArchiveModelPage(props: ArchiveModelPageProps) {
+  const params = await props.params;
   const modelId = Number(params.modelId);
 
   return (

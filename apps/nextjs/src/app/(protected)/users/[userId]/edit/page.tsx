@@ -10,12 +10,13 @@ import {
 import UpdateUserForm from "../../_components/UpdateUserForm";
 
 interface EditUserPageProps {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
-export default function EditUserPage({ params }: EditUserPageProps) {
+export default async function EditUserPage(props: EditUserPageProps) {
+  const params = await props.params;
   const userId = Number(params.userId);
 
   return (

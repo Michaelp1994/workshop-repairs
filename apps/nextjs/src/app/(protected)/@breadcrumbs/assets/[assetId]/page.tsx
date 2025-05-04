@@ -4,12 +4,13 @@ import { api } from "~/trpc/server";
 import generateAssetSlug from "~/utils/generateAssetSlug";
 
 interface BreadcrumbSlotProps {
-  params: {
+  params: Promise<{
     assetId: string;
-  };
+  }>;
 }
 
-export default async function BreadcrumbSlot({ params }: BreadcrumbSlotProps) {
+export default async function BreadcrumbSlot(props: BreadcrumbSlotProps) {
+  const params = await props.params;
   const assetId = Number(params.assetId);
   const asset = await api.assets.getById({ id: assetId });
   const routes = [

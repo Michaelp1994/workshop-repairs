@@ -18,7 +18,7 @@ export default async function ProtectedLayout({
   children,
   breadcrumbs,
 }: ProtectedLayoutProps) {
-  if (!isAuthenticated()) {
+  if (!(await isAuthenticated())) {
     redirect("/login");
   }
   const user = await api.users.getCurrentUser({});

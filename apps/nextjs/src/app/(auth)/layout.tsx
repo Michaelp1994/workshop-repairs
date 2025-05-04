@@ -8,8 +8,8 @@ interface AuthLayout {
   children: ReactNode;
 }
 
-export default function AuthLayout({ children }: AuthLayout) {
-  if (isAuthenticated()) {
+export default async function AuthLayout({ children }: AuthLayout) {
+  if (await isAuthenticated()) {
     redirect("/dashboard");
   }
   return children;

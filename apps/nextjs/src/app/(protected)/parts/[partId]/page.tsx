@@ -14,12 +14,13 @@ import PartDetails from "../_components/PartDetails";
 import PartModelsTable from "../_components/PartModelsTable";
 
 interface ViewPartPageProps {
-  params: {
+  params: Promise<{
     partId: PartID;
-  };
+  }>;
 }
 
-export default async function ViewPartPage({ params }: ViewPartPageProps) {
+export default async function ViewPartPage(props: ViewPartPageProps) {
+  const params = await props.params;
   const partId = Number(params.partId);
   const part = await api.parts.getById({
     id: partId,

@@ -50,7 +50,7 @@ type InferUpdateModel<
   } = {
     dbColumnNames: false;
   },
-> = Prettify<UpdateInput<InferInsertModel<TTable, TConfig>>>;
+> = Prettify<UpdateInput<InferSelectModel<TTable, TConfig>>>;
 
 type DeleteInput<T extends BaseType> = Required<
   RemoveNull<Pick<T, "id" | "deletedById" | "deletedAt">>
@@ -63,7 +63,7 @@ type InferArchiveModel<
   } = {
     dbColumnNames: false;
   },
-> = Prettify<DeleteInput<InferInsertModel<TTable, TConfig>>>;
+> = Prettify<DeleteInput<InferSelectModel<TTable, TConfig>>>;
 
 type CreateInput<T extends BaseType> = Omit<
   T,
