@@ -8,6 +8,7 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  transpilePackages: ["@workspace/ui"],
   webpack: (config, { webpack }) => {
     config.plugins.push(
       new webpack.IgnorePlugin({
