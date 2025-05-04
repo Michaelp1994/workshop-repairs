@@ -40,109 +40,104 @@ export interface ComboboxProps
   isFetchingNextPage: boolean;
 }
 
-export const InfiniteCombobox = React.forwardRef<
-  React.ElementRef<typeof Button>,
-  ComboboxProps
->(
-  (
-    {
-      onChange,
-      value,
-      fetchNextPage,
-      isFetchingNextPage,
-      isLoading,
-      className,
-      data,
-      ...props
-    },
-    ref,
-  ) => {
-    const [open, setOpen] = React.useState(false);
-    const parentRef = React.useRef<HTMLDivElement | null>(null);
-    const allRows = data ? data.pages.flatMap((d) => d.data) : [];
-    console.log(allRows);
-    // The virtualizer
-    const rowVirtualizer = useVirtualizer({
-      count: allRows.length,
-      getScrollElement: () => parentRef.current,
+export const InfiniteCombobox = ({
+  ref,
+  onChange,
+  value,
+  fetchNextPage,
+  isFetchingNextPage,
+  isLoading,
+  className,
+  data,
+  ...props
+}: ComboboxProps & {
+  ref: React.RefObject<React.ComponentRef<typeof Button>>;
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const parentRef = React.useRef<HTMLDivElement | null>(null);
+  const allRows = data ? data.pages.flatMap((d) => d.data) : [];
+  console.log(allRows);
+  // The virtualizer
+  const rowVirtualizer = useVirtualizer({
+    count: allRows.length,
+    getScrollElement: () => parentRef.current,
 
-      estimateSize: () => 35,
-      overscan: 5,
-    });
+    estimateSize: () => 35,
+    overscan: 5,
+  });
 
-    function handleSelect(newValue: string) {
-      onChange(Number(newValue) === value ? null : Number(newValue));
-      setOpen(false);
-    }
+  function handleSelect(newValue: string) {
+    onChange(Number(newValue) === value ? null : Number(newValue));
+    setOpen(false);
+  }
 
-    const selectedOption = React.useMemo(
-      () => allRows.find((option) => option.value === value),
-      [value, allRows],
-    );
+  const selectedOption = React.useMemo(
+    () => allRows.find((option) => option.value === value),
+    [value, allRows],
+  );
 
-    function handleScroll() {
-      const scrollContainer = parentRef.current;
-      if (scrollContainer) {
-        const isAtBottom =
-          scrollContainer.scrollHeight - scrollContainer.scrollTop ===
-          scrollContainer.clientHeight;
+  function handleScroll() {
+    const scrollContainer = parentRef.current;
+    if (scrollContainer) {
+      const isAtBottom =
+        scrollContainer.scrollHeight - scrollContainer.scrollTop ===
+        scrollContainer.clientHeight;
 
-        if (isAtBottom && fetchNextPage && !isFetchingNextPage) {
-          console.log("fetching next page");
-          fetchNextPage();
-        }
+      if (isAtBottom && fetchNextPage && !isFetchingNextPage) {
+        console.log("fetching next page");
+        fetchNextPage();
       }
     }
+  }
 
-    return (
-      <Popover onOpenChange={setOpen} open={open}>
-        <PopoverTrigger asChild>
-          <Button
-            aria-expanded={open}
-            className={cn("flex w-full justify-between", className)}
-            role="combobox"
-            variant="outline"
-            {...props}
-            ref={ref}
-          >
-            {selectedOption ? selectedOption.label : "Select option..."}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="p-0">
-          <Command>
-            <CommandInput placeholder="Search..." />
-            <CommandEmpty>Nothing found.</CommandEmpty>
-            <CommandList onScroll={handleScroll} ref={parentRef}>
-              {isLoading && <CommandLoading>Loading...</CommandLoading>}
-              <CommandGroup>
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                  const row = allRows[virtualRow.index];
-                  if (!row) return null;
-                  return (
-                    <CommandItem
-                      key={row.value}
-                      keywords={[row.label]}
-                      onSelect={handleSelect}
-                      value={row.value.toString()}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          value === row.value ? "opacity-100" : "opacity-0",
-                        )}
-                      />
-                      {row.label}
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    );
-  },
-);
+  return (
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger asChild>
+        <Button
+          aria-expanded={open}
+          className={cn("flex w-full justify-between", className)}
+          role="combobox"
+          variant="outline"
+          {...props}
+          ref={ref}
+        >
+          {selectedOption ? selectedOption.label : "Select option..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0">
+        <Command>
+          <CommandInput placeholder="Search..." />
+          <CommandEmpty>Nothing found.</CommandEmpty>
+          <CommandList onScroll={handleScroll} ref={parentRef}>
+            {isLoading && <CommandLoading>Loading...</CommandLoading>}
+            <CommandGroup>
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const row = allRows[virtualRow.index];
+                if (!row) return null;
+                return (
+                  <CommandItem
+                    key={row.value}
+                    keywords={[row.label]}
+                    onSelect={handleSelect}
+                    value={row.value.toString()}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === row.value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    {row.label}
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 InfiniteCombobox.displayName = "InfiniteCombobox";
