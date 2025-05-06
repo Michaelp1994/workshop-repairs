@@ -49,6 +49,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           fontBody.variable,
         )}
         lang="en"
+        suppressHydrationWarning
       >
         <SessionProvider session={{ userId: Number(userId) }}>
           <TRPCProvider>
