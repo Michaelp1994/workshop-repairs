@@ -7,7 +7,7 @@ export default function CTASection() {
       className="w-full bg-gray-900 py-12 text-white md:py-24 lg:py-32"
       id="cta"
     >
-      <div className="container px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center space-y-4 text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
             Ready to Optimize Your Asset Management?

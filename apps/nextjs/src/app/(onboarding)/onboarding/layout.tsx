@@ -19,7 +19,7 @@ export default async function OnboardingLayout({
 
   return (
     <div className="bg-muted/40 flex h-full min-h-screen flex-col">
-      <div className="container flex justify-between pb-10 pt-10">
+      <div className="container mx-auto flex justify-between px-4 pb-10 pt-10">
         <Logo />
         <ProfileAvatar />
       </div>

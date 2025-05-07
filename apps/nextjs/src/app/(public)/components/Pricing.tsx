@@ -36,7 +36,7 @@ export default function Pricing() {
       className="w-full bg-gray-50 py-12 md:py-24 lg:py-32 dark:bg-gray-900"
       id="pricing"
     >
-      <div className="container px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-6">
         <h2 className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-5xl">
           Pricing Plans
         </h2>
