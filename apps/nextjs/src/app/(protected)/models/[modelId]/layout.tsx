@@ -1,7 +1,7 @@
 interface ViewModelLayoutProps {
-  params: {
+  params: Promise<{
     modelId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }

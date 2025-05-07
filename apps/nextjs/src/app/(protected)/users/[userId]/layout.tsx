@@ -1,7 +1,7 @@
 interface ViewLocationLayoutProps {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }

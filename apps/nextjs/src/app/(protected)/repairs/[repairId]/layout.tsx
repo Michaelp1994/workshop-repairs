@@ -1,9 +1,9 @@
 interface ViewRepairLayoutProps {
   children: React.ReactNode;
   modal: React.ReactNode;
-  params: {
+  params: Promise<{
     repairId: string;
-  };
+  }>;
 }
 
 export default function ViewRepairLayout({

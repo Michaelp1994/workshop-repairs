@@ -1,7 +1,7 @@
 interface ViewAssetLayoutProps {
-  params: {
+  params: Promise<{
     assetId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }
