@@ -1,7 +1,7 @@
 interface ViewClientLayoutProps {
-  params: {
+  params: Promise<{
     clientId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }

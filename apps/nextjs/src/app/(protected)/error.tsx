@@ -38,7 +38,7 @@ export default function Error({ error, reset }: ErrorPageProps) {
         </CardHeader>
         <CardContent className="text-muted-foreground text-sm">
           If this issue persists, please contact support with error code:{" "}
-          <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm">
+          <code className="bg-muted relative rounded-sm px-[0.3rem] py-[0.2rem] font-mono text-sm">
             {error?.name || "ERR_UNKNOWN"}
           </code>
         </CardContent>

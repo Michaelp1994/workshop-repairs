@@ -7,7 +7,7 @@ import {
 export default function FAQSection() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32" id="faq">
-      <div className="container px-4 md:px-6">
+      <div className="mx-auto px-4 md:px-6">
         <h2 className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-5xl">
           Frequently Asked Questions
         </h2>

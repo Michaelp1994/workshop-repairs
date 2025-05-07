@@ -1,7 +1,7 @@
 interface ViewPartLayoutProps {
-  params: {
+  params: Promise<{
     partId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }

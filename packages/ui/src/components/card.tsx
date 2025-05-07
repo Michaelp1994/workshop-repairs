@@ -5,7 +5,7 @@ import { cn } from "../lib/utils";
 const Card = ({ ref, className, ...props }: React.ComponentProps<"div">) => (
   <div
     className={cn(
-      "bg-card text-card-foreground rounded-lg border shadow-sm",
+      "bg-card text-card-foreground shadow-xs rounded-lg border",
       className,
     )}
     ref={ref}

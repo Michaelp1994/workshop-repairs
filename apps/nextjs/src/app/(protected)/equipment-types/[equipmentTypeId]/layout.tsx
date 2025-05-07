@@ -1,7 +1,7 @@
 interface ViewEquipmentTypeLayoutProps {
-  params: {
+  params: Promise<{
     equipmentTypeId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }

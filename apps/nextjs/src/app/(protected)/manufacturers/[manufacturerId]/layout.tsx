@@ -1,7 +1,7 @@
 interface ViewManufacturerLayoutProps {
-  params: {
+  params: Promise<{
     manufacturerId: string;
-  };
+  }>;
   modal: React.ReactNode;
   children: React.ReactNode;
 }
