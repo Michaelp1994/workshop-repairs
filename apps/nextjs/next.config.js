@@ -1,5 +1,3 @@
-import { withHighlightConfig } from "@highlight-run/next/config";
-
 /** @type import("next").NextConfig */
 const config = {
   eslint: {
@@ -24,4 +22,4 @@ const config = {
   ],
 };
 
-export default withHighlightConfig(config);
+export default config;

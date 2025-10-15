@@ -1,15 +1,14 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { Resource } from "sst";
 
 import { schema } from "./tables";
 
 const pool = new pg.Pool({
-  host: Resource.Postgres1.host,
-  port: Resource.Postgres1.port,
-  user: Resource.Postgres1.username,
-  password: Resource.Postgres1.password,
-  database: Resource.Postgres1.database,
+  host: process.env["POSTGRES_HOST"],
+  port: Number(process.env["POSTGRES_PORT"]),
+  user: process.env["POSTGRES_USER"],
+  password: process.env["POSTGRES_PASSWORD"],
+  database: process.env["POSTGRES_DB"],
   connectionTimeoutMillis: 5000,
 });
 

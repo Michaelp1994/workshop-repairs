@@ -7,7 +7,6 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { ErrorBoundary } from "~/components/ErrorBoundary";
-import { ClientTelemetry } from "~/telemetry/ClientTelemetry";
 import { TRPCProvider } from "~/trpc/client";
 
 import { SessionProvider } from "../auth/SessionProvider";
@@ -41,7 +40,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const userId = (await cookies()).get("userId")?.value;
   return (
     <ErrorBoundary>
-      <ClientTelemetry />
       <html
         className={cn(
           "min-h-screen scroll-smooth antialiased",

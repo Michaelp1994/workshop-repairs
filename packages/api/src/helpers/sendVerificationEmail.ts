@@ -3,7 +3,6 @@ import type { UserID } from "@repo/validators/ids.validators";
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import { createEmailVerificationRequest } from "@repo/db/repositories/auth.repository";
-import { Resource } from "sst";
 
 import assertDatabaseResult from "./trpcAssert";
 
@@ -27,7 +26,7 @@ export default async function sendVerificationEmail(
     try {
       await client.send(
         new SendEmailCommand({
-          FromEmailAddress: `no-reply@${Resource.Email1.sender}`,
+          FromEmailAddress: process.env["RETURN_EMAIL"],
           Destination: {
             ToAddresses: [email],
           },

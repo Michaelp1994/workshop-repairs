@@ -22,27 +22,27 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.799.0",
+    "@aws-sdk/client-lambda": "^3.910.0",
     "drizzle-orm": "^0.43.1",
-    "pg": "^8.15.6"
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@repo/auth": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/validators": "workspace:*",
-    "@softwaretechnik/dbml-renderer": "^1.0.30",
-    "@types/node": "^22.15.3",
-    "@types/pg": "^8.11.14",
+    "@softwaretechnik/dbml-renderer": "^1.0.31",
+    "@types/node": "^22.18.10",
+    "@types/pg": "^8.15.5",
     "drizzle-dbml-generator": "^0.10.0",
-    "drizzle-kit": "^0.31.1",
+    "drizzle-kit": "^0.31.5",
     "drizzle-seed": "^0.3.1",
-    "eslint": "^9.26.0",
+    "eslint": "^9.37.0",
     "ts-node": "^10.9.2",
-    "tsc-alias": "^1.8.15",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.1.2"
+    "vitest": "^3.2.4"
   }
 }

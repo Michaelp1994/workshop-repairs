@@ -19,7 +19,6 @@ import {
 } from "@repo/validators/server/repairImages.validators";
 import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
-import { Resource } from "sst";
 
 import {
   createArchiveMetadata,
@@ -56,7 +55,7 @@ export default router({
       );
       return allRepairImages.map((repairImage) => ({
         ...repairImage,
-        url: `${Resource.MyRouter.url}/repairImages/${repairImage.url}`,
+        url: `${process.env["IMAGE_URL"]}/repairImages/${repairImage.url}`,
       }));
     }),
   getById: organizationProcedure

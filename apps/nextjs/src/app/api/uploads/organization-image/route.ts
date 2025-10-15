@@ -1,6 +1,5 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
-import { Resource } from "sst";
 
 import { client } from "~/utils/awsLib";
 
@@ -18,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const command = new PutObjectCommand({
       Key: "uploads/" + file.name,
-      Bucket: Resource.Bucket1.name,
+      Bucket: process.env["S3_BUCKET_NAME"],
     });
     const result = await client.send(command);
     // await api.userOnboardings.createOrganization.mutation({

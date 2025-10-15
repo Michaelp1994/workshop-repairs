@@ -1,5 +1,4 @@
 import { defineConfig } from "drizzle-kit";
-import { Resource } from "sst";
 
 export default defineConfig({
   dialect: "postgresql",
@@ -7,11 +6,11 @@ export default defineConfig({
   out: "./packages/db/migrations",
   casing: "snake_case",
   dbCredentials: {
-    host: Resource.Postgres1.host,
-    port: Resource.Postgres1.port,
-    user: Resource.Postgres1.username,
-    password: Resource.Postgres1.password,
-    database: Resource.Postgres1.database,
+    host: process.env["POSTGRES_HOST"],
+    port: Number(process.env["POSTGRES_PORT"]),
+    user: process.env["POSTGRES_USER"],
+    password: process.env["POSTGRES_PASSWORD"],
+    database: process.env["POSTGRES_DB"],
     ssl: false,
   },
 });

@@ -1,7 +1,6 @@
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import { createInvitation } from "@repo/db/repositories/organization.repository";
-import { Resource } from "sst";
 
 import type { Organization } from "../../../db/src/tables/organization.sql";
 
@@ -17,7 +16,7 @@ export default async function sendInvitationEmail(
     try {
       await client.send(
         new SendEmailCommand({
-          FromEmailAddress: `no-reply@${Resource.Email1.sender}`,
+          FromEmailAddress: process.env["RETURN_EMAIL"],
           Destination: {
             ToAddresses: [email],
           },

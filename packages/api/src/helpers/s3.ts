@@ -6,7 +6,6 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { TRPCError } from "@trpc/server";
-import { Resource } from "sst";
 
 const s3 = new S3Client({});
 const ONE_MINUTE = 60 * 1000;
@@ -24,7 +23,7 @@ export async function createPresignedUrl(
 ) {
   const command = new PutObjectCommand({
     ...opts,
-    Bucket: Resource.Bucket1.name,
+    Bucket: process.env["S3_BUCKET_NAME"],
   });
   return await getSignedUrl(s3, command, {
     expiresIn: ONE_MINUTE,
@@ -37,7 +36,7 @@ export function createRepairImageKeyFromFileName(fileName: string) {
 
 export async function fileExistsInS3(key: string) {
   const command = new HeadObjectCommand({
-    Bucket: Resource.Bucket1.name,
+    Bucket: process.env["S3_BUCKET_NAME"],
     Key: key,
   });
   const result = await s3.send(command);
@@ -65,13 +64,13 @@ export function getFileExtension(fileType: string) {
 }
 
 export function getModelImageUrlFromKey(key: string) {
-  return `${Resource.MyRouter.url}/modelImages/${key}`;
+  return `${process.env["IMAGE_URL"]}/modelImages/${key}`;
 }
 
 export function getOrganizationLogoUrlFromKey(key: string) {
-  return `${Resource.MyRouter.url}/organizations/logos/${key}`;
+  return `${process.env["IMAGE_URL"]}/organizations/logos/${key}`;
 }
 
 export function getRepairImageUrlFromKey(key: string) {
-  return `${Resource.MyRouter.url}/repairImages/${key}`;
+  return `${process.env["IMAGE_URL"]}/repairImages/${key}`;
 }
