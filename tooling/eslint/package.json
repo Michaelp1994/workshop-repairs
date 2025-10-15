@@ -10,9 +10,6 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist"
   },
-  "dependencies": {
-    "sst": "^3.14.11"
-  },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
     "@repo/typescript-config": "workspace:*",
