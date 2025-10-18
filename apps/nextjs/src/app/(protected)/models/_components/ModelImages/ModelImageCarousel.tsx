@@ -73,7 +73,7 @@ function FavouriteButton({ favourite, id }: FavouriteButtonProps) {
   });
   return (
     <Button
-      className="absolute right-0 top-0"
+      className="absolute top-0 right-0"
       onClick={() => {
         if (!favourite) favouriteMutation.mutate({ id });
       }}

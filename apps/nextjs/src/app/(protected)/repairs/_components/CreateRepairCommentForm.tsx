@@ -73,7 +73,7 @@ export default function CreateRepairCommentForm({
                     <Textarea placeholder="Write your comment..." {...field} />
                   </FormControl>
                   <SubmitButton
-                    className="absolute bottom-2 right-2"
+                    className="absolute right-2 bottom-2"
                     disabled={!form.formState.isDirty}
                     isLoading={createMutation.isPending}
                   />

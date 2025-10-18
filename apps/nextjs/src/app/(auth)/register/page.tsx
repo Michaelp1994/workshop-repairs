@@ -19,11 +19,11 @@ export default async function RegisterPage() {
     redirect("/dashboard");
   }
   return (
-    <div className="container relative mx-auto hidden h-screen flex-col items-center justify-center px-4 md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="relative container mx-auto hidden h-screen flex-col items-center justify-center px-4 md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Link
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "absolute right-4 top-4 md:right-8 md:top-8",
+          "absolute top-4 right-4 md:top-8 md:right-8",
         )}
         href="/login"
       >

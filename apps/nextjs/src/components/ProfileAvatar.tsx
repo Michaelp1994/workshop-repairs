@@ -46,7 +46,7 @@ export default function ProfileAvatar() {
       <DropdownMenuContent align="end" className="w-56" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
+            <p className="text-sm leading-none font-medium">
               {user.firstName} {user.lastName}
             </p>
             <p className="text-muted-foreground text-xs leading-none">

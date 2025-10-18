@@ -12,7 +12,7 @@ export function CommentText({ children }: { children: React.ReactNode }) {
     <>
       <p
         className={cn(
-          "whitespace-pre-wrap text-sm",
+          "text-sm whitespace-pre-wrap",
           !isReadingMore && "line-clamp-5",
         )}
         ref={ref}
