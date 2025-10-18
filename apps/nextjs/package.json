@@ -15,8 +15,6 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.0",
     "@aws-sdk/client-s3": "^3.910.0",
-    "@highlight-run/next": "^7.9.38",
-    "@highlight-run/node": "^3.12.22",
     "@repo/api": "workspace:^",
     "@repo/auth": "workspace:^",
     "@repo/ui": "workspace:^",

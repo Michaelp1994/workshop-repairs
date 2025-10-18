@@ -6,7 +6,6 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
-import { ErrorBoundary } from "~/components/ErrorBoundary";
 import { TRPCProvider } from "~/trpc/client";
 
 import { SessionProvider } from "../auth/SessionProvider";
@@ -39,33 +38,31 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const userId = (await cookies()).get("userId")?.value;
   return (
-    <ErrorBoundary>
-      <html
-        className={cn(
-          "min-h-screen scroll-smooth antialiased",
-          fontHeading.variable,
-          fontBody.variable,
-        )}
-        lang="en"
-        suppressHydrationWarning
-      >
-        <SessionProvider session={{ userId: Number(userId) }}>
-          <TRPCProvider>
-            <body className="min-h-screen">
-              <NextThemesProvider
-                attribute="class"
-                defaultTheme="system"
-                disableTransitionOnChange
-                enableColorScheme
-                enableSystem
-              >
-                {children}
-                <Toaster closeButton richColors />
-              </NextThemesProvider>
-            </body>
-          </TRPCProvider>
-        </SessionProvider>
-      </html>
-    </ErrorBoundary>
+    <html
+      className={cn(
+        "min-h-screen scroll-smooth antialiased",
+        fontHeading.variable,
+        fontBody.variable,
+      )}
+      lang="en"
+      suppressHydrationWarning
+    >
+      <SessionProvider session={{ userId: Number(userId) }}>
+        <TRPCProvider>
+          <body className="min-h-screen">
+            <NextThemesProvider
+              attribute="class"
+              defaultTheme="system"
+              disableTransitionOnChange
+              enableColorScheme
+              enableSystem
+            >
+              {children}
+              <Toaster closeButton richColors />
+            </NextThemesProvider>
+          </body>
+        </TRPCProvider>
+      </SessionProvider>
+    </html>
   );
 }

@@ -7,19 +7,15 @@ const config = {
     ignoreBuildErrors: true,
   },
   transpilePackages: ["@workspace/ui"],
-  webpack: (config, { webpack }) => {
-    config.plugins.push(
-      new webpack.IgnorePlugin({
-        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
-      }),
-    );
-    return config;
-  },
-  serverExternalPackages: [
-    "@node-rs/argon2",
-    "@highlight-run/node",
-    "require-in-the-middle",
-  ],
+  // webpack: (config, { webpack }) => {
+  //   config.plugins.push(
+  //     new webpack.IgnorePlugin({
+  //       resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+  //     }),
+  //   );
+  //   return config;
+  // },
+  serverExternalPackages: ["@node-rs/argon2", "require-in-the-middle"],
 };
 
 export default config;
