@@ -22,7 +22,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.910.0",
+    "@aws-sdk/client-lambda": "^3.913.0",
     "drizzle-orm": "^0.43.1",
     "pg": "^8.16.3"
   },
@@ -32,12 +32,12 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/validators": "workspace:*",
     "@softwaretechnik/dbml-renderer": "^1.0.31",
-    "@types/node": "^22.18.10",
+    "@types/node": "^22.18.11",
     "@types/pg": "^8.15.5",
     "drizzle-dbml-generator": "^0.10.0",
     "drizzle-kit": "^0.31.5",
     "drizzle-seed": "^0.3.1",
-    "eslint": "^9.37.0",
+    "eslint": "^9.38.0",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.20.6",
