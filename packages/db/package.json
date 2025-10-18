@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.913.0",
-    "drizzle-orm": "^0.43.1",
+    "drizzle-orm": "^0.44.6",
     "pg": "^8.16.3"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/validators": "workspace:*",
     "@softwaretechnik/dbml-renderer": "^1.0.31",
-    "@types/node": "^22.18.11",
+    "@types/node": "^24.8.1",
     "@types/pg": "^8.15.5",
     "drizzle-dbml-generator": "^0.10.0",
     "drizzle-kit": "^0.31.5",

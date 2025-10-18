@@ -20,12 +20,12 @@
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
     "@trpc/server": "^11.6.0",
-    "zod": "4.0.0-beta.20250430T185432"
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.18.11",
+    "@types/node": "^24.8.1",
     "eslint": "^9.38.0",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
