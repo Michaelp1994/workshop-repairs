@@ -1,6 +1,6 @@
 import { getCredentialsByUserId } from "@repo/db/repositories/user.repository";
 import { initTRPC, TRPCError } from "@trpc/server";
-import { ZodError } from "zod";
+import z, { ZodError } from "zod";
 
 import type { Context } from "./createContext";
 
@@ -11,7 +11,7 @@ const t = initTRPC.context<Context>().create({
       data: {
         ...shape.data,
         zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+          error.cause instanceof ZodError ? z.flattenError(error.cause) : null,
       },
     };
   },
