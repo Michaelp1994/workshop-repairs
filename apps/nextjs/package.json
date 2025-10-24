@@ -6,7 +6,7 @@
   "scripts": {
     "build": "next build",
     "clean": "rm -rf .turbo node_modules dist .next .open-next",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "lint": "eslint .",
     "start": "next start",
     "test": "vitest",

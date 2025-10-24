@@ -8,10 +8,6 @@ const handler = async function GET(req: Request) {
     req,
     router: appRouter,
     createContext: createTRPCContext,
-    onError: ({ error }) => {
-      console.log({ error });
-      throw error;
-    },
   });
   return response;
 };
