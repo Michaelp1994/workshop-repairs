@@ -20,8 +20,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-lambda": "^3.913.0",
-    "drizzle-orm": "^0.44.6",
+    "@aws-sdk/client-lambda": "^3.917.0",
+    "drizzle-orm": "^0.44.7",
     "pg": "^8.16.3"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/validators": "workspace:*",
     "@softwaretechnik/dbml-renderer": "^1.0.31",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.9.1",
     "@types/pg": "^8.15.5",
     "dotenv": "^17.2.3",
     "drizzle-dbml-generator": "^0.10.0",
@@ -42,6 +42,6 @@
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.3"
   }
 }
