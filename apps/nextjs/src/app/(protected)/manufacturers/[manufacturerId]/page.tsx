@@ -8,7 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import ManufacturerModelsTable from "../_components/ManufacturerModelsTable";
 import ManufacturerDetails from "../_components/ManufacturersDetails";
@@ -24,7 +24,9 @@ export default async function ViewManufacturerPage(
 ) {
   const params = await props.params;
   const manufacturerId = Number(params.manufacturerId);
-  const manufacturer = await api.manufacturers.getById({ id: manufacturerId });
+  const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
+    id: manufacturerId,
+  });
 
   return (
     <PageWrapper>

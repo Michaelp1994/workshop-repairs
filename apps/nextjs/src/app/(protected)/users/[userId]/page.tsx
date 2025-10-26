@@ -8,7 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import UserDetails from "../_components/UserDetails";
 
@@ -21,7 +21,7 @@ interface ViewUserPageProps {
 export default async function ViewUserPage(props: ViewUserPageProps) {
   const params = await props.params;
   const userId = Number(params.userId);
-  const user = await api.users.getById({
+  const [user] = api.users.getById.useSuspenseQuery({
     id: userId,
   });
   return (

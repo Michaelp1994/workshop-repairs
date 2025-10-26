@@ -1,3 +1,5 @@
+import type { CreateHTTPContextOptions } from "@trpc/server/adapters/standalone";
+
 import {
   createClearSession,
   createSetSession,
@@ -6,20 +8,14 @@ import {
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
 
-interface CreateTRPCContextOptions {
-  req: {
-    headers: Headers;
-  };
-  resHeaders?: Headers;
-}
-
 export async function createTRPCContext({
   req,
-  resHeaders,
-}: CreateTRPCContextOptions) {
-  const setSession = createSetSession(resHeaders);
-  const clearSession = createClearSession(resHeaders);
+  res,
+}: CreateHTTPContextOptions) {
+  const setSession = createSetSession(res);
+  const clearSession = createClearSession(res);
   const session = await getSession(req.headers);
+  console.log({ session });
   return {
     setSession,
     clearSession,

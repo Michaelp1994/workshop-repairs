@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 
 export default async function isAuthenticated() {
-  return (await cookies()).has("Authorization");
+  const allCookies = await cookies();
+  console.log(allCookies.getAll());
+  return allCookies.has("Authorization");
 }

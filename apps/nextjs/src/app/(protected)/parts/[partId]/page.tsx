@@ -8,7 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import PartDetails from "../_components/PartDetails";
 import PartModelsTable from "../_components/PartModelsTable";
@@ -22,7 +22,7 @@ interface ViewPartPageProps {
 export default async function ViewPartPage(props: ViewPartPageProps) {
   const params = await props.params;
   const partId = Number(params.partId);
-  const part = await api.parts.getById({
+  const [part] = api.parts.getById.useSuspenseQuery({
     id: partId,
   });
   return (

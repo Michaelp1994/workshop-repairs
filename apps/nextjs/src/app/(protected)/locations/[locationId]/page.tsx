@@ -8,7 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import LocationAssetsTable from "../_components/LocationAssetsTable";
 import LocationDetails from "../_components/LocationDetails";
@@ -22,7 +22,7 @@ interface ViewLocationPageProps {
 export default async function ViewLocationPage(props: ViewLocationPageProps) {
   const params = await props.params;
   const locationId = Number(params.locationId);
-  const location = await api.locations.getById({ id: locationId });
+  const [location] = api.locations.getById.useSuspenseQuery({ id: locationId });
   return (
     <PageWrapper>
       <PageHeader>

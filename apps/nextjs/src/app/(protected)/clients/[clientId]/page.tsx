@@ -6,7 +6,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import ClientAssetsTable from "../_components/ClientAssetsTable";
 import ClientDetails from "../_components/ClientDetails";
@@ -21,7 +21,7 @@ interface ViewClientPageProps {
 export default async function ViewClientPage(props: ViewClientPageProps) {
   const params = await props.params;
   const clientId = Number(params.clientId);
-  const client = await api.clients.getById({ id: clientId });
+  const [client] = api.clients.getById.useSuspenseQuery({ id: clientId });
 
   return (
     <PageWrapper>

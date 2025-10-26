@@ -2,8 +2,6 @@ import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import { createInvitation } from "@repo/db/repositories/organization.repository";
 
-import type { Organization } from "../../../db/src/tables/organization.sql";
-
 const client = new SESv2Client();
 
 export default async function sendInvitationEmail(

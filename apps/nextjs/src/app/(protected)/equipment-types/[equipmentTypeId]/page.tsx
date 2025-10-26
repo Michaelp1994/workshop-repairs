@@ -6,7 +6,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import EquipmentTypeAssetsTable from "../_components/EquipmentTypeAssetsTable";
 import EquipmentTypeDetails from "../_components/EquipmentTypeDetails";
@@ -23,7 +23,7 @@ export default async function ViewEquipmentTypePage(
 ) {
   const params = await props.params;
   const equipmentTypeId = Number(params.equipmentTypeId);
-  const equipmentType = await api.equipmentTypes.getById({
+  const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
     id: equipmentTypeId,
   });
   return (

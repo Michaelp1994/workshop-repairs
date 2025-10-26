@@ -11,7 +11,7 @@
     "db:reset": "pnpm -F db db:reset",
     "db:seed": "pnpm -F db db:seed",
     "db:sequence": "pnpm -F db db:sequence",
-    "dev": "pnpm -F nextjs dev",
+    "dev": "turbo dev",
     "format": "prettier . --write",
     "lint": "turbo lint",
     "prepare": "husky",

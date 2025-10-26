@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 export default async function OnboardingPage() {
-  const data = await api.userOnboardings.getStatus();
+  const [data] = api.userOnboardings.getStatus.useSuspenseQuery();
   if (!data.welcomed) {
     redirect("/onboarding/welcome");
   }

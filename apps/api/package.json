@@ -10,7 +10,8 @@
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "eslint .",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx watch src/server.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.917.0",
@@ -20,14 +21,17 @@
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
     "@trpc/server": "^11.6.0",
+    "cors": "^2.8.5",
     "zod": "4.1.12"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/cors": "^2.8.19",
     "@types/node": "^24.9.1",
     "eslint": "^9.38.0",
     "tsc-alias": "^1.8.16",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.3"

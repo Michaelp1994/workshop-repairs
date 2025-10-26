@@ -1,3 +1,4 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -11,13 +12,13 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { BadgeCheck, Bell, CircleUser, CreditCard } from "@repo/ui/icons";
 
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 import getInitials from "~/utils/getInitials";
 
 import LogoutButton from "./LogoutButton";
 
-export default async function ProfileButton() {
-  const user = await api.users.getCurrentUser({});
+export default function ProfileButton() {
+  const [user] = api.users.getCurrentUser.useSuspenseQuery({});
   const initials = getInitials(user.firstName, user.lastName);
   return (
     <DropdownMenu>

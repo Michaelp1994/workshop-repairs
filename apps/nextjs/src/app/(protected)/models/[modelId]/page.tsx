@@ -8,7 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/app/(protected)/_components/Page";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
 import ModelAssetsTable from "../_components/ModelAssetsTable";
 import ModelDetails from "../_components/ModelDetails";
@@ -24,7 +24,7 @@ interface ViewModelPageProps {
 export default async function ViewModelPage(props: ViewModelPageProps) {
   const params = await props.params;
   const modelId = Number(params.modelId);
-  const model = await api.models.getById({ id: modelId });
+  const [model] = api.models.getById.useSuspenseQuery({ id: modelId });
   return (
     <PageWrapper>
       <PageHeader>

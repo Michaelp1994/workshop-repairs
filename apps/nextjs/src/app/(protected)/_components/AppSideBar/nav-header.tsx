@@ -1,3 +1,5 @@
+"use client";
+
 import { Activity } from "@repo/ui/icons";
 import {
   SidebarHeader,
@@ -7,10 +9,10 @@ import {
 } from "@repo/ui/sidebar";
 import Link from "next/link";
 
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/client";
 
-export default async function NavHeader() {
-  const organization = await api.organizations.get({});
+export default function NavHeader() {
+  const [organization] = api.organizations.get.useSuspenseQuery({});
   return (
     <SidebarHeader>
       <SidebarMenu>

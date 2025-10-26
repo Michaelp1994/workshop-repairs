@@ -55,7 +55,6 @@ export default router({
     .input(getAssetByIdSchema)
     .query(async ({ input, ctx }) => {
       const asset = await getAssetById(input.id, ctx.session.organizationId);
-
       if (!asset) {
         throw new TRPCError({
           code: "NOT_FOUND",

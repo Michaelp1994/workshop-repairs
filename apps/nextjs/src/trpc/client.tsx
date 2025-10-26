@@ -23,13 +23,7 @@ function getQueryClient() {
   // Browser: use singleton pattern to keep the same query client
   return (clientQueryClientSingleton ??= makeQueryClient());
 }
-function getUrl() {
-  const base = (() => {
-    if (typeof window !== "undefined") return "";
-    return process.env.NEXT_PUBLIC_URL;
-  })();
-  return `${base}/api/trpc`;
-}
+
 export function TRPCProvider({ children }: TRPCReactProviderProps) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
@@ -49,18 +43,24 @@ export function TRPCProvider({ children }: TRPCReactProviderProps) {
           },
         }),
         httpBatchLink({
-          url: getUrl(),
-          headers: async () => {
-            let heads;
-            if (typeof window == "undefined") {
-              const headers = await import("next/headers");
-              heads = new Map(await headers.headers());
-            } else {
-              heads = new Headers();
-            }
-            heads.set("x-trpc-source", "nextjs-react");
-            return Object.fromEntries(heads);
+          url: "http://localhost:2022/api/trpc",
+          fetch(url, options) {
+            return fetch(url, {
+              ...options,
+              credentials: "include",
+            });
           },
+          // headers: async () => {
+          //   let heads;
+          //   if (typeof window == "undefined") {
+          //     const headers = await import("next/headers");
+          //     heads = new Map(await headers.headers());
+          //   } else {
+          //     heads = new Headers();
+          //   }
+          //   heads.set("x-trpc-source", "nextjs-react");
+          //   return Object.fromEntries(heads);
+          // },
         }),
       ],
     }),
