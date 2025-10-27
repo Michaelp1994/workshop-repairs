@@ -39,11 +39,12 @@
     "zod": "4.1.12"
   },
   "devDependencies": {
-    "@repo/backend": "workspace:^",
     "@repo/auth": "workspace:^",
+    "@repo/backend": "workspace:^",
     "@repo/eslint-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.16",
     "@tailwindcss/vite": "^4.1.16",
+    "@tanstack/react-router-devtools": "^1.133.32",
     "@tanstack/router-plugin": "^1.133.29",
     "@types/node": "^24.9.1",
     "@types/react": "19.2.2",

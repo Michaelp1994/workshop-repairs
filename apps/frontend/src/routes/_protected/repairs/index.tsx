@@ -26,7 +26,7 @@ function AllRepairsPage() {
           </PageDescription>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/repairs/new" variant="create">
+          <IconButton to="/repairs/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

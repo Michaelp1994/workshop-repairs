@@ -1,6 +1,9 @@
+import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
+import ArchiveUserModal from "~/components/modals/ArchiveUserModal";
 import {
   PageHeader,
   PageHeaderActions,
@@ -21,6 +24,7 @@ function ViewUserPage() {
   const [user] = api.users.getById.useSuspenseQuery({
     id: userId,
   });
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <PageWrapper>
       <PageHeader>
@@ -30,9 +34,15 @@ function ViewUserPage() {
           </PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href={`/users/${userId}/edit`} variant="update">
+          <IconButton to={`/users/${userId}/edit`} variant="update">
             Update
           </IconButton>
+          <Button onClick={() => setIsOpen(true)}>Archive</Button>
+          <ArchiveUserModal
+            isOpen={isOpen}
+            onOpenChange={() => setIsOpen(false)}
+            userId={userId}
+          />
         </PageHeaderActions>
       </PageHeader>
       <UserDetails userId={userId} />

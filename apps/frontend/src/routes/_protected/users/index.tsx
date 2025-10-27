@@ -22,7 +22,7 @@ function UsersPage() {
           <PageTitle>Users</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/users/new" variant="create">
+          <IconButton to="/users/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

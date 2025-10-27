@@ -55,8 +55,8 @@ export default function EquipmentTypeModelsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
-            href={`/models/new?equipmentTypeId=${equipmentTypeId}`}
             size="sm"
+            to={`/models/new?equipmentTypeId=${equipmentTypeId}`}
             variant="create"
           >
             Add

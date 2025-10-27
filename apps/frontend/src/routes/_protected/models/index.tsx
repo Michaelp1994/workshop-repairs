@@ -22,7 +22,7 @@ function AllModelsPage() {
           <PageTitle>Models</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/models/new" variant="create">
+          <IconButton to="/models/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

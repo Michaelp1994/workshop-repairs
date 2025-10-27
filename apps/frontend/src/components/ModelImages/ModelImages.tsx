@@ -28,9 +28,8 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
           {data.map((modelImage) => {
             return (
               <Link
-                href={`${modelId}/images?id=${modelImage.id}`}
                 key={modelImage.id}
-                scroll={false}
+                to={`${modelId}/images?id=${modelImage.id}`}
               >
                 <ImageGridItem
                   alt={modelImage.caption || ""}
@@ -41,7 +40,7 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
               </Link>
             );
           })}
-          <Link scroll={false} to={`${modelId}/images/new`}>
+          <Link to={`${modelId}/images/new`}>
             <ImageGridUploadButton />
           </Link>
         </ImageGrid>

@@ -22,7 +22,7 @@ function AllAssetsPage() {
           <PageTitle>Assets</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/assets/new" variant="create">
+          <IconButton to="/assets/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

@@ -1,8 +1,11 @@
+import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
 import ManufacturerModelsTable from "~/components/ManufacturerModelsTable";
 import ManufacturerDetails from "~/components/ManufacturersDetails";
+import ArchiveManufacturerModal from "~/components/modals/ArchiveManufacturerModal";
 import {
   PageHeader,
   PageHeaderActions,
@@ -24,7 +27,7 @@ function ViewManufacturerPage() {
   const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
     id: manufacturerId,
   });
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <PageWrapper>
       <PageHeader>
@@ -32,12 +35,18 @@ function ViewManufacturerPage() {
           <PageTitle>{manufacturer.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href={`${manufacturerId}/edit`} variant="update">
+          <IconButton
+            to={`/manufacturers/${manufacturerId}/edit`}
+            variant="update"
+          >
             Update
           </IconButton>
-          <IconButton href={`${manufacturerId}/archive`} variant="delete">
-            Archive
-          </IconButton>
+          <Button onClick={() => setIsOpen(true)}>Archive</Button>
+          <ArchiveManufacturerModal
+            isOpen={isOpen}
+            manufacturerId={manufacturerId}
+            onOpenChange={() => setIsOpen(false)}
+          />
         </PageHeaderActions>
       </PageHeader>
       <ManufacturerDetails manufacturerId={manufacturerId} />

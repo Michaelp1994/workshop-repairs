@@ -56,8 +56,8 @@ export default function ClientRepairsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
-            href={`/repairs/new?clientId=${clientId}`}
             size="sm"
+            to={`/repairs/new?clientId=${clientId}`}
             variant="create"
           >
             Add

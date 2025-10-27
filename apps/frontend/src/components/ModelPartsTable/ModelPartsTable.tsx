@@ -38,11 +38,7 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Parts</CardTitle>
-        <IconButton
-          href={`/models/${modelId}/parts/new`}
-          scroll={false}
-          variant="create"
-        >
+        <IconButton to={`/models/${modelId}/parts/new`} variant="create">
           Add Part
         </IconButton>
       </CardHeader>

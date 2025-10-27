@@ -22,7 +22,7 @@ function AllLocationsPage() {
           <PageTitle>Locations</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/locations/new" variant="create">
+          <IconButton to="/locations/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

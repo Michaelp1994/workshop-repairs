@@ -15,6 +15,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { TRPCProvider } from "~/trpc/client";
 
@@ -28,6 +29,7 @@ function RootComponent() {
   return (
     <TRPCProvider>
       <NiceModal.Provider>
+        <TanStackRouterDevtools />
         <Outlet />
         <Toaster closeButton richColors />
       </NiceModal.Provider>

@@ -19,7 +19,7 @@ function JoinOrganizationPage() {
     <Card className="w-[500px]">
       <CardHeader>
         <CardHeaderText>
-          <GoBackLink href="/onboarding/organization" />
+          <GoBackLink to="/onboarding/organization" />
           <CardTitle>Join an Organization</CardTitle>
         </CardHeaderText>
       </CardHeader>

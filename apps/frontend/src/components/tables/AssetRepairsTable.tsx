@@ -45,7 +45,7 @@ export default function AssetRepairsTable({ assetId }: AssetRepairsTableProps) {
           <CardTitle>Repairs</CardTitle>
         </div>
         <div>
-          <IconButton href={`/repairs/new?assetId=${assetId}`} variant="create">
+          <IconButton to={`/repairs/new?assetId=${assetId}`} variant="create">
             Add Repair
           </IconButton>
         </div>

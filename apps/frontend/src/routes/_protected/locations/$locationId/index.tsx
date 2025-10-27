@@ -31,7 +31,7 @@ function ViewLocationPage() {
           <PageTitle>{location.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href={`/locations/${locationId}/edit`} variant="update">
+          <IconButton to={`/locations/${locationId}/edit`} variant="update">
             Edit
           </IconButton>
           <Button onClick={() => setIsOpen(true)}>Archive</Button>

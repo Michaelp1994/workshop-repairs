@@ -1,9 +1,12 @@
+import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 import EquipmentTypeAssetsTable from "~/components/EquipmentTypeAssetsTable";
 import EquipmentTypeDetails from "~/components/EquipmentTypeDetails";
 import EquipmentTypeModelsTable from "~/components/EquipmentTypeModelsTable";
 import { IconButton } from "~/components/IconButton";
+import ArchiveEquipmentTypeModal from "~/components/modals/ArchiveEquipmentTypeModal";
 import {
   PageHeader,
   PageHeaderActions,
@@ -25,6 +28,8 @@ function ViewEquipmentTypePage() {
   const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
     id: equipmentTypeId,
   });
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <PageWrapper>
       <PageHeader>
@@ -33,17 +38,17 @@ function ViewEquipmentTypePage() {
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton
-            href={`/equipment-types/${equipmentTypeId}/edit`}
+            to={`/equipment-types/${equipmentTypeId}/edit`}
             variant="update"
           >
             Update
           </IconButton>
-          <IconButton
-            href={`/equipment-types/${equipmentTypeId}/archive`}
-            variant="delete"
-          >
-            Archive
-          </IconButton>
+          <Button onClick={() => setIsOpen(true)}>Archive</Button>
+          <ArchiveEquipmentTypeModal
+            equipmentTypeId={equipmentTypeId}
+            isOpen={isOpen}
+            onOpenChange={() => setIsOpen(false)}
+          />
         </PageHeaderActions>
       </PageHeader>
       <EquipmentTypeDetails equipmentTypeId={equipmentTypeId} />

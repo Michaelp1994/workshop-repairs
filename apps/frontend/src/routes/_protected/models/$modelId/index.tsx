@@ -33,7 +33,7 @@ function ViewModelPage() {
           <PageTitle>{model.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href={`/models/${modelId}/edit`} variant="update">
+          <IconButton to={`/models/${modelId}/edit`} variant="update">
             Update
           </IconButton>
           <Button onClick={() => setIsOpen(true)}>Archive</Button>

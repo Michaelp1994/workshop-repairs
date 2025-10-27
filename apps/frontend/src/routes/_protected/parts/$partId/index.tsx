@@ -1,6 +1,9 @@
+import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
+import ArchivePartModal from "~/components/modals/ArchivePartModal";
 import {
   PageHeader,
   PageHeaderActions,
@@ -22,6 +25,7 @@ function ViewPartPage() {
   const [part] = api.parts.getById.useSuspenseQuery({
     id: partId,
   });
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <PageWrapper>
       <PageHeader>
@@ -29,12 +33,15 @@ function ViewPartPage() {
           <PageTitle>{part.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href={`/parts/${partId}/edit`} variant="update">
+          <IconButton to={`/parts/${partId}/edit`} variant="update">
             Update
           </IconButton>
-          <IconButton href={`/parts/${partId}/archive`} variant="delete">
-            Archive
-          </IconButton>
+          <Button onClick={() => setIsOpen(true)}>Archive</Button>
+          <ArchivePartModal
+            isOpen={isOpen}
+            onOpenChange={() => setIsOpen(false)}
+            partId={partId}
+          />
         </PageHeaderActions>
       </PageHeader>
       <PartDetails partId={partId} />

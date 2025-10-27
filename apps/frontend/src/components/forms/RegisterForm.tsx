@@ -126,14 +126,14 @@ export default function RegisterForm() {
                       I accept AssetRx&apos;s{" "}
                       <Link
                         className="hover:text-primary underline underline-offset-4"
-                        href="/terms"
+                        to="/terms"
                       >
                         Terms of Service
                       </Link>{" "}
                       and{" "}
                       <Link
                         className="hover:text-primary underline underline-offset-4"
-                        href="/privacy"
+                        to="/privacy"
                       >
                         Privacy Policy
                       </Link>

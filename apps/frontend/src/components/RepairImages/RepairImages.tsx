@@ -29,9 +29,8 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
           {data.map((repairImage) => {
             return (
               <Link
-                href={`${repairId}/images?id=${repairImage.id}`}
                 key={repairImage.id}
-                scroll={false}
+                to={`${repairId}/images?id=${repairImage.id}`}
               >
                 <ImageGridItem
                   alt={repairImage.caption}
@@ -43,7 +42,7 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
               </Link>
             );
           })}
-          <Link scroll={false} to={`${repairId}/images/new`}>
+          <Link to={`${repairId}/images/new`}>
             <ImageGridUploadButton />
           </Link>
         </ImageGrid>

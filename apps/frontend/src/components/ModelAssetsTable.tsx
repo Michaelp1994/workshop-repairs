@@ -53,8 +53,8 @@ export default function ModelAssetsTable({ modelId }: ModelAssetsTableProps) {
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
-            href={`/assets/new?modelId=${modelId}`}
             size="sm"
+            to={`/assets/new?modelId=${modelId}`}
             variant="create"
           >
             Add Asset

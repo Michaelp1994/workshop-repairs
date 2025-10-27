@@ -22,7 +22,7 @@ function AllEquipmentTypesPage() {
           <PageTitle>Equipment Types</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/equipment-types/new" variant="create">
+          <IconButton to="/equipment-types/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

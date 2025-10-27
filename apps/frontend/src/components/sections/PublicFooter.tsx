@@ -7,10 +7,10 @@ export default function PublicFooter() {
         © 2024 AssetRx. All rights reserved.
       </p>
       <nav className="flex gap-4 sm:ml-auto sm:gap-6">
-        <Link className="text-xs underline-offset-4 hover:underline" href="#">
+        <Link className="text-xs underline-offset-4 hover:underline" to="#">
           Terms of Service
         </Link>
-        <Link className="text-xs underline-offset-4 hover:underline" href="#">
+        <Link className="text-xs underline-offset-4 hover:underline" to="#">
           Privacy
         </Link>
       </nav>

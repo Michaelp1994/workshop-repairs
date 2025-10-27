@@ -49,11 +49,7 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
           <CardTitle>Parts</CardTitle>
         </CardHeaderText>
         <CardHeaderActions>
-          <IconButton
-            href={`/repairs/${repairId}/parts/new`}
-            scroll={false}
-            variant="create"
-          >
+          <IconButton to={`/repairs/${repairId}/parts/new`} variant="create">
             Add Part
           </IconButton>
         </CardHeaderActions>

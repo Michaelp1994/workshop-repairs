@@ -22,7 +22,7 @@ function AllClientsPage() {
           <PageTitle>Clients</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/clients/new" variant="create">
+          <IconButton to="/clients/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

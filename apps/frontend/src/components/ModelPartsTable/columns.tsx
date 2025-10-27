@@ -1,5 +1,3 @@
-import type { RouterOutputs } from "../../../../backend/src/router";
-
 import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
@@ -7,6 +5,8 @@ import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { Pencil, Trash2 } from "@repo/ui/icons";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
+
+import type { RouterOutputs } from "../../../../backend/src/router";
 
 const columnHelper =
   createColumnHelper<
@@ -50,17 +50,13 @@ export const columns = [
     cell: ({ row }) => (
       <>
         <Button asChild size="sm" variant="link">
-          <Link
-            href={`${row.original.modelId}/parts/${row.original.partId}`}
-            scroll={false}
-          >
+          <Link to={`${row.original.modelId}/parts/${row.original.partId}`}>
             <Pencil className="h-5 w-5" />
           </Link>
         </Button>
         <Button asChild size="sm" variant="link">
           <Link
-            href={`${row.original.modelId}/parts/${row.original.partId}/archive`}
-            scroll={false}
+            to={`${row.original.modelId}/parts/${row.original.partId}/archive`}
           >
             <Trash2 className="h-5 w-5" />
           </Link>

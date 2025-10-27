@@ -1,5 +1,3 @@
-import type { RouterOutputs } from "../../../../backend/src/router";
-
 import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
@@ -9,6 +7,8 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
+
+import type { RouterOutputs } from "../../../../backend/src/router";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["repairParts"]["getAll"][number]>();
@@ -125,17 +125,13 @@ export const columns = [
     cell: ({ row }) => (
       <>
         <Button asChild size="sm" variant="link">
-          <Link
-            href={`${row.original.repairId}/parts/${row.original.id}`}
-            scroll={false}
-          >
+          <Link to={`${row.original.repairId}/parts/${row.original.id}`}>
             <Pencil className="h-5 w-5" />
           </Link>
         </Button>
         <Button asChild size="sm" variant="link">
           <Link
-            href={`${row.original.repairId}/parts/${row.original.id}/archive`}
-            scroll={false}
+            to={`${row.original.repairId}/parts/${row.original.id}/archive`}
           >
             <Trash2 className="h-5 w-5" />
           </Link>

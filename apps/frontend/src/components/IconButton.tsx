@@ -4,17 +4,15 @@ import { Link } from "@tanstack/react-router";
 import React from "react";
 
 interface IconButtonProps extends Omit<ButtonProps, "asChild" | "variant"> {
-  href: string;
+  to: string;
   children: React.ReactNode;
-  scroll?: boolean;
   variant: "create" | "read" | "update" | "delete";
 }
 
 export function IconButton({
-  href,
+  to,
   children,
   variant,
-  scroll,
   ...props
 }: IconButtonProps) {
   const Icon =
@@ -27,7 +25,7 @@ export function IconButton({
           : Trash2;
   return (
     <Button asChild {...props}>
-      <Link scroll={scroll} to={href}>
+      <Link to={to}>
         <Icon className="mr-1 size-4" />
         {children}
       </Link>

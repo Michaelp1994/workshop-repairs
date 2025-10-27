@@ -22,7 +22,7 @@ function AllManufacturersPage() {
           <PageTitle>Manufacturers</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton href="/manufacturers/new" variant="create">
+          <IconButton to="/manufacturers/new" variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

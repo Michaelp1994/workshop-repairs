@@ -54,8 +54,8 @@ export default function ClientAssetsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
-            href={`/assets/new?clientId=${clientId}`}
             size="sm"
+            to={`/assets/new?clientId=${clientId}`}
             variant="create"
           >
             Add

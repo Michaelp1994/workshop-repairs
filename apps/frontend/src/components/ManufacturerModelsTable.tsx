@@ -56,8 +56,8 @@ export default function ManufacturerModelsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
-            href={`/models/new?manufacturerId=${manufacturerId}`}
             size="sm"
+            to={`/models/new?manufacturerId=${manufacturerId}`}
             variant="create"
           >
             Add

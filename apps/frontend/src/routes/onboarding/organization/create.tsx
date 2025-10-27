@@ -19,7 +19,7 @@ function CreateOrganizationPage() {
     <Card className="w-[500px]">
       <CardHeader>
         <CardHeaderText>
-          <GoBackLink href="/onboarding/organization" />
+          <GoBackLink to="/onboarding/organization" />
           <CardTitle>Create Organization</CardTitle>
         </CardHeaderText>
       </CardHeader>
