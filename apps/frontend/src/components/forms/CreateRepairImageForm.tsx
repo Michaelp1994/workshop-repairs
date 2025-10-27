@@ -21,7 +21,6 @@ import {
   type RepairImageFormInput,
   repairImageFormSchema,
 } from "@repo/validators/client/repairImages.schema";
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { api } from "~/trpc/client";
@@ -36,7 +35,6 @@ export default function CreateRepairImageForm({
   repairId,
 }: CreateRepairImageFormProps) {
   const utils = api.useUtils();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const createMutation = api.repairImages.create.useMutation({
     async onSuccess() {
@@ -44,7 +42,6 @@ export default function CreateRepairImageForm({
         repairId,
       });
       toast.success(`Repair Image uploaded`);
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

@@ -19,7 +19,6 @@ import {
   type ModelPartFormInput,
   modelPartFormSchema,
 } from "@repo/validators/client/partsToModels.schema";
-import { useNavigate } from "@tanstack/react-router";
 
 import PartSelect from "~/components/selects/PartSelect";
 import { api } from "~/trpc/client";
@@ -33,7 +32,6 @@ export default function CreateModelPartForm({
   modelId,
 }: CreateModelPartFormProps) {
   const utils = api.useUtils();
-  const navigate = useNavigate();
   const createMutation = api.partsToModels.create.useMutation({
     async onSuccess(data) {
       await utils.partsToModels.getByIds.invalidate({
@@ -43,7 +41,6 @@ export default function CreateModelPartForm({
       await utils.partsToModels.getAllPartsByModelId.invalidate();
       await utils.partsToModels.getAllModelsByPartId.invalidate();
       toast.success("Model Part Created");
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

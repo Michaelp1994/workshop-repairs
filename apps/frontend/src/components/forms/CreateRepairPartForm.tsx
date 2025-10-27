@@ -21,7 +21,6 @@ import {
   type RepairPartFormInput,
   repairPartFormSchema,
 } from "@repo/validators/client/repairParts.schema";
-import { useNavigate } from "@tanstack/react-router";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
@@ -36,7 +35,6 @@ export default function CreateRepairPartForm({
   repairId,
 }: CreateRepairPartFormProps) {
   const utils = api.useUtils();
-  const navigate = useNavigate();
   const [repair] = api.repairs.getById.useSuspenseQuery({
     id: repairId,
   });
@@ -46,7 +44,6 @@ export default function CreateRepairPartForm({
       await utils.repairParts.getAll.invalidate();
       await utils.repairParts.countAll.invalidate();
       toast.success(`Part was added to ${generateRepairSlug(data.repairId)}`);
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

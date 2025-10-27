@@ -18,7 +18,6 @@ import {
   partModelFormSchema,
   type PartsModelFormInput,
 } from "@repo/validators/client/partsToModels.schema";
-import { useNavigate } from "@tanstack/react-router";
 
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
@@ -33,7 +32,6 @@ export default function UpdatePartModelForm({
   partId,
   modelId,
 }: UpdatePartModelFormProps) {
-  const navigate = useNavigate();
   const utils = api.useUtils();
   const [partModel] = api.partsToModels.getByIds.useSuspenseQuery({
     partId,
@@ -45,7 +43,6 @@ export default function UpdatePartModelForm({
       await utils.partsToModels.getAllPartsByModelId.invalidate();
       await utils.partsToModels.getAllModelsByPartId.invalidate();
       toast.success(`Part To Model relationship updated`);
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

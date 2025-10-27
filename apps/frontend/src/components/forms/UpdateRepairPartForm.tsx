@@ -20,7 +20,6 @@ import {
   type RepairPartFormInput,
   repairPartFormSchema,
 } from "@repo/validators/client/repairParts.schema";
-import { useNavigate } from "@tanstack/react-router";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
@@ -36,14 +35,12 @@ export default function UpdateRepairPartForm({
   const [repairPart] = api.repairParts.getById.useSuspenseQuery({
     id: repairPartId,
   });
-  const navigate = useNavigate();
   const utils = api.useUtils();
   const updateMutation = api.repairParts.update.useMutation({
     async onSuccess() {
       await utils.repairParts.getAll.invalidate();
       await utils.repairParts.getById.invalidate({ id: repairPartId });
       toast.success(`Part updated`);
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

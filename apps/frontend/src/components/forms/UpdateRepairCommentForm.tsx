@@ -18,7 +18,6 @@ import {
   type RepairCommentFormInput,
   repairCommentFormSchema,
 } from "@repo/validators/client/repairComments.schema";
-import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
@@ -31,7 +30,6 @@ export default function UpdateRepairCommentForm({
   repairCommentId,
 }: UpdateRepairCommentFormProps) {
   const utils = api.useUtils();
-  const navigate = useNavigate();
   const [data] = api.repairComments.getById.useSuspenseQuery({
     id: repairCommentId,
   });
@@ -42,7 +40,6 @@ export default function UpdateRepairCommentForm({
       await utils.repairComments.getAllByRepairId.invalidate({
         repairId: data.repairId,
       });
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

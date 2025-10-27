@@ -19,7 +19,6 @@ import {
   partModelFormSchema,
   type PartsModelFormInput,
 } from "@repo/validators/client/partsToModels.schema";
-import { useNavigate } from "@tanstack/react-router";
 
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
@@ -32,7 +31,6 @@ interface CreatePartModelFormProps {
 export default function CreatePartModelForm({
   partId,
 }: CreatePartModelFormProps) {
-  const navigate = useNavigate();
   const utils = api.useUtils();
   const createMutation = api.partsToModels.create.useMutation({
     async onSuccess() {
@@ -40,7 +38,6 @@ export default function CreatePartModelForm({
         filters: { partId },
       });
       toast.success(`Part To Model relationship created`);
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

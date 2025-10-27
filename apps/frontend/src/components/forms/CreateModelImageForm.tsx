@@ -19,7 +19,6 @@ import {
   modelImageFormSchema,
 } from "@repo/validators/client/modelImages.schema";
 import { type ModelID } from "@repo/validators/ids.validators";
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { api } from "~/trpc/client";
@@ -36,7 +35,6 @@ export default function CreateModelImageForm({
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: requestUpload } =
     api.modelImages.requestUpload.useMutation();
-  const navigate = useNavigate();
   const utils = api.useUtils();
 
   const createMutation = api.modelImages.create.useMutation({
@@ -45,7 +43,6 @@ export default function CreateModelImageForm({
         modelId,
       });
       toast.success(`Model Image uploaded`);
-      router.back();
     },
     onError(errors) {
       displayMutationErrors(errors, form);

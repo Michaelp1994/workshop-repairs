@@ -13,7 +13,6 @@ export default function LogoutButton() {
     async onSuccess() {
       queryClient.clear();
       navigate({ to: "/" });
-      router.refresh();
     },
     async onError(errors) {
       displayMutationErrors(errors);

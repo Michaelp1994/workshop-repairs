@@ -24,7 +24,6 @@ export default function ProfileAvatar() {
     async onSuccess() {
       queryClient.clear();
       navigate({ to: "/" });
-      router.refresh();
     },
     async onError(errors) {
       displayMutationErrors(errors);
