@@ -1,4 +1,3 @@
-"use client";
 import type { ModelID } from "@repo/validators/ids.validators";
 
 import {
@@ -10,10 +9,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import CreateModelImageForm from "../../../../_components/CreateModelImageForm";
+import CreateModelImageForm from "../../../../../../../components/forms/CreateModelImageForm";
 
 interface ArchiveModelModalProps {
   params: Promise<{ modelId: ModelID }>;
@@ -22,7 +21,7 @@ interface ArchiveModelModalProps {
 export default function ArchiveModelModal(props: ArchiveModelModalProps) {
   const params = use(props.params);
   const modelId = Number(params.modelId);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <Dialog

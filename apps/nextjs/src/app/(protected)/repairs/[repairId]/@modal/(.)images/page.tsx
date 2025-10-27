@@ -1,4 +1,3 @@
-"use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import {
@@ -10,10 +9,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import RepairImageCarousel from "../../../_components/RepairImages/RepairImageCarousel";
+import RepairImageCarousel from "../../../../../../components/RepairImages/RepairImageCarousel";
 
 interface RepairImagesModalProps {
   params: Promise<{ repairId: RepairID }>;
@@ -22,7 +21,7 @@ interface RepairImagesModalProps {
 export default function RepairImagesModal(props: RepairImagesModalProps) {
   const params = use(props.params);
   const repairId = Number(params.repairId);
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <Dialog
       defaultOpen

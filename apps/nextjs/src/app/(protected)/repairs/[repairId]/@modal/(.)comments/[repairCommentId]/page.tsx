@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -8,10 +7,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import UpdateRepairCommentForm from "~/app/(protected)/repairs/_components/UpdateRepairCommentForm";
+import UpdateRepairCommentForm from "~/components/forms/UpdateRepairCommentForm";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface RepairImagesModalProps {
@@ -24,7 +23,7 @@ export default function UpdateRepairCommentModal(
   const params = use(props.params);
   const repairId = Number(params.repairId);
   const repairCommentId = Number(params.repairCommentId);
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <Dialog
       defaultOpen

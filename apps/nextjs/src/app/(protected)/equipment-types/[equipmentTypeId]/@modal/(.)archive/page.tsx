@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,12 +8,12 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
-import ArchiveEquipmentTypeButton from "../../../_components/ArchiveEquipmentTypeButton";
+import ArchiveEquipmentTypeButton from "../../../../../../components/ArchiveEquipmentTypeButton";
 
 interface ArchiveEquipmentTypeModalProps {
   params: Promise<{
@@ -26,7 +25,7 @@ export default function ArchiveEquipmentTypeModal(
   props: ArchiveEquipmentTypeModalProps,
 ) {
   const params = use(props.params);
-  const router = useRouter();
+  const navigate = useNavigate();
   const equipmentTypeId = Number(params.equipmentTypeId);
 
   return (

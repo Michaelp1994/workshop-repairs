@@ -12,7 +12,7 @@ const handler = createHTTPHandler({
   responseMeta() {
     return {
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "http://localhost:5173",
         "Access-Control-Allow-Credentials": "true",
       },
     };
@@ -21,7 +21,7 @@ const handler = createHTTPHandler({
 });
 
 const server = createServer((req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
   res.setHeader("Access-Control-Request-Method", "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET");

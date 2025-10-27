@@ -1,4 +1,3 @@
-"use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import {
@@ -10,10 +9,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import CreateRepairImageForm from "../../../../_components/CreateRepairImageForm";
+import CreateRepairImageForm from "../../../../../../../components/forms/CreateRepairImageForm";
 
 interface ArchiveRepairModalProps {
   params: Promise<{ repairId: RepairID }>;
@@ -22,7 +21,7 @@ interface ArchiveRepairModalProps {
 export default function ArchiveRepairModal(props: ArchiveRepairModalProps) {
   const params = use(props.params);
   const repairId = Number(params.repairId);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <Dialog

@@ -1,6 +1,6 @@
+import { Link } from "@tanstack/react-router";
 import { type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "../../button";
 
@@ -23,7 +23,7 @@ export function DataTableRowActions<TData extends Data>({
   return (
     <div className="flex justify-end">
       <Button asChild size="sm" variant="ghost">
-        <Link href={url}>
+        <Link to={url}>
           <ChevronRight className="size-4" />
         </Link>
       </Button>

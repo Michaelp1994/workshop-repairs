@@ -1,4 +1,3 @@
-"use client";
 import { Avatar, AvatarFallback } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -11,20 +10,20 @@ import {
 } from "@repo/ui/dropdown-menu";
 import { LogOut } from "@repo/ui/icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 import getInitials from "~/utils/getInitials";
 
 export default function ProfileAvatar() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [user] = api.users.getCurrentUser.useSuspenseQuery({});
   const logoutMutation = api.auth.logout.useMutation({
     async onSuccess() {
       queryClient.clear();
-      router.push("/");
+      navigate({ to: "/" });
       router.refresh();
     },
     async onError(errors) {

@@ -1,5 +1,3 @@
-"use client";
-
 import type { CheckedState } from "@radix-ui/react-checkbox";
 
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";

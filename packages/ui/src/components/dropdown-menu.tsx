@@ -1,5 +1,3 @@
-"use client";
-
 import type { CheckedState } from "@radix-ui/react-checkbox";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";

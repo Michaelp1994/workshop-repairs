@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,12 +8,12 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 
-import ArchiveAssetButton from "../../../_components/ArchiveAssetButton";
+import ArchiveAssetButton from "../../../../../../components/ArchiveAssetButton";
 
 interface ArchiveAssetModalProps {
   params: Promise<{
@@ -24,7 +23,7 @@ interface ArchiveAssetModalProps {
 
 export default function ArchiveAssetModal(props: ArchiveAssetModalProps) {
   const params = use(props.params);
-  const router = useRouter();
+  const navigate = useNavigate();
   const assetId = Number(params.assetId);
 
   return (

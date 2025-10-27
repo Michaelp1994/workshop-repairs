@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,12 +8,11 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
+import ArchiveManufacturerButton from "~/components/ArchiveManufacturerButton";
 import { BackButton } from "~/components/BackButton";
-
-import ArchiveManufacturerButton from "../../../_components/ArchiveManufacturerButton";
 
 interface ArchiveManufacturerModalProps {
   params: Promise<{
@@ -26,7 +24,7 @@ export default function ArchiveManufacturerModal(
   props: ArchiveManufacturerModalProps,
 ) {
   const params = use(props.params);
-  const router = useRouter();
+  const navigate = useNavigate();
   const manufacturerId = Number(params.manufacturerId);
 
   return (

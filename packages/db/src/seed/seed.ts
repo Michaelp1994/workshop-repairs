@@ -1,5 +1,4 @@
 import { hashPassword } from "@repo/auth/password";
-import dotenv from "dotenv";
 import { getTableColumns, getTableName, sql } from "drizzle-orm";
 import { reset } from "drizzle-seed";
 
@@ -18,7 +17,6 @@ import repair_status_types from "./data/staging/repair_status_types.json";
 import repair_types from "./data/staging/repair_types.json";
 import user_types from "./data/staging/user_types.json";
 
-dotenv.config();
 console.log("Seeding database...");
 const email = process.env["TEST_USER_EMAIL"];
 const password = process.env["TEST_USER_PASSWORD"];

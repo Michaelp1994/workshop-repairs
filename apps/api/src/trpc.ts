@@ -23,6 +23,7 @@ export const publicProcedure = t.procedure;
 
 export const authedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.userId) {
+    console.log("test");
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
@@ -39,6 +40,8 @@ export const authedProcedure = t.procedure.use(({ ctx, next }) => {
 
 export const organizationProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.session.userId) {
+    console.log("test 2");
+
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
@@ -46,6 +49,8 @@ export const organizationProcedure = t.procedure.use(async ({ ctx, next }) => {
 
   const user = await getCredentialsByUserId(ctx.session.userId);
   if (!user || !user.organizationId) {
+    console.log("test 3");
+
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });

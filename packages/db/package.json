@@ -32,7 +32,6 @@
     "@softwaretechnik/dbml-renderer": "^1.0.31",
     "@types/node": "^24.9.1",
     "@types/pg": "^8.15.5",
-    "dotenv": "^17.2.3",
     "drizzle-dbml-generator": "^0.10.0",
     "drizzle-kit": "^0.31.5",
     "drizzle-seed": "^0.3.1",

@@ -1,5 +1,3 @@
-"use client";
-
 import type { UserID } from "@repo/validators/ids.validators";
 
 import * as React from "react";

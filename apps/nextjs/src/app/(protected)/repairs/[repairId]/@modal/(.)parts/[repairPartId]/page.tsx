@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -7,10 +6,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import UpdateRepairPartForm from "~/app/(protected)/repairs/_components/UpdateRepairPartForm";
+import UpdateRepairPartForm from "~/components/forms/UpdateRepairPartForm";
 
 interface UpdateRepairPartModalProps {
   params: Promise<{
@@ -23,7 +22,7 @@ export default function UpdateRepairPartModal(
   props: UpdateRepairPartModalProps,
 ) {
   const params = use(props.params);
-  const router = useRouter();
+  const navigate = useNavigate();
   const repairPartId = Number(params.repairPartId);
 
   return (

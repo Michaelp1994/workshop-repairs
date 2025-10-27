@@ -1,12 +1,11 @@
-"use client";
 import { Button } from "@repo/ui/button";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 
 interface BackButtonProps {
   children: React.ReactNode;
 }
 
 export function BackButton({ children }: BackButtonProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   return <Button onClick={() => router.back()}>{children}</Button>;
 }

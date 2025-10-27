@@ -1,5 +1,3 @@
-"use client";
-
 import type { CheckedState } from "@radix-ui/react-checkbox";
 export type { MenubarMenuProps } from "@radix-ui/react-menubar";
 

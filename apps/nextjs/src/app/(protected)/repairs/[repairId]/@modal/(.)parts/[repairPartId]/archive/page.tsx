@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +8,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import ArchiveRepairPartButton from "~/app/(protected)/repairs/_components/ArchiveRepairPartButton";
+import ArchiveRepairPartButton from "~/components/ArchiveRepairPartButton";
 import { BackButton } from "~/components/BackButton";
 
 interface ArchiveRepairPartModalProps {
@@ -26,7 +25,7 @@ export default function ArchiveRepairPartModal(
   props: ArchiveRepairPartModalProps,
 ) {
   const params = use(props.params);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const repairPartId = Number(params.repairPartId);
 

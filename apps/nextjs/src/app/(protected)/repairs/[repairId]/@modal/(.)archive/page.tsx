@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,13 +8,13 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
 import { BackButton } from "~/components/BackButton";
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
-import ArchiveRepairButton from "../../../_components/ArchiveRepairButton";
+import ArchiveRepairButton from "../../../../../../components/ArchiveRepairButton";
 
 interface ArchiveRepairModalProps {
   params: Promise<{ repairId: string }>;
@@ -24,7 +23,7 @@ interface ArchiveRepairModalProps {
 export default function ArchiveRepairModal(props: ArchiveRepairModalProps) {
   const params = use(props.params);
   const repairId = Number(params.repairId);
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <Dialog defaultOpen onOpenChange={() => router.back()} open>
       <DialogPortal>

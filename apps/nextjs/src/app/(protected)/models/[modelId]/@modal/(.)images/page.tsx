@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +8,10 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 import { type ModelID } from "@repo/validators/ids.validators";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import ModelImageCarousel from "../../../_components/ModelImages/ModelImageCarousel";
+import ModelImageCarousel from "../../../../../../components/ModelImages/ModelImageCarousel";
 
 interface ModelImageGalleryPageProps {
   params: Promise<{
@@ -25,7 +24,7 @@ export default function ModelImageGalleryPage(
 ) {
   const params = use(props.params);
   const modelId = Number(params.modelId);
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <Dialog
       defaultOpen

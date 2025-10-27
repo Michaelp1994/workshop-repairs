@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -8,10 +7,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import UpdatePartModelForm from "~/app/(protected)/parts/_components/UpdatePartModelForm";
+import UpdatePartModelForm from "~/components/forms/UpdatePartModelForm";
 
 interface UpdatePartModelModalProps {
   params: Promise<{
@@ -24,7 +23,7 @@ export default function UpdatePartModelModal(props: UpdatePartModelModalProps) {
   const params = use(props.params);
   const modelId = Number(params.modelId);
   const partId = Number(params.partId);
-  const router = useRouter();
+  const navigate = useNavigate();
   return (
     <Dialog
       defaultOpen

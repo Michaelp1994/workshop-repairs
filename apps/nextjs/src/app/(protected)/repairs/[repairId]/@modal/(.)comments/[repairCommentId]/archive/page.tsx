@@ -1,4 +1,3 @@
-"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +8,10 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
-import ArchiveRepairCommentButton from "~/app/(protected)/repairs/_components/ArchiveRepairCommentButton";
+import ArchiveRepairCommentButton from "~/components/ArchiveRepairCommentButton";
 import { BackButton } from "~/components/BackButton";
 
 interface ArchiveCommentModalProps {
@@ -24,7 +23,7 @@ interface ArchiveCommentModalProps {
 
 export default function ArchiveCommentModal(props: ArchiveCommentModalProps) {
   const params = use(props.params);
-  const router = useRouter();
+  const navigate = useNavigate();
   const repairCommentId = Number(params.repairCommentId);
 
   return (

@@ -18,11 +18,6 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "incremental": true,
     /* Path Aliases */
     "baseUrl": ".",
@@ -36,9 +31,7 @@
     "tests",
     "*.config.*",
     "sst-env.d.ts",
-    "../../packages/ui/src/tanstack-table.d.ts",
-    ".next/dev/types/**/*.ts",
-    ".next/types/**/*.ts"
+    "../../packages/ui/src/tanstack-table.d.ts"
   ],
   "exclude": ["node_modules", "eslint.config.js"]
 }

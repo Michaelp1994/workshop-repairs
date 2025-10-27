@@ -1,4 +1,3 @@
-"use client";
 import type { RepairID } from "@repo/validators/ids.validators";
 
 import {
@@ -10,12 +9,12 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { use } from "react";
 
 import generateRepairSlug from "~/utils/generateRepairSlug";
 
-import CreateRepairPartForm from "../../../../_components/CreateRepairPartForm";
+import CreateRepairPartForm from "../../../../../../../components/forms/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps {
   params: Promise<{ repairId: RepairID }>;
@@ -26,7 +25,7 @@ export default function CreateRepairPartModal(
 ) {
   const params = use(props.params);
   const repairId = Number(params.repairId);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <Dialog
