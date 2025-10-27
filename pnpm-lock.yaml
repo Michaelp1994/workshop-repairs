@@ -63,7 +63,7 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3(@types/node@24.9.1)(jiti@2.6.1)(jsdom@27.0.1(postcss@8.5.6))(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.1)
 
-  apps/api:
+  apps/backend:
     dependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.917.0
@@ -145,7 +145,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  apps/nextjs:
+  apps/frontend:
     dependencies:
       '@auth/drizzle-adapter':
         specifier: ^1.11.0
@@ -156,12 +156,6 @@ importers:
       '@ebay/nice-modal-react':
         specifier: ^1.2.13
         version: 1.2.13(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@repo/api':
-        specifier: workspace:^
-        version: link:../api
-      '@repo/auth':
-        specifier: workspace:^
-        version: link:../../packages/auth
       '@repo/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -223,6 +217,12 @@ importers:
         specifier: 4.1.12
         version: 4.1.12
     devDependencies:
+      '@repo/auth':
+        specifier: workspace:^
+        version: link:../../packages/auth
+      '@repo/backend':
+        specifier: workspace:^
+        version: link:../backend
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint
