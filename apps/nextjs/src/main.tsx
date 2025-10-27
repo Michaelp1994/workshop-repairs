@@ -1,4 +1,3 @@
-import { Toaster } from "@repo/ui/sonner";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import "@repo/ui/globals.css";
@@ -20,6 +19,5 @@ if (!rootEl) throw new Error("Failed to find the root element");
 createRoot(rootEl).render(
   <StrictMode>
     <RouterProvider router={router} />
-    <Toaster closeButton richColors />
   </StrictMode>,
 );

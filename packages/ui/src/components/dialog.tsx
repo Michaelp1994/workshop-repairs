@@ -4,6 +4,11 @@ import * as React from "react";
 
 import { cn } from "../lib/utils";
 
+export interface BaseModalProps extends BaseModalProps {
+  isOpen: boolean;
+  onOpenChange: () => void;
+}
+
 const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;

@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
@@ -20,7 +18,6 @@ import { Route as OnboardingLayoutRouteImport } from './routes/onboarding/_layou
 import { Route as publicRegisterRouteImport } from './routes/(public)/register'
 import { Route as publicLoginRouteImport } from './routes/(public)/login'
 import { Route as publicForgotPasswordRouteImport } from './routes/(public)/forgot-password'
-import { Route as publicAboutRouteImport } from './routes/(public)/about'
 import { Route as protectedLayoutRouteRouteImport } from './routes/(protected)/_layout/route'
 import { Route as OnboardingOrganizationIndexRouteImport } from './routes/onboarding/organization/index'
 import { Route as OnboardingOrganizationJoinRouteImport } from './routes/onboarding/organization/join'
@@ -37,7 +34,6 @@ import { Route as protectedLayoutLocationsIndexRouteImport } from './routes/(pro
 import { Route as protectedLayoutEquipmentTypesIndexRouteImport } from './routes/(protected)/_layout/equipment-types/index'
 import { Route as protectedLayoutClientsIndexRouteImport } from './routes/(protected)/_layout/clients/index'
 import { Route as protectedLayoutAssetsIndexRouteImport } from './routes/(protected)/_layout/assets/index'
-import { Route as protectedLayoutUsersNewRouteImport } from './routes/(protected)/_layout/users/new'
 import { Route as protectedLayoutRepairsNewRouteImport } from './routes/(protected)/_layout/repairs/new'
 import { Route as protectedLayoutPartsNewRouteImport } from './routes/(protected)/_layout/parts/new'
 import { Route as protectedLayoutModelsNewRouteImport } from './routes/(protected)/_layout/models/new'
@@ -65,13 +61,6 @@ import { Route as protectedLayoutEquipmentTypesEquipmentTypeIdEditRouteImport } 
 import { Route as protectedLayoutClientsClientIdEditRouteImport } from './routes/(protected)/_layout/clients/$clientId/edit'
 import { Route as protectedLayoutAssetsAssetIdEditRouteImport } from './routes/(protected)/_layout/assets/$assetId/edit'
 
-const OnboardingRouteImport = createFileRoute('/onboarding')()
-
-const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const OnboardingIndexRoute = OnboardingIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -115,11 +104,6 @@ const publicLoginRoute = publicLoginRouteImport.update({
 const publicForgotPasswordRoute = publicForgotPasswordRouteImport.update({
   id: '/(public)/forgot-password',
   path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const publicAboutRoute = publicAboutRouteImport.update({
-  id: '/(public)/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const protectedLayoutRouteRoute = protectedLayoutRouteRouteImport.update({
@@ -216,11 +200,6 @@ const protectedLayoutAssetsIndexRoute =
     path: '/assets/',
     getParentRoute: () => protectedLayoutRouteRoute,
   } as any)
-const protectedLayoutUsersNewRoute = protectedLayoutUsersNewRouteImport.update({
-  id: '/users/new',
-  path: '/users/new',
-  getParentRoute: () => protectedLayoutRouteRoute,
-} as any)
 const protectedLayoutRepairsNewRoute =
   protectedLayoutRepairsNewRouteImport.update({
     id: '/repairs/new',
@@ -378,7 +357,6 @@ const protectedLayoutAssetsAssetIdEditRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/about': typeof publicAboutRoute
   '/forgot-password': typeof publicForgotPasswordRoute
   '/login': typeof publicLoginRoute
   '/register': typeof publicRegisterRoute
@@ -400,7 +378,6 @@ export interface FileRoutesByFullPath {
   '/models/new': typeof protectedLayoutModelsNewRoute
   '/parts/new': typeof protectedLayoutPartsNewRoute
   '/repairs/new': typeof protectedLayoutRepairsNewRoute
-  '/users/new': typeof protectedLayoutUsersNewRoute
   '/assets': typeof protectedLayoutAssetsIndexRoute
   '/clients': typeof protectedLayoutClientsIndexRoute
   '/equipment-types': typeof protectedLayoutEquipmentTypesIndexRoute
@@ -432,7 +409,6 @@ export interface FileRoutesByFullPath {
   '/users/$userId': typeof protectedLayoutUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/about': typeof publicAboutRoute
   '/forgot-password': typeof publicForgotPasswordRoute
   '/login': typeof publicLoginRoute
   '/register': typeof publicRegisterRoute
@@ -453,7 +429,6 @@ export interface FileRoutesByTo {
   '/models/new': typeof protectedLayoutModelsNewRoute
   '/parts/new': typeof protectedLayoutPartsNewRoute
   '/repairs/new': typeof protectedLayoutRepairsNewRoute
-  '/users/new': typeof protectedLayoutUsersNewRoute
   '/assets': typeof protectedLayoutAssetsIndexRoute
   '/clients': typeof protectedLayoutClientsIndexRoute
   '/equipment-types': typeof protectedLayoutEquipmentTypesIndexRoute
@@ -487,11 +462,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(protected)/_layout': typeof protectedLayoutRouteRouteWithChildren
-  '/(public)/about': typeof publicAboutRoute
   '/(public)/forgot-password': typeof publicForgotPasswordRoute
   '/(public)/login': typeof publicLoginRoute
   '/(public)/register': typeof publicRegisterRoute
-  '/onboarding': typeof OnboardingRouteWithChildren
   '/onboarding/_layout': typeof OnboardingLayoutRoute
   '/onboarding/email-verification': typeof OnboardingEmailVerificationRoute
   '/onboarding/invitation': typeof OnboardingInvitationRoute
@@ -510,7 +483,6 @@ export interface FileRoutesById {
   '/(protected)/_layout/models/new': typeof protectedLayoutModelsNewRoute
   '/(protected)/_layout/parts/new': typeof protectedLayoutPartsNewRoute
   '/(protected)/_layout/repairs/new': typeof protectedLayoutRepairsNewRoute
-  '/(protected)/_layout/users/new': typeof protectedLayoutUsersNewRoute
   '/(protected)/_layout/assets/': typeof protectedLayoutAssetsIndexRoute
   '/(protected)/_layout/clients/': typeof protectedLayoutClientsIndexRoute
   '/(protected)/_layout/equipment-types/': typeof protectedLayoutEquipmentTypesIndexRoute
@@ -544,7 +516,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/about'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -566,7 +537,6 @@ export interface FileRouteTypes {
     | '/models/new'
     | '/parts/new'
     | '/repairs/new'
-    | '/users/new'
     | '/assets'
     | '/clients'
     | '/equipment-types'
@@ -598,7 +568,6 @@ export interface FileRouteTypes {
     | '/users/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/about'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -619,7 +588,6 @@ export interface FileRouteTypes {
     | '/models/new'
     | '/parts/new'
     | '/repairs/new'
-    | '/users/new'
     | '/assets'
     | '/clients'
     | '/equipment-types'
@@ -652,11 +620,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/(protected)/_layout'
-    | '/(public)/about'
     | '/(public)/forgot-password'
     | '/(public)/login'
     | '/(public)/register'
-    | '/onboarding'
     | '/onboarding/_layout'
     | '/onboarding/email-verification'
     | '/onboarding/invitation'
@@ -675,7 +641,6 @@ export interface FileRouteTypes {
     | '/(protected)/_layout/models/new'
     | '/(protected)/_layout/parts/new'
     | '/(protected)/_layout/repairs/new'
-    | '/(protected)/_layout/users/new'
     | '/(protected)/_layout/assets/'
     | '/(protected)/_layout/clients/'
     | '/(protected)/_layout/equipment-types/'
@@ -709,23 +674,14 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   protectedLayoutRouteRoute: typeof protectedLayoutRouteRouteWithChildren
-  publicAboutRoute: typeof publicAboutRoute
   publicForgotPasswordRoute: typeof publicForgotPasswordRoute
   publicLoginRoute: typeof publicLoginRoute
   publicRegisterRoute: typeof publicRegisterRoute
-  OnboardingRoute: typeof OnboardingRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/onboarding/': {
       id: '/onboarding/'
       path: '/'
@@ -763,7 +719,7 @@ declare module '@tanstack/react-router' {
     }
     '/onboarding/_layout': {
       id: '/onboarding/_layout'
-      path: '/onboarding'
+      path: ''
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingLayoutRouteImport
       parentRoute: typeof OnboardingRoute
@@ -787,13 +743,6 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof publicForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(public)/about': {
-      id: '/(public)/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof publicAboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(protected)/_layout': {
@@ -906,13 +855,6 @@ declare module '@tanstack/react-router' {
       path: '/assets'
       fullPath: '/assets'
       preLoaderRoute: typeof protectedLayoutAssetsIndexRouteImport
-      parentRoute: typeof protectedLayoutRouteRoute
-    }
-    '/(protected)/_layout/users/new': {
-      id: '/(protected)/_layout/users/new'
-      path: '/users/new'
-      fullPath: '/users/new'
-      preLoaderRoute: typeof protectedLayoutUsersNewRouteImport
       parentRoute: typeof protectedLayoutRouteRoute
     }
     '/(protected)/_layout/repairs/new': {
@@ -1110,7 +1052,6 @@ interface protectedLayoutRouteRouteChildren {
   protectedLayoutModelsNewRoute: typeof protectedLayoutModelsNewRoute
   protectedLayoutPartsNewRoute: typeof protectedLayoutPartsNewRoute
   protectedLayoutRepairsNewRoute: typeof protectedLayoutRepairsNewRoute
-  protectedLayoutUsersNewRoute: typeof protectedLayoutUsersNewRoute
   protectedLayoutAssetsIndexRoute: typeof protectedLayoutAssetsIndexRoute
   protectedLayoutClientsIndexRoute: typeof protectedLayoutClientsIndexRoute
   protectedLayoutEquipmentTypesIndexRoute: typeof protectedLayoutEquipmentTypesIndexRoute
@@ -1152,7 +1093,6 @@ const protectedLayoutRouteRouteChildren: protectedLayoutRouteRouteChildren = {
   protectedLayoutModelsNewRoute: protectedLayoutModelsNewRoute,
   protectedLayoutPartsNewRoute: protectedLayoutPartsNewRoute,
   protectedLayoutRepairsNewRoute: protectedLayoutRepairsNewRoute,
-  protectedLayoutUsersNewRoute: protectedLayoutUsersNewRoute,
   protectedLayoutAssetsIndexRoute: protectedLayoutAssetsIndexRoute,
   protectedLayoutClientsIndexRoute: protectedLayoutClientsIndexRoute,
   protectedLayoutEquipmentTypesIndexRoute:
@@ -1201,39 +1141,11 @@ const protectedLayoutRouteRouteChildren: protectedLayoutRouteRouteChildren = {
 const protectedLayoutRouteRouteWithChildren =
   protectedLayoutRouteRoute._addFileChildren(protectedLayoutRouteRouteChildren)
 
-interface OnboardingRouteChildren {
-  OnboardingLayoutRoute: typeof OnboardingLayoutRoute
-  OnboardingEmailVerificationRoute: typeof OnboardingEmailVerificationRoute
-  OnboardingInvitationRoute: typeof OnboardingInvitationRoute
-  OnboardingWelcomeRoute: typeof OnboardingWelcomeRoute
-  OnboardingIndexRoute: typeof OnboardingIndexRoute
-  OnboardingOrganizationCreateRoute: typeof OnboardingOrganizationCreateRoute
-  OnboardingOrganizationJoinRoute: typeof OnboardingOrganizationJoinRoute
-  OnboardingOrganizationIndexRoute: typeof OnboardingOrganizationIndexRoute
-}
-
-const OnboardingRouteChildren: OnboardingRouteChildren = {
-  OnboardingLayoutRoute: OnboardingLayoutRoute,
-  OnboardingEmailVerificationRoute: OnboardingEmailVerificationRoute,
-  OnboardingInvitationRoute: OnboardingInvitationRoute,
-  OnboardingWelcomeRoute: OnboardingWelcomeRoute,
-  OnboardingIndexRoute: OnboardingIndexRoute,
-  OnboardingOrganizationCreateRoute: OnboardingOrganizationCreateRoute,
-  OnboardingOrganizationJoinRoute: OnboardingOrganizationJoinRoute,
-  OnboardingOrganizationIndexRoute: OnboardingOrganizationIndexRoute,
-}
-
-const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
-  OnboardingRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   protectedLayoutRouteRoute: protectedLayoutRouteRouteWithChildren,
-  publicAboutRoute: publicAboutRoute,
   publicForgotPasswordRoute: publicForgotPasswordRoute,
   publicLoginRoute: publicLoginRoute,
   publicRegisterRoute: publicRegisterRoute,
-  OnboardingRoute: OnboardingRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
 }
 export const routeTree = rootRouteImport

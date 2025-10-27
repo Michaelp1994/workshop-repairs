@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   Card,
@@ -7,6 +8,7 @@ import {
   CardTitle,
 } from "@repo/ui/card";
 import { Ghost, Home } from "@repo/ui/icons";
+import { Toaster } from "@repo/ui/sonner";
 import {
   createRootRoute,
   type ErrorComponentProps,
@@ -24,11 +26,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
-      <TRPCProvider>
+    <TRPCProvider>
+      <NiceModal.Provider>
         <Outlet />
-      </TRPCProvider>
-    </>
+        <Toaster closeButton richColors />
+      </NiceModal.Provider>
+    </TRPCProvider>
   );
 }
 

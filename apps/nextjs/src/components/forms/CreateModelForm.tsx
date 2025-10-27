@@ -17,7 +17,7 @@ import {
   type ModelFormInput,
   modelFormSchema,
 } from "@repo/validators/client/models.schema";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
@@ -25,14 +25,15 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 export default function CreateModelForm() {
-  const searchParams = useSearchParams();
-  const manufacturerId = searchParams.get("manufacturerId");
-  const equipmentTypeId = searchParams.get("equipmentTypeId");
   const navigate = useNavigate();
+  const { manufacturerId, equipmentTypeId } = useSearch({
+    strict: false,
+  });
+
   const createMutation = api.models.create.useMutation({
     onSuccess(data) {
       toast.success(`Model ${data.name} created`);
-      navigate(`/models/${data.id}`);
+      navigate({ to: `/models/${data.id}` });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

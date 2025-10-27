@@ -3,14 +3,13 @@ import { assetId, clientId } from "@repo/validators/ids.validators";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
+import CreateRepairForm from "~/components/forms/CreateRepairForm";
 import {
   PageHeader,
   PageHeaderText,
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-
-import CreateRepairForm from "../../../../components/forms/CreateRepairForm";
 
 const createRepairPageSearchSchema = z.object({
   assetId: assetId.optional(),
