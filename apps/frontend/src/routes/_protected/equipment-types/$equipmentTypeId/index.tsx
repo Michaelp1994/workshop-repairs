@@ -38,7 +38,10 @@ function ViewEquipmentTypePage() {
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton
-            to={`/equipment-types/${equipmentTypeId}/edit`}
+            linkOptions={{
+              to: "/equipment-types/$equipmentTypeId/edit",
+              params: { equipmentTypeId },
+            }}
             variant="update"
           >
             Update

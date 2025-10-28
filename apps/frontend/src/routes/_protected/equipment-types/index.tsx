@@ -22,7 +22,10 @@ function AllEquipmentTypesPage() {
           <PageTitle>Equipment Types</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/equipment-types/new" variant="create">
+          <IconButton
+            linkOptions={{ to: "/equipment-types/new" }}
+            variant="create"
+          >
             Create
           </IconButton>
         </PageHeaderActions>

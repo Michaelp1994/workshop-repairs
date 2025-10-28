@@ -56,8 +56,8 @@ export default function ManufacturerModelsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
+            linkOptions={{ to: "/models/new", search: { manufacturerId } }}
             size="sm"
-            to={`/models/new?manufacturerId=${manufacturerId}`}
             variant="create"
           >
             Add

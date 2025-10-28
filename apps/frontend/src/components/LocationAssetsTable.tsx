@@ -55,8 +55,8 @@ export default function LocationAssetsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
+            linkOptions={{ to: "/assets/new", search: { locationId } }}
             size="sm"
-            to={`/assets/new?locationId=${locationId}`}
             variant="create"
           >
             Add

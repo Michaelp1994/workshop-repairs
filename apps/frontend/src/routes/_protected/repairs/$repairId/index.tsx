@@ -39,7 +39,13 @@ function ViewRepairPage() {
             onOpenChange={() => setIsOpen(false)}
             repairId={repairId}
           />
-          <IconButton to={`/repairs/${repairId}/edit`} variant="update">
+          <IconButton
+            linkOptions={{
+              to: "/repairs/$repairId/edit",
+              params: { repairId },
+            }}
+            variant="update"
+          >
             Update
           </IconButton>
         </PageHeaderActions>

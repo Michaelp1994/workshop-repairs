@@ -26,7 +26,7 @@ function AllRepairsPage() {
           </PageDescription>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/repairs/new" variant="create">
+          <IconButton linkOptions={{ to: "/repairs/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

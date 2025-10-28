@@ -22,7 +22,7 @@ function AllClientsPage() {
           <PageTitle>Clients</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/clients/new" variant="create">
+          <IconButton linkOptions={{ to: "/clients/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

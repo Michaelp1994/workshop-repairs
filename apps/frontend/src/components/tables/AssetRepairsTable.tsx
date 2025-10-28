@@ -45,7 +45,10 @@ export default function AssetRepairsTable({ assetId }: AssetRepairsTableProps) {
           <CardTitle>Repairs</CardTitle>
         </div>
         <div>
-          <IconButton to={`/repairs/new?assetId=${assetId}`} variant="create">
+          <IconButton
+            linkOptions={{ to: "/repairs/new", search: { assetId } }}
+            variant="create"
+          >
             Add Repair
           </IconButton>
         </div>

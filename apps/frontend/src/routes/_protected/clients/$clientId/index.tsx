@@ -32,7 +32,13 @@ function ViewClientPage() {
           <PageTitle>{client.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to={`/clients/${clientId}/edit`} variant="update">
+          <IconButton
+            linkOptions={{
+              to: "/clients/$clientId/edit",
+              params: { clientId },
+            }}
+            variant="update"
+          >
             Edit
           </IconButton>
           <Button onClick={() => setIsOpen(true)}>Archive</Button>

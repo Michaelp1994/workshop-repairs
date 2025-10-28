@@ -22,7 +22,7 @@ function AllPartsPage() {
           <PageTitle>Parts</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/parts/new" variant="create">
+          <IconButton linkOptions={{ to: "/parts/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

@@ -34,7 +34,10 @@ function ViewUserPage() {
           </PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to={`/users/${userId}/edit`} variant="update">
+          <IconButton
+            linkOptions={{ to: "/users/$userId/edit", params: { userId } }}
+            variant="update"
+          >
             Update
           </IconButton>
           <Button onClick={() => setIsOpen(true)}>Archive</Button>

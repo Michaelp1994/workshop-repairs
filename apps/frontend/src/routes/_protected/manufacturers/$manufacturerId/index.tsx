@@ -36,7 +36,10 @@ function ViewManufacturerPage() {
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton
-            to={`/manufacturers/${manufacturerId}/edit`}
+            linkOptions={{
+              to: "/manufacturers/$manufacturerId/edit",
+              params: { manufacturerId },
+            }}
             variant="update"
           >
             Update

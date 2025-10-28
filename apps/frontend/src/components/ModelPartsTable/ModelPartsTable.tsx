@@ -1,11 +1,13 @@
+import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { type ModelID } from "@repo/validators/ids.validators";
+import { useState } from "react";
 
-import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
+import CreateModelPartModal from "../modals/CreateModelPartModal";
 import { columns } from "./columns";
 
 interface ModelPartsTableProps {
@@ -34,13 +36,18 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
     },
   });
 
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Parts</CardTitle>
-        <IconButton to={`/models/${modelId}/parts/new`} variant="create">
-          Add Part
-        </IconButton>
+        <Button onClick={() => setIsOpen(true)}>Add Part</Button>
+        <CreateModelPartModal
+          isOpen={isOpen}
+          modelId={modelId}
+          onOpenChange={() => setIsOpen(false)}
+        />
       </CardHeader>
       <CardContent>
         <DataTable

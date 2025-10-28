@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 
 import {
   ImageGrid,
@@ -8,6 +9,8 @@ import {
   ImageGridUploadButton,
 } from "~/components/ImageGrid";
 import { api } from "~/trpc/client";
+
+import UploadModelImageModal from "../modals/UploadModelImageModal";
 
 interface ModelImagesProps {
   modelId: ModelID;
@@ -17,7 +20,7 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
   const [data] = api.modelImages.getAllByModelId.useSuspenseQuery({
     modelId,
   });
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Card>
       <CardHeader>
@@ -40,9 +43,12 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
               </Link>
             );
           })}
-          <Link to={`${modelId}/images/new`}>
-            <ImageGridUploadButton />
-          </Link>
+          <ImageGridUploadButton onClick={() => setIsOpen(true)} />
+          <UploadModelImageModal
+            isOpen={isOpen}
+            modelId={modelId}
+            onOpenChange={() => setIsOpen(false)}
+          />
         </ImageGrid>
       </CardContent>
     </Card>

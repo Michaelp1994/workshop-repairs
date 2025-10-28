@@ -125,13 +125,15 @@ export const columns = [
     cell: ({ row }) => (
       <>
         <Button asChild size="sm" variant="link">
-          <Link to={`${row.original.repairId}/parts/${row.original.id}`}>
+          <Link
+            to={`/repairs/${row.original.repairId}/parts/${row.original.id}`}
+          >
             <Pencil className="h-5 w-5" />
           </Link>
         </Button>
         <Button asChild size="sm" variant="link">
           <Link
-            to={`${row.original.repairId}/parts/${row.original.id}/archive`}
+            to={`/repairs/${row.original.repairId}/parts/${row.original.id}/archive`}
           >
             <Trash2 className="h-5 w-5" />
           </Link>

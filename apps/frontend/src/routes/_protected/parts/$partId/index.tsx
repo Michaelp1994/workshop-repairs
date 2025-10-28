@@ -33,7 +33,10 @@ function ViewPartPage() {
           <PageTitle>{part.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to={`/parts/${partId}/edit`} variant="update">
+          <IconButton
+            linkOptions={{ to: "/parts/$partId/edit", params: { partId } }}
+            variant="update"
+          >
             Update
           </IconButton>
           <Button onClick={() => setIsOpen(true)}>Archive</Button>

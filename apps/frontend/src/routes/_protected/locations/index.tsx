@@ -22,7 +22,7 @@ function AllLocationsPage() {
           <PageTitle>Locations</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/locations/new" variant="create">
+          <IconButton linkOptions={{ to: "/locations/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

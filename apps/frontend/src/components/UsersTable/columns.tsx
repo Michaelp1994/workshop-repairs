@@ -1,5 +1,3 @@
-import type { RouterOutputs } from "../../../../backend/src/router";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { DataTableColumnHeader, DataTableLinkCell } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
@@ -9,6 +7,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 import getInitials from "~/utils/getInitials";
+
+import type { RouterOutputs } from "../../../../backend/src/router";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["users"]["getAll"][number]>();
@@ -81,7 +81,7 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => (
       <DataTableRowActions
-        generateUrl={(row) => `users/${row.original.id}`}
+        generateUrl={(row) => `/users/${row.original.id}`}
         row={row}
       />
     ),

@@ -22,7 +22,7 @@ function AllAssetsPage() {
           <PageTitle>Assets</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/assets/new" variant="create">
+          <IconButton linkOptions={{ to: "/assets/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

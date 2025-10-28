@@ -30,7 +30,13 @@ function ViewAssetPage() {
           <PageTitle>{generateAssetSlug(assetId)}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to={`/assets/${assetId}/edit`} variant="update">
+          <IconButton
+            linkOptions={{
+              to: "/assets/$assetId/edit",
+              params: { assetId },
+            }}
+            variant="update"
+          >
             Edit
           </IconButton>
           <Button onClick={() => setIsOpen(true)}>Archive</Button>

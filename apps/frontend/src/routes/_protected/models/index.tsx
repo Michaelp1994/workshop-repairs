@@ -22,7 +22,7 @@ function AllModelsPage() {
           <PageTitle>Models</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/models/new" variant="create">
+          <IconButton linkOptions={{ to: "/models/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

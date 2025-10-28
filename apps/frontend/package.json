@@ -8,10 +8,10 @@
     "clean": "rm -rf .turbo node_modules dist .next .open-next",
     "dev": "vite",
     "lint": "eslint .",
+    "preview": "vite preview",
     "start": "next start",
     "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "preview": "vite preview"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.0",

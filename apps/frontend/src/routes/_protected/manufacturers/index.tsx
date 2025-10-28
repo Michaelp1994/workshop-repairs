@@ -22,7 +22,10 @@ function AllManufacturersPage() {
           <PageTitle>Manufacturers</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/manufacturers/new" variant="create">
+          <IconButton
+            linkOptions={{ to: "/manufacturers/new" }}
+            variant="create"
+          >
             Create
           </IconButton>
         </PageHeaderActions>

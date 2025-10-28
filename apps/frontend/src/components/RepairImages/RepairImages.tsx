@@ -2,6 +2,7 @@ import type { RepairID } from "@repo/validators/ids.validators";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 
 import {
   ImageGrid,
@@ -9,6 +10,8 @@ import {
   ImageGridUploadButton,
 } from "~/components/ImageGrid";
 import { api } from "~/trpc/client";
+
+import UploadRepairImageModal from "../modals/UploadRepairImageModal";
 
 interface RepairImagesProps {
   repairId: RepairID;
@@ -18,7 +21,7 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
   const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
     repairId,
   });
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Card>
       <CardHeader>
@@ -42,9 +45,12 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
               </Link>
             );
           })}
-          <Link to={`${repairId}/images/new`}>
-            <ImageGridUploadButton />
-          </Link>
+          <ImageGridUploadButton onClick={() => setIsOpen(true)} />
+          <UploadRepairImageModal
+            isOpen={isOpen}
+            onOpenChange={() => setIsOpen(false)}
+            repairId={repairId}
+          />
         </ImageGrid>
       </CardContent>
     </Card>

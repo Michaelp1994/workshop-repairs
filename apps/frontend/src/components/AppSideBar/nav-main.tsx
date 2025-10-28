@@ -21,55 +21,55 @@ import { Link, useLocation } from "@tanstack/react-router";
 const items = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    to: "/dashboard",
     icon: ChartLine,
   },
   {
     title: "Repairs",
-    href: "/repairs",
+    to: "/repairs",
     icon: Wrench,
     isActive: true,
   },
   {
-    href: "/clients",
+    to: "/clients",
     icon: Handshake,
     title: "Clients",
   },
   {
-    href: "/locations",
+    to: "/locations",
     icon: MapPin,
     title: "Locations",
   },
   {
     title: "Assets",
     icon: ScanBarcode,
-    href: "/assets",
+    to: "/assets",
     isActive: false,
   },
   {
-    href: "/models",
+    to: "/models",
     icon: Layers,
     title: "Models",
   },
   {
-    href: "/manufacturers",
+    to: "/manufacturers",
     icon: Building,
     title: "Manufacturers",
   },
   {
-    href: "/equipment-types",
+    to: "/equipment-types",
     icon: BriefcaseMedical,
     title: "Equipment Types",
   },
   {
-    href: "/parts",
+    to: "/parts",
     icon: Cog,
     title: "Parts",
   },
   {
     title: "Users",
     icon: Users,
-    href: "/users",
+    to: "/users",
     isActive: false,
   },
 ];
@@ -83,10 +83,10 @@ export function NavMain() {
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton
               asChild
-              isActive={location.pathname.startsWith(item.href)}
+              isActive={location.pathname.startsWith(item.to)}
               tooltip={item.title}
             >
-              <Link to={item.href}>
+              <Link to={item.to}>
                 <item.icon />
                 <span>{item.title}</span>
               </Link>

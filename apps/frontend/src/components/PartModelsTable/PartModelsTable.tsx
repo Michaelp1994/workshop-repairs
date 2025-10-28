@@ -43,7 +43,13 @@ export default function PartModelsTable({ partId }: PartModelsTableProps) {
           <CardTitle>Models</CardTitle>
         </CardHeaderText>
         <CardHeaderActions>
-          <IconButton to={`/parts/${partId}/models/new`} variant="create">
+          <IconButton
+            linkOptions={{
+              to: "/parts/$partId/models/new",
+              params: { partId },
+            }}
+            variant="create"
+          >
             Add Model
           </IconButton>
         </CardHeaderActions>

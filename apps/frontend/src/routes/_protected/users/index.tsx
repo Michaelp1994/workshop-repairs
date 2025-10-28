@@ -22,7 +22,7 @@ function UsersPage() {
           <PageTitle>Users</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <IconButton to="/users/new" variant="create">
+          <IconButton linkOptions={{ to: "/users/new" }} variant="create">
             Create
           </IconButton>
         </PageHeaderActions>

@@ -1,6 +1,13 @@
 import type { EquipmentTypeID } from "@repo/validators/ids.validators";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardHeaderActions,
+  CardHeaderText,
+  CardTitle,
+} from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 
@@ -43,9 +50,13 @@ export default function EquipmentTypeAssetsTable({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row justify-between">
-        <CardTitle>Assets</CardTitle>
+      <CardHeader>
+        <CardHeaderText>
+          <CardTitle>Assets</CardTitle>
+        </CardHeaderText>
+        <CardHeaderActions></CardHeaderActions>
       </CardHeader>
+
       <CardContent>
         <DataTable
           columns={columns}

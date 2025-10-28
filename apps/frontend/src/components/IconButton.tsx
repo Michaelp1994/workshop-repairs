@@ -1,16 +1,27 @@
+import type {
+  RegisteredRouter,
+  ValidateLinkOptions,
+} from "@tanstack/react-router";
+
 import { Button, type ButtonProps } from "@repo/ui/button";
 import { Eye, Pencil, PlusCircle, Trash2 } from "@repo/ui/icons";
 import { Link } from "@tanstack/react-router";
 import React from "react";
 
-interface IconButtonProps extends Omit<ButtonProps, "asChild" | "variant"> {
-  to: string;
+interface IconButtonProps<
+  TRouter extends RegisteredRouter = RegisteredRouter,
+  TOptions = unknown,
+> extends Omit<ButtonProps, "asChild" | "variant"> {
+  linkOptions: ValidateLinkOptions<TRouter, TOptions>;
   children: React.ReactNode;
   variant: "create" | "read" | "update" | "delete";
 }
 
+export function IconButton<TRouter extends RegisteredRouter, TOptions>(
+  props: IconButtonProps<TRouter, TOptions>,
+): React.ReactNode;
 export function IconButton({
-  to,
+  linkOptions,
   children,
   variant,
   ...props
@@ -25,7 +36,7 @@ export function IconButton({
           : Trash2;
   return (
     <Button asChild {...props}>
-      <Link to={to}>
+      <Link {...linkOptions}>
         <Icon className="mr-1 size-4" />
         {children}
       </Link>

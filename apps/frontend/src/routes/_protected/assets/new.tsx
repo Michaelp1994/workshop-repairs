@@ -1,5 +1,10 @@
 import { Card, CardContent } from "@repo/ui/card";
-import { clientId, locationId, modelId } from "@repo/validators/ids.validators";
+import {
+  clientId,
+  equipmentTypeId,
+  locationId,
+  modelId,
+} from "@repo/validators/ids.validators";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 
@@ -15,6 +20,7 @@ const createAssetPageSearchSchema = z.object({
   locationId: locationId.optional(),
   clientId: clientId.optional(),
   modelId: modelId.optional(),
+  equipmentTypeId: equipmentTypeId.optional(),
 });
 
 export const Route = createFileRoute("/_protected/assets/new")({
