@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
+import { Button } from "@repo/ui/button";
 import {
   DataTableColumnHeader,
   DataTableHeaderCheckbox,
-  DataTableRowActions,
   DataTableRowCheckbox,
 } from "@repo/ui/data-table";
+import { ChevronRight } from "@repo/ui/icons";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -87,10 +88,13 @@ export const columns = [
     id: "id",
     enableHiding: false,
     cell: ({ row }) => (
-      <DataTableRowActions
-        generateUrl={(row) => `/users/${row.original.id}`}
-        row={row}
-      />
+      <div className="flex justify-end">
+        <Button asChild size="sm" variant="ghost">
+          <Link params={{ userId: row.original.id }} to="/users/$userId">
+            <ChevronRight className="size-4" />
+          </Link>
+        </Button>
+      </div>
     ),
   }),
 ];

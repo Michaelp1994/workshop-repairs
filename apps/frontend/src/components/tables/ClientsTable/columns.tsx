@@ -1,9 +1,10 @@
+import { Button } from "@repo/ui/button";
 import {
   DataTableColumnHeader,
   DataTableHeaderCheckbox,
-  DataTableRowActions,
   DataTableRowCheckbox,
 } from "@repo/ui/data-table";
+import { ChevronRight } from "@repo/ui/icons";
 import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -64,10 +65,13 @@ export const columns = [
     id: "id",
     enableHiding: false,
     cell: ({ row }) => (
-      <DataTableRowActions
-        generateUrl={(row) => `/clients/${row.original.id}`}
-        row={row}
-      />
+      <div className="flex justify-end">
+        <Button asChild size="sm" variant="ghost">
+          <Link params={{ clientId: row.original.id }} to="/clients/$clientId">
+            <ChevronRight className="size-4" />
+          </Link>
+        </Button>
+      </div>
     ),
   }),
 ];
