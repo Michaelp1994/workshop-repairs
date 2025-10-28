@@ -1,16 +1,8 @@
 import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
-import { type ElementRef, forwardRef } from "react";
 
 import { api } from "~/trpc/client";
 
-const ModelSelect = forwardRef<
-  ElementRef<typeof Combobox>,
-  Omit<ComboboxProps, "data" | "isLoading">
->((props, ref) => {
+export default function ModelSelect(props: Omit<ComboboxProps, "data">) {
   const [data] = api.models.getSelect.useSuspenseQuery({});
-
-  return <Combobox data={data} ref={ref} {...props} />;
-});
-
-ModelSelect.displayName = "ModelSelect";
-export default ModelSelect;
+  return <Combobox data={data} {...props} />;
+}

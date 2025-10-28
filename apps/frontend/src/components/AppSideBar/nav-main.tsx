@@ -28,7 +28,6 @@ const items = [
     title: "Repairs",
     to: "/repairs",
     icon: Wrench,
-    isActive: true,
   },
   {
     to: "/clients",
@@ -44,7 +43,6 @@ const items = [
     title: "Assets",
     icon: ScanBarcode,
     to: "/assets",
-    isActive: false,
   },
   {
     to: "/models",
@@ -70,7 +68,6 @@ const items = [
     title: "Users",
     icon: Users,
     to: "/users",
-    isActive: false,
   },
 ];
 

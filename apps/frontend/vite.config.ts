@@ -11,7 +11,11 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     tsconfigPaths(),
-    react(),
+    react({
+      babel: {
+        plugins: ["babel-plugin-react-compiler"],
+      },
+    }),
     tailwindcss(),
   ],
 });

@@ -1,16 +1,8 @@
 import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
-import { type ElementRef, forwardRef } from "react";
 
 import { api } from "~/trpc/client";
 
-const ManufacturerSelect = forwardRef<
-  ElementRef<typeof Combobox>,
-  Omit<ComboboxProps, "data">
->((props, ref) => {
+export default function ManufacturerSelect(props: Omit<ComboboxProps, "data">) {
   const [data] = api.manufacturers.getSelect.useSuspenseQuery({});
-
-  return <Combobox data={data} ref={ref} {...props} />;
-});
-
-ManufacturerSelect.displayName = "ManufacturerSelect";
-export default ManufacturerSelect;
+  return <Combobox data={data} {...props} />;
+}
