@@ -25,13 +25,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "src",
-    "tests",
-    "*.config.*",
-    "sst-env.d.ts",
-    "../../packages/ui/src/tanstack-table.d.ts"
-  ],
+  "include": ["src", "*.config.*", "../../packages/ui/src/tanstack-table.d.ts"],
   "exclude": ["node_modules", "eslint.config.js"]
 }
