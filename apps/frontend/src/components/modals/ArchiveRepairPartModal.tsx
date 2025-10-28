@@ -1,5 +1,6 @@
 import type { RepairID, RepairPartID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -22,7 +23,20 @@ interface ArchiveRepairPartModalProps extends BaseModalProps {
   repairPartId: RepairPartID;
 }
 
-export default function ArchiveRepairPartModal({
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveRepairPartModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveRepairPartModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);
+
+function ArchiveRepairPartModal({
   isOpen,
   onOpenChange,
   repairPartId,

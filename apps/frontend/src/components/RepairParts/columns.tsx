@@ -1,14 +1,17 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { CheckIcon, Pencil, Trash2 } from "@repo/ui/icons";
-import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 
 import type { RouterOutputs } from "../../../../backend/src/router";
+
+import ArchiveRepairPartModal from "../modals/ArchiveRepairPartModal";
+import UpdateRepairPartModal from "../modals/UpdateRepairPartModal";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["repairParts"]["getAll"][number]>();
@@ -122,23 +125,29 @@ export const columns = [
   columnHelper.display({
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => (
-      <>
-        <Button asChild size="sm" variant="link">
-          <Link
-            to={`/repairs/${row.original.repairId}/parts/${row.original.id}`}
-          >
+    cell: ({ row }) => {
+      function showEditModal() {
+        NiceModal.show(UpdateRepairPartModal, {
+          repairId: row.original.repairId,
+          repairPartId: row.original.id,
+        });
+      }
+      function showArchiveModal() {
+        NiceModal.show(ArchiveRepairPartModal, {
+          repairId: row.original.repairId,
+          repairPartId: row.original.id,
+        });
+      }
+      return (
+        <div>
+          <Button onClick={showEditModal} size="sm" variant="link">
             <Pencil className="h-5 w-5" />
-          </Link>
-        </Button>
-        <Button asChild size="sm" variant="link">
-          <Link
-            to={`/repairs/${row.original.repairId}/parts/${row.original.id}/archive`}
-          >
+          </Button>
+          <Button onClick={showArchiveModal} size="sm" variant="link">
             <Trash2 className="h-5 w-5" />
-          </Link>
-        </Button>
-      </>
-    ),
+          </Button>
+        </div>
+      );
+    },
   }),
 ];
