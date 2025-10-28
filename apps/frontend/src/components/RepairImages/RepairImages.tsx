@@ -1,8 +1,8 @@
 import type { RepairID } from "@repo/validators/ids.validators";
 
+import NiceModal from "@ebay/nice-modal-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
 
 import {
   ImageGrid,
@@ -21,7 +21,9 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
   const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
     repairId,
   });
-  const [isOpen, setIsOpen] = useState(false);
+  function showUploadModal() {
+    NiceModal.show(UploadRepairImageModal, { repairId });
+  }
   return (
     <Card>
       <CardHeader>
@@ -45,12 +47,7 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
               </Link>
             );
           })}
-          <ImageGridUploadButton onClick={() => setIsOpen(true)} />
-          <UploadRepairImageModal
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-            repairId={repairId}
-          />
+          <ImageGridUploadButton onClick={showUploadModal} />
         </ImageGrid>
       </CardContent>
     </Card>

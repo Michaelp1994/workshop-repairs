@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
 import ManufacturerModelsTable from "~/components/ManufacturerModelsTable";
@@ -27,7 +27,9 @@ function ViewManufacturerPage() {
   const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
     id: manufacturerId,
   });
-  const [isOpen, setIsOpen] = useState(false);
+  function showArchiveModal() {
+    NiceModal.show(ArchiveManufacturerModal, { manufacturerId });
+  }
   return (
     <PageWrapper>
       <PageHeader>
@@ -44,12 +46,7 @@ function ViewManufacturerPage() {
           >
             Update
           </IconButton>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchiveManufacturerModal
-            isOpen={isOpen}
-            manufacturerId={manufacturerId}
-            onOpenChange={() => setIsOpen(false)}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
       <ManufacturerDetails manufacturerId={manufacturerId} />

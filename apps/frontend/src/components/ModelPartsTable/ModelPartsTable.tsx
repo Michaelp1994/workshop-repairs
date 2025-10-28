@@ -1,9 +1,9 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { type ModelID } from "@repo/validators/ids.validators";
-import { useState } from "react";
 
 import { api } from "~/trpc/client";
 
@@ -36,18 +36,15 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
     },
   });
 
-  const [isOpen, setIsOpen] = useState(false);
+  function showCreateModal() {
+    NiceModal.show(CreateModelPartModal, { modelId });
+  }
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Parts</CardTitle>
-        <Button onClick={() => setIsOpen(true)}>Add Part</Button>
-        <CreateModelPartModal
-          isOpen={isOpen}
-          modelId={modelId}
-          onOpenChange={() => setIsOpen(false)}
-        />
+        <Button onClick={showCreateModal}>Add Part</Button>
       </CardHeader>
       <CardContent>
         <DataTable

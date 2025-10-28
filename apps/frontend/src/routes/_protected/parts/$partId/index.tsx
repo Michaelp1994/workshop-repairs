@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
 import ArchivePartModal from "~/components/modals/ArchivePartModal";
@@ -25,7 +25,9 @@ function ViewPartPage() {
   const [part] = api.parts.getById.useSuspenseQuery({
     id: partId,
   });
-  const [isOpen, setIsOpen] = useState(false);
+  function showArchiveModal() {
+    NiceModal.show(ArchivePartModal, { partId });
+  }
   return (
     <PageWrapper>
       <PageHeader>
@@ -39,12 +41,7 @@ function ViewPartPage() {
           >
             Update
           </IconButton>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchivePartModal
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-            partId={partId}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
       <PartDetails partId={partId} />

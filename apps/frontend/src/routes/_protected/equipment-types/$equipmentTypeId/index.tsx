@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import EquipmentTypeAssetsTable from "~/components/EquipmentTypeAssetsTable";
 import EquipmentTypeDetails from "~/components/EquipmentTypeDetails";
@@ -28,7 +28,9 @@ function ViewEquipmentTypePage() {
   const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
     id: equipmentTypeId,
   });
-  const [isOpen, setIsOpen] = useState(false);
+  function showArchiveModal() {
+    NiceModal.show(ArchiveEquipmentTypeModal, { equipmentTypeId });
+  }
 
   return (
     <PageWrapper>
@@ -46,12 +48,7 @@ function ViewEquipmentTypePage() {
           >
             Update
           </IconButton>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchiveEquipmentTypeModal
-            equipmentTypeId={equipmentTypeId}
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
       <EquipmentTypeDetails equipmentTypeId={equipmentTypeId} />

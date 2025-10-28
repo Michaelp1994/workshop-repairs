@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import AssetDetails from "~/components/AssetDetails";
 import { IconButton } from "~/components/IconButton";
@@ -22,7 +22,9 @@ export const Route = createFileRoute("/_protected/assets/$assetId/")({
 function ViewAssetPage() {
   const params = Route.useParams();
   const assetId = Number(params.assetId);
-  const [isOpen, setIsOpen] = useState(false);
+  function showArchiveModal() {
+    NiceModal.show(ArchiveAssetModal, { assetId });
+  }
   return (
     <PageWrapper>
       <PageHeader>
@@ -39,12 +41,7 @@ function ViewAssetPage() {
           >
             Edit
           </IconButton>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchiveAssetModal
-            assetId={assetId}
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
       <AssetDetails assetId={assetId} />

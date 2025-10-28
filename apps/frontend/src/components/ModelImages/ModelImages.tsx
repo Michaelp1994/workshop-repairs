@@ -1,7 +1,7 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type ModelID } from "@repo/validators/ids.validators";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
 
 import {
   ImageGrid,
@@ -20,7 +20,9 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
   const [data] = api.modelImages.getAllByModelId.useSuspenseQuery({
     modelId,
   });
-  const [isOpen, setIsOpen] = useState(false);
+  function showUploadModal() {
+    NiceModal.show(UploadModelImageModal, { modelId });
+  }
   return (
     <Card>
       <CardHeader>
@@ -43,12 +45,7 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
               </Link>
             );
           })}
-          <ImageGridUploadButton onClick={() => setIsOpen(true)} />
-          <UploadModelImageModal
-            isOpen={isOpen}
-            modelId={modelId}
-            onOpenChange={() => setIsOpen(false)}
-          />
+          <ImageGridUploadButton onClick={showUploadModal} />
         </ImageGrid>
       </CardContent>
     </Card>

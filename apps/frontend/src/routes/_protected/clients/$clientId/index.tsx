@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import ClientDetails from "~/components/ClientDetails";
 import { IconButton } from "~/components/IconButton";
@@ -24,7 +24,9 @@ function ViewClientPage() {
   const params = Route.useParams();
   const clientId = Number(params.clientId);
   const [client] = api.clients.getById.useSuspenseQuery({ id: clientId });
-  const [isOpen, setIsOpen] = useState(false);
+  function showArchiveModal() {
+    NiceModal.show(ArchiveClientModal, { clientId });
+  }
   return (
     <PageWrapper>
       <PageHeader>
@@ -41,12 +43,7 @@ function ViewClientPage() {
           >
             Edit
           </IconButton>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchiveClientModal
-            clientId={clientId}
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
       <ClientDetails clientId={clientId} />

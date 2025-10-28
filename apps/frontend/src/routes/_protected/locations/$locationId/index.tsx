@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
 import LocationAssetsTable from "~/components/LocationAssetsTable";
@@ -23,7 +23,9 @@ function ViewLocationPage() {
   const params = Route.useParams();
   const locationId = Number(params.locationId);
   const [location] = api.locations.getById.useSuspenseQuery({ id: locationId });
-  const [isOpen, setIsOpen] = useState(false);
+  function showArchiveModal() {
+    NiceModal.show(ArchiveLocationModal, { locationId });
+  }
   return (
     <PageWrapper>
       <PageHeader>
@@ -40,12 +42,7 @@ function ViewLocationPage() {
           >
             Edit
           </IconButton>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchiveLocationModal
-            isOpen={isOpen}
-            locationId={locationId}
-            onOpenChange={() => setIsOpen(false)}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
       <LocationDetails locationId={locationId} />
