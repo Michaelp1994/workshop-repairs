@@ -27,7 +27,7 @@ export default function SendInvitationsForm() {
     async onSuccess() {
       toast.success("Your invitations have been sent.");
       await utils.userOnboardings.getStatus.invalidate();
-      navigate({ to: "/dashboard" });
+      await navigate({ to: "/dashboard" });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

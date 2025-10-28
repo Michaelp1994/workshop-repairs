@@ -25,8 +25,8 @@ function ViewModelPage() {
   const params = Route.useParams();
   const modelId = Number(params.modelId);
   const [model] = api.models.getById.useSuspenseQuery({ id: modelId });
-  function showArchiveModal() {
-    NiceModal.show(ArchiveModelModal, { modelId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveModelModal, { modelId });
   }
   return (
     <PageWrapper>

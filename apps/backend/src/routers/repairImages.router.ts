@@ -20,6 +20,7 @@ import {
 import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
 
+import { env } from "../env";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -55,7 +56,7 @@ export default router({
       );
       return allRepairImages.map((repairImage) => ({
         ...repairImage,
-        url: `${process.env["IMAGE_URL"]}/repairImages/${repairImage.url}`,
+        url: `${env.imageUrl}/repairImages/${repairImage.url}`,
       }));
     }),
   getById: organizationProcedure

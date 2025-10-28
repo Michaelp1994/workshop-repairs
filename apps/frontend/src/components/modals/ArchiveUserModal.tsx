@@ -55,9 +55,17 @@ function ArchiveUserModal({
           </DialogHeader>
           This user will no longer be avaliable.
           <DialogFooter>
-            <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ id: userId })}
+              onClick={() => {
+                onOpenChange();
+              }}
+            >
+              No
+            </Button>
+            <Button
+              onClick={() => {
+                archiveMutation.mutate({ id: userId });
+              }}
               variant="destructive"
             >
               Yes, I am sure

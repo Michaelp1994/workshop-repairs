@@ -18,14 +18,14 @@ export type CountUsersInput = z.infer<typeof countUsersSchema>;
 export const registerUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
 });
 
 export const createUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
+  email: z.email(),
   typeId: userTypeId,
   password: z.string().min(8),
 });
@@ -34,14 +34,14 @@ export const updateUserSchema = z.object({
   id: userId,
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
+  email: z.email(),
   typeId: userTypeId,
 });
 
 export const updateCurrentUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
+  email: z.email(),
 });
 
 export const getCurrentUserSchema = z.object({});

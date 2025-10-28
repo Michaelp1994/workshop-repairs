@@ -39,8 +39,8 @@ export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
     async onSuccess(values) {
       await utils.users.getById.invalidate({ id: values.id });
       toast.success(`User ${values.firstName} updated`);
-      navigate({
-        to: `/users/$userId`,
+      await navigate({
+        to: "/users/$userId",
         params: { userId: values.id },
       });
     },

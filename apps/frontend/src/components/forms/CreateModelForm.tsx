@@ -31,9 +31,9 @@ export default function CreateModelForm() {
   });
 
   const createMutation = api.models.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
       toast.success(`Model ${data.name} created`);
-      navigate({ to: `/models/${data.id}` });
+      await navigate({ to: "/models/$modelId", params: { modelId: data.id } });
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -43,12 +43,8 @@ export default function CreateModelForm() {
   const form = useForm({
     defaultValues: {
       ...defaultModel,
-      manufacturerId: manufacturerId
-        ? Number(manufacturerId)
-        : defaultModel.manufacturerId,
-      equipmentTypeId: equipmentTypeId
-        ? Number(equipmentTypeId)
-        : defaultModel.equipmentTypeId,
+      manufacturerId: manufacturerId ?? defaultModel.manufacturerId,
+      equipmentTypeId: equipmentTypeId ?? defaultModel.equipmentTypeId,
     },
     schema: modelFormSchema,
   });

@@ -42,7 +42,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
     async onSuccess() {
       await utils.repairs.getById.invalidate({ id: repairId });
       toast.success("Repair updated successfully");
-      navigate({ to: `/repairs/${repairId}` });
+      await navigate({ to: "/repairs/$repairId", params: { repairId } });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

@@ -24,8 +24,8 @@ export const Route = createFileRoute("/_protected/repairs/$repairId/")({
 function ViewRepairPage() {
   const params = Route.useParams();
   const repairId = Number(params.repairId);
-  function showArchiveModal() {
-    NiceModal.show(ArchiveRepairModal, { repairId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveRepairModal, { repairId });
   }
   return (
     <PageWrapper>

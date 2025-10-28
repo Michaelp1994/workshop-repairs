@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const loginFormSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string(),
 });
 
@@ -19,7 +19,7 @@ export const registerFormSchema = z.object({
   lastName: z.string().min(3, {
     message: "Your last name must be atleast 3 characters.",
   }),
-  email: z.string().email({
+  email: z.email({
     message: "Please enter a valid email",
   }),
   password: z.string().min(8, {
@@ -51,7 +51,7 @@ export const defaultConfirm = {
 };
 
 export const forgotPasswordFormSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
 });
 
 export type ForgotPasswordFormInput = z.infer<typeof forgotPasswordFormSchema>;
@@ -90,7 +90,7 @@ export const defaultChangePassword: ChangePasswordFormInput = {
 export const updateProfileFormSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string().email(),
+  email: z.email(),
 });
 
 export type UpdateProfileFormInput = z.infer<typeof updateProfileFormSchema>;
@@ -103,7 +103,7 @@ export const defaultProfile: UpdateProfileFormInput = {
 
 export const verifyAuthUserSchema = z.object({
   id: z.number(),
-  email: z.string().email(),
+  email: z.email(),
   authToken: z.string(),
 });
 

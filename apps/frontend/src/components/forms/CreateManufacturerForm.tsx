@@ -27,7 +27,7 @@ export default function CreateManufacturerForm() {
   const createMutation = api.manufacturers.create.useMutation({
     onSuccess(data) {
       toast.success(`Manufacturer ${data.name} created`);
-      navigate({
+      await navigate({
         to: "/manufacturers/$manufacturerId",
         params: { manufacturerId: data.id },
       });

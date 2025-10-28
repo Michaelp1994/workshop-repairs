@@ -4,6 +4,8 @@ import { createInvitation } from "@repo/db/repositories/organization.repository"
 
 import type { Organization } from "../../../../packages/db/src/tables/organization.sql";
 
+import { env } from "../env";
+
 const client = new SESv2Client();
 
 export default async function sendInvitationEmail(
@@ -11,12 +13,14 @@ export default async function sendInvitationEmail(
   organization: Organization,
 ) {
   const code = generateRandomOTP();
-
-  if (process.env["NODE_ENV"] === "production") {
+  if (!organization.invitationCode) {
+    throw Error("Organization does not have an invitation code");
+  }
+  if (env.nodeEnv === "production") {
     try {
       await client.send(
         new SendEmailCommand({
-          FromEmailAddress: process.env["RETURN_EMAIL"],
+          FromEmailAddress: env.returnEmail,
           Destination: {
             ToAddresses: [email],
           },

@@ -25,8 +25,8 @@ function ViewPartPage() {
   const [part] = api.parts.getById.useSuspenseQuery({
     id: partId,
   });
-  function showArchiveModal() {
-    NiceModal.show(ArchivePartModal, { partId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchivePartModal, { partId });
   }
   return (
     <PageWrapper>

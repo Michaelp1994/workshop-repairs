@@ -34,9 +34,9 @@ export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
   });
 
   const updateMutation = api.parts.update.useMutation({
-    onSuccess(values) {
-      navigate({
-        to: `/parts/$partId`,
+    async onSuccess(values) {
+      await navigate({
+        to: "/parts/$partId",
         params: { partId: values.id },
       });
       toast.success(`Part ${values.name} updated`);

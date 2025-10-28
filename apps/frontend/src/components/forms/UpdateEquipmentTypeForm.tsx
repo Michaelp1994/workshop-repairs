@@ -40,8 +40,8 @@ export default function UpdateEquipmentTypeForm({
     async onSuccess(data) {
       await utils.equipmentTypes.getById.invalidate({ id: equipmentTypeId });
       toast.success(`Updated Equipment Type: ${data.name}`);
-      navigate({
-        to: `/equipment-types/$equipmentTypeId`,
+      await navigate({
+        to: "/equipment-types/$equipmentTypeId",
         params: { equipmentTypeId: data.id },
       });
     },

@@ -22,8 +22,8 @@ export const Route = createFileRoute("/_protected/assets/$assetId/")({
 function ViewAssetPage() {
   const params = Route.useParams();
   const assetId = Number(params.assetId);
-  function showArchiveModal() {
-    NiceModal.show(ArchiveAssetModal, { assetId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveAssetModal, { assetId });
   }
   return (
     <PageWrapper>

@@ -22,7 +22,7 @@ export const { router, createCallerFactory } = t;
 export const publicProcedure = t.procedure;
 
 export const authedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.userId) {
+  if (!ctx.session?.userId) {
     console.log("test");
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -39,7 +39,7 @@ export const authedProcedure = t.procedure.use(({ ctx, next }) => {
 });
 
 export const organizationProcedure = t.procedure.use(async ({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.userId) {
+  if (!ctx.session?.userId) {
     console.log("test 2");
 
     throw new TRPCError({
@@ -48,7 +48,7 @@ export const organizationProcedure = t.procedure.use(async ({ ctx, next }) => {
   }
 
   const user = await getCredentialsByUserId(ctx.session.userId);
-  if (!user || !user.organizationId) {
+  if (!user?.organizationId) {
     console.log("test 3");
 
     throw new TRPCError({

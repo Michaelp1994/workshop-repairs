@@ -55,9 +55,17 @@ function ArchivePartModelModal({
           </DialogHeader>
           You will no longer be able to use this part on repairs for this model.
           <DialogFooter>
-            <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ modelId, partId })}
+              onClick={() => {
+                onOpenChange();
+              }}
+            >
+              No
+            </Button>
+            <Button
+              onClick={() => {
+                archiveMutation.mutate({ modelId, partId });
+              }}
               variant="destructive"
             >
               Yes, I am sure

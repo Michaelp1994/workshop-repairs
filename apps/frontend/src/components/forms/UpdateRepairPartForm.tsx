@@ -52,7 +52,7 @@ export default function UpdateRepairPartForm({
     schema: repairPartFormSchema,
   });
 
-  async function onValid(values: RepairPartFormInput) {
+  function onValid(values: RepairPartFormInput) {
     updateMutation.mutate({ ...values, id: repairPartId });
   }
 

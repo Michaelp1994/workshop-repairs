@@ -12,9 +12,9 @@ export default function LogoutButton() {
   const logoutMutation = api.auth.logout.useMutation({
     async onSuccess() {
       queryClient.clear();
-      navigate({ to: "/" });
+      await navigate({ to: "/" });
     },
-    async onError(errors) {
+    onError(errors) {
       displayMutationErrors(errors);
     },
   });

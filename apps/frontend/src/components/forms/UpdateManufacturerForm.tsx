@@ -40,7 +40,7 @@ export default function UpdateManufacturerForm({
     async onSuccess(values) {
       await utils.manufacturers.getById.invalidate({ id: values.id });
       toast.success(`Manufacturer ${values.name} updated`);
-      navigate({
+      await navigate({
         to: "/manufacturers/$manufacturerId",
         params: { manufacturerId: values.id },
       });

@@ -25,9 +25,9 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 export default function CreatePartForm() {
   const navigate = useNavigate();
   const createMutation = api.parts.create.useMutation({
-    onSuccess(data) {
-      navigate({
-        to: `/parts/$partId`,
+    async onSuccess(data) {
+      await navigate({
+        to: "/parts/$partId",
         params: { partId: data.id },
       });
       toast.success(`Part ${data.name} created`);

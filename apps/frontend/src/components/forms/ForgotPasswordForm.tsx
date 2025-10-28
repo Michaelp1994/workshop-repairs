@@ -23,9 +23,10 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
   const forgotPasswordMutation = api.auth.forgotPassword.useMutation({
-    onSuccess(_, variables) {
-      navigate({
-        to: `/reset-password?email=${variables.email}`,
+    async onSuccess(_, variables) {
+      await navigate({
+        to: "/reset-password",
+        search: { email: variables.email },
       });
     },
     onError(errors) {

@@ -29,9 +29,9 @@ export default function LoginForm() {
       await utils.invalidate();
       console.log(values);
       if (!values.onboardingCompleted) {
-        navigate({ to: "/onboarding" });
+        await navigate({ to: "/onboarding" });
       } else {
-        navigate({ to: "/dashboard" });
+        await navigate({ to: "/dashboard" });
       }
       toast.success("Logged in!");
     },

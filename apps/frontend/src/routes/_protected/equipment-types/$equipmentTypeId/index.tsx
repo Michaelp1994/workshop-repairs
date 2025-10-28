@@ -28,8 +28,8 @@ function ViewEquipmentTypePage() {
   const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
     id: equipmentTypeId,
   });
-  function showArchiveModal() {
-    NiceModal.show(ArchiveEquipmentTypeModal, { equipmentTypeId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveEquipmentTypeModal, { equipmentTypeId });
   }
 
   return (

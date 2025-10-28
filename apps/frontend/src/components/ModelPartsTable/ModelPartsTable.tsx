@@ -36,8 +36,8 @@ export default function ModelPartsTable({ modelId }: ModelPartsTableProps) {
     },
   });
 
-  function showCreateModal() {
-    NiceModal.show(CreateModelPartModal, { modelId });
+  async function showCreateModal() {
+    await NiceModal.show(CreateModelPartModal, { modelId });
   }
 
   return (

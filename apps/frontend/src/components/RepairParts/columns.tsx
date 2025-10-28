@@ -114,7 +114,7 @@ export const columns = [
       }
       return (
         <>
-          {createdBy?.firstName} {createdBy.lastName}
+          {createdBy.firstName} {createdBy.lastName}
         </>
       );
     },
@@ -126,14 +126,14 @@ export const columns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      function showEditModal() {
-        NiceModal.show(UpdateRepairPartModal, {
+      async function showEditModal() {
+        await NiceModal.show(UpdateRepairPartModal, {
           repairId: row.original.repairId,
           repairPartId: row.original.id,
         });
       }
-      function showArchiveModal() {
-        NiceModal.show(ArchiveRepairPartModal, {
+      async function showArchiveModal() {
+        await NiceModal.show(ArchiveRepairPartModal, {
           repairId: row.original.repairId,
           repairPartId: row.original.id,
         });

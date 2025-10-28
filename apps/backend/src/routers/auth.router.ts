@@ -35,7 +35,7 @@ export default router({
       ]);
     }
     const passwordCorrect = await verifyPasswordHash(
-      user?.password,
+      user.password,
       input.password,
     );
     if (!passwordCorrect) {
@@ -106,13 +106,11 @@ export default router({
       await ctx.setSession(user);
       return true;
     }),
-  logout: authedProcedure.input(logoutSchema).mutation(async ({ ctx }) => {
+  logout: authedProcedure.input(logoutSchema).mutation(({ ctx }) => {
     ctx.clearSession();
     return true;
   }),
-  forgotPassword: publicProcedure
-    .input(forgotPasswordSchema)
-    .mutation(async () => {
-      throw new TRPCError({ code: "NOT_IMPLEMENTED" });
-    }),
+  forgotPassword: publicProcedure.input(forgotPasswordSchema).mutation(() => {
+    throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+  }),
 });

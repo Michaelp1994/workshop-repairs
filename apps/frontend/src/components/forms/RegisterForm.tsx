@@ -32,7 +32,7 @@ export default function RegisterForm() {
   const registerMutation = api.auth.register.useMutation({
     async onSuccess() {
       toast.success("Account successfully created!");
-      navigate({ to: "/onboarding" });
+      await navigate({ to: "/onboarding" });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

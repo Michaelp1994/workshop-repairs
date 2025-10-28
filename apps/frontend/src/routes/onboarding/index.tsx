@@ -13,12 +13,11 @@ function OnboardingPage() {
   const [data] = api.userOnboardings.getStatus.useSuspenseQuery();
   if (!data.welcomed) {
     navigate({ to: "/onboarding/welcome" });
-  }
-  if (!data.organizationChosen) {
+  } else if (!data.organizationChosen) {
     navigate({ to: "/onboarding/organization" });
-  }
-  if (!data.invitedUsers) {
+  } else if (!data.invitedUsers) {
     navigate({ to: "/onboarding/invitation" });
+  } else {
+    navigate({ to: "/dashboard" });
   }
-  navigate({ to: "/dashboard" });
 }

@@ -48,7 +48,7 @@ export function createSetSession(res: ServerResponse) {
 }
 
 export function createClearSession(res: ServerResponse) {
-  return async function () {
+  return function () {
     const authCookie = setCookie("Authorization", "", {
       secure: false,
       sameSite: "lax",

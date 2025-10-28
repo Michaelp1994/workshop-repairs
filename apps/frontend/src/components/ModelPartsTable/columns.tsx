@@ -51,14 +51,14 @@ export const columns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      function showEditModal() {
-        NiceModal.show(UpdateModelPartModal, {
+      async function showEditModal() {
+        await NiceModal.show(UpdateModelPartModal, {
           modelId: row.original.modelId,
           partId: row.original.partId,
         });
       }
-      function showArchiveModal() {
-        NiceModal.show(ArchiveModelPartModal, {
+      async function showArchiveModal() {
+        await NiceModal.show(ArchiveModelPartModal, {
           modelId: row.original.modelId,
           partId: row.original.partId,
         });

@@ -29,8 +29,8 @@ export default function CreateLocationForm() {
     async onSuccess(data) {
       await utils.locations.getAll.invalidate();
       toast.success(`Location ${data.name} created`);
-      navigate({
-        to: `/locations/$locationId`,
+      await navigate({
+        to: "/locations/$locationId",
         params: { locationId: data.id },
       });
     },

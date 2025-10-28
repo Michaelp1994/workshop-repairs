@@ -20,8 +20,8 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
   const [data] = api.modelImages.getAllByModelId.useSuspenseQuery({
     modelId,
   });
-  function showUploadModal() {
-    NiceModal.show(UploadModelImageModal, { modelId });
+  async function showUploadModal() {
+    await NiceModal.show(UploadModelImageModal, { modelId });
   }
   return (
     <Card>
@@ -37,7 +37,7 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
                 to={`${modelId}/images?id=${modelImage.id}`}
               >
                 <ImageGridItem
-                  alt={modelImage.caption || ""}
+                  alt={modelImage.caption ?? ""}
                   height={84}
                   src={modelImage.url}
                   width={84}

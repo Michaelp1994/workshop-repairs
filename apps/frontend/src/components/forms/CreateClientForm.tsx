@@ -27,7 +27,10 @@ export default function CreateClientForm() {
   const createMutation = api.clients.create.useMutation({
     onSuccess(data) {
       toast.success(`Client created`);
-      navigate({ to: `/clients/$clientId`, params: { clientId: data.id } });
+      await navigate({
+        to: "/clients/$clientId",
+        params: { clientId: data.id },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

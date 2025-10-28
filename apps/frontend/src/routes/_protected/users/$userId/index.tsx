@@ -24,8 +24,8 @@ function ViewUserPage() {
   const [user] = api.users.getById.useSuspenseQuery({
     id: userId,
   });
-  function showArchiveModal() {
-    NiceModal.show(ArchiveUserModal, { userId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveUserModal, { userId });
   }
   return (
     <PageWrapper>

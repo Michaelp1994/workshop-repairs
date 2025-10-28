@@ -27,8 +27,8 @@ function ViewManufacturerPage() {
   const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
     id: manufacturerId,
   });
-  function showArchiveModal() {
-    NiceModal.show(ArchiveManufacturerModal, { manufacturerId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveManufacturerModal, { manufacturerId });
   }
   return (
     <PageWrapper>

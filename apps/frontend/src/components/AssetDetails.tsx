@@ -22,7 +22,7 @@ export default function AssetDetails({ assetId }: AssetDetailsProps) {
           <DetailsLabel>Asset Number:</DetailsLabel>
           <DetailsValue>{asset.assetNumber}</DetailsValue>
           <DetailsLabel>Software Version:</DetailsLabel>
-          <DetailsValue>{asset.softwareVersion ?? "N/A"}</DetailsValue>
+          <DetailsValue>{asset.softwareVersion}</DetailsValue>
           <DetailsLabel>Owned By:</DetailsLabel>
           <DetailsValue>{asset.client.name}</DetailsValue>
           <DetailsLabel>Location:</DetailsLabel>

@@ -33,9 +33,12 @@ export default function CreateRepairForm() {
   });
   const navigate = useNavigate();
   const createMutation = api.repairs.create.useMutation({
-    onSuccess(values) {
-      toast.success(`Repair created`);
-      navigate({ to: `/repairs/${values.id}` });
+    async onSuccess(values) {
+      toast.success("Repair created");
+      await navigate({
+        to: "/repairs/$repairId",
+        params: { repairId: values.id },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -46,8 +49,8 @@ export default function CreateRepairForm() {
     schema: repairFormSchema,
     defaultValues: {
       ...defaultRepair,
-      assetId: assetId ? Number(assetId) : defaultRepair.assetId,
-      clientId: clientId ? Number(clientId) : defaultRepair.clientId,
+      assetId: assetId ?? defaultRepair.assetId,
+      clientId: clientId ?? defaultRepair.clientId,
     },
   });
 

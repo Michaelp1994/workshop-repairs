@@ -12,7 +12,7 @@ export default function CompleteStepButton() {
   const updateMutation = api.userOnboardings.markUserAsWelcomed.useMutation({
     async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
-      navigate({ to: "/onboarding/organization" });
+      await navigate({ to: "/onboarding/organization" });
     },
     onError(errors) {
       displayMutationErrors(errors);
@@ -22,7 +22,9 @@ export default function CompleteStepButton() {
   return (
     <Button
       disabled={updateMutation.isPending}
-      onClick={() => updateMutation.mutate()}
+      onClick={() => {
+        updateMutation.mutate();
+      }}
     >
       {updateMutation.isPending ? (
         <LoaderCircle className="animate-spin" />

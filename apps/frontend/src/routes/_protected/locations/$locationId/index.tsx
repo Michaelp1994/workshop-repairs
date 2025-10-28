@@ -23,8 +23,8 @@ function ViewLocationPage() {
   const params = Route.useParams();
   const locationId = Number(params.locationId);
   const [location] = api.locations.getById.useSuspenseQuery({ id: locationId });
-  function showArchiveModal() {
-    NiceModal.show(ArchiveLocationModal, { locationId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveLocationModal, { locationId });
   }
   return (
     <PageWrapper>

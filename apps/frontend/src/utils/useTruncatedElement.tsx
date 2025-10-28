@@ -7,7 +7,7 @@ export const useTruncatedElement = (
   const [isReadingMore, setIsReadingMore] = useState(false);
 
   useLayoutEffect(() => {
-    const { offsetHeight, scrollHeight } = ref.current || {};
+    const { offsetHeight, scrollHeight } = ref.current ?? {};
 
     if (offsetHeight && scrollHeight && offsetHeight < scrollHeight) {
       setIsTruncated(true);

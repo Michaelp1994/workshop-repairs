@@ -10,7 +10,7 @@ export const userFormSchema = z.object({
     message: "Last name must be atleast 3 characters.",
   }),
   typeId: userTypeId,
-  email: z.string().email({
+  email: z.email({
     message: "Please enter a valid email",
   }),
 });

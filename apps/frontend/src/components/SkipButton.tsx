@@ -10,7 +10,7 @@ export default function SkipButton() {
   const skipMutation = api.userOnboardings.skipInvitations.useMutation({
     async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
-      navigate({ to: "/dashboard" });
+      await navigate({ to: "/dashboard" });
     },
     onError(errors) {
       displayMutationErrors(errors);

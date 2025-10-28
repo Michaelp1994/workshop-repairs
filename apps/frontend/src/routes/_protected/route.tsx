@@ -84,7 +84,7 @@ export default function Error({ error, reset }: ErrorComponentProps) {
         <CardContent className="text-muted-foreground text-sm">
           If this issue persists, please contact support with error code:{" "}
           <code className="bg-muted relative rounded-sm px-[0.3rem] py-[0.2rem] font-mono text-sm">
-            {error?.name || "ERR_UNKNOWN"}
+            {error.name || "ERR_UNKNOWN"}
           </code>
         </CardContent>
         <CardFooter className="flex justify-center gap-4">

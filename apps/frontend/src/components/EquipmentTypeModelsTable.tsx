@@ -55,7 +55,7 @@ export default function EquipmentTypeModelsTable({
         </CardHeaderText>
         <CardHeaderActions>
           <IconButton
-            linkOptions={{ to: `/models/new`, search: { equipmentTypeId } }}
+            linkOptions={{ to: "/models/new", search: { equipmentTypeId } }}
             size="sm"
             variant="create"
           >

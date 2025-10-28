@@ -21,11 +21,11 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
   const [data] = api.repairImages.getAllByRepairId.useSuspenseQuery({
     repairId,
   });
-  function showUploadModal() {
-    NiceModal.show(UploadRepairImageModal, { repairId });
+  async function showUploadModal() {
+    await NiceModal.show(UploadRepairImageModal, { repairId });
   }
-  function showGalleryModal(repairImageId: RepairImageID) {
-    NiceModal.show(RepairImagesModal, { repairId, repairImageId });
+  async function showGalleryModal(repairImageId: RepairImageID) {
+    await NiceModal.show(RepairImagesModal, { repairId, repairImageId });
   }
   return (
     <Card>

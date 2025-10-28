@@ -5,12 +5,14 @@ import { useState } from "react";
 export default function InvitationLink() {
   const [copied, setCopied] = useState(false);
 
-  function copyInvitationLink() {
-    navigator.clipboard.writeText(
+  async function copyInvitationLink() {
+    await navigator.clipboard.writeText(
       `${process.env.NEXT_PUBLIC_URL}/public-invite/`,
     );
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   }
   return (
     <Button

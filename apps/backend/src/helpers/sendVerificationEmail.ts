@@ -4,6 +4,7 @@ import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import { createEmailVerificationRequest } from "@repo/db/repositories/auth.repository";
 
+import { env } from "../env";
 import assertDatabaseResult from "./trpcAssert";
 
 const client = new SESv2Client();
@@ -22,11 +23,11 @@ export default async function sendVerificationEmail(
   });
 
   assertDatabaseResult(request);
-  if (process.env["NODE_ENV"] === "production") {
+  if (env.nodeEnv === "production") {
     try {
       await client.send(
         new SendEmailCommand({
-          FromEmailAddress: process.env["RETURN_EMAIL"],
+          FromEmailAddress: env.returnEmail,
           Destination: {
             ToAddresses: [email],
           },

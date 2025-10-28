@@ -44,8 +44,8 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
     },
   });
 
-  function showCreateModal() {
-    NiceModal.show(CreateRepairPartModal, { repairId });
+  async function showCreateModal() {
+    await NiceModal.show(CreateRepairPartModal, { repairId });
   }
   return (
     <Card>

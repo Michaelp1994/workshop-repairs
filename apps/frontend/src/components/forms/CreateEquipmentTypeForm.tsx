@@ -25,10 +25,10 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 export default function CreateEquipmentTypeForm() {
   const navigate = useNavigate();
   const createMutation = api.equipmentTypes.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
       toast.success(`${data.name} created`);
-      navigate({
-        to: `/equipment-types/$equipmentTypeId`,
+      await navigate({
+        to: "/equipment-types/$equipmentTypeId",
         params: { equipmentTypeId: data.id },
       });
     },

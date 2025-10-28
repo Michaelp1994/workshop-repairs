@@ -31,9 +31,9 @@ export default function CreateAssetForm() {
 
   const navigate = useNavigate();
   const createMutation = api.assets.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
       toast.success(`Asset ${data.assetNumber} created`);
-      navigate({ to: `/assets/${data.id}` });
+      await navigate({ to: "/assets/$assetId", params: { assetId: data.id } });
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -43,9 +43,9 @@ export default function CreateAssetForm() {
   const form = useForm({
     defaultValues: {
       ...defaultAsset,
-      clientId: clientId ? Number(clientId) : defaultAsset.clientId,
-      locationId: locationId ? Number(locationId) : defaultAsset.locationId,
-      modelId: modelId ? Number(modelId) : defaultAsset.modelId,
+      clientId: clientId ?? defaultAsset.clientId,
+      locationId: locationId ?? defaultAsset.locationId,
+      modelId: modelId ?? defaultAsset.modelId,
     },
     schema: assetFormSchema,
   });
@@ -57,7 +57,9 @@ export default function CreateAssetForm() {
     <Form {...form}>
       <form
         className="space-y-8"
-        onReset={() => form.reset()}
+        onReset={() => {
+          form.reset();
+        }}
         onSubmit={(e) => void form.handleSubmit(handleValid)(e)}
       >
         <FormField

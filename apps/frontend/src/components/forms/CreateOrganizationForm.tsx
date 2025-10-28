@@ -37,7 +37,7 @@ export default function CreateOrganizationForm() {
     async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
       toast.success("Organization created.");
-      navigate({ to: "/onboarding/invitation" });
+      await navigate({ to: "/onboarding/invitation" });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

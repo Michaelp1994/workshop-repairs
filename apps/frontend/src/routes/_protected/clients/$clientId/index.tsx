@@ -24,8 +24,8 @@ function ViewClientPage() {
   const params = Route.useParams();
   const clientId = Number(params.clientId);
   const [client] = api.clients.getById.useSuspenseQuery({ id: clientId });
-  function showArchiveModal() {
-    NiceModal.show(ArchiveClientModal, { clientId });
+  async function showArchiveModal() {
+    await NiceModal.show(ArchiveClientModal, { clientId });
   }
   return (
     <PageWrapper>

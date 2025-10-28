@@ -27,7 +27,7 @@ export default function JoinOrganizationForm() {
     async onSuccess(data) {
       await utils.userOnboardings.getStatus.invalidate();
       toast.success(`You have succesfully joined ${data.name}!`);
-      navigate({ to: "/dashboard" });
+      await navigate({ to: "/dashboard" });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

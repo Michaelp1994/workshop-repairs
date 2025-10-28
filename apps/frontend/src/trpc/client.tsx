@@ -24,7 +24,6 @@ export function TRPCProvider({ children }: TRPCReactProviderProps) {
       links: [
         loggerLink({
           enabled: (op) => {
-            if (typeof window === "undefined") return false;
             return (
               process.env.NODE_ENV === "development" ||
               (op.direction === "down" && op.result instanceof Error)

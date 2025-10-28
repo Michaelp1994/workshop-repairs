@@ -49,11 +49,9 @@ export default router({
       const count = countUsers(input, ctx.session.organizationId);
       return count;
     }),
-  resetPassword: authedProcedure
-    .input(resetPasswordSchema)
-    .mutation(async () => {
-      throw new TRPCError({ code: "NOT_IMPLEMENTED" });
-    }),
+  resetPassword: authedProcedure.input(resetPasswordSchema).mutation(() => {
+    throw new TRPCError({ code: "NOT_IMPLEMENTED" });
+  }),
   sendEmailConfirmation: authedProcedure
     .input(confirmEmailSchema)
     .mutation(async ({ ctx, input }) => {
@@ -114,7 +112,7 @@ export default router({
 
       return user;
     }),
-  create: organizationProcedure.input(createUserSchema).mutation(async () => {
+  create: organizationProcedure.input(createUserSchema).mutation(() => {
     throw new TRPCError({
       code: "NOT_IMPLEMENTED",
     });
