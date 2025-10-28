@@ -1,5 +1,6 @@
 import type { AssetID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -22,7 +23,7 @@ interface ArchiveAssetModalProps extends BaseModalProps {
   assetId: AssetID;
 }
 
-export default function ArchiveAssetModal({
+function ArchiveAssetModal({
   assetId,
   isOpen,
   onOpenChange,
@@ -68,3 +69,16 @@ export default function ArchiveAssetModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveAssetModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveAssetModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

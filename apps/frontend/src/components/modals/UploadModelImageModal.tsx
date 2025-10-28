@@ -1,5 +1,6 @@
 import type { ModelID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
   type BaseModalProps,
   Dialog,
@@ -17,7 +18,7 @@ interface ArchiveModelModalProps extends BaseModalProps {
   modelId: ModelID;
 }
 
-export default function UploadModelImageModal({
+function UploadModelImageModal({
   isOpen,
   modelId,
   onOpenChange,
@@ -39,3 +40,16 @@ export default function UploadModelImageModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveModelModalProps) => {
+    const modal = useModal();
+    return (
+      <UploadModelImageModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

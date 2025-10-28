@@ -1,5 +1,6 @@
 import type { EquipmentTypeID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -21,7 +22,7 @@ interface ArchiveEquipmentTypeModalProps extends BaseModalProps {
   equipmentTypeId: EquipmentTypeID;
 }
 
-export default function ArchiveEquipmentTypeModal({
+function ArchiveEquipmentTypeModal({
   equipmentTypeId,
   onOpenChange,
   isOpen,
@@ -67,3 +68,16 @@ export default function ArchiveEquipmentTypeModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveEquipmentTypeModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveEquipmentTypeModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

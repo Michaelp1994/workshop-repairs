@@ -3,6 +3,7 @@ import type {
   RepairID,
 } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -25,7 +26,7 @@ interface ArchiveCommentModalProps extends BaseModalProps {
   repairCommentId: RepairCommentID;
 }
 
-export default function ArchiveCommentModal({
+function ArchiveCommentModal({
   repairCommentId,
   isOpen,
   onOpenChange,
@@ -67,3 +68,16 @@ export default function ArchiveCommentModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveCommentModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveCommentModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

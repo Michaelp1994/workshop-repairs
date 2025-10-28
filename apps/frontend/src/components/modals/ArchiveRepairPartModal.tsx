@@ -23,19 +23,6 @@ interface ArchiveRepairPartModalProps extends BaseModalProps {
   repairPartId: RepairPartID;
 }
 
-export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveRepairPartModalProps) => {
-    const modal = useModal();
-    return (
-      <ArchiveRepairPartModal
-        isOpen={modal.visible}
-        onOpenChange={() => modal.hide()}
-        {...props}
-      />
-    );
-  },
-);
-
 function ArchiveRepairPartModal({
   isOpen,
   onOpenChange,
@@ -78,3 +65,16 @@ function ArchiveRepairPartModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveRepairPartModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveRepairPartModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

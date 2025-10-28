@@ -1,5 +1,6 @@
 import type { RepairID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
   type BaseModalProps,
   Dialog,
@@ -17,7 +18,7 @@ interface ArchiveRepairModalProps extends BaseModalProps {
   repairId: RepairID;
 }
 
-export default function UploadRepairImageModal({
+function UploadRepairImageModal({
   repairId,
   onOpenChange,
   isOpen,
@@ -39,3 +40,16 @@ export default function UploadRepairImageModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveRepairModalProps) => {
+    const modal = useModal();
+    return (
+      <UploadRepairImageModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

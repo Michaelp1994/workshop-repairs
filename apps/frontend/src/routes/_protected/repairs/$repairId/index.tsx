@@ -1,6 +1,6 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 import { IconButton } from "~/components/IconButton";
 import ArchiveRepairModal from "~/components/modals/ArchiveRepairModal";
@@ -24,8 +24,9 @@ export const Route = createFileRoute("/_protected/repairs/$repairId/")({
 function ViewRepairPage() {
   const params = Route.useParams();
   const repairId = Number(params.repairId);
-  const [isOpen, setIsOpen] = useState(false);
-
+  function showArchiveModal() {
+    NiceModal.show(ArchiveRepairModal, { repairId });
+  }
   return (
     <PageWrapper>
       <PageHeader>
@@ -33,12 +34,7 @@ function ViewRepairPage() {
           <PageTitle>{generateRepairSlug(repairId)}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
-          <Button onClick={() => setIsOpen(true)}>Archive</Button>
-          <ArchiveRepairModal
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-            repairId={repairId}
-          />
+          <Button onClick={showArchiveModal}>Archive</Button>
           <IconButton
             linkOptions={{
               to: "/repairs/$repairId/edit",

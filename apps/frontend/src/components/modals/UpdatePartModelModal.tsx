@@ -1,5 +1,6 @@
 import type { ModelID, PartID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
   type BaseModalProps,
   Dialog,
@@ -18,7 +19,7 @@ interface UpdatePartModelModalProps extends BaseModalProps {
   partId: PartID;
 }
 
-export default function UpdatePartModelModal({
+function UpdatePartModelModal({
   isOpen,
   modelId,
   onOpenChange,
@@ -39,3 +40,16 @@ export default function UpdatePartModelModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: UpdatePartModelModalProps) => {
+    const modal = useModal();
+    return (
+      <UpdatePartModelModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

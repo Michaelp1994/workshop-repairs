@@ -3,6 +3,7 @@ import type {
   RepairID,
 } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
   type BaseModalProps,
   Dialog,
@@ -22,7 +23,7 @@ interface RepairImagesModalProps extends BaseModalProps {
   repairCommentId: RepairCommentID;
 }
 
-export default function UpdateRepairCommentModal({
+function UpdateRepairCommentModal({
   isOpen,
   onOpenChange,
   repairCommentId,
@@ -45,3 +46,16 @@ export default function UpdateRepairCommentModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: RepairImagesModalProps) => {
+    const modal = useModal();
+    return (
+      <UpdateRepairCommentModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

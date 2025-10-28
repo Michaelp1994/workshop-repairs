@@ -1,3 +1,4 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   Card,
@@ -9,7 +10,6 @@ import {
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
 import { type RepairID } from "@repo/validators/ids.validators";
-import { useState } from "react";
 
 import { api } from "~/trpc/client";
 
@@ -44,8 +44,9 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
     },
   });
 
-  const [isOpen, setIsOpen] = useState(false);
-
+  function showCreateModal() {
+    NiceModal.show(CreateRepairPartModal, { repairId });
+  }
   return (
     <Card>
       <CardHeader>
@@ -53,12 +54,7 @@ export default function RepairParts({ repairId }: RepairPartsProps) {
           <CardTitle>Parts</CardTitle>
         </CardHeaderText>
         <CardHeaderActions>
-          <Button onClick={() => setIsOpen(true)}>Add Part</Button>
-          <CreateRepairPartModal
-            isOpen={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-            repairId={repairId}
-          />
+          <Button onClick={showCreateModal}>Add Part</Button>
         </CardHeaderActions>
       </CardHeader>
       <DataTable

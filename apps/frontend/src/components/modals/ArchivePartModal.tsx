@@ -1,5 +1,6 @@
 import type { PartID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -21,7 +22,7 @@ interface ArchivePartModalProps extends BaseModalProps {
   partId: PartID;
 }
 
-export default function ArchivePartModal({
+function ArchivePartModal({
   partId,
   isOpen,
   onOpenChange,
@@ -67,3 +68,16 @@ export default function ArchivePartModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchivePartModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchivePartModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

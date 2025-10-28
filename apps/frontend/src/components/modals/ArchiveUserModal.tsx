@@ -1,5 +1,6 @@
 import type { UserID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -21,7 +22,7 @@ interface ArchiveUserModalProps extends BaseModalProps {
   userId: UserID;
 }
 
-export default function ArchiveUserModal({
+function ArchiveUserModal({
   userId,
   onOpenChange,
   isOpen,
@@ -67,3 +68,16 @@ export default function ArchiveUserModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveUserModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveUserModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

@@ -1,5 +1,6 @@
 import type { ManufacturerID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -21,7 +22,7 @@ interface ArchiveManufacturerModalProps extends BaseModalProps {
   manufacturerId: ManufacturerID;
 }
 
-export default function ArchiveManufacturerModal({
+function ArchiveManufacturerModal({
   manufacturerId,
   isOpen,
   onOpenChange,
@@ -67,3 +68,16 @@ export default function ArchiveManufacturerModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveManufacturerModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveManufacturerModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

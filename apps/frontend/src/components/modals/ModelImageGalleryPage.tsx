@@ -1,3 +1,4 @@
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
   type BaseModalProps,
   Dialog,
@@ -16,7 +17,7 @@ interface ModelImageGalleryModalProps extends BaseModalProps {
   modelId: ModelID;
 }
 
-export default function ModelImageGalleryModal({
+function ModelImageGalleryModal({
   modelId,
   isOpen,
   onOpenChange,
@@ -40,3 +41,16 @@ export default function ModelImageGalleryModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ModelImageGalleryModalProps) => {
+    const modal = useModal();
+    return (
+      <ModelImageGalleryModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);

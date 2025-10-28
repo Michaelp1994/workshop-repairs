@@ -1,5 +1,6 @@
 import type { LocationID } from "@repo/validators/ids.validators";
 
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
   type BaseModalProps,
@@ -21,7 +22,7 @@ interface ArchiveLocationModalProps extends BaseModalProps {
   locationId: LocationID;
 }
 
-export default function ArchiveLocationModal({
+function ArchiveLocationModal({
   locationId,
   isOpen,
   onOpenChange,
@@ -67,3 +68,16 @@ export default function ArchiveLocationModal({
     </Dialog>
   );
 }
+
+export default NiceModal.create(
+  ({ isOpen, onOpenChange, ...props }: ArchiveLocationModalProps) => {
+    const modal = useModal();
+    return (
+      <ArchiveLocationModal
+        isOpen={modal.visible}
+        onOpenChange={() => modal.hide()}
+        {...props}
+      />
+    );
+  },
+);
