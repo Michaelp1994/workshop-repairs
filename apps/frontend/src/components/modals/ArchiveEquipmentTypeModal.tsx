@@ -70,7 +70,7 @@ function ArchiveEquipmentTypeModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveEquipmentTypeModalProps) => {
+  (props: Omit<ArchiveEquipmentTypeModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ArchiveEquipmentTypeModal

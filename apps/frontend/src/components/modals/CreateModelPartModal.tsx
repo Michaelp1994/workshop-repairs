@@ -40,7 +40,7 @@ function CreateModelPartModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: CreateModelPartModalProps) => {
+  (props: Omit<CreateModelPartModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <CreateModelPartModal

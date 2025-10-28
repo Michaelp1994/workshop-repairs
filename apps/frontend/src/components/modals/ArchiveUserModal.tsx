@@ -70,7 +70,7 @@ function ArchiveUserModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveUserModalProps) => {
+  (props: Omit<ArchiveUserModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ArchiveUserModal

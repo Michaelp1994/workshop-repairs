@@ -42,7 +42,7 @@ function UpdateModelPartModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: UpdateModelPartModalProps) => {
+  (props: Omit<UpdateModelPartModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <UpdateModelPartModal

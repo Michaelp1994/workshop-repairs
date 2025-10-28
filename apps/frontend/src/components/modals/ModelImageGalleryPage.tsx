@@ -43,7 +43,7 @@ function ModelImageGalleryModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ModelImageGalleryModalProps) => {
+  (props: Omit<ModelImageGalleryModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ModelImageGalleryModal

@@ -71,7 +71,7 @@ function ArchiveAssetModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveAssetModalProps) => {
+  (props: Omit<ArchiveAssetModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ArchiveAssetModal

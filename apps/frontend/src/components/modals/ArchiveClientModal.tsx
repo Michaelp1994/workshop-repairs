@@ -70,7 +70,7 @@ function ArchiveClientModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveClientModalProps) => {
+  (props: Omit<ArchiveClientModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ArchiveClientModal

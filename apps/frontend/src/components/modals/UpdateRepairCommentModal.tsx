@@ -48,7 +48,7 @@ function UpdateRepairCommentModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: RepairImagesModalProps) => {
+  (props: Omit<RepairImagesModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <UpdateRepairCommentModal

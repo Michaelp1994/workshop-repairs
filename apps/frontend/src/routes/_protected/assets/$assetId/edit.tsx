@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
+import UpdateAssetForm from "~/components/forms/UpdateAssetForm";
 import {
   PageHeader,
   PageHeaderText,
@@ -8,7 +9,6 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import UpdateAssetForm from "../../../../components/forms/UpdateAssetForm";
 export const Route = createFileRoute("/_protected/assets/$assetId/edit")({
   component: EditAssetPage,
 });

@@ -42,7 +42,7 @@ function UploadRepairImageModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveRepairModalProps) => {
+  (props: Omit<ArchiveRepairModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <UploadRepairImageModal

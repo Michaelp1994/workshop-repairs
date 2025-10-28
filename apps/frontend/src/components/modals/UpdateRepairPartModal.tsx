@@ -39,7 +39,7 @@ function UpdateRepairPartModal({
 }
 
 export default create(
-  ({ isOpen, onOpenChange, ...props }: UpdateRepairPartModalProps) => {
+  (props: Omit<UpdateRepairPartModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <UpdateRepairPartModal

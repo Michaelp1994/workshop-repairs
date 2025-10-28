@@ -70,7 +70,7 @@ function ArchiveCommentModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveCommentModalProps) => {
+  (props: Omit<ArchiveCommentModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ArchiveCommentModal

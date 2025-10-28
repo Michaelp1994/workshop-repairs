@@ -1,12 +1,15 @@
+import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
 import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { Pencil, Trash2 } from "@repo/ui/icons";
-import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import type { RouterOutputs } from "../../../../backend/src/router";
+
+import ArchiveModelPartModal from "../modals/ArchiveModelPartModal";
+import UpdateModelPartModal from "../modals/UpdateModelPartModal";
 
 const columnHelper =
   createColumnHelper<
@@ -47,21 +50,29 @@ export const columns = [
   columnHelper.display({
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => (
-      <>
-        <Button asChild size="sm" variant="link">
-          <Link to={`${row.original.modelId}/parts/${row.original.partId}`}>
+    cell: ({ row }) => {
+      function showEditModal() {
+        NiceModal.show(UpdateModelPartModal, {
+          modelId: row.original.modelId,
+          partId: row.original.partId,
+        });
+      }
+      function showArchiveModal() {
+        NiceModal.show(ArchiveModelPartModal, {
+          modelId: row.original.modelId,
+          partId: row.original.partId,
+        });
+      }
+      return (
+        <>
+          <Button onClick={showEditModal} size="sm" variant="link">
             <Pencil className="h-5 w-5" />
-          </Link>
-        </Button>
-        <Button asChild size="sm" variant="link">
-          <Link
-            to={`${row.original.modelId}/parts/${row.original.partId}/archive`}
-          >
+          </Button>
+          <Button onClick={showArchiveModal} size="sm" variant="link">
             <Trash2 className="h-5 w-5" />
-          </Link>
-        </Button>
-      </>
-    ),
+          </Button>
+        </>
+      );
+    },
   }),
 ];

@@ -44,7 +44,7 @@ function CreateRepairPartModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: CreateRepairPartModalProps) => {
+  (props: Omit<CreateRepairPartModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <CreateRepairPartModal

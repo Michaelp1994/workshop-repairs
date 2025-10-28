@@ -67,7 +67,7 @@ function ArchiveRepairPartModal({
 }
 
 export default NiceModal.create(
-  ({ isOpen, onOpenChange, ...props }: ArchiveRepairPartModalProps) => {
+  (props: Omit<ArchiveRepairPartModalProps, "isOpen" | "onOpenChange">) => {
     const modal = useModal();
     return (
       <ArchiveRepairPartModal
