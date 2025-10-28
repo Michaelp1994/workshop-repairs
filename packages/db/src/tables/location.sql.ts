@@ -16,6 +16,7 @@ export const locationTable = pgTable(
   "location",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     name: varchar().notNull(),
     address: varchar().notNull(),
     organizationId: integer()
@@ -24,7 +25,11 @@ export const locationTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
+  (t) => [
+    unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export const locationRelations = relations(locationTable, ({ one, many }) => ({

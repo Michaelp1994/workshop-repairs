@@ -16,6 +16,7 @@ export const manufacturerTable = pgTable(
   "manufacturer",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     name: varchar().notNull(),
     organizationId: integer()
       .notNull()
@@ -23,7 +24,11 @@ export const manufacturerTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
+  (t) => [
+    unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export const manufacturerRelations = relations(

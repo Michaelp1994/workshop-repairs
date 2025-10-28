@@ -17,6 +17,10 @@ import {
   organizationInvitationRelations,
   organizationInvitationTable,
 } from "./organization-invitation.sql";
+import {
+  organizationSequenceRelations,
+  organizationSequenceTable,
+} from "./organization-sequences.sql";
 import { organizationRelations, organizationTable } from "./organization.sql";
 import { partRelations, partTable } from "./part.sql";
 import { partsToModelRelations, partsToModelTable } from "./parts-to-model.sql";
@@ -50,6 +54,7 @@ export const schema = {
   modelImageTable,
   modelTable,
   organizationInvitationTable,
+  organizationSequenceTable,
   organizationTable,
   partsToModelTable,
   partTable,
@@ -75,6 +80,7 @@ export const relations = {
   modelImageRelations,
   modelRelations,
   organizationInvitationRelations,
+  organizationSequenceRelations,
   organizationRelations,
   partRelations,
   partsToModelRelations,

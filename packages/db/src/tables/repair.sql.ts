@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -22,6 +22,7 @@ export const repairTable = pgTable(
   "repair",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     fault: varchar().notNull(),
     summary: varchar(),
     clientId: integer()
@@ -43,7 +44,7 @@ export const repairTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [...auditConstraints(t)],
+  (t) => [unique().on(t.localId, t.organizationId), ...auditConstraints(t)],
 );
 
 export const repairRelations = relations(repairTable, ({ one, many }) => ({

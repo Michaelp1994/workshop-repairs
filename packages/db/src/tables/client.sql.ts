@@ -18,6 +18,7 @@ export const clientTable = pgTable(
   "client",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     name: varchar().notNull(),
     organizationId: integer()
       .notNull()
@@ -25,7 +26,11 @@ export const clientTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
+  (t) => [
+    unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export const clientRelations = relations(clientTable, ({ one, many }) => ({

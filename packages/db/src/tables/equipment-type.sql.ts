@@ -16,6 +16,7 @@ export const equipmentTypeTable = pgTable(
   "equipment_type",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     name: text().notNull(),
     imageUrl: text(),
     organizationId: integer()
@@ -24,7 +25,11 @@ export const equipmentTypeTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
+  (t) => [
+    unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export const equipmentTypeRelations = relations(

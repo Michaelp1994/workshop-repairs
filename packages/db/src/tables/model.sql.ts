@@ -24,6 +24,7 @@ export const modelTable = pgTable(
   "model",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     name: varchar().notNull(),
     nickname: varchar().notNull(),
     manufacturerId: integer()
@@ -42,6 +43,7 @@ export const modelTable = pgTable(
   (t) => [
     ...auditConstraints(t),
     unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
     unique().on(t.nickname, t.organizationId),
     foreignKey({
       columns: [t.defaultImageId],

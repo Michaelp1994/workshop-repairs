@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import {
   type InferArchiveModel,
@@ -16,6 +16,7 @@ export const partTable = pgTable(
   "part",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     name: varchar().notNull(),
     partNumber: varchar().notNull(),
     description: varchar().notNull(),
@@ -26,7 +27,11 @@ export const partTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [...auditConstraints(t)],
+  (t) => [
+    unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export const partRelations = relations(partTable, ({ one, many }) => ({

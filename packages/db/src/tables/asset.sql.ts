@@ -21,6 +21,7 @@ export const assetTable = pgTable(
   "asset",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     serialNumber: varchar().notNull(),
     assetNumber: varchar().notNull(),
     softwareVersion: varchar().notNull(),
@@ -44,6 +45,7 @@ export const assetTable = pgTable(
   },
   (t) => [
     unique().on(t.serialNumber, t.organizationId),
+    unique().on(t.localId, t.organizationId),
     ...auditConstraints(t),
   ],
 );
