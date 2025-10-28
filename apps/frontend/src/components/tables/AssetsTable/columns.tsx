@@ -1,17 +1,17 @@
-import type { RouterOutputs } from "../../../../../backend/src/router";
-
 import { Badge } from "@repo/ui/badge";
 import {
   DataTableColumnHeader,
   DataTableHeaderCheckbox,
-  DataTableLinkCell,
+  DataTableRowActions,
   DataTableRowCheckbox,
 } from "@repo/ui/data-table";
-import { DataTableRowActions } from "@repo/ui/data-table";
+import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 import generateAssetSlug from "~/utils/generateAssetSlug";
+
+import type { RouterOutputs } from "../../../../../backend/src/router";
 
 type Row = RouterOutputs["assets"]["getAll"][number];
 
@@ -31,9 +31,13 @@ export const columns = [
     ),
     cell: ({ getValue }) => {
       return (
-        <DataTableLinkCell href={`/assets/${getValue()}`}>
+        <Link
+          className="font-bold hover:underline"
+          params={{ assetId: getValue() }}
+          to="/assets/$assetId"
+        >
           {generateAssetSlug(getValue())}
-        </DataTableLinkCell>
+        </Link>
       );
     },
     meta: {

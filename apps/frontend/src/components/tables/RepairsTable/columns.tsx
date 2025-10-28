@@ -1,14 +1,17 @@
-import type { RouterOutputs } from "../../../../../backend/src/router";
-
 import { Badge } from "@repo/ui/badge";
-import { DataTableColumnHeader, DataTableLinkCell } from "@repo/ui/data-table";
-import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
-import { DataTableRowCheckbox } from "@repo/ui/data-table";
-import { DataTableRowActions } from "@repo/ui/data-table";
+import {
+  DataTableColumnHeader,
+  DataTableHeaderCheckbox,
+  DataTableRowActions,
+  DataTableRowCheckbox,
+} from "@repo/ui/data-table";
+import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 import generateRepairSlug from "~/utils/generateRepairSlug";
+
+import type { RouterOutputs } from "../../../../../backend/src/router";
 
 import RepairStatusBadge from "../../RepairStatusBadge";
 
@@ -29,9 +32,13 @@ export const columns = [
     ),
     cell: ({ getValue }) => {
       return (
-        <DataTableLinkCell href={`/repairs/${getValue()}`}>
+        <Link
+          className="font-bold hover:underline"
+          params={{ repairId: getValue() }}
+          to="/repairs/$repairId"
+        >
           {generateRepairSlug(getValue())}
-        </DataTableLinkCell>
+        </Link>
       );
     },
     meta: {

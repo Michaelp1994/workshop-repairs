@@ -1,8 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { DataTableColumnHeader, DataTableLinkCell } from "@repo/ui/data-table";
-import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
-import { DataTableRowCheckbox } from "@repo/ui/data-table";
-import { DataTableRowActions } from "@repo/ui/data-table";
+import {
+  DataTableColumnHeader,
+  DataTableHeaderCheckbox,
+  DataTableRowActions,
+  DataTableRowCheckbox,
+} from "@repo/ui/data-table";
+import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
@@ -34,9 +37,13 @@ export const columns = [
         </Avatar>
         <div>
           <div className="font-bold">
-            <DataTableLinkCell href={`/users/${row.original.id}`}>
+            <Link
+              className="font-bold hover:underline"
+              params={{ userId: row.original.id }}
+              to="/users/$userId"
+            >
               {row.original.firstName} {row.original.lastName}
-            </DataTableLinkCell>
+            </Link>
           </div>
           <div className="text-muted-foreground">{row.original.email}</div>
         </div>
