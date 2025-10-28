@@ -39,7 +39,6 @@
   },
   "globalEnv": [
     "NODE_ENV",
-    "NEXTAUTH_SECRET",
     "DATABASE_URL",
     "POSTGRES_URL",
     "AUTH_DISCORD_ID",
@@ -54,7 +53,6 @@
     "AWS_SECRET_ACCESS_KEY",
     "AWS_REGION",
     "AMPLIFY_BUCKET",
-    "NEXTAUTH_SECRET",
     "DATABASE_URL",
     "CI",
     "VERCEL",

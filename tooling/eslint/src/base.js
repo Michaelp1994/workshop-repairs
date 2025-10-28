@@ -40,8 +40,7 @@ export default tseslint.config(
       "dist/",
       "eslint.config.js",
       "sst-env.d.ts",
-      ".open-next/",
-      ".next/",
+
       "node_modules/",
       ".turbo/",
     ],

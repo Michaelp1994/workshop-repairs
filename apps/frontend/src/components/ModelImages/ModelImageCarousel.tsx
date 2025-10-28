@@ -11,21 +11,18 @@ import {
 import { Star } from "@repo/ui/icons";
 import { toast } from "@repo/ui/sonner";
 import { cn } from "@repo/ui/utils";
-import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
 interface ModelImageCarouselProps {
   modelId: ModelID;
-  imageId?: ModelImageID;
+  modelImageId?: ModelImageID;
 }
 
 export default function ModelImageCarousel({
   modelId,
+  modelImageId,
 }: ModelImageCarouselProps) {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  const modelImageId = id ? Number(id) : undefined;
   const [repairImages] = api.modelImages.getAllByModelId.useSuspenseQuery({
     modelId,
   });

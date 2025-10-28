@@ -1,8 +1,7 @@
-import type { RepairID } from "@repo/validators/ids.validators";
+import type { RepairID, RepairImageID } from "@repo/validators/ids.validators";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Link } from "@tanstack/react-router";
 
 import {
   ImageGrid,
@@ -11,6 +10,7 @@ import {
 } from "~/components/ImageGrid";
 import { api } from "~/trpc/client";
 
+import RepairImagesModal from "../modals/RepairImagesModal";
 import UploadRepairImageModal from "../modals/UploadRepairImageModal";
 
 interface RepairImagesProps {
@@ -24,6 +24,9 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
   function showUploadModal() {
     NiceModal.show(UploadRepairImageModal, { repairId });
   }
+  function showGalleryModal(repairImageId: RepairImageID) {
+    NiceModal.show(RepairImagesModal, { repairId, repairImageId });
+  }
   return (
     <Card>
       <CardHeader>
@@ -33,18 +36,15 @@ export default function RepairImages({ repairId }: RepairImagesProps) {
         <ImageGrid>
           {data.map((repairImage) => {
             return (
-              <Link
+              <ImageGridItem
+                alt={repairImage.caption}
+                className="aspect-square w-full rounded-md object-cover"
+                height="84"
                 key={repairImage.id}
-                to={`${repairId}/images?id=${repairImage.id}`}
-              >
-                <ImageGridItem
-                  alt={repairImage.caption}
-                  className="aspect-square w-full rounded-md object-cover"
-                  height="84"
-                  src={repairImage.url}
-                  width="84"
-                />
-              </Link>
+                onClick={() => showGalleryModal(repairImage.id)}
+                src={repairImage.url}
+                width="84"
+              />
             );
           })}
           <ImageGridUploadButton onClick={showUploadModal} />

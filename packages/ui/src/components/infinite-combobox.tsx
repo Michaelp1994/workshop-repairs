@@ -79,7 +79,6 @@ export const InfiniteCombobox = ({
         scrollContainer.clientHeight;
 
       if (isAtBottom && fetchNextPage && !isFetchingNextPage) {
-        console.log("fetching next page");
         fetchNextPage();
       }
     }

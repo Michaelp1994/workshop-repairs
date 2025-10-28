@@ -1,4 +1,4 @@
-import type { RepairID } from "@repo/validators/ids.validators";
+import type { RepairID, RepairImageID } from "@repo/validators/ids.validators";
 
 import {
   Carousel,
@@ -8,23 +8,21 @@ import {
   CarouselPrevious,
   CarouselProps,
 } from "@repo/ui/carousel";
-import { useSearchParams } from "next/navigation";
 
 import { api } from "~/trpc/client";
 
 interface RepairImageCarouselProps extends CarouselProps {
   repairId: RepairID;
+  repairImageId?: RepairImageID;
 }
 
 export default function RepairImageCarousel({
   repairId,
+  repairImageId,
 }: RepairImageCarouselProps) {
   const [repairImages] = api.repairImages.getAllByRepairId.useSuspenseQuery({
     repairId,
   });
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  const repairImageId = id ? Number(id) : undefined;
 
   const startIndex = repairImageId
     ? repairImages.findIndex((image) => image.id === repairImageId)

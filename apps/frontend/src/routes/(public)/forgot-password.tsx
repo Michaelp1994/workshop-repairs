@@ -8,7 +8,8 @@ import {
 } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
-import ForgotPasswordForm from "./_components/ForgotPasswordForm";
+import ForgotPasswordForm from "~/components/forms/ForgotPasswordForm";
+
 export const Route = createFileRoute("/(public)/forgot-password")({
   component: ForgotPasswordPage,
 });
