@@ -60,22 +60,22 @@ const Carousel = ({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
+  function onSelect(api: CarouselApi) {
     if (!api) {
       return;
     }
 
     setCanScrollPrev(api.canScrollPrev());
     setCanScrollNext(api.canScrollNext());
-  }, []);
+  }
 
-  const scrollPrev = React.useCallback(() => {
+  function scrollPrev() {
     api?.scrollPrev();
-  }, [api]);
+  }
 
-  const scrollNext = React.useCallback(() => {
+  function scrollNext() {
     api?.scrollNext();
-  }, [api]);
+  }
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
