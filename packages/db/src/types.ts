@@ -18,6 +18,7 @@ export type FilterMapping = Record<string, PgColumn>;
 
 interface BaseType {
   id?: string | number;
+  localId?: string;
   updatedAt?: string | number | null;
   updatedById?: string | number | null;
   createdById?: string | number | null;
@@ -28,17 +29,17 @@ interface BaseType {
 
 type OmitKeys<T extends BaseType> = OmitSome<
   T,
-  "createdAt" | "createdById" | "deletedAt" | "deletedById"
+  "createdAt" | "createdById" | "deletedAt" | "deletedById" | "id"
 >;
 
 type RequireKeys<T extends OmitKeys<BaseType>> = RequireSome<
   T,
-  "id" | "updatedAt" | "updatedById"
+  "updatedAt" | "updatedById" | "localId"
 >;
 
 type RemoveNullKeys<T extends OmitKeys<BaseType>> = RemoveNullSome<
   RequireKeys<T>,
-  "updatedAt" | "updatedById" | "id"
+  "updatedAt" | "updatedById" | "localId"
 >;
 
 type UpdateInput<T extends BaseType> = RemoveNullKeys<OmitKeys<T>>;
@@ -67,7 +68,7 @@ type InferArchiveModel<
 
 type CreateInput<T extends BaseType> = Omit<
   T,
-  "id" | "updatedAt" | "updatedById" | "deletedById" | "deletedAt"
+  "id" | "updatedAt" | "updatedById" | "deletedById" | "deletedAt" | "localId"
 >;
 
 type InferCreateModel<

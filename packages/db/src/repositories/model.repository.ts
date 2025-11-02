@@ -9,6 +9,7 @@ import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
 import { db } from "../index";
 import { createGlobalFilters } from "../mappings/model.mapper";
 import {
@@ -122,9 +123,19 @@ export async function getModelById(id: ModelID) {
 }
 
 export async function createModel(input: CreateModel) {
-  const query = db.insert(modelTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "model",
+    );
+    const query = tx
+      .insert(modelTable)
+      .values({ ...input, localId })
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  });
 }
 
 export async function updateModel(input: UpdateModel) {

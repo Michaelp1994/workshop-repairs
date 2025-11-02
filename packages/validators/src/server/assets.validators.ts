@@ -21,7 +21,7 @@ import {
 const assetFilters = z
   .object({
     modelId: modelId.optional(),
-    clientId: clientId.optional(),
+    client: z.string().optional(),
     locationId: locationId.optional(),
     manufacturerId: manufacturerId.optional(),
     equipmentTypeId: equipmentTypeId.optional(),
@@ -43,6 +43,10 @@ export type GetAssetsSelectSchema = z.infer<typeof getAssestsSelectSchema>;
 
 export const getAssetByIdSchema = z.object({
   id: assetId,
+});
+
+export const getAssetBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const getAssetByRepairIdSchema = z.object({

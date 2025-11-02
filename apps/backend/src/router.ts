@@ -11,6 +11,7 @@ import meta from "./routers/meta.router";
 import modelImages from "./routers/modelImages.router";
 import models from "./routers/models.router";
 import organizations from "./routers/organizations.router";
+import organizationSequences from "./routers/organizationSequences.router";
 import parts from "./routers/parts.router";
 import partsToModels from "./routers/partsToModels.router";
 import repairComments from "./routers/repairComments.router";
@@ -33,6 +34,7 @@ export const appRouter = router({
   locations,
   manufacturers,
   organizations,
+  organizationSequences,
   meta,
   modelImages,
   models,

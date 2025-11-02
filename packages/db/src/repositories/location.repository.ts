@@ -9,6 +9,7 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -110,9 +111,19 @@ export async function getLocationById(id: LocationID) {
 }
 
 export async function createLocation(input: CreateLocation) {
-  const query = db.insert(locationTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "location",
+    );
+    const query = tx
+      .insert(locationTable)
+      .values({ ...input, localId })
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  });
 }
 
 export async function updateLocation(input: UpdateLocation) {

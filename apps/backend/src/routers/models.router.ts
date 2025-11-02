@@ -1,4 +1,3 @@
-import { getAssetById } from "@repo/db/repositories/asset.repository";
 import {
   archiveModel,
   countModels,
@@ -13,7 +12,6 @@ import {
   countModelsSchema,
   createModelSchema,
   getAllModelsSchema,
-  getModelByAssetIdSchema,
   getModelByIdSchema,
   getModelsSelectSchema,
   updateModelSchema,
@@ -57,32 +55,32 @@ export default router({
       return allModels;
     }),
 
-  getByAssetId: organizationProcedure
-    .input(getModelByAssetIdSchema)
-    .query(async ({ input, ctx }) => {
-      const asset = await getAssetById(
-        input.assetId,
-        ctx.session.organizationId,
-      );
+  // getByAssetId: organizationProcedure
+  //   .input(getModelByAssetIdSchema)
+  //   .query(async ({ input, ctx }) => {
+  //     const asset = await getAssetById(
+  //       input.assetId,
+  //       ctx.session.organizationId,
+  //     );
 
-      if (!asset) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "asset not found",
-        });
-      }
+  //     if (!asset) {
+  //       throw new TRPCError({
+  //         code: "NOT_FOUND",
+  //         message: "asset not found",
+  //       });
+  //     }
 
-      const model = await getModelById(asset.modelId);
+  //     const model = await getModelById(asset.modelId);
 
-      if (!model) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "model not found",
-        });
-      }
+  //     if (!model) {
+  //       throw new TRPCError({
+  //         code: "NOT_FOUND",
+  //         message: "model not found",
+  //       });
+  //     }
 
-      return model;
-    }),
+  //     return model;
+  //   }),
   getById: organizationProcedure
     .input(getModelByIdSchema)
     .query(async ({ input }) => {

@@ -9,6 +9,7 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -182,9 +183,19 @@ export async function getRepairById(input: RepairID) {
 }
 
 export async function createRepair(input: CreateRepair) {
-  const query = db.insert(repairTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "repair",
+    );
+    const query = tx
+      .insert(repairTable)
+      .values({ ...input, localId })
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  });
 }
 
 export async function updateRepair(input: UpdateRepair) {

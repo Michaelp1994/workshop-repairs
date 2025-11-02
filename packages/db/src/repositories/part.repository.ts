@@ -9,6 +9,7 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -102,9 +103,19 @@ export async function getPartById(id: PartID) {
 }
 
 export async function createPart(input: CreatePart) {
-  const query = db.insert(partTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "part",
+    );
+    const query = tx
+      .insert(partTable)
+      .values({ ...input, localId })
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  });
 }
 
 export async function updatePart(input: UpdatePart) {

@@ -9,6 +9,7 @@ import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
 import { db } from "../index";
 import {
   createAllAssetsQuery,
@@ -17,7 +18,6 @@ import {
 import { assetStatusTable } from "../tables/asset-status.sql";
 import {
   type ArchiveAsset,
-  type AssetID,
   assetTable,
   type CreateAsset,
   type UpdateAsset,
@@ -71,9 +71,19 @@ export async function countAssets(
 }
 
 export async function createAsset(input: CreateAsset) {
-  const query = db.insert(assetTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "asset",
+    );
+    const query = tx
+      .insert(assetTable)
+      .values({ ...input, localId })
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  });
 }
 
 export async function getAllAssets(
@@ -85,7 +95,7 @@ export async function getAllAssets(
     isNull(assetTable.deletedAt),
     eq(assetTable.organizationId, organizationId),
     filters?.modelId ? eq(assetTable.modelId, filters.modelId) : undefined,
-    filters?.clientId ? eq(assetTable.clientId, filters.clientId) : undefined,
+    filters?.client ? eq(clientTable.localId, filters.clientId) : undefined,
     filters?.locationId
       ? eq(assetTable.locationId, filters.locationId)
       : undefined,
@@ -100,8 +110,8 @@ export async function getAllAssets(
   return res;
 }
 
-export async function getAssetById(
-  id: AssetID,
+export async function getAssetByLocalId(
+  localId: number,
   organizationId: OrganizationID,
 ) {
   const { createdByTable, deletedByTable, metadata, updatedByTable } =
@@ -137,7 +147,10 @@ export async function getAssetById(
       eq(modelTable.manufacturerId, manufacturerTable.id),
     )
     .where(
-      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
+      and(
+        eq(assetTable.localId, localId),
+        eq(assetTable.organizationId, organizationId),
+      ),
     );
   const [res] = await query.execute();
   return res;

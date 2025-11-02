@@ -9,6 +9,7 @@ import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 import type { OrganizationID } from "../tables/organization.sql";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
 import { db } from "../index";
 import {
   getColumnFilters,
@@ -17,7 +18,6 @@ import {
 } from "../mappings/clients.mapper";
 import {
   type ArchiveClient,
-  type ClientID,
   clientTable,
   type CreateClient,
   type UpdateClient,
@@ -91,7 +91,10 @@ export function getClientsSelect(
   return query.execute();
 }
 
-export async function getClientById(id: ClientID) {
+export async function getClientByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
   const query = db
@@ -103,22 +106,46 @@ export async function getClientById(id: ClientID) {
     .innerJoin(createdByTable, eq(clientTable.createdById, createdByTable.id))
     .leftJoin(updatedByTable, eq(clientTable.updatedById, updatedByTable.id))
     .leftJoin(deletedByTable, eq(clientTable.deletedById, deletedByTable.id))
-    .where(eq(clientTable.id, id));
+    .where(
+      and(
+        eq(clientTable.localId, localId),
+        eq(clientTable.organizationId, organizationId),
+      ),
+    );
   const [res] = await query.execute();
   return res;
 }
 
 export async function createClient(input: CreateClient) {
-  const query = db.insert(clientTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "client",
+    );
+
+    const [result] = await tx
+      .insert(clientTable)
+      .values({ ...input, localId })
+      .returning();
+
+    return result;
+  });
 }
 
-export async function updateClient(input: UpdateClient) {
+export async function updateClient(
+  input: UpdateClient,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(clientTable)
     .set(input)
-    .where(eq(clientTable.id, input.id))
+    .where(
+      and(
+        eq(clientTable.localId, input.localId),
+        eq(clientTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

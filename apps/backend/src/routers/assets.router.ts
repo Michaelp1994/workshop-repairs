@@ -3,7 +3,7 @@ import {
   countAssets,
   createAsset,
   getAllAssets,
-  getAssetById,
+  getAssetByLocalId,
   getAssetByRepairId,
   getAssetsSelect,
   updateAsset,
@@ -14,8 +14,8 @@ import {
   createAssetSchema,
   getAllAssetsSchema,
   getAssestsSelectSchema,
-  getAssetByIdSchema,
   getAssetByRepairIdSchema,
+  getAssetBySlugSchema,
   updateAssetSchema,
 } from "@repo/validators/server/assets.validators";
 import { TRPCError } from "@trpc/server";
@@ -25,6 +25,7 @@ import {
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -32,6 +33,8 @@ export default router({
   getAll: organizationProcedure
     .input(getAllAssetsSchema)
     .query(async ({ ctx, input }) => {
+      const clientFilter =
+        input.filters?.client && splitSlug(input.filters.client);
       const allAssets = await getAllAssets(input, ctx.session.organizationId);
       return allAssets;
     }),
@@ -51,17 +54,22 @@ export default router({
       );
       return allAssets;
     }),
-  getById: organizationProcedure
-    .input(getAssetByIdSchema)
-    .query(async ({ input, ctx }) => {
-      const asset = await getAssetById(input.id, ctx.session.organizationId);
+  getBySlug: organizationProcedure
+    .input(getAssetBySlugSchema)
+    .query(async ({ ctx, input }) => {
+      const { localId } = splitSlug(input.slug);
+
+      const asset = await getAssetByLocalId(
+        localId,
+        ctx.session.organizationId,
+      );
+
       if (!asset) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "asset not found",
+          message: "can't find client",
         });
       }
-
       return asset;
     }),
   getByRepairId: organizationProcedure
