@@ -15,6 +15,7 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as OnboardingWelcomeRouteImport } from './routes/onboarding/welcome'
+import { Route as OnboardingSequencesRouteImport } from './routes/onboarding/sequences'
 import { Route as OnboardingInvitationRouteImport } from './routes/onboarding/invitation'
 import { Route as OnboardingEmailVerificationRouteImport } from './routes/onboarding/email-verification'
 import { Route as OnboardingLayoutRouteImport } from './routes/onboarding/_layout'
@@ -51,8 +52,8 @@ import { Route as ProtectedModelsModelIdIndexRouteImport } from './routes/_prote
 import { Route as ProtectedManufacturersManufacturerIdIndexRouteImport } from './routes/_protected/manufacturers/$manufacturerId/index'
 import { Route as ProtectedLocationsLocationIdIndexRouteImport } from './routes/_protected/locations/$locationId/index'
 import { Route as ProtectedEquipmentTypesEquipmentTypeIdIndexRouteImport } from './routes/_protected/equipment-types/$equipmentTypeId/index'
-import { Route as ProtectedClientsClientIdIndexRouteImport } from './routes/_protected/clients/$clientId/index'
-import { Route as ProtectedAssetsAssetIdIndexRouteImport } from './routes/_protected/assets/$assetId/index'
+import { Route as ProtectedClientsClientSlugIndexRouteImport } from './routes/_protected/clients/$clientSlug/index'
+import { Route as ProtectedAssetsAssetSlugIndexRouteImport } from './routes/_protected/assets/$assetSlug/index'
 import { Route as ProtectedUsersUserIdEditRouteImport } from './routes/_protected/users/$userId/edit'
 import { Route as ProtectedRepairsRepairIdEditRouteImport } from './routes/_protected/repairs/$repairId/edit'
 import { Route as ProtectedPartsPartIdEditRouteImport } from './routes/_protected/parts/$partId/edit'
@@ -60,8 +61,8 @@ import { Route as ProtectedModelsModelIdEditRouteImport } from './routes/_protec
 import { Route as ProtectedManufacturersManufacturerIdEditRouteImport } from './routes/_protected/manufacturers/$manufacturerId/edit'
 import { Route as ProtectedLocationsLocationIdEditRouteImport } from './routes/_protected/locations/$locationId/edit'
 import { Route as ProtectedEquipmentTypesEquipmentTypeIdEditRouteImport } from './routes/_protected/equipment-types/$equipmentTypeId/edit'
-import { Route as ProtectedClientsClientIdEditRouteImport } from './routes/_protected/clients/$clientId/edit'
-import { Route as ProtectedAssetsAssetIdEditRouteImport } from './routes/_protected/assets/$assetId/edit'
+import { Route as ProtectedClientsClientSlugEditRouteImport } from './routes/_protected/clients/$clientSlug/edit'
+import { Route as ProtectedAssetsAssetSlugEditRouteImport } from './routes/_protected/assets/$assetSlug/edit'
 
 const OnboardingRouteImport = createFileRoute('/onboarding')()
 
@@ -87,6 +88,11 @@ const publicIndexRoute = publicIndexRouteImport.update({
 const OnboardingWelcomeRoute = OnboardingWelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const OnboardingSequencesRoute = OnboardingSequencesRouteImport.update({
+  id: '/sequences',
+  path: '/sequences',
   getParentRoute: () => OnboardingRoute,
 } as any)
 const OnboardingInvitationRoute = OnboardingInvitationRouteImport.update({
@@ -284,16 +290,16 @@ const ProtectedEquipmentTypesEquipmentTypeIdIndexRoute =
     path: '/equipment-types/$equipmentTypeId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedClientsClientIdIndexRoute =
-  ProtectedClientsClientIdIndexRouteImport.update({
-    id: '/clients/$clientId/',
-    path: '/clients/$clientId/',
+const ProtectedClientsClientSlugIndexRoute =
+  ProtectedClientsClientSlugIndexRouteImport.update({
+    id: '/clients/$clientSlug/',
+    path: '/clients/$clientSlug/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedAssetsAssetIdIndexRoute =
-  ProtectedAssetsAssetIdIndexRouteImport.update({
-    id: '/assets/$assetId/',
-    path: '/assets/$assetId/',
+const ProtectedAssetsAssetSlugIndexRoute =
+  ProtectedAssetsAssetSlugIndexRouteImport.update({
+    id: '/assets/$assetSlug/',
+    path: '/assets/$assetSlug/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 const ProtectedUsersUserIdEditRoute =
@@ -338,16 +344,16 @@ const ProtectedEquipmentTypesEquipmentTypeIdEditRoute =
     path: '/equipment-types/$equipmentTypeId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedClientsClientIdEditRoute =
-  ProtectedClientsClientIdEditRouteImport.update({
-    id: '/clients/$clientId/edit',
-    path: '/clients/$clientId/edit',
+const ProtectedClientsClientSlugEditRoute =
+  ProtectedClientsClientSlugEditRouteImport.update({
+    id: '/clients/$clientSlug/edit',
+    path: '/clients/$clientSlug/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedAssetsAssetIdEditRoute =
-  ProtectedAssetsAssetIdEditRouteImport.update({
-    id: '/assets/$assetId/edit',
-    path: '/assets/$assetId/edit',
+const ProtectedAssetsAssetSlugEditRoute =
+  ProtectedAssetsAssetSlugEditRouteImport.update({
+    id: '/assets/$assetSlug/edit',
+    path: '/assets/$assetSlug/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 
@@ -359,6 +365,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingLayoutRoute
   '/onboarding/email-verification': typeof OnboardingEmailVerificationRoute
   '/onboarding/invitation': typeof OnboardingInvitationRoute
+  '/onboarding/sequences': typeof OnboardingSequencesRoute
   '/onboarding/welcome': typeof OnboardingWelcomeRoute
   '/': typeof publicIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
@@ -384,8 +391,8 @@ export interface FileRoutesByFullPath {
   '/repairs': typeof ProtectedRepairsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
-  '/assets/$assetId/edit': typeof ProtectedAssetsAssetIdEditRoute
-  '/clients/$clientId/edit': typeof ProtectedClientsClientIdEditRoute
+  '/assets/$assetSlug/edit': typeof ProtectedAssetsAssetSlugEditRoute
+  '/clients/$clientSlug/edit': typeof ProtectedClientsClientSlugEditRoute
   '/equipment-types/$equipmentTypeId/edit': typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
   '/locations/$locationId/edit': typeof ProtectedLocationsLocationIdEditRoute
   '/manufacturers/$manufacturerId/edit': typeof ProtectedManufacturersManufacturerIdEditRoute
@@ -393,8 +400,8 @@ export interface FileRoutesByFullPath {
   '/parts/$partId/edit': typeof ProtectedPartsPartIdEditRoute
   '/repairs/$repairId/edit': typeof ProtectedRepairsRepairIdEditRoute
   '/users/$userId/edit': typeof ProtectedUsersUserIdEditRoute
-  '/assets/$assetId': typeof ProtectedAssetsAssetIdIndexRoute
-  '/clients/$clientId': typeof ProtectedClientsClientIdIndexRoute
+  '/assets/$assetSlug': typeof ProtectedAssetsAssetSlugIndexRoute
+  '/clients/$clientSlug': typeof ProtectedClientsClientSlugIndexRoute
   '/equipment-types/$equipmentTypeId': typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
   '/locations/$locationId': typeof ProtectedLocationsLocationIdIndexRoute
   '/manufacturers/$manufacturerId': typeof ProtectedManufacturersManufacturerIdIndexRoute
@@ -411,6 +418,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingIndexRoute
   '/onboarding/email-verification': typeof OnboardingEmailVerificationRoute
   '/onboarding/invitation': typeof OnboardingInvitationRoute
+  '/onboarding/sequences': typeof OnboardingSequencesRoute
   '/onboarding/welcome': typeof OnboardingWelcomeRoute
   '/': typeof publicIndexRoute
   '/assets/new': typeof ProtectedAssetsNewRoute
@@ -435,8 +443,8 @@ export interface FileRoutesByTo {
   '/repairs': typeof ProtectedRepairsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
-  '/assets/$assetId/edit': typeof ProtectedAssetsAssetIdEditRoute
-  '/clients/$clientId/edit': typeof ProtectedClientsClientIdEditRoute
+  '/assets/$assetSlug/edit': typeof ProtectedAssetsAssetSlugEditRoute
+  '/clients/$clientSlug/edit': typeof ProtectedClientsClientSlugEditRoute
   '/equipment-types/$equipmentTypeId/edit': typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
   '/locations/$locationId/edit': typeof ProtectedLocationsLocationIdEditRoute
   '/manufacturers/$manufacturerId/edit': typeof ProtectedManufacturersManufacturerIdEditRoute
@@ -444,8 +452,8 @@ export interface FileRoutesByTo {
   '/parts/$partId/edit': typeof ProtectedPartsPartIdEditRoute
   '/repairs/$repairId/edit': typeof ProtectedRepairsRepairIdEditRoute
   '/users/$userId/edit': typeof ProtectedUsersUserIdEditRoute
-  '/assets/$assetId': typeof ProtectedAssetsAssetIdIndexRoute
-  '/clients/$clientId': typeof ProtectedClientsClientIdIndexRoute
+  '/assets/$assetSlug': typeof ProtectedAssetsAssetSlugIndexRoute
+  '/clients/$clientSlug': typeof ProtectedClientsClientSlugIndexRoute
   '/equipment-types/$equipmentTypeId': typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
   '/locations/$locationId': typeof ProtectedLocationsLocationIdIndexRoute
   '/manufacturers/$manufacturerId': typeof ProtectedManufacturersManufacturerIdIndexRoute
@@ -465,6 +473,7 @@ export interface FileRoutesById {
   '/onboarding/_layout': typeof OnboardingLayoutRoute
   '/onboarding/email-verification': typeof OnboardingEmailVerificationRoute
   '/onboarding/invitation': typeof OnboardingInvitationRoute
+  '/onboarding/sequences': typeof OnboardingSequencesRoute
   '/onboarding/welcome': typeof OnboardingWelcomeRoute
   '/(public)/': typeof publicIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
@@ -490,8 +499,8 @@ export interface FileRoutesById {
   '/_protected/repairs/': typeof ProtectedRepairsIndexRoute
   '/_protected/users/': typeof ProtectedUsersIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
-  '/_protected/assets/$assetId/edit': typeof ProtectedAssetsAssetIdEditRoute
-  '/_protected/clients/$clientId/edit': typeof ProtectedClientsClientIdEditRoute
+  '/_protected/assets/$assetSlug/edit': typeof ProtectedAssetsAssetSlugEditRoute
+  '/_protected/clients/$clientSlug/edit': typeof ProtectedClientsClientSlugEditRoute
   '/_protected/equipment-types/$equipmentTypeId/edit': typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
   '/_protected/locations/$locationId/edit': typeof ProtectedLocationsLocationIdEditRoute
   '/_protected/manufacturers/$manufacturerId/edit': typeof ProtectedManufacturersManufacturerIdEditRoute
@@ -499,8 +508,8 @@ export interface FileRoutesById {
   '/_protected/parts/$partId/edit': typeof ProtectedPartsPartIdEditRoute
   '/_protected/repairs/$repairId/edit': typeof ProtectedRepairsRepairIdEditRoute
   '/_protected/users/$userId/edit': typeof ProtectedUsersUserIdEditRoute
-  '/_protected/assets/$assetId/': typeof ProtectedAssetsAssetIdIndexRoute
-  '/_protected/clients/$clientId/': typeof ProtectedClientsClientIdIndexRoute
+  '/_protected/assets/$assetSlug/': typeof ProtectedAssetsAssetSlugIndexRoute
+  '/_protected/clients/$clientSlug/': typeof ProtectedClientsClientSlugIndexRoute
   '/_protected/equipment-types/$equipmentTypeId/': typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
   '/_protected/locations/$locationId/': typeof ProtectedLocationsLocationIdIndexRoute
   '/_protected/manufacturers/$manufacturerId/': typeof ProtectedManufacturersManufacturerIdIndexRoute
@@ -519,6 +528,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/onboarding/email-verification'
     | '/onboarding/invitation'
+    | '/onboarding/sequences'
     | '/onboarding/welcome'
     | '/'
     | '/onboarding/'
@@ -544,8 +554,8 @@ export interface FileRouteTypes {
     | '/repairs'
     | '/users'
     | '/onboarding/organization'
-    | '/assets/$assetId/edit'
-    | '/clients/$clientId/edit'
+    | '/assets/$assetSlug/edit'
+    | '/clients/$clientSlug/edit'
     | '/equipment-types/$equipmentTypeId/edit'
     | '/locations/$locationId/edit'
     | '/manufacturers/$manufacturerId/edit'
@@ -553,8 +563,8 @@ export interface FileRouteTypes {
     | '/parts/$partId/edit'
     | '/repairs/$repairId/edit'
     | '/users/$userId/edit'
-    | '/assets/$assetId'
-    | '/clients/$clientId'
+    | '/assets/$assetSlug'
+    | '/clients/$clientSlug'
     | '/equipment-types/$equipmentTypeId'
     | '/locations/$locationId'
     | '/manufacturers/$manufacturerId'
@@ -571,6 +581,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/onboarding/email-verification'
     | '/onboarding/invitation'
+    | '/onboarding/sequences'
     | '/onboarding/welcome'
     | '/'
     | '/assets/new'
@@ -595,8 +606,8 @@ export interface FileRouteTypes {
     | '/repairs'
     | '/users'
     | '/onboarding/organization'
-    | '/assets/$assetId/edit'
-    | '/clients/$clientId/edit'
+    | '/assets/$assetSlug/edit'
+    | '/clients/$clientSlug/edit'
     | '/equipment-types/$equipmentTypeId/edit'
     | '/locations/$locationId/edit'
     | '/manufacturers/$manufacturerId/edit'
@@ -604,8 +615,8 @@ export interface FileRouteTypes {
     | '/parts/$partId/edit'
     | '/repairs/$repairId/edit'
     | '/users/$userId/edit'
-    | '/assets/$assetId'
-    | '/clients/$clientId'
+    | '/assets/$assetSlug'
+    | '/clients/$clientSlug'
     | '/equipment-types/$equipmentTypeId'
     | '/locations/$locationId'
     | '/manufacturers/$manufacturerId'
@@ -624,6 +635,7 @@ export interface FileRouteTypes {
     | '/onboarding/_layout'
     | '/onboarding/email-verification'
     | '/onboarding/invitation'
+    | '/onboarding/sequences'
     | '/onboarding/welcome'
     | '/(public)/'
     | '/onboarding/'
@@ -649,8 +661,8 @@ export interface FileRouteTypes {
     | '/_protected/repairs/'
     | '/_protected/users/'
     | '/onboarding/organization/'
-    | '/_protected/assets/$assetId/edit'
-    | '/_protected/clients/$clientId/edit'
+    | '/_protected/assets/$assetSlug/edit'
+    | '/_protected/clients/$clientSlug/edit'
     | '/_protected/equipment-types/$equipmentTypeId/edit'
     | '/_protected/locations/$locationId/edit'
     | '/_protected/manufacturers/$manufacturerId/edit'
@@ -658,8 +670,8 @@ export interface FileRouteTypes {
     | '/_protected/parts/$partId/edit'
     | '/_protected/repairs/$repairId/edit'
     | '/_protected/users/$userId/edit'
-    | '/_protected/assets/$assetId/'
-    | '/_protected/clients/$clientId/'
+    | '/_protected/assets/$assetSlug/'
+    | '/_protected/clients/$clientSlug/'
     | '/_protected/equipment-types/$equipmentTypeId/'
     | '/_protected/locations/$locationId/'
     | '/_protected/manufacturers/$manufacturerId/'
@@ -713,6 +725,13 @@ declare module '@tanstack/react-router' {
       path: '/welcome'
       fullPath: '/onboarding/welcome'
       preLoaderRoute: typeof OnboardingWelcomeRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/onboarding/sequences': {
+      id: '/onboarding/sequences'
+      path: '/sequences'
+      fullPath: '/onboarding/sequences'
+      preLoaderRoute: typeof OnboardingSequencesRouteImport
       parentRoute: typeof OnboardingRoute
     }
     '/onboarding/invitation': {
@@ -967,18 +986,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/clients/$clientId/': {
-      id: '/_protected/clients/$clientId/'
-      path: '/clients/$clientId'
-      fullPath: '/clients/$clientId'
-      preLoaderRoute: typeof ProtectedClientsClientIdIndexRouteImport
+    '/_protected/clients/$clientSlug/': {
+      id: '/_protected/clients/$clientSlug/'
+      path: '/clients/$clientSlug'
+      fullPath: '/clients/$clientSlug'
+      preLoaderRoute: typeof ProtectedClientsClientSlugIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/assets/$assetId/': {
-      id: '/_protected/assets/$assetId/'
-      path: '/assets/$assetId'
-      fullPath: '/assets/$assetId'
-      preLoaderRoute: typeof ProtectedAssetsAssetIdIndexRouteImport
+    '/_protected/assets/$assetSlug/': {
+      id: '/_protected/assets/$assetSlug/'
+      path: '/assets/$assetSlug'
+      fullPath: '/assets/$assetSlug'
+      preLoaderRoute: typeof ProtectedAssetsAssetSlugIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/users/$userId/edit': {
@@ -1030,18 +1049,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/clients/$clientId/edit': {
-      id: '/_protected/clients/$clientId/edit'
-      path: '/clients/$clientId/edit'
-      fullPath: '/clients/$clientId/edit'
-      preLoaderRoute: typeof ProtectedClientsClientIdEditRouteImport
+    '/_protected/clients/$clientSlug/edit': {
+      id: '/_protected/clients/$clientSlug/edit'
+      path: '/clients/$clientSlug/edit'
+      fullPath: '/clients/$clientSlug/edit'
+      preLoaderRoute: typeof ProtectedClientsClientSlugEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/assets/$assetId/edit': {
-      id: '/_protected/assets/$assetId/edit'
-      path: '/assets/$assetId/edit'
-      fullPath: '/assets/$assetId/edit'
-      preLoaderRoute: typeof ProtectedAssetsAssetIdEditRouteImport
+    '/_protected/assets/$assetSlug/edit': {
+      id: '/_protected/assets/$assetSlug/edit'
+      path: '/assets/$assetSlug/edit'
+      fullPath: '/assets/$assetSlug/edit'
+      preLoaderRoute: typeof ProtectedAssetsAssetSlugEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
@@ -1068,8 +1087,8 @@ interface ProtectedRouteRouteChildren {
   ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
   ProtectedRepairsIndexRoute: typeof ProtectedRepairsIndexRoute
   ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
-  ProtectedAssetsAssetIdEditRoute: typeof ProtectedAssetsAssetIdEditRoute
-  ProtectedClientsClientIdEditRoute: typeof ProtectedClientsClientIdEditRoute
+  ProtectedAssetsAssetSlugEditRoute: typeof ProtectedAssetsAssetSlugEditRoute
+  ProtectedClientsClientSlugEditRoute: typeof ProtectedClientsClientSlugEditRoute
   ProtectedEquipmentTypesEquipmentTypeIdEditRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
   ProtectedLocationsLocationIdEditRoute: typeof ProtectedLocationsLocationIdEditRoute
   ProtectedManufacturersManufacturerIdEditRoute: typeof ProtectedManufacturersManufacturerIdEditRoute
@@ -1077,8 +1096,8 @@ interface ProtectedRouteRouteChildren {
   ProtectedPartsPartIdEditRoute: typeof ProtectedPartsPartIdEditRoute
   ProtectedRepairsRepairIdEditRoute: typeof ProtectedRepairsRepairIdEditRoute
   ProtectedUsersUserIdEditRoute: typeof ProtectedUsersUserIdEditRoute
-  ProtectedAssetsAssetIdIndexRoute: typeof ProtectedAssetsAssetIdIndexRoute
-  ProtectedClientsClientIdIndexRoute: typeof ProtectedClientsClientIdIndexRoute
+  ProtectedAssetsAssetSlugIndexRoute: typeof ProtectedAssetsAssetSlugIndexRoute
+  ProtectedClientsClientSlugIndexRoute: typeof ProtectedClientsClientSlugIndexRoute
   ProtectedEquipmentTypesEquipmentTypeIdIndexRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
   ProtectedLocationsLocationIdIndexRoute: typeof ProtectedLocationsLocationIdIndexRoute
   ProtectedManufacturersManufacturerIdIndexRoute: typeof ProtectedManufacturersManufacturerIdIndexRoute
@@ -1109,8 +1128,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
   ProtectedRepairsIndexRoute: ProtectedRepairsIndexRoute,
   ProtectedUsersIndexRoute: ProtectedUsersIndexRoute,
-  ProtectedAssetsAssetIdEditRoute: ProtectedAssetsAssetIdEditRoute,
-  ProtectedClientsClientIdEditRoute: ProtectedClientsClientIdEditRoute,
+  ProtectedAssetsAssetSlugEditRoute: ProtectedAssetsAssetSlugEditRoute,
+  ProtectedClientsClientSlugEditRoute: ProtectedClientsClientSlugEditRoute,
   ProtectedEquipmentTypesEquipmentTypeIdEditRoute:
     ProtectedEquipmentTypesEquipmentTypeIdEditRoute,
   ProtectedLocationsLocationIdEditRoute: ProtectedLocationsLocationIdEditRoute,
@@ -1120,8 +1139,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedPartsPartIdEditRoute: ProtectedPartsPartIdEditRoute,
   ProtectedRepairsRepairIdEditRoute: ProtectedRepairsRepairIdEditRoute,
   ProtectedUsersUserIdEditRoute: ProtectedUsersUserIdEditRoute,
-  ProtectedAssetsAssetIdIndexRoute: ProtectedAssetsAssetIdIndexRoute,
-  ProtectedClientsClientIdIndexRoute: ProtectedClientsClientIdIndexRoute,
+  ProtectedAssetsAssetSlugIndexRoute: ProtectedAssetsAssetSlugIndexRoute,
+  ProtectedClientsClientSlugIndexRoute: ProtectedClientsClientSlugIndexRoute,
   ProtectedEquipmentTypesEquipmentTypeIdIndexRoute:
     ProtectedEquipmentTypesEquipmentTypeIdIndexRoute,
   ProtectedLocationsLocationIdIndexRoute:
@@ -1142,6 +1161,7 @@ interface OnboardingRouteChildren {
   OnboardingLayoutRoute: typeof OnboardingLayoutRoute
   OnboardingEmailVerificationRoute: typeof OnboardingEmailVerificationRoute
   OnboardingInvitationRoute: typeof OnboardingInvitationRoute
+  OnboardingSequencesRoute: typeof OnboardingSequencesRoute
   OnboardingWelcomeRoute: typeof OnboardingWelcomeRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
   OnboardingOrganizationCreateRoute: typeof OnboardingOrganizationCreateRoute
@@ -1153,6 +1173,7 @@ const OnboardingRouteChildren: OnboardingRouteChildren = {
   OnboardingLayoutRoute: OnboardingLayoutRoute,
   OnboardingEmailVerificationRoute: OnboardingEmailVerificationRoute,
   OnboardingInvitationRoute: OnboardingInvitationRoute,
+  OnboardingSequencesRoute: OnboardingSequencesRoute,
   OnboardingWelcomeRoute: OnboardingWelcomeRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
   OnboardingOrganizationCreateRoute: OnboardingOrganizationCreateRoute,

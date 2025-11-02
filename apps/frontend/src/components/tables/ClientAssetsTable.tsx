@@ -14,11 +14,11 @@ import { api } from "~/trpc/client";
 import { columns } from "./AssetsTable/columns";
 
 interface ClientAssetsTableProps {
-  clientId: number;
+  clientSlug: string;
 }
 
 export default function ClientAssetsTable({
-  clientId,
+  clientSlug,
 }: ClientAssetsTableProps) {
   const { dataState, countState, tableState } = useDataTableState({
     columns: {
@@ -36,14 +36,14 @@ export default function ClientAssetsTable({
   const [assets] = api.assets.getAll.useSuspenseQuery({
     ...dataState,
     filters: {
-      clientId,
+      // clientId,
     },
   });
 
   const [rowCount] = api.assets.countAll.useSuspenseQuery({
     ...countState,
     filters: {
-      clientId,
+      // clientId,
     },
   });
   return (
@@ -56,7 +56,7 @@ export default function ClientAssetsTable({
           <IconButton
             linkOptions={{
               to: "/assets/new",
-              search: { clientId },
+              // search: { clientId },
             }}
             size="sm"
             variant="create"

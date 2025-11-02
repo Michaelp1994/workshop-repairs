@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
-import UpdateClientForm from "~/components/forms/UpdateClientForm";
+import UpdateAssetForm from "~/components/forms/UpdateAssetForm";
 import {
   PageHeader,
   PageHeaderText,
@@ -9,26 +9,23 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-export const Route = createFileRoute(
-  "/_protected/clients/$clientId/edit",
-)({
-  component: EditClientPage,
+export const Route = createFileRoute("/_protected/assets/$assetSlug/edit")({
+  component: EditAssetPage,
 });
 
-function EditClientPage() {
+function EditAssetPage() {
   const params = Route.useParams();
-  const clientId = Number(params.clientId);
-
+  const assetId = Number(params.assetId);
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>Edit Client</PageTitle>
+          <PageTitle>Edit Asset</PageTitle>
         </PageHeaderText>
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateClientForm clientId={clientId} />
+          <UpdateAssetForm assetId={assetId} />
         </CardContent>
       </Card>
     </PageWrapper>

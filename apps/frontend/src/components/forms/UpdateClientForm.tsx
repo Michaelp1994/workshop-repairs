@@ -1,5 +1,3 @@
-import type { ClientID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -23,13 +21,12 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface BaseFormProps {
-  clientId: ClientID;
+  clientSlug: string;
 }
 
-export default function UpdateClientForm({ clientId }: BaseFormProps) {
-  const [client] = api.clients.getById.useSuspenseQuery({
-    id: clientId,
-  });
+export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
+  const [client] = api.clients.getBySlug.useSuspenseQuery({ slug: clientSlug });
+
   const updateMutation = api.clients.update.useMutation({
     onSuccess() {
       toast.success(`Client updated`);
@@ -45,7 +42,7 @@ export default function UpdateClientForm({ clientId }: BaseFormProps) {
   });
 
   function handleValid(values: ClientFormInput) {
-    updateMutation.mutate({ ...values, id: clientId });
+    updateMutation.mutate({ ...values, slug: clientSlug });
   }
 
   return (

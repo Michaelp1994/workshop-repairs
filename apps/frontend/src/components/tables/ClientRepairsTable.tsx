@@ -16,11 +16,11 @@ import { api } from "~/trpc/client";
 import { columns } from "./RepairsTable/columns";
 
 interface ClientRepairsTableProps {
-  clientId: ClientID;
+  clientSlug: string;
 }
 
 export default function ClientRepairsTable({
-  clientId,
+  clientSlug,
 }: ClientRepairsTableProps) {
   const { dataState, countState, tableState } = useDataTableState({
     columns: {
@@ -38,14 +38,14 @@ export default function ClientRepairsTable({
   const [repairs] = api.repairs.getAll.useSuspenseQuery({
     ...dataState,
     filters: {
-      clientId,
+      // clientId,
     },
   });
 
   const [rowCount] = api.repairs.countAll.useSuspenseQuery({
     ...countState,
     filters: {
-      clientId,
+      // clientId,
     },
   });
   return (
@@ -58,7 +58,7 @@ export default function ClientRepairsTable({
           <IconButton
             linkOptions={{
               to: "/repairs/new",
-              search: { clientId },
+              // search: { clientId },
             }}
             size="sm"
             variant="create"

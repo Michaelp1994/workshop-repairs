@@ -21,19 +21,28 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
+  columnHelper.accessor("localId", {
+    id: "slug",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
+    cell: ({ row }) => (
+      <Link
+        className="font-bold hover:underline"
+        params={{ clientSlug: row.original.slug }}
+        to="/clients/$clientSlug"
+      >
+        {row.original.slug}
+      </Link>
+    ),
+    meta: {
+      name: "Name",
+    },
+  }),
   columnHelper.accessor("name", {
     id: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row, getValue }) => (
-      <Link
-        className="font-bold hover:underline"
-        params={{ clientId: row.original.id }}
-        to="/clients/$clientId"
-      >
-        {getValue()}
-      </Link>
     ),
     meta: {
       name: "Name",
@@ -67,7 +76,10 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
-          <Link params={{ clientId: row.original.id }} to="/clients/$clientId">
+          <Link
+            params={{ clientSlug: row.original.slug }}
+            to="/clients/$clientSlug"
+          >
             <ChevronRight className="size-4" />
           </Link>
         </Button>

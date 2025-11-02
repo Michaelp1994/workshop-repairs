@@ -10,7 +10,6 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-import generateAssetSlug from "~/utils/generateAssetSlug";
 
 import type { RouterOutputs } from "../../../../../backend/src/router";
 
@@ -34,10 +33,10 @@ export const columns = [
       return (
         <Link
           className="font-bold hover:underline"
-          params={{ assetId: getValue() }}
-          to="/assets/$assetId"
+          params={{ assetSlug: getValue() }}
+          to="/assets/$assetSlug"
         >
-          {generateAssetSlug(getValue())}
+          {getValue()}
         </Link>
       );
     },
