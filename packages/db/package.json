@@ -12,9 +12,11 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules dist",
+    "db": "drizzle-kit",
+    "db:seed": "tsx --env-file=.env ./src/seed/seed.ts",
     "dbml:generate": "tsx ./scripts/create-dbml.ts",
-    "db:seed": "tsx ./src/seed/seed.ts",
     "dbml:render": "dbml-renderer -i schema.dbml -o schema.svg",
+    "dev": "drizzle-kit studio",
     "lint": "eslint .",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
