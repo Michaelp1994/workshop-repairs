@@ -59,3 +59,6 @@ export type OrganizationID = z.infer<typeof organizationId>;
 
 export const organizationInvitationId = z.number().positive();
 export type OrganizationInvitationID = z.infer<typeof organizationInvitationId>;
+
+export const organizationSequenceId = z.number().positive();
+export type OrganizationSequenceID = z.infer<typeof organizationSequenceId>;
