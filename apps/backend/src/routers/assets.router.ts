@@ -33,8 +33,6 @@ export default router({
   getAll: organizationProcedure
     .input(getAllAssetsSchema)
     .query(async ({ ctx, input }) => {
-      const clientFilter =
-        input.filters?.client && splitSlug(input.filters.client);
       const allAssets = await getAllAssets(input, ctx.session.organizationId);
       return allAssets;
     }),
@@ -106,9 +104,13 @@ export default router({
   update: organizationProcedure
     .input(updateAssetSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
+
       const metadata = createUpdateMetadata(ctx.session);
       const updatedAsset = await updateAsset(
-        { ...input, ...metadata },
+        { ...values, ...metadata },
+        localId,
         ctx.session.organizationId,
       );
       assertDatabaseResult(updatedAsset);
@@ -118,10 +120,13 @@ export default router({
   archive: organizationProcedure
     .input(archiveAssetSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createArchiveMetadata(ctx.session);
 
       const archivedAsset = await archiveAsset(
-        { ...input, ...metadata },
+        { ...values, ...metadata },
+        localId,
         ctx.session.organizationId,
       );
       assertDatabaseResult(archivedAsset);

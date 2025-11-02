@@ -3,7 +3,7 @@ import {
   countLocations,
   createLocation,
   getAllLocations,
-  getLocationById,
+  getLocationByLocalId,
   getLocationsSelect,
   updateLocation,
 } from "@repo/db/repositories/location.repository";
@@ -12,7 +12,7 @@ import {
   countLocationsSchema,
   createLocationSchema,
   getAllLocationsSchema,
-  getLocationByIdSchema,
+  getLocationBySlugSchema,
   getLocationsSelectSchema,
   updateLocationSchema,
 } from "@repo/validators/server/locations.validators";
@@ -23,6 +23,7 @@ import {
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -46,10 +47,15 @@ export default router({
       const locations = getLocationsSelect(input, ctx.session.organizationId);
       return locations;
     }),
-  getById: organizationProcedure
-    .input(getLocationByIdSchema)
-    .query(async ({ input }) => {
-      const location = await getLocationById(input.id);
+  getBySlug: organizationProcedure
+    .input(getLocationBySlugSchema)
+    .query(async ({ input, ctx }) => {
+      const { localId } = splitSlug(input.slug);
+
+      const location = await getLocationByLocalId(
+        localId,
+        ctx.session.organizationId,
+      );
 
       if (!location) {
         throw new TRPCError({
@@ -77,11 +83,17 @@ export default router({
   update: organizationProcedure
     .input(updateLocationSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedLocation = await updateLocation({
-        ...input,
-        ...metadata,
-      });
+      const updatedLocation = await updateLocation(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(updatedLocation);
 
@@ -90,11 +102,17 @@ export default router({
   archive: organizationProcedure
     .input(archiveLocationSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedLocation = await archiveLocation({
-        ...input,
-        ...metadata,
-      });
+      const archivedLocation = await archiveLocation(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(archivedLocation);
 

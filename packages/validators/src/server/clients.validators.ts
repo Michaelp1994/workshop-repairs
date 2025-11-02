@@ -41,5 +41,5 @@ export const getClientBySlugSchema = z.object({
 });
 
 export const archiveClientSchema = z.object({
-  id: clientId,
+  slug: z.string(),
 });

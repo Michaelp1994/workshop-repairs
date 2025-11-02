@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import {
-  assetId,
   assetStatusId,
   clientId,
   equipmentTypeId,
@@ -41,10 +40,6 @@ export type CountAssetsInput = z.infer<typeof countAssetsSchema>;
 export const getAssestsSelectSchema = getSelectSchema.extend({});
 export type GetAssetsSelectSchema = z.infer<typeof getAssestsSelectSchema>;
 
-export const getAssetByIdSchema = z.object({
-  id: assetId,
-});
-
 export const getAssetBySlugSchema = z.object({
   slug: z.string(),
 });
@@ -65,8 +60,8 @@ export const createAssetSchema = z.object({
 
 export const updateAssetSchema = createAssetSchema
   .partial()
-  .extend({ id: assetId });
+  .extend({ slug: z.string() });
 
 export const archiveAssetSchema = z.object({
-  id: assetId,
+  slug: z.string(),
 });

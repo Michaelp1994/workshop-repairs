@@ -29,17 +29,17 @@ interface BaseType {
 
 type OmitKeys<T extends BaseType> = OmitSome<
   T,
-  "createdAt" | "createdById" | "deletedAt" | "deletedById" | "id"
+  "createdAt" | "createdById" | "deletedAt" | "deletedById" | "id" | "localId"
 >;
 
 type RequireKeys<T extends OmitKeys<BaseType>> = RequireSome<
   T,
-  "updatedAt" | "updatedById" | "localId"
+  "updatedAt" | "updatedById"
 >;
 
 type RemoveNullKeys<T extends OmitKeys<BaseType>> = RemoveNullSome<
   RequireKeys<T>,
-  "updatedAt" | "updatedById" | "localId"
+  "updatedAt" | "updatedById"
 >;
 
 type UpdateInput<T extends BaseType> = RemoveNullKeys<OmitKeys<T>>;
@@ -54,7 +54,7 @@ type InferUpdateModel<
 > = Prettify<UpdateInput<InferSelectModel<TTable, TConfig>>>;
 
 type DeleteInput<T extends BaseType> = Required<
-  RemoveNull<Pick<T, "id" | "deletedById" | "deletedAt">>
+  RemoveNull<Pick<T, "deletedById" | "deletedAt">>
 >;
 
 type InferArchiveModel<

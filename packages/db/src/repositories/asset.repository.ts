@@ -31,21 +31,6 @@ import { type RepairID, repairTable } from "../tables/repair.sql";
 
 const assetFields = getTableColumns(assetTable);
 
-export async function archiveAsset(
-  { id, ...values }: ArchiveAsset,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .update(assetTable)
-    .set(values)
-    .where(
-      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
-    )
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
-
 export async function countAssets(
   { filters, ...dataTableInput }: CountAssetsInput,
   organizationId: OrganizationID,
@@ -68,22 +53,6 @@ export async function countAssets(
   );
   const [res] = await query.execute();
   return res?.count;
-}
-
-export async function createAsset(input: CreateAsset) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "asset",
-    );
-    const query = tx
-      .insert(assetTable)
-      .values({ ...input, localId })
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  });
 }
 
 export async function getAllAssets(
@@ -214,15 +183,54 @@ export async function getAssetsSelect(
   return res;
 }
 
+export async function createAsset(input: CreateAsset) {
+  return await db.transaction(async (tx) => {
+    const localId = await getNextSequenceValue(
+      tx,
+      input.organizationId,
+      "asset",
+    );
+    const query = tx
+      .insert(assetTable)
+      .values({ ...input, localId })
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  });
+}
+
 export async function updateAsset(
-  { id, ...values }: UpdateAsset,
+  values: UpdateAsset,
+  localId: number,
   organizationId: OrganizationID,
 ) {
   const query = db
     .update(assetTable)
     .set(values)
     .where(
-      and(eq(assetTable.id, id), eq(assetTable.organizationId, organizationId)),
+      and(
+        eq(assetTable.localId, localId),
+        eq(assetTable.organizationId, organizationId),
+      ),
+    )
+    .returning();
+  const [res] = await query.execute();
+  return res;
+}
+
+export async function archiveAsset(
+  values: ArchiveAsset,
+  localId: number,
+  organizationId: OrganizationID,
+) {
+  const query = db
+    .update(assetTable)
+    .set(values)
+    .where(
+      and(
+        eq(assetTable.localId, localId),
+        eq(assetTable.organizationId, organizationId),
+      ),
     )
     .returning();
   const [res] = await query.execute();

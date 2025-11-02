@@ -135,6 +135,7 @@ export async function createClient(input: CreateClient) {
 
 export async function updateClient(
   input: UpdateClient,
+  localId: number,
   organizationId: OrganizationID,
 ) {
   const query = db
@@ -142,7 +143,7 @@ export async function updateClient(
     .set(input)
     .where(
       and(
-        eq(clientTable.localId, input.localId),
+        eq(clientTable.localId, localId),
         eq(clientTable.organizationId, organizationId),
       ),
     )
@@ -151,11 +152,20 @@ export async function updateClient(
   return res;
 }
 
-export async function archiveClient(input: ArchiveClient) {
+export async function archiveClient(
+  input: ArchiveClient,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(clientTable)
     .set(input)
-    .where(eq(clientTable.id, input.id))
+    .where(
+      and(
+        eq(clientTable.localId, localId),
+        eq(clientTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

@@ -19,7 +19,6 @@ import {
 import {
   type ArchivePart,
   type CreatePart,
-  type PartID,
   partTable,
   type UpdatePart,
 } from "../tables/part.sql";
@@ -85,7 +84,10 @@ export async function getPartsSelect(_props: GetPartsSelectInput) {
   return res;
 }
 
-export async function getPartById(id: PartID) {
+export async function getPartByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
   const query = db
@@ -97,7 +99,12 @@ export async function getPartById(id: PartID) {
     .innerJoin(createdByTable, eq(partTable.createdById, createdByTable.id))
     .leftJoin(updatedByTable, eq(partTable.updatedById, updatedByTable.id))
     .leftJoin(deletedByTable, eq(partTable.deletedById, deletedByTable.id))
-    .where(eq(partTable.id, id));
+    .where(
+      and(
+        eq(partTable.localId, localId),
+        eq(partTable.organizationId, organizationId),
+      ),
+    );
   const [res] = await query.execute();
   return res;
 }
@@ -118,21 +125,39 @@ export async function createPart(input: CreatePart) {
   });
 }
 
-export async function updatePart(input: UpdatePart) {
+export async function updatePart(
+  input: UpdatePart,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(partTable)
     .set(input)
-    .where(eq(partTable.id, input.id))
+    .where(
+      and(
+        eq(partTable.localId, localId),
+        eq(partTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archivePart(input: ArchivePart) {
+export async function archivePart(
+  input: ArchivePart,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(partTable)
     .set(input)
-    .where(eq(partTable.id, input.id))
+    .where(
+      and(
+        eq(partTable.localId, localId),
+        eq(partTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

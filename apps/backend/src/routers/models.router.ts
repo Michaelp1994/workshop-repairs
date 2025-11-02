@@ -3,7 +3,7 @@ import {
   countModels,
   createModel,
   getAllModels,
-  getModelById,
+  getModelByLocalId,
   getModelsSelect,
   updateModel,
 } from "@repo/db/repositories/model.repository";
@@ -12,7 +12,7 @@ import {
   countModelsSchema,
   createModelSchema,
   getAllModelsSchema,
-  getModelByIdSchema,
+  getModelBySlugSchema,
   getModelsSelectSchema,
   updateModelSchema,
 } from "@repo/validators/server/models.validators";
@@ -24,6 +24,7 @@ import {
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
 import { getModelImageUrlFromKey } from "../helpers/s3";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -54,37 +55,15 @@ export default router({
       );
       return allModels;
     }),
+  getBySlug: organizationProcedure
+    .input(getModelBySlugSchema)
+    .query(async ({ input, ctx }) => {
+      const { localId } = splitSlug(input.slug);
 
-  // getByAssetId: organizationProcedure
-  //   .input(getModelByAssetIdSchema)
-  //   .query(async ({ input, ctx }) => {
-  //     const asset = await getAssetById(
-  //       input.assetId,
-  //       ctx.session.organizationId,
-  //     );
-
-  //     if (!asset) {
-  //       throw new TRPCError({
-  //         code: "NOT_FOUND",
-  //         message: "asset not found",
-  //       });
-  //     }
-
-  //     const model = await getModelById(asset.modelId);
-
-  //     if (!model) {
-  //       throw new TRPCError({
-  //         code: "NOT_FOUND",
-  //         message: "model not found",
-  //       });
-  //     }
-
-  //     return model;
-  //   }),
-  getById: organizationProcedure
-    .input(getModelByIdSchema)
-    .query(async ({ input }) => {
-      const model = await getModelById(input.id);
+      const model = await getModelByLocalId(
+        localId,
+        ctx.session.organizationId,
+      );
 
       if (!model) {
         throw new TRPCError({
@@ -113,12 +92,18 @@ export default router({
   update: organizationProcedure
     .input(updateModelSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedModel = await updateModel({
-        ...input,
-        ...metadata,
-      });
+      const updatedModel = await updateModel(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(updatedModel);
 
@@ -127,12 +112,18 @@ export default router({
   archive: organizationProcedure
     .input(archiveModelSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedModel = await archiveModel({
-        ...input,
-        ...metadata,
-      });
+      const archivedModel = await archiveModel(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(archivedModel);
 

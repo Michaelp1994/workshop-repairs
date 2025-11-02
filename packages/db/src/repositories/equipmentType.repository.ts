@@ -85,6 +85,40 @@ export async function getEquipmentTypesSelect(
   return query.execute();
 }
 
+export async function getEquipmentTypeByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
+  const { createdByTable, updatedByTable, deletedByTable, metadata } =
+    createMetadataFields();
+  const query = db
+    .select({
+      ...equipmentTypeFields,
+      ...metadata,
+    })
+    .from(equipmentTypeTable)
+    .innerJoin(
+      createdByTable,
+      eq(equipmentTypeTable.createdById, createdByTable.id),
+    )
+    .leftJoin(
+      updatedByTable,
+      eq(equipmentTypeTable.updatedById, updatedByTable.id),
+    )
+    .leftJoin(
+      deletedByTable,
+      eq(equipmentTypeTable.deletedById, deletedByTable.id),
+    )
+    .where(
+      and(
+        eq(equipmentTypeTable.localId, localId),
+        eq(equipmentTypeTable.organizationId, organizationId),
+      ),
+    );
+  const [res] = await query.execute();
+  return res;
+}
+
 export async function getEquipmentTypeById(input: EquipmentTypeID) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
@@ -127,21 +161,39 @@ export async function createEquipmentType(input: CreateEquipmentType) {
   });
 }
 
-export async function updateEquipmentType(input: UpdateEquipmentType) {
+export async function updateEquipmentType(
+  input: UpdateEquipmentType,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(equipmentTypeTable)
     .set(input)
-    .where(eq(equipmentTypeTable.id, input.id))
+    .where(
+      and(
+        eq(equipmentTypeTable.localId, localId),
+        eq(equipmentTypeTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveEquipmentType(input: ArchiveEquipmentType) {
+export async function archiveEquipmentType(
+  input: ArchiveEquipmentType,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(equipmentTypeTable)
     .set(input)
-    .where(eq(equipmentTypeTable.id, input.id))
+    .where(
+      and(
+        eq(equipmentTypeTable.localId, localId),
+        eq(equipmentTypeTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

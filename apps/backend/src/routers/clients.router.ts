@@ -105,14 +105,17 @@ export default router({
   update: organizationProcedure
     .input(updateClientSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
+
       const metadata = createUpdateMetadata(ctx.session);
-      const { localId } = splitSlug(input.slug);
+
       const updatedClient = await updateClient(
         {
-          localId,
-          ...input,
+          ...values,
           ...metadata,
         },
+        localId,
         ctx.session.organizationId,
       );
 
@@ -122,11 +125,17 @@ export default router({
   archive: organizationProcedure
     .input(archiveClientSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedClient = await archiveClient({
-        ...input,
-        ...metadata,
-      });
+      const archivedClient = await archiveClient(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(archivedClient);
 

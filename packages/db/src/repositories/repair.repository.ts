@@ -27,7 +27,6 @@ import { repairTypeTable } from "../tables/repair-type.sql";
 import {
   type ArchiveRepair,
   type CreateRepair,
-  type RepairID,
   repairTable,
   type UpdateRepair,
 } from "../tables/repair.sql";
@@ -136,7 +135,10 @@ export async function getRepairsSelect(_: GetRepairsSelectInput) {
   return query.execute();
 }
 
-export async function getRepairById(input: RepairID) {
+export async function getRepairByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const { createdByTable, deletedByTable, metadata, updatedByTable } =
     createMetadataFields();
   const query = db
@@ -176,7 +178,12 @@ export async function getRepairById(input: RepairID) {
       repairStatusTypeTable,
       eq(repairTable.statusId, repairStatusTypeTable.id),
     )
-    .where(eq(repairTable.id, input));
+    .where(
+      and(
+        eq(repairTable.localId, localId),
+        eq(repairTable.organizationId, organizationId),
+      ),
+    );
 
   const [res] = await query.execute();
   return res;
@@ -198,21 +205,39 @@ export async function createRepair(input: CreateRepair) {
   });
 }
 
-export async function updateRepair(input: UpdateRepair) {
+export async function updateRepair(
+  input: UpdateRepair,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(repairTable)
     .set(input)
-    .where(eq(repairTable.id, input.id))
+    .where(
+      and(
+        eq(repairTable.localId, localId),
+        eq(repairTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveRepair({ id, ...input }: ArchiveRepair) {
+export async function archiveRepair(
+  input: ArchiveRepair,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(repairTable)
     .set(input)
-    .where(eq(repairTable.id, id))
+    .where(
+      and(
+        eq(repairTable.localId, localId),
+        eq(repairTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

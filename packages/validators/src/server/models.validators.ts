@@ -4,7 +4,6 @@ import {
   assetId,
   equipmentTypeId,
   manufacturerId,
-  modelId,
 } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
@@ -40,16 +39,12 @@ export const createModelSchema = z.object({
   equipmentTypeId,
 });
 
-export const updateModelSchema = z.object({
-  id: modelId,
-  name: z.string().min(3),
-  nickname: z.string().min(2),
-  manufacturerId,
-  equipmentTypeId,
+export const updateModelSchema = createModelSchema.partial().extend({
+  slug: z.string(),
 });
 
-export const getModelByIdSchema = z.object({
-  id: modelId,
+export const getModelBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const getModelByAssetIdSchema = z.object({
@@ -57,5 +52,5 @@ export const getModelByAssetIdSchema = z.object({
 });
 
 export const archiveModelSchema = z.object({
-  id: modelId,
+  slug: z.string(),
 });

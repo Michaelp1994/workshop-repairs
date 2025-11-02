@@ -3,7 +3,7 @@ import {
   countParts,
   createPart,
   getAllParts,
-  getPartById,
+  getPartByLocalId,
   getPartsSelect,
   updatePart,
 } from "@repo/db/repositories/part.repository";
@@ -12,7 +12,7 @@ import {
   countPartsSchema,
   createPartSchema,
   getAllPartsSchema,
-  getPartByIdSchema,
+  getPartBySlugSchema,
   getPartsSelectSchema,
   updatePartSchema,
 } from "@repo/validators/server/parts.validators";
@@ -23,6 +23,7 @@ import {
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -48,10 +49,11 @@ export default router({
 
       return allParts;
     }),
-  getById: organizationProcedure
-    .input(getPartByIdSchema)
-    .query(async ({ input }) => {
-      const part = await getPartById(input.id);
+  getBySlug: organizationProcedure
+    .input(getPartBySlugSchema)
+    .query(async ({ input, ctx }) => {
+      const { localId } = splitSlug(input.slug);
+      const part = await getPartByLocalId(localId, ctx.session.organizationId);
 
       if (!part) {
         throw new TRPCError({
@@ -79,11 +81,17 @@ export default router({
   update: organizationProcedure
     .input(updatePartSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedPart = await updatePart({
-        ...input,
-        ...metadata,
-      });
+      const updatedPart = await updatePart(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(updatedPart);
 
@@ -92,12 +100,18 @@ export default router({
   archive: organizationProcedure
     .input(archivePartSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedPart = await archivePart({
-        ...input,
-        ...metadata,
-      });
+      const archivedPart = await archivePart(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(archivedPart);
 

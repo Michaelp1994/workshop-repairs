@@ -22,7 +22,6 @@ import { modelImageTable } from "../tables/model-image.sql";
 import {
   type ArchiveModel,
   type CreateModel,
-  type ModelID,
   modelTable,
   type UpdateModel,
 } from "../tables/model.sql";
@@ -89,7 +88,10 @@ export function getModelsSelect(
   return res;
 }
 
-export async function getModelById(id: ModelID) {
+export async function getModelByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const { createdByTable, deletedByTable, metadata, updatedByTable } =
     createMetadataFields();
 
@@ -117,7 +119,12 @@ export async function getModelById(id: ModelID) {
       modelImageTable,
       eq(modelTable.defaultImageId, modelImageTable.id),
     )
-    .where(eq(modelTable.id, id));
+    .where(
+      and(
+        eq(modelTable.localId, localId),
+        eq(modelTable.organizationId, organizationId),
+      ),
+    );
   const [res] = await query.execute();
   return res;
 }
@@ -138,21 +145,39 @@ export async function createModel(input: CreateModel) {
   });
 }
 
-export async function updateModel(input: UpdateModel) {
+export async function updateModel(
+  input: UpdateModel,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(modelTable)
     .set(input)
-    .where(eq(modelTable.id, input.id))
+    .where(
+      and(
+        eq(modelTable.localId, localId),
+        eq(modelTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveModel(input: ArchiveModel) {
+export async function archiveModel(
+  input: ArchiveModel,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(modelTable)
     .set(input)
-    .where(eq(modelTable.id, input.id))
+    .where(
+      and(
+        eq(modelTable.localId, localId),
+        eq(modelTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

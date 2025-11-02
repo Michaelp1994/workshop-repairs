@@ -19,7 +19,6 @@ import {
 import {
   type ArchiveLocation,
   type CreateLocation,
-  type LocationID,
   locationTable,
   type UpdateLocation,
 } from "../tables/location.sql";
@@ -93,7 +92,10 @@ export function getLocationsSelect(
   return query.execute();
 }
 
-export async function getLocationById(id: LocationID) {
+export async function getLocationByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const { metadata, createdByTable, deletedByTable, updatedByTable } =
     createMetadataFields();
   const query = db
@@ -105,7 +107,12 @@ export async function getLocationById(id: LocationID) {
     .innerJoin(createdByTable, eq(locationTable.createdById, createdByTable.id))
     .leftJoin(updatedByTable, eq(locationTable.updatedById, updatedByTable.id))
     .leftJoin(deletedByTable, eq(locationTable.deletedById, deletedByTable.id))
-    .where(eq(locationTable.id, id));
+    .where(
+      and(
+        eq(locationTable.localId, localId),
+        eq(locationTable.organizationId, organizationId),
+      ),
+    );
   const [res] = await query.execute();
   return res;
 }
@@ -126,21 +133,39 @@ export async function createLocation(input: CreateLocation) {
   });
 }
 
-export async function updateLocation(input: UpdateLocation) {
+export async function updateLocation(
+  input: UpdateLocation,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(locationTable)
     .set(input)
-    .where(eq(locationTable.id, input.id))
+    .where(
+      and(
+        eq(locationTable.localId, localId),
+        eq(locationTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveLocation(input: ArchiveLocation) {
+export async function archiveLocation(
+  input: ArchiveLocation,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(locationTable)
     .set(input)
-    .where(eq(locationTable.id, input.id))
+    .where(
+      and(
+        eq(locationTable.localId, localId),
+        eq(locationTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

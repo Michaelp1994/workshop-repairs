@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-import { equipmentTypeId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
@@ -33,15 +32,16 @@ export const createEquipmentTypeSchema = z.object({
   name: z.string().min(3),
 });
 
-export const updateEquipmentTypeSchema = z.object({
-  id: equipmentTypeId,
-  name: z.string().min(3),
-});
+export const updateEquipmentTypeSchema = createEquipmentTypeSchema
+  .partial()
+  .extend({
+    slug: z.string(),
+  });
 
-export const getEquipmentTypeByIdSchema = z.object({
-  id: equipmentTypeId,
+export const getEquipmentTypeBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const archiveEquipmentTypeSchema = z.object({
-  id: equipmentTypeId,
+  slug: z.string(),
 });

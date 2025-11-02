@@ -3,7 +3,6 @@ import { z } from "zod";
 import {
   assetId,
   clientId,
-  repairId,
   repairStatusTypeId,
   repairTypeId,
 } from "../isomorphic/ids.validators";
@@ -37,8 +36,8 @@ export const getAllRepairsByAssetIdSchema = z.object({
   assetId,
 });
 
-export const getRepairByIdSchema = z.object({
-  id: repairId,
+export const getRepairBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const createRepairSchema = z.object({
@@ -52,13 +51,8 @@ export const createRepairSchema = z.object({
 
 export const updateRepairSchema = createRepairSchema
   .partial()
-  .extend({ id: repairId });
-
-export const updateRepairStatusSchema = z.object({
-  id: repairId,
-  statusId: repairStatusTypeId,
-});
+  .extend({ slug: z.string() });
 
 export const archiveRepairSchema = z.object({
-  id: repairId,
+  slug: z.string(),
 });

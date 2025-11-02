@@ -19,7 +19,6 @@ import {
 import {
   type ArchiveManufacturer,
   type CreateManufacturer,
-  type ManufacturerID,
   manufacturerTable,
   type UpdateManufacturer,
 } from "../tables/manufacturer.sql";
@@ -74,7 +73,10 @@ export async function countManufacturers(
   return res?.count;
 }
 
-export async function getManufacturerById(id: ManufacturerID) {
+export async function getManufacturerByLocalId(
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const { metadata, createdByTable, deletedByTable, updatedByTable } =
     createMetadataFields();
   const query = db
@@ -95,7 +97,12 @@ export async function getManufacturerById(id: ManufacturerID) {
       deletedByTable,
       eq(manufacturerTable.deletedById, deletedByTable.id),
     )
-    .where(eq(manufacturerTable.id, id));
+    .where(
+      and(
+        eq(manufacturerTable.id, localId),
+        eq(manufacturerTable.organizationId, organizationId),
+      ),
+    );
   const [res] = await query.execute();
   return res;
 }
@@ -135,21 +142,39 @@ export async function createManufacturer(input: CreateManufacturer) {
   });
 }
 
-export async function updateManufacturer(input: UpdateManufacturer) {
+export async function updateManufacturer(
+  input: UpdateManufacturer,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(manufacturerTable)
     .set(input)
-    .where(eq(manufacturerTable.id, input.id))
+    .where(
+      and(
+        eq(manufacturerTable.localId, localId),
+        eq(manufacturerTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveManufacturer(input: ArchiveManufacturer) {
+export async function archiveManufacturer(
+  input: ArchiveManufacturer,
+  localId: number,
+  organizationId: OrganizationID,
+) {
   const query = db
     .update(manufacturerTable)
     .set(input)
-    .where(eq(manufacturerTable.id, input.id))
+    .where(
+      and(
+        eq(manufacturerTable.localId, localId),
+        eq(manufacturerTable.organizationId, organizationId),
+      ),
+    )
     .returning();
   const [res] = await query.execute();
   return res;

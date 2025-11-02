@@ -3,7 +3,7 @@ import {
   countEquipmentTypes,
   createEquipmentType,
   getAllEquipmentTypes,
-  getEquipmentTypeById,
+  getEquipmentTypeByLocalId,
   getEquipmentTypesSelect,
   updateEquipmentType,
 } from "@repo/db/repositories/equipmentType.repository";
@@ -12,7 +12,7 @@ import {
   countEquipmentTypesSchema,
   createEquipmentTypeSchema,
   getAllEquipmentTypesSchema,
-  getEquipmentTypeByIdSchema,
+  getEquipmentTypeBySlugSchema,
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
 } from "@repo/validators/server/equipmentTypes.validators";
@@ -23,6 +23,7 @@ import {
   createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import assertDatabaseResult from "../helpers/trpcAssert";
 import { organizationProcedure, router } from "../trpc";
 
@@ -53,19 +54,23 @@ export default router({
 
       return allEquipmentTypes;
     }),
-  getById: organizationProcedure
-    .input(getEquipmentTypeByIdSchema)
-    .query(async ({ input }) => {
-      const repairType = await getEquipmentTypeById(input.id);
+  getBySlug: organizationProcedure
+    .input(getEquipmentTypeBySlugSchema)
+    .query(async ({ ctx, input }) => {
+      const { localId } = splitSlug(input.slug);
 
-      if (!repairType) {
+      const equipmentType = await getEquipmentTypeByLocalId(
+        localId,
+        ctx.session.organizationId,
+      );
+
+      if (!equipmentType) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "repairType not found",
+          message: "can't find Equipment Type",
         });
       }
-
-      return repairType;
+      return equipmentType;
     }),
   create: organizationProcedure
     .input(createEquipmentTypeSchema)
@@ -84,11 +89,17 @@ export default router({
   update: organizationProcedure
     .input(updateEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedEquipmentType = await updateEquipmentType({
-        ...input,
-        ...metadata,
-      });
+      const updatedEquipmentType = await updateEquipmentType(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(updatedEquipmentType);
 
@@ -97,12 +108,18 @@ export default router({
   archive: organizationProcedure
     .input(archiveEquipmentTypeSchema)
     .mutation(async ({ input, ctx }) => {
+      const { slug, ...values } = input;
+      const { localId } = splitSlug(slug);
       const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedEquipmentType = await archiveEquipmentType({
-        ...input,
-        ...metadata,
-      });
+      const archivedEquipmentType = await archiveEquipmentType(
+        {
+          ...values,
+          ...metadata,
+        },
+        localId,
+        ctx.session.organizationId,
+      );
 
       assertDatabaseResult(archivedEquipmentType);
 
