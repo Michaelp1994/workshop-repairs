@@ -17,6 +17,17 @@ export default defineConfig(
       "perfectionist/sort-modules": "off",
       "perfectionist/sort-intersection-types": "off",
       "@typescript-eslint/no-confusing-void-expression": "off",
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        {
+          allowAny: false,
+          allowBoolean: false,
+          allowNever: false,
+          allowNullish: false,
+          allowNumber: true,
+          allowRegExp: false,
+        },
+      ],
       "@typescript-eslint/no-misused-promises": [
         "error",
         {

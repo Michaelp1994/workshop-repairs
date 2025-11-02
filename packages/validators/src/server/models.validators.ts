@@ -43,6 +43,7 @@ export const createModelSchema = z.object({
 export const updateModelSchema = z.object({
   id: modelId,
   name: z.string().min(3),
+  nickname: z.string().min(2),
   manufacturerId,
   equipmentTypeId,
 });

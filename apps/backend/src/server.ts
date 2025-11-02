@@ -9,6 +9,9 @@ const handler = createHTTPHandler({
   middleware: cors(),
   basePath: "/api/trpc/",
   router: appRouter,
+  onError({ error }) {
+    console.log(error);
+  },
   responseMeta() {
     return {
       headers: {

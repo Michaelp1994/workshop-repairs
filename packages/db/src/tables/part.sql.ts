@@ -27,11 +27,7 @@ export const partTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [
-    unique().on(t.name, t.organizationId),
-    unique().on(t.localId, t.organizationId),
-    ...auditConstraints(t),
-  ],
+  (t) => [unique().on(t.localId, t.organizationId), ...auditConstraints(t)],
 );
 
 export const partRelations = relations(partTable, ({ one, many }) => ({

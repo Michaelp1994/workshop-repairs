@@ -25,7 +25,7 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 export default function CreateClientForm() {
   const navigate = useNavigate();
   const createMutation = api.clients.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
       toast.success(`Client created`);
       await navigate({
         to: "/clients/$clientId",

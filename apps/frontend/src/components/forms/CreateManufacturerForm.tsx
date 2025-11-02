@@ -25,7 +25,7 @@ import displayMutationErrors from "~/utils/displayMutationErrors";
 export default function CreateManufacturerForm() {
   const navigate = useNavigate();
   const createMutation = api.manufacturers.create.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
       toast.success(`Manufacturer ${data.name} created`);
       await navigate({
         to: "/manufacturers/$manufacturerId",
