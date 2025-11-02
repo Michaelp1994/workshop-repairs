@@ -4,14 +4,18 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { fromSSO } from "@aws-sdk/credential-providers"; // ES6 import
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { TRPCError } from "@trpc/server";
 
 import { env } from "../env";
 
-const s3 = new S3Client({});
-const ONE_MINUTE = 60 * 1000;
+const s3 = new S3Client({
+  credentials: fromSSO({ profile: "workshop-repairs" }),
+  region: "ap-southeast-2",
+});
 
+const ONE_MINUTE = 60 * 1000;
 export function createModelImageKeyFromFileName(fileName: string) {
   return `modelImages/${fileName}`;
 }
@@ -70,7 +74,7 @@ export function getModelImageUrlFromKey(key: string) {
 }
 
 export function getOrganizationLogoUrlFromKey(key: string) {
-  return `${env.imageUrl}/organizations/logos/${key}`;
+  return `https://workshop-repairs-dev-assets.s3.ap-southeast-2.amazonaws.com/organizations/logos/${key}`;
 }
 
 export function getRepairImageUrlFromKey(key: string) {
