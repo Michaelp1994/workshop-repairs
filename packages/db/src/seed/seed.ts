@@ -1,6 +1,5 @@
 import { hashPassword } from "@repo/auth/password";
 import { getTableColumns, getTableName, sql } from "drizzle-orm";
-import { reset } from "drizzle-seed";
 
 import { db } from "../index";
 import { schema } from "../tables";
@@ -16,7 +15,6 @@ import parts_to_models from "./data/staging/parts_to_models.json";
 import repair_status_types from "./data/staging/repair_status_types.json";
 import repair_types from "./data/staging/repair_types.json";
 import user_types from "./data/staging/user_types.json";
-
 console.log("Seeding database...");
 const email = process.env["TEST_USER_EMAIL"];
 const password = process.env["TEST_USER_PASSWORD"];
@@ -24,7 +22,7 @@ if (!email || !password) {
   throw Error("TEST_USER_EMAIL and TEST_USER_PASSWORD must be set in .env");
 }
 try {
-  await reset(db, schema);
+  // await reset(db, schema);
   await db.transaction(async (t) => {
     await t.insert(schema.assetStatusTable).values(asset_statuses);
     await t.insert(schema.repairStatusTypeTable).values(repair_status_types);
@@ -111,7 +109,7 @@ try {
 
     await t.execute(sql`SET CONSTRAINTS ALL DEFERRED;`);
 
-    for await (const table of Object.values(schema)) {
+    for (const table of Object.values(schema)) {
       const tableName = getTableName(table);
       const columns = getTableColumns(table);
       if ("id" in columns) {

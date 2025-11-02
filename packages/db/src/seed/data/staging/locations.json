@@ -1,327 +1,327 @@
 [
   {
-    "id": 1,
     "name": "Gold Coast University Hospital",
-    "address": "Bld G16 2.58 Parklands Dr Southport 4215"
+    "address": "Bld G16 2.58 Parklands Dr Southport 4215",
+    "localId": 1
   },
   {
-    "id": 2,
     "name": "Gold Coast Private Hospital",
-    "address": "1 Hospital Blvd Southport 4215"
+    "address": "1 Hospital Blvd Southport 4215",
+    "localId": 2
   },
   {
-    "id": 3,
     "name": "Logan Hospital",
-    "address": "Cnr Armstrong and Loganlea Roads Meadowbrook 4131"
+    "address": "Cnr Armstrong and Loganlea Roads Meadowbrook 4131",
+    "localId": 3
   },
   {
-    "id": 4,
     "name": "Princess Alexandra Hospital",
-    "address": "199 Ipswich Road Woolloongabba 4102"
+    "address": "199 Ipswich Road Woolloongabba 4102",
+    "localId": 4
   },
   {
-    "id": 5,
     "name": "Royal Brisbane & Women's Hospital",
-    "address": "199 Ipswich Road Woolloongabba 4102"
+    "address": "199 Ipswich Road Woolloongabba 4102",
+    "localId": 5
   },
   {
-    "id": 6,
     "name": "Redland Hospital",
-    "address": "Weippin Street Cleveland 4163"
+    "address": "Weippin Street Cleveland 4163",
+    "localId": 6
   },
   {
-    "id": 7,
     "name": "The Prince Charles Hospital",
-    "address": "Rode Road Chermside 4032"
+    "address": "Rode Road Chermside 4032",
+    "localId": 7
   },
   {
-    "id": 8,
     "name": "The Royal Children's Hospital",
-    "address": "Herston Road Herston 4029"
+    "address": "Herston Road Herston 4029",
+    "localId": 8
   },
   {
-    "id": 9,
     "name": "Toowoomba Hospital",
-    "address": "Pechey Street Toowoomba 4350"
+    "address": "Pechey Street Toowoomba 4350",
+    "localId": 9
   },
   {
-    "id": 10,
     "name": "Townsville Hospital",
-    "address": "100 Angus Smith Drive Douglas 4814"
+    "address": "100 Angus Smith Drive Douglas 4814",
+    "localId": 10
   },
   {
-    "id": 11,
     "name": "Wesley Hospital",
-    "address": "451 Coronation Drive Auchenflower 4066"
+    "address": "451 Coronation Drive Auchenflower 4066",
+    "localId": 11
   },
   {
-    "id": 12,
     "name": "Sunshine Coast University Hospital",
-    "address": "6 Doherty Street Birtinya 4575"
+    "address": "6 Doherty Street Birtinya 4575",
+    "localId": 12
   },
   {
-    "id": 13,
     "name": "Mater Hospital",
-    "address": "Raymond Terrace South Brisbane 4101"
+    "address": "Raymond Terrace South Brisbane 4101",
+    "localId": 13
   },
   {
-    "id": 14,
     "name": "Greenslopes Private Hospital",
-    "address": "Newdegate Street Greenslopes 4120"
+    "address": "Newdegate Street Greenslopes 4120",
+    "localId": 14
   },
   {
-    "id": 15,
     "name": "St Andrew's War Memorial Hospital",
-    "address": "457 Wickham Terrace Brisbane 4000"
+    "address": "457 Wickham Terrace Brisbane 4000",
+    "localId": 15
   },
   {
-    "id": 16,
     "name": "St Vincent's Private Hospital",
-    "address": "20 Dalley Street Lismore 2480"
+    "address": "20 Dalley Street Lismore 2480",
+    "localId": 16
   },
   {
-    "id": 17,
     "name": "St Vincent's Hospital",
-    "address": "390 Victoria Street Darlinghurst 2010"
+    "address": "390 Victoria Street Darlinghurst 2010",
+    "localId": 17
   },
   {
-    "id": 18,
     "name": "John Flynn Private Hospital",
-    "address": "42 Inland Drive Tugun 4224"
+    "address": "42 Inland Drive Tugun 4224",
+    "localId": 18
   },
   {
-    "id": 19,
     "name": "Cairns Hospital",
-    "address": "165 The Esplanade Cairns 4870"
+    "address": "165 The Esplanade Cairns 4870",
+    "localId": 19
   },
   {
-    "id": 20,
     "name": "Mackay Base Hospital",
-    "address": "475 Bridge Road Mackay 4740"
+    "address": "475 Bridge Road Mackay 4740",
+    "localId": 20
   },
   {
-    "id": 21,
     "name": "Ipswich Hospital",
-    "address": "Chelmsford Avenue Ipswich 4305"
+    "address": "Chelmsford Avenue Ipswich 4305",
+    "localId": 21
   },
   {
-    "id": 22,
     "name": "Bundaberg Hospital",
-    "address": "271 Bourbong Street Bundaberg 4670"
+    "address": "271 Bourbong Street Bundaberg 4670",
+    "localId": 22
   },
   {
-    "id": 23,
     "name": "Rockhampton Hospital",
-    "address": "Canning Street Rockhampton 4700"
+    "address": "Canning Street Rockhampton 4700",
+    "localId": 23
   },
   {
-    "id": 24,
     "name": "Nambour General Hospital",
-    "address": "Hospital Road Nambour 4560"
+    "address": "Hospital Road Nambour 4560",
+    "localId": 24
   },
   {
-    "id": 25,
     "name": "Robina Hospital",
-    "address": "2 Bayberry Lane Robina 4226"
+    "address": "2 Bayberry Lane Robina 4226",
+    "localId": 25
   },
   {
-    "id": 26,
     "name": "Westmead Hospital",
-    "address": "Hawkesbury Road Westmead 2145"
+    "address": "Hawkesbury Road Westmead 2145",
+    "localId": 26
   },
   {
-    "id": 27,
     "name": "Liverpool Hospital",
-    "address": "Elizabeth Street Liverpool 2170"
+    "address": "Elizabeth Street Liverpool 2170",
+    "localId": 27
   },
   {
-    "id": 28,
     "name": "Royal Prince Alfred Hospital",
-    "address": "Missenden Road Camperdown 2050"
+    "address": "Missenden Road Camperdown 2050",
+    "localId": 28
   },
   {
-    "id": 29,
     "name": "St George Hospital",
-    "address": "Gray Street Kogarah 2217"
+    "address": "Gray Street Kogarah 2217",
+    "localId": 29
   },
   {
-    "id": 30,
     "name": "Nepean Hospital",
-    "address": "Derby Street Kingswood 2747"
+    "address": "Derby Street Kingswood 2747",
+    "localId": 30
   },
   {
-    "id": 31,
     "name": "Blacktown Hospital",
-    "address": "17 Blacktown Road Blacktown 2148"
+    "address": "17 Blacktown Road Blacktown 2148",
+    "localId": 31
   },
   {
-    "id": 32,
     "name": "Concord Repatriation General Hospital",
-    "address": "Hospital Road Concord 2139"
+    "address": "Hospital Road Concord 2139",
+    "localId": 32
   },
   {
-    "id": 33,
     "name": "Fairfield Hospital",
-    "address": "Prairievale Road Prairiewood 2176"
+    "address": "Prairievale Road Prairiewood 2176",
+    "localId": 33
   },
   {
-    "id": 34,
     "name": "Gosford Hospital",
-    "address": "Holden Street Gosford 2250"
+    "address": "Holden Street Gosford 2250",
+    "localId": 34
   },
   {
-    "id": 35,
     "name": "Hornsby Ku-ring-gai Hospital",
-    "address": "Palmerston Road Hornsby 2077"
+    "address": "Palmerston Road Hornsby 2077",
+    "localId": 35
   },
   {
-    "id": 36,
     "name": "Manly Hospital",
-    "address": "Darley Road Manly 2095"
+    "address": "Darley Road Manly 2095",
+    "localId": 36
   },
   {
-    "id": 37,
     "name": "Royal North Shore Hospital",
-    "address": "Reserve Road St Leonards 2065"
+    "address": "Reserve Road St Leonards 2065",
+    "localId": 37
   },
   {
-    "id": 38,
     "name": "Ryde Hospital",
-    "address": "Denistone Road Eastwood 2122"
+    "address": "Denistone Road Eastwood 2122",
+    "localId": 38
   },
   {
-    "id": 39,
     "name": "Sutherland Hospital",
-    "address": "Kingsway Caringbah 2229"
+    "address": "Kingsway Caringbah 2229",
+    "localId": 39
   },
   {
-    "id": 40,
     "name": "Sydney Children's Hospital",
-    "address": "High Street Randwick 2031"
+    "address": "High Street Randwick 2031",
+    "localId": 40
   },
   {
-    "id": 41,
     "name": "The Royal Melbourne Hospital",
-    "address": "300 Grattan Street Parkville 3050"
+    "address": "300 Grattan Street Parkville 3050",
+    "localId": 41
   },
   {
-    "id": 42,
     "name": "St Vincent's Hospital Melbourne",
-    "address": "41 Victoria Parade Fitzroy 3065"
+    "address": "41 Victoria Parade Fitzroy 3065",
+    "localId": 42
   },
   {
-    "id": 43,
     "name": "The Alfred Hospital",
-    "address": "55 Commercial Road Melbourne 3004"
+    "address": "55 Commercial Road Melbourne 3004",
+    "localId": 43
   },
   {
-    "id": 44,
     "name": "Austin Hospital",
-    "address": "145 Studley Road Heidelberg 3084"
+    "address": "145 Studley Road Heidelberg 3084",
+    "localId": 44
   },
   {
-    "id": 45,
     "name": "Box Hill Hospital",
-    "address": "8 Arnold Street Box Hill 3128"
+    "address": "8 Arnold Street Box Hill 3128",
+    "localId": 45
   },
   {
-    "id": 46,
     "name": "Monash Medical Centre",
-    "address": "246 Clayton Road Clayton 3168"
+    "address": "246 Clayton Road Clayton 3168",
+    "localId": 46
   },
   {
-    "id": 47,
     "name": "Royal Children's Hospital Melbourne",
-    "address": "50 Flemington Road Parkville 3052"
+    "address": "50 Flemington Road Parkville 3052",
+    "localId": 47
   },
   {
-    "id": 48,
     "name": "Royal Women's Hospital",
-    "address": "20 Flemington Road Parkville 3052"
+    "address": "20 Flemington Road Parkville 3052",
+    "localId": 48
   },
   {
-    "id": 49,
     "name": "Frankston Hospital",
-    "address": "2 Hastings Road Frankston 3199"
+    "address": "2 Hastings Road Frankston 3199",
+    "localId": 49
   },
   {
-    "id": 50,
     "name": "Western Hospital",
-    "address": "Footscray Road Footscray 3011"
+    "address": "Footscray Road Footscray 3011",
+    "localId": 50
   },
   {
-    "id": 51,
     "name": "Royal Perth Hospital",
-    "address": "197 Wellington Street Perth 6000"
+    "address": "197 Wellington Street Perth 6000",
+    "localId": 51
   },
   {
-    "id": 52,
     "name": "Fiona Stanley Hospital",
-    "address": "11 Robin Warren Drive Murdoch 6150"
+    "address": "11 Robin Warren Drive Murdoch 6150",
+    "localId": 52
   },
   {
-    "id": 53,
     "name": "Sir Charles Gairdner Hospital",
-    "address": "Hospital Avenue Nedlands 6009"
+    "address": "Hospital Avenue Nedlands 6009",
+    "localId": 53
   },
   {
-    "id": 54,
     "name": "Joondalup Health Campus",
-    "address": "Shenton Avenue Joondalup 6027"
+    "address": "Shenton Avenue Joondalup 6027",
+    "localId": 54
   },
   {
-    "id": 55,
     "name": "St John of God Subiaco Hospital",
-    "address": "12 Salvado Road Subiaco 6008"
+    "address": "12 Salvado Road Subiaco 6008",
+    "localId": 55
   },
   {
-    "id": 56,
     "name": "Royal Hobart Hospital",
-    "address": "48 Liverpool Street Hobart 7000"
+    "address": "48 Liverpool Street Hobart 7000",
+    "localId": 56
   },
   {
-    "id": 57,
     "name": "Launceston General Hospital",
-    "address": "274-280 Charles Street Launceston 7250"
+    "address": "274-280 Charles Street Launceston 7250",
+    "localId": 57
   },
   {
-    "id": 58,
     "name": "North West Regional Hospital",
-    "address": "23 Brickport Road Burnie 7320"
+    "address": "23 Brickport Road Burnie 7320",
+    "localId": 58
   },
   {
-    "id": 59,
     "name": "Royal Darwin Hospital",
-    "address": "105 Rocklands Drive Tiwi 0810"
+    "address": "105 Rocklands Drive Tiwi 0810",
+    "localId": 59
   },
   {
-    "id": 60,
     "name": "Alice Springs Hospital",
-    "address": "6 Gap Road Alice Springs 0870"
+    "address": "6 Gap Road Alice Springs 0870",
+    "localId": 60
   },
   {
-    "id": 61,
     "name": "Royal Adelaide Hospital",
-    "address": "Port Road Adelaide 5000"
+    "address": "Port Road Adelaide 5000",
+    "localId": 61
   },
   {
-    "id": 62,
     "name": "Flinders Medical Centre",
-    "address": "Flinders Drive Bedford Park 5042"
+    "address": "Flinders Drive Bedford Park 5042",
+    "localId": 62
   },
   {
-    "id": 63,
     "name": "Lyell McEwin Hospital",
-    "address": "Haydown Road Elizabeth Vale 5112"
+    "address": "Haydown Road Elizabeth Vale 5112",
+    "localId": 63
   },
   {
-    "id": 64,
     "name": "The Queen Elizabeth Hospital",
-    "address": "Woodville Road Woodville South 5011"
+    "address": "Woodville Road Woodville South 5011",
+    "localId": 64
   },
   {
-    "id": 65,
     "name": "Women's and Children's Hospital",
-    "address": "72 King William Road North Adelaide 5006"
+    "address": "72 King William Road North Adelaide 5006",
+    "localId": 65
   }
 ]

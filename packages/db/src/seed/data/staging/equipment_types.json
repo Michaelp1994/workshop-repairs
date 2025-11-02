@@ -1,66 +1,66 @@
 [
   {
-    "id": 1,
-    "name": "Syringe Driver"
+    "name": "Syringe Driver",
+    "localId": 1
   },
   {
-    "id": 2,
-    "name": "Infusion Pump"
+    "name": "Infusion Pump",
+    "localId": 2
   },
   {
-    "id": 3,
-    "name": "Ventilator"
+    "name": "Ventilator",
+    "localId": 3
   },
   {
-    "id": 4,
-    "name": "Defibrillator"
+    "name": "Defibrillator",
+    "localId": 4
   },
   {
-    "id": 5,
-    "name": "Patient Monitor"
+    "name": "Patient Monitor",
+    "localId": 5
   },
   {
-    "id": 6,
-    "name": "Ultrasound"
+    "name": "Ultrasound",
+    "localId": 6
   },
   {
-    "id": 7,
-    "name": "Suction Unit"
+    "name": "Suction Unit",
+    "localId": 7
   },
   {
-    "id": 8,
-    "name": "Medication Dispensing System"
+    "name": "Medication Dispensing System",
+    "localId": 8
   },
   {
-    "id": 9,
-    "name": "EtCO2 Monitor"
+    "name": "EtCO2 Monitor",
+    "localId": 9
   },
   {
-    "id": 10,
-    "name": "Infusion System Controller"
+    "name": "Infusion System Controller",
+    "localId": 10
   },
   {
-    "id": 11,
-    "name": "Docking Station"
+    "name": "Docking Station",
+    "localId": 11
   },
   {
-    "id": 12,
-    "name": "Thermometer"
+    "name": "Thermometer",
+    "localId": 12
   },
   {
-    "id": 13,
-    "name": "Vital Signs Monitor"
+    "name": "Vital Signs Monitor",
+    "localId": 13
   },
   {
-    "id": 14,
-    "name": "Humidifier"
+    "name": "Humidifier",
+    "localId": 14
   },
   {
-    "id": 15,
-    "name": "Automated External Defibrillator"
+    "name": "Automated External Defibrillator",
+    "localId": 15
   },
   {
-    "id": 16,
-    "name": "Smoke Evacuator System"
+    "name": "Smoke Evacuator System",
+    "localId": 16
   }
 ]
