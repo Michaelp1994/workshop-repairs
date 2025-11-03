@@ -77,12 +77,15 @@ export default router({
     }),
   update: organizationProcedure
     .input(updateUserTypeSchema)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedUserType = await updateUserType({
-        ...input,
-        ...metadata,
-      });
+      const updatedUserType = await updateUserType(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       if (!updatedUserType) {
         throw new TRPCError({
@@ -95,12 +98,15 @@ export default router({
     }),
   archive: organizationProcedure
     .input(archiveUserTypeSchema)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedUserType = await archiveUserType({
-        ...input,
-        ...metadata,
-      });
+      const archivedUserType = await archiveUserType(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       if (!archivedUserType) {
         throw new TRPCError({

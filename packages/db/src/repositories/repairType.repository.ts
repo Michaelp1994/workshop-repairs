@@ -61,21 +61,27 @@ export async function createRepairType(input: CreateRepairType) {
   return res;
 }
 
-export async function updateRepairType(input: UpdateRepairType) {
+export async function updateRepairType(
+  input: UpdateRepairType,
+  repairTypeId: RepairTypeID,
+) {
   const query = db
     .update(repairTypeTable)
     .set(input)
-    .where(eq(repairTypeTable.id, input.id))
+    .where(eq(repairTypeTable.id, repairTypeId))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveRepairType(input: ArchiveRepairType) {
+export async function archiveRepairType(
+  input: ArchiveRepairType,
+  repairTypeId: RepairTypeID,
+) {
   const query = db
     .update(repairTypeTable)
     .set(input)
-    .where(eq(repairTypeTable.id, input.id))
+    .where(eq(repairTypeTable.id, repairTypeId))
     .returning();
   const [res] = await query.execute();
   return res;

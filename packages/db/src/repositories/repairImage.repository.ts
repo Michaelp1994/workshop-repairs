@@ -59,21 +59,27 @@ export async function createRepairImage(input: CreateRepairImage) {
   const [res] = await query.execute();
   return res;
 }
-export async function updateRepairImage(input: UpdateRepairImage) {
+export async function updateRepairImage(
+  input: UpdateRepairImage,
+  repairImageId: RepairImageID,
+) {
   const query = db
     .update(repairImageTable)
     .set(input)
-    .where(eq(repairImageTable.id, input.id))
+    .where(eq(repairImageTable.id, repairImageId))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveRepairImage(input: ArchiveRepairImage) {
+export async function archiveRepairImage(
+  input: ArchiveRepairImage,
+  repairImageId: RepairImageID,
+) {
   const query = db
     .update(repairImageTable)
     .set(input)
-    .where(eq(repairImageTable.id, input.id))
+    .where(eq(repairImageTable.id, repairImageId))
     .returning();
   const [res] = await query.execute();
   return res;

@@ -127,21 +127,21 @@ export async function createUser(input: CreateUser) {
   return res;
 }
 
-export async function updateUser(input: UpdateUser) {
+export async function updateUser(input: UpdateUser, userId: UserID) {
   const query = db
     .update(userTable)
     .set(input)
-    .where(eq(userTable.id, input.id))
+    .where(eq(userTable.id, userId))
     .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveUser(input: ArchiveUser) {
+export async function archiveUser(input: ArchiveUser, userId: UserID) {
   const query = db
     .update(userTable)
     .set(input)
-    .where(eq(userTable.id, input.id))
+    .where(eq(userTable.id, userId))
     .returning({ ...publicUserColumns });
   const [res] = await query.execute();
   return res;

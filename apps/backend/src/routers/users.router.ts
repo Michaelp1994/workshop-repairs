@@ -119,12 +119,15 @@ export default router({
   }),
   update: organizationProcedure
     .input(updateUserSchema)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedUser = await updateUser({
-        ...input,
-        ...metadata,
-      });
+      const updatedUser = await updateUser(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(updatedUser);
 
@@ -136,11 +139,13 @@ export default router({
     .mutation(async ({ input, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedUser = await updateUser({
-        ...input,
-        ...metadata,
-        id: ctx.session.userId,
-      });
+      const updatedUser = await updateUser(
+        {
+          ...input,
+          ...metadata,
+        },
+        ctx.session.userId,
+      );
 
       assertDatabaseResult(updatedUser);
 
@@ -148,13 +153,16 @@ export default router({
     }),
   archive: organizationProcedure
     .input(archiveUserSchema)
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedUser = await archiveUser({
-        ...input,
-        ...metadata,
-      });
+      const archivedUser = await archiveUser(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(archivedUser);
 

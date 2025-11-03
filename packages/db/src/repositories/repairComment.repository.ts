@@ -78,21 +78,27 @@ export async function createRepairComment(input: CreateRepairComment) {
   return res;
 }
 
-export async function updateRepairComment(input: UpdateRepairComment) {
+export async function updateRepairComment(
+  input: UpdateRepairComment,
+  repairCommentId: RepairCommentID,
+) {
   const query = db
     .update(repairCommentTable)
     .set(input)
-    .where(eq(repairCommentTable.id, input.id))
+    .where(eq(repairCommentTable.id, repairCommentId))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveRepairComment(input: ArchiveRepairComment) {
+export async function archiveRepairComment(
+  input: ArchiveRepairComment,
+  repairCommentId: RepairCommentID,
+) {
   const query = db
     .update(repairCommentTable)
     .set(input)
-    .where(eq(repairCommentTable.id, input.id))
+    .where(eq(repairCommentTable.id, repairCommentId))
     .returning();
   const [res] = await query.execute();
   return res;

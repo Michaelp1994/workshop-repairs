@@ -75,11 +75,15 @@ export default router({
   update: organizationProcedure
     .input(updateAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedUserType = await updateAssetStatus({
-        ...input,
-        ...metadata,
-      });
+      const updatedUserType = await updateAssetStatus(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(updatedUserType);
 
@@ -88,11 +92,15 @@ export default router({
   archive: organizationProcedure
     .input(archiveAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedUserType = await archiveAssetStatus({
-        ...input,
-        ...metadata,
-      });
+      const archivedUserType = await archiveAssetStatus(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(archivedUserType);
 

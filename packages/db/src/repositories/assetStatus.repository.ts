@@ -61,21 +61,27 @@ export async function createAssetStatus(input: CreateAssetStatus) {
   return res;
 }
 
-export async function updateAssetStatus(input: UpdateAssetStatus) {
+export async function updateAssetStatus(
+  input: UpdateAssetStatus,
+  assetStatusId: AssetStatusID,
+) {
   const query = db
     .update(assetStatusTable)
     .set(input)
-    .where(eq(assetStatusTable.id, input.id))
+    .where(eq(assetStatusTable.id, assetStatusId))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveAssetStatus(input: ArchiveAssetStatus) {
+export async function archiveAssetStatus(
+  input: ArchiveAssetStatus,
+  assetStatusId: AssetStatusID,
+) {
   const query = db
     .update(assetStatusTable)
     .set(input)
-    .where(eq(assetStatusTable.id, input.id))
+    .where(eq(assetStatusTable.id, assetStatusId))
     .returning();
   const [res] = await query.execute();
   return res;

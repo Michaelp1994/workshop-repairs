@@ -33,12 +33,16 @@ export default router({
   update: organizationProcedure
     .input(updateOrganizationSequenceSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedModel = await updateOrganizationSequence({
-        ...input,
-        ...metadata,
-      });
+      const updatedModel = await updateOrganizationSequence(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(updatedModel);
 

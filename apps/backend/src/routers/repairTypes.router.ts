@@ -75,11 +75,15 @@ export default router({
   update: organizationProcedure
     .input(updateRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairType = await updateRepairType({
-        ...input,
-        ...metadata,
-      });
+      const updatedRepairType = await updateRepairType(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(updatedRepairType);
 
@@ -88,12 +92,16 @@ export default router({
   archive: organizationProcedure
     .input(archiveRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createArchiveMetadata(ctx.session);
 
-      const archivedRepairType = await archiveRepairType({
-        ...input,
-        ...metadata,
-      });
+      const archivedRepairType = await archiveRepairType(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(archivedRepairType);
 

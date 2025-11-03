@@ -61,21 +61,27 @@ export async function createModelImage(input: CreateModelImage) {
   return res;
 }
 
-export async function updateModelImage(input: UpdateModelImage) {
+export async function updateModelImage(
+  input: UpdateModelImage,
+  modelImageId: ModelImageID,
+) {
   const query = db
     .update(modelImageTable)
     .set(input)
-    .where(eq(modelImageTable.id, input.id))
+    .where(eq(modelImageTable.id, modelImageId))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveModelImage(input: ArchiveModelImage) {
+export async function archiveModelImage(
+  input: ArchiveModelImage,
+  modelImageId: ModelImageID,
+) {
   const query = db
     .update(modelImageTable)
     .set(input)
-    .where(eq(modelImageTable.id, input.id))
+    .where(eq(modelImageTable.id, modelImageId))
     .returning();
   const [res] = await query.execute();
   return res;

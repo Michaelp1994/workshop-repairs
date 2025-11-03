@@ -5,6 +5,7 @@ import type { OrganizationID } from "../tables/organization.sql";
 import { db } from "..";
 import {
   type CreateOrganizationSequence,
+  type OrganizationSequenceID,
   organizationSequenceTable,
   type UpdateOrganizationSequence,
 } from "../tables/organization-sequences.sql";
@@ -26,14 +27,14 @@ export async function createOrganizationSequence(
   return res;
 }
 
-export async function updateOrganizationSequence({
-  id,
-  ...input
-}: UpdateOrganizationSequence) {
+export async function updateOrganizationSequence(
+  input: UpdateOrganizationSequence,
+  organizationSequenceId: OrganizationSequenceID,
+) {
   const query = db
     .update(organizationSequenceTable)
     .set(input)
-    .where(eq(organizationSequenceTable.id, id))
+    .where(eq(organizationSequenceTable.id, organizationSequenceId))
     .returning();
   const [res] = await query.execute();
   return res;

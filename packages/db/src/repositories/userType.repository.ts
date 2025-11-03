@@ -15,11 +15,14 @@ import {
   userTypeTable,
 } from "../tables/user-type.sql";
 
-export async function archiveUserType(input: ArchiveUserType) {
+export async function archiveUserType(
+  input: ArchiveUserType,
+  userTypeId: UserTypeID,
+) {
   const query = db
     .update(userTypeTable)
     .set(input)
-    .where(eq(userTypeTable.id, input.id))
+    .where(eq(userTypeTable.id, userTypeId))
     .returning();
   const [res] = await query.execute();
   return res;
@@ -71,11 +74,14 @@ export async function getUserTypesSelect(_: GetUserTypeSelectInput) {
   return query.execute();
 }
 
-export async function updateUserType(input: UpdateUserType) {
+export async function updateUserType(
+  input: UpdateUserType,
+  userTypeId: UserTypeID,
+) {
   const query = db
     .update(userTypeTable)
     .set(input)
-    .where(eq(userTypeTable.id, input.id))
+    .where(eq(userTypeTable.id, userTypeId))
     .returning();
   const [res] = await query.execute();
   return res;

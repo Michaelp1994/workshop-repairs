@@ -115,21 +115,27 @@ export async function createRepairPart(input: CreateRepairPart) {
   return res;
 }
 
-export async function updateRepairPart(input: UpdateRepairPart) {
+export async function updateRepairPart(
+  input: UpdateRepairPart,
+  repairPartId: RepairPartID,
+) {
   const query = db
     .update(repairPartTable)
     .set(input)
-    .where(eq(repairPartTable.id, input.id))
+    .where(eq(repairPartTable.id, repairPartId))
     .returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function archiveRepairPart(input: ArchiveRepairPart) {
+export async function archiveRepairPart(
+  input: ArchiveRepairPart,
+  repairPartId: RepairPartID,
+) {
   const query = db
     .update(repairPartTable)
     .set(input)
-    .where(eq(repairPartTable.id, input.id))
+    .where(eq(repairPartTable.id, repairPartId))
     .returning();
   const [res] = await query.execute();
   return res;

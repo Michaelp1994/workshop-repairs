@@ -106,11 +106,15 @@ export default router({
   update: organizationProcedure
     .input(updateRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairImage = await updateRepairImage({
-        ...input,
-        ...metadata,
-      });
+      const updatedRepairImage = await updateRepairImage(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(updatedRepairImage);
 
@@ -119,11 +123,15 @@ export default router({
   archive: organizationProcedure
     .input(archiveRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepairImage = await archiveRepairImage({
-        ...input,
-        ...metadata,
-      });
+      const archivedRepairImage = await archiveRepairImage(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(archivedRepairImage);
 

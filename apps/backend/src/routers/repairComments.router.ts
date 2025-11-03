@@ -77,11 +77,15 @@ export default router({
   update: organizationProcedure
     .input(updateRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairComment = await updateRepairComment({
-        ...input,
-        ...metadata,
-      });
+      const updatedRepairComment = await updateRepairComment(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(updatedRepairComment);
 
@@ -90,11 +94,15 @@ export default router({
   archive: organizationProcedure
     .input(archiveRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
+      const { id, ...values } = input;
       const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepairComment = await archiveRepairComment({
-        ...input,
-        ...metadata,
-      });
+      const archivedRepairComment = await archiveRepairComment(
+        {
+          ...values,
+          ...metadata,
+        },
+        id,
+      );
 
       assertDatabaseResult(archivedRepairComment);
 
