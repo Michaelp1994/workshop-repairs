@@ -32,8 +32,7 @@ export default router({
     }),
   update: organizationProcedure
     .input(updateOrganizationSequenceSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
 
       const updatedModel = await updateOrganizationSequence(

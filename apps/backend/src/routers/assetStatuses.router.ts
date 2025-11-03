@@ -74,8 +74,7 @@ export default router({
     }),
   update: organizationProcedure
     .input(updateAssetStatusSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
       const updatedUserType = await updateAssetStatus(
         {
@@ -91,8 +90,7 @@ export default router({
     }),
   archive: organizationProcedure
     .input(archiveAssetStatusSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
       const archivedUserType = await archiveAssetStatus(
         {

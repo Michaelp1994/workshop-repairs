@@ -105,8 +105,7 @@ export default router({
     }),
   update: organizationProcedure
     .input(updateRepairImageSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
       const updatedRepairImage = await updateRepairImage(
         {
@@ -122,8 +121,7 @@ export default router({
     }),
   archive: organizationProcedure
     .input(archiveRepairImageSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
       const archivedRepairImage = await archiveRepairImage(
         {

@@ -74,8 +74,7 @@ export default router({
     }),
   update: organizationProcedure
     .input(updateRepairStatusTypeSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createUpdateMetadata(ctx.session);
       const updatedRepairStatusType = await updateRepairStatus(
         {
@@ -91,8 +90,7 @@ export default router({
     }),
   archive: organizationProcedure
     .input(archiveRepairStatusTypeSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...values } = input;
+    .mutation(async ({ input: { id, ...values }, ctx }) => {
       const metadata = createArchiveMetadata(ctx.session);
       const archivedRepairStatusType = await archiveRepairStatus(
         {
