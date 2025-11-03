@@ -15,30 +15,32 @@ import RepairCommentsTable from "~/components/RepairComments";
 import RepairDetails from "~/components/RepairDetails";
 import RepairImages from "~/components/RepairImages";
 import RepairParts from "~/components/RepairParts";
-import generateRepairSlug from "~/utils/generateRepairSlug";
+import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/repairs/$repairId/")({
+export const Route = createFileRoute("/_protected/repairs/$repairSlug/")({
   component: ViewRepairPage,
 });
 
 function ViewRepairPage() {
-  const params = Route.useParams();
-  const repairId = Number(params.repairId);
+  const { repairSlug } = Route.useParams();
+  const [repair] = api.repairs.getBySlug.useSuspenseQuery({
+    slug: repairSlug,
+  });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveRepairModal, { repairId });
+    await NiceModal.show(ArchiveRepairModal, { slug: repairSlug });
   }
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>{generateRepairSlug(repairId)}</PageTitle>
+          <PageTitle>{repairSlug}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
           <Button onClick={showArchiveModal}>Archive</Button>
           <IconButton
             linkOptions={{
-              to: "/repairs/$repairId/edit",
-              params: { repairId },
+              to: "/repairs/$repairSlug/edit",
+              params: { repairSlug },
             }}
             variant="update"
           >
@@ -46,10 +48,10 @@ function ViewRepairPage() {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <RepairDetails repairId={repairId} />
-      <RepairParts repairId={repairId} />
-      <RepairCommentsTable repairId={repairId} />
-      <RepairImages repairId={repairId} />
+      <RepairDetails slug={repairSlug} />
+      <RepairParts repairId={repair.id} />
+      <RepairCommentsTable repairId={repair.id} />
+      <RepairImages repairId={repair.id} />
     </PageWrapper>
   );
 }

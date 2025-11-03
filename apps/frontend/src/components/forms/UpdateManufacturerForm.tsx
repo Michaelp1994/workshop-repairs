@@ -1,5 +1,3 @@
-import type { ManufacturerID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -24,25 +22,25 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateManufacturerFormProps {
-  manufacturerId: ManufacturerID;
+  slug: string;
 }
 
 export default function UpdateManufacturerForm({
-  manufacturerId,
+  slug,
 }: UpdateManufacturerFormProps) {
   const navigate = useNavigate();
   const utils = api.useUtils();
-  const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
-    id: manufacturerId,
+  const [manufacturer] = api.manufacturers.getBySlug.useSuspenseQuery({
+    slug,
   });
 
   const updateMutation = api.manufacturers.update.useMutation({
     async onSuccess(values) {
-      await utils.manufacturers.getById.invalidate({ id: values.id });
+      await utils.manufacturers.getBySlug.invalidate({ slug: slug });
       toast.success(`Manufacturer ${values.name} updated`);
       await navigate({
-        to: "/manufacturers/$manufacturerId",
-        params: { manufacturerId: values.id },
+        to: "/manufacturers/$manufacturerSlug",
+        params: { manufacturerSlug: slug },
       });
     },
     onError(errors) {
@@ -56,7 +54,7 @@ export default function UpdateManufacturerForm({
   });
 
   function handleValid(values: ManufacturerFormInput) {
-    updateMutation.mutate({ ...values, id: manufacturerId });
+    updateMutation.mutate({ ...values, slug });
   }
 
   return (

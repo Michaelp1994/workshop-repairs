@@ -1,5 +1,3 @@
-import type { EquipmentTypeID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -24,25 +22,27 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateEquipmentTypeFormProps {
-  equipmentTypeId: EquipmentTypeID;
+  slug: string;
 }
 
 export default function UpdateEquipmentTypeForm({
-  equipmentTypeId,
+  slug,
 }: UpdateEquipmentTypeFormProps) {
   const navigate = useNavigate();
   const utils = api.useUtils();
-  const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
-    id: equipmentTypeId,
+  const [equipmentType] = api.equipmentTypes.getBySlug.useSuspenseQuery({
+    slug,
   });
 
   const updateMutation = api.equipmentTypes.update.useMutation({
     async onSuccess(data) {
-      await utils.equipmentTypes.getById.invalidate({ id: equipmentTypeId });
+      await utils.equipmentTypes.getBySlug.invalidate({
+        slug,
+      });
       toast.success(`Updated Equipment Type: ${data.name}`);
       await navigate({
-        to: "/equipment-types/$equipmentTypeId",
-        params: { equipmentTypeId: data.id },
+        to: "/equipment-types/$equipmentTypeSlug",
+        params: { equipmentTypeSlug: slug },
       });
     },
     onError(errors) {
@@ -56,7 +56,7 @@ export default function UpdateEquipmentTypeForm({
   });
 
   function handleValid(values: EquipmentTypeFormInput) {
-    updateMutation.mutate({ ...values, id: equipmentTypeId });
+    updateMutation.mutate({ ...values, slug });
   }
 
   return (

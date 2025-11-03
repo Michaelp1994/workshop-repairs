@@ -1,5 +1,3 @@
-import type { RepairID } from "@repo/validators/ids.validators";
-
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
@@ -17,16 +15,15 @@ import { toast } from "@repo/ui/sonner";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
-import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface ArchiveRepairModalProps extends BaseModalProps {
-  repairId: RepairID;
+  slug: string;
 }
 
 function ArchiveRepairModal({
   isOpen,
   onOpenChange,
-  repairId,
+  slug,
 }: ArchiveRepairModalProps) {
   const utils = api.useUtils();
   const archiveMutation = api.repairs.archive.useMutation({
@@ -46,7 +43,7 @@ function ArchiveRepairModal({
         <DialogOverlay />
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Archive {generateRepairSlug(repairId)}</DialogTitle>
+            <DialogTitle>Archive {slug}</DialogTitle>
             <DialogDescription>
               Are you sure you wish to archive this repair?
             </DialogDescription>
@@ -54,7 +51,7 @@ function ArchiveRepairModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ id: repairId })}
+              onClick={() => archiveMutation.mutate({ slug })}
               variant="destructive"
             >
               Yes, I am sure

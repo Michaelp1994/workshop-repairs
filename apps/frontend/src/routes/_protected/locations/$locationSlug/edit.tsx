@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
+import UpdateLocationForm from "~/components/forms/UpdateLocationForm";
 import {
   PageHeader,
   PageHeaderText,
@@ -8,27 +9,25 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-import UpdateManufacturerForm from "../../../../components/forms/UpdateManufacturerForm";
 export const Route = createFileRoute(
-  "/_protected/manufacturers/$manufacturerId/edit",
+  "/_protected/locations/$locationSlug/edit",
 )({
-  component: EditManufacturerPage,
+  component: EditLocationPage,
 });
 
-function EditManufacturerPage() {
-  const params = Route.useParams();
-  const manufacturerId = Number(params.manufacturerId);
+function EditLocationPage() {
+  const { locationSlug } = Route.useParams();
 
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>Edit Manufacturer</PageTitle>
+          <PageTitle>Edit Location</PageTitle>
         </PageHeaderText>
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateManufacturerForm manufacturerId={manufacturerId} />
+          <UpdateLocationForm slug={locationSlug} />
         </CardContent>
       </Card>
     </PageWrapper>

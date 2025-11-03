@@ -1,5 +1,3 @@
-import type { RepairID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -29,20 +27,23 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateRepairFormProps {
-  repairId: RepairID;
+  slug: string;
 }
 
-export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
+export default function UpdateRepairForm({ slug }: UpdateRepairFormProps) {
   const utils = api.useUtils();
   const navigate = useNavigate();
-  const [repair] = api.repairs.getById.useSuspenseQuery({
-    id: repairId,
+  const [repair] = api.repairs.getBySlug.useSuspenseQuery({
+    slug,
   });
   const updateMutation = api.repairs.update.useMutation({
     async onSuccess() {
-      await utils.repairs.getById.invalidate({ id: repairId });
+      await utils.repairs.getBySlug.invalidate({ slug });
       toast.success("Repair updated successfully");
-      await navigate({ to: "/repairs/$repairId", params: { repairId } });
+      await navigate({
+        to: "/repairs/$repairSlug",
+        params: { repairSlug: slug },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -55,7 +56,7 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   });
 
   function handleValid(data: RepairFormInput) {
-    updateMutation.mutate({ ...data, id: repairId });
+    updateMutation.mutate({ ...data, slug });
   }
 
   return (

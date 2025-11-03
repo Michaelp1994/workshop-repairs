@@ -28,8 +28,8 @@ export default function CreateEquipmentTypeForm() {
     async onSuccess(data) {
       toast.success(`${data.name} created`);
       await navigate({
-        to: "/equipment-types/$equipmentTypeId",
-        params: { equipmentTypeId: data.id },
+        to: "/equipment-types/$equipmentTypeSlug",
+        params: { equipmentTypeSlug: data.id },
       });
     },
     onError(errors) {

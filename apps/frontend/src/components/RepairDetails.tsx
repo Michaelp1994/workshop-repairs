@@ -7,11 +7,11 @@ import { api } from "~/trpc/client";
 import RepairStatusBadge from "./RepairStatusBadge";
 
 interface RepairDetailsProps {
-  repairId: number;
+  slug: string;
 }
 
-export default function RepairDetails({ repairId }: RepairDetailsProps) {
-  const [repair] = api.repairs.getById.useSuspenseQuery({ id: repairId });
+export default function RepairDetails({ slug }: RepairDetailsProps) {
+  const [repair] = api.repairs.getBySlug.useSuspenseQuery({ slug });
   return (
     <Card>
       <CardHeader>

@@ -1,5 +1,3 @@
-import type { LocationID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -23,14 +21,12 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateLocationFormProps {
-  locationId: LocationID;
+  slug: string;
 }
 
-export default function UpdateLocationForm({
-  locationId,
-}: UpdateLocationFormProps) {
-  const [location] = api.locations.getById.useSuspenseQuery({
-    id: locationId,
+export default function UpdateLocationForm({ slug }: UpdateLocationFormProps) {
+  const [location] = api.locations.getBySlug.useSuspenseQuery({
+    slug,
   });
 
   const updateMutation = api.locations.update.useMutation({
@@ -48,7 +44,7 @@ export default function UpdateLocationForm({
   });
 
   function handleValid(values: LocationFormInput) {
-    updateMutation.mutate({ ...values, id: locationId });
+    updateMutation.mutate({ ...values, slug });
   }
 
   return (

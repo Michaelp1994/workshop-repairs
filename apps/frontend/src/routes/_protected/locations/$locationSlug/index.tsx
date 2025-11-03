@@ -15,16 +15,17 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/locations/$locationId/")({
+export const Route = createFileRoute("/_protected/locations/$locationSlug/")({
   component: ViewLocationPage,
 });
 
 function ViewLocationPage() {
-  const params = Route.useParams();
-  const locationId = Number(params.locationId);
-  const [location] = api.locations.getById.useSuspenseQuery({ id: locationId });
+  const { locationSlug } = Route.useParams();
+  const [location] = api.locations.getBySlug.useSuspenseQuery({
+    slug: locationSlug,
+  });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveLocationModal, { locationId });
+    await NiceModal.show(ArchiveLocationModal, { slug: locationSlug });
   }
   return (
     <PageWrapper>
@@ -35,8 +36,8 @@ function ViewLocationPage() {
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/locations/$locationId/edit",
-              params: { locationId },
+              to: "/locations/$locationSlug/edit",
+              params: { locationSlug },
             }}
             variant="update"
           >
@@ -45,8 +46,8 @@ function ViewLocationPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <LocationDetails locationId={locationId} />
-      <LocationAssetsTable locationId={locationId} />
+      <LocationDetails slug={locationSlug} />
+      <LocationAssetsTable locationId={location.id} />
     </PageWrapper>
   );
 }

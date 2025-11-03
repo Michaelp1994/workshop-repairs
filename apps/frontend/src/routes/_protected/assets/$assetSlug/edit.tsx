@@ -14,8 +14,7 @@ export const Route = createFileRoute("/_protected/assets/$assetSlug/edit")({
 });
 
 function EditAssetPage() {
-  const params = Route.useParams();
-  const assetId = Number(params.assetId);
+  const { assetSlug } = Route.useParams();
   return (
     <PageWrapper>
       <PageHeader>
@@ -25,7 +24,7 @@ function EditAssetPage() {
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateAssetForm assetId={assetId} />
+          <UpdateAssetForm slug={assetSlug} />
         </CardContent>
       </Card>
     </PageWrapper>

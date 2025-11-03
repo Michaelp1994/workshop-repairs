@@ -17,16 +17,15 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/models/$modelId/")({
+export const Route = createFileRoute("/_protected/models/$modelSlug/")({
   component: ViewModelPage,
 });
 
 function ViewModelPage() {
-  const params = Route.useParams();
-  const modelId = Number(params.modelId);
-  const [model] = api.models.getById.useSuspenseQuery({ id: modelId });
+  const { modelSlug } = Route.useParams();
+  const [model] = api.models.getBySlug.useSuspenseQuery({ slug: modelSlug });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveModelModal, { modelId });
+    await NiceModal.show(ArchiveModelModal, { slug: modelSlug });
   }
   return (
     <PageWrapper>
@@ -37,8 +36,8 @@ function ViewModelPage() {
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/models/$modelId/edit",
-              params: { modelId },
+              to: "/models/$modelSlug/edit",
+              params: { modelSlug },
             }}
             variant="update"
           >
@@ -47,10 +46,10 @@ function ViewModelPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <ModelDetails modelId={modelId} />
-      <ModelAssetsTable modelId={modelId} />
-      <ModelPartsTable modelId={modelId} />
-      <ModelImages modelId={modelId} />
+      <ModelDetails slug={modelSlug} />
+      <ModelAssetsTable modelId={model.id} />
+      <ModelPartsTable modelId={model.id} />
+      <ModelImages modelId={model.id} />
     </PageWrapper>
   );
 }

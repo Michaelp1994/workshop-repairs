@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
-import UpdateModelForm from "~/components/forms/UpdateModelForm";
+import UpdateEquipmentTypeForm from "~/components/forms/UpdateEquipmentTypeForm";
 import {
   PageHeader,
   PageHeaderText,
@@ -10,25 +10,24 @@ import {
 } from "~/components/Page";
 
 export const Route = createFileRoute(
-  "/_protected/models/$modelId/edit",
+  "/_protected/equipment-types/$equipmentTypeSlug/edit",
 )({
-  component: EditModelPage,
+  component: EditEquipmentTypePage,
 });
 
-function EditModelPage() {
-  const params = Route.useParams();
-  const modelId = Number(params.modelId);
+function EditEquipmentTypePage() {
+  const { equipmentTypeSlug } = Route.useParams();
 
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>Edit Model</PageTitle>
+          <PageTitle>Edit Equipment Type</PageTitle>
         </PageHeaderText>
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateModelForm modelId={modelId} />
+          <UpdateEquipmentTypeForm slug={equipmentTypeSlug} />
         </CardContent>
       </Card>
     </PageWrapper>

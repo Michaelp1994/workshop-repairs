@@ -17,19 +17,21 @@ import {
 import { api } from "~/trpc/client";
 
 export const Route = createFileRoute(
-  "/_protected/equipment-types/$equipmentTypeId/",
+  "/_protected/equipment-types/$equipmentTypeSlug/",
 )({
   component: ViewEquipmentTypePage,
 });
 
 function ViewEquipmentTypePage() {
-  const params = Route.useParams();
-  const equipmentTypeId = Number(params.equipmentTypeId);
-  const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
-    id: equipmentTypeId,
+  const { equipmentTypeSlug } = Route.useParams();
+
+  const [equipmentType] = api.equipmentTypes.getBySlug.useSuspenseQuery({
+    slug: equipmentTypeSlug,
   });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveEquipmentTypeModal, { equipmentTypeId });
+    await NiceModal.show(ArchiveEquipmentTypeModal, {
+      slug: equipmentTypeSlug,
+    });
   }
 
   return (
@@ -41,8 +43,8 @@ function ViewEquipmentTypePage() {
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/equipment-types/$equipmentTypeId/edit",
-              params: { equipmentTypeId },
+              to: "/equipment-types/$equipmentTypeSlug/edit",
+              params: { equipmentTypeSlug },
             }}
             variant="update"
           >
@@ -51,9 +53,9 @@ function ViewEquipmentTypePage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <EquipmentTypeDetails equipmentTypeId={equipmentTypeId} />
-      <EquipmentTypeModelsTable equipmentTypeId={equipmentTypeId} />
-      <EquipmentTypeAssetsTable equipmentTypeId={equipmentTypeId} />
+      <EquipmentTypeDetails equipmentTypeSlug={equipmentTypeSlug} />
+      <EquipmentTypeModelsTable equipmentTypeId={equipmentType.id} />
+      <EquipmentTypeAssetsTable equipmentTypeId={equipmentType.id} />
     </PageWrapper>
   );
 }

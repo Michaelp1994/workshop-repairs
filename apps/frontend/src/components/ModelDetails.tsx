@@ -5,11 +5,12 @@ import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
 interface ModelDetailsProps {
-  modelId: number;
+  slug: string;
 }
 
-export default function ModelDetails({ modelId }: ModelDetailsProps) {
-  const [model] = api.models.getById.useSuspenseQuery({ id: modelId });
+export default function ModelDetails({ slug }: ModelDetailsProps) {
+  const [model] = api.models.getBySlug.useSuspenseQuery({ slug });
+
   return (
     <Card>
       <CardHeader>

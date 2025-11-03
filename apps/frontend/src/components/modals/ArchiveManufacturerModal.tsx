@@ -1,5 +1,3 @@
-import type { ManufacturerID } from "@repo/validators/ids.validators";
-
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,11 +17,11 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface ArchiveManufacturerModalProps extends BaseModalProps {
-  manufacturerId: ManufacturerID;
+  slug: string;
 }
 
 function ArchiveManufacturerModal({
-  manufacturerId,
+  slug,
   isOpen,
   onOpenChange,
 }: ArchiveManufacturerModalProps) {
@@ -32,8 +30,8 @@ function ArchiveManufacturerModal({
     async onSuccess(data) {
       await utils.manufacturers.getAll.invalidate();
       await utils.manufacturers.countAll.invalidate();
-      await utils.manufacturers.getById.invalidate({
-        id: manufacturerId,
+      await utils.manufacturers.getBySlug.invalidate({
+        slug,
       });
       toast.success(`${data.name} has been archived.`);
       onOpenChange();
@@ -57,7 +55,7 @@ function ArchiveManufacturerModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ id: manufacturerId })}
+              onClick={() => archiveMutation.mutate({ slug })}
               variant="destructive"
             >
               Yes, I am sure

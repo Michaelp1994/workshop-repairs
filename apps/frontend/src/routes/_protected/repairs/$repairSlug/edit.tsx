@@ -8,15 +8,12 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-export const Route = createFileRoute(
-  "/_protected/repairs/$repairId/edit",
-)({
+export const Route = createFileRoute("/_protected/repairs/$repairSlug/edit")({
   component: EditRepairPage,
 });
 
 function EditRepairPage() {
-  const params = Route.useParams();
-  const repairId = Number(params.repairId);
+  const { repairSlug } = Route.useParams();
 
   return (
     <PageWrapper>
@@ -27,7 +24,7 @@ function EditRepairPage() {
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateRepairForm repairId={repairId} />
+          <UpdateRepairForm slug={repairSlug} />
         </CardContent>
       </Card>
     </PageWrapper>

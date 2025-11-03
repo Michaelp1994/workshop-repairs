@@ -1,5 +1,3 @@
-import type { ClientID } from "@repo/validators/ids.validators";
-
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,11 +17,11 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface ArchiveClientModalProps extends BaseModalProps {
-  clientId: ClientID;
+  slug: string;
 }
 
 function ArchiveClientModal({
-  clientId,
+  slug,
   isOpen,
   onOpenChange,
 }: ArchiveClientModalProps) {
@@ -32,8 +30,8 @@ function ArchiveClientModal({
     async onSuccess(data) {
       await utils.clients.getAll.invalidate();
       await utils.clients.countAll.invalidate();
-      await utils.clients.getById.invalidate({
-        id: clientId,
+      await utils.clients.getBySlug.invalidate({
+        slug,
       });
       toast.success(`${data.name} has been archived.`);
       onOpenChange();
@@ -57,7 +55,7 @@ function ArchiveClientModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ id: clientId })}
+              onClick={() => archiveMutation.mutate({ slug })}
               variant="destructive"
             >
               Yes, I am sure

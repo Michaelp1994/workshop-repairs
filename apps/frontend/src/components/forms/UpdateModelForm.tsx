@@ -1,5 +1,3 @@
-import type { ModelID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -25,23 +23,23 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateModelFormProps {
-  modelId: ModelID;
+  slug: string;
 }
 
-export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
+export default function UpdateModelForm({ slug }: UpdateModelFormProps) {
   const utils = api.useUtils();
-  const [model] = api.models.getById.useSuspenseQuery({
-    id: modelId,
+  const [model] = api.models.getBySlug.useSuspenseQuery({
+    slug,
   });
 
   const updateMutation = api.models.update.useMutation({
     async onMutate() {
       await utils.models.getAll.cancel();
-      await utils.models.getById.cancel({ id: modelId });
+      await utils.models.getBySlug.cancel({ slug });
     },
     async onSuccess(values) {
       toast.success(`Model ${values.name} updated`);
-      await utils.models.getById.invalidate({ id: modelId });
+      await utils.models.getBySlug.invalidate({ slug });
       await utils.models.getAll.invalidate();
     },
     onError(errors) {
@@ -55,7 +53,7 @@ export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
   });
 
   function handleValid(values: ModelFormInput) {
-    updateMutation.mutate({ ...values, id: modelId });
+    updateMutation.mutate({ ...values, slug });
   }
 
   return (

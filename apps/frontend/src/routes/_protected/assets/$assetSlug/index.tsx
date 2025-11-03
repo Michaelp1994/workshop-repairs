@@ -25,7 +25,7 @@ function ViewAssetPage() {
   const [asset] = api.assets.getBySlug.useSuspenseQuery({ slug: assetSlug });
 
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveAssetModal, { assetId: asset.id });
+    await NiceModal.show(ArchiveAssetModal, { slug: assetSlug });
   }
   return (
     <PageWrapper>

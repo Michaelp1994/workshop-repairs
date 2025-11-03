@@ -1,5 +1,3 @@
-import type { AssetID } from "@repo/validators/ids.validators";
-
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
@@ -17,14 +15,13 @@ import { toast } from "@repo/ui/sonner";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
-import generateAssetSlug from "~/utils/generateAssetSlug";
 
 interface ArchiveAssetModalProps extends BaseModalProps {
-  assetId: AssetID;
+  slug: string;
 }
 
 function ArchiveAssetModal({
-  assetId,
+  slug,
   isOpen,
   onOpenChange,
 }: ArchiveAssetModalProps) {
@@ -33,10 +30,10 @@ function ArchiveAssetModal({
     async onSuccess() {
       await utils.assets.getAll.invalidate();
       await utils.assets.countAll.invalidate();
-      await utils.assets.getById.invalidate({
-        id: assetId,
+      await utils.assets.getBySlug.invalidate({
+        slug,
       });
-      toast.success(`${generateAssetSlug(assetId)} has been archived.`);
+      toast.success(`${slug} has been archived.`);
       onOpenChange();
     },
     onError(error) {
@@ -58,7 +55,7 @@ function ArchiveAssetModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ id: assetId })}
+              onClick={() => archiveMutation.mutate({ slug })}
               variant="destructive"
             >
               Yes, I am sure

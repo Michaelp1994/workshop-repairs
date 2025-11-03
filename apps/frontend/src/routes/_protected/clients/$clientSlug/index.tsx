@@ -25,13 +25,13 @@ function ViewClientPage() {
   const [client] = api.clients.getBySlug.useSuspenseQuery({ slug: clientSlug });
 
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveClientModal, { clientId: client.id });
+    await NiceModal.show(ArchiveClientModal, { slug: clientSlug });
   }
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>{clientSlug}</PageTitle>
+          <PageTitle>{client.name}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton

@@ -15,18 +15,17 @@ import PartDetails from "~/components/PartDetails";
 import PartModelsTable from "~/components/PartModelsTable";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/parts/$partId/")({
+export const Route = createFileRoute("/_protected/parts/$partSlug/")({
   component: ViewPartPage,
 });
 
 function ViewPartPage() {
-  const params = Route.useParams();
-  const partId = Number(params.partId);
-  const [part] = api.parts.getById.useSuspenseQuery({
-    id: partId,
+  const { partSlug } = Route.useParams();
+  const [part] = api.parts.getBySlug.useSuspenseQuery({
+    slug: partSlug,
   });
   async function showArchiveModal() {
-    await NiceModal.show(ArchivePartModal, { partId });
+    await NiceModal.show(ArchivePartModal, { slug: partSlug });
   }
   return (
     <PageWrapper>
@@ -36,7 +35,7 @@ function ViewPartPage() {
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton
-            linkOptions={{ to: "/parts/$partId/edit", params: { partId } }}
+            linkOptions={{ to: "/parts/$partSlug/edit", params: { partSlug } }}
             variant="update"
           >
             Update
@@ -44,8 +43,8 @@ function ViewPartPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <PartDetails partId={partId} />
-      <PartModelsTable partId={partId} />
+      <PartDetails slug={partSlug} />
+      <PartModelsTable partId={part.id} />
     </PageWrapper>
   );
 }

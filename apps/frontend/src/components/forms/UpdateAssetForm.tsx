@@ -1,5 +1,3 @@
-import type { AssetID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -27,12 +25,12 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateAssetFormProps {
-  assetId: AssetID;
+  slug: string;
 }
 
-export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
-  const [asset] = api.assets.getById.useSuspenseQuery({
-    id: assetId,
+export default function UpdateAssetForm({ slug }: UpdateAssetFormProps) {
+  const [asset] = api.assets.getBySlug.useSuspenseQuery({
+    slug,
   });
 
   const updateMutation = api.assets.update.useMutation({
@@ -45,7 +43,7 @@ export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
   });
 
   function handleValid(values: AssetFormInput) {
-    updateMutation.mutate({ ...values, id: assetId });
+    updateMutation.mutate({ ...values, slug });
   }
 
   const form = useForm({

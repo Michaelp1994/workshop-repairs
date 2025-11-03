@@ -1,5 +1,3 @@
-import type { LocationID } from "@repo/validators/ids.validators";
-
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import {
@@ -19,11 +17,11 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface ArchiveLocationModalProps extends BaseModalProps {
-  locationId: LocationID;
+  slug: string;
 }
 
 function ArchiveLocationModal({
-  locationId,
+  slug,
   isOpen,
   onOpenChange,
 }: ArchiveLocationModalProps) {
@@ -32,8 +30,8 @@ function ArchiveLocationModal({
     async onSuccess(data) {
       await utils.locations.getAll.invalidate();
       await utils.locations.countAll.invalidate();
-      await utils.locations.getById.invalidate({
-        id: locationId,
+      await utils.locations.getBySlug.invalidate({
+        slug,
       });
       toast.success(`${data.name} has been archived.`);
       onOpenChange();
@@ -57,7 +55,7 @@ function ArchiveLocationModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ id: locationId })}
+              onClick={() => archiveMutation.mutate({ slug })}
               variant="destructive"
             >
               Yes, I am sure

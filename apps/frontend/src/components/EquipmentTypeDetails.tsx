@@ -5,14 +5,14 @@ import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
 interface EquipmentTypeDetailsProps {
-  equipmentTypeId: number;
+  equipmentTypeSlug: string;
 }
 
 export default function EquipmentTypeDetails({
-  equipmentTypeId,
+  equipmentTypeSlug,
 }: EquipmentTypeDetailsProps) {
-  const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
-    id: equipmentTypeId,
+  const [equipmentType] = api.equipmentTypes.getBySlug.useSuspenseQuery({
+    slug: equipmentTypeSlug,
   });
   return (
     <Card>
