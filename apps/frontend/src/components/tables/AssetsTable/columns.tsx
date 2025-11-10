@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend/router";
+
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
 import {
@@ -10,8 +12,6 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-
-import type { RouterOutputs } from "../../../../../backend/src/router";
 
 type Row = RouterOutputs["assets"]["getAll"][number];
 

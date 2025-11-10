@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend/router";
+
 import { Button } from "@repo/ui/button";
 import {
   DataTableColumnHeader,
@@ -9,8 +11,6 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-
-import type { RouterOutputs } from "../../../../../backend/src/router";
 const columnHelper =
   createColumnHelper<RouterOutputs["locations"]["getAll"][number]>();
 

@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend/router";
+
 import { Button } from "@repo/ui/button";
 import {
   DataTableColumnHeader,
@@ -9,8 +11,6 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-
-import type { RouterOutputs } from "../../../../../backend/src/router";
 const columnHelper =
   createColumnHelper<RouterOutputs["clients"]["getAll"][number]>();
 
@@ -21,18 +21,18 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("localId", {
+  columnHelper.accessor("slug", {
     id: "slug",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => (
+    cell: ({ getValue }) => (
       <Link
         className="font-bold hover:underline"
-        params={{ clientSlug: row.original.slug }}
+        params={{ clientSlug: getValue() }}
         to="/clients/$clientSlug"
       >
-        {row.original.slug}
+        {getValue()}
       </Link>
     ),
     meta: {
