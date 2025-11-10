@@ -23,7 +23,7 @@ import {
 } from "./organization-sequences.sql";
 import { organizationRelations, organizationTable } from "./organization.sql";
 import { partRelations, partTable } from "./part.sql";
-import { partsToModelRelations, partsToModelTable } from "./parts-to-model.sql";
+import { partToModelRelations, partToModelTable } from "./part-to-model.sql";
 import {
   repairCommentRelations,
   repairCommentTable,
@@ -56,7 +56,7 @@ export const schema = {
   organizationInvitationTable,
   organizationSequenceTable,
   organizationTable,
-  partsToModelTable,
+  partsToModelTable: partToModelTable,
   partTable,
   repairCommentTable,
   repairImageTable,
@@ -83,7 +83,7 @@ export const relations = {
   organizationSequenceRelations,
   organizationRelations,
   partRelations,
-  partsToModelRelations,
+  partsToModelRelations: partToModelRelations,
   repairCommentRelations,
   repairImageRelations,
   repairPartRelations,

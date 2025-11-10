@@ -6,8 +6,8 @@ import type { InferModel } from "../types";
 import { modelTable } from "./model.sql";
 import { partTable } from "./part.sql";
 
-export const partsToModelTable = pgTable(
-  "parts_to_model",
+export const partToModelTable = pgTable(
+  "part_to_model",
   {
     quantity: integer().notNull(),
     partId: integer()
@@ -20,19 +20,16 @@ export const partsToModelTable = pgTable(
   (t) => [primaryKey({ columns: [t.partId, t.modelId] })],
 );
 
-export const partsToModelRelations = relations(
-  partsToModelTable,
-  ({ one }) => ({
-    part: one(partTable, {
-      fields: [partsToModelTable.partId],
-      references: [partTable.id],
-    }),
-    model: one(modelTable, {
-      fields: [partsToModelTable.modelId],
-      references: [modelTable.id],
-    }),
+export const partToModelRelations = relations(partToModelTable, ({ one }) => ({
+  part: one(partTable, {
+    fields: [partToModelTable.partId],
+    references: [partTable.id],
   }),
-);
+  model: one(modelTable, {
+    fields: [partToModelTable.modelId],
+    references: [modelTable.id],
+  }),
+}));
 
-export type PartToModel = InferModel<typeof partsToModelTable>;
-export type PartToModelInput = InferInsertModel<typeof partsToModelTable>;
+export type PartToModel = InferModel<typeof partToModelTable>;
+export type PartToModelInput = InferInsertModel<typeof partToModelTable>;

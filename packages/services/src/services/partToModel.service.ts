@@ -24,7 +24,7 @@ import {
 import type {
   ArchivePartToModel,
   PartToModelInput,
-} from "../../../db/src/tables/parts-to-model.sql";
+} from "../../../db/src/tables/part-to-model.sql";
 import type { CreateInput, UpdateInput } from "../types";
 
 export async function getAllPartsByModelIdService(

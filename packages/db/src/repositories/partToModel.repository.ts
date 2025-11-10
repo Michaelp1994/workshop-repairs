@@ -19,11 +19,11 @@ import {
 import { type ModelID, modelTable } from "../tables/model.sql";
 import { type PartID, partTable } from "../tables/part.sql";
 import {
-  partsToModelTable,
   type PartToModelInput,
-} from "../tables/parts-to-model.sql";
+  partToModelTable,
+} from "../tables/part-to-model.sql";
 
-const partsToModelsFields = getTableColumns(partsToModelTable);
+const partsToModelsFields = getTableColumns(partToModelTable);
 
 export function getAllPartsByModelId(
   tx: DatabaseTransaction,
@@ -43,16 +43,16 @@ export function getAllPartsByModelId(
       ...partsToModelsFields,
       part: partTable,
     })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .from(partToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
     .where(
       and(
-        eq(partsToModelTable.modelId, filters.modelId),
+        eq(partToModelTable.modelId, filters.modelId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, partsToModelTable.partId)
+    .orderBy(...orderByParams, partToModelTable.partId)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   const res = query.execute();
@@ -69,11 +69,11 @@ export async function countAllPartsByModelId(
     .select({
       count: count(),
     })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
+    .from(partToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
     .where(
       and(
-        eq(partsToModelTable.modelId, filters.modelId),
+        eq(partToModelTable.modelId, filters.modelId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -100,16 +100,16 @@ export function getAllModelsByPartId(
       ...partsToModelsFields,
       model: modelTable,
     })
-    .from(partsToModelTable)
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
+    .from(partToModelTable)
+    .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
     .where(
       and(
-        eq(partsToModelTable.partId, filters.partId),
+        eq(partToModelTable.partId, filters.partId),
         globalFilterParams,
         ...columnFilterParams,
       ),
     )
-    .orderBy(...orderByParams, partsToModelTable.partId)
+    .orderBy(...orderByParams, partToModelTable.partId)
     .limit(pagination.pageSize)
     .offset(pagination.pageIndex * pagination.pageSize);
   const res = query.execute();
@@ -126,11 +126,11 @@ export async function countAllModelsByPartId(
     .select({
       count: count(),
     })
-    .from(partsToModelTable)
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
+    .from(partToModelTable)
+    .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
     .where(
       and(
-        eq(partsToModelTable.partId, filters.partId),
+        eq(partToModelTable.partId, filters.partId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -151,12 +151,12 @@ export function getPartsByModelIdSelect(
       value: partTable.id,
       label: partTable.name,
     })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
+    .from(partToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
+    .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
     .where(
       and(
-        eq(partsToModelTable.modelId, modelId),
+        eq(partToModelTable.modelId, modelId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -177,12 +177,12 @@ export function getModelsByPartIdSelect(
       value: modelTable.id,
       label: modelTable.name,
     })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
+    .from(partToModelTable)
+    .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
+    .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
     .where(
       and(
-        eq(partsToModelTable.partId, partId),
+        eq(partToModelTable.partId, partId),
         globalFilterParams,
         ...columnFilterParams,
       ),
@@ -200,11 +200,11 @@ export async function getPartToModelById(
 ) {
   const query = tx
     .select()
-    .from(partsToModelTable)
+    .from(partToModelTable)
     .where(
       and(
-        eq(partsToModelTable.partId, input.partId),
-        eq(partsToModelTable.modelId, input.modelId),
+        eq(partToModelTable.partId, input.partId),
+        eq(partToModelTable.modelId, input.modelId),
       ),
     );
   const [res] = await query.execute();
@@ -215,7 +215,7 @@ export async function createPartToModel(
   tx: DatabaseTransaction,
   input: CreateInput<PartToModelInput>,
 ) {
-  const query = tx.insert(partsToModelTable).values(input).returning();
+  const query = tx.insert(partToModelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
@@ -225,12 +225,12 @@ export async function updatePartToModel(
   input: UpdateInput<PartToModelInput>,
 ) {
   const query = tx
-    .update(partsToModelTable)
+    .update(partToModelTable)
     .set(input)
     .where(
       and(
-        eq(partsToModelTable.partId, input.partId),
-        eq(partsToModelTable.modelId, input.modelId),
+        eq(partToModelTable.partId, input.partId),
+        eq(partToModelTable.modelId, input.modelId),
       ),
     )
     .returning();
@@ -243,11 +243,11 @@ export async function archivePartToModel(
   input: ArchiveInput<PartToModelInput>,
 ) {
   const query = tx
-    .delete(partsToModelTable)
+    .delete(partToModelTable)
     .where(
       and(
-        eq(partsToModelTable.partId, input.partId),
-        eq(partsToModelTable.modelId, input.modelId),
+        eq(partToModelTable.partId, input.partId),
+        eq(partToModelTable.modelId, input.modelId),
       ),
     )
     .returning();

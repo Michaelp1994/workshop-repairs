@@ -5,7 +5,7 @@ import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.sql";
-import { partsToModelTable } from "./parts-to-model.sql";
+import { partToModelTable } from "./part-to-model.sql";
 
 export const partTable = pgTable(
   "part",
@@ -30,7 +30,7 @@ export const partRelations = relations(partTable, ({ one, many }) => ({
     fields: [partTable.organizationId],
     references: [organizationTable.id],
   }),
-  models: many(partsToModelTable),
+  models: many(partToModelTable),
 }));
 
 export type Part = InferModel<typeof partTable>;
