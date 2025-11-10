@@ -7,6 +7,12 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": ["src", "scripts", "*.config.*", "sst-env.d.ts"],
+  "include": [
+    "src",
+    "scripts",
+    "*.config.*",
+    "sst-env.d.ts",
+    "../services/src/helpers/includeMetadata.ts"
+  ],
   "exclude": ["node_modules", "eslint.config.js"]
 }

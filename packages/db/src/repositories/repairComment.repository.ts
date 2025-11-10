@@ -4,23 +4,24 @@ import {
 } from "@repo/validators/server/repairComments.validators";
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import { db } from "..";
+import type { DatabaseTransaction } from "..";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
 import {
-  type ArchiveRepairComment,
-  type CreateRepairComment,
   type RepairCommentID,
+  type RepairCommentInput,
   repairCommentTable,
-  type UpdateRepairComment,
 } from "../tables/repair-comment.sql";
 import { type RepairID } from "../tables/repair.sql";
 import { userTable } from "../tables/user.sql";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
-export function getAllRepairComments({
-  pagination,
-}: GetAllRepairCommentsInput) {
-  const query = db
+export function getAllRepairComments(
+  tx: DatabaseTransaction,
+  { pagination }: GetAllRepairCommentsInput,
+) {
+  const query = tx
     .select()
     .from(repairCommentTable)
     .where(isNull(repairCommentTable.deletedAt))
@@ -30,8 +31,11 @@ export function getAllRepairComments({
   return query.execute();
 }
 
-export async function countRepairComments(_input: CountRepairCommentsInput) {
-  const query = db
+export async function countRepairComments(
+  tx: DatabaseTransaction,
+  _input: CountRepairCommentsInput,
+) {
+  const query = tx
     .select({ count: count() })
     .from(repairCommentTable)
     .where(isNull(repairCommentTable.deletedAt));
@@ -39,8 +43,11 @@ export async function countRepairComments(_input: CountRepairCommentsInput) {
   return res?.count;
 }
 
-export async function getAllRepairCommentsByRepairId(input: RepairID) {
-  const query = db
+export async function getAllRepairCommentsByRepairId(
+  tx: DatabaseTransaction,
+  input: RepairID,
+) {
+  const query = tx
     .select({
       ...repairCommentFields,
       createdBy: {
@@ -62,8 +69,11 @@ export async function getAllRepairCommentsByRepairId(input: RepairID) {
   return res;
 }
 
-export async function getRepairCommentById(input: RepairCommentID) {
-  const query = db
+export async function getRepairCommentById(
+  tx: DatabaseTransaction,
+  input: RepairCommentID,
+) {
+  const query = tx
     .select()
     .from(repairCommentTable)
     .where(eq(repairCommentTable.id, input));
@@ -72,17 +82,21 @@ export async function getRepairCommentById(input: RepairCommentID) {
   return res;
 }
 
-export async function createRepairComment(input: CreateRepairComment) {
-  const query = db.insert(repairCommentTable).values(input).returning();
+export async function createRepairComment(
+  tx: DatabaseTransaction,
+  input: CreateInput<RepairCommentInput>,
+) {
+  const query = tx.insert(repairCommentTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function updateRepairComment(
-  input: UpdateRepairComment,
+  tx: DatabaseTransaction,
+  input: UpdateInput<RepairCommentInput>,
   repairCommentId: RepairCommentID,
 ) {
-  const query = db
+  const query = tx
     .update(repairCommentTable)
     .set(input)
     .where(eq(repairCommentTable.id, repairCommentId))
@@ -92,10 +106,11 @@ export async function updateRepairComment(
 }
 
 export async function archiveRepairComment(
-  input: ArchiveRepairComment,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<RepairCommentInput>,
   repairCommentId: RepairCommentID,
 ) {
-  const query = db
+  const query = tx
     .update(repairCommentTable)
     .set(input)
     .where(eq(repairCommentTable.id, repairCommentId))

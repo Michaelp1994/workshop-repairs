@@ -1,16 +1,11 @@
 import {
-  createOrganization,
-  getOrganizationById,
-  getOrganizationByInvitationCode,
-  getOrganizationByName,
-} from "@repo/db/repositories/organization.repository";
-import { getUserById } from "@repo/db/repositories/user.repository";
-import {
-  getUserOnboardingByUserId,
-  setInvitations,
-  setOrganization,
-  updateUserOnboardingByUserId,
-} from "@repo/db/repositories/userOnboarding.repository";
+  createOrganizationService,
+  getStatusService,
+  joinOrganizationService,
+  markUserAsWelcomedService,
+  sendInvitationsService,
+  skipInvitationsService,
+} from "@repo/services/services/userOnboarding.service";
 import {
   createOrganizationSchema,
   inviteOthersToOrganizationSchema,
@@ -21,21 +16,20 @@ import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
 import { ZodError } from "zod";
 
-import { createInsertMetadata } from "../helpers/includeMetadata";
 import {
   createOrganizationLogoKeyFromFileName,
   createPresignedUrl,
   fileExistsInS3,
   getFileExtension,
 } from "../helpers/s3";
-import sendInvitationEmail from "../helpers/sendInvitationEmail";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { authedProcedure, organizationProcedure, router } from "../trpc";
+import sendInvitationEmail from "../../../../packages/services/src/helpers/sendInvitationEmail";
+import { authedProcedure, organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getStatus: authedProcedure.query(async ({ ctx }) => {
-    const user = await getUserOnboardingByUserId(ctx.session.userId);
-    assertDatabaseResult(user);
+    const user = await getStatusService(ctx.session.userId);
+
     return {
       welcomed: user.onboarding?.welcomed,
       organizationChosen: user.organizationId !== null,
@@ -44,17 +38,13 @@ export default router({
     };
   }),
   markUserAsWelcomed: authedProcedure.mutation(async ({ ctx }) => {
-    const onboarding = await updateUserOnboardingByUserId({
-      userId: ctx.session.userId,
-      welcomed: true,
-    });
-    assertDatabaseResult(onboarding);
+    const onboarding = await markUserAsWelcomedService(ctx.session.userId);
   }),
   requestUpload: authedProcedure
     .input(requestUploadOrganizationLogoSchema)
     .mutation(async ({ input, ctx }) => {
       const user = await getUserById(ctx.session.userId);
-      assertDatabaseResult(user);
+
       if (user.organizationId) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -94,9 +84,7 @@ export default router({
         });
       }
 
-      const metadata = createInsertMetadata(ctx.session);
       const user = await getUserById(ctx.session.userId);
-      assertDatabaseResult(user);
 
       if (user.organizationId) {
         throw new TRPCError({
@@ -118,24 +106,19 @@ export default router({
         ]);
       }
 
-      const createdOrganization = await createOrganization({
-        ...input,
-        ...metadata,
-      });
-      assertDatabaseResult(createdOrganization);
+      const createdOrganization = await createOrganization(input);
 
       const updatedUser = await setOrganization(
         ctx.session.userId,
         createdOrganization.id,
       );
-      assertDatabaseResult(updatedUser);
+
       return true;
     }),
   joinOrganization: authedProcedure
     .input(joinOrganizationSchema)
     .mutation(async ({ input, ctx }) => {
       const user = await getUserOnboardingByUserId(ctx.session.userId);
-      assertDatabaseResult(user);
 
       if (user.organizationId) {
         throw new TRPCError({
@@ -144,9 +127,7 @@ export default router({
         });
       }
 
-      const organization = await getOrganizationByInvitationCode(
-        input.joinCode,
-      );
+      const organization = await joinOrganizationService(input.joinCode);
       if (!organization) {
         throw new ZodError([
           {
@@ -163,8 +144,8 @@ export default router({
         ctx.session.userId,
         organization.id,
       );
-      assertDatabaseResult(updatedUser);
-      await setInvitations(ctx.session.userId);
+
+      await sendInvitationsService(ctx.session.userId);
       return organization;
     }),
   sendInvitations: organizationProcedure
@@ -174,7 +155,7 @@ export default router({
       const organization = await getOrganizationById(
         ctx.session.organizationId,
       );
-      assertDatabaseResult(organization);
+
       const emailPromises = emails.map((unprocessedEmail) => {
         const email = unprocessedEmail.trim();
         // TODO: Check if valid email.
@@ -183,13 +164,13 @@ export default router({
 
       await Promise.all(emailPromises);
 
-      const user = await setInvitations(ctx.session.userId);
-      assertDatabaseResult(user);
+      const user = await sendInvitationsService(ctx.session.userId);
+
       return true;
     }),
   skipInvitations: organizationProcedure.mutation(async ({ ctx }) => {
-    const user = await setInvitations(ctx.session.userId);
-    assertDatabaseResult(user);
+    const user = await skipInvitationsService(ctx.session.userId);
+
     return true;
   }),
 });

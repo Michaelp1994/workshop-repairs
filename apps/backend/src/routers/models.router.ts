@@ -1,12 +1,12 @@
 import {
-  archiveModel,
-  countModels,
-  createModel,
-  getAllModels,
-  getModelByLocalId,
-  getModelsSelect,
-  updateModel,
-} from "@repo/db/repositories/model.repository";
+  archiveModelService,
+  countModelsService,
+  createModelService,
+  getAllModelsService,
+  getModelService,
+  getModelsSelectService,
+  updateModelService,
+} from "@repo/services/services/model.service";
 import {
   archiveModelSchema,
   countModelsSchema,
@@ -18,21 +18,16 @@ import {
 } from "@repo/validators/server/models.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
 import { getModelImageUrlFromKey } from "../helpers/s3";
 import { splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllModelsSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = await getAllModels(input, ctx.session.organizationId);
+      const allModels = await getAllModelsService(input, ctx.session);
       return allModels.map((model) => ({
         ...model,
         defaultImageUrl: model.defaultImageUrl
@@ -43,16 +38,13 @@ export default router({
   countAll: organizationProcedure
     .input(countModelsSchema)
     .query(({ ctx, input }) => {
-      const count = countModels(input, ctx.session.organizationId);
+      const count = countModelsService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getModelsSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allModels = await getModelsSelect(
-        input,
-        ctx.session.organizationId,
-      );
+      const allModels = await getModelsSelectService(input, ctx.session);
       return allModels;
     }),
   getBySlug: organizationProcedure
@@ -60,10 +52,7 @@ export default router({
     .query(async ({ input, ctx }) => {
       const { localId } = splitSlug(input.slug);
 
-      const model = await getModelByLocalId(
-        localId,
-        ctx.session.organizationId,
-      );
+      const model = await getModelService(localId, ctx.session);
 
       if (!model) {
         throw new TRPCError({
@@ -77,55 +66,29 @@ export default router({
   create: organizationProcedure
     .input(createModelSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-
-      const createdModel = await createModel({
-        ...input,
-        organizationId: ctx.session.organizationId,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdModel);
+      const createdModel = await createModelService(input, ctx.session);
 
       return createdModel;
     }),
   update: organizationProcedure
     .input(updateModelSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
-      const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedModel = await updateModel(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedModel = await updateModelService(
+        values,
         localId,
-        ctx.session.organizationId,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedModel);
 
       return updatedModel;
     }),
   archive: organizationProcedure
     .input(archiveModelSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
+      const { localId } = splitSlug(input.slug);
 
-      const archivedModel = await archiveModel(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
-
-      assertDatabaseResult(archivedModel);
+      const archivedModel = await archiveModelService(localId, ctx.session);
 
       return archivedModel;
     }),

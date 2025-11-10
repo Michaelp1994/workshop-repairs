@@ -8,7 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-import PartsTable from "~/components/PartsTable";
+import PartsTable from "~/components/tables/PartsTable";
 
 export const Route = createFileRoute("/_protected/parts/")({
   component: AllPartsPage,

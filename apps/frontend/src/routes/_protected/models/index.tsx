@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { IconButton } from "~/components/IconButton";
-import ModelsTable from "~/components/ModelsTable";
+import ModelsTable from "~/components/tables/ModelsTable";
 import {
   PageHeader,
   PageHeaderActions,

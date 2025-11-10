@@ -13,7 +13,7 @@ import { type EquipmentTypeID } from "@repo/validators/ids.validators";
 import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";
 
-import { columns } from "./ModelsTable/columns";
+import { columns } from "./tables/ModelsTable/columns";
 
 interface EquipmentTypeModelsTableProps {
   equipmentTypeId: EquipmentTypeID;

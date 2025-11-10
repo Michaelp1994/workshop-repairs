@@ -6,17 +6,20 @@ import type {
 
 import { count, eq, isNull } from "drizzle-orm";
 
-import { db } from "../index";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
+import { type DatabaseTransaction } from "../index";
 import {
-  type ArchiveRepairType,
-  type CreateRepairType,
   type RepairTypeID,
+  type RepairTypeInput,
   repairTypeTable,
-  type UpdateRepairType,
 } from "../tables/repair-type.sql";
 
-export function getAllRepairTypes({ pagination }: GetAllRepairTypesInput) {
-  const query = db
+export function getAllRepairTypes(
+  tx: DatabaseTransaction,
+  { pagination }: GetAllRepairTypesInput,
+) {
+  const query = tx
     .select()
     .from(repairTypeTable)
     .where(isNull(repairTypeTable.deletedAt))
@@ -26,8 +29,11 @@ export function getAllRepairTypes({ pagination }: GetAllRepairTypesInput) {
   return query.execute();
 }
 
-export async function countRepairTypes(_: CountRepairTypesInput) {
-  const query = db
+export async function countRepairTypes(
+  tx: DatabaseTransaction,
+  _: CountRepairTypesInput,
+) {
+  const query = tx
     .select({ count: count() })
     .from(repairTypeTable)
     .where(isNull(repairTypeTable.deletedAt));
@@ -35,8 +41,11 @@ export async function countRepairTypes(_: CountRepairTypesInput) {
   return res?.count;
 }
 
-export async function getRepairTypesSelect(_: GetRepairTypesSelectInput) {
-  const query = db
+export async function getRepairTypesSelect(
+  tx: DatabaseTransaction,
+  _: GetRepairTypesSelectInput,
+) {
+  const query = tx
     .select({
       value: repairTypeTable.id,
       label: repairTypeTable.name,
@@ -46,8 +55,11 @@ export async function getRepairTypesSelect(_: GetRepairTypesSelectInput) {
   return query.execute();
 }
 
-export async function getRepairTypeById(input: RepairTypeID) {
-  const query = db
+export async function getRepairTypeById(
+  tx: DatabaseTransaction,
+  input: RepairTypeID,
+) {
+  const query = tx
     .select()
     .from(repairTypeTable)
     .where(eq(repairTypeTable.id, input));
@@ -55,17 +67,21 @@ export async function getRepairTypeById(input: RepairTypeID) {
   return res;
 }
 
-export async function createRepairType(input: CreateRepairType) {
-  const query = db.insert(repairTypeTable).values(input).returning();
+export async function createRepairType(
+  tx: DatabaseTransaction,
+  input: CreateInput<RepairTypeInput>,
+) {
+  const query = tx.insert(repairTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function updateRepairType(
-  input: UpdateRepairType,
+  tx: DatabaseTransaction,
+  input: UpdateInput<RepairTypeInput>,
   repairTypeId: RepairTypeID,
 ) {
-  const query = db
+  const query = tx
     .update(repairTypeTable)
     .set(input)
     .where(eq(repairTypeTable.id, repairTypeId))
@@ -75,10 +91,11 @@ export async function updateRepairType(
 }
 
 export async function archiveRepairType(
-  input: ArchiveRepairType,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<RepairTypeInput>,
   repairTypeId: RepairTypeID,
 ) {
-  const query = db
+  const query = tx
     .update(repairTypeTable)
     .set(input)
     .where(eq(repairTypeTable.id, repairTypeId))

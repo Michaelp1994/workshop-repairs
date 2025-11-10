@@ -1,49 +1,30 @@
 import {
-  createOrganizationSequence,
-  updateOrganizationSequence,
-} from "@repo/db/repositories/organizationSequence.repository";
+  createOrganizationSequenceService,
+  updateOrganizationSequenceService,
+} from "@repo/services/services/organizationSequence.service";
 import {
   createOrganizationSequenceSchema,
   updateOrganizationSequenceSchema,
 } from "@repo/validators/server/organizationSequences.validators";
 
-import {
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   create: organizationProcedure
     .input(createOrganizationSequenceSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-
-      const createdModel = await createOrganizationSequence({
+      const createdModel = await createOrganizationSequenceService({
         ...input,
         organizationId: ctx.session.organizationId,
-        ...metadata,
       });
-
-      assertDatabaseResult(createdModel);
 
       return createdModel;
     }),
   update: organizationProcedure
     .input(updateOrganizationSequenceSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-
-      const updatedModel = await updateOrganizationSequence(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
-      );
-
-      assertDatabaseResult(updatedModel);
+      const updatedModel = await updateOrganizationSequenceService(values, id);
 
       return updatedModel;
     }),

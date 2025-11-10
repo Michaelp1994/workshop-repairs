@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { repairTable } from "./repair.sql";
@@ -35,6 +30,4 @@ export const repairImageRelations = relations(repairImageTable, ({ one }) => ({
 
 export type RepairImage = InferModel<typeof repairImageTable>;
 export type RepairImageID = RepairImage["id"];
-export type CreateRepairImage = InferCreateModel<typeof repairImageTable>;
-export type UpdateRepairImage = InferUpdateModel<typeof repairImageTable>;
-export type ArchiveRepairImage = InferArchiveModel<typeof repairImageTable>;
+export type RepairImageInput = InferInsertModel<typeof repairImageTable>;

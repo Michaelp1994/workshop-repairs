@@ -8,6 +8,8 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
@@ -62,6 +64,13 @@ import { Route as ProtectedEquipmentTypesEquipmentTypeSlugEditRouteImport } from
 import { Route as ProtectedClientsClientSlugEditRouteImport } from './routes/_protected/clients/$clientSlug/edit'
 import { Route as ProtectedAssetsAssetSlugEditRouteImport } from './routes/_protected/assets/$assetSlug/edit'
 
+const OnboardingRouteImport = createFileRoute('/onboarding')()
+
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
@@ -82,9 +91,9 @@ const OnboardingWelcomeRoute = OnboardingWelcomeRouteImport.update({
   getParentRoute: () => OnboardingRoute,
 } as any)
 const OnboardingSequencesRoute = OnboardingSequencesRouteImport.update({
-  id: '/onboarding/sequences',
-  path: '/onboarding/sequences',
-  getParentRoute: () => rootRouteImport,
+  id: '/sequences',
+  path: '/sequences',
+  getParentRoute: () => OnboardingRoute,
 } as any)
 const OnboardingInvitationRoute = OnboardingInvitationRouteImport.update({
   id: '/invitation',
@@ -460,6 +469,7 @@ export interface FileRoutesById {
   '/(public)/login': typeof publicLoginRoute
   '/(public)/register': typeof publicRegisterRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
   '/onboarding/_layout': typeof OnboardingLayoutRoute
   '/onboarding/email-verification': typeof OnboardingEmailVerificationRoute
   '/onboarding/invitation': typeof OnboardingInvitationRoute
@@ -621,6 +631,7 @@ export interface FileRouteTypes {
     | '/(public)/login'
     | '/(public)/register'
     | '/_protected/dashboard'
+    | '/onboarding'
     | '/onboarding/_layout'
     | '/onboarding/email-verification'
     | '/onboarding/invitation'
@@ -675,12 +686,19 @@ export interface RootRouteChildren {
   publicForgotPasswordRoute: typeof publicForgotPasswordRoute
   publicLoginRoute: typeof publicLoginRoute
   publicRegisterRoute: typeof publicRegisterRoute
-  OnboardingSequencesRoute: typeof OnboardingSequencesRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_protected': {
       id: '/_protected'
       path: ''
@@ -711,10 +729,10 @@ declare module '@tanstack/react-router' {
     }
     '/onboarding/sequences': {
       id: '/onboarding/sequences'
-      path: '/onboarding/sequences'
+      path: '/sequences'
       fullPath: '/onboarding/sequences'
       preLoaderRoute: typeof OnboardingSequencesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OnboardingRoute
     }
     '/onboarding/invitation': {
       id: '/onboarding/invitation'
@@ -732,7 +750,7 @@ declare module '@tanstack/react-router' {
     }
     '/onboarding/_layout': {
       id: '/onboarding/_layout'
-      path: ''
+      path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingLayoutRouteImport
       parentRoute: typeof OnboardingRoute
@@ -1140,12 +1158,40 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
   ProtectedRouteRouteChildren,
 )
 
+interface OnboardingRouteChildren {
+  OnboardingLayoutRoute: typeof OnboardingLayoutRoute
+  OnboardingEmailVerificationRoute: typeof OnboardingEmailVerificationRoute
+  OnboardingInvitationRoute: typeof OnboardingInvitationRoute
+  OnboardingSequencesRoute: typeof OnboardingSequencesRoute
+  OnboardingWelcomeRoute: typeof OnboardingWelcomeRoute
+  OnboardingIndexRoute: typeof OnboardingIndexRoute
+  OnboardingOrganizationCreateRoute: typeof OnboardingOrganizationCreateRoute
+  OnboardingOrganizationJoinRoute: typeof OnboardingOrganizationJoinRoute
+  OnboardingOrganizationIndexRoute: typeof OnboardingOrganizationIndexRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingLayoutRoute: OnboardingLayoutRoute,
+  OnboardingEmailVerificationRoute: OnboardingEmailVerificationRoute,
+  OnboardingInvitationRoute: OnboardingInvitationRoute,
+  OnboardingSequencesRoute: OnboardingSequencesRoute,
+  OnboardingWelcomeRoute: OnboardingWelcomeRoute,
+  OnboardingIndexRoute: OnboardingIndexRoute,
+  OnboardingOrganizationCreateRoute: OnboardingOrganizationCreateRoute,
+  OnboardingOrganizationJoinRoute: OnboardingOrganizationJoinRoute,
+  OnboardingOrganizationIndexRoute: OnboardingOrganizationIndexRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
   publicForgotPasswordRoute: publicForgotPasswordRoute,
   publicLoginRoute: publicLoginRoute,
   publicRegisterRoute: publicRegisterRoute,
-  OnboardingSequencesRoute: OnboardingSequencesRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
 }
 export const routeTree = rootRouteImport

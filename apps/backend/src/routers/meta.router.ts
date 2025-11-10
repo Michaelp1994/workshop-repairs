@@ -1,4 +1,5 @@
-import { publicProcedure, router } from "../trpc";
+import { publicProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   // Greeting procedure

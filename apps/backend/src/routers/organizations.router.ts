@@ -1,18 +1,18 @@
-import { getOrganizationById } from "@repo/db/repositories/organization.repository";
+import { getOrganizationService } from "@repo/services/services/organization.service";
 import { getOrganizationByIdSchema } from "@repo/validators/server/organization.validators";
 
 import { getOrganizationLogoUrlFromKey } from "../helpers/s3";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   get: organizationProcedure
     .input(getOrganizationByIdSchema)
     .query(async ({ ctx }) => {
-      const organization = await getOrganizationById(
+      const organization = await getOrganizationService(
         ctx.session.organizationId,
       );
-      assertDatabaseResult(organization);
+
       return {
         ...organization,
         logo: organization.logo

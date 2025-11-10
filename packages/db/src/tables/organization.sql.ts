@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import { organizationInvitationTable } from "./organization-invitation.sql";
 import { userTable } from "./user.sql";
 
@@ -27,6 +22,4 @@ export const organizationRelations = relations(
 
 export type Organization = InferModel<typeof organizationTable>;
 export type OrganizationID = Organization["id"];
-export type CreateOrganization = InferCreateModel<typeof organizationTable>;
-export type UpdateOrganization = InferUpdateModel<typeof organizationTable>;
-export type ArchiveOrganization = InferArchiveModel<typeof organizationTable>;
+export type OrganizationInput = InferInsertModel<typeof organizationTable>;

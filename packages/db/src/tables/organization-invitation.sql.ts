@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import { organizationTable } from "./organization.sql";
 
 export const organizationInvitationTable = pgTable("organization_invitation", {
@@ -33,12 +28,6 @@ export type OrganizationInvitation = InferModel<
   typeof organizationInvitationTable
 >;
 export type OrganizationInvitationID = OrganizationInvitation["id"];
-export type CreateOrganizationInvitation = InferCreateModel<
-  typeof organizationInvitationTable
->;
-export type UpdateOrganizationInvitation = InferUpdateModel<
-  typeof organizationInvitationTable
->;
-export type ArchiveOrganizationInvitation = InferArchiveModel<
+export type OrganizationInvitationInput = InferInsertModel<
   typeof organizationInvitationTable
 >;

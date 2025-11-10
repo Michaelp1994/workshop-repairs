@@ -1,18 +1,19 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "..";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
+import { type DatabaseTransaction } from "..";
+import { organizationInvitationTable } from "../tables/organization-invitation.sql";
 import {
-  type CreateOrganizationInvitation,
-  organizationInvitationTable,
-} from "../tables/organization-invitation.sql";
-import {
-  type CreateOrganization,
   type OrganizationID,
   organizationTable,
 } from "../tables/organization.sql";
 
-export async function getOrganizationById(id: OrganizationID) {
-  const query = db
+export async function getOrganizationById(
+  tx: DatabaseTransaction,
+  id: OrganizationID,
+) {
+  const query = tx
     .select()
     .from(organizationTable)
     .where(eq(organizationTable.id, id));
@@ -20,8 +21,11 @@ export async function getOrganizationById(id: OrganizationID) {
   return res;
 }
 
-export async function getOrganizationByName(name: string) {
-  const query = db
+export async function getOrganizationByName(
+  tx: DatabaseTransaction,
+  name: string,
+) {
+  const query = tx
     .select()
     .from(organizationTable)
     .where(eq(organizationTable.name, name));
@@ -29,14 +33,20 @@ export async function getOrganizationByName(name: string) {
   return res;
 }
 
-export async function createOrganization(input: CreateOrganization) {
-  const query = db.insert(organizationTable).values(input).returning();
+export async function createOrganization(
+  tx: DatabaseTransaction,
+  input: CreateInput<OrganizationInput>,
+) {
+  const query = tx.insert(organizationTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function getOrganizationByInvitationCode(invitationCode: string) {
-  const query = db
+export async function getOrganizationByInvitationCode(
+  tx: DatabaseTransaction,
+  invitationCode: string,
+) {
+  const query = tx
     .select()
     .from(organizationTable)
     .where(eq(organizationTable.invitationCode, invitationCode));
@@ -44,8 +54,11 @@ export async function getOrganizationByInvitationCode(invitationCode: string) {
   return res;
 }
 
-export async function createInvitation(input: CreateOrganizationInvitation) {
-  const query = db
+export async function createInvitation(
+  tx: DatabaseTransaction,
+  input: CreateInput<OrganizationInvitationInput>,
+) {
+  const query = tx
     .insert(organizationInvitationTable)
     .values(input)
     .returning();

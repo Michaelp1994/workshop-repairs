@@ -8,7 +8,9 @@ import type {
 
 import { and, count, eq, getTableColumns } from "drizzle-orm";
 
-import { db } from "..";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
+import { type DatabaseTransaction } from "..";
 import {
   getColumnFilters,
   getGlobalFilters,
@@ -17,25 +19,26 @@ import {
 import { type ModelID, modelTable } from "../tables/model.sql";
 import { type PartID, partTable } from "../tables/part.sql";
 import {
-  type ArchivePartToModel,
-  type CreatePartToModel,
   partsToModelTable,
-  UpdatePartToModel,
+  type PartToModelInput,
 } from "../tables/parts-to-model.sql";
 
 const partsToModelsFields = getTableColumns(partsToModelTable);
 
-export function getAllPartsByModelId({
-  sorting,
-  pagination,
-  globalFilter,
-  columnFilters,
-  filters,
-}: GetAllPartsByModelIdInput) {
+export function getAllPartsByModelId(
+  tx: DatabaseTransaction,
+  {
+    sorting,
+    pagination,
+    globalFilter,
+    columnFilters,
+    filters,
+  }: GetAllPartsByModelIdInput,
+) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const orderByParams = getOrderBy(sorting);
-  const query = db
+  const query = tx
     .select({
       ...partsToModelsFields,
       part: partTable,
@@ -56,14 +59,13 @@ export function getAllPartsByModelId({
   return res;
 }
 
-export async function countAllPartsByModelId({
-  columnFilters,
-  globalFilter,
-  filters,
-}: CountAllPartsByModelIdInput) {
+export async function countAllPartsByModelId(
+  tx: DatabaseTransaction,
+  { columnFilters, globalFilter, filters }: CountAllPartsByModelIdInput,
+) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({
       count: count(),
     })
@@ -80,17 +82,20 @@ export async function countAllPartsByModelId({
   return res?.count;
 }
 
-export function getAllModelsByPartId({
-  sorting,
-  pagination,
-  globalFilter,
-  columnFilters,
-  filters,
-}: GetAllModelsByPartIdInput) {
+export function getAllModelsByPartId(
+  tx: DatabaseTransaction,
+  {
+    sorting,
+    pagination,
+    globalFilter,
+    columnFilters,
+    filters,
+  }: GetAllModelsByPartIdInput,
+) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const orderByParams = getOrderBy(sorting);
-  const query = db
+  const query = tx
     .select({
       ...partsToModelsFields,
       model: modelTable,
@@ -111,14 +116,13 @@ export function getAllModelsByPartId({
   return res;
 }
 
-export async function countAllModelsByPartId({
-  columnFilters,
-  globalFilter,
-  filters,
-}: CountAllModelsByPartIdInput) {
+export async function countAllModelsByPartId(
+  tx: DatabaseTransaction,
+  { columnFilters, globalFilter, filters }: CountAllModelsByPartIdInput,
+) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({
       count: count(),
     })
@@ -136,12 +140,13 @@ export async function countAllModelsByPartId({
 }
 
 export function getPartsByModelIdSelect(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: GetSelectInput,
   modelId: ModelID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({
       value: partTable.id,
       label: partTable.name,
@@ -161,12 +166,13 @@ export function getPartsByModelIdSelect(
 }
 
 export function getModelsByPartIdSelect(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: GetSelectInput,
   partId: PartID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({
       value: modelTable.id,
       label: modelTable.name,
@@ -185,11 +191,14 @@ export function getModelsByPartIdSelect(
   return query.execute();
 }
 
-export async function getPartToModelById(input: {
-  partId: PartID;
-  modelId: ModelID;
-}) {
-  const query = db
+export async function getPartToModelById(
+  tx: DatabaseTransaction,
+  input: {
+    partId: PartID;
+    modelId: ModelID;
+  },
+) {
+  const query = tx
     .select()
     .from(partsToModelTable)
     .where(
@@ -202,14 +211,20 @@ export async function getPartToModelById(input: {
   return res;
 }
 
-export async function createPartToModel(input: CreatePartToModel) {
-  const query = db.insert(partsToModelTable).values(input).returning();
+export async function createPartToModel(
+  tx: DatabaseTransaction,
+  input: CreateInput<PartToModelInput>,
+) {
+  const query = tx.insert(partsToModelTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export async function updatePartToModel(input: UpdatePartToModel) {
-  const query = db
+export async function updatePartToModel(
+  tx: DatabaseTransaction,
+  input: UpdateInput<PartToModelInput>,
+) {
+  const query = tx
     .update(partsToModelTable)
     .set(input)
     .where(
@@ -223,8 +238,11 @@ export async function updatePartToModel(input: UpdatePartToModel) {
   return res;
 }
 
-export async function archivePartToModel(input: ArchivePartToModel) {
-  const query = db
+export async function archivePartToModel(
+  tx: DatabaseTransaction,
+  input: ArchiveInput<PartToModelInput>,
+) {
+  const query = tx
     .delete(partsToModelTable)
     .where(
       and(

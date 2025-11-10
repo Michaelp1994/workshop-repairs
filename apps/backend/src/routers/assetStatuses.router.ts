@@ -1,12 +1,12 @@
 import {
-  archiveAssetStatus,
-  countAssetStatuses,
-  createAssetStatus,
-  getAllAssetStatuses,
-  getAssetStatusById,
-  getAssetStatusSelect,
-  updateAssetStatus,
-} from "@repo/db/repositories/assetStatus.repository";
+  archiveAssetStatusService,
+  countAssetStatusesService,
+  createAssetStatusService,
+  getAllAssetStatusesService,
+  getAssetStatusSelectService,
+  getAssetStatusService,
+  updateAssetStatusService,
+} from "@repo/services/services/assetStatus.service";
 import {
   archiveAssetStatusSchema,
   countAssetStatusesSchema,
@@ -18,37 +18,35 @@ import {
 } from "@repo/validators/server/assetStatuses.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllAssetStatusesSchema)
-    .query(async ({ input }) => {
-      const allUserTypes = getAllAssetStatuses(input);
+    .query(async ({ input, ctx }) => {
+      const allUserTypes = await getAllAssetStatusesService(input, ctx.session);
       return allUserTypes;
     }),
   countAll: organizationProcedure
     .input(countAssetStatusesSchema)
-    .query(({ input }) => {
-      const count = countAssetStatuses(input);
+    .query(async ({ input, ctx }) => {
+      const count = await countAssetStatusesService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getAssetStatusesSelectSchema)
-    .query(({ input }) => {
-      const allUserTypes = getAssetStatusSelect(input);
+    .query(async ({ input, ctx }) => {
+      const allUserTypes = await getAssetStatusSelectService(
+        input,
+        ctx.session,
+      );
       return allUserTypes;
     }),
   getById: organizationProcedure
     .input(getAssetStatusByIdSchema)
-    .query(async ({ input }) => {
-      const userType = await getAssetStatusById(input.id);
+    .query(async ({ input, ctx }) => {
+      const userType = await getAssetStatusService(input.id, ctx.session);
 
       if (!userType) {
         throw new TRPCError({
@@ -62,45 +60,31 @@ export default router({
   create: organizationProcedure
     .input(createAssetStatusSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdUserType = await createAssetStatus({
-        ...input,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdUserType);
+      const createdUserType = await createAssetStatusService(
+        input,
+        ctx.session,
+      );
 
       return createdUserType;
     }),
   update: organizationProcedure
     .input(updateAssetStatusSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedUserType = await updateAssetStatus(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedUserType = await updateAssetStatusService(
+        values,
         id,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedUserType);
 
       return updatedUserType;
     }),
   archive: organizationProcedure
     .input(archiveAssetStatusSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedUserType = await archiveAssetStatus(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedUserType = await archiveAssetStatusService(
+        input.id,
+        ctx.session,
       );
-
-      assertDatabaseResult(archivedUserType);
 
       return archivedUserType;
     }),

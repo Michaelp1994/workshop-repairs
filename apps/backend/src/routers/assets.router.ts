@@ -1,55 +1,76 @@
 import {
-  archiveAsset,
-  countAssets,
-  createAsset,
-  getAllAssets,
-  getAssetByLocalId,
-  getAssetByRepairId,
-  getAssetsSelect,
-  updateAsset,
-} from "@repo/db/repositories/asset.repository";
+  archiveAssetService,
+  countAssetsService,
+  createAssetService,
+  getAllAssetsService,
+  getAssetService,
+  getAssetsSelectService,
+  updateAssetService,
+} from "@repo/services/services/asset.service";
 import {
   archiveAssetSchema,
+  type AssetFilters,
   countAssetsSchema,
   createAssetSchema,
   getAllAssetsSchema,
   getAssestsSelectSchema,
-  getAssetByRepairIdSchema,
   getAssetBySlugSchema,
   updateAssetSchema,
 } from "@repo/validators/server/assets.validators";
-import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
 import { splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
+
+function assetFilters(filters: AssetFilters) {
+  if (!filters) {
+    return {};
+  }
+  return {
+    model: filters.model ? splitSlug(filters.model).localId : undefined,
+    client: filters.client ? splitSlug(filters.client).localId : undefined,
+    location: filters.location
+      ? splitSlug(filters.location).localId
+      : undefined,
+    manufacturer: filters.manufacturer
+      ? splitSlug(filters.manufacturer).localId
+      : undefined,
+    equipmentType: filters.equipmentType
+      ? splitSlug(filters.equipmentType).localId
+      : undefined,
+  };
+}
 
 export default router({
   getAll: organizationProcedure
     .input(getAllAssetsSchema)
-    .query(async ({ ctx, input }) => {
-      const allAssets = await getAllAssets(input, ctx.session.organizationId);
+    .query(async ({ ctx, input: { filters, ...input } }) => {
+      const newFilters = assetFilters(filters);
+
+      const values = {
+        ...input,
+        filters: newFilters,
+      };
+
+      const allAssets = await getAllAssetsService(values, ctx.session);
+
       return allAssets;
     }),
   countAll: organizationProcedure
     .input(countAssetsSchema)
-    .query(async ({ ctx, input }) => {
-      const count = await countAssets(input, ctx.session.organizationId);
-      assertDatabaseResult(count);
+    .query(async ({ ctx, input: { filters, ...input } }) => {
+      const newFilters = assetFilters(filters);
+      const values = {
+        ...input,
+        filters: newFilters,
+      };
+      const count = await countAssetsService(values, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getAssestsSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allAssets = await getAssetsSelect(
-        input,
-        ctx.session.organizationId,
-      );
+      const allAssets = await getAssetsSelectService(input, ctx.session);
       return allAssets;
     }),
   getBySlug: organizationProcedure
@@ -57,79 +78,35 @@ export default router({
     .query(async ({ ctx, input }) => {
       const { localId } = splitSlug(input.slug);
 
-      const asset = await getAssetByLocalId(
-        localId,
-        ctx.session.organizationId,
-      );
-
-      if (!asset) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't find client",
-        });
-      }
-      return asset;
-    }),
-  getByRepairId: organizationProcedure
-    .input(getAssetByRepairIdSchema)
-    .query(async ({ input, ctx }) => {
-      const asset = await getAssetByRepairId(
-        input.id,
-        ctx.session.organizationId,
-      );
-
-      if (!asset) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't find asset for repair",
-        });
-      }
+      const asset = await getAssetService(localId, ctx.session);
 
       return asset;
     }),
   create: organizationProcedure
     .input(createAssetSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdAsset = await createAsset({
-        ...input,
-        ...metadata,
-        organizationId: ctx.session.organizationId,
-        statusId: 1,
-      });
-
-      assertDatabaseResult(createdAsset);
-      return createdAsset;
+      const asset = await createAssetService(input, ctx.session);
+      return asset;
     }),
   update: organizationProcedure
     .input(updateAssetSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
 
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedAsset = await updateAsset(
-        { ...values, ...metadata },
+      const updatedAsset = await updateAssetService(
+        values,
         localId,
-        ctx.session.organizationId,
+        ctx.session,
       );
-      assertDatabaseResult(updatedAsset);
 
       return updatedAsset;
     }),
   archive: organizationProcedure
     .input(archiveAssetSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
+      const { localId } = splitSlug(input.slug);
 
-      const archivedAsset = await archiveAsset(
-        { ...values, ...metadata },
-        localId,
-        ctx.session.organizationId,
-      );
-      assertDatabaseResult(archivedAsset);
+      const archivedAsset = await archiveAssetService(localId, ctx.session);
 
       return archivedAsset;
     }),

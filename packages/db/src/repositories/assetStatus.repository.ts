@@ -6,17 +6,20 @@ import type {
 
 import { count, eq, isNull } from "drizzle-orm";
 
-import { db } from "../index";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
+import { type DatabaseTransaction } from "../index";
 import {
-  type ArchiveAssetStatus,
   type AssetStatusID,
+  type AssetStatusInput,
   assetStatusTable,
-  type CreateAssetStatus,
-  type UpdateAssetStatus,
 } from "../tables/asset-status.sql";
 
-export function getAllAssetStatuses({ pagination }: GetAllAssetStatusesInput) {
-  const query = db
+export function getAllAssetStatuses(
+  tx: DatabaseTransaction,
+  { pagination }: GetAllAssetStatusesInput,
+) {
+  const query = tx
     .select()
     .from(assetStatusTable)
     .where(isNull(assetStatusTable.deletedAt))
@@ -26,8 +29,11 @@ export function getAllAssetStatuses({ pagination }: GetAllAssetStatusesInput) {
   return query.execute();
 }
 
-export async function countAssetStatuses(_: CountAssetStatusesInput) {
-  const query = db
+export async function countAssetStatuses(
+  tx: DatabaseTransaction,
+  _: CountAssetStatusesInput,
+) {
+  const query = tx
     .select({ count: count() })
     .from(assetStatusTable)
     .where(isNull(assetStatusTable.deletedAt));
@@ -35,8 +41,11 @@ export async function countAssetStatuses(_: CountAssetStatusesInput) {
   return res?.count;
 }
 
-export async function getAssetStatusById(input: AssetStatusID) {
-  const query = db
+export async function getAssetStatusById(
+  tx: DatabaseTransaction,
+  input: AssetStatusID,
+) {
+  const query = tx
     .select()
     .from(assetStatusTable)
     .where(eq(assetStatusTable.id, input));
@@ -44,8 +53,11 @@ export async function getAssetStatusById(input: AssetStatusID) {
   return res;
 }
 
-export function getAssetStatusSelect(_: GetAssetStatusesSelectInput) {
-  const query = db
+export function getAssetStatusSelect(
+  tx: DatabaseTransaction,
+  _: GetAssetStatusesSelectInput,
+) {
+  const query = tx
     .select({
       value: assetStatusTable.id,
       label: assetStatusTable.name,
@@ -55,17 +67,21 @@ export function getAssetStatusSelect(_: GetAssetStatusesSelectInput) {
   return query.execute();
 }
 
-export async function createAssetStatus(input: CreateAssetStatus) {
-  const query = db.insert(assetStatusTable).values(input).returning();
+export async function createAssetStatus(
+  tx: DatabaseTransaction,
+  input: CreateInput<AssetStatusInput>,
+) {
+  const query = tx.insert(assetStatusTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function updateAssetStatus(
-  input: UpdateAssetStatus,
+  tx: DatabaseTransaction,
+  input: UpdateInput<AssetStatusInput>,
   assetStatusId: AssetStatusID,
 ) {
-  const query = db
+  const query = tx
     .update(assetStatusTable)
     .set(input)
     .where(eq(assetStatusTable.id, assetStatusId))
@@ -75,10 +91,11 @@ export async function updateAssetStatus(
 }
 
 export async function archiveAssetStatus(
-  input: ArchiveAssetStatus,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<AssetStatusInput>,
   assetStatusId: AssetStatusID,
 ) {
-  const query = db
+  const query = tx
     .update(assetStatusTable)
     .set(input)
     .where(eq(assetStatusTable.id, assetStatusId))

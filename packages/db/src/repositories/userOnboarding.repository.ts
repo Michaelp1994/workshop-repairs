@@ -2,11 +2,11 @@ import assert from "assert";
 import { eq, getTableColumns } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
-  type CreateUserOnboarding,
-  type UpdateUserOnboarding,
+  type UserOnboardingInput,
   userOnboardingTable,
 } from "../tables/user-onboarding.sql";
 import { type UserID, userTable } from "../tables/user.sql";
@@ -15,8 +15,11 @@ const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 const userOnboardingColumns = getTableColumns(userOnboardingTable);
 
-export async function getUserOnboardingByUserId(userId: UserID) {
-  const query = db
+export async function getUserOnboardingByUserId(
+  tx: DatabaseTransaction,
+  userId: UserID,
+) {
+  const query = tx
     .select({
       ...publicUserColumns,
       onboarding: userOnboardingColumns,
@@ -28,17 +31,21 @@ export async function getUserOnboardingByUserId(userId: UserID) {
   return res;
 }
 
-export async function createUserOnboarding(input: CreateUserOnboarding) {
-  const query = db.insert(userOnboardingTable).values(input).returning();
+export async function createUserOnboarding(
+  tx: DatabaseTransaction,
+  input: CreateInput<UserOnboardingInput>,
+) {
+  const query = tx.insert(userOnboardingTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function setOrganization(
+  tx: DatabaseTransaction,
   userId: UserID,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(userTable)
     .set({
       organizationId,
@@ -51,8 +58,8 @@ export async function setOrganization(
   return res;
 }
 
-export async function setInvitations(userId: UserID) {
-  const query = db
+export async function setInvitations(tx: DatabaseTransaction, userId: UserID) {
+  const query = tx
     .update(userOnboardingTable)
     .set({
       invitedUsers: true,
@@ -61,7 +68,7 @@ export async function setInvitations(userId: UserID) {
     .returning();
   const [res] = await query.execute();
   assert(res, "User not found");
-  const query2 = db
+  const query2 = tx
     .update(userTable)
     .set({
       onboardingCompleted: true,
@@ -75,9 +82,10 @@ export async function setInvitations(userId: UserID) {
 }
 
 export async function updateUserOnboardingByUserId(
-  input: UpdateUserOnboarding,
+  tx: DatabaseTransaction,
+  input: UpdateInput<UserOnboardingInput>,
 ) {
-  const query = db
+  const query = tx
     .update(userOnboardingTable)
     .set(input)
     .where(eq(userOnboardingTable.userId, input.userId))

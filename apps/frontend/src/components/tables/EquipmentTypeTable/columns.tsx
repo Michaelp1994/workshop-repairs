@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend/router";
+
 import { Button } from "@repo/ui/button";
 import {
   DataTableColumnHeader,
@@ -9,8 +11,6 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-
-import type { RouterOutputs } from "../../../../../backend/src/router";
 const columnHelper =
   createColumnHelper<RouterOutputs["equipmentTypes"]["getAll"][number]>();
 
@@ -21,18 +21,26 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("name", {
+  columnHelper.accessor("slug", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ getValue, row }) => (
+    cell: ({ getValue }) => (
       <Link
         className="font-bold hover:underline"
-        params={{ equipmentTypeId: row.original.id }}
-        to="/equipment-types/$equipmentTypeId"
+        params={{ equipmentTypeSlug: getValue() }}
+        to="/equipment-types/$equipmentTypeSlug"
       >
         {getValue()}
       </Link>
+    ),
+    meta: {
+      name: "Name",
+    },
+  }),
+  columnHelper.accessor("name", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     meta: {
       name: "Name",
@@ -65,8 +73,8 @@ export const columns = [
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
           <Link
-            params={{ equipmentTypeId: row.original.id }}
-            to="/equipment-types/$equipmentTypeId"
+            params={{ equipmentTypeSlug: row.original.slug }}
+            to="/equipment-types/$equipmentTypeSlug"
           >
             <ChevronRight className="size-4" />
           </Link>

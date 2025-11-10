@@ -10,7 +10,6 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-import generateRepairSlug from "~/utils/generateRepairSlug";
 
 import type { RouterOutputs } from "../../../../../backend/src/router";
 
@@ -26,8 +25,8 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("id", {
-    id: "id",
+  columnHelper.accessor("slug", {
+    id: "slug",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Repair" />
     ),
@@ -35,10 +34,10 @@ export const columns = [
       return (
         <Link
           className="font-bold hover:underline"
-          params={{ repairId: getValue() }}
-          to="/repairs/$repairId"
+          params={{ repairSlug: getValue() }}
+          to="/repairs/$repairSlug"
         >
-          {generateRepairSlug(getValue())}
+          {getValue()}
         </Link>
       );
     },
@@ -123,7 +122,10 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
-          <Link params={{ repairId: row.original.id }} to="/repairs/$repairId">
+          <Link
+            params={{ repairSlug: row.original.slug }}
+            to="/repairs/$repairSlug"
+          >
             <ChevronRight className="size-4" />
           </Link>
         </Button>

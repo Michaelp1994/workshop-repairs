@@ -1,12 +1,12 @@
 import {
-  archiveUserType,
-  countUserTypes,
-  createUserType,
-  getAllUserTypes,
-  getUserTypeById,
-  getUserTypesSelect,
-  updateUserType,
-} from "@repo/db/repositories/userType.repository";
+  archiveUserTypeService,
+  countUserTypesService,
+  createUserTypeService,
+  getAllUserTypesService,
+  getUserTypeByIdService,
+  getUserTypesSelectService,
+  updateUserTypeService,
+} from "@repo/services/services/userType.service";
 import {
   archiveUserTypeSchema,
   countUserTypesSchema,
@@ -18,36 +18,32 @@ import {
 } from "@repo/validators/server/userTypes.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllUserTypesSchema)
-    .query(async ({ input }) => {
-      const allUserTypes = getAllUserTypes(input);
+    .query(async ({ input, ctx }) => {
+      const allUserTypes = getAllUserTypesService(input, ctx.session);
       return allUserTypes;
     }),
   countAll: organizationProcedure
     .input(countUserTypesSchema)
-    .query(({ input }) => {
-      const count = countUserTypes(input);
+    .query(({ input, ctx }) => {
+      const count = countUserTypesService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getUserTypeSelectSchema)
-    .query(async ({ input }) => {
-      const allUserTypes = getUserTypesSelect(input);
+    .query(async ({ input, ctx }) => {
+      const allUserTypes = getUserTypesSelectService(input, ctx.session);
       return allUserTypes;
     }),
   getById: organizationProcedure
     .input(getUserTypeByIdSchema)
-    .query(async ({ input }) => {
-      const userType = await getUserTypeById(input.id);
+    .query(async ({ input, ctx }) => {
+      const userType = await getUserTypeByIdService(input.id, ctx.session);
 
       if (!userType) {
         throw new TRPCError({
@@ -61,11 +57,7 @@ export default router({
   create: organizationProcedure
     .input(createUserTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdUserType = await createUserType({
-        ...input,
-        ...metadata,
-      });
+      const createdUserType = await createUserTypeService(input, ctx.session);
       if (!createdUserType) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -78,13 +70,10 @@ export default router({
   update: organizationProcedure
     .input(updateUserTypeSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedUserType = await updateUserType(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedUserType = await updateUserTypeService(
+        values,
         id,
+        ctx.session,
       );
 
       if (!updatedUserType) {
@@ -98,14 +87,10 @@ export default router({
     }),
   archive: organizationProcedure
     .input(archiveUserTypeSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedUserType = await archiveUserType(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedUserType = await archiveUserTypeService(
+        input.id,
+        ctx.session,
       );
 
       if (!archivedUserType) {

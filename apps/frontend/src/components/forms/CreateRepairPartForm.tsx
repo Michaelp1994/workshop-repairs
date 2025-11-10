@@ -1,5 +1,3 @@
-import type { RepairID } from "@repo/validators/ids.validators";
-
 import { Checkbox } from "@repo/ui/checkbox";
 import {
   Form,
@@ -25,25 +23,24 @@ import {
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
-import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface CreateRepairPartFormProps {
-  repairId: RepairID;
+  slug: string;
 }
 
 export default function CreateRepairPartForm({
-  repairId,
+  slug,
 }: CreateRepairPartFormProps) {
   const utils = api.useUtils();
-  const [repair] = api.repairs.getById.useSuspenseQuery({
-    id: repairId,
+  const [repair] = api.repairs.getBySlug.useSuspenseQuery({
+    slug,
   });
 
   const createMutation = api.repairParts.create.useMutation({
-    async onSuccess(data) {
+    async onSuccess() {
       await utils.repairParts.getAll.invalidate();
       await utils.repairParts.countAll.invalidate();
-      toast.success(`Part was added to ${generateRepairSlug(data.repairId)}`);
+      toast.success(`Part was added to ${slug}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);

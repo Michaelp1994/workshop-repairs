@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -8,12 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type {
-  InferArchiveModel,
-  InferCreateModel,
-  InferModel,
-  InferUpdateModel,
-} from "../types";
+import type { InferModel } from "../types";
 
 import { userTable } from "./user.sql";
 
@@ -47,15 +42,6 @@ export type EmailVerificationRequest = InferModel<
 >;
 
 export type EmailVerificationRequestID = EmailVerificationRequest["id"];
-
-export type CreateEmailVerificationRequest = InferCreateModel<
-  typeof emailVerificationRequestTable
->;
-
-export type UpdateEmailVerificationRequest = InferUpdateModel<
-  typeof emailVerificationRequestTable
->;
-
-export type ArchiveEmailVerificationRequest = InferArchiveModel<
+export type EmailVerificationRequestInput = InferInsertModel<
   typeof emailVerificationRequestTable
 >;

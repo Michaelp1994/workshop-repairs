@@ -20,7 +20,6 @@ import {
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
-import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface CreateRepairCommentFormProps {
   repairId: RepairID;
@@ -36,7 +35,7 @@ export default function CreateRepairCommentForm({
         repairId,
       });
       form.reset();
-      toast.success(`Comment added to ${generateRepairSlug(data.repairId)}`);
+      toast.success(`Comment added to ${data.repairId}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);

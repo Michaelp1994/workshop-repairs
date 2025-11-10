@@ -12,10 +12,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  type UpdateProfileFormInput,
-  updateProfileFormSchema,
-} from "@repo/validators/client/auth.schema";
+import { updateProfileFormSchema } from "@repo/validators/client/auth.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

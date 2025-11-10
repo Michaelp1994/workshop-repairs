@@ -5,7 +5,9 @@ import type {
 
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import { db } from "..";
+import type { DatabaseTransaction } from "..";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
 import createMetadataFields from "../helpers/createMetadataFields";
 import {
   getColumnFilters,
@@ -15,29 +17,30 @@ import {
 import { assetTable } from "../tables/asset.sql";
 import { partTable } from "../tables/part.sql";
 import {
-  type ArchiveRepairPart,
-  type CreateRepairPart,
   type RepairPartID,
+  type RepairPartInput,
   repairPartTable,
-  type UpdateRepairPart,
 } from "../tables/repair-part.sql";
 import { repairTable } from "../tables/repair.sql";
 
 const repairPartFields = getTableColumns(repairPartTable);
 
-export function getAllRepairParts({
-  pagination,
-  filters,
-  columnFilters,
-  globalFilter,
-  sorting,
-}: GetAllRepairPartsInput) {
+export function getAllRepairParts(
+  tx: DatabaseTransaction,
+  {
+    pagination,
+    filters,
+    columnFilters,
+    globalFilter,
+    sorting,
+  }: GetAllRepairPartsInput,
+) {
   const orderByParams = getOrderBy(sorting);
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const { createdByTable, deletedByTable, metadata, updatedByTable } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...repairPartFields,
       part: partTable,
@@ -70,14 +73,13 @@ export function getAllRepairParts({
   return query.execute();
 }
 
-export async function countRepairParts({
-  filters,
-  columnFilters,
-  globalFilter,
-}: CountRepairPartsInput) {
+export async function countRepairParts(
+  tx: DatabaseTransaction,
+  { filters, columnFilters, globalFilter }: CountRepairPartsInput,
+) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(repairPartTable)
     .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
@@ -95,8 +97,11 @@ export async function countRepairParts({
   return res?.count;
 }
 
-export async function getRepairPartById(input: RepairPartID) {
-  const query = db
+export async function getRepairPartById(
+  tx: DatabaseTransaction,
+  input: RepairPartID,
+) {
+  const query = tx
     .select({
       ...repairPartFields,
       assets: assetTable,
@@ -109,17 +114,21 @@ export async function getRepairPartById(input: RepairPartID) {
   return res;
 }
 
-export async function createRepairPart(input: CreateRepairPart) {
-  const query = db.insert(repairPartTable).values(input).returning();
+export async function createRepairPart(
+  tx: DatabaseTransaction,
+  input: CreateInput<RepairPartInput>,
+) {
+  const query = tx.insert(repairPartTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function updateRepairPart(
-  input: UpdateRepairPart,
+  tx: DatabaseTransaction,
+  input: UpdateInput<RepairPartInput>,
   repairPartId: RepairPartID,
 ) {
-  const query = db
+  const query = tx
     .update(repairPartTable)
     .set(input)
     .where(eq(repairPartTable.id, repairPartId))
@@ -129,10 +138,11 @@ export async function updateRepairPart(
 }
 
 export async function archiveRepairPart(
-  input: ArchiveRepairPart,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<RepairPartInput>,
   repairPartId: RepairPartID,
 ) {
-  const query = db
+  const query = tx
     .update(repairPartTable)
     .set(input)
     .where(eq(repairPartTable.id, repairPartId))

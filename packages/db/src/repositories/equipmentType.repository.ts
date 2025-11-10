@@ -7,31 +7,30 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   createGlobalFilters,
   createSortOrder,
 } from "../mappings/equipmentType.mapper";
 import {
-  type ArchiveEquipmentType,
-  type CreateEquipmentType,
   type EquipmentTypeID,
+  type EquipmentTypeInput,
   equipmentTypeTable,
-  type UpdateEquipmentType,
 } from "../tables/equipment-type.sql";
 
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
 export function getAllEquipmentTypes(
+  tx: DatabaseTransaction,
   { pagination, globalFilter, sorting }: GetAllEquipmentTypesInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);
   const orderByParams = createSortOrder(sorting);
-  const query = db
+  const query = tx
     .select()
     .from(equipmentTypeTable)
     .where(
@@ -48,11 +47,12 @@ export function getAllEquipmentTypes(
 }
 
 export async function countEquipmentTypes(
+  tx: DatabaseTransaction,
   { globalFilter }: CountEquipmentTypesInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = createGlobalFilters(globalFilter);
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(equipmentTypeTable)
     .where(
@@ -67,10 +67,11 @@ export async function countEquipmentTypes(
 }
 
 export async function getEquipmentTypesSelect(
+  tx: DatabaseTransaction,
   _: GetEquipmentTypesSelectInput,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .select({
       value: equipmentTypeTable.id,
       label: equipmentTypeTable.name,
@@ -86,12 +87,13 @@ export async function getEquipmentTypesSelect(
 }
 
 export async function getEquipmentTypeByLocalId(
+  tx: DatabaseTransaction,
   localId: number,
   organizationId: OrganizationID,
 ) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...equipmentTypeFields,
       ...metadata,
@@ -119,10 +121,13 @@ export async function getEquipmentTypeByLocalId(
   return res;
 }
 
-export async function getEquipmentTypeById(input: EquipmentTypeID) {
+export async function getEquipmentTypeById(
+  tx: DatabaseTransaction,
+  input: EquipmentTypeID,
+) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...equipmentTypeFields,
       ...metadata,
@@ -145,28 +150,22 @@ export async function getEquipmentTypeById(input: EquipmentTypeID) {
   return res;
 }
 
-export async function createEquipmentType(input: CreateEquipmentType) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "equipmentType",
-    );
-    const query = tx
-      .insert(equipmentTypeTable)
-      .values({ ...input, localId })
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  });
+export async function createEquipmentType(
+  tx: DatabaseTransaction,
+  input: CreateInput<EquipmentTypeInput>,
+) {
+  const query = tx.insert(equipmentTypeTable).values(input).returning();
+  const [res] = await query.execute();
+  return res;
 }
 
 export async function updateEquipmentType(
-  input: UpdateEquipmentType,
+  tx: DatabaseTransaction,
+  input: UpdateInput<EquipmentTypeInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(equipmentTypeTable)
     .set(input)
     .where(
@@ -181,11 +180,12 @@ export async function updateEquipmentType(
 }
 
 export async function archiveEquipmentType(
-  input: ArchiveEquipmentType,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<EquipmentTypeInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(equipmentTypeTable)
     .set(input)
     .where(

@@ -1,5 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
+
+import type { InferModel } from "../types";
 
 import { modelTable } from "./model.sql";
 import { partTable } from "./part.sql";
@@ -32,7 +34,5 @@ export const partsToModelRelations = relations(
   }),
 );
 
-export type PartToModel = typeof partsToModelTable.$inferSelect;
-export type CreatePartToModel = typeof partsToModelTable.$inferInsert;
-export type UpdatePartToModel = CreatePartToModel;
-export type ArchivePartToModel = Omit<CreatePartToModel, "quantity">;
+export type PartToModel = InferModel<typeof partsToModelTable>;
+export type PartToModelInput = InferInsertModel<typeof partsToModelTable>;

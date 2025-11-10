@@ -6,19 +6,20 @@ import type {
 
 import { count, eq, isNull } from "drizzle-orm";
 
-import { db } from "..";
+import type { DatabaseTransaction } from "..";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
 import {
-  type ArchiveRepairStatusType,
-  type CreateRepairStatusType,
   type RepairStatusTypeID,
+  type RepairStatusTypeInput,
   repairStatusTypeTable,
-  type UpdateRepairStatusType,
 } from "../tables/repair-status-type.sql";
 
-export function getAllRepairStatusTypes({
-  pagination,
-}: GetAllRepairStatusTypesInput) {
-  const query = db
+export function getAllRepairStatusTypes(
+  tx: DatabaseTransaction,
+  { pagination }: GetAllRepairStatusTypesInput,
+) {
+  const query = tx
     .select()
     .from(repairStatusTypeTable)
     .where(isNull(repairStatusTypeTable.deletedAt))
@@ -28,8 +29,11 @@ export function getAllRepairStatusTypes({
   return query.execute();
 }
 
-export async function countRepairStatusTypes(_: CountRepairStatusTypesInput) {
-  const query = db
+export async function countRepairStatusTypes(
+  tx: DatabaseTransaction,
+  _: CountRepairStatusTypesInput,
+) {
+  const query = tx
     .select({ count: count() })
     .from(repairStatusTypeTable)
     .where(isNull(repairStatusTypeTable.deletedAt));
@@ -38,9 +42,10 @@ export async function countRepairStatusTypes(_: CountRepairStatusTypesInput) {
 }
 
 export async function getRepairStatusTypesSelect(
+  tx: DatabaseTransaction,
   _: GetRepairStatusSelectInput,
 ) {
-  const query = db
+  const query = tx
     .select({
       value: repairStatusTypeTable.id,
       label: repairStatusTypeTable.name,
@@ -51,8 +56,11 @@ export async function getRepairStatusTypesSelect(
   return query.execute();
 }
 
-export async function getRepairStatusById(input: RepairStatusTypeID) {
-  const query = db
+export async function getRepairStatusById(
+  tx: DatabaseTransaction,
+  input: RepairStatusTypeID,
+) {
+  const query = tx
     .select()
     .from(repairStatusTypeTable)
     .where(eq(repairStatusTypeTable.id, input));
@@ -60,17 +68,21 @@ export async function getRepairStatusById(input: RepairStatusTypeID) {
   return res;
 }
 
-export async function createRepairStatus(input: CreateRepairStatusType) {
-  const query = db.insert(repairStatusTypeTable).values(input).returning();
+export async function createRepairStatus(
+  tx: DatabaseTransaction,
+  input: CreateInput<RepairStatusTypeInput>,
+) {
+  const query = tx.insert(repairStatusTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
 export async function updateRepairStatus(
-  input: UpdateRepairStatusType,
+  tx: DatabaseTransaction,
+  input: UpdateInput<RepairStatusTypeInput>,
   repairStatusTypeId: RepairStatusTypeID,
 ) {
-  const query = db
+  const query = tx
     .update(repairStatusTypeTable)
     .set(input)
     .where(eq(repairStatusTypeTable.id, repairStatusTypeId))
@@ -80,10 +92,11 @@ export async function updateRepairStatus(
 }
 
 export async function archiveRepairStatus(
-  input: ArchiveRepairStatusType,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<RepairStatusTypeInput>,
   repairStatusTypeId: RepairStatusTypeID,
 ) {
-  const query = db
+  const query = tx
     .update(repairStatusTypeTable)
     .set(input)
     .where(eq(repairStatusTypeTable.id, repairStatusTypeId))

@@ -1,16 +1,19 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "..";
+import type { CreateInput } from "../types";
+
+import { type DatabaseTransaction } from "..";
 import {
-  type CreateEmailVerificationRequest,
   type EmailVerificationRequestID,
+  type EmailVerificationRequestInput,
   emailVerificationRequestTable,
 } from "../tables/email-verification-request.sql";
 
 export async function createEmailVerificationRequest(
-  input: CreateEmailVerificationRequest,
+  tx: DatabaseTransaction,
+  input: CreateInput<EmailVerificationRequestInput>,
 ) {
-  const query = db
+  const query = tx
     .insert(emailVerificationRequestTable)
     .values(input)
     .returning();
@@ -18,8 +21,12 @@ export async function createEmailVerificationRequest(
   return res;
 }
 
-export async function getEmailVerificationRequest(email: string, code: string) {
-  const query = db
+export async function getEmailVerificationRequest(
+  tx: DatabaseTransaction,
+  email: string,
+  code: string,
+) {
+  const query = tx
     .select()
     .from(emailVerificationRequestTable)
     .where(
@@ -33,9 +40,10 @@ export async function getEmailVerificationRequest(email: string, code: string) {
 }
 
 export async function deleteEmailConfirmationRequestById(
+  tx: DatabaseTransaction,
   id: EmailVerificationRequestID,
 ) {
-  const query = db
+  const query = tx
     .delete(emailVerificationRequestTable)
     .where(and(eq(emailVerificationRequestTable.id, id)))
     .returning();

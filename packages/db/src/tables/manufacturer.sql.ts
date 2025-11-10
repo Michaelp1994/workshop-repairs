@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
@@ -44,6 +39,4 @@ export const manufacturerRelations = relations(
 
 export type Manufacturer = InferModel<typeof manufacturerTable>;
 export type ManufacturerID = Manufacturer["id"];
-export type CreateManufacturer = InferCreateModel<typeof manufacturerTable>;
-export type UpdateManufacturer = InferUpdateModel<typeof manufacturerTable>;
-export type ArchiveManufacturer = InferArchiveModel<typeof manufacturerTable>;
+export type ManufacturerInput = InferInsertModel<typeof manufacturerTable>;

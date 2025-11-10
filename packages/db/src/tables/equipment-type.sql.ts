@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
@@ -45,6 +40,4 @@ export const equipmentTypeRelations = relations(
 
 export type EquipmentType = InferModel<typeof equipmentTypeTable>;
 export type EquipmentTypeID = EquipmentType["id"];
-export type CreateEquipmentType = InferCreateModel<typeof equipmentTypeTable>;
-export type UpdateEquipmentType = InferUpdateModel<typeof equipmentTypeTable>;
-export type ArchiveEquipmentType = InferArchiveModel<typeof equipmentTypeTable>;
+export type EquipmentTypeInput = InferInsertModel<typeof equipmentTypeTable>;

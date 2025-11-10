@@ -1,12 +1,12 @@
 import {
-  archiveRepairImage,
-  countRepairImages,
-  createRepairImage,
-  getAllRepairImages,
-  getAllRepairImagesByRepairId,
-  getRepairImageById,
-  updateRepairImage,
-} from "@repo/db/repositories/repairImage.repository";
+  archiveRepairImageService,
+  countRepairImagesService,
+  createRepairImageService,
+  getAllRepairImagesByRepairIdService,
+  getAllRepairImagesService,
+  getRepairImageByIdService,
+  updateRepairImageService,
+} from "@repo/services/services/repairImage.service";
 import {
   archiveRepairImageSchema,
   countRepairImagesSchema,
@@ -22,36 +22,31 @@ import { randomUUID } from "crypto";
 
 import { env } from "../env";
 import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import {
   createPresignedUrl,
   fileExistsInS3,
   getFileExtension,
 } from "../helpers/s3";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllRepairImagesSchema)
     .query(async ({ input }) => {
-      const allRepairImages = getAllRepairImages(input);
+      const allRepairImages = getAllRepairImagesService(input);
 
       return allRepairImages;
     }),
   countAll: organizationProcedure
     .input(countRepairImagesSchema)
     .query(({ input }) => {
-      const count = countRepairImages(input);
+      const count = countRepairImagesService(input);
       return count;
     }),
   getAllByRepairId: organizationProcedure
     .input(getAllRepairImagesByRepairIdSchema)
     .query(async ({ input }) => {
-      const allRepairImages = await getAllRepairImagesByRepairId(
+      const allRepairImages = await getAllRepairImagesByRepairIdService(
         input.repairId,
       );
       return allRepairImages.map((repairImage) => ({
@@ -62,7 +57,7 @@ export default router({
   getById: organizationProcedure
     .input(getRepairImageByIdSchema)
     .query(async ({ input }) => {
-      const repairImage = await getRepairImageById(input.id);
+      const repairImage = await getRepairImageByIdService(input.id);
 
       if (!repairImage) {
         throw new TRPCError({
@@ -87,7 +82,6 @@ export default router({
   create: organizationProcedure
     .input(createRepairImageSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
       const fileExists = await fileExistsInS3(`repairImages/${input.fileName}`);
       if (!fileExists) {
         throw new TRPCError({
@@ -95,43 +89,34 @@ export default router({
           message: "File does not exist.",
         });
       }
-      const createdRepairImage = await createRepairImage({
-        ...input,
-        url: input.fileName,
-        ...metadata,
-      });
-      assertDatabaseResult(createdRepairImage);
+      const createdRepairImage = await createRepairImageService(
+        {
+          ...input,
+          url: input.fileName,
+        },
+        ctx.session,
+      );
+
       return createdRepairImage;
     }),
   update: organizationProcedure
     .input(updateRepairImageSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairImage = await updateRepairImage(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedRepairImage = await updateRepairImageService(
+        values,
         id,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedRepairImage);
 
       return updatedRepairImage;
     }),
   archive: organizationProcedure
     .input(archiveRepairImageSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepairImage = await archiveRepairImage(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedRepairImage = await archiveRepairImageService(
+        input.id,
+        ctx.session,
       );
-
-      assertDatabaseResult(archivedRepairImage);
 
       return archivedRepairImage;
     }),

@@ -28,7 +28,7 @@ export default function CreateManufacturerForm() {
     async onSuccess(data) {
       toast.success(`Manufacturer ${data.name} created`);
       await navigate({
-        to: "/manufacturers/$manufacturerId",
+        to: "/manufacturers/$manufacturerSlug",
         params: { manufacturerId: data.id },
       });
     },

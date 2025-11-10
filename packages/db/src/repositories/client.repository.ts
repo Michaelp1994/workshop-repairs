@@ -7,25 +7,21 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/clients.mapper";
-import {
-  type ArchiveClient,
-  clientTable,
-  type CreateClient,
-  type UpdateClient,
-} from "../tables/client.sql";
+import { type ClientInput, clientTable } from "../tables/client.sql";
 
 const clientFields = getTableColumns(clientTable);
 
 export function getAllClients(
+  tx: DatabaseTransaction,
   { pagination, sorting, globalFilter, columnFilters }: GetAllClientsInput,
   organizationId: OrganizationID,
 ) {
@@ -33,7 +29,7 @@ export function getAllClients(
   const globalFilters = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
 
-  const query = db
+  const query = tx
     .select()
     .from(clientTable)
     .where(
@@ -51,12 +47,13 @@ export function getAllClients(
 }
 
 export async function countClients(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: CountClientsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(clientTable)
     .where(
@@ -72,10 +69,11 @@ export async function countClients(
 }
 
 export function getClientsSelect(
+  tx: DatabaseTransaction,
   _: GetClientSelectInput,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .select({
       value: clientTable.id,
       label: clientTable.name,
@@ -92,12 +90,13 @@ export function getClientsSelect(
 }
 
 export async function getClientByLocalId(
+  tx: DatabaseTransaction,
   localId: number,
   organizationId: OrganizationID,
 ) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...clientFields,
       ...metadata,
@@ -116,29 +115,22 @@ export async function getClientByLocalId(
   return res;
 }
 
-export async function createClient(input: CreateClient) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "client",
-    );
+export async function createClient(
+  tx: DatabaseTransaction,
+  input: CreateInput<ClientInput>,
+) {
+  const [client] = await tx.insert(clientTable).values(input).returning();
 
-    const [result] = await tx
-      .insert(clientTable)
-      .values({ ...input, localId })
-      .returning();
-
-    return result;
-  });
+  return client;
 }
 
 export async function updateClient(
-  input: UpdateClient,
+  tx: DatabaseTransaction,
+  input: UpdateInput<ClientInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(clientTable)
     .set(input)
     .where(
@@ -153,11 +145,12 @@ export async function updateClient(
 }
 
 export async function archiveClient(
-  input: ArchiveClient,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<ClientInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(clientTable)
     .set(input)
     .where(

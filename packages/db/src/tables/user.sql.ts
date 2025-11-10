@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -8,12 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import { laxAuditing, timestamps } from "./columns.helpers";
 import { emailVerificationRequestTable } from "./email-verification-request.sql";
 import { organizationTable } from "./organization.sql";
@@ -75,6 +70,4 @@ export const userRelations = relations(userTable, ({ one, many }) => ({
 
 export type User = InferModel<typeof userTable>;
 export type UserID = User["id"];
-export type CreateUser = InferCreateModel<typeof userTable>;
-export type UpdateUser = InferUpdateModel<typeof userTable>;
-export type ArchiveUser = InferArchiveModel<typeof userTable>;
+export type UserInput = InferInsertModel<typeof userTable>;

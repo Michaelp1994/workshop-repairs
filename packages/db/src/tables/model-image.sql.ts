@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import {
   type AnyPgColumn,
   integer,
@@ -6,12 +6,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
@@ -40,6 +35,4 @@ export const modelImageRelations = relations(modelImageTable, ({ one }) => ({
 
 export type ModelImage = InferModel<typeof modelImageTable>;
 export type ModelImageID = ModelImage["id"];
-export type CreateModelImage = InferCreateModel<typeof modelImageTable>;
-export type UpdateModelImage = InferUpdateModel<typeof modelImageTable>;
-export type ArchiveModelImage = InferArchiveModel<typeof modelImageTable>;
+export type ModelImageInput = InferInsertModel<typeof modelImageTable>;

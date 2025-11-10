@@ -1,16 +1,11 @@
 import type {
   OmitSome,
   Prettify,
-  RemoveNull,
   RemoveNullSome,
   RequireSome,
 } from "@repo/validators/types";
 
-import {
-  type InferInsertModel,
-  type InferSelectModel,
-  type Table,
-} from "drizzle-orm";
+import { type InferSelectModel } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
 
 export type OrderMapping = Record<string, PgColumn>;
@@ -18,13 +13,13 @@ export type FilterMapping = Record<string, PgColumn>;
 
 interface BaseType {
   id?: string | number;
-  localId?: string;
-  updatedAt?: string | number | null;
-  updatedById?: string | number | null;
-  createdById?: string | number | null;
-  createdAt?: string | number | null;
-  deletedAt?: string | number | null;
-  deletedById?: string | number | null;
+  localId?: number;
+  createdById: number;
+  createdAt?: Date | undefined;
+  deletedAt?: Date | null | undefined;
+  deletedById?: number | null | undefined;
+  updatedAt?: Date | null | undefined;
+  updatedById?: number | null | undefined;
 }
 
 type OmitKeys<T extends BaseType> = OmitSome<
@@ -42,47 +37,54 @@ type RemoveNullKeys<T extends OmitKeys<BaseType>> = RemoveNullSome<
   "updatedAt" | "updatedById"
 >;
 
-type UpdateInput<T extends BaseType> = RemoveNullKeys<OmitKeys<T>>;
-
-type InferUpdateModel<
-  TTable extends Table,
-  TConfig extends {
-    dbColumnNames: boolean;
-  } = {
-    dbColumnNames: false;
-  },
-> = Prettify<UpdateInput<InferSelectModel<TTable, TConfig>>>;
-
-type DeleteInput<T extends BaseType> = Required<
-  RemoveNull<Pick<T, "deletedById" | "deletedAt">>
+export type CreateInput<T extends BaseType> = Prettify<
+  Omit<
+    RequireSome<T, "createdAt">,
+    "id" | "updatedById" | "updatedAt" | "deletedAt" | "deletedById"
+  >
 >;
 
-type InferArchiveModel<
-  TTable extends Table,
-  TConfig extends {
-    dbColumnNames: boolean;
-  } = {
-    dbColumnNames: false;
-  },
-> = Prettify<DeleteInput<InferSelectModel<TTable, TConfig>>>;
-
-type CreateInput<T extends BaseType> = Omit<
-  T,
-  "id" | "updatedAt" | "updatedById" | "deletedById" | "deletedAt" | "localId"
+export type UpdateInput<T extends BaseType> = Prettify<
+  RemoveNullKeys<OmitKeys<T>>
 >;
 
-type InferCreateModel<
-  TTable extends Table,
-  TConfig extends {
-    dbColumnNames: boolean;
-  } = {
-    dbColumnNames: false;
-  },
-> = CreateInput<InferInsertModel<TTable, TConfig>>;
+export type ArchiveInput<T extends BaseType> = Prettify<
+  RemoveNullSome<
+    RequireSome<
+      Pick<T, "deletedAt" | "deletedById">,
+      "deletedAt" | "deletedById"
+    >,
+    "deletedAt" | "deletedById"
+  >
+>;
 
-export type {
-  InferArchiveModel,
-  InferCreateModel,
-  InferSelectModel as InferModel,
-  InferUpdateModel,
-};
+// Data tables
+
+interface Pagination {
+  pageIndex: number;
+  pageSize: number;
+}
+
+interface Sorting {
+  id: string;
+  desc: boolean;
+}
+
+interface ColumnFilter {
+  id: string;
+  value: unknown;
+}
+
+export interface BaseDataTableQuery {
+  pagination: Pagination;
+  sorting: Sorting[];
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+}
+
+export interface BaseCountQuery {
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+}
+
+export type { InferSelectModel as InferModel };

@@ -1,12 +1,12 @@
 import {
-  archiveLocation,
-  countLocations,
-  createLocation,
-  getAllLocations,
-  getLocationByLocalId,
-  getLocationsSelect,
-  updateLocation,
-} from "@repo/db/repositories/location.repository";
+  archiveLocationService,
+  countLocationsService,
+  createLocationService,
+  getAllLocationsService,
+  getLocationService,
+  getLocationsSelectService,
+  updateLocationService,
+} from "@repo/services/services/location.service";
 import {
   archiveLocationSchema,
   countLocationsSchema,
@@ -16,35 +16,29 @@ import {
   getLocationsSelectSchema,
   updateLocationSchema,
 } from "@repo/validators/server/locations.validators";
-import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
 import { splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllLocationsSchema)
-    .query(({ ctx, input }) => {
-      const allLocations = getAllLocations(input, ctx.session.organizationId);
+    .query(async ({ ctx, input }) => {
+      const allLocations = await getAllLocationsService(input, ctx.session);
 
       return allLocations;
     }),
   countAll: organizationProcedure
     .input(countLocationsSchema)
-    .query(({ ctx, input }) => {
-      const count = countLocations(input, ctx.session.organizationId);
+    .query(async ({ ctx, input }) => {
+      const count = await countLocationsService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getLocationsSelectSchema)
-    .query(({ ctx, input }) => {
-      const locations = getLocationsSelect(input, ctx.session.organizationId);
+    .query(async ({ ctx, input }) => {
+      const locations = await getLocationsSelectService(input, ctx.session);
       return locations;
     }),
   getBySlug: organizationProcedure
@@ -52,69 +46,39 @@ export default router({
     .query(async ({ input, ctx }) => {
       const { localId } = splitSlug(input.slug);
 
-      const location = await getLocationByLocalId(
-        localId,
-        ctx.session.organizationId,
-      );
-
-      if (!location) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "location not found",
-        });
-      }
+      const location = await getLocationService(localId, ctx.session);
 
       return location;
     }),
   create: organizationProcedure
     .input(createLocationSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdLocation = await createLocation({
-        ...input,
-        organizationId: ctx.session.organizationId,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdLocation);
+      const createdLocation = await createLocationService(input, ctx.session);
 
       return createdLocation;
     }),
   update: organizationProcedure
     .input(updateLocationSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedLocation = await updateLocation(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
 
-      assertDatabaseResult(updatedLocation);
+      const updatedLocation = await updateLocationService(
+        values,
+        localId,
+        ctx.session,
+      );
 
       return updatedLocation;
     }),
   archive: organizationProcedure
     .input(archiveLocationSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedLocation = await archiveLocation(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
+      const { localId } = splitSlug(input.slug);
 
-      assertDatabaseResult(archivedLocation);
+      const archivedLocation = await archiveLocationService(
+        localId,
+        ctx.session,
+      );
 
       return archivedLocation;
     }),

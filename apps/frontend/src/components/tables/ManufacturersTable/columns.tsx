@@ -1,8 +1,9 @@
+import type { RouterOutputs } from "@repo/backend/router";
+
 import { Button } from "@repo/ui/button";
 import {
   DataTableColumnHeader,
   DataTableHeaderCheckbox,
-  DataTableImageCell,
   DataTableRowCheckbox,
 } from "@repo/ui/data-table";
 import { ChevronRight } from "@repo/ui/icons";
@@ -10,11 +11,8 @@ import { Link } from "@tanstack/react-router";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-
-import type { RouterOutputs } from "../../../../backend/src/router";
-
 const columnHelper =
-  createColumnHelper<RouterOutputs["models"]["getAll"][number]>();
+  createColumnHelper<RouterOutputs["manufacturers"]["getAll"][number]>();
 
 export const columns = [
   columnHelper.display({
@@ -23,27 +21,15 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("defaultImageUrl", {
-    header: "",
-    cell: ({ getValue, row }) => (
-      <DataTableImageCell
-        alt={row.original.name}
-        url={getValue() ?? "/placeholder.svg"}
-      />
-    ),
-    meta: {
-      name: "Image",
-    },
-  }),
-  columnHelper.accessor("name", {
+  columnHelper.accessor("slug", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ getValue, row }) => (
+    cell: ({ getValue }) => (
       <Link
         className="font-bold hover:underline"
-        params={{ modelId: row.original.id }}
-        to="/models/$modelId"
+        params={{ manufacturerSlug: getValue() }}
+        to="/manufacturers/$manufacturerSlug"
       >
         {getValue()}
       </Link>
@@ -52,54 +38,44 @@ export const columns = [
       name: "Name",
     },
   }),
-  columnHelper.accessor("equipmentType.name", {
-    id: "equipmentType",
+  columnHelper.accessor("name", {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Equipment Type" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     meta: {
-      name: "Equipment Type",
-    },
-  }),
-  columnHelper.accessor("manufacturer.name", {
-    id: "manufacturer",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Manufacturer" />
-    ),
-    meta: {
-      name: "Manufacturer",
+      name: "Name",
     },
   }),
 
   columnHelper.accessor("createdAt", {
-    id: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Created" />
     ),
-    cell: ({ getValue }) => formatDate(getValue()),
+    cell: (info) => formatDate(info.getValue()),
     meta: {
       name: "Date Created",
     },
   }),
 
   columnHelper.accessor("updatedAt", {
-    id: "updatedAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Updated" />
     ),
-    cell: ({ getValue }) => formatDate(getValue()),
+    cell: (info) => formatDate(info.getValue()),
     meta: {
       name: "Date Updated",
     },
   }),
-
   columnHelper.display({
     id: "id",
     enableHiding: false,
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
-          <Link params={{ modelId: row.original.id }} to="/models/$modelId">
+          <Link
+            params={{ manufacturerSlug: row.original.slug }}
+            to="/manufacturers/$manufacturerSlug"
+          >
             <ChevronRight className="size-4" />
           </Link>
         </Button>

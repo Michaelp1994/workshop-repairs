@@ -1,12 +1,12 @@
 import {
-  archiveRepairComment,
-  countRepairComments,
-  createRepairComment,
-  getAllRepairComments,
-  getAllRepairCommentsByRepairId,
-  getRepairCommentById,
-  updateRepairComment,
-} from "@repo/db/repositories/repairComment.repository";
+  archiveRepairCommentService,
+  countRepairCommentsService,
+  createRepairCommentService,
+  getAllRepairCommentsByRepairIdService,
+  getAllRepairCommentsService,
+  getRepairCommentByIdService,
+  updateRepairCommentService,
+} from "@repo/services/services/repairComment.service";
 import {
   archiveRepairCommentSchema,
   countRepairCommentsSchema,
@@ -18,32 +18,27 @@ import {
 } from "@repo/validators/server/repairComments.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllRepairCommentsSchema)
     .query(async ({ input }) => {
-      const allRepairComments = getAllRepairComments(input);
+      const allRepairComments = getAllRepairCommentsService(input);
 
       return allRepairComments;
     }),
   countAll: organizationProcedure
     .input(countRepairCommentsSchema)
     .query(({ input }) => {
-      const count = countRepairComments(input);
+      const count = countRepairCommentsService(input);
       return count;
     }),
   getById: organizationProcedure
     .input(getRepairCommentByIdSchema)
     .query(async ({ input }) => {
-      const repairComment = await getRepairCommentById(input.id);
+      const repairComment = await getRepairCommentByIdService(input.id);
 
       if (!repairComment) {
         throw new TRPCError({
@@ -57,52 +52,40 @@ export default router({
   getAllByRepairId: organizationProcedure
     .input(getAllRepairCommentsByRepairIdSchema)
     .query(async ({ input }) => {
-      const allRepairParts = getAllRepairCommentsByRepairId(input.repairId);
+      const allRepairParts = getAllRepairCommentsByRepairIdService(
+        input.repairId,
+      );
 
       return allRepairParts;
     }),
   create: organizationProcedure
     .input(createRepairCommentSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdRepairComment = await createRepairComment({
-        ...input,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdRepairComment);
+      const createdRepairComment = await createRepairCommentService(
+        input,
+        ctx.session,
+      );
 
       return createdRepairComment;
     }),
   update: organizationProcedure
     .input(updateRepairCommentSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairComment = await updateRepairComment(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedRepairComment = await updateRepairCommentService(
+        values,
         id,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedRepairComment);
 
       return updatedRepairComment;
     }),
   archive: organizationProcedure
     .input(archiveRepairCommentSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepairComment = await archiveRepairComment(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedRepairComment = await archiveRepairCommentService(
+        input.id,
+        ctx.session,
       );
-
-      assertDatabaseResult(archivedRepairComment);
 
       return archivedRepairComment;
     }),

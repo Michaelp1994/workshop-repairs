@@ -3,9 +3,7 @@ import { z } from "zod";
 import {
   assetStatusId,
   clientId,
-  equipmentTypeId,
   locationId,
-  manufacturerId,
   modelId,
   repairId,
 } from "../isomorphic/ids.validators";
@@ -19,13 +17,15 @@ import {
 
 const assetFilters = z
   .object({
-    modelId: modelId.optional(),
+    model: z.string().optional(),
     client: z.string().optional(),
-    locationId: locationId.optional(),
-    manufacturerId: manufacturerId.optional(),
-    equipmentTypeId: equipmentTypeId.optional(),
+    location: z.string().optional(),
+    manufacturer: z.string().optional(),
+    equipmentType: z.string().optional(),
   })
   .optional();
+
+export type AssetFilters = z.infer<typeof assetFilters>;
 
 export const getAllAssetsSchema = dataTableSchema.extend({
   filters: assetFilters,

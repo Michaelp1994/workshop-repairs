@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { IconButton } from "~/components/IconButton";
-import ManufacturersTable from "~/components/ManufacturersTable";
 import {
   PageHeader,
   PageHeaderActions,
@@ -9,6 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
+import ManufacturersTable from "~/components/tables/ManufacturersTable";
 
 export const Route = createFileRoute("/_protected/manufacturers/")({
   component: AllManufacturersPage,

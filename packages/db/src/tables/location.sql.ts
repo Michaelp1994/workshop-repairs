@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import { assetTable } from "./asset.sql";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
@@ -42,6 +37,4 @@ export const locationRelations = relations(locationTable, ({ one, many }) => ({
 
 export type Location = InferModel<typeof locationTable>;
 export type LocationID = Location["id"];
-export type CreateLocation = InferCreateModel<typeof locationTable>;
-export type UpdateLocation = InferUpdateModel<typeof locationTable>;
-export type ArchiveLocation = InferArchiveModel<typeof locationTable>;
+export type LocationInput = InferInsertModel<typeof locationTable>;

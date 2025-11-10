@@ -1,11 +1,11 @@
 import {
-  archiveRepairPart,
-  countRepairParts,
-  createRepairPart,
-  getAllRepairParts,
-  getRepairPartById,
-  updateRepairPart,
-} from "@repo/db/repositories/repairPart.repository";
+  archiveRepairPartService,
+  countRepairPartsService,
+  createRepairPartService,
+  getAllRepairPartsService,
+  getRepairPartByIdService,
+  updateRepairPartService,
+} from "@repo/services/services/repairPart.service";
 import {
   archiveRepairPartSchema,
   countRepairPartsSchema,
@@ -16,32 +16,27 @@ import {
 } from "@repo/validators/server/repairParts.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllRepairPartsSchema)
-    .query(async ({ input }) => {
-      const allRepairParts = getAllRepairParts(input);
+    .query(async ({ input, ctx }) => {
+      const allRepairParts = getAllRepairPartsService(input, ctx.session);
 
       return allRepairParts;
     }),
   countAll: organizationProcedure
     .input(countRepairPartsSchema)
-    .query(({ input }) => {
-      const count = countRepairParts(input);
+    .query(({ input, ctx }) => {
+      const count = countRepairPartsService(input, ctx.session);
       return count;
     }),
   getById: organizationProcedure
     .input(getRepairPartByIdSchema)
-    .query(async ({ input }) => {
-      const repairPart = await getRepairPartById(input.id);
+    .query(async ({ input, ctx }) => {
+      const repairPart = await getRepairPartByIdService(input.id, ctx.session);
 
       if (!repairPart) {
         throw new TRPCError({
@@ -55,45 +50,31 @@ export default router({
   create: organizationProcedure
     .input(createRepairPartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdRepairPart = await createRepairPart({
-        ...input,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdRepairPart);
+      const createdRepairPart = await createRepairPartService(
+        input,
+        ctx.session,
+      );
 
       return createdRepairPart;
     }),
   update: organizationProcedure
     .input(updateRepairPartSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairPart = await updateRepairPart(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedRepairPart = await updateRepairPartService(
+        values,
         id,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedRepairPart);
 
       return updatedRepairPart;
     }),
   archive: organizationProcedure
     .input(archiveRepairPartSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepairPart = await archiveRepairPart(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedRepairPart = await archiveRepairPartService(
+        input.id,
+        ctx.session,
       );
-
-      assertDatabaseResult(archivedRepairPart);
 
       return archivedRepairPart;
     }),

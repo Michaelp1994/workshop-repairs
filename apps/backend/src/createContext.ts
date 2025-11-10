@@ -15,7 +15,6 @@ export async function createTRPCContext({
   const setSession = createSetSession(res);
   const clearSession = createClearSession(res);
   const session = await getSession(req.headers);
-  console.log({ session });
   return {
     setSession,
     clearSession,

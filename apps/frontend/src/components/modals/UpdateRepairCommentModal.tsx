@@ -16,7 +16,6 @@ import {
 } from "@repo/ui/dialog";
 
 import UpdateRepairCommentForm from "~/components/forms/UpdateRepairCommentForm";
-import generateRepairSlug from "~/utils/generateRepairSlug";
 
 interface RepairImagesModalProps extends BaseModalProps {
   repairId: RepairID;
@@ -37,7 +36,7 @@ function UpdateRepairCommentModal({
           <DialogHeader>
             <DialogTitle>Update Repair Comment</DialogTitle>
             <DialogDescription>
-              Update repair comment for repair {generateRepairSlug(repairId)}
+              Update repair comment for repair {repairId}
             </DialogDescription>
           </DialogHeader>
           <UpdateRepairCommentForm repairCommentId={repairCommentId} />

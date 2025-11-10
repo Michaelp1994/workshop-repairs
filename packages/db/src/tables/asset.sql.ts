@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
-import type {
-  InferArchiveModel,
-  InferCreateModel,
-  InferModel,
-  InferUpdateModel,
-} from "../types";
+import type { InferModel } from "../types";
 
 import { assetStatusTable } from "./asset-status.sql";
 import auditConstraints from "./audit-constraints.helpers";
@@ -75,7 +70,6 @@ export const assetRelations = relations(assetTable, ({ one, many }) => ({
 }));
 
 export type Asset = InferModel<typeof assetTable>;
+export type AssetInput = InferInsertModel<typeof assetTable>;
+
 export type AssetID = Asset["id"];
-export type CreateAsset = InferCreateModel<typeof assetTable>;
-export type UpdateAsset = InferUpdateModel<typeof assetTable>;
-export type ArchiveAsset = InferArchiveModel<typeof assetTable>;

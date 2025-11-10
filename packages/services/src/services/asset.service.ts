@@ -1,32 +1,95 @@
-import type { OrganizationID } from "@repo/validators/ids.validators";
+import type { GetAssetsSelectSchema } from "@repo/validators/server/assets.validators";
 
 import { db } from "@repo/db";
 import {
+  archiveAsset,
+  type AssetCountParameters,
+  type AssetDataTableParameters,
+  countAssets,
   createAsset,
   getAllAssets,
+  getAsset,
+  getAssetsSelect,
+  updateAsset,
 } from "@repo/db/repositories/asset.repository";
 import {
   getSequenceByOrganizationId,
   incrementAssetSequence,
 } from "@repo/db/repositories/organizationSequence.repository";
-import assert from "assert";
 
-import type { CreateAsset } from "../../../db/src/tables/asset.sql";
+import type { AssetInput } from "../../../db/src/tables/asset.sql";
+import type { CreateInput, UpdateInput } from "../types";
 
+import assertDatabaseResult from "../helpers/assertDatabaseResult";
+import {
+  createArchiveMetadata,
+  createInsertMetadata,
+  createUpdateMetadata,
+  type OrganizationSession,
+} from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
-export default function assertDatabaseResult(value: unknown): asserts value {
-  assert(value != null, new Error("INTERNAL_SERVER_ERROR"));
+export async function getAllAssetsService(
+  input: AssetDataTableParameters,
+  session: OrganizationSession,
+) {
+  const sequence = await getSequenceByOrganizationId(
+    db,
+    session.organizationId,
+  );
+
+  assertDatabaseResult(sequence);
+
+  const allAssets = await getAllAssets(db, input, session.organizationId);
+
+  return allAssets.map(({ localId, ...asset }) => ({
+    ...asset,
+    slug: createSlug(sequence.assetKeyPrefix, localId),
+  }));
 }
 
-export async function createAssetService(input: Omit<CreateAsset, "localId">) {
+export async function countAssetsService(
+  input: AssetCountParameters,
+  session: OrganizationSession,
+) {
+  const count = await countAssets(db, input, session.organizationId);
+  assertDatabaseResult(count);
+  return count;
+}
+
+export async function getAssetsSelectService(
+  input: GetAssetsSelectSchema,
+  session: OrganizationSession,
+) {
+  const assets = await getAssetsSelect(db, input, session.organizationId);
+  return assets;
+}
+
+export async function getAssetService(
+  localId: number,
+  session: OrganizationSession,
+) {
+  const asset = await getAsset(db, {
+    localId,
+    organizationId: session.organizationId,
+  });
+  assertDatabaseResult(asset);
+  return asset;
+}
+
+export async function createAssetService(
+  input: CreateInput<AssetInput>,
+  session: OrganizationSession,
+) {
   return await db.transaction(async (tx) => {
-    const sequence = await incrementAssetSequence(tx, input.organizationId);
+    const sequence = await incrementAssetSequence(tx, session.organizationId);
+    const metadata = createInsertMetadata(session);
 
     assertDatabaseResult(sequence);
 
     const values = {
       ...input,
+      ...metadata,
       localId: sequence.assetLastUsedValue,
     };
 
@@ -43,17 +106,55 @@ export async function createAssetService(input: Omit<CreateAsset, "localId">) {
   });
 }
 
-export async function getAllAssetsService(input, organizationId) {
+export async function updateAssetService(
+  input: UpdateInput<AssetInput>,
+  localId: number,
+  session: OrganizationSession,
+) {
   return await db.transaction(async (tx) => {
-    const sequence = await getSequenceByOrganizationId(tx, organizationId);
+    const values = {
+      ...input,
+      ...createUpdateMetadata(session),
+    };
 
+    const where = {
+      localId,
+      organizationId: session.organizationId,
+    };
+
+    const updatedAsset = await updateAsset(tx, values, where);
+    assertDatabaseResult(updatedAsset);
+    const sequence = await getSequenceByOrganizationId(
+      tx,
+      session.organizationId,
+    );
     assertDatabaseResult(sequence);
+    const slug = createSlug(sequence.assetKeyPrefix, localId);
+    return {
+      slug,
+      ...updatedAsset,
+    };
+  });
+}
 
-    const allAssets = await getAllAssets(tx, input, organizationId);
-
-    allAssets.map((asset) => ({
-      ...asset,
-      slug: createSlug(sequence.assetKeyPrefix, asset.localId),
-    }));
+export async function archiveAssetService(
+  localId: number,
+  session: OrganizationSession,
+) {
+  return await db.transaction(async (tx) => {
+    const metadata = createArchiveMetadata(session);
+    const where = {
+      localId,
+      organizationId: session.organizationId,
+    };
+    const archivedAsset = await archiveAsset(tx, metadata, where);
+    assertDatabaseResult(archivedAsset);
+    const sequence = await getSequenceByOrganizationId(
+      tx,
+      session.organizationId,
+    );
+    assertDatabaseResult(sequence);
+    const slug = createSlug(sequence.assetKeyPrefix, localId);
+    return { slug, ...archivedAsset };
   });
 }

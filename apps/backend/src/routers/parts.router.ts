@@ -1,12 +1,12 @@
 import {
-  archivePart,
-  countParts,
-  createPart,
-  getAllParts,
-  getPartByLocalId,
-  getPartsSelect,
-  updatePart,
-} from "@repo/db/repositories/part.repository";
+  archivePartService,
+  countPartsService,
+  createPartService,
+  getAllPartsService,
+  getPartService,
+  getPartsSelectService,
+  updatePartService,
+} from "@repo/services/services/part.service";
 import {
   archivePartSchema,
   countPartsSchema,
@@ -18,34 +18,29 @@ import {
 } from "@repo/validators/server/parts.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
 import { splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllPartsSchema)
     .query(async ({ ctx, input }) => {
-      const allParts = getAllParts(input, ctx.session.organizationId);
+      const allParts = getAllPartsService(input, ctx.session);
 
       return allParts;
     }),
   countAll: organizationProcedure
     .input(countPartsSchema)
     .query(async ({ ctx, input }) => {
-      const count = await countParts(input, ctx.session.organizationId);
+      const count = await countPartsService(input, ctx.session);
 
       return count;
     }),
   getSelect: organizationProcedure
     .input(getPartsSelectSchema)
-    .query(async ({ input }) => {
-      const allParts = await getPartsSelect(input);
+    .query(async ({ input, ctx }) => {
+      const allParts = await getPartsSelectService(input, ctx.session);
 
       return allParts;
     }),
@@ -53,7 +48,7 @@ export default router({
     .input(getPartBySlugSchema)
     .query(async ({ input, ctx }) => {
       const { localId } = splitSlug(input.slug);
-      const part = await getPartByLocalId(localId, ctx.session.organizationId);
+      const part = await getPartService(localId, ctx.session);
 
       if (!part) {
         throw new TRPCError({
@@ -67,53 +62,25 @@ export default router({
   create: organizationProcedure
     .input(createPartSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdPart = await createPart({
-        ...input,
-        organizationId: ctx.session.organizationId,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdPart);
+      const createdPart = await createPartService(input, ctx.session);
 
       return createdPart;
     }),
   update: organizationProcedure
     .input(updatePartSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedPart = await updatePart(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
 
-      assertDatabaseResult(updatedPart);
+      const updatedPart = await updatePartService(values, localId, ctx.session);
 
       return updatedPart;
     }),
   archive: organizationProcedure
     .input(archivePartSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
+      const { localId } = splitSlug(input.slug);
 
-      const archivedPart = await archivePart(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
-
-      assertDatabaseResult(archivedPart);
+      const archivedPart = await archivePartService(localId, ctx.session);
 
       return archivedPart;
     }),

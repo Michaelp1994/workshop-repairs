@@ -1,16 +1,12 @@
 import {
-  deleteEmailConfirmationRequestById,
-  getEmailVerificationRequest,
-} from "@repo/db/repositories/auth.repository";
-import {
-  archiveUser,
-  countUsers,
-  getAllUsers,
-  getUserByEmail,
-  getUserById,
-  setUserEmailVerified,
-  updateUser,
-} from "@repo/db/repositories/user.repository";
+  archiveUserService,
+  confirmEmailService,
+  countUsersService,
+  getAllUsersService,
+  getUserByIdService,
+  sendEmailConfirmationService,
+  updateUserService,
+} from "@repo/services/services/user.service";
 import {
   confirmEmailSchema,
   resetPasswordSchema,
@@ -27,26 +23,21 @@ import {
 } from "@repo/validators/server/users.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import sendVerificationEmail from "../helpers/sendVerificationEmail";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { authedProcedure, organizationProcedure, router } from "../trpc";
+import { authedProcedure, organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllUsersSchema)
     .query(async ({ input, ctx }) => {
-      const allUsers = getAllUsers(input, ctx.session.organizationId);
+      const allUsers = getAllUsersService(input, ctx.session);
 
       return allUsers;
     }),
   countAll: organizationProcedure
     .input(countUsersSchema)
     .query(({ input, ctx }) => {
-      const count = countUsers(input, ctx.session.organizationId);
+      const count = countUsersService(input, ctx.session);
       return count;
     }),
   resetPassword: authedProcedure.input(resetPasswordSchema).mutation(() => {
@@ -55,39 +46,18 @@ export default router({
   sendEmailConfirmation: authedProcedure
     .input(confirmEmailSchema)
     .mutation(async ({ ctx, input }) => {
-      await sendVerificationEmail(ctx.session.userId, input.email);
+      return await sendEmailConfirmationService(input, ctx.session);
     }),
   confirmEmail: authedProcedure
     .input(confirmEmailSchema)
     .mutation(async ({ input }) => {
-      const user = await getUserByEmail(input.email);
-      if (!user) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Cannot find user.",
-        });
-      }
-      const request = await getEmailVerificationRequest(
-        input.email,
-        input.code,
-      );
-      if (!request) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Token is not correct.",
-        });
-      }
-      await setUserEmailVerified(user.id);
-
-      await deleteEmailConfirmationRequestById(request.id);
-
-      return true;
+      return await confirmEmailService(input);
     }),
 
   getCurrentUser: authedProcedure
     .input(getCurrentUserSchema)
     .query(async ({ ctx }) => {
-      const user = await getUserById(ctx.session.userId);
+      const user = await getUserByIdService(ctx.session.userId);
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -101,7 +71,7 @@ export default router({
   getById: organizationProcedure
     .input(getUserByIdSchema)
     .query(async ({ input }) => {
-      const user = await getUserById(input.id);
+      const user = await getUserByIdService(input.id);
 
       if (!user) {
         throw new TRPCError({
@@ -120,16 +90,7 @@ export default router({
   update: organizationProcedure
     .input(updateUserSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedUser = await updateUser(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
-      );
-
-      assertDatabaseResult(updatedUser);
+      const updatedUser = await updateUserService(values, id, ctx.session);
 
       return updatedUser;
     }),
@@ -137,34 +98,18 @@ export default router({
   updateCurrent: authedProcedure
     .input(updateCurrentUserSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-
-      const updatedUser = await updateUser(
-        {
-          ...input,
-          ...metadata,
-        },
+      const updatedUser = await updateUserService(
+        input,
         ctx.session.userId,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedUser);
 
       return updatedUser;
     }),
   archive: organizationProcedure
     .input(archiveUserSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-
-      const archivedUser = await archiveUser(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
-      );
-
-      assertDatabaseResult(archivedUser);
+    .mutation(async ({ input, ctx }) => {
+      const archivedUser = await archiveUserService(input.id, ctx.session);
 
       return archivedUser;
     }),

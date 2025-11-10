@@ -7,25 +7,24 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/manufacturers.mapper";
 import {
-  type ArchiveManufacturer,
-  type CreateManufacturer,
+  type ManufacturerInput,
   manufacturerTable,
-  type UpdateManufacturer,
 } from "../tables/manufacturer.sql";
 
 const manufacturerFields = getTableColumns(manufacturerTable);
 
 export function getAllManufacturers(
+  tx: DatabaseTransaction,
   { pagination, sorting, globalFilter, columnFilters }: DataTableOutput,
   organizationId: OrganizationID,
 ) {
@@ -33,7 +32,7 @@ export function getAllManufacturers(
   const columnFilterParams = getColumnFilters(columnFilters);
   const orderByParams = getOrderBy(sorting);
 
-  const query = db
+  const query = tx
     .select()
     .from(manufacturerTable)
     .where(
@@ -51,13 +50,14 @@ export function getAllManufacturers(
 }
 
 export async function countManufacturers(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: DataTableCountOutput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
 
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(manufacturerTable)
     .where(
@@ -74,12 +74,13 @@ export async function countManufacturers(
 }
 
 export async function getManufacturerByLocalId(
+  tx: DatabaseTransaction,
   localId: number,
   organizationId: OrganizationID,
 ) {
   const { metadata, createdByTable, deletedByTable, updatedByTable } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...manufacturerFields,
       ...metadata,
@@ -99,7 +100,7 @@ export async function getManufacturerByLocalId(
     )
     .where(
       and(
-        eq(manufacturerTable.id, localId),
+        eq(manufacturerTable.localId, localId),
         eq(manufacturerTable.organizationId, organizationId),
       ),
     );
@@ -108,10 +109,11 @@ export async function getManufacturerByLocalId(
 }
 
 export async function getManufacturersSelect(
+  tx: DatabaseTransaction,
   _: GetSelectInput,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .select({
       value: manufacturerTable.id,
       label: manufacturerTable.name,
@@ -126,28 +128,22 @@ export async function getManufacturersSelect(
   return query.execute();
 }
 
-export async function createManufacturer(input: CreateManufacturer) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "manufacturer",
-    );
-    const query = tx
-      .insert(manufacturerTable)
-      .values({ ...input, localId })
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  });
+export async function createManufacturer(
+  tx: DatabaseTransaction,
+  input: CreateInput<ManufacturerInput>,
+) {
+  const query = tx.insert(manufacturerTable).values(input).returning();
+  const [res] = await query.execute();
+  return res;
 }
 
 export async function updateManufacturer(
-  input: UpdateManufacturer,
+  tx: DatabaseTransaction,
+  input: UpdateInput<ManufacturerInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(manufacturerTable)
     .set(input)
     .where(
@@ -162,11 +158,12 @@ export async function updateManufacturer(
 }
 
 export async function archiveManufacturer(
-  input: ArchiveManufacturer,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<ManufacturerInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(manufacturerTable)
     .set(input)
     .where(

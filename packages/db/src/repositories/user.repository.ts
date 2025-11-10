@@ -6,34 +6,30 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/users.mapper";
 import { userTypeTable } from "../tables/user-type.sql";
-import {
-  type ArchiveUser,
-  type CreateUser,
-  type UpdateUser,
-  type UserID,
-  userTable,
-} from "../tables/user.sql";
+import { type UserID, type UserInput, userTable } from "../tables/user.sql";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
 export function getAllUsers(
+  tx: DatabaseTransaction,
   { globalFilter, sorting, pagination, columnFilters }: GetAllUsersInput,
   organizationId: OrganizationID,
 ) {
   const orderByParams = getOrderBy(sorting);
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({ ...publicUserColumns, type: userTypeTable })
     .from(userTable)
     .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
@@ -52,12 +48,13 @@ export function getAllUsers(
 }
 
 export async function countUsers(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: CountUsersInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(userTable)
     .where(
@@ -72,10 +69,11 @@ export async function countUsers(
   return res?.count;
 }
 
-export async function getUserById(input: UserID) {
+export async function getUserById(tx: DatabaseTransaction, input: UserID) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
-  const query = db
+
+  const query = tx
     .select({ ...publicUserColumns, type: userTypeTable, ...metadata })
     .from(userTable)
     .leftJoin(createdByTable, eq(userTable.createdById, createdByTable.id))
@@ -87,8 +85,11 @@ export async function getUserById(input: UserID) {
   return res;
 }
 
-export async function getCredentialsByUserId(input: UserID) {
-  const query = db
+export async function getCredentialsByUserId(
+  tx: DatabaseTransaction,
+  input: UserID,
+) {
+  const query = tx
     .select({
       typeId: userTable.typeId,
       organizationId: userTable.organizationId,
@@ -99,14 +100,17 @@ export async function getCredentialsByUserId(input: UserID) {
   return res;
 }
 
-export async function getUserByEmail(input: string) {
-  const query = db.select().from(userTable).where(eq(userTable.email, input));
+export async function getUserByEmail(tx: DatabaseTransaction, input: string) {
+  const query = tx.select().from(userTable).where(eq(userTable.email, input));
   const [res] = await query.execute();
   return res;
 }
 
-export async function setUserEmailVerified(input: UserID) {
-  const query = db
+export async function setUserEmailVerified(
+  tx: DatabaseTransaction,
+  input: UserID,
+) {
+  const query = tx
     .update(userTable)
     .set({
       emailVerified: true,
@@ -118,8 +122,11 @@ export async function setUserEmailVerified(input: UserID) {
   return res;
 }
 
-export async function createUser(input: CreateUser) {
-  const query = db
+export async function createUser(
+  tx: DatabaseTransaction,
+  input: CreateInput<UserInput>,
+) {
+  const query = tx
     .insert(userTable)
     .values(input)
     .returning({ ...publicUserColumns });
@@ -127,8 +134,12 @@ export async function createUser(input: CreateUser) {
   return res;
 }
 
-export async function updateUser(input: UpdateUser, userId: UserID) {
-  const query = db
+export async function updateUser(
+  tx: DatabaseTransaction,
+  input: UpdateInput<UserInput>,
+  userId: UserID,
+) {
+  const query = tx
     .update(userTable)
     .set(input)
     .where(eq(userTable.id, userId))
@@ -137,8 +148,12 @@ export async function updateUser(input: UpdateUser, userId: UserID) {
   return res;
 }
 
-export async function archiveUser(input: ArchiveUser, userId: UserID) {
-  const query = db
+export async function archiveUser(
+  tx: DatabaseTransaction,
+  input: ArchiveInput<UserInput>,
+  userId: UserID,
+) {
+  const query = tx
     .update(userTable)
     .set(input)
     .where(eq(userTable.id, userId))

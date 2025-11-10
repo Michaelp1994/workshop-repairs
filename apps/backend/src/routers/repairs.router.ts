@@ -1,12 +1,12 @@
 import {
-  archiveRepair,
-  countRepairs,
-  createRepair,
-  getAllRepairs,
-  getRepairByLocalId,
-  getRepairsSelect,
-  updateRepair,
-} from "@repo/db/repositories/repair.repository";
+  archiveRepairService,
+  countRepairsService,
+  createRepairService,
+  getAllRepairsService,
+  getRepairService,
+  getRepairsSelectService,
+  updateRepairService,
+} from "@repo/services/services/repair.service";
 import {
   archiveRepairSchema,
   countRepairsSchema,
@@ -18,27 +18,22 @@ import {
 } from "@repo/validators/server/repairs.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
 import { splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllRepairsSchema)
     .query(async ({ ctx, input }) => {
-      const allRepairs = await getAllRepairs(input, ctx.session.organizationId);
+      const allRepairs = await getAllRepairsService(input, ctx.session);
       return allRepairs;
     }),
 
   countAll: organizationProcedure
     .input(countRepairsSchema)
     .query(async ({ ctx, input }) => {
-      const count = await countRepairs(input, ctx.session.organizationId);
+      const count = await countRepairsService(input, ctx.session);
       if (count === undefined) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -50,8 +45,8 @@ export default router({
 
   getSelect: organizationProcedure
     .input(getRepairsSelectSchema)
-    .query(async ({ input }) => {
-      const allRepairs = await getRepairsSelect(input);
+    .query(async ({ input, ctx }) => {
+      const allRepairs = await getRepairsSelectService(input, ctx.session);
       return allRepairs;
     }),
 
@@ -59,10 +54,7 @@ export default router({
     .input(getRepairBySlugSchema)
     .query(async ({ input, ctx }) => {
       const { localId } = splitSlug(input.slug);
-      const repair = await getRepairByLocalId(
-        localId,
-        ctx.session.organizationId,
-      );
+      const repair = await getRepairService(localId, ctx.session);
 
       if (!repair) {
         throw new TRPCError({
@@ -77,35 +69,21 @@ export default router({
   create: organizationProcedure
     .input(createRepairSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-
-      const repair = await createRepair({
-        ...input,
-        organizationId: ctx.session.organizationId,
-        ...metadata,
-      });
-
-      assertDatabaseResult(repair);
+      const repair = await createRepairService(input, ctx.session);
 
       return repair;
     }),
 
   update: organizationProcedure
     .input(updateRepairSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepair = await updateRepair(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
 
-      assertDatabaseResult(updatedRepair);
+      const updatedRepair = await updateRepairService(
+        values,
+        localId,
+        ctx.session,
+      );
 
       return updatedRepair;
     }),
@@ -113,19 +91,9 @@ export default router({
   archive: organizationProcedure
     .input(archiveRepairSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepair = await archiveRepair(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
+      const { localId } = splitSlug(input.slug);
 
-      assertDatabaseResult(archivedRepair);
+      const archivedRepair = await archiveRepairService(localId, ctx.session);
 
       return archivedRepair;
     }),

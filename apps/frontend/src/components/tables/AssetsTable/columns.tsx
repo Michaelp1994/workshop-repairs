@@ -24,7 +24,7 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("id", {
+  columnHelper.accessor("slug", {
     id: "id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Asset" />
@@ -142,7 +142,10 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
-          <Link params={{ assetId: row.original.id }} to="/assets/$assetId">
+          <Link
+            params={{ assetSlug: row.original.slug }}
+            to="/assets/$assetSlug"
+          >
             <ChevronRight className="size-4" />
           </Link>
         </Button>

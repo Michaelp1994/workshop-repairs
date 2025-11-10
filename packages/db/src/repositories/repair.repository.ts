@@ -7,10 +7,10 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
@@ -24,16 +24,12 @@ import { modelImageTable } from "../tables/model-image.sql";
 import { modelTable } from "../tables/model.sql";
 import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
 import { repairTypeTable } from "../tables/repair-type.sql";
-import {
-  type ArchiveRepair,
-  type CreateRepair,
-  repairTable,
-  type UpdateRepair,
-} from "../tables/repair.sql";
+import { type RepairInput, repairTable } from "../tables/repair.sql";
 
 const repairFields = getTableColumns(repairTable);
 
 export function getAllRepairs(
+  tx: DatabaseTransaction,
   {
     globalFilter,
     sorting,
@@ -47,7 +43,7 @@ export function getAllRepairs(
   const columnFilterParams = getColumnFilters(columnFilters);
   const orderByParams = getOrderBy(sorting);
 
-  const query = db
+  const query = tx
     .select({
       ...repairFields,
       asset: {
@@ -92,13 +88,14 @@ export function getAllRepairs(
 }
 
 export async function countRepairs(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters, filters }: CountRepairsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
 
-  const query = db
+  const query = tx
     .select({ value: count() })
     .from(repairTable)
     .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
@@ -124,8 +121,12 @@ export async function countRepairs(
   return res?.value;
 }
 
-export async function getRepairsSelect(_: GetRepairsSelectInput) {
-  const query = db
+export async function getRepairsSelect(
+  tx: DatabaseTransaction,
+  _: GetRepairsSelectInput,
+  _organizationId: OrganizationID,
+) {
+  const query = tx
     .select({
       value: repairTable.id,
       label: repairTable.fault,
@@ -136,12 +137,13 @@ export async function getRepairsSelect(_: GetRepairsSelectInput) {
 }
 
 export async function getRepairByLocalId(
+  tx: DatabaseTransaction,
   localId: number,
   organizationId: OrganizationID,
 ) {
   const { createdByTable, deletedByTable, metadata, updatedByTable } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...repairFields,
       asset: assetTable,
@@ -189,28 +191,22 @@ export async function getRepairByLocalId(
   return res;
 }
 
-export async function createRepair(input: CreateRepair) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "repair",
-    );
-    const query = tx
-      .insert(repairTable)
-      .values({ ...input, localId })
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  });
+export async function createRepair(
+  tx: DatabaseTransaction,
+  input: CreateInput<RepairInput>,
+) {
+  const query = tx.insert(repairTable).values(input).returning();
+  const [res] = await query.execute();
+  return res;
 }
 
 export async function updateRepair(
-  input: UpdateRepair,
+  tx: DatabaseTransaction,
+  input: UpdateInput<RepairInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(repairTable)
     .set(input)
     .where(
@@ -225,11 +221,12 @@ export async function updateRepair(
 }
 
 export async function archiveRepair(
-  input: ArchiveRepair,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<RepairInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(repairTable)
     .set(input)
     .where(

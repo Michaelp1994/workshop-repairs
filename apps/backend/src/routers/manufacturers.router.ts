@@ -1,12 +1,12 @@
 import {
-  archiveManufacturer,
-  countManufacturers,
-  createManufacturer,
-  getAllManufacturers,
-  getManufacturerByLocalId,
-  getManufacturersSelect,
-  updateManufacturer,
-} from "@repo/db/repositories/manufacturer.repository";
+  archiveManufacturerService,
+  countManufacturersService,
+  createManufacturerService,
+  getAllManufacturersService,
+  getManufacturerService,
+  getManufacturersSelectService,
+  updateManufacturerService,
+} from "@repo/services/services/manufacturer.service";
 import {
   archiveManufacturerSchema,
   countManufacturersSchema,
@@ -18,22 +18,17 @@ import {
 } from "@repo/validators/server/manufacturers.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
 import { splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllManufacturersSchema)
     .query(async ({ ctx, input }) => {
-      const allManufacturers = await getAllManufacturers(
+      const allManufacturers = await getAllManufacturersService(
         input,
-        ctx.session.organizationId,
+        ctx.session,
       );
 
       return allManufacturers;
@@ -41,15 +36,15 @@ export default router({
   countAll: organizationProcedure
     .input(countManufacturersSchema)
     .query(({ ctx, input }) => {
-      const count = countManufacturers(input, ctx.session.organizationId);
+      const count = countManufacturersService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getManufacturersSelectSchema)
     .query(async ({ ctx, input }) => {
-      const manufacturers = await getManufacturersSelect(
+      const manufacturers = await getManufacturersSelectService(
         input,
-        ctx.session.organizationId,
+        ctx.session,
       );
 
       return manufacturers;
@@ -58,10 +53,7 @@ export default router({
     .input(getManufacturerBySlugSchema)
     .query(async ({ input, ctx }) => {
       const { localId } = splitSlug(input.slug);
-      const manufacturer = await getManufacturerByLocalId(
-        localId,
-        ctx.session.organizationId,
-      );
+      const manufacturer = await getManufacturerService(localId, ctx.session);
 
       if (!manufacturer) {
         throw new TRPCError({
@@ -75,53 +67,35 @@ export default router({
   create: organizationProcedure
     .input(createManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdManufacturer = await createManufacturer({
-        ...input,
-        organizationId: ctx.session.organizationId,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdManufacturer);
+      const createdManufacturer = await createManufacturerService(
+        input,
+        ctx.session,
+      );
 
       return createdManufacturer;
     }),
   update: organizationProcedure
     .input(updateManufacturerSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
-      const metadata = createUpdateMetadata(ctx.session);
 
-      const updatedManufacturer = await updateManufacturer(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedManufacturer = await updateManufacturerService(
+        values,
         localId,
-        ctx.session.organizationId,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedManufacturer);
 
       return updatedManufacturer;
     }),
   archive: organizationProcedure
     .input(archiveManufacturerSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedManufacturer = await archiveManufacturer(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
+      const { localId } = splitSlug(input.slug);
 
-      assertDatabaseResult(archivedManufacturer);
+      const archivedManufacturer = await archiveManufacturerService(
+        localId,
+        ctx.session,
+      );
 
       return archivedManufacturer;
     }),

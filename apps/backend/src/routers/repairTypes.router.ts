@@ -1,12 +1,12 @@
 import {
-  archiveRepairType,
-  countRepairTypes,
-  createRepairType,
-  getAllRepairTypes,
-  getRepairTypeById,
-  getRepairTypesSelect,
-  updateRepairType,
-} from "@repo/db/repositories/repairType.repository";
+  archiveRepairTypeService,
+  countRepairTypesService,
+  createRepairTypeService,
+  getAllRepairTypesService,
+  getRepairTypeByIdService,
+  getRepairTypesSelectService,
+  updateRepairTypeService,
+} from "@repo/services/services/repairType.service";
 import {
   archiveRepairTypeSchema,
   countRepairTypesSchema,
@@ -18,37 +18,35 @@ import {
 } from "@repo/validators/server/repairTypes.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllRepairTypesSchema)
-    .query(async ({ input }) => {
-      const allRepairTypes = getAllRepairTypes(input);
+    .query(async ({ input, ctx }) => {
+      const allRepairTypes = getAllRepairTypesService(input, ctx.session);
       return allRepairTypes;
     }),
   countAll: organizationProcedure
     .input(countRepairTypesSchema)
-    .query(({ input }) => {
-      const count = countRepairTypes(input);
+    .query(({ input, ctx }) => {
+      const count = countRepairTypesService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getRepairTypesSelectSchema)
-    .query(async ({ input }) => {
-      const allRepairTypes = await getRepairTypesSelect(input);
+    .query(async ({ input, ctx }) => {
+      const allRepairTypes = await getRepairTypesSelectService(
+        input,
+        ctx.session,
+      );
       return allRepairTypes;
     }),
   getById: organizationProcedure
     .input(getRepairTypeByIdSchema)
-    .query(async ({ input }) => {
-      const repairType = await getRepairTypeById(input.id);
+    .query(async ({ input, ctx }) => {
+      const repairType = await getRepairTypeByIdService(input.id, ctx.session);
 
       if (!repairType) {
         throw new TRPCError({
@@ -56,53 +54,34 @@ export default router({
           message: "repairType not found",
         });
       }
-
       return repairType;
     }),
   create: organizationProcedure
     .input(createRepairTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdRepairType = await createRepairType({
-        ...input,
-        ...metadata,
-      });
-
-      assertDatabaseResult(createdRepairType);
-
+      const createdRepairType = await createRepairTypeService(
+        input,
+        ctx.session,
+      );
       return createdRepairType;
     }),
   update: organizationProcedure
     .input(updateRepairTypeSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairType = await updateRepairType(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedRepairType = await updateRepairTypeService(
+        values,
         id,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedRepairType);
-
       return updatedRepairType;
     }),
   archive: organizationProcedure
     .input(archiveRepairTypeSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-
-      const archivedRepairType = await archiveRepairType(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedRepairType = await archiveRepairTypeService(
+        input.id,
+        ctx.session,
       );
-
-      assertDatabaseResult(archivedRepairType);
-
       return archivedRepairType;
     }),
 });

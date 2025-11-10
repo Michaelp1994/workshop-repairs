@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
-import {
-  type InferArchiveModel,
-  type InferCreateModel,
-  type InferModel,
-  type InferUpdateModel,
-} from "../types";
+import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { repairTable } from "./repair.sql";
@@ -37,6 +32,4 @@ export const repairCommentRelations = relations(
 
 export type RepairComment = InferModel<typeof repairCommentTable>;
 export type RepairCommentID = RepairComment["id"];
-export type CreateRepairComment = InferCreateModel<typeof repairCommentTable>;
-export type UpdateRepairComment = InferUpdateModel<typeof repairCommentTable>;
-export type ArchiveRepairComment = InferArchiveModel<typeof repairCommentTable>;
+export type RepairCommentInput = InferInsertModel<typeof repairCommentTable>;

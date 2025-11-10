@@ -6,20 +6,21 @@ import type {
 
 import { count, eq, isNull } from "drizzle-orm";
 
-import { db } from "..";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+
+import { type DatabaseTransaction } from "..";
 import {
-  type ArchiveUserType,
-  type CreateUserType,
-  type UpdateUserType,
   type UserTypeID,
+  type UserTypeInput,
   userTypeTable,
 } from "../tables/user-type.sql";
 
 export async function archiveUserType(
-  input: ArchiveUserType,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<UserTypeInput>,
   userTypeId: UserTypeID,
 ) {
-  const query = db
+  const query = tx
     .update(userTypeTable)
     .set(input)
     .where(eq(userTypeTable.id, userTypeId))
@@ -28,8 +29,11 @@ export async function archiveUserType(
   return res;
 }
 
-export async function countUserTypes(_: CountUserTypesInput) {
-  const query = db
+export async function countUserTypes(
+  tx: DatabaseTransaction,
+  _: CountUserTypesInput,
+) {
+  const query = tx
     .select({ count: count() })
     .from(userTypeTable)
     .where(isNull(userTypeTable.deletedAt));
@@ -37,14 +41,20 @@ export async function countUserTypes(_: CountUserTypesInput) {
   return res?.count;
 }
 
-export async function createUserType(input: CreateUserType) {
-  const query = db.insert(userTypeTable).values(input).returning();
+export async function createUserType(
+  tx: DatabaseTransaction,
+  input: CreateInput<UserTypeInput>,
+) {
+  const query = tx.insert(userTypeTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 
-export function getAllUserTypes({ pagination }: GetAllUserTypesInput) {
-  const query = db
+export function getAllUserTypes(
+  tx: DatabaseTransaction,
+  { pagination }: GetAllUserTypesInput,
+) {
+  const query = tx
     .select()
     .from(userTypeTable)
     .where(isNull(userTypeTable.deletedAt))
@@ -54,8 +64,11 @@ export function getAllUserTypes({ pagination }: GetAllUserTypesInput) {
   return query.execute();
 }
 
-export async function getUserTypeById(input: UserTypeID) {
-  const query = db
+export async function getUserTypeById(
+  tx: DatabaseTransaction,
+  input: UserTypeID,
+) {
+  const query = tx
     .select()
     .from(userTypeTable)
     .where(eq(userTypeTable.id, input));
@@ -63,8 +76,11 @@ export async function getUserTypeById(input: UserTypeID) {
   return res;
 }
 
-export async function getUserTypesSelect(_: GetUserTypeSelectInput) {
-  const query = db
+export async function getUserTypesSelect(
+  tx: DatabaseTransaction,
+  _: GetUserTypeSelectInput,
+) {
+  const query = tx
     .select({
       value: userTypeTable.id,
       label: userTypeTable.name,
@@ -75,10 +91,11 @@ export async function getUserTypesSelect(_: GetUserTypeSelectInput) {
 }
 
 export async function updateUserType(
-  input: UpdateUserType,
+  tx: DatabaseTransaction,
+  input: UpdateInput<UserTypeInput>,
   userTypeId: UserTypeID,
 ) {
-  const query = db
+  const query = tx
     .update(userTypeTable)
     .set(input)
     .where(eq(userTypeTable.id, userTypeId))

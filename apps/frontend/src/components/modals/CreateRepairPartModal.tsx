@@ -1,5 +1,3 @@
-import type { RepairID } from "@repo/validators/ids.validators";
-
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {
   type BaseModalProps,
@@ -12,18 +10,16 @@ import {
   DialogTitle,
 } from "@repo/ui/dialog";
 
-import generateRepairSlug from "~/utils/generateRepairSlug";
-
 import CreateRepairPartForm from "../forms/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps extends BaseModalProps {
-  repairId: RepairID;
+  repairSlug: string;
 }
 
 function CreateRepairPartModal({
   isOpen,
   onOpenChange,
-  repairId,
+  repairSlug,
 }: CreateRepairPartModalProps) {
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
@@ -32,11 +28,9 @@ function CreateRepairPartModal({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Repair Part</DialogTitle>
-            <DialogDescription>
-              Add a part to {generateRepairSlug(repairId)}
-            </DialogDescription>
+            <DialogDescription>Add a part to {repairSlug}</DialogDescription>
           </DialogHeader>
-          <CreateRepairPartForm repairId={repairId} />
+          <CreateRepairPartForm slug={repairSlug} />
         </DialogContent>
       </DialogPortal>
     </Dialog>

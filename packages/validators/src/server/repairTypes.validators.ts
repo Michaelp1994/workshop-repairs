@@ -27,6 +27,7 @@ export type GetRepairTypesSelectInput = z.infer<
 
 export const createRepairTypeSchema = z.object({
   name: z.string().min(3),
+  colour: z.string(),
 });
 
 export const updateRepairTypeSchema = z.object({

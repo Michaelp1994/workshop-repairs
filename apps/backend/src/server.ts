@@ -38,3 +38,5 @@ const server = createServer((req, res) => {
 });
 
 server.listen(2022);
+
+console.log("Server started");

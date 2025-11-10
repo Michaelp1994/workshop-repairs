@@ -7,18 +7,17 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/locations.mapper";
 import {
-  type ArchiveLocation,
-  type CreateLocation,
+  type LocationInput,
   locationTable,
   type UpdateLocation,
 } from "../tables/location.sql";
@@ -26,13 +25,14 @@ import {
 const locationFields = getTableColumns(locationTable);
 
 export function getAllLocations(
+  tx: DatabaseTransaction,
   { pagination, globalFilter, sorting, columnFilters }: GetAllLocationsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const orderByParams = getOrderBy(sorting);
-  const query = db
+  const query = tx
     .select()
     .from(locationTable)
     .where(
@@ -50,13 +50,14 @@ export function getAllLocations(
 }
 
 export async function countLocations(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: CountLocationsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
 
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(locationTable)
     .where(
@@ -73,10 +74,11 @@ export async function countLocations(
 }
 
 export function getLocationsSelect(
+  tx: DatabaseTransaction,
   _: GetLocationsSelectInput,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .select({
       value: locationTable.id,
       label: locationTable.name,
@@ -93,12 +95,13 @@ export function getLocationsSelect(
 }
 
 export async function getLocationByLocalId(
+  tx: DatabaseTransaction,
   localId: number,
   organizationId: OrganizationID,
 ) {
   const { metadata, createdByTable, deletedByTable, updatedByTable } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...locationFields,
       ...metadata,
@@ -117,28 +120,22 @@ export async function getLocationByLocalId(
   return res;
 }
 
-export async function createLocation(input: CreateLocation) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "location",
-    );
-    const query = tx
-      .insert(locationTable)
-      .values({ ...input, localId })
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  });
+export async function createLocation(
+  tx: DatabaseTransaction,
+  input: CreateInput<LocationInput>,
+) {
+  const query = tx.insert(locationTable).values(input).returning();
+  const [res] = await query.execute();
+  return res;
 }
 
 export async function updateLocation(
-  input: UpdateLocation,
+  tx: DatabaseTransaction,
+  input: UpdateInput<LocationInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(locationTable)
     .set(input)
     .where(
@@ -153,11 +150,12 @@ export async function updateLocation(
 }
 
 export async function archiveLocation(
-  input: ArchiveLocation,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<LocationInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(locationTable)
     .set(input)
     .where(

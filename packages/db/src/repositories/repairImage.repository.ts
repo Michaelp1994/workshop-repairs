@@ -5,18 +5,20 @@ import {
 import { and, count, eq, isNull } from "drizzle-orm";
 
 import type { RepairID } from "../tables/repair.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
-import { db } from "..";
+import { type DatabaseTransaction } from "..";
 import {
-  type ArchiveRepairImage,
-  type CreateRepairImage,
   type RepairImageID,
+  type RepairImageInput,
   repairImageTable,
-  type UpdateRepairImage,
 } from "../tables/repair-image.sql";
 
-export function getAllRepairImages({ pagination }: GetAllRepairImagesInput) {
-  const query = db
+export function getAllRepairImages(
+  tx: DatabaseTransaction,
+  { pagination }: GetAllRepairImagesInput,
+) {
+  const query = tx
     .select()
     .from(repairImageTable)
     .where(isNull(repairImageTable.deletedAt))
@@ -25,24 +27,33 @@ export function getAllRepairImages({ pagination }: GetAllRepairImagesInput) {
     .offset(pagination.pageIndex * pagination.pageSize);
   return query.execute();
 }
-export async function countRepairImages(_: CountRepairImagesInput) {
-  const query = db
+export async function countRepairImages(
+  tx: DatabaseTransaction,
+  _: CountRepairImagesInput,
+) {
+  const query = tx
     .select({ count: count() })
     .from(repairImageTable)
     .where(isNull(repairImageTable.deletedAt));
   const [res] = await query.execute();
   return res?.count;
 }
-export async function getRepairImageById(input: RepairImageID) {
-  const query = db
+export async function getRepairImageById(
+  tx: DatabaseTransaction,
+  input: RepairImageID,
+) {
+  const query = tx
     .select()
     .from(repairImageTable)
     .where(eq(repairImageTable.id, input));
   const [res] = await query.execute();
   return res;
 }
-export async function getAllRepairImagesByRepairId(input: RepairID) {
-  const query = db
+export async function getAllRepairImagesByRepairId(
+  tx: DatabaseTransaction,
+  input: RepairID,
+) {
+  const query = tx
     .select()
     .from(repairImageTable)
     .where(
@@ -54,16 +65,20 @@ export async function getAllRepairImagesByRepairId(input: RepairID) {
   const res = await query.execute();
   return res;
 }
-export async function createRepairImage(input: CreateRepairImage) {
-  const query = db.insert(repairImageTable).values(input).returning();
+export async function createRepairImage(
+  tx: DatabaseTransaction,
+  input: CreateInput<RepairImageInput>,
+) {
+  const query = tx.insert(repairImageTable).values(input).returning();
   const [res] = await query.execute();
   return res;
 }
 export async function updateRepairImage(
-  input: UpdateRepairImage,
+  tx: DatabaseTransaction,
+  input: UpdateInput<RepairImageInput>,
   repairImageId: RepairImageID,
 ) {
-  const query = db
+  const query = tx
     .update(repairImageTable)
     .set(input)
     .where(eq(repairImageTable.id, repairImageId))
@@ -73,10 +88,11 @@ export async function updateRepairImage(
 }
 
 export async function archiveRepairImage(
-  input: ArchiveRepairImage,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<RepairImageInput>,
   repairImageId: RepairImageID,
 ) {
-  const query = db
+  const query = tx
     .update(repairImageTable)
     .set(input)
     .where(eq(repairImageTable.id, repairImageId))

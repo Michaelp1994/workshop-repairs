@@ -1,12 +1,7 @@
-import { relations } from "drizzle-orm";
+import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
-import type {
-  InferArchiveModel,
-  InferCreateModel,
-  InferModel,
-  InferUpdateModel,
-} from "../types";
+import type { InferModel } from "../types";
 
 import { assetTable } from "./asset.sql";
 import auditConstraints from "./audit-constraints.helpers";
@@ -43,7 +38,7 @@ export const clientRelations = relations(clientTable, ({ one, many }) => ({
 }));
 
 export type Client = InferModel<typeof clientTable>;
+
 export type ClientID = Client["id"];
-export type CreateClient = InferCreateModel<typeof clientTable>;
-export type UpdateClient = InferUpdateModel<typeof clientTable>;
-export type ArchiveClient = InferArchiveModel<typeof clientTable>;
+
+export type ClientInput = InferInsertModel<typeof clientTable>;

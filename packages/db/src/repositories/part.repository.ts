@@ -7,32 +7,28 @@ import type {
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.sql";
+import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { getNextSequenceValue } from "../helpers/getNextSequenceValue";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/parts.mapper";
-import {
-  type ArchivePart,
-  type CreatePart,
-  partTable,
-  type UpdatePart,
-} from "../tables/part.sql";
+import { type PartInput, partTable } from "../tables/part.sql";
 
 const partFields = getTableColumns(partTable);
 
 export function getAllParts(
+  tx: DatabaseTransaction,
   { pagination, globalFilter, sorting, columnFilters }: GetAllPartsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
   const orderByParams = getOrderBy(sorting);
-  const query = db
+  const query = tx
     .select()
     .from(partTable)
     .where(
@@ -50,13 +46,14 @@ export function getAllParts(
 }
 
 export async function countParts(
+  tx: DatabaseTransaction,
   { globalFilter, columnFilters }: CountPartsInput,
   organizationId: OrganizationID,
 ) {
   const globalFilterParams = getGlobalFilters(globalFilter);
   const columnFilterParams = getColumnFilters(columnFilters);
 
-  const query = db
+  const query = tx
     .select({ count: count() })
     .from(partTable)
     .where(
@@ -72,25 +69,36 @@ export async function countParts(
   return res?.count;
 }
 
-export async function getPartsSelect(_props: GetPartsSelectInput) {
-  const query = db
+export async function getPartsSelect(
+  tx: DatabaseTransaction,
+  _props: GetPartsSelectInput,
+  organizationId: OrganizationID,
+) {
+  const query = tx
     .select({
       value: partTable.id,
       label: partTable.name,
     })
     .from(partTable)
+    .where(
+      and(
+        isNull(partTable.deletedAt),
+        eq(partTable.organizationId, organizationId),
+      ),
+    )
     .orderBy(partTable.id);
   const res = await query.execute();
   return res;
 }
 
 export async function getPartByLocalId(
+  tx: DatabaseTransaction,
   localId: number,
   organizationId: OrganizationID,
 ) {
   const { createdByTable, updatedByTable, deletedByTable, metadata } =
     createMetadataFields();
-  const query = db
+  const query = tx
     .select({
       ...partFields,
       ...metadata,
@@ -109,28 +117,19 @@ export async function getPartByLocalId(
   return res;
 }
 
-export async function createPart(input: CreatePart) {
-  return await db.transaction(async (tx) => {
-    const localId = await getNextSequenceValue(
-      tx,
-      input.organizationId,
-      "part",
-    );
-    const query = tx
-      .insert(partTable)
-      .values({ ...input, localId })
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  });
+export async function createPart(tx: DatabaseTransaction, input: CreateInput<PartInput>) {
+  const query = tx.insert(partTable).values(input).returning();
+  const [res] = await query.execute();
+  return res;
 }
 
 export async function updatePart(
-  input: UpdatePart,
+  tx: DatabaseTransaction,
+  input: UpdateInput<PartInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(partTable)
     .set(input)
     .where(
@@ -145,11 +144,12 @@ export async function updatePart(
 }
 
 export async function archivePart(
-  input: ArchivePart,
+  tx: DatabaseTransaction,
+  input: ArchiveInput<PartInput>,
   localId: number,
   organizationId: OrganizationID,
 ) {
-  const query = db
+  const query = tx
     .update(partTable)
     .set(input)
     .where(

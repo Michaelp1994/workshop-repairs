@@ -1,12 +1,12 @@
 import {
-  archiveRepairStatus,
-  countRepairStatusTypes,
-  createRepairStatus,
-  getAllRepairStatusTypes,
-  getRepairStatusById,
-  getRepairStatusTypesSelect,
-  updateRepairStatus,
-} from "@repo/db/repositories/repairStatusType.repository";
+  archiveRepairStatusTypeService,
+  countRepairStatusTypesService,
+  createRepairStatusTypeService,
+  getAllRepairStatusTypesService,
+  getRepairStatusByIdService,
+  getRepairStatusSelectService,
+  updateRepairStatusTypeService,
+} from "@repo/services/services/repairStatusType.service";
 import {
   archiveRepairStatusTypeSchema,
   countRepairStatusTypesSchema,
@@ -18,38 +18,42 @@ import {
 } from "@repo/validators/server/repairStatusTypes.validators";
 import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllRepairStatusTypesSchema)
-    .query(async ({ input }) => {
-      const allRepairStatusTypes = getAllRepairStatusTypes(input);
+    .query(async ({ input, ctx }) => {
+      const allRepairStatusTypes = getAllRepairStatusTypesService(
+        input,
+        ctx.session,
+      );
 
       return allRepairStatusTypes;
     }),
   countAll: organizationProcedure
     .input(countRepairStatusTypesSchema)
-    .query(({ input }) => {
-      const count = countRepairStatusTypes(input);
+    .query(({ input, ctx }) => {
+      const count = countRepairStatusTypesService(input, ctx.session);
       return count;
     }),
   getSelect: organizationProcedure
     .input(getRepairStatusSelectSchema)
-    .query(async ({ input }) => {
-      const allRepairStatusTypes = await getRepairStatusTypesSelect(input);
+    .query(async ({ input, ctx }) => {
+      const allRepairStatusTypes = await getRepairStatusSelectService(
+        input,
+        ctx.session,
+      );
       return allRepairStatusTypes;
     }),
   getById: organizationProcedure
     .input(getRepairStatusTypeByIdSchema)
-    .query(async ({ input }) => {
-      const repairStatusType = await getRepairStatusById(input.id);
+    .query(async ({ input, ctx }) => {
+      const repairStatusType = await getRepairStatusByIdService(
+        input.id,
+        ctx.session,
+      );
 
       if (!repairStatusType) {
         throw new TRPCError({
@@ -63,44 +67,31 @@ export default router({
   create: organizationProcedure
     .input(createRepairStatusTypeSchema)
     .mutation(async ({ input, ctx }) => {
-      const metadata = createInsertMetadata(ctx.session);
-      const createdRepairStatusType = await createRepairStatus({
-        ...input,
-        ...metadata,
-      });
-      assertDatabaseResult(createdRepairStatusType);
+      const createdRepairStatusType = await createRepairStatusTypeService(
+        input,
+        ctx.session,
+      );
 
       return createdRepairStatusType;
     }),
   update: organizationProcedure
     .input(updateRepairStatusTypeSchema)
     .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createUpdateMetadata(ctx.session);
-      const updatedRepairStatusType = await updateRepairStatus(
-        {
-          ...values,
-          ...metadata,
-        },
+      const updatedRepairStatusType = await updateRepairStatusTypeService(
+        values,
         id,
+        ctx.session,
       );
-
-      assertDatabaseResult(updatedRepairStatusType);
 
       return updatedRepairStatusType;
     }),
   archive: organizationProcedure
     .input(archiveRepairStatusTypeSchema)
-    .mutation(async ({ input: { id, ...values }, ctx }) => {
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedRepairStatusType = await archiveRepairStatus(
-        {
-          ...values,
-          ...metadata,
-        },
-        id,
+    .mutation(async ({ input, ctx }) => {
+      const archivedRepairStatusType = await archiveRepairStatusTypeService(
+        input.id,
+        ctx.session,
       );
-
-      assertDatabaseResult(archivedRepairStatusType);
 
       return archivedRepairStatusType;
     }),

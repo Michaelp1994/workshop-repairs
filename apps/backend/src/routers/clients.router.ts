@@ -1,13 +1,12 @@
 import {
-  archiveClient,
-  countClients,
-  createClient,
-  getAllClients,
-  getClientByLocalId,
-  getClientsSelect,
-  updateClient,
-} from "@repo/db/repositories/client.repository";
-import { getSequenceByOrganizationId } from "@repo/db/repositories/organizationSequence.repository";
+  archiveClientService,
+  countClientsService,
+  createClientService,
+  getAllClientsService,
+  getClientService,
+  getClientsSelectService,
+  updateClientService,
+} from "@repo/services/services/client.service";
 import {
   archiveClientSchema,
   countClientsSchema,
@@ -17,128 +16,49 @@ import {
   getClientsSelectSchema,
   updateClientSchema,
 } from "@repo/validators/server/clients.validators";
-import { TRPCError } from "@trpc/server";
 
-import {
-  createArchiveMetadata,
-  createInsertMetadata,
-  createUpdateMetadata,
-} from "../helpers/includeMetadata";
-import { createSlug, splitSlug } from "../helpers/splitUrlSlug";
-import assertDatabaseResult from "../helpers/trpcAssert";
-import { organizationProcedure, router } from "../trpc";
+import { splitSlug } from "../helpers/splitUrlSlug";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 
 export default router({
   getAll: organizationProcedure
     .input(getAllClientsSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await getAllClients(input, ctx.session.organizationId);
-
-      const sequences = await getSequenceByOrganizationId(
-        ctx.session.organizationId,
-      );
-
-      if (!sequences) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't find client",
-        });
-      }
-
-      const prefix = sequences.clientKeyPrefix;
-
-      return allClients.map((client) => ({
-        ...client,
-        slug: createSlug(prefix, client.localId),
-      }));
+      return getAllClientsService(input, ctx.session);
     }),
   countAll: organizationProcedure
     .input(countClientsSchema)
     .query(async ({ ctx, input }) => {
-      const count = await countClients(input, ctx.session.organizationId);
-      assertDatabaseResult(count);
-      return count;
+      return countClientsService(input, ctx.session);
     }),
   getSelect: organizationProcedure
     .input(getClientsSelectSchema)
     .query(async ({ ctx, input }) => {
-      const allClients = await getClientsSelect(
-        input,
-        ctx.session.organizationId,
-      );
-
-      return allClients;
+      return getClientsSelectService(input, ctx.session);
     }),
   getBySlug: organizationProcedure
     .input(getClientBySlugSchema)
     .query(async ({ ctx, input }) => {
       const { localId } = splitSlug(input.slug);
 
-      const client = await getClientByLocalId(
-        localId,
-        ctx.session.organizationId,
-      );
-
-      if (!client) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't find client",
-        });
-      }
-      return client;
+      return getClientService(localId, ctx.session);
     }),
   create: organizationProcedure
     .input(createClientSchema)
     .mutation(async ({ input, ctx }) => {
-      const createMetadata = createInsertMetadata(ctx.session);
-
-      const createdClient = await createClient({
-        organizationId: ctx.session.organizationId,
-        ...input,
-        ...createMetadata,
-      });
-
-      assertDatabaseResult(createdClient);
-
-      return createdClient;
+      return await createClientService(input, ctx.session);
     }),
   update: organizationProcedure
     .input(updateClientSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
+    .mutation(async ({ input: { slug, ...values }, ctx }) => {
       const { localId } = splitSlug(slug);
-
-      const metadata = createUpdateMetadata(ctx.session);
-
-      const updatedClient = await updateClient(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
-
-      assertDatabaseResult(updatedClient);
-      return updatedClient;
+      return await updateClientService(values, localId, ctx.session);
     }),
   archive: organizationProcedure
     .input(archiveClientSchema)
     .mutation(async ({ input, ctx }) => {
-      const { slug, ...values } = input;
-      const { localId } = splitSlug(slug);
-      const metadata = createArchiveMetadata(ctx.session);
-      const archivedClient = await archiveClient(
-        {
-          ...values,
-          ...metadata,
-        },
-        localId,
-        ctx.session.organizationId,
-      );
-
-      assertDatabaseResult(archivedClient);
-
-      return archivedClient;
+      const { localId } = splitSlug(input.slug);
+      return archiveClientService(localId, ctx.session);
     }),
 });

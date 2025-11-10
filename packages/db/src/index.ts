@@ -1,3 +1,5 @@
+import type { PgTableWithColumns, TableConfig } from "drizzle-orm/pg-core";
+
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import pg from "pg";
 
@@ -16,6 +18,8 @@ export const db = drizzle(pool, { schema, casing: "snake_case" });
 
 export type Database = NodePgDatabase<typeof schema>;
 
-export type DatabaseTransaction = Parameters<
-  Parameters<Database["transaction"]>[0]
->[0];
+export type DatabaseTransaction =
+  | Parameters<Parameters<Database["transaction"]>[0]>[0]
+  | Database;
+
+export type Table<T extends TableConfig> = PgTableWithColumns<T>;

@@ -2,10 +2,10 @@ import type { UserID } from "@repo/validators/ids.validators";
 
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
-import { createEmailVerificationRequest } from "@repo/db/repositories/auth.repository";
+import { db } from "@repo/db";
+import { createEmailVerificationRequest } from "@repo/db/repositories/emailVerificationRequest.repository";
 
-import { env } from "../env";
-import assertDatabaseResult from "./trpcAssert";
+import assertDatabaseResult from "./assertDatabaseResult";
 
 const client = new SESv2Client();
 
@@ -15,19 +15,20 @@ export default async function sendVerificationEmail(
 ) {
   const code = generateRandomOTP();
 
-  const request = await createEmailVerificationRequest({
+  const request = await createEmailVerificationRequest(db, {
     userId: userId,
     email: email,
     code: code,
     expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+    createdAt: new Date(),
   });
 
   assertDatabaseResult(request);
-  if (env.nodeEnv === "production") {
+  if (process.env["nodeEnv"] === "production") {
     try {
       await client.send(
         new SendEmailCommand({
-          FromEmailAddress: env.returnEmail,
+          FromEmailAddress: process.env["returnEmail"],
           Destination: {
             ToAddresses: [email],
           },
