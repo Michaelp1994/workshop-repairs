@@ -33,7 +33,10 @@ export default function CreateAssetForm() {
   const createMutation = api.assets.create.useMutation({
     async onSuccess(data) {
       toast.success(`Asset ${data.assetNumber} created`);
-      await navigate({ to: "/assets/$assetId", params: { assetId: data.id } });
+      await navigate({
+        to: "/assets/$assetSlug",
+        params: { assetSlug: data.slug },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

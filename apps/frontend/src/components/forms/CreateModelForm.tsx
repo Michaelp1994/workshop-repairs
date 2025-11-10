@@ -33,7 +33,10 @@ export default function CreateModelForm() {
   const createMutation = api.models.create.useMutation({
     async onSuccess(data) {
       toast.success(`Model ${data.name} created`);
-      await navigate({ to: "/models/$modelId", params: { modelId: data.id } });
+      await navigate({
+        to: "/models/$modelSlug",
+        params: { modelSlug: data.slug },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);

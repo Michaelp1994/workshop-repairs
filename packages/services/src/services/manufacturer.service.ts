@@ -89,7 +89,16 @@ export async function createManufacturerService(
       ...metadata,
       ...input,
     };
-    return createManufacturer(tx, values);
+    const manufacturer = await createManufacturer(tx, values);
+    assertDatabaseResult(manufacturer);
+    const slug = createSlug(
+      sequence.manufacturerKeyPrefix,
+      manufacturer.localId,
+    );
+    return {
+      ...manufacturer,
+      slug,
+    };
   });
 }
 

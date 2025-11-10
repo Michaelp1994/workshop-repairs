@@ -29,7 +29,7 @@ export default function CreateManufacturerForm() {
       toast.success(`Manufacturer ${data.name} created`);
       await navigate({
         to: "/manufacturers/$manufacturerSlug",
-        params: { manufacturerId: data.id },
+        params: { manufacturerSlug: data.slug },
       });
     },
     onError(errors) {

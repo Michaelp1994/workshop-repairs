@@ -13,6 +13,7 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
+  type CreateOrganizationSequenceInput,
   createOrganizationSequenceSchema,
   defaultOrganizationSequence,
 } from "@repo/validators/client/organizationSequences.schema";

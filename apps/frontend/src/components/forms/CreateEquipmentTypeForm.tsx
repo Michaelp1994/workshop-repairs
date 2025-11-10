@@ -29,7 +29,7 @@ export default function CreateEquipmentTypeForm() {
       toast.success(`${data.name} created`);
       await navigate({
         to: "/equipment-types/$equipmentTypeSlug",
-        params: { equipmentTypeSlug: data.id },
+        params: { equipmentTypeSlug: data.slug },
       });
     },
     onError(errors) {

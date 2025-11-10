@@ -12,6 +12,7 @@ import { ImageInput } from "@repo/ui/image-input";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import {
+  type CreateOrganizationInput,
   createOrganizationSchema,
   defaultOrganization,
 } from "@repo/validators/client/organization.schema";
