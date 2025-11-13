@@ -4,16 +4,9 @@ import type {
   GetAllRepairImagesInput,
 } from "@repo/validators/server/repairImages.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveRepairImage,
-  countRepairImages,
-  createRepairImage,
-  getAllRepairImages,
-  getAllRepairImagesByRepairId,
-  getRepairImageById,
-  updateRepairImage,
-} from "@repo/db/repositories/repairImage.repository";
+import { type Database } from "@repo/db";
+import RepairImageRepository from "@repo/db/repositories/repairImage.repository";
+import { randomUUID } from "crypto";
 
 import type { RepairImageInput } from "../../../db/src/tables/repair-image.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -24,65 +17,92 @@ import {
   createUpdateMetadata,
   type OrganizationSession,
 } from "../helpers/includeMetadata";
+import {
+  createPresignedUrl,
+  fileExistsInS3,
+  getFileExtension,
+} from "../helpers/s3";
 
-export async function getAllRepairImagesService(
-  input: GetAllRepairImagesInput,
-) {
-  return getAllRepairImages(db, input);
-}
+export default class RepairImageService {
+  constructor(
+    private db: Database,
+    private repairImageRepository: RepairImageRepository,
+  ) {}
 
-export async function countRepairImagesService(input: CountRepairImagesInput) {
-  return countRepairImages(db, input);
-}
+  async archiveRepairImage(id: RepairImageID, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.repairImageRepository.archiveRepairImage(tx, metadata, id);
+    });
+  }
 
-export async function getAllRepairImagesByRepairIdService(repairId: RepairID) {
-  return getAllRepairImagesByRepairId(db, repairId);
-}
+  async countRepairImages(input: CountRepairImagesInput) {
+    return this.repairImageRepository.countRepairImages(this.db, input);
+  }
 
-export async function getRepairImageByIdService(id: RepairImageID) {
-  return getRepairImageById(db, id);
-}
+  async createRepairImage(
+    input: Omit<CreateInput<RepairImageInput>, "url"> & { fileName: string },
+    session: OrganizationSession,
+  ) {
+    const fileExists = await fileExistsInS3(`repairImages/${input.fileName}`);
 
-export async function requestUploadRepairImageService(input: unknown) {
-  // passthrough — router handles presigned upload details
-  return input;
-}
+    if (!fileExists) {
+      throw new Error("File does not exist.");
+    }
 
-export async function createRepairImageService(
-  input: CreateInput<RepairImageInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createInsertMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return createRepairImage(tx, values);
-  });
-}
+    const createdRepairImage = await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        url: input.fileName,
+        ...metadata,
+      };
+      return this.repairImageRepository.createRepairImage(tx, values);
+    });
 
-export async function updateRepairImageService(
-  input: UpdateInput<RepairImageInput>,
-  id: RepairImageID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateRepairImage(tx, values, id);
-  });
-}
+    return createdRepairImage;
+  }
 
-export async function archiveRepairImageService(
-  id: RepairImageID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveRepairImage(tx, metadata, id);
-  });
+  async getAllRepairImagesByRepairId(repairId: RepairID) {
+    return this.repairImageRepository.getAllRepairImagesByRepairId(
+      this.db,
+      repairId,
+    );
+  }
+
+  async getAllRepairImages(input: GetAllRepairImagesInput) {
+    return this.repairImageRepository.getAllRepairImages(this.db, input);
+  }
+
+  async getRepairImageById(id: RepairImageID) {
+    return this.repairImageRepository.getRepairImageById(this.db, id);
+  }
+
+  async requestUploadRepairImage(input: {
+    fileType: string;
+    fileSize: number;
+  }) {
+    const uuid = randomUUID();
+    const fileExt = getFileExtension(input.fileType);
+    const fileName = `${uuid}.${fileExt}`;
+    const presignedUrl = await createPresignedUrl({
+      Key: `repairImages/${fileName}`,
+    });
+    return { url: presignedUrl, fileName };
+  }
+
+  async updateRepairImage(
+    input: UpdateInput<RepairImageInput>,
+    id: RepairImageID,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairImageRepository.updateRepairImage(tx, values, id);
+    });
+  }
 }

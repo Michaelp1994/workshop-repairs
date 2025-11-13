@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const repairTypeFilters = z.object({}).optional();
+const repairTypeFilters = z.object({}).default({});
 
 export const getAllRepairTypesSchema = dataTableSchema.extend({
   filters: repairTypeFilters,
@@ -19,7 +19,9 @@ export const countRepairTypesSchema = dataTableCountSchema.extend({
 });
 export type CountRepairTypesInput = z.infer<typeof countRepairTypesSchema>;
 
-export const getRepairTypesSelectSchema = getSelectSchema.extend({});
+export const getRepairTypesSelectSchema = getSelectSchema.extend({
+  filters: repairTypeFilters,
+});
 
 export type GetRepairTypesSelectInput = z.infer<
   typeof getRepairTypesSelectSchema

@@ -4,20 +4,9 @@ import type {
   GetRepairsSelectInput,
 } from "@repo/validators/server/repairs.validators";
 
-import { db } from "@repo/db";
-import {
-  getSequenceByOrganizationId,
-  incrementRepairSequence,
-} from "@repo/db/repositories/organizationSequence.repository";
-import {
-  archiveRepair,
-  countRepairs,
-  createRepair,
-  getAllRepairs,
-  getRepairByLocalId,
-  getRepairsSelect,
-  updateRepair,
-} from "@repo/db/repositories/repair.repository";
+import { type Database } from "@repo/db";
+import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
+import RepairRepository from "@repo/db/repositories/repair.repository";
 
 import type { RepairInput } from "../../../db/src/tables/repair.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -31,125 +20,144 @@ import {
 } from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
-export async function getAllRepairsService(
-  input: GetAllRepairsInput,
-  session: OrganizationSession,
-) {
-  const sequence = await getSequenceByOrganizationId(
-    db,
-    session.organizationId,
-  );
-  assertDatabaseResult(sequence);
-  const allRepairs = await getAllRepairs(db, input, session.organizationId);
-  return allRepairs.map(({ localId, ...repair }) => ({
-    ...repair,
-    slug: createSlug(sequence.repairKeyPrefix, localId),
-  }));
-}
+export default class RepairService {
+  constructor(
+    private db: Database,
+    private repairRepository: RepairRepository,
+    private organizationSequenceRepository: OrganizationSequenceRepository,
+  ) {}
 
-export async function countRepairsService(
-  input: CountRepairsInput,
-  session: OrganizationSession,
-) {
-  return countRepairs(db, input, session.organizationId);
-}
+  async archiveRepair(localId: number, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      const archivedRepair = await this.repairRepository.archiveRepair(
+        tx,
+        metadata,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(archivedRepair);
 
-export async function getRepairsSelectService(
-  input: GetRepairsSelectInput,
-  session: OrganizationSession,
-) {
-  return getRepairsSelect(db, input, session.organizationId);
-}
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.assetKeyPrefix, localId);
 
-export async function getRepairService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return getRepairByLocalId(db, localId, session.organizationId);
-}
+      return { slug, ...archivedRepair };
+    });
+  }
 
-export async function createRepairService(
-  input: CreateInput<RepairInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const sequence = await incrementRepairSequence(tx, session.organizationId);
-    const metadata = createInsertMetadata(session);
+  async countRepairs(input: CountRepairsInput, session: OrganizationSession) {
+    return this.repairRepository.countRepairs(
+      this.db,
+      input,
+      session.organizationId,
+    );
+  }
 
+  async createRepair(
+    input: CreateInput<RepairInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const sequence =
+        await this.organizationSequenceRepository.incrementRepairSequence(
+          tx,
+          session.organizationId,
+        );
+      const metadata = createInsertMetadata(session);
+
+      assertDatabaseResult(sequence);
+
+      const values = {
+        ...input,
+        ...metadata,
+        localId: sequence.repairLastUsedValue,
+      };
+      const repair = await this.repairRepository.createRepair(tx, values);
+      assertDatabaseResult(repair);
+
+      const slug = createSlug(sequence.assetKeyPrefix, repair.localId);
+
+      return {
+        ...repair,
+        slug,
+      };
+    });
+  }
+
+  async getAllRepairs(input: GetAllRepairsInput, session: OrganizationSession) {
+    const sequence =
+      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
     assertDatabaseResult(sequence);
-
-    const values = {
-      ...input,
-      ...metadata,
-      localId: sequence.repairLastUsedValue,
-    };
-    const repair = await createRepair(tx, values);
-    assertDatabaseResult(repair);
-
-    const slug = createSlug(sequence.assetKeyPrefix, repair.localId);
-
-    return {
+    const allRepairs = await this.repairRepository.getAllRepairs(
+      this.db,
+      input,
+      session.organizationId,
+    );
+    return allRepairs.map(({ localId, ...repair }) => ({
       ...repair,
-      slug,
-    };
-  });
-}
+      slug: createSlug(sequence.repairKeyPrefix, localId),
+    }));
+  }
 
-export async function updateRepairService(
-  input: UpdateInput<RepairInput>,
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-
-    const repair = await updateRepair(
-      tx,
-      values,
+  async getRepair(localId: number, session: OrganizationSession) {
+    return this.repairRepository.getRepairByLocalId(
+      this.db,
       localId,
       session.organizationId,
     );
-    assertDatabaseResult(repair);
+  }
 
-    const sequence = await getSequenceByOrganizationId(
-      tx,
+  async getRepairsSelect(
+    input: GetRepairsSelectInput,
+    session: OrganizationSession,
+  ) {
+    return this.repairRepository.getRepairsSelect(
+      this.db,
+      input,
       session.organizationId,
     );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.repairKeyPrefix, localId);
+  }
 
-    return {
-      slug,
-      ...repair,
-    };
-  });
-}
+  async updateRepair(
+    input: UpdateInput<RepairInput>,
+    localId: number,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
 
-export async function archiveRepairService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    const archivedRepair = await archiveRepair(
-      tx,
-      metadata,
-      localId,
-      session.organizationId,
-    );
-    assertDatabaseResult(archivedRepair);
+      const repair = await this.repairRepository.updateRepair(
+        tx,
+        values,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(repair);
 
-    const sequence = await getSequenceByOrganizationId(
-      tx,
-      session.organizationId,
-    );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.assetKeyPrefix, localId);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.repairKeyPrefix, localId);
 
-    return { slug, ...archivedRepair };
-  });
+      return {
+        slug,
+        ...repair,
+      };
+    });
+  }
 }

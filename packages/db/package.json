@@ -30,7 +30,6 @@
     "@repo/auth": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/validators": "workspace:*",
     "@softwaretechnik/dbml-renderer": "^1.0.31",
     "@types/node": "^24.9.1",
     "@types/pg": "^8.15.6",

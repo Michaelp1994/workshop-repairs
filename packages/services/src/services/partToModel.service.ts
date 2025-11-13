@@ -7,89 +7,93 @@ import type {
   GetAllPartsByModelIdInput,
 } from "@repo/validators/server/partsToModel.validators";
 
-import { db } from "@repo/db";
-import {
-  archivePartToModel,
-  countAllModelsByPartId,
-  countAllPartsByModelId,
-  createPartToModel,
-  getAllModelsByPartId,
-  getAllPartsByModelId,
-  getModelsByPartIdSelect,
-  getPartsByModelIdSelect,
-  getPartToModelById,
-  updatePartToModel,
-} from "@repo/db/repositories/partToModel.repository";
+import { type Database } from "@repo/db";
+import PartToModelRepository from "@repo/db/repositories/partToModel.repository";
 
-import type {
-  ArchivePartToModel,
-  PartToModelInput,
-} from "../../../db/src/tables/part-to-model.sql";
+import type { PartToModelInput } from "../../../db/src/tables/part-to-model.sql";
 import type { CreateInput, UpdateInput } from "../types";
 
-export async function getAllPartsByModelIdService(
-  input: GetAllPartsByModelIdInput,
-) {
-  return getAllPartsByModelId(db, input);
-}
+import {
+  createInsertMetadata,
+  type OrganizationSession,
+} from "../helpers/includeMetadata";
 
-export async function countAllPartsByModelIdService(
-  input: CountAllPartsByModelIdInput,
-) {
-  return countAllPartsByModelId(db, input);
-}
+export default class PartToModelService {
+  constructor(
+    private db: Database,
+    private partToModelRepository: PartToModelRepository,
+  ) {}
+  async archivePartToModel({
+    partId,
+    modelId,
+  }: {
+    partId: PartID;
+    modelId: ModelID;
+  }) {
+    return await this.db.transaction(async (tx) => {
+      return this.partToModelRepository.archivePartToModel(tx, {
+        partId,
+        modelId,
+      });
+    });
+  }
 
-export async function getAllModelsByPartIdService(
-  input: GetAllModelsByPartIdInput,
-) {
-  return getAllModelsByPartId(db, input);
-}
+  async countAllModelsByPartId(input: CountAllModelsByPartIdInput) {
+    return this.partToModelRepository.countAllModelsByPartId(this.db, input);
+  }
 
-export async function countAllModelsByPartIdService(
-  input: CountAllModelsByPartIdInput,
-) {
-  return countAllModelsByPartId(db, input);
-}
+  async countAllPartsByModelId(input: CountAllPartsByModelIdInput) {
+    return this.partToModelRepository.countAllPartsByModelId(this.db, input);
+  }
 
-export async function getModelsByPartIdSelectService(
-  input: GetSelectInput,
-  partId: PartID,
-) {
-  return getModelsByPartIdSelect(db, input, partId);
-}
+  async createPartToModel(
+    input: CreateInput<PartToModelInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.partToModelRepository.createPartToModel(tx, values);
+    });
+  }
 
-export async function getPartsByModelIdSelectService(
-  input: GetSelectInput,
-  modelId: ModelID,
-) {
-  return getPartsByModelIdSelect(db, input, modelId);
-}
+  async getAllModelsByPartId(input: GetAllModelsByPartIdInput) {
+    return this.partToModelRepository.getAllModelsByPartId(this.db, input);
+  }
 
-export async function getPartToModelByIdService(
-  partId: PartID,
-  modelId: ModelID,
-) {
-  return getPartToModelById(db, { partId, modelId });
-}
+  async getAllPartsByModelId(input: GetAllPartsByModelIdInput) {
+    return this.partToModelRepository.getAllPartsByModelId(this.db, input);
+  }
 
-export async function createPartToModelService(
-  input: CreateInput<PartToModelInput>,
-) {
-  return await db.transaction(async (tx) => {
-    return createPartToModel(tx, input);
-  });
-}
+  async getModelsByPartIdSelect(input: GetSelectInput, partId: PartID) {
+    return this.partToModelRepository.getModelsByPartIdSelect(
+      this.db,
+      input,
+      partId,
+    );
+  }
 
-export async function updatePartToModelService(
-  input: UpdateInput<PartToModelInput>,
-) {
-  return await db.transaction(async (tx) => {
-    return updatePartToModel(tx, input);
-  });
-}
+  async getPartsByModelIdSelect(input: GetSelectInput, modelId: ModelID) {
+    return this.partToModelRepository.getPartsByModelIdSelect(
+      this.db,
+      input,
+      modelId,
+    );
+  }
 
-export async function archivePartToModelService(input: ArchivePartToModel) {
-  return await db.transaction(async (tx) => {
-    return archivePartToModel(tx, input);
-  });
+  async getPartToModelById(partId: PartID, modelId: ModelID) {
+    return this.partToModelRepository.getPartToModelById(this.db, {
+      partId,
+      modelId,
+    });
+  }
+
+  async updatePartToModel(input: UpdateInput<PartToModelInput>) {
+    return await this.db.transaction(async (tx) => {
+      return this.partToModelRepository.updatePartToModel(tx, input);
+    });
+  }
 }

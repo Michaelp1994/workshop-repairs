@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const userTypeFilters = z.object({}).optional();
+const userTypeFilters = z.object({}).default({});
 
 export const getAllUserTypesSchema = dataTableSchema.extend({
   filters: userTypeFilters,
@@ -19,7 +19,9 @@ export const countUserTypesSchema = dataTableCountSchema.extend({
 });
 export type CountUserTypesInput = z.infer<typeof countUserTypesSchema>;
 
-export const getUserTypeSelectSchema = getSelectSchema.extend({});
+export const getUserTypeSelectSchema = getSelectSchema.extend({
+  filters: userTypeFilters,
+});
 export type GetUserTypeSelectInput = z.infer<typeof getUserTypeSelectSchema>;
 
 export const createUserTypeSchema = z.object({

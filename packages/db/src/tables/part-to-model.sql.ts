@@ -3,6 +3,8 @@ import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 
 import type { InferModel } from "../types";
 
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { modelTable } from "./model.sql";
 import { partTable } from "./part.sql";
 
@@ -16,8 +18,13 @@ export const partToModelTable = pgTable(
     modelId: integer()
       .notNull()
       .references(() => modelTable.id),
+    ...timestamps,
+    ...strictAuditing,
   },
-  (t) => [primaryKey({ columns: [t.partId, t.modelId] })],
+  (t) => [
+    primaryKey({ columns: [t.partId, t.modelId] }),
+    ...auditConstraints(t),
+  ],
 );
 
 export const partToModelRelations = relations(partToModelTable, ({ one }) => ({

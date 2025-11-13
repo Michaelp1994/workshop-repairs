@@ -4,20 +4,9 @@ import type {
   GetClientSelectInput,
 } from "@repo/validators/server/clients.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveClient,
-  countClients,
-  createClient,
-  getAllClients,
-  getClientByLocalId,
-  getClientsSelect,
-  updateClient,
-} from "@repo/db/repositories/client.repository";
-import {
-  getSequenceByOrganizationId,
-  incrementClientSequence,
-} from "@repo/db/repositories/organizationSequence.repository";
+import { type Database } from "@repo/db";
+import ClientRepository from "@repo/db/repositories/client.repository";
+import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { ClientInput } from "../../../db/src/tables/client.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -31,123 +20,142 @@ import {
 } from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
-export async function getAllClientsService(
-  input: GetAllClientsInput,
-  session: OrganizationSession,
-) {
-  const sequence = await getSequenceByOrganizationId(
-    db,
-    session.organizationId,
-  );
+export default class ClientService {
+  constructor(
+    private db: Database,
+    private clientRepository: ClientRepository,
+    private organizationSequenceRepository: OrganizationSequenceRepository,
+  ) {}
 
-  assertDatabaseResult(sequence);
+  async archiveClient(localId: number, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      const archivedClient = await this.clientRepository.archiveClient(
+        tx,
+        metadata,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(archivedClient);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      return { slug, ...archivedClient };
+    });
+  }
 
-  const allClients = await getAllClients(db, input, session.organizationId);
+  async countClients(input: CountClientsInput, session: OrganizationSession) {
+    return this.clientRepository.countClients(
+      this.db,
+      input,
+      session.organizationId,
+    );
+  }
 
-  return allClients.map(({ localId, ...client }) => ({
-    ...client,
-    slug: createSlug(sequence.clientKeyPrefix, localId),
-  }));
-}
+  async createClient(
+    input: CreateInput<ClientInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const sequence =
+        await this.organizationSequenceRepository.incrementClientSequence(
+          tx,
+          session.organizationId,
+        );
+      const metadata = createInsertMetadata(session);
 
-export async function countClientsService(
-  input: CountClientsInput,
-  session: OrganizationSession,
-) {
-  return countClients(db, input, session.organizationId);
-}
+      assertDatabaseResult(sequence);
 
-export async function getClientsSelectService(
-  input: GetClientSelectInput,
-  session: OrganizationSession,
-) {
-  return getClientsSelect(db, input, session.organizationId);
-}
+      const values = {
+        ...input,
+        ...metadata,
+        localId: sequence.clientLastUsedValue,
+      };
+      const client = await this.clientRepository.createClient(tx, values);
+      assertDatabaseResult(client);
 
-export async function getClientService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return getClientByLocalId(db, localId, session.organizationId);
-}
+      const slug = createSlug(sequence.clientKeyPrefix, client.localId);
 
-export async function createClientService(
-  input: CreateInput<ClientInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const sequence = await incrementClientSequence(tx, session.organizationId);
-    const metadata = createInsertMetadata(session);
+      return {
+        ...client,
+        slug,
+      };
+    });
+  }
+
+  async getAllClients(input: GetAllClientsInput, session: OrganizationSession) {
+    const sequence =
+      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
 
     assertDatabaseResult(sequence);
 
-    const values = {
-      ...input,
-      ...metadata,
-      localId: sequence.clientLastUsedValue,
-    };
-    const client = await createClient(tx, values);
-    assertDatabaseResult(client);
+    const allClients = await this.clientRepository.getAllClients(
+      this.db,
+      input,
+      session.organizationId,
+    );
 
-    const slug = createSlug(sequence.clientKeyPrefix, client.localId);
-
-    return {
+    return allClients.map(({ localId, ...client }) => ({
       ...client,
-      slug,
-    };
-  });
-}
+      slug: createSlug(sequence.clientKeyPrefix, localId),
+    }));
+  }
 
-export async function updateClientService(
-  input: UpdateInput<ClientInput>,
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    const client = await updateClient(
-      tx,
-      values,
+  async getClient(localId: number, session: OrganizationSession) {
+    return this.clientRepository.getClientByLocalId(
+      this.db,
       localId,
       session.organizationId,
     );
-    assertDatabaseResult(client);
-    const sequence = await getSequenceByOrganizationId(
-      tx,
-      session.organizationId,
-    );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.clientKeyPrefix, localId);
-    return {
-      slug,
-      ...client,
-    };
-  });
-}
+  }
 
-export async function archiveClientService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    const archivedClient = await archiveClient(
-      tx,
-      metadata,
-      localId,
+  async getClientsSelect(
+    input: GetClientSelectInput,
+    session: OrganizationSession,
+  ) {
+    return this.clientRepository.getClientsSelect(
+      this.db,
+      input,
       session.organizationId,
     );
-    assertDatabaseResult(archivedClient);
-    const sequence = await getSequenceByOrganizationId(
-      tx,
-      session.organizationId,
-    );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.assetKeyPrefix, localId);
-    return { slug, ...archivedClient };
-  });
+  }
+
+  async updateClient(
+    input: UpdateInput<ClientInput>,
+    localId: number,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      const client = await this.clientRepository.updateClient(
+        tx,
+        values,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(client);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.clientKeyPrefix, localId);
+      return {
+        slug,
+        ...client,
+      };
+    });
+  }
 }

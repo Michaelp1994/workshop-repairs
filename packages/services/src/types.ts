@@ -1,4 +1,6 @@
-import type { Prettify } from "@repo/validators/types";
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & NonNullable<unknown>;
 
 export type CreateInput<T> = Prettify<
   Omit<

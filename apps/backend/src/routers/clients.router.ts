@@ -1,12 +1,4 @@
-import {
-  archiveClientService,
-  countClientsService,
-  createClientService,
-  getAllClientsService,
-  getClientService,
-  getClientsSelectService,
-  updateClientService,
-} from "@repo/services/services/client.service";
+import ClientService from "@repo/services/services/client.service";
 import {
   archiveClientSchema,
   countClientsSchema,
@@ -21,44 +13,46 @@ import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
-export default router({
-  getAll: organizationProcedure
-    .input(getAllClientsSchema)
-    .query(async ({ ctx, input }) => {
-      return getAllClientsService(input, ctx.session);
-    }),
-  countAll: organizationProcedure
-    .input(countClientsSchema)
-    .query(async ({ ctx, input }) => {
-      return countClientsService(input, ctx.session);
-    }),
-  getSelect: organizationProcedure
-    .input(getClientsSelectSchema)
-    .query(async ({ ctx, input }) => {
-      return getClientsSelectService(input, ctx.session);
-    }),
-  getBySlug: organizationProcedure
-    .input(getClientBySlugSchema)
-    .query(async ({ ctx, input }) => {
-      const { localId } = splitSlug(input.slug);
+export default function clientRouter(clientService: ClientService) {
+  return router({
+    getAll: organizationProcedure
+      .input(getAllClientsSchema)
+      .query(async ({ ctx, input }) => {
+        return clientService.getAllClients(input, ctx.session);
+      }),
+    countAll: organizationProcedure
+      .input(countClientsSchema)
+      .query(async ({ ctx, input }) => {
+        return clientService.countClients(input, ctx.session);
+      }),
+    getSelect: organizationProcedure
+      .input(getClientsSelectSchema)
+      .query(async ({ ctx, input }) => {
+        return clientService.getClientsSelect(input, ctx.session);
+      }),
+    getBySlug: organizationProcedure
+      .input(getClientBySlugSchema)
+      .query(async ({ ctx, input }) => {
+        const { localId } = splitSlug(input.slug);
 
-      return getClientService(localId, ctx.session);
-    }),
-  create: organizationProcedure
-    .input(createClientSchema)
-    .mutation(async ({ input, ctx }) => {
-      return await createClientService(input, ctx.session);
-    }),
-  update: organizationProcedure
-    .input(updateClientSchema)
-    .mutation(async ({ input: { slug, ...values }, ctx }) => {
-      const { localId } = splitSlug(slug);
-      return await updateClientService(values, localId, ctx.session);
-    }),
-  archive: organizationProcedure
-    .input(archiveClientSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { localId } = splitSlug(input.slug);
-      return archiveClientService(localId, ctx.session);
-    }),
-});
+        return clientService.getClient(localId, ctx.session);
+      }),
+    create: organizationProcedure
+      .input(createClientSchema)
+      .mutation(async ({ input, ctx }) => {
+        return await clientService.createClient(input, ctx.session);
+      }),
+    update: organizationProcedure
+      .input(updateClientSchema)
+      .mutation(async ({ input: { slug, ...values }, ctx }) => {
+        const { localId } = splitSlug(slug);
+        return await clientService.updateClient(values, localId, ctx.session);
+      }),
+    archive: organizationProcedure
+      .input(archiveClientSchema)
+      .mutation(async ({ input, ctx }) => {
+        const { localId } = splitSlug(input.slug);
+        return clientService.archiveClient(localId, ctx.session);
+      }),
+  });
+}

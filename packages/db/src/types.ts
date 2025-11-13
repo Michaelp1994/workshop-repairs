@@ -1,20 +1,32 @@
-import type {
-  OmitSome,
-  Prettify,
-  RemoveNullSome,
-  RequireSome,
-} from "@repo/validators/types";
-
 import { type InferSelectModel } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
 
 export type OrderMapping = Record<string, PgColumn>;
 export type FilterMapping = Record<string, PgColumn>;
 
+export type OmitSome<T, K extends keyof T> = Omit<T, K>;
+
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & NonNullable<unknown>;
+
+export type RemoveNull<T> = {
+  [K in keyof T]: Exclude<T[K], null>;
+};
+
+export type RemoveNullSome<T, K extends keyof T> = RemoveNull<Pick<T, K>> &
+  Partial<Omit<T, K>>;
+
+export type RemoveUndefined<T> = {
+  [P in keyof T]: Exclude<T[P], undefined>;
+};
+
+export type RequireSome<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
 interface BaseType {
   id?: string | number;
   localId?: number;
-  createdById: number;
+  createdById?: number | null | undefined;
   createdAt?: Date | undefined;
   deletedAt?: Date | null | undefined;
   deletedById?: number | null | undefined;
@@ -39,7 +51,7 @@ type RemoveNullKeys<T extends OmitKeys<BaseType>> = RemoveNullSome<
 
 export type CreateInput<T extends BaseType> = Prettify<
   Omit<
-    RequireSome<T, "createdAt">,
+    RequireSome<T, "createdAt" | "createdById">,
     "id" | "updatedById" | "updatedAt" | "deletedAt" | "deletedById"
   >
 >;
@@ -60,31 +72,39 @@ export type ArchiveInput<T extends BaseType> = Prettify<
 
 // Data tables
 
-interface Pagination {
+export interface Pagination {
   pageIndex: number;
   pageSize: number;
 }
 
-interface Sorting {
+export interface Sorting {
   id: string;
   desc: boolean;
 }
 
-interface ColumnFilter {
+export interface ColumnFilter {
   id: string;
   value: unknown;
 }
 
-export interface BaseDataTableQuery {
+export interface GetAllInput<T = Record<string, never> | undefined> {
   pagination: Pagination;
   sorting: Sorting[];
   globalFilter: string;
   columnFilters: ColumnFilter[];
+  filters: T;
 }
 
-export interface BaseCountQuery {
+export interface CountInput<T = Record<string, never> | undefined> {
   globalFilter: string;
   columnFilters: ColumnFilter[];
+  filters: T;
+}
+
+export interface GetAllSimpleInput<T = Record<string, never> | undefined> {
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+  filters: T;
 }
 
 export type { InferSelectModel as InferModel };

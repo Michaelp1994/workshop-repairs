@@ -1,12 +1,4 @@
-import {
-  archivePartService,
-  countPartsService,
-  createPartService,
-  getAllPartsService,
-  getPartService,
-  getPartsSelectService,
-  updatePartService,
-} from "@repo/services/services/part.service";
+import PartService from "@repo/services/services/part.service";
 import {
   archivePartSchema,
   countPartsSchema,
@@ -22,66 +14,75 @@ import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
-export default router({
-  getAll: organizationProcedure
-    .input(getAllPartsSchema)
-    .query(async ({ ctx, input }) => {
-      const allParts = getAllPartsService(input, ctx.session);
+export default function partRouter(partService: PartService) {
+  return router({
+    getAll: organizationProcedure
+      .input(getAllPartsSchema)
+      .query(async ({ ctx, input }) => {
+        const allParts = await partService.getAllParts(input, ctx.session);
 
-      return allParts;
-    }),
-  countAll: organizationProcedure
-    .input(countPartsSchema)
-    .query(async ({ ctx, input }) => {
-      const count = await countPartsService(input, ctx.session);
+        return allParts;
+      }),
+    countAll: organizationProcedure
+      .input(countPartsSchema)
+      .query(async ({ ctx, input }) => {
+        const count = await partService.countParts(input, ctx.session);
 
-      return count;
-    }),
-  getSelect: organizationProcedure
-    .input(getPartsSelectSchema)
-    .query(async ({ input, ctx }) => {
-      const allParts = await getPartsSelectService(input, ctx.session);
+        return count;
+      }),
+    getSelect: organizationProcedure
+      .input(getPartsSelectSchema)
+      .query(async ({ input, ctx }) => {
+        const allParts = await partService.getPartsSelect(input, ctx.session);
 
-      return allParts;
-    }),
-  getBySlug: organizationProcedure
-    .input(getPartBySlugSchema)
-    .query(async ({ input, ctx }) => {
-      const { localId } = splitSlug(input.slug);
-      const part = await getPartService(localId, ctx.session);
+        return allParts;
+      }),
+    getBySlug: organizationProcedure
+      .input(getPartBySlugSchema)
+      .query(async ({ input, ctx }) => {
+        const { localId } = splitSlug(input.slug);
+        const part = await partService.getPart(localId, ctx.session);
 
-      if (!part) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "part not found",
-        });
-      }
+        if (!part) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "part not found",
+          });
+        }
 
-      return part;
-    }),
-  create: organizationProcedure
-    .input(createPartSchema)
-    .mutation(async ({ input, ctx }) => {
-      const createdPart = await createPartService(input, ctx.session);
+        return part;
+      }),
+    create: organizationProcedure
+      .input(createPartSchema)
+      .mutation(async ({ input, ctx }) => {
+        const createdPart = await partService.createPart(input, ctx.session);
 
-      return createdPart;
-    }),
-  update: organizationProcedure
-    .input(updatePartSchema)
-    .mutation(async ({ input: { slug, ...values }, ctx }) => {
-      const { localId } = splitSlug(slug);
+        return createdPart;
+      }),
+    update: organizationProcedure
+      .input(updatePartSchema)
+      .mutation(async ({ input: { slug, ...values }, ctx }) => {
+        const { localId } = splitSlug(slug);
 
-      const updatedPart = await updatePartService(values, localId, ctx.session);
+        const updatedPart = await partService.updatePart(
+          values,
+          localId,
+          ctx.session,
+        );
 
-      return updatedPart;
-    }),
-  archive: organizationProcedure
-    .input(archivePartSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { localId } = splitSlug(input.slug);
+        return updatedPart;
+      }),
+    archive: organizationProcedure
+      .input(archivePartSchema)
+      .mutation(async ({ input, ctx }) => {
+        const { localId } = splitSlug(input.slug);
 
-      const archivedPart = await archivePartService(localId, ctx.session);
+        const archivedPart = await partService.archivePart(
+          localId,
+          ctx.session,
+        );
 
-      return archivedPart;
-    }),
-});
+        return archivedPart;
+      }),
+  });
+}

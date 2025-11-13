@@ -4,20 +4,9 @@ import type {
   GetPartsSelectInput,
 } from "@repo/validators/server/parts.validators";
 
-import { db } from "@repo/db";
-import {
-  getSequenceByOrganizationId,
-  incrementPartSequence,
-} from "@repo/db/repositories/organizationSequence.repository";
-import {
-  archivePart,
-  countParts,
-  createPart,
-  getAllParts,
-  getPartByLocalId,
-  getPartsSelect,
-  updatePart,
-} from "@repo/db/repositories/part.repository";
+import { type Database, db } from "@repo/db";
+import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
+import PartRepository from "@repo/db/repositories/part.repository";
 
 import type { PartInput } from "../../../db/src/tables/part.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -31,115 +20,138 @@ import {
 } from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
-export async function getAllPartsService(
-  input: GetAllPartsInput,
-  session: OrganizationSession,
-) {
-  const sequence = await getSequenceByOrganizationId(
-    db,
-    session.organizationId,
-  );
-  assertDatabaseResult(sequence);
-  const allParts = await getAllParts(db, input, session.organizationId);
-  return allParts.map(({ localId, ...part }) => ({
-    ...part,
-    slug: createSlug(sequence.partKeyPrefix, localId),
-  }));
-}
+export default class PartService {
+  constructor(
+    private db: Database,
+    private partRepository: PartRepository,
+    private organizationSequenceRepository: OrganizationSequenceRepository,
+  ) {}
+  async archivePart(localId: number, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      const archivedPart = await this.partRepository.archivePart(
+        tx,
+        metadata,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(archivedPart);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      return { slug, ...archivedPart };
+    });
+  }
 
-export async function countPartsService(
-  input: CountPartsInput,
-  session: OrganizationSession,
-) {
-  return countParts(db, input, session.organizationId);
-}
-
-export async function getPartsSelectService(
-  input: GetPartsSelectInput,
-  session: OrganizationSession,
-) {
-  return getPartsSelect(db, input, session.organizationId);
-}
-
-export async function getPartService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return getPartByLocalId(db, localId, session.organizationId);
-}
-
-export async function createPartService(
-  input: CreateInput<PartInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const sequence = await incrementPartSequence(tx, session.organizationId);
-    const metadata = createInsertMetadata(session);
-
-    assertDatabaseResult(sequence);
-
-    const values = {
-      ...input,
-      ...metadata,
-      localId: sequence.partLastUsedValue,
-    };
-    const part = await createPart(tx, values);
-    assertDatabaseResult(part);
-
-    const slug = createSlug(sequence.assetKeyPrefix, part.localId);
-
-    return {
-      ...part,
-      slug,
-    };
-  });
-}
-
-export async function updatePartService(
-  input: UpdateInput<PartInput>,
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    const part = await updatePart(tx, values, localId, session.organizationId);
-    assertDatabaseResult(part);
-    const sequence = await getSequenceByOrganizationId(
-      tx,
+  async countParts(input: CountPartsInput, session: OrganizationSession) {
+    return this.partRepository.countParts(
+      this.db,
+      input,
       session.organizationId,
     );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.assetKeyPrefix, localId);
-    return {
-      slug,
-      ...part,
-    };
-  });
-}
+  }
 
-export async function archivePartService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    const archivedPart = await archivePart(
-      tx,
-      metadata,
+  async createPart(
+    input: CreateInput<PartInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const sequence =
+        await this.organizationSequenceRepository.incrementPartSequence(
+          tx,
+          session.organizationId,
+        );
+      const metadata = createInsertMetadata(session);
+
+      assertDatabaseResult(sequence);
+
+      const values = {
+        ...input,
+        ...metadata,
+        localId: sequence.partLastUsedValue,
+      };
+      const part = await this.partRepository.createPart(tx, values);
+      assertDatabaseResult(part);
+
+      const slug = createSlug(sequence.assetKeyPrefix, part.localId);
+
+      return {
+        ...part,
+        slug,
+      };
+    });
+  }
+
+  async getAllParts(input: GetAllPartsInput, session: OrganizationSession) {
+    const sequence =
+      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        db,
+        session.organizationId,
+      );
+    assertDatabaseResult(sequence);
+    const allParts = await this.partRepository.getAllParts(
+      this.db,
+      input,
+      session.organizationId,
+    );
+    return allParts.map(({ localId, ...part }) => ({
+      ...part,
+      slug: createSlug(sequence.partKeyPrefix, localId),
+    }));
+  }
+
+  async getPart(localId: number, session: OrganizationSession) {
+    return this.partRepository.getPartByLocalId(
+      this.db,
       localId,
       session.organizationId,
     );
-    assertDatabaseResult(archivedPart);
-    const sequence = await getSequenceByOrganizationId(
-      tx,
+  }
+
+  async getPartsSelect(
+    input: GetPartsSelectInput,
+    session: OrganizationSession,
+  ) {
+    return this.partRepository.getPartsSelect(
+      this.db,
+      input,
       session.organizationId,
     );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.assetKeyPrefix, localId);
-    return { slug, ...archivedPart };
-  });
+  }
+
+  async updatePart(
+    input: UpdateInput<PartInput>,
+    localId: number,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      const part = await this.partRepository.updatePart(
+        tx,
+        values,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(part);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      return {
+        slug,
+        ...part,
+      };
+    });
+  }
 }

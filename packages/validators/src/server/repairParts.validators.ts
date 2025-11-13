@@ -7,7 +7,7 @@ const repairPartFilters = z
   .object({
     repairId: repairId.optional(),
   })
-  .optional();
+  .default({});
 
 export const getAllRepairPartsSchema = dataTableSchema.extend({
   filters: repairPartFilters,

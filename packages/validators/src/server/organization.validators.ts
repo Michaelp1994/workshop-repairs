@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
-const organizationFilters = z.object({}).optional();
+const organizationFilters = z.object({}).default({});
 
 export const getAllOrganizationsSchema = dataTableSchema.extend({
   filters: organizationFilters,

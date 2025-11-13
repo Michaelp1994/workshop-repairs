@@ -6,7 +6,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const equipmentTypeFilters = z.object({}).optional();
+const equipmentTypeFilters = z.object({}).default({});
 
 export const getAllEquipmentTypesSchema = dataTableSchema.extend({
   filters: equipmentTypeFilters,
@@ -22,7 +22,9 @@ export type CountEquipmentTypesInput = z.infer<
   typeof countEquipmentTypesSchema
 >;
 
-export const getEquipmentTypesSelectSchema = getSelectSchema.extend({});
+export const getEquipmentTypesSelectSchema = getSelectSchema.extend({
+  filters: equipmentTypeFilters,
+});
 
 export type GetEquipmentTypesSelectInput = z.infer<
   typeof getEquipmentTypesSelectSchema

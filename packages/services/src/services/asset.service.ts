@@ -1,21 +1,12 @@
-import type { GetAssetsSelectSchema } from "@repo/validators/server/assets.validators";
+import type {
+  CountAssetsInput,
+  GetAllAssetsInput,
+  GetAssetsSelectInput,
+} from "@repo/validators/server/assets.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveAsset,
-  type AssetCountParameters,
-  type AssetDataTableParameters,
-  countAssets,
-  createAsset,
-  getAllAssets,
-  getAsset,
-  getAssetsSelect,
-  updateAsset,
-} from "@repo/db/repositories/asset.repository";
-import {
-  getSequenceByOrganizationId,
-  incrementAssetSequence,
-} from "@repo/db/repositories/organizationSequence.repository";
+import { type Database } from "@repo/db";
+import AssetRepository from "@repo/db/repositories/asset.repository";
+import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { AssetInput } from "../../../db/src/tables/asset.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -29,132 +20,155 @@ import {
 } from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
-export async function getAllAssetsService(
-  input: AssetDataTableParameters,
-  session: OrganizationSession,
-) {
-  const sequence = await getSequenceByOrganizationId(
-    db,
-    session.organizationId,
-  );
+export default class AssetService {
+  constructor(
+    private db: Database,
+    private assetRepository: AssetRepository,
+    private organizationSequenceRepository: OrganizationSequenceRepository,
+  ) {}
 
-  assertDatabaseResult(sequence);
+  async archiveAsset(localId: number, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      const where = {
+        localId,
+        organizationId: session.organizationId,
+      };
+      const archivedAsset = await this.assetRepository.archiveAsset(
+        tx,
+        metadata,
+        where,
+      );
+      assertDatabaseResult(archivedAsset);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      return { slug, ...archivedAsset };
+    });
+  }
 
-  const allAssets = await getAllAssets(db, input, session.organizationId);
+  async countAssets(input: CountAssetsInput, session: OrganizationSession) {
+    const count = await this.assetRepository.countAssets(
+      this.db,
+      input,
+      session.organizationId,
+    );
+    assertDatabaseResult(count);
+    return count;
+  }
 
-  return allAssets.map(({ localId, ...asset }) => ({
-    ...asset,
-    slug: createSlug(sequence.assetKeyPrefix, localId),
-  }));
-}
+  async createAsset(
+    input: CreateInput<AssetInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const sequence =
+        await this.organizationSequenceRepository.incrementAssetSequence(
+          tx,
+          session.organizationId,
+        );
+      const metadata = createInsertMetadata(session);
 
-export async function countAssetsService(
-  input: AssetCountParameters,
-  session: OrganizationSession,
-) {
-  const count = await countAssets(db, input, session.organizationId);
-  assertDatabaseResult(count);
-  return count;
-}
+      assertDatabaseResult(sequence);
 
-export async function getAssetsSelectService(
-  input: GetAssetsSelectSchema,
-  session: OrganizationSession,
-) {
-  const assets = await getAssetsSelect(db, input, session.organizationId);
-  return assets;
-}
+      const values = {
+        ...input,
+        ...metadata,
+        localId: sequence.assetLastUsedValue,
+      };
 
-export async function getAssetService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  const asset = await getAsset(db, {
-    localId,
-    organizationId: session.organizationId,
-  });
-  assertDatabaseResult(asset);
-  return asset;
-}
+      const asset = await this.assetRepository.createAsset(tx, values);
 
-export async function createAssetService(
-  input: CreateInput<AssetInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const sequence = await incrementAssetSequence(tx, session.organizationId);
-    const metadata = createInsertMetadata(session);
+      assertDatabaseResult(asset);
+
+      const slug = createSlug(sequence.assetKeyPrefix, asset.localId);
+
+      return {
+        ...asset,
+        slug,
+      };
+    });
+  }
+
+  async getAllAssets(input: GetAllAssetsInput, session: OrganizationSession) {
+    const sequence =
+      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
 
     assertDatabaseResult(sequence);
 
-    const values = {
-      ...input,
-      ...metadata,
-      localId: sequence.assetLastUsedValue,
-    };
+    const allAssets = await this.assetRepository.getAllAssets(
+      this.db,
+      input,
+      session.organizationId,
+    );
 
-    const asset = await createAsset(tx, values);
-
-    assertDatabaseResult(asset);
-
-    const slug = createSlug(sequence.assetKeyPrefix, asset.localId);
-
-    return {
+    return allAssets.map(({ localId, ...asset }) => ({
       ...asset,
-      slug,
-    };
-  });
-}
+      slug: createSlug(sequence.assetKeyPrefix, localId),
+    }));
+  }
 
-export async function updateAssetService(
-  input: UpdateInput<AssetInput>,
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const values = {
-      ...input,
-      ...createUpdateMetadata(session),
-    };
-
-    const where = {
+  async getAsset(localId: number, session: OrganizationSession) {
+    const asset = await this.assetRepository.getAsset(this.db, {
       localId,
       organizationId: session.organizationId,
-    };
+    });
+    assertDatabaseResult(asset);
+    return asset;
+  }
 
-    const updatedAsset = await updateAsset(tx, values, where);
-    assertDatabaseResult(updatedAsset);
-    const sequence = await getSequenceByOrganizationId(
-      tx,
+  async getAssetsSelect(
+    input: GetAssetsSelectInput,
+    session: OrganizationSession,
+  ) {
+    const assets = await this.assetRepository.getAssetsSelect(
+      this.db,
+      input,
       session.organizationId,
     );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.assetKeyPrefix, localId);
-    return {
-      slug,
-      ...updatedAsset,
-    };
-  });
-}
+    return assets;
+  }
 
-export async function archiveAssetService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    const where = {
-      localId,
-      organizationId: session.organizationId,
-    };
-    const archivedAsset = await archiveAsset(tx, metadata, where);
-    assertDatabaseResult(archivedAsset);
-    const sequence = await getSequenceByOrganizationId(
-      tx,
-      session.organizationId,
-    );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.assetKeyPrefix, localId);
-    return { slug, ...archivedAsset };
-  });
+  async updateAsset(
+    input: UpdateInput<AssetInput>,
+    localId: number,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const values = {
+        ...input,
+        ...createUpdateMetadata(session),
+      };
+
+      const where = {
+        localId,
+        organizationId: session.organizationId,
+      };
+
+      const updatedAsset = await this.assetRepository.updateAsset(
+        tx,
+        values,
+        where,
+      );
+      assertDatabaseResult(updatedAsset);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      return {
+        slug,
+        ...updatedAsset,
+      };
+    });
+  }
 }

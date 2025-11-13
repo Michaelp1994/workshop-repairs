@@ -99,7 +99,7 @@ try {
         organizationId: organization.id,
       })),
     );
-    await t.insert(schema.partsToModelTable).values(
+    await t.insert(schema.partToModelTable).values(
       parts_to_models.map((part_to_model) => ({
         ...part_to_model,
         createdById: user.id,

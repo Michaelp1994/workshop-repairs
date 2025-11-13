@@ -1,11 +1,10 @@
-import { ColumnFilters } from "@repo/validators/dataTables.schema";
 import assert from "assert";
 import { eq, inArray } from "drizzle-orm";
 
-import { FilterMapping } from "../types";
+import { ColumnFilter, FilterMapping } from "../types";
 
 export function createColumnFilterFunction(mappingArray: FilterMapping) {
-  return function (columnFilters: ColumnFilters) {
+  return function (columnFilters: ColumnFilter[]) {
     const filters = columnFilters.map((filter) => {
       if (filter.id in mappingArray) {
         const column = mappingArray[filter.id];

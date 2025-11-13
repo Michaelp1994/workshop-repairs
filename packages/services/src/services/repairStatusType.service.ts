@@ -5,16 +5,8 @@ import type {
   GetRepairStatusSelectInput,
 } from "@repo/validators/server/repairStatusTypes.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveRepairStatus,
-  countRepairStatusTypes,
-  createRepairStatus,
-  getAllRepairStatusTypes,
-  getRepairStatusById,
-  getRepairStatusTypesSelect,
-  updateRepairStatus,
-} from "@repo/db/repositories/repairStatusType.repository";
+import { type Database, db } from "@repo/db";
+import RepairStatusTypeRepository from "@repo/db/repositories/repairStatusType.repository";
 
 import type { RepairStatusTypeInput } from "../../../db/src/tables/repair-status-type.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -26,69 +18,86 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 
-export async function getAllRepairStatusTypesService(
-  input: GetAllRepairStatusTypesInput,
-  _session: OrganizationSession,
-) {
-  return getAllRepairStatusTypes(db, input);
-}
+export default class RepairStatusTypeService {
+  constructor(
+    private db: Database,
+    private repairStatusTypeRepository: RepairStatusTypeRepository,
+  ) {}
+  async archiveRepairStatusType(
+    repairStatusId: RepairStatusTypeID,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.repairStatusTypeRepository.archiveRepairStatus(
+        tx,
+        metadata,
+        repairStatusId,
+      );
+    });
+  }
 
-export async function countRepairStatusTypesService(
-  input: CountRepairStatusTypesInput,
-  _session: OrganizationSession,
-) {
-  return countRepairStatusTypes(db, input);
-}
+  async countRepairStatusTypes(
+    input: CountRepairStatusTypesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairStatusTypeRepository.countRepairStatusTypes(db, input);
+  }
 
-export async function getRepairStatusSelectService(
-  input: GetRepairStatusSelectInput,
-  _session: OrganizationSession,
-) {
-  return getRepairStatusTypesSelect(db, input);
-}
+  async createRepairStatusType(
+    input: CreateInput<RepairStatusTypeInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairStatusTypeRepository.createRepairStatus(tx, values);
+    });
+  }
 
-export async function getRepairStatusByIdService(
-  id: RepairStatusTypeID,
-  _session: OrganizationSession,
-) {
-  return getRepairStatusById(db, id);
-}
+  async getAllRepairStatusTypes(
+    input: GetAllRepairStatusTypesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairStatusTypeRepository.getAllRepairStatusTypes(db, input);
+  }
 
-export async function createRepairStatusTypeService(
-  input: CreateInput<RepairStatusTypeInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createInsertMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return createRepairStatus(tx, values);
-  });
-}
+  async getRepairStatusById(
+    id: RepairStatusTypeID,
+    _session: OrganizationSession,
+  ) {
+    return this.repairStatusTypeRepository.getRepairStatusById(db, id);
+  }
 
-export async function updateRepairStatusTypeService(
-  input: UpdateInput<RepairStatusTypeInput>,
-  repairStatusId: RepairStatusTypeID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateRepairStatus(tx, values, repairStatusId);
-  });
-}
+  async getRepairStatusSelect(
+    input: GetRepairStatusSelectInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairStatusTypeRepository.getRepairStatusTypesSelect(
+      db,
+      input,
+    );
+  }
 
-export async function archiveRepairStatusTypeService(
-  repairStatusId: RepairStatusTypeID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveRepairStatus(tx, metadata, repairStatusId);
-  });
+  async updateRepairStatusType(
+    input: UpdateInput<RepairStatusTypeInput>,
+    repairStatusId: RepairStatusTypeID,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairStatusTypeRepository.updateRepairStatus(
+        tx,
+        values,
+        repairStatusId,
+      );
+    });
+  }
 }

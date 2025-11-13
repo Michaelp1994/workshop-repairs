@@ -5,16 +5,8 @@ import type {
 } from "@repo/validators/server/assetStatuses.validators";
 import type { CountAssetStatusesInput } from "@repo/validators/server/assetStatuses.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveAssetStatus,
-  countAssetStatuses,
-  createAssetStatus,
-  getAllAssetStatuses,
-  getAssetStatusById,
-  getAssetStatusSelect,
-  updateAssetStatus,
-} from "@repo/db/repositories/assetStatus.repository";
+import { type Database } from "@repo/db";
+import AssetStatusRepository from "@repo/db/repositories/assetStatus.repository";
 
 import type { AssetStatusInput } from "../../../db/src/tables/asset-status.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -25,70 +17,73 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 
-export async function getAllAssetStatusesService(
-  input: GetAllAssetStatusesInput,
-  _session: OrganizationSession,
-) {
-  return getAllAssetStatuses(db, input);
-}
+export default class AssetStatusService {
+  constructor(
+    private db: Database,
+    private assetStatusRepository: AssetStatusRepository,
+  ) {}
+  async archiveAssetStatus(id: number, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.assetStatusRepository.archiveAssetStatus(tx, metadata, id);
+    });
+  }
 
-export async function countAssetStatusesService(
-  input: CountAssetStatusesInput,
-  _session: OrganizationSession,
-) {
-  return countAssetStatuses(db, input);
-}
+  async countAssetStatuses(
+    input: CountAssetStatusesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.assetStatusRepository.countAssetStatuses(this.db, input);
+  }
 
-export async function getAssetStatusSelectService(
-  input: GetAssetStatusesSelectInput,
-  _session: OrganizationSession,
-) {
-  return getAssetStatusSelect(db, input);
-}
+  async createAssetStatus(
+    input: CreateInput<AssetStatusInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      const assetStatus = await this.assetStatusRepository.createAssetStatus(
+        tx,
+        values,
+      );
+      return assetStatus;
+    });
+  }
 
-export async function getAssetStatusService(
-  id: AssetStatusID,
-  _session: OrganizationSession,
-) {
-  return getAssetStatusById(db, id);
-}
+  async getAllAssetStatuses(
+    input: GetAllAssetStatusesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.assetStatusRepository.getAllAssetStatuses(this.db, input);
+  }
 
-export async function createAssetStatusService(
-  input: CreateInput<AssetStatusInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    const assetStatus = await createAssetStatus(tx, values);
-    return assetStatus;
-  });
-}
+  async getAssetStatus(id: AssetStatusID, _session: OrganizationSession) {
+    return this.assetStatusRepository.getAssetStatusById(this.db, id);
+  }
 
-export async function updateAssetStatusService(
-  input: UpdateInput<AssetStatusInput>,
-  id: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateAssetStatus(tx, values, id);
-  });
-}
+  async getAssetStatusSelect(
+    input: GetAssetStatusesSelectInput,
+    _session: OrganizationSession,
+  ) {
+    return this.assetStatusRepository.getAssetStatusSelect(this.db, input);
+  }
 
-export async function archiveAssetStatusService(
-  id: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveAssetStatus(tx, metadata, id);
-  });
+  async updateAssetStatus(
+    input: UpdateInput<AssetStatusInput>,
+    id: number,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.assetStatusRepository.updateAssetStatus(tx, values, id);
+    });
+  }
 }

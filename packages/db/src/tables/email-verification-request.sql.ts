@@ -10,6 +10,8 @@ import {
 
 import type { InferModel } from "../types";
 
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { userTable } from "./user.sql";
 
 export const emailVerificationRequestTable = pgTable(
@@ -24,7 +26,10 @@ export const emailVerificationRequestTable = pgTable(
     expiresAt: timestamp().notNull(),
     emailVerified: boolean().notNull().default(false),
     twoFactorVerified: boolean().notNull().default(false),
+    ...timestamps,
+    ...strictAuditing,
   },
+  (t) => [...auditConstraints(t)],
 );
 
 export const emailVerificationRequestRelations = relations(

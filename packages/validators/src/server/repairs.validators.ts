@@ -17,7 +17,9 @@ const repairFilters = z
     clientId: clientId.optional(),
     assetId: assetId.optional(),
   })
-  .optional();
+  .default({});
+
+export type RepairFilters = z.infer<typeof repairFilters>;
 
 export const getAllRepairsSchema = dataTableSchema.extend({
   filters: repairFilters,
@@ -29,7 +31,9 @@ export const countRepairsSchema = dataTableCountSchema.extend({
 });
 export type CountRepairsInput = z.infer<typeof countRepairsSchema>;
 
-export const getRepairsSelectSchema = getSelectSchema.extend({});
+export const getRepairsSelectSchema = getSelectSchema.extend({
+  filters: repairFilters,
+});
 export type GetRepairsSelectInput = z.infer<typeof getRepairsSelectSchema>;
 
 export const getAllRepairsByAssetIdSchema = z.object({

@@ -1,12 +1,13 @@
-import type {
-  CountRepairPartsInput,
-  GetAllRepairPartsInput,
-} from "@repo/validators/server/repairParts.validators";
-
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
 import type { DatabaseTransaction } from "..";
-import type { ArchiveInput, CreateInput, UpdateInput } from "../types";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
 import {
@@ -25,128 +26,133 @@ import { repairTable } from "../tables/repair.sql";
 
 const repairPartFields = getTableColumns(repairPartTable);
 
-export function getAllRepairParts(
-  tx: DatabaseTransaction,
-  {
-    pagination,
-    filters,
-    columnFilters,
-    globalFilter,
-    sorting,
-  }: GetAllRepairPartsInput,
-) {
-  const orderByParams = getOrderBy(sorting);
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const { createdByTable, deletedByTable, metadata, updatedByTable } =
-    createMetadataFields();
-  const query = tx
-    .select({
-      ...repairPartFields,
-      part: partTable,
-      ...metadata,
-    })
-    .from(repairPartTable)
-    .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
-    .innerJoin(
-      createdByTable,
-      eq(repairPartTable.createdById, createdByTable.id),
-    )
-    .leftJoin(
-      updatedByTable,
-      eq(repairPartTable.updatedById, updatedByTable.id),
-    )
-    .leftJoin(deletedByTable, eq(deletedByTable.deletedById, deletedByTable.id))
-    .where(
-      and(
-        isNull(repairPartTable.deletedAt),
-        globalFilterParams,
-        ...columnFilterParams,
-        filters?.repairId
-          ? eq(repairPartTable.repairId, filters.repairId)
-          : undefined,
-      ),
-    )
-    .orderBy(...orderByParams, repairPartTable.createdAt)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
+interface RepairPartFilters {
+  repairId?: number;
 }
+export default class RepairPartRepository {
+  async archiveRepairPart(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<RepairPartInput>,
+    repairPartId: RepairPartID,
+  ) {
+    const query = tx
+      .update(repairPartTable)
+      .set(input)
+      .where(eq(repairPartTable.id, repairPartId))
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  }
 
-export async function countRepairParts(
-  tx: DatabaseTransaction,
-  { filters, columnFilters, globalFilter }: CountRepairPartsInput,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const query = tx
-    .select({ count: count() })
-    .from(repairPartTable)
-    .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
-    .where(
-      and(
-        isNull(repairPartTable.deletedAt),
-        globalFilterParams,
-        ...columnFilterParams,
-        filters?.repairId
-          ? eq(repairPartTable.repairId, filters.repairId)
-          : undefined,
-      ),
-    );
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async countRepairParts(
+    tx: DatabaseTransaction,
+    { filters, columnFilters, globalFilter }: CountInput<RepairPartFilters>,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({ count: count() })
+      .from(repairPartTable)
+      .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
+      .where(
+        and(
+          isNull(repairPartTable.deletedAt),
+          globalFilterParams,
+          ...columnFilterParams,
+          filters.repairId
+            ? eq(repairPartTable.repairId, filters.repairId)
+            : undefined,
+        ),
+      );
+    const [res] = await query.execute();
+    return res?.count;
+  }
 
-export async function getRepairPartById(
-  tx: DatabaseTransaction,
-  input: RepairPartID,
-) {
-  const query = tx
-    .select({
-      ...repairPartFields,
-      assets: assetTable,
-    })
-    .from(repairPartTable)
-    .innerJoin(repairTable, eq(repairTable.id, repairPartTable.repairId))
-    .innerJoin(assetTable, eq(assetTable.id, repairTable.assetId))
-    .where(eq(repairPartTable.id, input));
-  const [res] = await query.execute();
-  return res;
-}
+  async createRepairPart(
+    tx: DatabaseTransaction,
+    input: CreateInput<RepairPartInput>,
+  ) {
+    const query = tx.insert(repairPartTable).values(input).returning();
+    const [res] = await query.execute();
+    return res;
+  }
 
-export async function createRepairPart(
-  tx: DatabaseTransaction,
-  input: CreateInput<RepairPartInput>,
-) {
-  const query = tx.insert(repairPartTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllRepairParts(
+    tx: DatabaseTransaction,
+    {
+      pagination,
+      filters,
+      columnFilters,
+      globalFilter,
+      sorting,
+    }: GetAllInput<RepairPartFilters>,
+  ) {
+    const orderByParams = getOrderBy(sorting);
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const { createdByTable, deletedByTable, metadata, updatedByTable } =
+      createMetadataFields();
+    const query = tx
+      .select({
+        ...repairPartFields,
+        part: partTable,
+        ...metadata,
+      })
+      .from(repairPartTable)
+      .innerJoin(partTable, eq(partTable.id, repairPartTable.partId))
+      .innerJoin(
+        createdByTable,
+        eq(repairPartTable.createdById, createdByTable.id),
+      )
+      .leftJoin(
+        updatedByTable,
+        eq(repairPartTable.updatedById, updatedByTable.id),
+      )
+      .leftJoin(
+        deletedByTable,
+        eq(deletedByTable.deletedById, deletedByTable.id),
+      )
+      .where(
+        and(
+          isNull(repairPartTable.deletedAt),
+          globalFilterParams,
+          ...columnFilterParams,
+          filters.repairId
+            ? eq(repairPartTable.repairId, filters.repairId)
+            : undefined,
+        ),
+      )
+      .orderBy(...orderByParams, repairPartTable.createdAt)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return query.execute();
+  }
 
-export async function updateRepairPart(
-  tx: DatabaseTransaction,
-  input: UpdateInput<RepairPartInput>,
-  repairPartId: RepairPartID,
-) {
-  const query = tx
-    .update(repairPartTable)
-    .set(input)
-    .where(eq(repairPartTable.id, repairPartId))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getRepairPartById(tx: DatabaseTransaction, input: RepairPartID) {
+    const query = tx
+      .select({
+        ...repairPartFields,
+        assets: assetTable,
+      })
+      .from(repairPartTable)
+      .innerJoin(repairTable, eq(repairTable.id, repairPartTable.repairId))
+      .innerJoin(assetTable, eq(assetTable.id, repairTable.assetId))
+      .where(eq(repairPartTable.id, input));
+    const [res] = await query.execute();
+    return res;
+  }
 
-export async function archiveRepairPart(
-  tx: DatabaseTransaction,
-  input: ArchiveInput<RepairPartInput>,
-  repairPartId: RepairPartID,
-) {
-  const query = tx
-    .update(repairPartTable)
-    .set(input)
-    .where(eq(repairPartTable.id, repairPartId))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async updateRepairPart(
+    tx: DatabaseTransaction,
+    input: UpdateInput<RepairPartInput>,
+    repairPartId: RepairPartID,
+  ) {
+    const query = tx
+      .update(repairPartTable)
+      .set(input)
+      .where(eq(repairPartTable.id, repairPartId))
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  }
 }

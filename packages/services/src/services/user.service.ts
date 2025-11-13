@@ -4,24 +4,9 @@ import type {
   GetAllUsersInput,
 } from "@repo/validators/server/users.validators";
 
-import { db } from "@repo/db";
-import {
-  deleteEmailConfirmationRequestById,
-  getEmailVerificationRequest,
-} from "@repo/db/repositories/emailVerificationRequest.repository";
-import {
-  getCredentialsByUserId,
-  getUserByEmail,
-} from "@repo/db/repositories/user.repository";
-import {
-  archiveUser,
-  countUsers,
-  createUser,
-  getAllUsers,
-  getUserById,
-  setUserEmailVerified,
-  updateUser,
-} from "@repo/db/repositories/user.repository";
+import { type Database } from "@repo/db";
+import EmailVerificationRequestRepository from "@repo/db/repositories/emailVerificationRequest.repository";
+import UserRepository from "@repo/db/repositories/user.repository";
 
 import type { UserInput } from "../../../db/src/tables/user.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -36,96 +21,111 @@ import {
 } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
 
-export async function getAllUsersService(
-  input: GetAllUsersInput,
-  session: OrganizationSession,
-) {
-  return getAllUsers(db, input, session.organizationId);
-}
+export default class UserService {
+  constructor(
+    private db: Database,
+    private userRepository: UserRepository,
+    private emailVerificationRequestRepository: EmailVerificationRequestRepository,
+  ) {}
 
-export async function countUsersService(
-  input: CountUsersInput,
-  session: OrganizationSession,
-) {
-  return countUsers(db, input, session.organizationId);
-}
+  async archiveUser(id: UserID, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.userRepository.archiveUser(tx, metadata, id);
+    });
+  }
 
-// export async function resetPasswordService(input: unknown) {
-//   return input;
-// }
+  async confirmEmail(
+    input: {
+      email: string;
+      code: string;
+    },
+    session: AuthedSession,
+  ) {
+    const user = await this.userRepository.getUserByEmail(this.db, input.email);
+    assertDatabaseResult(user);
+    const request =
+      await this.emailVerificationRequestRepository.getEmailVerificationRequest(
+        this.db,
+        input.email,
+        input.code,
+      );
+    assertDatabaseResult(request);
 
-export async function sendEmailConfirmationService(
-  input: { email: string },
-  session: AuthedSession,
-) {
-  await sendVerificationEmail(session.userId, input.email);
-  return true;
-}
+    await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...metadata,
+        emailVerified: true,
+      };
+      await this.userRepository.updateUser(tx, values, user.id);
+      await this.emailVerificationRequestRepository.deleteEmailConfirmationRequestById(
+        this.db,
+        request.id,
+      );
+    });
 
-export async function confirmEmailService(input: {
-  email: string;
-  code: string;
-}) {
-  const user = await getUserByEmail(db, input.email);
-  assertDatabaseResult(user);
-  const request = await getEmailVerificationRequest(
-    db,
-    input.email,
-    input.code,
-  );
-  assertDatabaseResult(request);
+    return true;
+  }
 
-  await db.transaction(async (tx) => {
-    await setUserEmailVerified(tx, user.id);
-    await deleteEmailConfirmationRequestById(db, request.id);
-  });
+  async countUsers(input: CountUsersInput, session: OrganizationSession) {
+    return this.userRepository.countUsers(
+      this.db,
+      input,
+      session.organizationId,
+    );
+  }
 
-  return true;
-}
+  async createUser(
+    input: CreateInput<UserInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.userRepository.createUser(tx, values);
+    });
+  }
 
-export async function getUserByIdService(id: UserID) {
-  return getUserById(db, id);
-}
+  async getAllUsers(input: GetAllUsersInput, session: OrganizationSession) {
+    return this.userRepository.getAllUsers(
+      this.db,
+      input,
+      session.organizationId,
+    );
+  }
 
-export async function getCredentialsByUserIdService(id: UserID) {
-  return await getCredentialsByUserId(db, id);
-}
+  async getCredentialsByUserId(id: UserID) {
+    return await this.userRepository.getCredentialsByUserId(this.db, id);
+  }
 
-export async function createUserService(
-  input: CreateInput<UserInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createInsertMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return createUser(tx, values);
-  });
-}
+  async getUserById(id: UserID) {
+    return this.userRepository.getUserById(this.db, id);
+  }
 
-export async function updateUserService(
-  input: UpdateInput<UserInput>,
-  id: UserID,
-  session: AuthedSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateUser(tx, values, id);
-  });
-}
+  async sendEmailConfirmation(
+    input: { email: string },
+    session: AuthedSession,
+  ) {
+    await sendVerificationEmail(session.userId, input.email);
+    return true;
+  }
 
-export async function archiveUserService(
-  id: UserID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveUser(tx, metadata, id);
-  });
+  async updateUser(
+    input: UpdateInput<UserInput>,
+    id: UserID,
+    session: AuthedSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.userRepository.updateUser(tx, values, id);
+    });
+  }
 }

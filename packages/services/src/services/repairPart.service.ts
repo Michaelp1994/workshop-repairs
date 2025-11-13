@@ -4,15 +4,8 @@ import type {
   GetAllRepairPartsInput,
 } from "@repo/validators/server/repairParts.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveRepairPart,
-  countRepairParts,
-  createRepairPart,
-  getAllRepairParts,
-  getRepairPartById,
-  updateRepairPart,
-} from "@repo/db/repositories/repairPart.repository";
+import { type Database } from "@repo/db";
+import RepairPartRepository from "@repo/db/repositories/repairPart.repository";
 
 import type { RepairPartInput } from "../../../db/src/tables/repair-part.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -24,62 +17,62 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 
-export async function getAllRepairPartsService(
-  input: GetAllRepairPartsInput,
-  _session: OrganizationSession,
-) {
-  return getAllRepairParts(db, input);
-}
+export default class RepairPartService {
+  constructor(
+    private db: Database,
+    private repairPartRepository: RepairPartRepository,
+  ) {}
+  async archiveRepairPart(id: RepairPartID, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.repairPartRepository.archiveRepairPart(tx, metadata, id);
+    });
+  }
 
-export async function countRepairPartsService(
-  input: CountRepairPartsInput,
-  _session: OrganizationSession,
-) {
-  return countRepairParts(db, input);
-}
+  async countRepairParts(
+    input: CountRepairPartsInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairPartRepository.countRepairParts(this.db, input);
+  }
 
-export async function getRepairPartByIdService(
-  id: RepairPartID,
-  _session: OrganizationSession,
-) {
-  return getRepairPartById(db, id);
-}
+  async createRepairPart(
+    input: CreateInput<RepairPartInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairPartRepository.createRepairPart(tx, values);
+    });
+  }
 
-export async function createRepairPartService(
-  input: CreateInput<RepairPartInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createInsertMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return createRepairPart(tx, values);
-  });
-}
+  async getAllRepairParts(
+    input: GetAllRepairPartsInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairPartRepository.getAllRepairParts(this.db, input);
+  }
 
-export async function updateRepairPartService(
-  input: UpdateInput<RepairPartInput>,
-  id: RepairPartID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateRepairPart(tx, values, id);
-  });
-}
+  async getRepairPartById(id: RepairPartID, _session: OrganizationSession) {
+    return this.repairPartRepository.getRepairPartById(this.db, id);
+  }
 
-export async function archiveRepairPartService(
-  id: RepairPartID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveRepairPart(tx, metadata, id);
-  });
+  async updateRepairPart(
+    input: UpdateInput<RepairPartInput>,
+    id: RepairPartID,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairPartRepository.updateRepairPart(tx, values, id);
+    });
+  }
 }

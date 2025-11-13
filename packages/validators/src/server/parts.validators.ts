@@ -6,7 +6,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const partFilters = z.object({}).optional();
+const partFilters = z.object({}).default({});
 
 export const getAllPartsSchema = dataTableSchema.extend({
   filters: partFilters,
@@ -18,7 +18,9 @@ export const countPartsSchema = dataTableCountSchema.extend({
 });
 export type CountPartsInput = z.infer<typeof countPartsSchema>;
 
-export const getPartsSelectSchema = getSelectSchema.extend({});
+export const getPartsSelectSchema = getSelectSchema.extend({
+  filters: partFilters,
+});
 export type GetPartsSelectInput = z.infer<typeof getPartsSelectSchema>;
 
 export const createPartSchema = z.object({

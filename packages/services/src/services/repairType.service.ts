@@ -5,16 +5,8 @@ import type {
   GetRepairTypesSelectInput,
 } from "@repo/validators/server/repairTypes.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveRepairType,
-  countRepairTypes,
-  createRepairType,
-  getAllRepairTypes,
-  getRepairTypeById,
-  getRepairTypesSelect,
-  updateRepairType,
-} from "@repo/db/repositories/repairType.repository";
+import { type Database } from "@repo/db";
+import RepairTypeRepository from "@repo/db/repositories/repairType.repository";
 
 import type { RepairTypeInput } from "../../../db/src/tables/repair-type.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -26,69 +18,70 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 
-export async function getAllRepairTypesService(
-  input: GetAllRepairTypesInput,
-  _session: OrganizationSession,
-) {
-  return getAllRepairTypes(db, input);
-}
+export default class RepairTypeService {
+  constructor(
+    private db: Database,
+    private repairTypeRepository: RepairTypeRepository,
+  ) {}
 
-export async function countRepairTypesService(
-  input: CountRepairTypesInput,
-  _session: OrganizationSession,
-) {
-  return countRepairTypes(db, input);
-}
+  async archiveRepairType(id: RepairTypeID, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.repairTypeRepository.archiveRepairType(tx, metadata, id);
+    });
+  }
 
-export async function getRepairTypesSelectService(
-  input: GetRepairTypesSelectInput,
-  _session: OrganizationSession,
-) {
-  return getRepairTypesSelect(db, input);
-}
+  async countRepairTypes(
+    input: CountRepairTypesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairTypeRepository.countRepairTypes(this.db, input);
+  }
 
-export async function getRepairTypeByIdService(
-  id: RepairTypeID,
-  _session: OrganizationSession,
-) {
-  return getRepairTypeById(db, id);
-}
+  async createRepairType(
+    input: CreateInput<RepairTypeInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairTypeRepository.createRepairType(tx, values);
+    });
+  }
 
-export async function createRepairTypeService(
-  input: CreateInput<RepairTypeInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createInsertMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return createRepairType(tx, values);
-  });
-}
+  async getAllRepairTypes(
+    input: GetAllRepairTypesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairTypeRepository.getAllRepairTypes(this.db, input);
+  }
 
-export async function updateRepairTypeService(
-  input: UpdateInput<RepairTypeInput>,
-  id: RepairTypeID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateRepairType(tx, values, id);
-  });
-}
+  async getRepairTypeById(id: RepairTypeID, _session: OrganizationSession) {
+    return this.repairTypeRepository.getRepairTypeById(this.db, id);
+  }
 
-export async function archiveRepairTypeService(
-  id: RepairTypeID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveRepairType(tx, metadata, id);
-  });
+  async getRepairTypesSelect(
+    input: GetRepairTypesSelectInput,
+    _session: OrganizationSession,
+  ) {
+    return this.repairTypeRepository.getRepairTypesSelect(this.db, input);
+  }
+
+  async updateRepairType(
+    input: UpdateInput<RepairTypeInput>,
+    id: RepairTypeID,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.repairTypeRepository.updateRepairType(tx, values, id);
+    });
+  }
 }

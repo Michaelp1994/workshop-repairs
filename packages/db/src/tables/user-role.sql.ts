@@ -5,7 +5,7 @@ import { strictAuditing, timestamps } from "./columns.helpers";
 import { roleTable } from "./role.sql";
 import { userTable } from "./user.sql";
 
-export const groupRoleTable = pgTable(
+export const userRoleTable = pgTable(
   "user_role",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),

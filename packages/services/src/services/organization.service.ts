@@ -1,20 +1,30 @@
 import type { OrganizationID } from "@repo/validators/ids.validators";
 
-import { db } from "@repo/db";
-import { createOrganization } from "@repo/db/repositories/organization.repository";
-import { getOrganizationById } from "@repo/db/repositories/organization.repository";
+import { type Database } from "@repo/db";
+import OrganizationRepository from "@repo/db/repositories/organization.repository";
 
 import type { OrganizationInput } from "../../../db/src/tables/organization.sql";
 import type { CreateInput } from "../types";
 
-export async function getOrganizationService(organizationId: OrganizationID) {
-  return getOrganizationById(db, organizationId);
-}
+import assertDatabaseResult from "../helpers/assertDatabaseResult";
 
-export async function createOrganizationService(
-  input: CreateInput<OrganizationInput>,
-) {
-  return await db.transaction(async (tx) => {
-    return createOrganization(tx, input);
-  });
+export default class OrganizationService {
+  constructor(
+    private db: Database,
+    private organizationRepository: OrganizationRepository,
+  ) {}
+  async createOrganization(input: CreateInput<OrganizationInput>) {
+    return await this.db.transaction(async (tx) => {
+      return this.organizationRepository.createOrganization(tx, input);
+    });
+  }
+
+  async getOrganization(organizationId: OrganizationID) {
+    const organization = await this.organizationRepository.getOrganizationById(
+      this.db,
+      organizationId,
+    );
+    assertDatabaseResult(organization);
+    return organization;
+  }
 }

@@ -6,7 +6,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const manufacturerFilters = z.object({}).optional();
+const manufacturerFilters = z.object({}).default({});
 
 export const getAllManufacturersSchema = dataTableSchema.extend({
   filters: manufacturerFilters,
@@ -20,7 +20,9 @@ export const countManufacturersSchema = dataTableCountSchema.extend({
 });
 export type CountManufacturersInput = z.infer<typeof countManufacturersSchema>;
 
-export const getManufacturersSelectSchema = getSelectSchema.extend({});
+export const getManufacturersSelectSchema = getSelectSchema.extend({
+  filters: manufacturerFilters,
+});
 
 export type GetManufacturersSelectInput = z.infer<
   typeof getManufacturersSelectSchema

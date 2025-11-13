@@ -1,12 +1,4 @@
-import {
-  archiveRepairService,
-  countRepairsService,
-  createRepairService,
-  getAllRepairsService,
-  getRepairService,
-  getRepairsSelectService,
-  updateRepairService,
-} from "@repo/services/services/repair.service";
+import RepairService from "@repo/services/services/repair.service";
 import {
   archiveRepairSchema,
   countRepairsSchema,
@@ -22,79 +14,90 @@ import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
-export default router({
-  getAll: organizationProcedure
-    .input(getAllRepairsSchema)
-    .query(async ({ ctx, input }) => {
-      const allRepairs = await getAllRepairsService(input, ctx.session);
-      return allRepairs;
-    }),
+export default function Router(repairService: RepairService) {
+  return router({
+    getAll: organizationProcedure
+      .input(getAllRepairsSchema)
+      .query(async ({ ctx, input }) => {
+        const allRepairs = await repairService.getAllRepairs(
+          input,
+          ctx.session,
+        );
+        return allRepairs;
+      }),
 
-  countAll: organizationProcedure
-    .input(countRepairsSchema)
-    .query(async ({ ctx, input }) => {
-      const count = await countRepairsService(input, ctx.session);
-      if (count === undefined) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "can't count repairs",
-        });
-      }
-      return count;
-    }),
+    countAll: organizationProcedure
+      .input(countRepairsSchema)
+      .query(async ({ ctx, input }) => {
+        const count = await repairService.countRepairs(input, ctx.session);
+        if (count === undefined) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "can't count repairs",
+          });
+        }
+        return count;
+      }),
 
-  getSelect: organizationProcedure
-    .input(getRepairsSelectSchema)
-    .query(async ({ input, ctx }) => {
-      const allRepairs = await getRepairsSelectService(input, ctx.session);
-      return allRepairs;
-    }),
+    getSelect: organizationProcedure
+      .input(getRepairsSelectSchema)
+      .query(async ({ input, ctx }) => {
+        const allRepairs = await repairService.getRepairsSelect(
+          input,
+          ctx.session,
+        );
+        return allRepairs;
+      }),
 
-  getBySlug: organizationProcedure
-    .input(getRepairBySlugSchema)
-    .query(async ({ input, ctx }) => {
-      const { localId } = splitSlug(input.slug);
-      const repair = await getRepairService(localId, ctx.session);
+    getBySlug: organizationProcedure
+      .input(getRepairBySlugSchema)
+      .query(async ({ input, ctx }) => {
+        const { localId } = splitSlug(input.slug);
+        const repair = await repairService.getRepair(localId, ctx.session);
 
-      if (!repair) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found",
-        });
-      }
+        if (!repair) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "User not found",
+          });
+        }
 
-      return repair;
-    }),
+        return repair;
+      }),
 
-  create: organizationProcedure
-    .input(createRepairSchema)
-    .mutation(async ({ input, ctx }) => {
-      const repair = await createRepairService(input, ctx.session);
+    create: organizationProcedure
+      .input(createRepairSchema)
+      .mutation(async ({ input, ctx }) => {
+        const repair = await repairService.createRepair(input, ctx.session);
 
-      return repair;
-    }),
+        return repair;
+      }),
 
-  update: organizationProcedure
-    .input(updateRepairSchema)
-    .mutation(async ({ input: { slug, ...values }, ctx }) => {
-      const { localId } = splitSlug(slug);
+    update: organizationProcedure
+      .input(updateRepairSchema)
+      .mutation(async ({ input: { slug, ...values }, ctx }) => {
+        const { localId } = splitSlug(slug);
 
-      const updatedRepair = await updateRepairService(
-        values,
-        localId,
-        ctx.session,
-      );
+        const updatedRepair = await repairService.updateRepair(
+          values,
+          localId,
+          ctx.session,
+        );
 
-      return updatedRepair;
-    }),
+        return updatedRepair;
+      }),
 
-  archive: organizationProcedure
-    .input(archiveRepairSchema)
-    .mutation(async ({ input, ctx }) => {
-      const { localId } = splitSlug(input.slug);
+    archive: organizationProcedure
+      .input(archiveRepairSchema)
+      .mutation(async ({ input, ctx }) => {
+        const { localId } = splitSlug(input.slug);
 
-      const archivedRepair = await archiveRepairService(localId, ctx.session);
+        const archivedRepair = await repairService.archiveRepair(
+          localId,
+          ctx.session,
+        );
 
-      return archivedRepair;
-    }),
-});
+        return archivedRepair;
+      }),
+  });
+}

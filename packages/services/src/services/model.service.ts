@@ -4,20 +4,9 @@ import type {
   GetModelsSelectInput,
 } from "@repo/validators/server/models.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveModel,
-  countModels,
-  createModel,
-  getAllModels,
-  getModelByLocalId,
-  getModelsSelect,
-  updateModel,
-} from "@repo/db/repositories/model.repository";
-import {
-  getSequenceByOrganizationId,
-  incrementModelSequence,
-} from "@repo/db/repositories/organizationSequence.repository";
+import { type Database } from "@repo/db";
+import ModelRepository from "@repo/db/repositories/model.repository";
+import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { ModelInput } from "../../../db/src/tables/model.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -31,125 +20,143 @@ import {
 } from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
-export async function getAllModelsService(
-  input: GetAllModelsInput,
-  session: OrganizationSession,
-) {
-  const sequence = await getSequenceByOrganizationId(
-    db,
-    session.organizationId,
-  );
-  assertDatabaseResult(sequence);
-  const allModels = await getAllModels(db, input, session.organizationId);
-  return allModels.map(({ localId, ...model }) => ({
-    ...model,
-    slug: createSlug(sequence.modelKeyPrefix, localId),
-  }));
-}
+export default class ModelService {
+  constructor(
+    private db: Database,
+    private modelRepository: ModelRepository,
+    private organizationSequenceRepository: OrganizationSequenceRepository,
+  ) {}
+  async archiveModel(localId: number, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      const archivedModel = await this.modelRepository.archiveModel(
+        tx,
+        metadata,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(archivedModel);
 
-export async function countModelsService(
-  input: CountModelsInput,
-  session: OrganizationSession,
-) {
-  return countModels(db, input, session.organizationId);
-}
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.modelKeyPrefix, localId);
 
-export async function getModelsSelectService(
-  input: GetModelsSelectInput,
-  session: OrganizationSession,
-) {
-  return getModelsSelect(db, input, session.organizationId);
-}
+      return { slug, ...archivedModel };
+    });
+  }
 
-export async function getModelService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return getModelByLocalId(db, localId, session.organizationId);
-}
+  async countModels(input: CountModelsInput, session: OrganizationSession) {
+    return this.modelRepository.countModels(
+      this.db,
+      input,
+      session.organizationId,
+    );
+  }
 
-export async function createModelService(
-  input: CreateInput<ModelInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const sequence = await incrementModelSequence(tx, session.organizationId);
-    const metadata = createInsertMetadata(session);
+  async createModel(
+    input: CreateInput<ModelInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const sequence =
+        await this.organizationSequenceRepository.incrementModelSequence(
+          tx,
+          session.organizationId,
+        );
+      const metadata = createInsertMetadata(session);
 
+      assertDatabaseResult(sequence);
+
+      const values = {
+        ...input,
+        ...metadata,
+        localId: sequence.modelLastUsedValue,
+      };
+      const model = await this.modelRepository.createModel(tx, values);
+      assertDatabaseResult(model);
+
+      const slug = createSlug(sequence.modelKeyPrefix, model.localId);
+
+      return {
+        ...model,
+        slug,
+      };
+    });
+  }
+
+  async getAllModels(input: GetAllModelsInput, session: OrganizationSession) {
+    const sequence =
+      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
     assertDatabaseResult(sequence);
-
-    const values = {
-      ...input,
-      ...metadata,
-      localId: sequence.modelLastUsedValue,
-    };
-    const model = await createModel(tx, values);
-    assertDatabaseResult(model);
-
-    const slug = createSlug(sequence.modelKeyPrefix, model.localId);
-
-    return {
+    const allModels = await this.modelRepository.getAllModels(
+      this.db,
+      input,
+      session.organizationId,
+    );
+    return allModels.map(({ localId, ...model }) => ({
       ...model,
-      slug,
-    };
-  });
-}
+      slug: createSlug(sequence.modelKeyPrefix, localId),
+    }));
+  }
 
-export async function updateModelService(
-  input: UpdateInput<ModelInput>,
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-
-    const model = await updateModel(
-      tx,
-      values,
+  async getModel(localId: number, session: OrganizationSession) {
+    return this.modelRepository.getModelByLocalId(
+      this.db,
       localId,
       session.organizationId,
     );
-    assertDatabaseResult(model);
+  }
 
-    const sequence = await getSequenceByOrganizationId(
-      tx,
+  async getModelsSelect(
+    input: GetModelsSelectInput,
+    session: OrganizationSession,
+  ) {
+    return this.modelRepository.getModelsSelect(
+      this.db,
+      input,
       session.organizationId,
     );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.modelKeyPrefix, localId);
+  }
 
-    return {
-      slug,
-      ...model,
-    };
-  });
-}
+  async updateModel(
+    input: UpdateInput<ModelInput>,
+    localId: number,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
 
-export async function archiveModelService(
-  localId: number,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    const archivedModel = await archiveModel(
-      tx,
-      metadata,
-      localId,
-      session.organizationId,
-    );
-    assertDatabaseResult(archivedModel);
+      const model = await this.modelRepository.updateModel(
+        tx,
+        values,
+        localId,
+        session.organizationId,
+      );
+      assertDatabaseResult(model);
 
-    const sequence = await getSequenceByOrganizationId(
-      tx,
-      session.organizationId,
-    );
-    assertDatabaseResult(sequence);
-    const slug = createSlug(sequence.modelKeyPrefix, localId);
+      const sequence =
+        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+          tx,
+          session.organizationId,
+        );
+      assertDatabaseResult(sequence);
+      const slug = createSlug(sequence.modelKeyPrefix, localId);
 
-    return { slug, ...archivedModel };
-  });
+      return {
+        slug,
+        ...model,
+      };
+    });
+  }
 }

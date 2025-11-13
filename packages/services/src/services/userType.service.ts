@@ -5,16 +5,8 @@ import type {
   GetUserTypeSelectInput,
 } from "@repo/validators/server/userTypes.validators";
 
-import { db } from "@repo/db";
-import {
-  archiveUserType,
-  countUserTypes,
-  createUserType,
-  getAllUserTypes,
-  getUserTypeById,
-  getUserTypesSelect,
-  updateUserType,
-} from "@repo/db/repositories/userType.repository";
+import { type Database } from "@repo/db";
+import UserTypeRepository from "@repo/db/repositories/userType.repository";
 
 import type { UserTypeInput } from "../../../db/src/tables/user-type.sql";
 import type { CreateInput, UpdateInput } from "../types";
@@ -26,69 +18,70 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 
-export async function createUserTypeService(
-  input: CreateInput<UserTypeInput>,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createInsertMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return createUserType(tx, values);
-  });
-}
+export default class UserTypeService {
+  constructor(
+    private db: Database,
+    private userTypeRepository: UserTypeRepository,
+  ) {}
 
-export async function getAllUserTypesService(
-  input: GetAllUserTypesInput,
-  _session: OrganizationSession,
-) {
-  return getAllUserTypes(db, input);
-}
+  async archiveUserType(id: UserTypeID, session: OrganizationSession) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createArchiveMetadata(session);
+      return this.userTypeRepository.archiveUserType(tx, metadata, id);
+    });
+  }
 
-export async function countUserTypesService(
-  input: CountUserTypesInput,
-  _session: OrganizationSession,
-) {
-  return countUserTypes(db, input);
-}
+  async countUserTypes(
+    input: CountUserTypesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.userTypeRepository.countUserTypes(this.db, input);
+  }
 
-export async function getUserTypeByIdService(
-  id: UserTypeID,
-  _session: OrganizationSession,
-) {
-  return getUserTypeById(db, id);
-}
+  async createUserType(
+    input: CreateInput<UserTypeInput>,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createInsertMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.userTypeRepository.createUserType(tx, values);
+    });
+  }
 
-export async function getUserTypesSelectService(
-  input: GetUserTypeSelectInput,
-  _session: OrganizationSession,
-) {
-  return getUserTypesSelect(db, input);
-}
+  async getAllUserTypes(
+    input: GetAllUserTypesInput,
+    _session: OrganizationSession,
+  ) {
+    return this.userTypeRepository.getAllUserTypes(this.db, input);
+  }
 
-export async function updateUserTypeService(
-  input: UpdateInput<UserTypeInput>,
-  id: UserTypeID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createUpdateMetadata(session);
-    const values = {
-      ...input,
-      ...metadata,
-    };
-    return updateUserType(tx, values, id);
-  });
-}
+  async getUserTypeById(id: UserTypeID, _session: OrganizationSession) {
+    return this.userTypeRepository.getUserTypeById(this.db, id);
+  }
 
-export async function archiveUserTypeService(
-  id: UserTypeID,
-  session: OrganizationSession,
-) {
-  return await db.transaction(async (tx) => {
-    const metadata = createArchiveMetadata(session);
-    return archiveUserType(tx, metadata, id);
-  });
+  async getUserTypesSelect(
+    input: GetUserTypeSelectInput,
+    _session: OrganizationSession,
+  ) {
+    return this.userTypeRepository.getUserTypesSelect(this.db, input);
+  }
+
+  async updateUserType(
+    input: UpdateInput<UserTypeInput>,
+    id: UserTypeID,
+    session: OrganizationSession,
+  ) {
+    return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+      const values = {
+        ...input,
+        ...metadata,
+      };
+      return this.userTypeRepository.updateUserType(tx, values, id);
+    });
+  }
 }

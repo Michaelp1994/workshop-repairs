@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const locationFilters = z.object({}).optional();
+const locationFilters = z.object({}).default({});
 
 export const getAllLocationsSchema = dataTableSchema.extend({
   filters: locationFilters,
@@ -19,7 +19,9 @@ export const countLocationsSchema = dataTableCountSchema.extend({
 });
 export type CountLocationsInput = z.infer<typeof countLocationsSchema>;
 
-export const getLocationsSelectSchema = getSelectSchema.extend({});
+export const getLocationsSelectSchema = getSelectSchema.extend({
+  filters: locationFilters,
+});
 
 export type GetLocationsSelectInput = z.infer<typeof getLocationsSelectSchema>;
 

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { userId, userTypeId } from "../isomorphic/ids.validators";
 import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
-const userFilters = z.object({}).optional();
+const userFilters = z.object({}).default({});
 
 export const getAllUsersSchema = dataTableSchema.extend({
   filters: userFilters,

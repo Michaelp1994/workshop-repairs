@@ -1,18 +1,26 @@
 import { type InferInsertModel, relations } from "drizzle-orm";
-import { boolean, integer, pgTable } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, unique } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
+import auditConstraints from "./audit-constraints.helpers";
+import { strictAuditing, timestamps } from "./columns.helpers";
 import { userTable } from "./user.sql";
 
-export const userOnboardingTable = pgTable("user_onboarding", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer()
-    .notNull()
-    .unique()
-    .references(() => userTable.id),
-  welcomed: boolean().notNull().default(false),
-  invitedUsers: boolean().notNull().default(false),
-});
+export const userOnboardingTable = pgTable(
+  "user_onboarding",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    userId: integer()
+      .notNull()
+      .unique()
+      .references(() => userTable.id),
+    welcomed: boolean().notNull().default(false),
+    invitedUsers: boolean().notNull().default(false),
+    ...timestamps,
+    ...strictAuditing,
+  },
+  (t) => [unique().on(t.userId), ...auditConstraints(t)],
+);
 
 export const userOnboardingRelations = relations(
   userOnboardingTable,

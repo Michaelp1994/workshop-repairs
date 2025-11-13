@@ -10,12 +10,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
-  "include": [
-    "src",
-    "*.config.*",
-    "sst-env.d.ts",
-    "../../packages/services/src/helpers/includeMetadata.ts",
-    "../../packages/services/src/helpers/sendInvitationEmail.ts"
-  ],
+  "include": ["src", "*.config.*"],
   "exclude": ["node_modules", "eslint.config.js"]
 }

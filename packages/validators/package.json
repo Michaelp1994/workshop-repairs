@@ -9,12 +9,9 @@
   "exports": {
     "./server/*": "./src/server/*.ts",
     "./client/*": "./src/client/*.ts",
-    "./*": "./src/isomorphic/*.ts",
-    "./types": "./src/types.ts"
+    "./*": "./src/isomorphic/*.ts"
   },
   "scripts": {
-    "// build": "tsc && tsc-alias",
-    "//dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "eslint .",
     "test": "vitest",

@@ -9,6 +9,8 @@ import {
   equipmentTypeRelations,
   equipmentTypeTable,
 } from "./equipment-type.sql";
+import { groupRoleTable } from "./group-role.sql";
+import { groupTable } from "./group.sql";
 import { locationRelations, locationTable } from "./location.sql";
 import { manufacturerRelations, manufacturerTable } from "./manufacturer.sql";
 import { modelImageRelations, modelImageTable } from "./model-image.sql";
@@ -22,8 +24,9 @@ import {
   organizationSequenceTable,
 } from "./organization-sequences.sql";
 import { organizationRelations, organizationTable } from "./organization.sql";
-import { partRelations, partTable } from "./part.sql";
 import { partToModelRelations, partToModelTable } from "./part-to-model.sql";
+import { partRelations, partTable } from "./part.sql";
+import { permissionTable } from "./permission.sql";
 import {
   repairCommentRelations,
   repairCommentTable,
@@ -36,10 +39,14 @@ import {
 } from "./repair-status-type.sql";
 import { repairTypeRelations, repairTypeTable } from "./repair-type.sql";
 import { repairRelations, repairTable } from "./repair.sql";
+import { rolePermissionTable } from "./role-permission.sql";
+import { roleTable } from "./role.sql";
+import { userGroupTable } from "./user-group.sql";
 import {
   userOnboardingRelations,
   userOnboardingTable,
 } from "./user-onboarding.sql";
+import { userRoleTable } from "./user-role.sql";
 import { userTypeRelations, userTypeTable } from "./user-type.sql";
 import { userRelations, userTable } from "./user.sql";
 
@@ -49,6 +56,8 @@ export const schema = {
   clientTable,
   emailVerificationRequestTable,
   equipmentTypeTable,
+  groupRoleTable,
+  groupTable,
   locationTable,
   manufacturerTable,
   modelImageTable,
@@ -56,15 +65,20 @@ export const schema = {
   organizationInvitationTable,
   organizationSequenceTable,
   organizationTable,
-  partsToModelTable: partToModelTable,
+  partToModelTable,
   partTable,
+  permissionTable,
   repairCommentTable,
   repairImageTable,
   repairPartTable,
   repairStatusTypeTable,
   repairTable,
   repairTypeTable,
+  rolePermissionTable,
+  roleTable,
+  userGroupTable,
   userOnboardingTable,
+  userRoleTable,
   userTable,
   userTypeTable,
 };
@@ -83,7 +97,7 @@ export const relations = {
   organizationSequenceRelations,
   organizationRelations,
   partRelations,
-  partsToModelRelations: partToModelRelations,
+  partToModelRelations,
   repairCommentRelations,
   repairImageRelations,
   repairPartRelations,

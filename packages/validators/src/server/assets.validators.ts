@@ -23,7 +23,7 @@ const assetFilters = z
     manufacturer: z.string().optional(),
     equipmentType: z.string().optional(),
   })
-  .optional();
+  .default({});
 
 export type AssetFilters = z.infer<typeof assetFilters>;
 
@@ -37,8 +37,10 @@ export const countAssetsSchema = dataTableCountSchema.extend({
 });
 export type CountAssetsInput = z.infer<typeof countAssetsSchema>;
 
-export const getAssestsSelectSchema = getSelectSchema.extend({});
-export type GetAssetsSelectSchema = z.infer<typeof getAssestsSelectSchema>;
+export const getAssestsSelectSchema = getSelectSchema.extend({
+  filters: assetFilters,
+});
+export type GetAssetsSelectInput = z.infer<typeof getAssestsSelectSchema>;
 
 export const getAssetBySlugSchema = z.object({
   slug: z.string(),
