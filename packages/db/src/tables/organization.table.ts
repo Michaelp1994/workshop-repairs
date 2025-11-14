@@ -2,7 +2,7 @@ import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
-import { laxAuditing, timestamps } from "./columns.helpers";
+import { laxAuditing, timestamps } from "../helpers/commonColumns";
 import { organizationInvitationTable } from "./organizationInvitation.table";
 import { userTable } from "./user.table";
 

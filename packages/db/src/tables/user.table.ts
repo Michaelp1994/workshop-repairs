@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
-import { laxAuditing, timestamps } from "./columns.helpers";
+import { laxAuditing, timestamps } from "../helpers/commonColumns";
 import { emailVerificationRequestTable } from "./emailVerificationRequest.table";
 import { organizationTable } from "./organization.table";
 import { userOnboardingTable } from "./userOnboarding.table";

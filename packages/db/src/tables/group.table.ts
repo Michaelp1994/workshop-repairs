@@ -1,7 +1,7 @@
 import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
-import auditConstraints from "./audit-constraints.helpers";
-import { strictAuditing, timestamps } from "./columns.helpers";
+import auditConstraints from "../helpers/auditConstraints";
+import { strictAuditing, timestamps } from "../helpers/commonColumns";
 import { organizationTable } from "./organization.table";
 
 export const groupTable = pgTable(

@@ -8,8 +8,8 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
-import auditConstraints from "./audit-constraints.helpers";
-import { strictAuditing, timestamps } from "./columns.helpers";
+import auditConstraints from "../helpers/auditConstraints";
+import { strictAuditing, timestamps } from "../helpers/commonColumns";
 import { equipmentTypeTable } from "./equipmentType.table";
 import { manufacturerTable } from "./manufacturer.table";
 import { modelImageTable } from "./modelImage.table";

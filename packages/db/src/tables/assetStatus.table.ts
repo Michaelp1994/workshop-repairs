@@ -3,8 +3,8 @@ import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
 import { assetTable } from "./asset.table";
-import auditConstraints from "./audit-constraints.helpers";
-import { laxAuditing, timestamps } from "./columns.helpers";
+import auditConstraints from "../helpers/auditConstraints";
+import { laxAuditing, timestamps } from "../helpers/commonColumns";
 
 export const assetStatusTable = pgTable(
   "asset_status",
