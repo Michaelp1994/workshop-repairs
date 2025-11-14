@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -17,10 +17,10 @@ import {
   createGlobalFilters,
   createSortOrder,
 } from "../mappings/model.mapper";
-import { equipmentTypeTable } from "../tables/equipment-type.sql";
-import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelImageTable } from "../tables/model-image.sql";
-import { type ModelInput, modelTable } from "../tables/model.sql";
+import { equipmentTypeTable } from "../tables/equipment-type.table";
+import { manufacturerTable } from "../tables/manufacturer.table";
+import { modelImageTable } from "../tables/model-image.table";
+import { type ModelInput, modelTable } from "../tables/model.table";
 
 const modelFields = getTableColumns(modelTable);
 

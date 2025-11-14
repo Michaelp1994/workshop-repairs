@@ -8,7 +8,7 @@ import { type Database } from "@repo/db";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 import RepairRepository from "@repo/db/repositories/repair.repository";
 
-import type { RepairInput } from "../../../db/src/tables/repair.sql";
+import type { RepairInput } from "../../../db/src/tables/repair.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import assertDatabaseResult from "../helpers/assertDatabaseResult";

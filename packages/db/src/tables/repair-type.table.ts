@@ -4,7 +4,7 @@ import { integer, pgTable, text } from "drizzle-orm/pg-core";
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { laxAuditing, timestamps } from "./columns.helpers";
-import { repairTable } from "./repair.sql";
+import { repairTable } from "./repair.table";
 
 export const repairTypeTable = pgTable(
   "repair_type",

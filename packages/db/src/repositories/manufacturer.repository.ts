@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -20,7 +20,7 @@ import {
 import {
   type ManufacturerInput,
   manufacturerTable,
-} from "../tables/manufacturer.sql";
+} from "../tables/manufacturer.table";
 
 const manufacturerFields = getTableColumns(manufacturerTable);
 export default class ManufacturerRepository {

@@ -6,8 +6,8 @@ import { type DatabaseTransaction } from "../index";
 import {
   type UserOnboardingInput,
   userOnboardingTable,
-} from "../tables/user-onboarding.sql";
-import { type UserID, userTable } from "../tables/user.sql";
+} from "../tables/user-onboarding.table";
+import { type UserID, userTable } from "../tables/user.table";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);

@@ -4,7 +4,7 @@ import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { laxAuditing, timestamps } from "./columns.helpers";
-import { organizationTable } from "./organization.sql";
+import { organizationTable } from "./organization.table";
 
 export const organizationInvitationTable = pgTable(
   "organization_invitation",

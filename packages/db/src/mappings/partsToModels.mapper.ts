@@ -1,9 +1,9 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { modelTable } from "../tables/model.sql";
-import { partToModelTable } from "../tables/part-to-model.sql";
-import { partTable } from "../tables/part.sql";
+import { modelTable } from "../tables/model.table";
+import { partToModelTable } from "../tables/part-to-model.table";
+import { partTable } from "../tables/part.table";
 
 const orderMapping = {
   part_name: partTable.name,

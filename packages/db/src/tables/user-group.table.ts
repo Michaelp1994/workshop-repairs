@@ -2,8 +2,8 @@ import { integer, pgTable, unique } from "drizzle-orm/pg-core";
 
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { groupTable } from "./group.sql";
-import { userTable } from "./user.sql";
+import { groupTable } from "./group.table";
+import { userTable } from "./user.table";
 
 export const userGroupTable = pgTable(
   "user_group",

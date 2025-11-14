@@ -2,7 +2,7 @@ import type { BuildExtraConfigColumns } from "drizzle-orm";
 
 import { foreignKey, type PgColumnBuilderBase } from "drizzle-orm/pg-core";
 
-import { userTable } from "./user.sql";
+import { userTable } from "./user.table";
 
 export default function auditConstraints<
   TTableName extends string,

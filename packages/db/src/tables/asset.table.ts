@@ -3,14 +3,14 @@ import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import type { InferModel } from "../types";
 
-import { assetStatusTable } from "./asset-status.sql";
+import { assetStatusTable } from "./asset-status.table";
 import auditConstraints from "./audit-constraints.helpers";
-import { clientTable } from "./client.sql";
+import { clientTable } from "./client.table";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { locationTable } from "./location.sql";
-import { modelTable } from "./model.sql";
-import { organizationTable } from "./organization.sql";
-import { repairTable } from "./repair.sql";
+import { locationTable } from "./location.table";
+import { modelTable } from "./model.table";
+import { organizationTable } from "./organization.table";
+import { repairTable } from "./repair.table";
 
 export const assetTable = pgTable(
   "asset",

@@ -13,8 +13,8 @@ import {
   type ModelImageID,
   type ModelImageInput,
   modelImageTable,
-} from "../tables/model-image.sql";
-import { type ModelID } from "../tables/model.sql";
+} from "../tables/model-image.table";
+import { type ModelID } from "../tables/model.table";
 
 export default class ModelImageRepository {
   async archiveModelImage(

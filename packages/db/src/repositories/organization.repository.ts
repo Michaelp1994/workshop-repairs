@@ -6,12 +6,12 @@ import { type DatabaseTransaction } from "..";
 import {
   type OrganizationInvitationInput,
   organizationInvitationTable,
-} from "../tables/organization-invitation.sql";
+} from "../tables/organization-invitation.table";
 import {
   type OrganizationID,
   type OrganizationInput,
   organizationTable,
-} from "../tables/organization.sql";
+} from "../tables/organization.table";
 
 export default class OrganizationRepository {
   async createInvitation(

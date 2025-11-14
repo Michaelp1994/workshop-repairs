@@ -2,8 +2,8 @@ import { integer, pgTable, unique } from "drizzle-orm/pg-core";
 
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { groupTable } from "./group.sql";
-import { roleTable } from "./role.sql";
+import { groupTable } from "./group.table";
+import { roleTable } from "./role.table";
 
 export const groupRoleTable = pgTable(
   "group_role",

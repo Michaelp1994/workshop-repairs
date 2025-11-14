@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -17,7 +17,7 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/locations.mapper";
-import { type LocationInput, locationTable } from "../tables/location.sql";
+import { type LocationInput, locationTable } from "../tables/location.table";
 
 const locationFields = getTableColumns(locationTable);
 export default class LocationRepository {

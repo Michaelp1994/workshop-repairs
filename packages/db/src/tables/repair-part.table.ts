@@ -4,8 +4,8 @@ import { boolean, integer, pgTable } from "drizzle-orm/pg-core";
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { partTable } from "./part.sql";
-import { repairTable } from "./repair.sql";
+import { partTable } from "./part.table";
+import { repairTable } from "./repair.table";
 
 export const repairPartTable = pgTable(
   "repair_part",

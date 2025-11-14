@@ -2,10 +2,10 @@ import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { organizationTable } from "./organization.sql";
+import { organizationTable } from "./organization.table";
 
-export const roleTable = pgTable(
-  "role",
+export const groupTable = pgTable(
+  "group",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     organizationId: integer()
@@ -16,5 +16,5 @@ export const roleTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.organizationId, t.name), ...auditConstraints(t)],
+  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
 );

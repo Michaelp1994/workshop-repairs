@@ -7,7 +7,7 @@ import type {
 import { type Database } from "@repo/db";
 import RepairPartRepository from "@repo/db/repositories/repairPart.repository";
 
-import type { RepairPartInput } from "../../../db/src/tables/repair-part.sql";
+import type { RepairPartInput } from "../../../db/src/tables/repair-part.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import {

@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -20,7 +20,7 @@ import {
   type EquipmentTypeID,
   type EquipmentTypeInput,
   equipmentTypeTable,
-} from "../tables/equipment-type.sql";
+} from "../tables/equipment-type.table";
 
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 

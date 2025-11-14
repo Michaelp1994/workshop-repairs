@@ -8,7 +8,7 @@ import { type Database, db } from "@repo/db";
 import ManufacturerRepository from "@repo/db/repositories/manufacturer.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
-import type { ManufacturerInput } from "../../../db/src/tables/manufacturer.sql";
+import type { ManufacturerInput } from "../../../db/src/tables/manufacturer.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import assertDatabaseResult from "../helpers/assertDatabaseResult";

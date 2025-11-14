@@ -2,16 +2,16 @@ import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
-import { assetTable } from "./asset.sql";
+import { assetTable } from "./asset.table";
 import auditConstraints from "./audit-constraints.helpers";
-import { clientTable } from "./client.sql";
+import { clientTable } from "./client.table";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { organizationTable } from "./organization.sql";
-import { repairCommentTable } from "./repair-comment.sql";
-import { repairImageTable } from "./repair-image.sql";
-import { repairPartTable } from "./repair-part.sql";
-import { repairStatusTypeTable } from "./repair-status-type.sql";
-import { repairTypeTable } from "./repair-type.sql";
+import { organizationTable } from "./organization.table";
+import { repairCommentTable } from "./repair-comment.table";
+import { repairImageTable } from "./repair-image.table";
+import { repairPartTable } from "./repair-part.table";
+import { repairStatusTypeTable } from "./repair-status-type.table";
+import { repairTypeTable } from "./repair-type.table";
 
 export const repairTable = pgTable(
   "repair",

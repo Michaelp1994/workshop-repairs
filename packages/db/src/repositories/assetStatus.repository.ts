@@ -14,7 +14,7 @@ import {
   type AssetStatusID,
   type AssetStatusInput,
   assetStatusTable,
-} from "../tables/asset-status.sql";
+} from "../tables/asset-status.table";
 
 export default class AssetStatusRepository {
   async archiveAssetStatus(

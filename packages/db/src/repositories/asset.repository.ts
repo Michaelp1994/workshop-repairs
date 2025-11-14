@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -18,14 +18,14 @@ import {
   createGlobalFilters,
   createSortOrder,
 } from "../mappings/assets.mapper";
-import { assetStatusTable } from "../tables/asset-status.sql";
-import { type AssetInput, assetTable } from "../tables/asset.sql";
-import { clientTable } from "../tables/client.sql";
-import { equipmentTypeTable } from "../tables/equipment-type.sql";
-import { locationTable } from "../tables/location.sql";
-import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelImageTable } from "../tables/model-image.sql";
-import { modelTable } from "../tables/model.sql";
+import { assetStatusTable } from "../tables/asset-status.table";
+import { type AssetInput, assetTable } from "../tables/asset.table";
+import { clientTable } from "../tables/client.table";
+import { equipmentTypeTable } from "../tables/equipment-type.table";
+import { locationTable } from "../tables/location.table";
+import { manufacturerTable } from "../tables/manufacturer.table";
+import { modelImageTable } from "../tables/model-image.table";
+import { modelTable } from "../tables/model.table";
 
 const assetFields = getTableColumns(assetTable);
 

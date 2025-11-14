@@ -2,21 +2,21 @@ import { integer, pgTable, unique } from "drizzle-orm/pg-core";
 
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { roleTable } from "./role.sql";
-import { userTable } from "./user.sql";
+import { permissionTable } from "./permission.table";
+import { roleTable } from "./role.table";
 
-export const userRoleTable = pgTable(
-  "user_role",
+export const rolePermissionTable = pgTable(
+  "role_permission",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    userId: integer()
-      .notNull()
-      .references(() => userTable.id),
     roleId: integer()
       .notNull()
       .references(() => roleTable.id),
+    permissionId: integer()
+      .notNull()
+      .references(() => permissionTable.id),
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.userId, t.roleId), ...auditConstraints(t)],
+  (t) => [unique().on(t.roleId, t.permissionId), ...auditConstraints(t)],
 );

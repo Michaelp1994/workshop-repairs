@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -16,8 +16,8 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/users.mapper";
-import { userTypeTable } from "../tables/user-type.sql";
-import { type UserID, type UserInput, userTable } from "../tables/user.sql";
+import { userTypeTable } from "../tables/user-type.table";
+import { type UserID, type UserInput, userTable } from "../tables/user.table";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);

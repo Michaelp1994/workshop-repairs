@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -17,7 +17,7 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/parts.mapper";
-import { type PartInput, partTable } from "../tables/part.sql";
+import { type PartInput, partTable } from "../tables/part.table";
 
 const partFields = getTableColumns(partTable);
 export default class PartRepository {

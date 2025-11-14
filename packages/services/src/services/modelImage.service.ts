@@ -9,7 +9,7 @@ import ModelRepository from "@repo/db/repositories/model.repository";
 import ModelImageRepository from "@repo/db/repositories/modelImage.repository";
 import { randomUUID } from "crypto";
 
-import type { ModelImageInput } from "../../../db/src/tables/model-image.sql";
+import type { ModelImageInput } from "../../../db/src/tables/model-image.table";
 import type { UpdateInput } from "../types";
 
 import assertDatabaseResult from "../helpers/assertDatabaseResult";

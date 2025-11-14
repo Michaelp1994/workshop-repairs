@@ -8,7 +8,7 @@ import { type Database } from "@repo/db";
 import ClientRepository from "@repo/db/repositories/client.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
-import type { ClientInput } from "../../../db/src/tables/client.sql";
+import type { ClientInput } from "../../../db/src/tables/client.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import assertDatabaseResult from "../helpers/assertDatabaseResult";

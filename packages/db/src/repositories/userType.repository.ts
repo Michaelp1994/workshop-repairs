@@ -14,7 +14,7 @@ import {
   type UserTypeID,
   type UserTypeInput,
   userTypeTable,
-} from "../tables/user-type.sql";
+} from "../tables/user-type.table";
 
 export default class UserTypeRepository {
   async archiveUserType(

@@ -14,12 +14,12 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/partsToModels.mapper";
-import { type ModelID, modelTable } from "../tables/model.sql";
+import { type ModelID, modelTable } from "../tables/model.table";
 import {
   type PartToModelInput,
   partToModelTable,
-} from "../tables/part-to-model.sql";
-import { type PartID, partTable } from "../tables/part.sql";
+} from "../tables/part-to-model.table";
+import { type PartID, partTable } from "../tables/part.table";
 
 const partToModelsFields = getTableColumns(partToModelTable);
 

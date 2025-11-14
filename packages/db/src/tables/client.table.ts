@@ -3,11 +3,11 @@ import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import type { InferModel } from "../types";
 
-import { assetTable } from "./asset.sql";
+import { assetTable } from "./asset.table";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { organizationTable } from "./organization.sql";
-import { repairTable } from "./repair.sql";
+import { organizationTable } from "./organization.table";
+import { repairTable } from "./repair.table";
 
 export const clientTable = pgTable(
   "client",

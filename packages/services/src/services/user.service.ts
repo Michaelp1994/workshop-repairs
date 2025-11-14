@@ -8,7 +8,7 @@ import { type Database } from "@repo/db";
 import EmailVerificationRequestRepository from "@repo/db/repositories/emailVerificationRequest.repository";
 import UserRepository from "@repo/db/repositories/user.repository";
 
-import type { UserInput } from "../../../db/src/tables/user.sql";
+import type { UserInput } from "../../../db/src/tables/user.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import assertDatabaseResult from "../helpers/assertDatabaseResult";

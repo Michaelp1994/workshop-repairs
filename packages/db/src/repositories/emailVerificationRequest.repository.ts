@@ -7,7 +7,7 @@ import {
   type EmailVerificationRequestID,
   type EmailVerificationRequestInput,
   emailVerificationRequestTable,
-} from "../tables/email-verification-request.sql";
+} from "../tables/email-verification-request.table";
 
 export default class EmailVerificationRequestRepository {
   async createEmailVerificationRequest(

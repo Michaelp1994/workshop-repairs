@@ -1,10 +1,10 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { assetTable } from "../tables/asset.sql";
-import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
-import { repairTypeTable } from "../tables/repair-type.sql";
-import { repairTable } from "../tables/repair.sql";
+import { assetTable } from "../tables/asset.table";
+import { repairStatusTypeTable } from "../tables/repair-status-type.table";
+import { repairTypeTable } from "../tables/repair-type.table";
+import { repairTable } from "../tables/repair.table";
 
 const orderMapping = {
   id: repairTable.id,

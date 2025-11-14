@@ -3,7 +3,7 @@ import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { organizationTable } from "./organization.sql";
+import { organizationTable } from "./organization.table";
 
 export const organizationSequenceTable = pgTable("organization_sequence", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

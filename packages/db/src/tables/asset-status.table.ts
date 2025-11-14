@@ -2,7 +2,7 @@ import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
-import { assetTable } from "./asset.sql";
+import { assetTable } from "./asset.table";
 import auditConstraints from "./audit-constraints.helpers";
 import { laxAuditing, timestamps } from "./columns.helpers";
 

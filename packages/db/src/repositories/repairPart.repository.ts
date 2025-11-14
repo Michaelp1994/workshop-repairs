@@ -15,14 +15,14 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/repairParts.mapper";
-import { assetTable } from "../tables/asset.sql";
-import { partTable } from "../tables/part.sql";
+import { assetTable } from "../tables/asset.table";
+import { partTable } from "../tables/part.table";
 import {
   type RepairPartID,
   type RepairPartInput,
   repairPartTable,
-} from "../tables/repair-part.sql";
-import { repairTable } from "../tables/repair.sql";
+} from "../tables/repair-part.table";
+import { repairTable } from "../tables/repair.table";
 
 const repairPartFields = getTableColumns(repairPartTable);
 

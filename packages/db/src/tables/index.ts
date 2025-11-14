@@ -1,54 +1,54 @@
-import { assetStatusRelations, assetStatusTable } from "./asset-status.sql";
-import { assetRelations, assetTable } from "./asset.sql";
-import { clientRelations, clientTable } from "./client.sql";
+import { assetStatusRelations, assetStatusTable } from "./asset-status.table";
+import { assetRelations, assetTable } from "./asset.table";
+import { clientRelations, clientTable } from "./client.table";
 import {
   emailVerificationRequestRelations,
   emailVerificationRequestTable,
-} from "./email-verification-request.sql";
+} from "./email-verification-request.table";
 import {
   equipmentTypeRelations,
   equipmentTypeTable,
-} from "./equipment-type.sql";
-import { groupRoleTable } from "./group-role.sql";
-import { groupTable } from "./group.sql";
-import { locationRelations, locationTable } from "./location.sql";
-import { manufacturerRelations, manufacturerTable } from "./manufacturer.sql";
-import { modelImageRelations, modelImageTable } from "./model-image.sql";
-import { modelRelations, modelTable } from "./model.sql";
+} from "./equipment-type.table";
+import { groupRoleTable } from "./group-role.table";
+import { groupTable } from "./group.table";
+import { locationRelations, locationTable } from "./location.table";
+import { manufacturerRelations, manufacturerTable } from "./manufacturer.table";
+import { modelImageRelations, modelImageTable } from "./model-image.table";
+import { modelRelations, modelTable } from "./model.table";
 import {
   organizationInvitationRelations,
   organizationInvitationTable,
-} from "./organization-invitation.sql";
+} from "./organization-invitation.table";
 import {
   organizationSequenceRelations,
   organizationSequenceTable,
-} from "./organization-sequences.sql";
-import { organizationRelations, organizationTable } from "./organization.sql";
-import { partToModelRelations, partToModelTable } from "./part-to-model.sql";
-import { partRelations, partTable } from "./part.sql";
-import { permissionTable } from "./permission.sql";
+} from "./organization-sequences.table";
+import { organizationRelations, organizationTable } from "./organization.table";
+import { partToModelRelations, partToModelTable } from "./part-to-model.table";
+import { partRelations, partTable } from "./part.table";
+import { permissionTable } from "./permission.table";
 import {
   repairCommentRelations,
   repairCommentTable,
-} from "./repair-comment.sql";
-import { repairImageRelations, repairImageTable } from "./repair-image.sql";
-import { repairPartRelations, repairPartTable } from "./repair-part.sql";
+} from "./repair-comment.table";
+import { repairImageRelations, repairImageTable } from "./repair-image.table";
+import { repairPartRelations, repairPartTable } from "./repair-part.table";
 import {
   repairStatusTypeRelations,
   repairStatusTypeTable,
-} from "./repair-status-type.sql";
-import { repairTypeRelations, repairTypeTable } from "./repair-type.sql";
-import { repairRelations, repairTable } from "./repair.sql";
-import { rolePermissionTable } from "./role-permission.sql";
-import { roleTable } from "./role.sql";
-import { userGroupTable } from "./user-group.sql";
+} from "./repair-status-type.table";
+import { repairTypeRelations, repairTypeTable } from "./repair-type.table";
+import { repairRelations, repairTable } from "./repair.table";
+import { rolePermissionTable } from "./role-permission.table";
+import { roleTable } from "./role.table";
+import { userGroupTable } from "./user-group.table";
 import {
   userOnboardingRelations,
   userOnboardingTable,
-} from "./user-onboarding.sql";
-import { userRoleTable } from "./user-role.sql";
-import { userTypeRelations, userTypeTable } from "./user-type.sql";
-import { userRelations, userTable } from "./user.sql";
+} from "./user-onboarding.table";
+import { userRoleTable } from "./user-role.table";
+import { userTypeRelations, userTypeTable } from "./user-type.table";
+import { userRelations, userTable } from "./user.table";
 
 export const schema = {
   assetStatusTable,

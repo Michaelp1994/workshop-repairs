@@ -9,7 +9,7 @@ import {
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { modelTable } from "./model.sql";
+import { modelTable } from "./model.table";
 
 export const modelImageTable = pgTable(
   "model_image",

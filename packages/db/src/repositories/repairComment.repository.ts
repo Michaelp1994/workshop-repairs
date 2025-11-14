@@ -13,9 +13,9 @@ import {
   type RepairCommentID,
   type RepairCommentInput,
   repairCommentTable,
-} from "../tables/repair-comment.sql";
-import { type RepairID } from "../tables/repair.sql";
-import { userTable } from "../tables/user.sql";
+} from "../tables/repair-comment.table";
+import { type RepairID } from "../tables/repair.table";
+import { userTable } from "../tables/user.table";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 

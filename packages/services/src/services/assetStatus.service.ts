@@ -8,7 +8,7 @@ import type { CountAssetStatusesInput } from "@repo/validators/server/assetStatu
 import { type Database } from "@repo/db";
 import AssetStatusRepository from "@repo/db/repositories/assetStatus.repository";
 
-import type { AssetStatusInput } from "../../../db/src/tables/asset-status.sql";
+import type { AssetStatusInput } from "../../../db/src/tables/asset-status.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import {

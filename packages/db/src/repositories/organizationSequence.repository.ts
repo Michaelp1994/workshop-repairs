@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import { type DatabaseTransaction } from "..";
@@ -8,7 +8,7 @@ import {
   type OrganizationSequenceID,
   type OrganizationSequenceInput,
   organizationSequenceTable,
-} from "../tables/organization-sequences.sql";
+} from "../tables/organization-sequences.table";
 
 export default class OrganizationSequenceRepository {
   async createOrganizationSequence(

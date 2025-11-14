@@ -4,7 +4,7 @@ import { boolean, integer, pgTable, unique } from "drizzle-orm/pg-core";
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { userTable } from "./user.sql";
+import { userTable } from "./user.table";
 
 export const userOnboardingTable = pgTable(
   "user_onboarding",

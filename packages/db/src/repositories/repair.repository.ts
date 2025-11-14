@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -17,15 +17,15 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/repairs.mapper";
-import { assetTable } from "../tables/asset.sql";
-import { clientTable } from "../tables/client.sql";
-import { locationTable } from "../tables/location.sql";
-import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelImageTable } from "../tables/model-image.sql";
-import { modelTable } from "../tables/model.sql";
-import { repairStatusTypeTable } from "../tables/repair-status-type.sql";
-import { repairTypeTable } from "../tables/repair-type.sql";
-import { type RepairInput, repairTable } from "../tables/repair.sql";
+import { assetTable } from "../tables/asset.table";
+import { clientTable } from "../tables/client.table";
+import { locationTable } from "../tables/location.table";
+import { manufacturerTable } from "../tables/manufacturer.table";
+import { modelImageTable } from "../tables/model-image.table";
+import { modelTable } from "../tables/model.table";
+import { repairStatusTypeTable } from "../tables/repair-status-type.table";
+import { repairTypeTable } from "../tables/repair-type.table";
+import { type RepairInput, repairTable } from "../tables/repair.table";
 
 const repairFields = getTableColumns(repairTable);
 

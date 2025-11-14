@@ -1,6 +1,6 @@
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -17,7 +17,7 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/clients.mapper";
-import { type ClientInput, clientTable } from "../tables/client.sql";
+import { type ClientInput, clientTable } from "../tables/client.table";
 
 const clientFields = getTableColumns(clientTable);
 export default class ClientRepository {

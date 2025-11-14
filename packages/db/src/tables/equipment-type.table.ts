@@ -1,18 +1,19 @@
 import { type InferInsertModel, relations } from "drizzle-orm";
-import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { modelTable } from "./model.sql";
-import { organizationTable } from "./organization.sql";
+import { modelTable } from "./model.table";
+import { organizationTable } from "./organization.table";
 
-export const manufacturerTable = pgTable(
-  "manufacturer",
+export const equipmentTypeTable = pgTable(
+  "equipment_type",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     localId: integer().notNull(),
-    name: varchar().notNull(),
+    name: text().notNull(),
+    imageUrl: text(),
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
@@ -26,17 +27,17 @@ export const manufacturerTable = pgTable(
   ],
 );
 
-export const manufacturerRelations = relations(
-  manufacturerTable,
+export const equipmentTypeRelations = relations(
+  equipmentTypeTable,
   ({ one, many }) => ({
+    models: many(modelTable),
     organization: one(organizationTable, {
-      fields: [manufacturerTable.organizationId],
+      fields: [equipmentTypeTable.organizationId],
       references: [organizationTable.id],
     }),
-    models: many(modelTable),
   }),
 );
 
-export type Manufacturer = InferModel<typeof manufacturerTable>;
-export type ManufacturerID = Manufacturer["id"];
-export type ManufacturerInput = InferInsertModel<typeof manufacturerTable>;
+export type EquipmentType = InferModel<typeof equipmentTypeTable>;
+export type EquipmentTypeID = EquipmentType["id"];
+export type EquipmentTypeInput = InferInsertModel<typeof equipmentTypeTable>;

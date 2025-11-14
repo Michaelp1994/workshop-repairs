@@ -1,6 +1,6 @@
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import type { RepairID } from "../tables/repair.sql";
+import type { RepairID } from "../tables/repair.table";
 import type {
   ArchiveInput,
   CountInput,
@@ -14,7 +14,7 @@ import {
   type RepairImageID,
   type RepairImageInput,
   repairImageTable,
-} from "../tables/repair-image.sql";
+} from "../tables/repair-image.table";
 
 export default class RepairImageRepository {
   async archiveRepairImage(

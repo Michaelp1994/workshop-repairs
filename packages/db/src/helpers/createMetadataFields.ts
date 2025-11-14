@@ -1,6 +1,6 @@
 import { alias } from "drizzle-orm/pg-core";
 
-import { userTable } from "../tables/user.sql";
+import { userTable } from "../tables/user.table";
 
 export default function createMetadataFields() {
   const createdByTable = alias(userTable, "createdBy");
