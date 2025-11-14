@@ -13,7 +13,7 @@ import {
   type RepairCommentID,
   type RepairCommentInput,
   repairCommentTable,
-} from "../tables/repair-comment.table";
+} from "../tables/repairComment.table";
 import { type RepairID } from "../tables/repair.table";
 import { userTable } from "../tables/user.table";
 

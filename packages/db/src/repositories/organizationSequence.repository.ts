@@ -8,7 +8,7 @@ import {
   type OrganizationSequenceID,
   type OrganizationSequenceInput,
   organizationSequenceTable,
-} from "../tables/organization-sequences.table";
+} from "../tables/organizationSequences.table";
 
 export default class OrganizationSequenceRepository {
   async createOrganizationSequence(

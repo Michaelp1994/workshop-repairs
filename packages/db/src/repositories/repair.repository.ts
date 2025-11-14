@@ -21,10 +21,10 @@ import { assetTable } from "../tables/asset.table";
 import { clientTable } from "../tables/client.table";
 import { locationTable } from "../tables/location.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
-import { modelImageTable } from "../tables/model-image.table";
+import { modelImageTable } from "../tables/modelImage.table";
 import { modelTable } from "../tables/model.table";
-import { repairStatusTypeTable } from "../tables/repair-status-type.table";
-import { repairTypeTable } from "../tables/repair-type.table";
+import { repairStatusTypeTable } from "../tables/repairStatusType.table";
+import { repairTypeTable } from "../tables/repairType.table";
 import { type RepairInput, repairTable } from "../tables/repair.table";
 
 const repairFields = getTableColumns(repairTable);

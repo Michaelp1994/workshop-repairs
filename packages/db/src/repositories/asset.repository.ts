@@ -18,14 +18,14 @@ import {
   createGlobalFilters,
   createSortOrder,
 } from "../mappings/assets.mapper";
-import { assetStatusTable } from "../tables/asset-status.table";
 import { type AssetInput, assetTable } from "../tables/asset.table";
+import { assetStatusTable } from "../tables/assetStatus.table";
 import { clientTable } from "../tables/client.table";
-import { equipmentTypeTable } from "../tables/equipment-type.table";
+import { equipmentTypeTable } from "../tables/equipmentType.table";
 import { locationTable } from "../tables/location.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
-import { modelImageTable } from "../tables/model-image.table";
 import { modelTable } from "../tables/model.table";
+import { modelImageTable } from "../tables/modelImage.table";
 
 const assetFields = getTableColumns(assetTable);
 

@@ -1,8 +1,8 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { assetStatusTable } from "../tables/asset-status.table";
 import { assetTable } from "../tables/asset.table";
+import { assetStatusTable } from "../tables/assetStatus.table";
 import { locationTable } from "../tables/location.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
 import { modelTable } from "../tables/model.table";

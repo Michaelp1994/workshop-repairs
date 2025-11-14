@@ -17,9 +17,9 @@ import {
   createGlobalFilters,
   createSortOrder,
 } from "../mappings/model.mapper";
-import { equipmentTypeTable } from "../tables/equipment-type.table";
+import { equipmentTypeTable } from "../tables/equipmentType.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
-import { modelImageTable } from "../tables/model-image.table";
+import { modelImageTable } from "../tables/modelImage.table";
 import { type ModelInput, modelTable } from "../tables/model.table";
 
 const modelFields = getTableColumns(modelTable);

@@ -8,7 +8,7 @@ import type {
 import { type Database } from "@repo/db";
 import UserTypeRepository from "@repo/db/repositories/userType.repository";
 
-import type { UserTypeInput } from "../../../db/src/tables/user-type.table";
+import type { UserTypeInput } from "../../../db/src/tables/userType.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import {

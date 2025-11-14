@@ -8,7 +8,7 @@ import { type Database } from "@repo/db";
 import RepairImageRepository from "@repo/db/repositories/repairImage.repository";
 import { randomUUID } from "crypto";
 
-import type { RepairImageInput } from "../../../db/src/tables/repair-image.table";
+import type { RepairImageInput } from "../../../db/src/tables/repairImage.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import {

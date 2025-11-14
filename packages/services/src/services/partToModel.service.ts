@@ -10,7 +10,7 @@ import type {
 import { type Database } from "@repo/db";
 import PartToModelRepository from "@repo/db/repositories/partToModel.repository";
 
-import type { PartToModelInput } from "../../../db/src/tables/part-to-model.table";
+import type { PartToModelInput } from "../../../db/src/tables/partToModel.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import {

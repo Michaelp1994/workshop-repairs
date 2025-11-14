@@ -3,7 +3,7 @@ import type { OrganizationSequenceID } from "@repo/validators/ids.validators";
 import { type Database } from "@repo/db";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
-import type { OrganizationSequenceInput } from "../../../db/src/tables/organization-sequences.table";
+import type { OrganizationSequenceInput } from "../../../db/src/tables/organizationSequences.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 export default class OrganizationSequenceService {

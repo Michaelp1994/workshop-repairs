@@ -7,11 +7,11 @@ import auditConstraints from "./audit-constraints.helpers";
 import { clientTable } from "./client.table";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.table";
-import { repairCommentTable } from "./repair-comment.table";
-import { repairImageTable } from "./repair-image.table";
-import { repairPartTable } from "./repair-part.table";
-import { repairStatusTypeTable } from "./repair-status-type.table";
-import { repairTypeTable } from "./repair-type.table";
+import { repairCommentTable } from "./repairComment.table";
+import { repairImageTable } from "./repairImage.table";
+import { repairPartTable } from "./repairPart.table";
+import { repairStatusTypeTable } from "./repairStatusType.table";
+import { repairTypeTable } from "./repairType.table";
 
 export const repairTable = pgTable(
   "repair",

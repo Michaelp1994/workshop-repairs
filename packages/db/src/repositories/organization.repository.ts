@@ -6,7 +6,7 @@ import { type DatabaseTransaction } from "..";
 import {
   type OrganizationInvitationInput,
   organizationInvitationTable,
-} from "../tables/organization-invitation.table";
+} from "../tables/organizationInvitation.table";
 import {
   type OrganizationID,
   type OrganizationInput,

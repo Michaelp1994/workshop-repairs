@@ -21,7 +21,7 @@ import {
   type RepairPartID,
   type RepairPartInput,
   repairPartTable,
-} from "../tables/repair-part.table";
+} from "../tables/repairPart.table";
 import { repairTable } from "../tables/repair.table";
 
 const repairPartFields = getTableColumns(repairPartTable);

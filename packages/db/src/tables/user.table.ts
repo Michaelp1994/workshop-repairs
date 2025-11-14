@@ -10,10 +10,10 @@ import {
 
 import { type InferModel } from "../types";
 import { laxAuditing, timestamps } from "./columns.helpers";
-import { emailVerificationRequestTable } from "./email-verification-request.table";
+import { emailVerificationRequestTable } from "./emailVerificationRequest.table";
 import { organizationTable } from "./organization.table";
-import { userOnboardingTable } from "./user-onboarding.table";
-import { userTypeTable } from "./user-type.table";
+import { userOnboardingTable } from "./userOnboarding.table";
+import { userTypeTable } from "./userType.table";
 
 export const userTable = pgTable(
   "user",

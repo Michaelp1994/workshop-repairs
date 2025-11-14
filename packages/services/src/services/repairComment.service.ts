@@ -10,7 +10,7 @@ import type {
 import { type Database } from "@repo/db";
 import RepairCommentRepository from "@repo/db/repositories/repairComment.repository";
 
-import type { RepairCommentInput } from "../../../db/src/tables/repair-comment.table";
+import type { RepairCommentInput } from "../../../db/src/tables/repairComment.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import {

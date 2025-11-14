@@ -10,9 +10,9 @@ import {
 import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
-import { equipmentTypeTable } from "./equipment-type.table";
+import { equipmentTypeTable } from "./equipmentType.table";
 import { manufacturerTable } from "./manufacturer.table";
-import { modelImageTable } from "./model-image.table";
+import { modelImageTable } from "./modelImage.table";
 import { organizationTable } from "./organization.table";
 
 export const modelTable = pgTable(

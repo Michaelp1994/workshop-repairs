@@ -18,7 +18,7 @@ import { type ModelID, modelTable } from "../tables/model.table";
 import {
   type PartToModelInput,
   partToModelTable,
-} from "../tables/part-to-model.table";
+} from "../tables/partToModel.table";
 import { type PartID, partTable } from "../tables/part.table";
 
 const partToModelsFields = getTableColumns(partToModelTable);

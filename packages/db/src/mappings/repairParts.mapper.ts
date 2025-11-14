@@ -2,7 +2,7 @@ import { createColumnFilterFunction } from "../helpers/createColumnFilterFunctio
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
 import { partTable } from "../tables/part.table";
-import { repairPartTable } from "../tables/repair-part.table";
+import { repairPartTable } from "../tables/repairPart.table";
 
 const orderMapping = {
   name: partTable.partNumber,

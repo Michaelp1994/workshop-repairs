@@ -20,7 +20,7 @@ import {
   type EquipmentTypeID,
   type EquipmentTypeInput,
   equipmentTypeTable,
-} from "../tables/equipment-type.table";
+} from "../tables/equipmentType.table";
 
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 

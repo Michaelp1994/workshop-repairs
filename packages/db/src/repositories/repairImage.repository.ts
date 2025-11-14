@@ -14,7 +14,7 @@ import {
   type RepairImageID,
   type RepairImageInput,
   repairImageTable,
-} from "../tables/repair-image.table";
+} from "../tables/repairImage.table";
 
 export default class RepairImageRepository {
   async archiveRepairImage(

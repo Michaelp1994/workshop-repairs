@@ -3,7 +3,7 @@ import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { type InferModel } from "../types";
 import { laxAuditing, timestamps } from "./columns.helpers";
-import { organizationInvitationTable } from "./organization-invitation.table";
+import { organizationInvitationTable } from "./organizationInvitation.table";
 import { userTable } from "./user.table";
 
 export const organizationTable = pgTable("organization", {

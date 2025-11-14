@@ -14,7 +14,7 @@ import {
   type RepairStatusTypeID,
   type RepairStatusTypeInput,
   repairStatusTypeTable,
-} from "../tables/repair-status-type.table";
+} from "../tables/repairStatusType.table";
 
 export default class RepairStatusTypeRepository {
   async archiveRepairStatus(

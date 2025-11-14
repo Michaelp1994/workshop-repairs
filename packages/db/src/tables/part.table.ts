@@ -5,7 +5,7 @@ import { type InferModel } from "../types";
 import auditConstraints from "./audit-constraints.helpers";
 import { strictAuditing, timestamps } from "./columns.helpers";
 import { organizationTable } from "./organization.table";
-import { partToModelTable } from "./part-to-model.table";
+import { partToModelTable } from "./partToModel.table";
 
 export const partTable = pgTable(
   "part",

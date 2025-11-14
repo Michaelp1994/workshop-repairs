@@ -13,7 +13,7 @@ import {
   type ModelImageID,
   type ModelImageInput,
   modelImageTable,
-} from "../tables/model-image.table";
+} from "../tables/modelImage.table";
 import { type ModelID } from "../tables/model.table";
 
 export default class ModelImageRepository {
