@@ -17,12 +17,12 @@ import {
 } from "../mappings/repairParts.mapper";
 import { assetTable } from "../tables/asset.table";
 import { partTable } from "../tables/part.table";
+import { repairTable } from "../tables/repair.table";
 import {
   type RepairPartID,
   type RepairPartInput,
   repairPartTable,
 } from "../tables/repairPart.table";
-import { repairTable } from "../tables/repair.table";
 
 const repairPartFields = getTableColumns(repairPartTable);
 

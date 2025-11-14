@@ -108,7 +108,7 @@ const DropdownMenuCheckboxItem = ({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) => (
   <DropdownMenuPrimitive.CheckboxItem
-    checked={checked as CheckedState}
+    checked={checked!}
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className,

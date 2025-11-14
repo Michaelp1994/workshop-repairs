@@ -9,12 +9,12 @@ import type {
 } from "../types";
 
 import { type DatabaseTransaction } from "../index";
+import { type ModelID } from "../tables/model.table";
 import {
   type ModelImageID,
   type ModelImageInput,
   modelImageTable,
 } from "../tables/modelImage.table";
-import { type ModelID } from "../tables/model.table";
 
 export default class ModelImageRepository {
   async archiveModelImage(

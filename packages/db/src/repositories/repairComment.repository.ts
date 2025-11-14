@@ -9,12 +9,12 @@ import type {
   UpdateInput,
 } from "../types";
 
+import { type RepairID } from "../tables/repair.table";
 import {
   type RepairCommentID,
   type RepairCommentInput,
   repairCommentTable,
 } from "../tables/repairComment.table";
-import { type RepairID } from "../tables/repair.table";
 import { userTable } from "../tables/user.table";
 
 const repairCommentFields = getTableColumns(repairCommentTable);

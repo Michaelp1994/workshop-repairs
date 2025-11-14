@@ -16,8 +16,8 @@ import {
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/users.mapper";
-import { userTypeTable } from "../tables/userType.table";
 import { type UserID, type UserInput, userTable } from "../tables/user.table";
+import { userTypeTable } from "../tables/userType.table";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);

@@ -270,5 +270,3 @@ export default class AssetRepository {
     return res;
   }
 }
-
-// export type AssetRepository = ReturnType<typeof assetRepository>;

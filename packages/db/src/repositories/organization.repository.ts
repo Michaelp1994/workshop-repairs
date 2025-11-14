@@ -4,14 +4,14 @@ import type { CreateInput } from "../types";
 
 import { type DatabaseTransaction } from "..";
 import {
-  type OrganizationInvitationInput,
-  organizationInvitationTable,
-} from "../tables/organizationInvitation.table";
-import {
   type OrganizationID,
   type OrganizationInput,
   organizationTable,
 } from "../tables/organization.table";
+import {
+  type OrganizationInvitationInput,
+  organizationInvitationTable,
+} from "../tables/organizationInvitation.table";
 
 export default class OrganizationRepository {
   async createInvitation(

@@ -19,8 +19,8 @@ import {
 } from "../mappings/model.mapper";
 import { equipmentTypeTable } from "../tables/equipmentType.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
-import { modelImageTable } from "../tables/modelImage.table";
 import { type ModelInput, modelTable } from "../tables/model.table";
+import { modelImageTable } from "../tables/modelImage.table";
 
 const modelFields = getTableColumns(modelTable);
 
