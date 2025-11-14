@@ -8,8 +8,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { type InferModel } from "../types";
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
+import { type InferModel } from "../types";
 import { emailVerificationRequestTable } from "./emailVerificationRequest.table";
 import { organizationTable } from "./organization.table";
 import { userOnboardingTable } from "./userOnboarding.table";

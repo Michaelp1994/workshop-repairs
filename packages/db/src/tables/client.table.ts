@@ -3,9 +3,9 @@ import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import type { InferModel } from "../types";
 
-import { assetTable } from "./asset.table";
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
+import { assetTable } from "./asset.table";
 import { organizationTable } from "./organization.table";
 import { repairTable } from "./repair.table";
 

@@ -1,8 +1,8 @@
 import { type InferInsertModel, relations } from "drizzle-orm";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
-import { type InferModel } from "../types";
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
+import { type InferModel } from "../types";
 import { userTable } from "./user.table";
 
 export const userTypeTable = pgTable("user_type", {
