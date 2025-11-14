@@ -32,12 +32,12 @@ export default class RepairImageService {
   async archiveRepairImage(id: RepairImageID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.repairImageRepository.archiveRepairImage(tx, metadata, id);
+      return this.repairImageRepository.archive(tx, metadata, id);
     });
   }
 
   async countRepairImages(input: CountRepairImagesInput) {
-    return this.repairImageRepository.countRepairImages(this.db, input);
+    return this.repairImageRepository.count(this.db, input);
   }
 
   async createRepairImage(
@@ -57,25 +57,22 @@ export default class RepairImageService {
         url: input.fileName,
         ...metadata,
       };
-      return this.repairImageRepository.createRepairImage(tx, values);
+      return this.repairImageRepository.create(tx, values);
     });
 
     return createdRepairImage;
   }
 
-  async getAllRepairImagesByRepairId(repairId: RepairID) {
-    return this.repairImageRepository.getAllRepairImagesByRepairId(
-      this.db,
-      repairId,
-    );
+  async getAllRepairImages(input: GetAllRepairImagesInput) {
+    return this.repairImageRepository.getAll(this.db, input);
   }
 
-  async getAllRepairImages(input: GetAllRepairImagesInput) {
-    return this.repairImageRepository.getAllRepairImages(this.db, input);
+  async getAllRepairImagesByRepairId(repairId: RepairID) {
+    return this.repairImageRepository.getAllByRepairId(this.db, repairId);
   }
 
   async getRepairImageById(id: RepairImageID) {
-    return this.repairImageRepository.getRepairImageById(this.db, id);
+    return this.repairImageRepository.getById(this.db, id);
   }
 
   async requestUploadRepairImage(input: {
@@ -102,7 +99,7 @@ export default class RepairImageService {
         ...input,
         ...metadata,
       };
-      return this.repairImageRepository.updateRepairImage(tx, values, id);
+      return this.repairImageRepository.update(tx, values, id);
     });
   }
 }

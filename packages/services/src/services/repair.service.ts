@@ -30,7 +30,7 @@ export default class RepairService {
   async archiveRepair(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedRepair = await this.repairRepository.archiveRepair(
+      const archivedRepair = await this.repairRepository.archive(
         tx,
         metadata,
         localId,
@@ -39,7 +39,7 @@ export default class RepairService {
       assertDatabaseResult(archivedRepair);
 
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -51,11 +51,7 @@ export default class RepairService {
   }
 
   async countRepairs(input: CountRepairsInput, session: OrganizationSession) {
-    return this.repairRepository.countRepairs(
-      this.db,
-      input,
-      session.organizationId,
-    );
+    return this.repairRepository.count(this.db, input, session.organizationId);
   }
 
   async createRepair(
@@ -77,7 +73,7 @@ export default class RepairService {
         ...metadata,
         localId: sequence.repairLastUsedValue,
       };
-      const repair = await this.repairRepository.createRepair(tx, values);
+      const repair = await this.repairRepository.create(tx, values);
       assertDatabaseResult(repair);
 
       const slug = createSlug(sequence.assetKeyPrefix, repair.localId);
@@ -91,12 +87,12 @@ export default class RepairService {
 
   async getAllRepairs(input: GetAllRepairsInput, session: OrganizationSession) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
         session.organizationId,
       );
     assertDatabaseResult(sequence);
-    const allRepairs = await this.repairRepository.getAllRepairs(
+    const allRepairs = await this.repairRepository.getAll(
       this.db,
       input,
       session.organizationId,
@@ -108,7 +104,7 @@ export default class RepairService {
   }
 
   async getRepair(localId: number, session: OrganizationSession) {
-    return this.repairRepository.getRepairByLocalId(
+    return this.repairRepository.getByLocalId(
       this.db,
       localId,
       session.organizationId,
@@ -119,7 +115,7 @@ export default class RepairService {
     input: GetRepairsSelectInput,
     session: OrganizationSession,
   ) {
-    return this.repairRepository.getRepairsSelect(
+    return this.repairRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
@@ -138,7 +134,7 @@ export default class RepairService {
         ...metadata,
       };
 
-      const repair = await this.repairRepository.updateRepair(
+      const repair = await this.repairRepository.update(
         tx,
         values,
         localId,
@@ -147,7 +143,7 @@ export default class RepairService {
       assertDatabaseResult(repair);
 
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

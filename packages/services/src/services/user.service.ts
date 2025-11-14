@@ -31,7 +31,7 @@ export default class UserService {
   async archiveUser(id: UserID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.userRepository.archiveUser(tx, metadata, id);
+      return this.userRepository.archive(tx, metadata, id);
     });
   }
 
@@ -42,10 +42,10 @@ export default class UserService {
     },
     session: AuthedSession,
   ) {
-    const user = await this.userRepository.getUserByEmail(this.db, input.email);
+    const user = await this.userRepository.getByEmail(this.db, input.email);
     assertDatabaseResult(user);
     const request =
-      await this.emailVerificationRequestRepository.getEmailVerificationRequest(
+      await this.emailVerificationRequestRepository.getByEmailAndCode(
         this.db,
         input.email,
         input.code,
@@ -58,8 +58,8 @@ export default class UserService {
         ...metadata,
         emailVerified: true,
       };
-      await this.userRepository.updateUser(tx, values, user.id);
-      await this.emailVerificationRequestRepository.deleteEmailConfirmationRequestById(
+      await this.userRepository.update(tx, values, user.id);
+      await this.emailVerificationRequestRepository.archive(
         this.db,
         request.id,
       );
@@ -69,11 +69,7 @@ export default class UserService {
   }
 
   async countUsers(input: CountUsersInput, session: OrganizationSession) {
-    return this.userRepository.countUsers(
-      this.db,
-      input,
-      session.organizationId,
-    );
+    return this.userRepository.count(this.db, input, session.organizationId);
   }
 
   async createUser(
@@ -86,24 +82,20 @@ export default class UserService {
         ...input,
         ...metadata,
       };
-      return this.userRepository.createUser(tx, values);
+      return this.userRepository.create(tx, values);
     });
   }
 
   async getAllUsers(input: GetAllUsersInput, session: OrganizationSession) {
-    return this.userRepository.getAllUsers(
-      this.db,
-      input,
-      session.organizationId,
-    );
+    return this.userRepository.getAll(this.db, input, session.organizationId);
   }
 
   async getCredentialsByUserId(id: UserID) {
-    return await this.userRepository.getCredentialsByUserId(this.db, id);
+    return await this.userRepository.getSimpleById(this.db, id);
   }
 
   async getUserById(id: UserID) {
-    return this.userRepository.getUserById(this.db, id);
+    return this.userRepository.getById(this.db, id);
   }
 
   async sendEmailConfirmation(
@@ -125,7 +117,7 @@ export default class UserService {
         ...input,
         ...metadata,
       };
-      return this.userRepository.updateUser(tx, values, id);
+      return this.userRepository.update(tx, values, id);
     });
   }
 }

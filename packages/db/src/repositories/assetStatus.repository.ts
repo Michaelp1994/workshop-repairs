@@ -17,7 +17,7 @@ import {
 } from "../tables/assetStatus.table";
 
 export default class AssetStatusRepository {
-  async archiveAssetStatus(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<AssetStatusInput>,
     assetStatusId: AssetStatusID,
@@ -31,7 +31,7 @@ export default class AssetStatusRepository {
     return res;
   }
 
-  async countAssetStatuses(tx: DatabaseTransaction, _input: CountInput) {
+  async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(assetStatusTable)
@@ -40,19 +40,13 @@ export default class AssetStatusRepository {
     return res?.count;
   }
 
-  async createAssetStatus(
-    tx: DatabaseTransaction,
-    input: CreateInput<AssetStatusInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<AssetStatusInput>) {
     const query = tx.insert(assetStatusTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllAssetStatuses(
-    tx: DatabaseTransaction,
-    { pagination }: GetAllInput,
-  ) {
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
       .select()
       .from(assetStatusTable)
@@ -63,19 +57,7 @@ export default class AssetStatusRepository {
     return await query.execute();
   }
 
-  async getAssetStatusById(tx: DatabaseTransaction, input: AssetStatusID) {
-    const query = tx
-      .select()
-      .from(assetStatusTable)
-      .where(eq(assetStatusTable.id, input));
-    const [res] = await query.execute();
-    return res;
-  }
-
-  async getAssetStatusSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-  ) {
+  async getAllSimple(tx: DatabaseTransaction, _input: GetAllSimpleInput) {
     const query = tx
       .select({
         value: assetStatusTable.id,
@@ -86,7 +68,16 @@ export default class AssetStatusRepository {
     return await query.execute();
   }
 
-  async updateAssetStatus(
+  async getById(tx: DatabaseTransaction, input: AssetStatusID) {
+    const query = tx
+      .select()
+      .from(assetStatusTable)
+      .where(eq(assetStatusTable.id, input));
+    const [res] = await query.execute();
+    return res;
+  }
+
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<AssetStatusInput>,
     assetStatusId: AssetStatusID,

@@ -16,12 +16,12 @@ export default class OrganizationService {
   ) {}
   async createOrganization(input: CreateInput<OrganizationInput>) {
     return await this.db.transaction(async (tx) => {
-      return this.organizationRepository.createOrganization(tx, input);
+      return this.organizationRepository.create(tx, input);
     });
   }
 
   async getOrganization(organizationId: OrganizationID) {
-    const organization = await this.organizationRepository.getOrganizationById(
+    const organization = await this.organizationRepository.getById(
       this.db,
       organizationId,
     );

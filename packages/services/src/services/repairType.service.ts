@@ -27,7 +27,7 @@ export default class RepairTypeService {
   async archiveRepairType(id: RepairTypeID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.repairTypeRepository.archiveRepairType(tx, metadata, id);
+      return this.repairTypeRepository.archive(tx, metadata, id);
     });
   }
 
@@ -35,7 +35,7 @@ export default class RepairTypeService {
     input: CountRepairTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairTypeRepository.countRepairTypes(this.db, input);
+    return this.repairTypeRepository.count(this.db, input);
   }
 
   async createRepairType(
@@ -48,7 +48,7 @@ export default class RepairTypeService {
         ...input,
         ...metadata,
       };
-      return this.repairTypeRepository.createRepairType(tx, values);
+      return this.repairTypeRepository.create(tx, values);
     });
   }
 
@@ -56,18 +56,18 @@ export default class RepairTypeService {
     input: GetAllRepairTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairTypeRepository.getAllRepairTypes(this.db, input);
+    return this.repairTypeRepository.getAll(this.db, input);
   }
 
   async getRepairTypeById(id: RepairTypeID, _session: OrganizationSession) {
-    return this.repairTypeRepository.getRepairTypeById(this.db, id);
+    return this.repairTypeRepository.getById(this.db, id);
   }
 
   async getRepairTypesSelect(
     input: GetRepairTypesSelectInput,
     _session: OrganizationSession,
   ) {
-    return this.repairTypeRepository.getRepairTypesSelect(this.db, input);
+    return this.repairTypeRepository.getAllSimple(this.db, input);
   }
 
   async updateRepairType(
@@ -81,7 +81,7 @@ export default class RepairTypeService {
         ...input,
         ...metadata,
       };
-      return this.repairTypeRepository.updateRepairType(tx, values, id);
+      return this.repairTypeRepository.update(tx, values, id);
     });
   }
 }

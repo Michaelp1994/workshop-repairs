@@ -43,7 +43,7 @@ interface AssetFilters {
 }
 
 export default class AssetRepository {
-  async archiveAsset(
+  async archive(
     tx: DatabaseTransaction,
     values: ArchiveInput<AssetInput>,
     { localId, organizationId }: AssetSelector,
@@ -61,7 +61,7 @@ export default class AssetRepository {
     const [res] = await query.execute();
     return res;
   }
-  async countAssets(
+  async count(
     tx: DatabaseTransaction,
     { columnFilters, filters, globalFilter }: CountInput<AssetFilters>,
     organizationId: OrganizationID,
@@ -106,13 +106,13 @@ export default class AssetRepository {
     return res?.count;
   }
 
-  async createAsset(tx: DatabaseTransaction, input: CreateInput<AssetInput>) {
+  async create(tx: DatabaseTransaction, input: CreateInput<AssetInput>) {
     const query = tx.insert(assetTable).values(input).returning();
     const [asset] = await query.execute();
     return asset;
   }
 
-  async getAllAssets(
+  async getAll(
     tx: DatabaseTransaction,
     {
       filters,
@@ -182,7 +182,30 @@ export default class AssetRepository {
     return res;
   }
 
-  async getAsset(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput<AssetFilters>,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: assetTable.id,
+        label: assetTable.serialNumber,
+      })
+      .from(assetTable)
+      .where(
+        and(
+          eq(assetTable.organizationId, organizationId),
+          isNull(assetTable.deletedAt),
+        ),
+      )
+      .orderBy(assetTable.id);
+
+    const res = await query.execute();
+    return res;
+  }
+
+  async getById(
     tx: DatabaseTransaction,
     { localId, organizationId }: AssetSelector,
   ) {
@@ -228,30 +251,7 @@ export default class AssetRepository {
     return res;
   }
 
-  async getAssetsSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput<AssetFilters>,
-    organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: assetTable.id,
-        label: assetTable.serialNumber,
-      })
-      .from(assetTable)
-      .where(
-        and(
-          eq(assetTable.organizationId, organizationId),
-          isNull(assetTable.deletedAt),
-        ),
-      )
-      .orderBy(assetTable.id);
-
-    const res = await query.execute();
-    return res;
-  }
-
-  async updateAsset(
+  async update(
     tx: DatabaseTransaction,
     values: UpdateInput<AssetInput>,
     { localId, organizationId }: AssetSelector,

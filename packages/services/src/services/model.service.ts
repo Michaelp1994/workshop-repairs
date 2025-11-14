@@ -30,7 +30,7 @@ export default class ModelService {
   async archiveModel(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedModel = await this.modelRepository.archiveModel(
+      const archivedModel = await this.modelRepository.archive(
         tx,
         metadata,
         localId,
@@ -39,7 +39,7 @@ export default class ModelService {
       assertDatabaseResult(archivedModel);
 
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -51,11 +51,7 @@ export default class ModelService {
   }
 
   async countModels(input: CountModelsInput, session: OrganizationSession) {
-    return this.modelRepository.countModels(
-      this.db,
-      input,
-      session.organizationId,
-    );
+    return this.modelRepository.count(this.db, input, session.organizationId);
   }
 
   async createModel(
@@ -77,7 +73,7 @@ export default class ModelService {
         ...metadata,
         localId: sequence.modelLastUsedValue,
       };
-      const model = await this.modelRepository.createModel(tx, values);
+      const model = await this.modelRepository.create(tx, values);
       assertDatabaseResult(model);
 
       const slug = createSlug(sequence.modelKeyPrefix, model.localId);
@@ -91,12 +87,12 @@ export default class ModelService {
 
   async getAllModels(input: GetAllModelsInput, session: OrganizationSession) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
         session.organizationId,
       );
     assertDatabaseResult(sequence);
-    const allModels = await this.modelRepository.getAllModels(
+    const allModels = await this.modelRepository.getAll(
       this.db,
       input,
       session.organizationId,
@@ -111,7 +107,7 @@ export default class ModelService {
   }
 
   async getModel(localId: number, session: OrganizationSession) {
-    return this.modelRepository.getModelByLocalId(
+    return this.modelRepository.getByLocalId(
       this.db,
       localId,
       session.organizationId,
@@ -122,7 +118,7 @@ export default class ModelService {
     input: GetModelsSelectInput,
     session: OrganizationSession,
   ) {
-    return this.modelRepository.getModelsSelect(
+    return this.modelRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
@@ -141,7 +137,7 @@ export default class ModelService {
         ...metadata,
       };
 
-      const model = await this.modelRepository.updateModel(
+      const model = await this.modelRepository.update(
         tx,
         values,
         localId,
@@ -150,7 +146,7 @@ export default class ModelService {
       assertDatabaseResult(model);
 
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

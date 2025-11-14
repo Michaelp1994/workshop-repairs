@@ -31,7 +31,7 @@ export default class PartToModelService {
     modelId: ModelID;
   }) {
     return await this.db.transaction(async (tx) => {
-      return this.partToModelRepository.archivePartToModel(tx, {
+      return this.partToModelRepository.archive(tx, {
         partId,
         modelId,
       });
@@ -56,7 +56,7 @@ export default class PartToModelService {
         ...input,
         ...metadata,
       };
-      return this.partToModelRepository.createPartToModel(tx, values);
+      return this.partToModelRepository.create(tx, values);
     });
   }
 
@@ -85,7 +85,7 @@ export default class PartToModelService {
   }
 
   async getPartToModelById(partId: PartID, modelId: ModelID) {
-    return this.partToModelRepository.getPartToModelById(this.db, {
+    return this.partToModelRepository.getById(this.db, {
       partId,
       modelId,
     });
@@ -93,7 +93,7 @@ export default class PartToModelService {
 
   async updatePartToModel(input: UpdateInput<PartToModelInput>) {
     return await this.db.transaction(async (tx) => {
-      return this.partToModelRepository.updatePartToModel(tx, input);
+      return this.partToModelRepository.update(tx, input);
     });
   }
 }

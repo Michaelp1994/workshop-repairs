@@ -21,7 +21,7 @@ import { type ClientInput, clientTable } from "../tables/client.table";
 
 const clientFields = getTableColumns(clientTable);
 export default class ClientRepository {
-  async archiveClient(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<ClientInput>,
     localId: number,
@@ -41,7 +41,7 @@ export default class ClientRepository {
     return res;
   }
 
-  async countClients(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters }: CountInput,
     organizationId: OrganizationID,
@@ -63,13 +63,13 @@ export default class ClientRepository {
     return res?.count;
   }
 
-  async createClient(tx: DatabaseTransaction, input: CreateInput<ClientInput>) {
+  async create(tx: DatabaseTransaction, input: CreateInput<ClientInput>) {
     const [client] = await tx.insert(clientTable).values(input).returning();
 
     return client;
   }
 
-  async getAllClients(
+  async getAll(
     tx: DatabaseTransaction,
     { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
     organizationId: OrganizationID,
@@ -95,7 +95,28 @@ export default class ClientRepository {
     return await query.execute();
   }
 
-  async getClientByLocalId(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: clientTable.id,
+        label: clientTable.name,
+      })
+      .from(clientTable)
+      .where(
+        and(
+          isNull(clientTable.deletedAt),
+          eq(clientTable.organizationId, organizationId),
+        ),
+      )
+      .orderBy(clientTable.name);
+    return await query.execute();
+  }
+
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -121,28 +142,7 @@ export default class ClientRepository {
     return res;
   }
 
-  async getClientsSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-    organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: clientTable.id,
-        label: clientTable.name,
-      })
-      .from(clientTable)
-      .where(
-        and(
-          isNull(clientTable.deletedAt),
-          eq(clientTable.organizationId, organizationId),
-        ),
-      )
-      .orderBy(clientTable.name);
-    return await query.execute();
-  }
-
-  async updateClient(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<ClientInput>,
     localId: number,

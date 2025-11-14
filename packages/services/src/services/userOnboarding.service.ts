@@ -41,18 +41,17 @@ export default class UserOnboardingService {
       throw new Error("File does not exist.");
     }
 
-    const user = await this.userRepository.getUserById(this.db, session.userId);
+    const user = await this.userRepository.getById(this.db, session.userId);
     assertDatabaseResult(user);
 
     if (user.organizationId) {
       throw new Error("You already belong to an organization");
     }
 
-    const organizationExists =
-      await this.organizationRepository.getOrganizationByName(
-        this.db,
-        input.name,
-      );
+    const organizationExists = await this.organizationRepository.getByName(
+      this.db,
+      input.name,
+    );
 
     if (organizationExists) {
       throw new ZodError([
@@ -65,11 +64,13 @@ export default class UserOnboardingService {
       ]);
     }
 
-    const createdOrganization =
-      await this.organizationRepository.createOrganization(this.db, input);
+    const createdOrganization = await this.organizationRepository.create(
+      this.db,
+      input,
+    );
     assertDatabaseResult(createdOrganization);
     const metadata = createUpdateMetadata(session);
-    const updatedUser = await this.userRepository.updateUser(
+    const updatedUser = await this.userRepository.update(
       db,
       { organizationId: createdOrganization.id, ...metadata },
       session.userId,
@@ -79,17 +80,16 @@ export default class UserOnboardingService {
   }
 
   async getStatus(userId: UserID) {
-    const userStatus =
-      await this.userOnboardingRepository.getUserOnboardingByUserId(
-        this.db,
-        userId,
-      );
+    const userStatus = await this.userOnboardingRepository.getByUserId(
+      this.db,
+      userId,
+    );
     assertDatabaseResult(userStatus);
     return userStatus;
   }
 
   async joinOrganization(input: { joinCode: string }, session: AuthedSession) {
-    const user = await this.userOnboardingRepository.getUserOnboardingByUserId(
+    const user = await this.userOnboardingRepository.getByUserId(
       this.db,
       session.userId,
     );
@@ -98,11 +98,10 @@ export default class UserOnboardingService {
       throw new Error("You already belong to an organization");
     }
 
-    const organization =
-      await this.organizationRepository.getOrganizationByInvitationCode(
-        this.db,
-        input.joinCode,
-      );
+    const organization = await this.organizationRepository.getByInvitationCode(
+      this.db,
+      input.joinCode,
+    );
     if (!organization) {
       throw new ZodError([
         {
@@ -114,7 +113,7 @@ export default class UserOnboardingService {
       ]);
     }
     const metadata = createUpdateMetadata(session);
-    const updatedUser = await this.userRepository.updateUser(
+    const updatedUser = await this.userRepository.update(
       db,
       {
         organizationId: organization.id,
@@ -132,7 +131,7 @@ export default class UserOnboardingService {
   async markUserAsWelcomed(session: AuthedSession) {
     return await db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
-      return this.userOnboardingRepository.updateUserOnboardingByUserId(
+      return this.userOnboardingRepository.updateByUserId(
         tx,
         { welcomed: true, ...metadata },
         session.userId,
@@ -144,16 +143,15 @@ export default class UserOnboardingService {
     input: { name: string; fileType: string; fileSize: number },
     session: AuthedSession,
   ) {
-    const user = await this.userRepository.getUserById(this.db, session.userId);
+    const user = await this.userRepository.getById(this.db, session.userId);
     assertDatabaseResult(user);
     if (user.organizationId) {
       throw new Error("You already belong to an organization");
     }
-    const organizationExists =
-      await this.organizationRepository.getOrganizationByName(
-        this.db,
-        input.name,
-      );
+    const organizationExists = await this.organizationRepository.getByName(
+      this.db,
+      input.name,
+    );
 
     if (organizationExists) {
       throw new ZodError([
@@ -179,7 +177,7 @@ export default class UserOnboardingService {
     session: OrganizationSession,
   ) {
     const emails = input.emails.split(/[, \n]/);
-    const organization = await this.organizationRepository.getOrganizationById(
+    const organization = await this.organizationRepository.getById(
       this.db,
       session.organizationId,
     );
@@ -200,7 +198,7 @@ export default class UserOnboardingService {
 
     await db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
-      await this.userOnboardingRepository.updateUserOnboardingByUserId(
+      await this.userOnboardingRepository.updateByUserId(
         tx,
         {
           invitedUsers: true,
@@ -209,7 +207,7 @@ export default class UserOnboardingService {
         session.userId,
       );
 
-      await this.userRepository.updateUser(
+      await this.userRepository.update(
         tx,
         { onboardingCompleted: true, ...metadata },
         session.userId,
@@ -223,7 +221,7 @@ export default class UserOnboardingService {
     return await db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
 
-      await this.userOnboardingRepository.updateUserOnboardingByUserId(
+      await this.userOnboardingRepository.updateByUserId(
         tx,
         {
           invitedUsers: true,
@@ -232,7 +230,7 @@ export default class UserOnboardingService {
         session.userId,
       );
 
-      await this.userRepository.updateUser(
+      await this.userRepository.update(
         tx,
         { onboardingCompleted: true, ...metadata },
         session.userId,

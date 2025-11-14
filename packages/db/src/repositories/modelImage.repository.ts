@@ -17,7 +17,7 @@ import {
 } from "../tables/modelImage.table";
 
 export default class ModelImageRepository {
-  async archiveModelImage(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<ModelImageInput>,
     modelImageId: ModelImageID,
@@ -31,7 +31,7 @@ export default class ModelImageRepository {
     return res;
   }
 
-  async countModelImages(tx: DatabaseTransaction, _input: CountInput) {
+  async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(modelImageTable)
@@ -40,19 +40,13 @@ export default class ModelImageRepository {
     return res?.count;
   }
 
-  async createModelImage(
-    tx: DatabaseTransaction,
-    input: CreateInput<ModelImageInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<ModelImageInput>) {
     const query = tx.insert(modelImageTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllModelImages(
-    tx: DatabaseTransaction,
-    { pagination }: GetAllInput,
-  ) {
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
       .select()
       .from(modelImageTable)
@@ -63,7 +57,7 @@ export default class ModelImageRepository {
     return await query.execute();
   }
 
-  async getAllModelImagesByModelId(tx: DatabaseTransaction, id: ModelID) {
+  async getAllByModelId(tx: DatabaseTransaction, id: ModelID) {
     const query = tx
       .select()
       .from(modelImageTable)
@@ -75,7 +69,7 @@ export default class ModelImageRepository {
     return res;
   }
 
-  async getModelImageById(tx: DatabaseTransaction, id: ModelImageID) {
+  async getById(tx: DatabaseTransaction, id: ModelImageID) {
     const query = tx
       .select()
       .from(modelImageTable)
@@ -84,7 +78,7 @@ export default class ModelImageRepository {
     return res;
   }
 
-  async updateModelImage(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<ModelImageInput>,
     modelImageId: ModelImageID,

@@ -25,7 +25,7 @@ export default class AssetStatusService {
   async archiveAssetStatus(id: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.assetStatusRepository.archiveAssetStatus(tx, metadata, id);
+      return this.assetStatusRepository.archive(tx, metadata, id);
     });
   }
 
@@ -33,7 +33,7 @@ export default class AssetStatusService {
     input: CountAssetStatusesInput,
     _session: OrganizationSession,
   ) {
-    return this.assetStatusRepository.countAssetStatuses(this.db, input);
+    return this.assetStatusRepository.count(this.db, input);
   }
 
   async createAssetStatus(
@@ -46,10 +46,7 @@ export default class AssetStatusService {
         ...input,
         ...metadata,
       };
-      const assetStatus = await this.assetStatusRepository.createAssetStatus(
-        tx,
-        values,
-      );
+      const assetStatus = await this.assetStatusRepository.create(tx, values);
       return assetStatus;
     });
   }
@@ -58,18 +55,18 @@ export default class AssetStatusService {
     input: GetAllAssetStatusesInput,
     _session: OrganizationSession,
   ) {
-    return this.assetStatusRepository.getAllAssetStatuses(this.db, input);
+    return this.assetStatusRepository.getAll(this.db, input);
   }
 
   async getAssetStatus(id: AssetStatusID, _session: OrganizationSession) {
-    return this.assetStatusRepository.getAssetStatusById(this.db, id);
+    return this.assetStatusRepository.getById(this.db, id);
   }
 
   async getAssetStatusSelect(
     input: GetAssetStatusesSelectInput,
     _session: OrganizationSession,
   ) {
-    return this.assetStatusRepository.getAssetStatusSelect(this.db, input);
+    return this.assetStatusRepository.getAllSimple(this.db, input);
   }
 
   async updateAssetStatus(
@@ -83,7 +80,7 @@ export default class AssetStatusService {
         ...input,
         ...metadata,
       };
-      return this.assetStatusRepository.updateAssetStatus(tx, values, id);
+      return this.assetStatusRepository.update(tx, values, id);
     });
   }
 }

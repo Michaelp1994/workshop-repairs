@@ -25,7 +25,7 @@ import {
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
 export default class EquipmentTypeRepository {
-  async archiveEquipmentType(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<EquipmentTypeInput>,
     localId: number,
@@ -45,7 +45,7 @@ export default class EquipmentTypeRepository {
     return res;
   }
 
-  async countEquipmentTypes(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter }: CountInput,
     organizationId: OrganizationID,
@@ -65,7 +65,7 @@ export default class EquipmentTypeRepository {
     return res?.count;
   }
 
-  async createEquipmentType(
+  async create(
     tx: DatabaseTransaction,
     input: CreateInput<EquipmentTypeInput>,
   ) {
@@ -74,7 +74,7 @@ export default class EquipmentTypeRepository {
     return res;
   }
 
-  async getAllEquipmentTypes(
+  async getAll(
     tx: DatabaseTransaction,
     { pagination, globalFilter, sorting }: GetAllInput,
     organizationId: OrganizationID,
@@ -97,7 +97,27 @@ export default class EquipmentTypeRepository {
     return await query.execute();
   }
 
-  async getEquipmentTypeById(tx: DatabaseTransaction, input: EquipmentTypeID) {
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: equipmentTypeTable.id,
+        label: equipmentTypeTable.name,
+      })
+      .from(equipmentTypeTable)
+      .where(
+        and(
+          isNull(equipmentTypeTable.deletedAt),
+          eq(equipmentTypeTable.organizationId, organizationId),
+        ),
+      );
+    return query.execute();
+  }
+
+  async getById(tx: DatabaseTransaction, input: EquipmentTypeID) {
     const { createdByTable, updatedByTable, deletedByTable, metadata } =
       createMetadataFields();
     const query = tx
@@ -123,7 +143,7 @@ export default class EquipmentTypeRepository {
     return res;
   }
 
-  async getEquipmentTypeByLocalId(
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -158,27 +178,7 @@ export default class EquipmentTypeRepository {
     return res;
   }
 
-  async getEquipmentTypesSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-    organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: equipmentTypeTable.id,
-        label: equipmentTypeTable.name,
-      })
-      .from(equipmentTypeTable)
-      .where(
-        and(
-          isNull(equipmentTypeTable.deletedAt),
-          eq(equipmentTypeTable.organizationId, organizationId),
-        ),
-      );
-    return query.execute();
-  }
-
-  async updateEquipmentType(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<EquipmentTypeInput>,
     localId: number,

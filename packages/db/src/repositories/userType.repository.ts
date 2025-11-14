@@ -17,7 +17,7 @@ import {
 } from "../tables/userType.table";
 
 export default class UserTypeRepository {
-  async archiveUserType(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<UserTypeInput>,
     userTypeId: UserTypeID,
@@ -31,7 +31,7 @@ export default class UserTypeRepository {
     return res;
   }
 
-  async countUserTypes(tx: DatabaseTransaction, _input: CountInput) {
+  async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(userTypeTable)
@@ -40,16 +40,13 @@ export default class UserTypeRepository {
     return res?.count;
   }
 
-  async createUserType(
-    tx: DatabaseTransaction,
-    input: CreateInput<UserTypeInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<UserTypeInput>) {
     const query = tx.insert(userTypeTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllUserTypes(tx: DatabaseTransaction, { pagination }: GetAllInput) {
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
       .select()
       .from(userTypeTable)
@@ -60,16 +57,7 @@ export default class UserTypeRepository {
     return query.execute();
   }
 
-  async getUserTypeById(tx: DatabaseTransaction, input: UserTypeID) {
-    const query = tx
-      .select()
-      .from(userTypeTable)
-      .where(eq(userTypeTable.id, input));
-    const [res] = await query.execute();
-    return res;
-  }
-
-  async getUserTypesSelect(tx: DatabaseTransaction, _input: GetAllSimpleInput) {
+  async getAllSimple(tx: DatabaseTransaction, _input: GetAllSimpleInput) {
     const query = tx
       .select({
         value: userTypeTable.id,
@@ -80,7 +68,16 @@ export default class UserTypeRepository {
     return query.execute();
   }
 
-  async updateUserType(
+  async getById(tx: DatabaseTransaction, input: UserTypeID) {
+    const query = tx
+      .select()
+      .from(userTypeTable)
+      .where(eq(userTypeTable.id, input));
+    const [res] = await query.execute();
+    return res;
+  }
+
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<UserTypeInput>,
     userTypeId: UserTypeID,

@@ -33,7 +33,7 @@ interface ModelToPartFilter {
 
 export default class PartToModelRepository {
   // TODO: should this be a delete operation or an archive operation?
-  async archivePartToModel(
+  async archive(
     tx: DatabaseTransaction,
     { partId, modelId }: { partId: PartID; modelId: ModelID },
   ) {
@@ -96,10 +96,7 @@ export default class PartToModelRepository {
     return res?.count;
   }
 
-  async createPartToModel(
-    tx: DatabaseTransaction,
-    input: CreateInput<PartToModelInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<PartToModelInput>) {
     const query = tx.insert(partToModelTable).values(input).returning();
     const [res] = await query.execute();
     return res;
@@ -173,6 +170,26 @@ export default class PartToModelRepository {
     return res;
   }
 
+  async getById(
+    tx: DatabaseTransaction,
+    input: {
+      partId: PartID;
+      modelId: ModelID;
+    },
+  ) {
+    const query = tx
+      .select()
+      .from(partToModelTable)
+      .where(
+        and(
+          eq(partToModelTable.partId, input.partId),
+          eq(partToModelTable.modelId, input.modelId),
+        ),
+      );
+    const [res] = await query.execute();
+    return res;
+  }
+
   async getModelsByPartIdSelect(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters }: GetAllSimpleInput,
@@ -225,28 +242,8 @@ export default class PartToModelRepository {
     return query.execute();
   }
 
-  async getPartToModelById(
-    tx: DatabaseTransaction,
-    input: {
-      partId: PartID;
-      modelId: ModelID;
-    },
-  ) {
-    const query = tx
-      .select()
-      .from(partToModelTable)
-      .where(
-        and(
-          eq(partToModelTable.partId, input.partId),
-          eq(partToModelTable.modelId, input.modelId),
-        ),
-      );
-    const [res] = await query.execute();
-    return res;
-  }
-
   // TODO: refactor type of input
-  async updatePartToModel(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<PartToModelInput>,
     { partId, modelId }: { partId: PartID; modelId: ModelID },

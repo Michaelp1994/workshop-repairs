@@ -29,7 +29,7 @@ export default class PartService {
   async archivePart(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedPart = await this.partRepository.archivePart(
+      const archivedPart = await this.partRepository.archive(
         tx,
         metadata,
         localId,
@@ -37,7 +37,7 @@ export default class PartService {
       );
       assertDatabaseResult(archivedPart);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -48,11 +48,7 @@ export default class PartService {
   }
 
   async countParts(input: CountPartsInput, session: OrganizationSession) {
-    return this.partRepository.countParts(
-      this.db,
-      input,
-      session.organizationId,
-    );
+    return this.partRepository.count(this.db, input, session.organizationId);
   }
 
   async createPart(
@@ -74,7 +70,7 @@ export default class PartService {
         ...metadata,
         localId: sequence.partLastUsedValue,
       };
-      const part = await this.partRepository.createPart(tx, values);
+      const part = await this.partRepository.create(tx, values);
       assertDatabaseResult(part);
 
       const slug = createSlug(sequence.assetKeyPrefix, part.localId);
@@ -88,12 +84,12 @@ export default class PartService {
 
   async getAllParts(input: GetAllPartsInput, session: OrganizationSession) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         db,
         session.organizationId,
       );
     assertDatabaseResult(sequence);
-    const allParts = await this.partRepository.getAllParts(
+    const allParts = await this.partRepository.getAll(
       this.db,
       input,
       session.organizationId,
@@ -105,7 +101,7 @@ export default class PartService {
   }
 
   async getPart(localId: number, session: OrganizationSession) {
-    return this.partRepository.getPartByLocalId(
+    return this.partRepository.getByLocalId(
       this.db,
       localId,
       session.organizationId,
@@ -116,7 +112,7 @@ export default class PartService {
     input: GetPartsSelectInput,
     session: OrganizationSession,
   ) {
-    return this.partRepository.getPartsSelect(
+    return this.partRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
@@ -134,7 +130,7 @@ export default class PartService {
         ...input,
         ...metadata,
       };
-      const part = await this.partRepository.updatePart(
+      const part = await this.partRepository.update(
         tx,
         values,
         localId,
@@ -142,7 +138,7 @@ export default class PartService {
       );
       assertDatabaseResult(part);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

@@ -29,7 +29,7 @@ export default class RepairStatusTypeService {
   ) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.repairStatusTypeRepository.archiveRepairStatus(
+      return this.repairStatusTypeRepository.archive(
         tx,
         metadata,
         repairStatusId,
@@ -41,7 +41,7 @@ export default class RepairStatusTypeService {
     input: CountRepairStatusTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.countRepairStatusTypes(db, input);
+    return this.repairStatusTypeRepository.count(db, input);
   }
 
   async createRepairStatusType(
@@ -54,7 +54,7 @@ export default class RepairStatusTypeService {
         ...input,
         ...metadata,
       };
-      return this.repairStatusTypeRepository.createRepairStatus(tx, values);
+      return this.repairStatusTypeRepository.create(tx, values);
     });
   }
 
@@ -62,24 +62,21 @@ export default class RepairStatusTypeService {
     input: GetAllRepairStatusTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getAllRepairStatusTypes(db, input);
+    return this.repairStatusTypeRepository.getAl(db, input);
   }
 
   async getRepairStatusById(
     id: RepairStatusTypeID,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getRepairStatusById(db, id);
+    return this.repairStatusTypeRepository.getById(db, id);
   }
 
   async getRepairStatusSelect(
     input: GetRepairStatusSelectInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getRepairStatusTypesSelect(
-      db,
-      input,
-    );
+    return this.repairStatusTypeRepository.getAllSimple(db, input);
   }
 
   async updateRepairStatusType(
@@ -93,11 +90,7 @@ export default class RepairStatusTypeService {
         ...input,
         ...metadata,
       };
-      return this.repairStatusTypeRepository.updateRepairStatus(
-        tx,
-        values,
-        repairStatusId,
-      );
+      return this.repairStatusTypeRepository.update(tx, values, repairStatusId);
     });
   }
 }

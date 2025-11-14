@@ -32,16 +32,12 @@ export default class RepairCommentService {
   ) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.repairCommentRepository.archiveRepairComment(
-        tx,
-        metadata,
-        id,
-      );
+      return this.repairCommentRepository.archive(tx, metadata, id);
     });
   }
 
   async countRepairComments(input: CountRepairCommentsInput) {
-    return this.repairCommentRepository.countRepairComments(this.db, input);
+    return this.repairCommentRepository.count(this.db, input);
   }
 
   async createRepairComment(
@@ -54,23 +50,20 @@ export default class RepairCommentService {
         ...input,
         ...metadata,
       };
-      return this.repairCommentRepository.createRepairComment(tx, values);
+      return this.repairCommentRepository.create(tx, values);
     });
   }
 
-  async getAllRepairCommentsByRepairId(repairId: RepairID) {
-    return this.repairCommentRepository.getAllRepairCommentsByRepairId(
-      this.db,
-      repairId,
-    );
+  async getAllRepairComments(input: GetAllRepairCommentsInput) {
+    return this.repairCommentRepository.getAll(this.db, input);
   }
 
-  async getAllRepairComments(input: GetAllRepairCommentsInput) {
-    return this.repairCommentRepository.getAllRepairComments(this.db, input);
+  async getAllRepairCommentsByRepairId(repairId: RepairID) {
+    return this.repairCommentRepository.getAllByRepairId(this.db, repairId);
   }
 
   async getRepairCommentById(id: RepairCommentID) {
-    return this.repairCommentRepository.getRepairCommentById(this.db, id);
+    return this.repairCommentRepository.getById(this.db, id);
   }
 
   async updateRepairComment(
@@ -84,7 +77,7 @@ export default class RepairCommentService {
         ...input,
         ...metadata,
       };
-      return this.repairCommentRepository.updateRepairComment(tx, values, id);
+      return this.repairCommentRepository.update(tx, values, id);
     });
   }
 }

@@ -30,16 +30,15 @@ export default class ManufacturerService {
   async archiveManufacturer(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const manufacturer =
-        await this.manufacturerRepository.archiveManufacturer(
-          tx,
-          metadata,
-          localId,
-          session.organizationId,
-        );
+      const manufacturer = await this.manufacturerRepository.archive(
+        tx,
+        metadata,
+        localId,
+        session.organizationId,
+      );
       assertDatabaseResult(manufacturer);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -56,7 +55,7 @@ export default class ManufacturerService {
     input: DataTableCountOutput,
     session: OrganizationSession,
   ) {
-    return this.manufacturerRepository.countManufacturers(
+    return this.manufacturerRepository.count(
       this.db,
       input,
       session.organizationId,
@@ -80,10 +79,7 @@ export default class ManufacturerService {
         ...metadata,
         ...input,
       };
-      const manufacturer = await this.manufacturerRepository.createManufacturer(
-        tx,
-        values,
-      );
+      const manufacturer = await this.manufacturerRepository.create(tx, values);
       assertDatabaseResult(manufacturer);
       const slug = createSlug(
         sequence.manufacturerKeyPrefix,
@@ -101,18 +97,17 @@ export default class ManufacturerService {
     session: OrganizationSession,
   ) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         db,
         session.organizationId,
       );
 
     assertDatabaseResult(sequence);
-    const allManufacturers =
-      await this.manufacturerRepository.getAllManufacturers(
-        db,
-        input,
-        session.organizationId,
-      );
+    const allManufacturers = await this.manufacturerRepository.getAll(
+      db,
+      input,
+      session.organizationId,
+    );
     return allManufacturers.map(({ localId, ...manufacturer }) => ({
       ...manufacturer,
       slug: createSlug(sequence.manufacturerKeyPrefix, localId),
@@ -120,7 +115,7 @@ export default class ManufacturerService {
   }
 
   async getManufacturer(localId: number, session: OrganizationSession) {
-    return this.manufacturerRepository.getManufacturerByLocalId(
+    return this.manufacturerRepository.getByLocalId(
       this.db,
       localId,
       session.organizationId,
@@ -131,7 +126,7 @@ export default class ManufacturerService {
     input: GetSelectInput,
     session: OrganizationSession,
   ) {
-    return this.manufacturerRepository.getManufacturersSelect(
+    return this.manufacturerRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
@@ -149,7 +144,7 @@ export default class ManufacturerService {
         ...metadata,
         ...input,
       };
-      const manufacturer = await this.manufacturerRepository.updateManufacturer(
+      const manufacturer = await this.manufacturerRepository.update(
         tx,
         values,
         localId,
@@ -157,7 +152,7 @@ export default class ManufacturerService {
       );
       assertDatabaseResult(manufacturer);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

@@ -11,7 +11,7 @@ import {
 } from "../tables/organizationSequences.table";
 
 export default class OrganizationSequenceRepository {
-  async createOrganizationSequence(
+  async create(
     tx: DatabaseTransaction,
     input: CreateInput<OrganizationSequenceInput>,
   ) {
@@ -23,10 +23,7 @@ export default class OrganizationSequenceRepository {
     return res;
   }
 
-  async getSequenceByOrganizationId(
-    tx: DatabaseTransaction,
-    id: OrganizationID,
-  ) {
+  async getByOrganizationId(tx: DatabaseTransaction, id: OrganizationID) {
     const query = tx
       .select()
       .from(organizationSequenceTable)
@@ -155,7 +152,7 @@ export default class OrganizationSequenceRepository {
     return res;
   }
 
-  async updateOrganizationSequence(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<OrganizationSequenceInput>,
     organizationSequenceId: OrganizationSequenceID,

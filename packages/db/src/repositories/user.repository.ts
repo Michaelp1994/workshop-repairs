@@ -23,7 +23,7 @@ const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 
 export default class UserRepository {
-  async archiveUser(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<UserInput>,
     userId: UserID,
@@ -37,7 +37,7 @@ export default class UserRepository {
     return res;
   }
 
-  async countUsers(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters }: CountInput,
     organizationId: OrganizationID,
@@ -59,7 +59,7 @@ export default class UserRepository {
     return res?.count;
   }
 
-  async createUser(tx: DatabaseTransaction, input: CreateInput<UserInput>) {
+  async create(tx: DatabaseTransaction, input: CreateInput<UserInput>) {
     const query = tx
       .insert(userTable)
       .values(input)
@@ -68,7 +68,7 @@ export default class UserRepository {
     return res;
   }
 
-  async getAllUsers(
+  async getAll(
     tx: DatabaseTransaction,
     { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
     organizationId: OrganizationID,
@@ -94,25 +94,13 @@ export default class UserRepository {
     return query.execute();
   }
 
-  async getCredentialsByUserId(tx: DatabaseTransaction, input: UserID) {
-    const query = tx
-      .select({
-        typeId: userTable.typeId,
-        organizationId: userTable.organizationId,
-      })
-      .from(userTable)
-      .where(eq(userTable.id, input));
-    const [res] = await query.execute();
-    return res;
-  }
-
-  async getUserByEmail(tx: DatabaseTransaction, input: string) {
+  async getByEmail(tx: DatabaseTransaction, input: string) {
     const query = tx.select().from(userTable).where(eq(userTable.email, input));
     const [res] = await query.execute();
     return res;
   }
 
-  async getUserById(tx: DatabaseTransaction, input: UserID) {
+  async getById(tx: DatabaseTransaction, input: UserID) {
     const { createdByTable, updatedByTable, deletedByTable, metadata } =
       createMetadataFields();
     const query = tx
@@ -127,7 +115,19 @@ export default class UserRepository {
     return res;
   }
 
-  async updateUser(
+  async getSimpleById(tx: DatabaseTransaction, input: UserID) {
+    const query = tx
+      .select({
+        typeId: userTable.typeId,
+        organizationId: userTable.organizationId,
+      })
+      .from(userTable)
+      .where(eq(userTable.id, input));
+    const [res] = await query.execute();
+    return res;
+  }
+
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<UserInput>,
     userId: UserID,

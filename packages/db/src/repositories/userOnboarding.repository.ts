@@ -14,7 +14,7 @@ const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
 const userOnboardingColumns = getTableColumns(userOnboardingTable);
 
 export default class UserOnboardingRepository {
-  async createUserOnboarding(
+  async create(
     tx: DatabaseTransaction,
     input: CreateInput<UserOnboardingInput>,
   ) {
@@ -23,7 +23,7 @@ export default class UserOnboardingRepository {
     return res;
   }
 
-  async getUserOnboardingByUserId(tx: DatabaseTransaction, userId: UserID) {
+  async getByUserId(tx: DatabaseTransaction, userId: UserID) {
     const query = tx
       .select({
         ...publicUserColumns,
@@ -39,7 +39,7 @@ export default class UserOnboardingRepository {
     return res;
   }
 
-  async updateUserOnboardingByUserId(
+  async updateByUserId(
     tx: DatabaseTransaction,
     input: UpdateInput<UserOnboardingInput>,
     userId: UserID,

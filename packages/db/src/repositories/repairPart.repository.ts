@@ -30,7 +30,7 @@ interface RepairPartFilters {
   repairId?: number;
 }
 export default class RepairPartRepository {
-  async archiveRepairPart(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<RepairPartInput>,
     repairPartId: RepairPartID,
@@ -44,7 +44,7 @@ export default class RepairPartRepository {
     return res;
   }
 
-  async countRepairParts(
+  async count(
     tx: DatabaseTransaction,
     { filters, columnFilters, globalFilter }: CountInput<RepairPartFilters>,
   ) {
@@ -68,16 +68,13 @@ export default class RepairPartRepository {
     return res?.count;
   }
 
-  async createRepairPart(
-    tx: DatabaseTransaction,
-    input: CreateInput<RepairPartInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<RepairPartInput>) {
     const query = tx.insert(repairPartTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllRepairParts(
+  async getAll(
     tx: DatabaseTransaction,
     {
       pagination,
@@ -128,7 +125,7 @@ export default class RepairPartRepository {
     return query.execute();
   }
 
-  async getRepairPartById(tx: DatabaseTransaction, input: RepairPartID) {
+  async getById(tx: DatabaseTransaction, input: RepairPartID) {
     const query = tx
       .select({
         ...repairPartFields,
@@ -142,7 +139,7 @@ export default class RepairPartRepository {
     return res;
   }
 
-  async updateRepairPart(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<RepairPartInput>,
     repairPartId: RepairPartID,

@@ -14,20 +14,13 @@ export default class OrganizationSequenceService {
   async createOrganizationSequence(
     input: CreateInput<OrganizationSequenceInput>,
   ) {
-    return this.organizationSequenceRepository.createOrganizationSequence(
-      this.db,
-      input,
-    );
+    return this.organizationSequenceRepository.create(this.db, input);
   }
 
   async updateOrganizationSequence(
     input: UpdateInput<OrganizationSequenceInput>,
     id: OrganizationSequenceID,
   ) {
-    return this.organizationSequenceRepository.updateOrganizationSequence(
-      this.db,
-      input,
-      id,
-    );
+    return this.organizationSequenceRepository.update(this.db, input, id);
   }
 }

@@ -17,7 +17,7 @@ import {
 } from "../tables/repairStatusType.table";
 
 export default class RepairStatusTypeRepository {
-  async archiveRepairStatus(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<RepairStatusTypeInput>,
     repairStatusTypeId: RepairStatusTypeID,
@@ -31,7 +31,7 @@ export default class RepairStatusTypeRepository {
     return res;
   }
 
-  async countRepairStatusTypes(tx: DatabaseTransaction, _input: CountInput) {
+  async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(repairStatusTypeTable)
@@ -40,7 +40,7 @@ export default class RepairStatusTypeRepository {
     return res?.count;
   }
 
-  async createRepairStatus(
+  async create(
     tx: DatabaseTransaction,
     input: CreateInput<RepairStatusTypeInput>,
   ) {
@@ -49,10 +49,7 @@ export default class RepairStatusTypeRepository {
     return res;
   }
 
-  async getAllRepairStatusTypes(
-    tx: DatabaseTransaction,
-    { pagination }: GetAllInput,
-  ) {
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
       .select()
       .from(repairStatusTypeTable)
@@ -63,22 +60,7 @@ export default class RepairStatusTypeRepository {
     return query.execute();
   }
 
-  async getRepairStatusById(
-    tx: DatabaseTransaction,
-    input: RepairStatusTypeID,
-  ) {
-    const query = tx
-      .select()
-      .from(repairStatusTypeTable)
-      .where(eq(repairStatusTypeTable.id, input));
-    const [res] = await query.execute();
-    return res;
-  }
-
-  async getRepairStatusTypesSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-  ) {
+  async getAllSimple(tx: DatabaseTransaction, _input: GetAllSimpleInput) {
     const query = tx
       .select({
         value: repairStatusTypeTable.id,
@@ -90,7 +72,16 @@ export default class RepairStatusTypeRepository {
     return query.execute();
   }
 
-  async updateRepairStatus(
+  async getById(tx: DatabaseTransaction, input: RepairStatusTypeID) {
+    const query = tx
+      .select()
+      .from(repairStatusTypeTable)
+      .where(eq(repairStatusTypeTable.id, input));
+    const [res] = await query.execute();
+    return res;
+  }
+
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<RepairStatusTypeInput>,
     repairStatusTypeId: RepairStatusTypeID,

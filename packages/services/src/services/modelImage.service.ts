@@ -35,7 +35,7 @@ export default class ModelImageService {
   async archiveModelImage(id: ModelImageID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.modelImageRepository.archiveModelImage(tx, metadata, id);
+      return this.modelImageRepository.archive(tx, metadata, id);
     });
   }
 
@@ -43,7 +43,7 @@ export default class ModelImageService {
     input: CountModelImagesInput,
     _session: OrganizationSession,
   ) {
-    return this.modelImageRepository.countModelImages(this.db, input);
+    return this.modelImageRepository.count(this.db, input);
   }
 
   async createModelImage(
@@ -56,11 +56,10 @@ export default class ModelImageService {
     if (!fileExists) {
       throw new Error("File does not exist.");
     }
-    const modelImages =
-      await this.modelImageRepository.getAllModelImagesByModelId(
-        this.db,
-        input.modelId,
-      );
+    const modelImages = await this.modelImageRepository.getAllByModelId(
+      this.db,
+      input.modelId,
+    );
     const isFirstImage = modelImages.length === 0;
 
     return await this.db.transaction(async (tx) => {
@@ -70,13 +69,15 @@ export default class ModelImageService {
         url: input.fileName,
         ...metadata,
       };
-      const createdModelImage =
-        await this.modelImageRepository.createModelImage(tx, values);
+      const createdModelImage = await this.modelImageRepository.create(
+        tx,
+        values,
+      );
       assertDatabaseResult(createdModelImage);
       if (isFirstImage) {
         const modelMetadata = createUpdateMetadata(session);
         //TODO: fixme
-        await this.modelRepository.updateModel(tx, {
+        await this.modelRepository.update(tx, {
           defaultImageId: createdModelImage.id,
           ...modelMetadata,
         });
@@ -86,19 +87,19 @@ export default class ModelImageService {
     });
   }
 
-  async getAllModelImagesByModelId(id: ModelID, _session: OrganizationSession) {
-    return this.modelImageRepository.getAllModelImagesByModelId(this.db, id);
-  }
-
   async getAllModelImages(
     input: GetAllModelImagesInput,
     _session: OrganizationSession,
   ) {
-    return this.modelImageRepository.getAllModelImages(this.db, input);
+    return this.modelImageRepository.getAll(this.db, input);
+  }
+
+  async getAllModelImagesByModelId(id: ModelID, _session: OrganizationSession) {
+    return this.modelImageRepository.getAllByModelId(this.db, id);
   }
 
   async getModelImageById(id: ModelImageID, _session: OrganizationSession) {
-    return this.modelImageRepository.getModelImageById(this.db, id);
+    return this.modelImageRepository.getById(this.db, id);
   }
 
   async requestUploadModelImage(
@@ -118,7 +119,7 @@ export default class ModelImageService {
     input: { id: ModelImageID },
     session: OrganizationSession,
   ) {
-    const modelImage = await this.modelImageRepository.getModelImageById(
+    const modelImage = await this.modelImageRepository.getById(
       this.db,
       input.id,
     );
@@ -126,7 +127,7 @@ export default class ModelImageService {
 
     const metadata = createUpdateMetadata(session);
     //TODO: fixme
-    await this.modelRepository.updateModel(this.db, {
+    await this.modelRepository.update(this.db, {
       id: modelImage.modelId,
       defaultImageId: modelImage.id,
       ...metadata,
@@ -146,7 +147,7 @@ export default class ModelImageService {
         ...input,
         ...metadata,
       };
-      return this.modelImageRepository.updateModelImage(tx, values, id);
+      return this.modelImageRepository.update(tx, values, id);
     });
   }
 }

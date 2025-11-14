@@ -27,7 +27,7 @@ export default class UserTypeService {
   async archiveUserType(id: UserTypeID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.userTypeRepository.archiveUserType(tx, metadata, id);
+      return this.userTypeRepository.archive(tx, metadata, id);
     });
   }
 
@@ -35,7 +35,7 @@ export default class UserTypeService {
     input: CountUserTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.userTypeRepository.countUserTypes(this.db, input);
+    return this.userTypeRepository.count(this.db, input);
   }
 
   async createUserType(
@@ -48,7 +48,7 @@ export default class UserTypeService {
         ...input,
         ...metadata,
       };
-      return this.userTypeRepository.createUserType(tx, values);
+      return this.userTypeRepository.create(tx, values);
     });
   }
 
@@ -56,18 +56,18 @@ export default class UserTypeService {
     input: GetAllUserTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.userTypeRepository.getAllUserTypes(this.db, input);
+    return this.userTypeRepository.getAll(this.db, input);
   }
 
   async getUserTypeById(id: UserTypeID, _session: OrganizationSession) {
-    return this.userTypeRepository.getUserTypeById(this.db, id);
+    return this.userTypeRepository.getById(this.db, id);
   }
 
   async getUserTypesSelect(
     input: GetUserTypeSelectInput,
     _session: OrganizationSession,
   ) {
-    return this.userTypeRepository.getUserTypesSelect(this.db, input);
+    return this.userTypeRepository.getAllSimple(this.db, input);
   }
 
   async updateUserType(
@@ -81,7 +81,7 @@ export default class UserTypeService {
         ...input,
         ...metadata,
       };
-      return this.userTypeRepository.updateUserType(tx, values, id);
+      return this.userTypeRepository.update(tx, values, id);
     });
   }
 }

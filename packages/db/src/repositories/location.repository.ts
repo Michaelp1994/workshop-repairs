@@ -21,7 +21,7 @@ import { type LocationInput, locationTable } from "../tables/location.table";
 
 const locationFields = getTableColumns(locationTable);
 export default class LocationRepository {
-  async archiveLocation(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<LocationInput>,
     localId: number,
@@ -41,7 +41,7 @@ export default class LocationRepository {
     return res;
   }
 
-  async countLocations(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters }: CountInput,
     organizationId: OrganizationID,
@@ -65,16 +65,13 @@ export default class LocationRepository {
     return res?.count;
   }
 
-  async createLocation(
-    tx: DatabaseTransaction,
-    input: CreateInput<LocationInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<LocationInput>) {
     const query = tx.insert(locationTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllLocations(
+  async getAll(
     tx: DatabaseTransaction,
     { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
     organizationId: OrganizationID,
@@ -99,7 +96,28 @@ export default class LocationRepository {
     return query.execute();
   }
 
-  async getLocationByLocalId(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: locationTable.id,
+        label: locationTable.name,
+      })
+      .from(locationTable)
+      .where(
+        and(
+          isNull(locationTable.deletedAt),
+          eq(locationTable.organizationId, organizationId),
+        ),
+      )
+      .orderBy(locationTable.name);
+    return query.execute();
+  }
+
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -134,28 +152,7 @@ export default class LocationRepository {
     return res;
   }
 
-  async getLocationsSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-    organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: locationTable.id,
-        label: locationTable.name,
-      })
-      .from(locationTable)
-      .where(
-        and(
-          isNull(locationTable.deletedAt),
-          eq(locationTable.organizationId, organizationId),
-        ),
-      )
-      .orderBy(locationTable.name);
-    return query.execute();
-  }
-
-  async updateLocation(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<LocationInput>,
     localId: number,

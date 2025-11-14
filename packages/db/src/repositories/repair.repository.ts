@@ -34,7 +34,7 @@ interface RepairFilters {
   clientId?: number;
 }
 export default class RepairRepository {
-  async archiveRepair(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<RepairInput>,
     localId: number,
@@ -54,7 +54,7 @@ export default class RepairRepository {
     return res;
   }
 
-  async countRepairs(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters, filters }: CountInput<RepairFilters>,
     organizationId: OrganizationID,
@@ -89,13 +89,13 @@ export default class RepairRepository {
     return res?.value;
   }
 
-  async createRepair(tx: DatabaseTransaction, input: CreateInput<RepairInput>) {
+  async create(tx: DatabaseTransaction, input: CreateInput<RepairInput>) {
     const query = tx.insert(repairTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllRepairs(
+  async getAll(
     tx: DatabaseTransaction,
     {
       globalFilter,
@@ -156,7 +156,22 @@ export default class RepairRepository {
     return query.execute();
   }
 
-  async getRepairByLocalId(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput<RepairFilters>,
+    _organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: repairTable.id,
+        label: repairTable.fault,
+      })
+      .from(repairTable)
+      .where(isNull(repairTable.deletedAt));
+    return query.execute();
+  }
+
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -211,22 +226,7 @@ export default class RepairRepository {
     return res;
   }
 
-  async getRepairsSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput<RepairFilters>,
-    _organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: repairTable.id,
-        label: repairTable.fault,
-      })
-      .from(repairTable)
-      .where(isNull(repairTable.deletedAt));
-    return query.execute();
-  }
-
-  async updateRepair(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<RepairInput>,
     localId: number,

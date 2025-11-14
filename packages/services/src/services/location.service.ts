@@ -30,7 +30,7 @@ export default class LocationService {
   async archiveLocation(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedLocation = await this.locationRepository.archiveLocation(
+      const archivedLocation = await this.locationRepository.archive(
         tx,
         metadata,
         localId,
@@ -38,7 +38,7 @@ export default class LocationService {
       );
       assertDatabaseResult(archivedLocation);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -52,7 +52,7 @@ export default class LocationService {
     input: CountLocationsInput,
     session: OrganizationSession,
   ) {
-    const count = await this.locationRepository.countLocations(
+    const count = await this.locationRepository.count(
       db,
       input,
       session.organizationId,
@@ -78,7 +78,7 @@ export default class LocationService {
         ...metadata,
         localId: sequence.locationLastUsedValue,
       };
-      const location = await this.locationRepository.createLocation(tx, values);
+      const location = await this.locationRepository.create(tx, values);
       assertDatabaseResult(location);
       const slug = createSlug(sequence.locationKeyPrefix, location.localId);
       return {
@@ -93,12 +93,12 @@ export default class LocationService {
     session: OrganizationSession,
   ) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         db,
         session.organizationId,
       );
     assertDatabaseResult(sequence);
-    const allLocations = await this.locationRepository.getAllLocations(
+    const allLocations = await this.locationRepository.getAll(
       db,
       input,
       session.organizationId,
@@ -110,7 +110,7 @@ export default class LocationService {
   }
 
   async getLocation(localId: number, session: OrganizationSession) {
-    const location = await this.locationRepository.getLocationByLocalId(
+    const location = await this.locationRepository.getByLocalId(
       db,
       localId,
       session.organizationId,
@@ -123,7 +123,7 @@ export default class LocationService {
     input: GetLocationsSelectInput,
     session: OrganizationSession,
   ) {
-    const locations = await this.locationRepository.getLocationsSelect(
+    const locations = await this.locationRepository.getAllSimple(
       db,
       input,
       session.organizationId,
@@ -143,7 +143,7 @@ export default class LocationService {
         ...metadata,
       };
 
-      const updatedLocation = await this.locationRepository.updateLocation(
+      const updatedLocation = await this.locationRepository.update(
         tx,
         values,
         localId,
@@ -151,7 +151,7 @@ export default class LocationService {
       );
       assertDatabaseResult(updatedLocation);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

@@ -34,14 +34,14 @@ export default class AssetService {
         localId,
         organizationId: session.organizationId,
       };
-      const archivedAsset = await this.assetRepository.archiveAsset(
+      const archivedAsset = await this.assetRepository.archive(
         tx,
         metadata,
         where,
       );
       assertDatabaseResult(archivedAsset);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -52,7 +52,7 @@ export default class AssetService {
   }
 
   async countAssets(input: CountAssetsInput, session: OrganizationSession) {
-    const count = await this.assetRepository.countAssets(
+    const count = await this.assetRepository.count(
       this.db,
       input,
       session.organizationId,
@@ -81,7 +81,7 @@ export default class AssetService {
         localId: sequence.assetLastUsedValue,
       };
 
-      const asset = await this.assetRepository.createAsset(tx, values);
+      const asset = await this.assetRepository.create(tx, values);
 
       assertDatabaseResult(asset);
 
@@ -96,14 +96,14 @@ export default class AssetService {
 
   async getAllAssets(input: GetAllAssetsInput, session: OrganizationSession) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
         session.organizationId,
       );
 
     assertDatabaseResult(sequence);
 
-    const allAssets = await this.assetRepository.getAllAssets(
+    const allAssets = await this.assetRepository.getAll(
       this.db,
       input,
       session.organizationId,
@@ -116,7 +116,7 @@ export default class AssetService {
   }
 
   async getAsset(localId: number, session: OrganizationSession) {
-    const asset = await this.assetRepository.getAsset(this.db, {
+    const asset = await this.assetRepository.getById(this.db, {
       localId,
       organizationId: session.organizationId,
     });
@@ -128,7 +128,7 @@ export default class AssetService {
     input: GetAssetsSelectInput,
     session: OrganizationSession,
   ) {
-    const assets = await this.assetRepository.getAssetsSelect(
+    const assets = await this.assetRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
@@ -152,14 +152,10 @@ export default class AssetService {
         organizationId: session.organizationId,
       };
 
-      const updatedAsset = await this.assetRepository.updateAsset(
-        tx,
-        values,
-        where,
-      );
+      const updatedAsset = await this.assetRepository.update(tx, values, where);
       assertDatabaseResult(updatedAsset);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

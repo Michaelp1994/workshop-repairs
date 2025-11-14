@@ -24,7 +24,7 @@ import {
 
 const manufacturerFields = getTableColumns(manufacturerTable);
 export default class ManufacturerRepository {
-  async archiveManufacturer(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<ManufacturerInput>,
     localId: number,
@@ -44,7 +44,7 @@ export default class ManufacturerRepository {
     return res;
   }
 
-  async countManufacturers(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters }: CountInput,
     organizationId: OrganizationID,
@@ -68,16 +68,13 @@ export default class ManufacturerRepository {
     return res?.count;
   }
 
-  async createManufacturer(
-    tx: DatabaseTransaction,
-    input: CreateInput<ManufacturerInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<ManufacturerInput>) {
     const query = tx.insert(manufacturerTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllManufacturers(
+  async getAll(
     tx: DatabaseTransaction,
     { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
     organizationId: OrganizationID,
@@ -103,7 +100,27 @@ export default class ManufacturerRepository {
     return query.execute();
   }
 
-  async getManufacturerByLocalId(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: manufacturerTable.id,
+        label: manufacturerTable.name,
+      })
+      .from(manufacturerTable)
+      .where(
+        and(
+          isNull(manufacturerTable.deletedAt),
+          eq(manufacturerTable.organizationId, organizationId),
+        ),
+      );
+    return query.execute();
+  }
+
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -138,27 +155,7 @@ export default class ManufacturerRepository {
     return res;
   }
 
-  async getManufacturersSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-    organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: manufacturerTable.id,
-        label: manufacturerTable.name,
-      })
-      .from(manufacturerTable)
-      .where(
-        and(
-          isNull(manufacturerTable.deletedAt),
-          eq(manufacturerTable.organizationId, organizationId),
-        ),
-      );
-    return query.execute();
-  }
-
-  async updateManufacturer(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<ManufacturerInput>,
     localId: number,

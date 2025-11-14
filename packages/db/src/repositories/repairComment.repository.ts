@@ -20,7 +20,7 @@ import { userTable } from "../tables/user.table";
 const repairCommentFields = getTableColumns(repairCommentTable);
 
 export default class RepairCommentRepository {
-  async archiveRepairComment(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<RepairCommentInput>,
     repairCommentId: RepairCommentID,
@@ -34,7 +34,7 @@ export default class RepairCommentRepository {
     return res;
   }
 
-  async countRepairComments(tx: DatabaseTransaction, _input: CountInput) {
+  async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(repairCommentTable)
@@ -43,7 +43,7 @@ export default class RepairCommentRepository {
     return res?.count;
   }
 
-  async createRepairComment(
+  async create(
     tx: DatabaseTransaction,
     input: CreateInput<RepairCommentInput>,
   ) {
@@ -52,10 +52,7 @@ export default class RepairCommentRepository {
     return res;
   }
 
-  async getAllRepairComments(
-    tx: DatabaseTransaction,
-    { pagination }: GetAllInput,
-  ) {
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
       .select()
       .from(repairCommentTable)
@@ -66,10 +63,7 @@ export default class RepairCommentRepository {
     return query.execute();
   }
 
-  async getAllRepairCommentsByRepairId(
-    tx: DatabaseTransaction,
-    input: RepairID,
-  ) {
+  async getAllByRepairId(tx: DatabaseTransaction, input: RepairID) {
     const query = tx
       .select({
         ...repairCommentFields,
@@ -92,7 +86,7 @@ export default class RepairCommentRepository {
     return res;
   }
 
-  async getRepairCommentById(tx: DatabaseTransaction, input: RepairCommentID) {
+  async getById(tx: DatabaseTransaction, input: RepairCommentID) {
     const query = tx
       .select()
       .from(repairCommentTable)
@@ -102,7 +96,7 @@ export default class RepairCommentRepository {
     return res;
   }
 
-  async updateRepairComment(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<RepairCommentInput>,
     repairCommentId: RepairCommentID,

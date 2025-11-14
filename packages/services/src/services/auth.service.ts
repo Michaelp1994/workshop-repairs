@@ -35,7 +35,7 @@ export default class AuthService {
   ) {}
 
   async login(input: LogicInput) {
-    const user = await this.userRepository.getUserByEmail(this.db, input.email);
+    const user = await this.userRepository.getByEmail(this.db, input.email);
     if (!user) {
       throw new ZodError([
         {
@@ -76,7 +76,7 @@ export default class AuthService {
           "Your password has been found in a data breach. Please choose a different password",
       });
     }
-    const emailExists = await this.userRepository.getUserByEmail(
+    const emailExists = await this.userRepository.getByEmail(
       this.db,
       input.email,
     );
@@ -97,7 +97,7 @@ export default class AuthService {
     const hash = await hashPassword(input.password);
 
     const { user, code } = await this.db.transaction(async (tx) => {
-      const user = await this.userRepository.createUser(tx, {
+      const user = await this.userRepository.create(tx, {
         ...input,
         typeId: 1,
         password: hash,
@@ -107,30 +107,25 @@ export default class AuthService {
       });
       assertDatabaseResult(user);
 
-      const onboarding =
-        await this.userOnboardingRepository.createUserOnboarding(tx, {
-          userId: user.id,
-          invitedUsers: false,
-          welcomed: false,
-          createdAt: new Date(),
-          createdById: user.id,
-        });
+      const onboarding = await this.userOnboardingRepository.create(tx, {
+        userId: user.id,
+        invitedUsers: false,
+        welcomed: false,
+        createdAt: new Date(),
+        createdById: user.id,
+      });
 
       assertDatabaseResult(onboarding);
 
       const code = generateRandomOTP();
-      const request =
-        await this.emailVerificationRequestRepository.createEmailVerificationRequest(
-          tx,
-          {
-            userId: user.id,
-            email: user.email,
-            code: code,
-            expiresAt: new Date(Date.now() + 1000 * 60 * 10),
-            createdAt: new Date(),
-            createdById: user.id,
-          },
-        );
+      const request = await this.emailVerificationRequestRepository.create(tx, {
+        userId: user.id,
+        email: user.email,
+        code: code,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+        createdAt: new Date(),
+        createdById: user.id,
+      });
       assertDatabaseResult(request);
       return { user, code };
     });

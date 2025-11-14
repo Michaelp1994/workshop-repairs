@@ -17,7 +17,7 @@ import {
 } from "../tables/repairImage.table";
 
 export default class RepairImageRepository {
-  async archiveRepairImage(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<RepairImageInput>,
     repairImageId: RepairImageID,
@@ -30,7 +30,7 @@ export default class RepairImageRepository {
     const [res] = await query.execute();
     return res;
   }
-  async countRepairImages(tx: DatabaseTransaction, _input: CountInput) {
+  async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(repairImageTable)
@@ -38,18 +38,12 @@ export default class RepairImageRepository {
     const [res] = await query.execute();
     return res?.count;
   }
-  async createRepairImage(
-    tx: DatabaseTransaction,
-    input: CreateInput<RepairImageInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<RepairImageInput>) {
     const query = tx.insert(repairImageTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
-  async getAllRepairImages(
-    tx: DatabaseTransaction,
-    { pagination }: GetAllInput,
-  ) {
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
       .select()
       .from(repairImageTable)
@@ -59,7 +53,7 @@ export default class RepairImageRepository {
       .offset(pagination.pageIndex * pagination.pageSize);
     return query.execute();
   }
-  async getAllRepairImagesByRepairId(tx: DatabaseTransaction, input: RepairID) {
+  async getAllByRepairId(tx: DatabaseTransaction, input: RepairID) {
     const query = tx
       .select()
       .from(repairImageTable)
@@ -72,7 +66,7 @@ export default class RepairImageRepository {
     const res = await query.execute();
     return res;
   }
-  async getRepairImageById(tx: DatabaseTransaction, input: RepairImageID) {
+  async getById(tx: DatabaseTransaction, input: RepairImageID) {
     const query = tx
       .select()
       .from(repairImageTable)
@@ -81,7 +75,7 @@ export default class RepairImageRepository {
     return res;
   }
 
-  async updateRepairImage(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<RepairImageInput>,
     repairImageId: RepairImageID,

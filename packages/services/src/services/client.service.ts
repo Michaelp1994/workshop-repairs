@@ -30,7 +30,7 @@ export default class ClientService {
   async archiveClient(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedClient = await this.clientRepository.archiveClient(
+      const archivedClient = await this.clientRepository.archive(
         tx,
         metadata,
         localId,
@@ -38,7 +38,7 @@ export default class ClientService {
       );
       assertDatabaseResult(archivedClient);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
@@ -49,11 +49,7 @@ export default class ClientService {
   }
 
   async countClients(input: CountClientsInput, session: OrganizationSession) {
-    return this.clientRepository.countClients(
-      this.db,
-      input,
-      session.organizationId,
-    );
+    return this.clientRepository.count(this.db, input, session.organizationId);
   }
 
   async createClient(
@@ -75,7 +71,7 @@ export default class ClientService {
         ...metadata,
         localId: sequence.clientLastUsedValue,
       };
-      const client = await this.clientRepository.createClient(tx, values);
+      const client = await this.clientRepository.create(tx, values);
       assertDatabaseResult(client);
 
       const slug = createSlug(sequence.clientKeyPrefix, client.localId);
@@ -89,14 +85,14 @@ export default class ClientService {
 
   async getAllClients(input: GetAllClientsInput, session: OrganizationSession) {
     const sequence =
-      await this.organizationSequenceRepository.getSequenceByOrganizationId(
+      await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
         session.organizationId,
       );
 
     assertDatabaseResult(sequence);
 
-    const allClients = await this.clientRepository.getAllClients(
+    const allClients = await this.clientRepository.getAll(
       this.db,
       input,
       session.organizationId,
@@ -109,7 +105,7 @@ export default class ClientService {
   }
 
   async getClient(localId: number, session: OrganizationSession) {
-    return this.clientRepository.getClientByLocalId(
+    return this.clientRepository.getByLocalId(
       this.db,
       localId,
       session.organizationId,
@@ -120,7 +116,7 @@ export default class ClientService {
     input: GetClientSelectInput,
     session: OrganizationSession,
   ) {
-    return this.clientRepository.getClientsSelect(
+    return this.clientRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
@@ -138,7 +134,7 @@ export default class ClientService {
         ...input,
         ...metadata,
       };
-      const client = await this.clientRepository.updateClient(
+      const client = await this.clientRepository.update(
         tx,
         values,
         localId,
@@ -146,7 +142,7 @@ export default class ClientService {
       );
       assertDatabaseResult(client);
       const sequence =
-        await this.organizationSequenceRepository.getSequenceByOrganizationId(
+        await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );

@@ -10,7 +10,16 @@ import {
 } from "../tables/emailVerificationRequest.table";
 
 export default class EmailVerificationRequestRepository {
-  async createEmailVerificationRequest(
+  async archive(tx: DatabaseTransaction, id: EmailVerificationRequestID) {
+    const query = tx
+      .delete(emailVerificationRequestTable)
+      .where(and(eq(emailVerificationRequestTable.id, id)))
+      .returning();
+    const [res] = await query.execute();
+    return res;
+  }
+
+  async create(
     tx: DatabaseTransaction,
     input: CreateInput<EmailVerificationRequestInput>,
   ) {
@@ -22,19 +31,7 @@ export default class EmailVerificationRequestRepository {
     return res;
   }
 
-  async deleteEmailConfirmationRequestById(
-    tx: DatabaseTransaction,
-    id: EmailVerificationRequestID,
-  ) {
-    const query = tx
-      .delete(emailVerificationRequestTable)
-      .where(and(eq(emailVerificationRequestTable.id, id)))
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  }
-
-  async getEmailVerificationRequest(
+  async getByEmailAndCode(
     tx: DatabaseTransaction,
     email: string,
     code: string,

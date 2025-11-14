@@ -29,7 +29,7 @@ interface ModelFilters {
   equipmentTypeId?: number;
 }
 export default class ModelRepository {
-  async archiveModel(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<ModelInput>,
     localId: number,
@@ -49,7 +49,7 @@ export default class ModelRepository {
     return res;
   }
 
-  async countModels(
+  async count(
     tx: DatabaseTransaction,
     { filters, globalFilter, columnFilters }: CountInput<ModelFilters>,
     organizationId: OrganizationID,
@@ -86,13 +86,13 @@ export default class ModelRepository {
     return res?.count;
   }
 
-  async createModel(tx: DatabaseTransaction, input: CreateInput<ModelInput>) {
+  async create(tx: DatabaseTransaction, input: CreateInput<ModelInput>) {
     const query = tx.insert(modelTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllModels(
+  async getAll(
     tx: DatabaseTransaction,
     {
       filters,
@@ -148,7 +148,31 @@ export default class ModelRepository {
     return query.execute();
   }
 
-  async getModelByLocalId(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilter = createGlobalFilters(input.globalFilter);
+    const query = tx
+      .select({
+        value: modelTable.id,
+        label: modelTable.name,
+      })
+      .from(modelTable)
+      .where(
+        and(
+          isNull(modelTable.deletedAt),
+          eq(modelTable.organizationId, organizationId),
+          globalFilter,
+        ),
+      )
+      .orderBy(modelTable.id);
+    const res = query.execute();
+    return res;
+  }
+
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -190,31 +214,7 @@ export default class ModelRepository {
     return res;
   }
 
-  async getModelsSelect(
-    tx: DatabaseTransaction,
-    input: GetAllSimpleInput,
-    organizationId: OrganizationID,
-  ) {
-    const globalFilter = createGlobalFilters(input.globalFilter);
-    const query = tx
-      .select({
-        value: modelTable.id,
-        label: modelTable.name,
-      })
-      .from(modelTable)
-      .where(
-        and(
-          isNull(modelTable.deletedAt),
-          eq(modelTable.organizationId, organizationId),
-          globalFilter,
-        ),
-      )
-      .orderBy(modelTable.id);
-    const res = query.execute();
-    return res;
-  }
-
-  async updateModel(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<ModelInput>,
     localId: number,

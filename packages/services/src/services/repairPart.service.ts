@@ -25,7 +25,7 @@ export default class RepairPartService {
   async archiveRepairPart(id: RepairPartID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      return this.repairPartRepository.archiveRepairPart(tx, metadata, id);
+      return this.repairPartRepository.archive(tx, metadata, id);
     });
   }
 
@@ -33,7 +33,7 @@ export default class RepairPartService {
     input: CountRepairPartsInput,
     _session: OrganizationSession,
   ) {
-    return this.repairPartRepository.countRepairParts(this.db, input);
+    return this.repairPartRepository.count(this.db, input);
   }
 
   async createRepairPart(
@@ -46,7 +46,7 @@ export default class RepairPartService {
         ...input,
         ...metadata,
       };
-      return this.repairPartRepository.createRepairPart(tx, values);
+      return this.repairPartRepository.create(tx, values);
     });
   }
 
@@ -54,11 +54,11 @@ export default class RepairPartService {
     input: GetAllRepairPartsInput,
     _session: OrganizationSession,
   ) {
-    return this.repairPartRepository.getAllRepairParts(this.db, input);
+    return this.repairPartRepository.getAll(this.db, input);
   }
 
   async getRepairPartById(id: RepairPartID, _session: OrganizationSession) {
-    return this.repairPartRepository.getRepairPartById(this.db, id);
+    return this.repairPartRepository.getById(this.db, id);
   }
 
   async updateRepairPart(
@@ -72,7 +72,7 @@ export default class RepairPartService {
         ...input,
         ...metadata,
       };
-      return this.repairPartRepository.updateRepairPart(tx, values, id);
+      return this.repairPartRepository.update(tx, values, id);
     });
   }
 }

@@ -8,34 +8,15 @@ import {
   type OrganizationInput,
   organizationTable,
 } from "../tables/organization.table";
-import {
-  type OrganizationInvitationInput,
-  organizationInvitationTable,
-} from "../tables/organizationInvitation.table";
 
 export default class OrganizationRepository {
-  async createInvitation(
-    tx: DatabaseTransaction,
-    input: CreateInput<OrganizationInvitationInput>,
-  ) {
-    const query = tx
-      .insert(organizationInvitationTable)
-      .values(input)
-      .returning();
-    const [res] = await query.execute();
-    return res;
-  }
-
-  async createOrganization(
-    tx: DatabaseTransaction,
-    input: CreateInput<OrganizationInput>,
-  ) {
+  async create(tx: DatabaseTransaction, input: CreateInput<OrganizationInput>) {
     const query = tx.insert(organizationTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getOrganizationById(tx: DatabaseTransaction, id: OrganizationID) {
+  async getById(tx: DatabaseTransaction, id: OrganizationID) {
     const query = tx
       .select()
       .from(organizationTable)
@@ -44,10 +25,7 @@ export default class OrganizationRepository {
     return res;
   }
 
-  async getOrganizationByInvitationCode(
-    tx: DatabaseTransaction,
-    invitationCode: string,
-  ) {
+  async getByInvitationCode(tx: DatabaseTransaction, invitationCode: string) {
     const query = tx
       .select()
       .from(organizationTable)
@@ -56,7 +34,7 @@ export default class OrganizationRepository {
     return res;
   }
 
-  async getOrganizationByName(tx: DatabaseTransaction, name: string) {
+  async getByName(tx: DatabaseTransaction, name: string) {
     const query = tx
       .select()
       .from(organizationTable)

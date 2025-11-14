@@ -21,7 +21,7 @@ import { type PartInput, partTable } from "../tables/part.table";
 
 const partFields = getTableColumns(partTable);
 export default class PartRepository {
-  async archivePart(
+  async archive(
     tx: DatabaseTransaction,
     input: ArchiveInput<PartInput>,
     localId: number,
@@ -41,7 +41,7 @@ export default class PartRepository {
     return res;
   }
 
-  async countParts(
+  async count(
     tx: DatabaseTransaction,
     { globalFilter, columnFilters }: CountInput,
     organizationId: OrganizationID,
@@ -65,13 +65,13 @@ export default class PartRepository {
     return res?.count;
   }
 
-  async createPart(tx: DatabaseTransaction, input: CreateInput<PartInput>) {
+  async create(tx: DatabaseTransaction, input: CreateInput<PartInput>) {
     const query = tx.insert(partTable).values(input).returning();
     const [res] = await query.execute();
     return res;
   }
 
-  async getAllParts(
+  async getAll(
     tx: DatabaseTransaction,
     { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
     organizationId: OrganizationID,
@@ -96,7 +96,29 @@ export default class PartRepository {
     return await query.execute();
   }
 
-  async getPartByLocalId(
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: partTable.id,
+        label: partTable.name,
+      })
+      .from(partTable)
+      .where(
+        and(
+          isNull(partTable.deletedAt),
+          eq(partTable.organizationId, organizationId),
+        ),
+      )
+      .orderBy(partTable.id);
+    const res = await query.execute();
+    return res;
+  }
+
+  async getByLocalId(
     tx: DatabaseTransaction,
     localId: number,
     organizationId: OrganizationID,
@@ -122,29 +144,7 @@ export default class PartRepository {
     return res;
   }
 
-  async getPartsSelect(
-    tx: DatabaseTransaction,
-    _input: GetAllSimpleInput,
-    organizationId: OrganizationID,
-  ) {
-    const query = tx
-      .select({
-        value: partTable.id,
-        label: partTable.name,
-      })
-      .from(partTable)
-      .where(
-        and(
-          isNull(partTable.deletedAt),
-          eq(partTable.organizationId, organizationId),
-        ),
-      )
-      .orderBy(partTable.id);
-    const res = await query.execute();
-    return res;
-  }
-
-  async updatePart(
+  async update(
     tx: DatabaseTransaction,
     input: UpdateInput<PartInput>,
     localId: number,
