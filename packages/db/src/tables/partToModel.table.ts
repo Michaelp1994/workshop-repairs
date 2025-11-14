@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 
 import type { InferModel } from "../types";
@@ -26,17 +26,6 @@ export const partToModelTable = pgTable(
     ...auditConstraints(t),
   ],
 );
-
-export const partToModelRelations = relations(partToModelTable, ({ one }) => ({
-  part: one(partTable, {
-    fields: [partToModelTable.partId],
-    references: [partTable.id],
-  }),
-  model: one(modelTable, {
-    fields: [partToModelTable.modelId],
-    references: [modelTable.id],
-  }),
-}));
 
 export type PartToModel = InferModel<typeof partToModelTable>;
 export type PartToModelInput = InferInsertModel<typeof partToModelTable>;

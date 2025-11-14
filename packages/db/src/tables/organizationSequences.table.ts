@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
@@ -29,16 +29,6 @@ export const organizationSequenceTable = pgTable("organization_sequence", {
   ...timestamps,
   ...strictAuditing,
 });
-
-export const organizationSequenceRelations = relations(
-  organizationSequenceTable,
-  ({ one }) => ({
-    organization: one(organizationTable, {
-      fields: [organizationSequenceTable.organizationId],
-      references: [organizationTable.id],
-    }),
-  }),
-);
 
 export type OrganizationSequence = InferModel<typeof organizationSequenceTable>;
 export type OrganizationSequenceID = OrganizationSequence["id"];

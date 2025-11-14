@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -10,9 +10,7 @@ import {
 
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
 import { type InferModel } from "../types";
-import { emailVerificationRequestTable } from "./emailVerificationRequest.table";
 import { organizationTable } from "./organization.table";
-import { userOnboardingTable } from "./userOnboarding.table";
 import { userTypeTable } from "./userType.table";
 
 export const userTable = pgTable(
@@ -54,19 +52,6 @@ export const userTable = pgTable(
     }),
   ],
 );
-
-export const userRelations = relations(userTable, ({ one, many }) => ({
-  userOnboarding: one(userOnboardingTable),
-  emailVerificationRequests: many(emailVerificationRequestTable),
-  userType: one(userTypeTable, {
-    fields: [userTable.typeId],
-    references: [userTypeTable.id],
-  }),
-  organization: one(organizationTable, {
-    fields: [userTable.organizationId],
-    references: [organizationTable.id],
-  }),
-}));
 
 export type User = InferModel<typeof userTable>;
 export type UserID = User["id"];

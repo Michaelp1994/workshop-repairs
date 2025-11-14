@@ -1,7 +1,7 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import pg from "pg";
 
-import { schema } from "./tables";
+import { schema } from "./schema";
 
 const pool = new pg.Pool({
   host: process.env["POSTGRES_HOST"],

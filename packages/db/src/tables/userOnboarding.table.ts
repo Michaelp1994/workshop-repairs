@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { boolean, integer, pgTable, unique } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
@@ -20,16 +20,6 @@ export const userOnboardingTable = pgTable(
     ...strictAuditing,
   },
   (t) => [unique().on(t.userId), ...auditConstraints(t)],
-);
-
-export const userOnboardingRelations = relations(
-  userOnboardingTable,
-  ({ one }) => ({
-    user: one(userTable, {
-      fields: [userOnboardingTable.userId],
-      references: [userTable.id],
-    }),
-  }),
 );
 
 export type UserOnboarding = InferModel<typeof userOnboardingTable>;

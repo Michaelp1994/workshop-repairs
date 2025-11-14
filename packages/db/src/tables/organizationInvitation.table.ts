@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
@@ -20,16 +20,6 @@ export const organizationInvitationTable = pgTable(
     ...laxAuditing,
   },
   (t) => [...auditConstraints(t)],
-);
-
-export const organizationInvitationRelations = relations(
-  organizationInvitationTable,
-  ({ one }) => ({
-    organization: one(organizationTable, {
-      fields: [organizationInvitationTable.organizationId],
-      references: [organizationTable.id],
-    }),
-  }),
 );
 
 export type OrganizationInvitation = InferModel<

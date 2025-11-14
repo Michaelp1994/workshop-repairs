@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import type { InferModel } from "../types";
@@ -10,7 +10,6 @@ import { clientTable } from "./client.table";
 import { locationTable } from "./location.table";
 import { modelTable } from "./model.table";
 import { organizationTable } from "./organization.table";
-import { repairTable } from "./repair.table";
 
 export const assetTable = pgTable(
   "asset",
@@ -31,7 +30,7 @@ export const assetTable = pgTable(
       .references(() => modelTable.id),
     clientId: integer()
       .notNull()
-      .references(() => modelTable.id),
+      .references(() => clientTable.id),
     locationId: integer()
       .notNull()
       .references(() => locationTable.id),
@@ -45,31 +44,6 @@ export const assetTable = pgTable(
   ],
 );
 
-export const assetRelations = relations(assetTable, ({ one, many }) => ({
-  repair: many(repairTable),
-  organization: one(organizationTable, {
-    fields: [assetTable.organizationId],
-    references: [organizationTable.id],
-  }),
-  status: one(assetStatusTable, {
-    fields: [assetTable.statusId],
-    references: [assetStatusTable.id],
-  }),
-  model: one(modelTable, {
-    fields: [assetTable.modelId],
-    references: [modelTable.id],
-  }),
-  client: one(clientTable, {
-    fields: [assetTable.clientId],
-    references: [clientTable.id],
-  }),
-  location: one(locationTable, {
-    fields: [assetTable.locationId],
-    references: [locationTable.id],
-  }),
-}));
-
 export type Asset = InferModel<typeof assetTable>;
 export type AssetInput = InferInsertModel<typeof assetTable>;
-
 export type AssetID = Asset["id"];

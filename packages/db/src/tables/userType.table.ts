@@ -1,9 +1,8 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
 import { type InferModel } from "../types";
-import { userTable } from "./user.table";
 
 export const userTypeTable = pgTable("user_type", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -11,10 +10,6 @@ export const userTypeTable = pgTable("user_type", {
   ...timestamps,
   ...laxAuditing,
 });
-
-export const userTypeRelations = relations(userTypeTable, ({ many }) => ({
-  users: many(userTable),
-}));
 
 export type UserType = InferModel<typeof userTypeTable>;
 export type UserTypeID = UserType["id"];

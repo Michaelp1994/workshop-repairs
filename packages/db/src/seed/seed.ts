@@ -2,7 +2,7 @@ import { hashPassword } from "@repo/auth/password";
 import { getTableColumns, getTableName, sql } from "drizzle-orm";
 
 import { db } from "../index";
-import { schema } from "../tables";
+import { schema } from "../schema";
 import asset_statuses from "./data/staging/asset_statuses.json";
 import clients from "./data/staging/clients.json";
 import equipment_types from "./data/staging/equipment_types.json";

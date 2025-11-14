@@ -1,10 +1,9 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
 import { type InferModel } from "../types";
-import { assetTable } from "./asset.table";
 
 export const assetStatusTable = pgTable(
   "asset_status",
@@ -16,10 +15,6 @@ export const assetStatusTable = pgTable(
   },
   (t) => [...auditConstraints(t)],
 );
-
-export const assetStatusRelations = relations(assetStatusTable, ({ many }) => ({
-  assets: many(assetTable),
-}));
 
 export type AssetStatus = InferModel<typeof assetStatusTable>;
 export type AssetStatusID = AssetStatus["id"];

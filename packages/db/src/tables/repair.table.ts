@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
@@ -7,9 +7,6 @@ import { type InferModel } from "../types";
 import { assetTable } from "./asset.table";
 import { clientTable } from "./client.table";
 import { organizationTable } from "./organization.table";
-import { repairCommentTable } from "./repairComment.table";
-import { repairImageTable } from "./repairImage.table";
-import { repairPartTable } from "./repairPart.table";
 import { repairStatusTypeTable } from "./repairStatusType.table";
 import { repairTypeTable } from "./repairType.table";
 
@@ -41,32 +38,6 @@ export const repairTable = pgTable(
   },
   (t) => [unique().on(t.localId, t.organizationId), ...auditConstraints(t)],
 );
-
-export const repairRelations = relations(repairTable, ({ one, many }) => ({
-  images: many(repairImageTable),
-  comments: many(repairCommentTable),
-  parts: many(repairPartTable),
-  asset: one(assetTable, {
-    fields: [repairTable.assetId],
-    references: [assetTable.id],
-  }),
-  status: one(repairStatusTypeTable, {
-    fields: [repairTable.statusId],
-    references: [repairStatusTypeTable.id],
-  }),
-  type: one(repairTypeTable, {
-    fields: [repairTable.typeId],
-    references: [repairTypeTable.id],
-  }),
-  organization: one(organizationTable, {
-    fields: [repairTable.organizationId],
-    references: [organizationTable.id],
-  }),
-  client: one(clientTable, {
-    fields: [repairTable.clientId],
-    references: [clientTable.id],
-  }),
-}));
 
 export type Repair = InferModel<typeof repairTable>;
 export type RepairID = Repair["id"];

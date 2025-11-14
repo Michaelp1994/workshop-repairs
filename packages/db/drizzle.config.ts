@@ -12,7 +12,7 @@ if (
 
 export default defineConfig({
   dialect: "postgresql",
-  schema: "./src/tables/*.sql.ts",
+  schema: "./src/tables/*.table.ts",
   out: "./migrations",
   casing: "snake_case",
   dbCredentials: {

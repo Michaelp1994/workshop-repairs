@@ -1,4 +1,4 @@
-import { type InferInsertModel, relations } from "drizzle-orm";
+import { type InferInsertModel } from "drizzle-orm";
 import { boolean, integer, pgTable } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
@@ -24,17 +24,6 @@ export const repairPartTable = pgTable(
   },
   (t) => [...auditConstraints(t)],
 );
-
-export const repairPartRelations = relations(repairPartTable, ({ one }) => ({
-  repair: one(repairTable, {
-    fields: [repairPartTable.repairId],
-    references: [repairTable.id],
-  }),
-  part: one(partTable, {
-    fields: [repairPartTable.partId],
-    references: [partTable.id],
-  }),
-}));
 
 export type RepairPart = InferModel<typeof repairPartTable>;
 export type RepairPartID = RepairPart["id"];
