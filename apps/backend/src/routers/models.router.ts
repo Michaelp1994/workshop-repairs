@@ -10,7 +10,6 @@ import {
 } from "@repo/validators/server/models.validators";
 import { TRPCError } from "@trpc/server";
 
-import { getModelImageUrlFromKey } from "../../../../packages/services/src/helpers/s3";
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -21,12 +20,7 @@ export default function modelRouter(modelService: ModelService) {
       .input(getAllModelsSchema)
       .query(async ({ ctx, input }) => {
         const allModels = await modelService.getAllModels(input, ctx.session);
-        return allModels.map((model) => ({
-          ...model,
-          defaultImageUrl: model.defaultImageUrl
-            ? getModelImageUrlFromKey(model.defaultImageUrl)
-            : null,
-        }));
+        return allModels;
       }),
     countAll: organizationProcedure
       .input(countModelsSchema)

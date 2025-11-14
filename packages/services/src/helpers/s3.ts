@@ -4,7 +4,7 @@ import {
   type PutObjectCommandInput,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { fromSSO } from "@aws-sdk/credential-providers"; // ES6 import
+import { fromSSO } from "@aws-sdk/credential-providers";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const ONE_MINUTE = 60 * 1000;

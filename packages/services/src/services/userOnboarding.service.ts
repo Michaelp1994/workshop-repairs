@@ -10,6 +10,7 @@ import { ZodError } from "zod";
 import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   type AuthedSession,
+  createInsertMetadata,
   createUpdateMetadata,
   type OrganizationSession,
 } from "../helpers/includeMetadata";
@@ -183,9 +184,15 @@ export default class UserOnboardingService {
       session.organizationId,
     );
     assertDatabaseResult(organization);
-    const emailPromises = emails.map((unprocessedEmail) => {
+    const emailPromises = emails.map(async (unprocessedEmail) => {
       const email = unprocessedEmail.trim();
+      const metadata = createInsertMetadata(session);
       // TODO: Check if valid email.
+      await this.organizationRepository.createInvitation(this.db, {
+        email,
+        emailSentAt: new Date(),
+        ...metadata,
+      });
       return sendInvitationEmail(email, organization);
     });
 

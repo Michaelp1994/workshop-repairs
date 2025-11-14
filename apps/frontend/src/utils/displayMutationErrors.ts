@@ -1,9 +1,8 @@
+import type { AppRouter } from "@repo/backend";
 import type { UseFormReturn } from "@repo/ui/form";
 import type { TRPCClientErrorLike } from "@trpc/client";
 
 import { toast } from "@repo/ui/sonner";
-
-import type { AppRouter } from "../../../backend/src/router";
 
 export default function displayMutationErrors<
   FieldValues extends Record<string, unknown>,

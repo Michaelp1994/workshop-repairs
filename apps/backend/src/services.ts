@@ -85,6 +85,7 @@ export const authService = new AuthService(
   db,
   userRepository,
   userOnboardingRepository,
+  emailVerificationRequestRepository,
 );
 export const clientService = new ClientService(
   db,

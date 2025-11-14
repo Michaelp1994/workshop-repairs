@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -11,8 +13,6 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
 import getInitials from "~/utils/getInitials";
-
-import type { RouterOutputs } from "../../../../backend/src/router";
 
 const columnHelper =
   createColumnHelper<RouterOutputs["users"]["getAll"][number]>();

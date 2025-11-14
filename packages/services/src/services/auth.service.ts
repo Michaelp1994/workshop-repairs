@@ -1,5 +1,7 @@
+import type EmailVerificationRequestRepository from "@repo/db/repositories/emailVerificationRequest.repository";
 import type { $ZodIssue } from "zod/v4/core";
 
+import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import {
   hashPassword,
   verifyPasswordHash,
@@ -27,8 +29,9 @@ interface RegisterInput {
 export default class AuthService {
   constructor(
     private db: Database,
-    private userRepository: UserRepository = new UserRepository(),
-    private userOnboardingRepository: UserOnboardingRepository = new UserOnboardingRepository(),
+    private userRepository: UserRepository,
+    private userOnboardingRepository: UserOnboardingRepository,
+    private emailVerificationRequestRepository: EmailVerificationRequestRepository,
   ) {}
 
   async login(input: LogicInput) {
@@ -92,29 +95,47 @@ export default class AuthService {
     }
 
     const hash = await hashPassword(input.password);
-    const user = await this.userRepository.createUser(this.db, {
-      ...input,
-      typeId: 1,
-      password: hash,
-      emailVerified: false,
-      organizationId: null,
-      createdAt: new Date(),
-    });
-    assertDatabaseResult(user);
 
-    const onboarding = await this.userOnboardingRepository.createUserOnboarding(
-      this.db,
-      {
-        userId: user.id,
-        invitedUsers: false,
-        welcomed: false,
+    const { user, code } = await this.db.transaction(async (tx) => {
+      const user = await this.userRepository.createUser(tx, {
+        ...input,
+        typeId: 1,
+        password: hash,
+        emailVerified: false,
+        organizationId: null,
         createdAt: new Date(),
-      },
-    );
+      });
+      assertDatabaseResult(user);
 
-    assertDatabaseResult(onboarding);
+      const onboarding =
+        await this.userOnboardingRepository.createUserOnboarding(tx, {
+          userId: user.id,
+          invitedUsers: false,
+          welcomed: false,
+          createdAt: new Date(),
+          createdById: user.id,
+        });
 
-    await sendVerificationEmail(user.id, user.email);
+      assertDatabaseResult(onboarding);
+
+      const code = generateRandomOTP();
+      const request =
+        await this.emailVerificationRequestRepository.createEmailVerificationRequest(
+          tx,
+          {
+            userId: user.id,
+            email: user.email,
+            code: code,
+            expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+            createdAt: new Date(),
+            createdById: user.id,
+          },
+        );
+      assertDatabaseResult(request);
+      return { user, code };
+    });
+
+    await sendVerificationEmail(user.email, code);
     return user;
   }
 }

@@ -1,14 +1,13 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
+import UpdateUserForm from "~/components/forms/UpdateUserForm";
 import {
   PageHeader,
   PageHeaderText,
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-
-import UpdateUserForm from "../../../../components/forms/UpdateUserForm";
 
 export const Route = createFileRoute("/_protected/users/$userId/edit")({
   component: EditUserPage,

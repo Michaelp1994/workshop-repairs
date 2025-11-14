@@ -1,7 +1,5 @@
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
-import { db } from "@repo/db";
-import { createInvitation } from "@repo/db/repositories/organization.repository";
 
 import type { Organization } from "../../../db/src/tables/organization.sql";
 
@@ -37,11 +35,6 @@ export default async function sendInvitationEmail(
           },
         }),
       );
-      await createInvitation(db, {
-        email,
-        organizationId: organization.id,
-        emailSentAt: new Date(),
-      });
     } catch (e) {
       console.error(e);
     }

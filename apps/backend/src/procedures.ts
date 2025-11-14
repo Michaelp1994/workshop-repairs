@@ -1,6 +1,6 @@
-import { getUserByIdService } from "@repo/services/services/user.service";
 import { TRPCError } from "@trpc/server";
 
+import { userService } from "./services";
 import { procedure } from "./trpc";
 
 export const publicProcedure = procedure;
@@ -28,7 +28,7 @@ export const organizationProcedure = procedure.use(async ({ ctx, next }) => {
     });
   }
 
-  const user = await getUserByIdService(ctx.session.userId);
+  const user = await userService.getUserById(ctx.session.userId);
   if (!user?.organizationId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",

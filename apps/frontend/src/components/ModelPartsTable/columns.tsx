@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend";
+
 import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
@@ -5,8 +7,6 @@ import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
 import { DataTableRowCheckbox } from "@repo/ui/data-table";
 import { Pencil, Trash2 } from "@repo/ui/icons";
 import { createColumnHelper } from "@tanstack/react-table";
-
-import type { RouterOutputs } from "../../../../backend/src/router";
 
 import ArchiveModelPartModal from "../modals/ArchiveModelPartModal";
 import UpdateModelPartModal from "../modals/UpdateModelPartModal";

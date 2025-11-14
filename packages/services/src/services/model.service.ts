@@ -18,6 +18,7 @@ import {
   createUpdateMetadata,
   type OrganizationSession,
 } from "../helpers/includeMetadata";
+import { getModelImageUrlFromKey } from "../helpers/s3";
 import { createSlug } from "../helpers/slugs";
 
 export default class ModelService {
@@ -103,6 +104,9 @@ export default class ModelService {
     return allModels.map(({ localId, ...model }) => ({
       ...model,
       slug: createSlug(sequence.modelKeyPrefix, localId),
+      defaultImageUrl: model.defaultImageUrl
+        ? getModelImageUrlFromKey(model.defaultImageUrl)
+        : null,
     }));
   }
 

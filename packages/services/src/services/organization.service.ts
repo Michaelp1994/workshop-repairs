@@ -7,6 +7,7 @@ import type { OrganizationInput } from "../../../db/src/tables/organization.sql"
 import type { CreateInput } from "../types";
 
 import assertDatabaseResult from "../helpers/assertDatabaseResult";
+import { getOrganizationLogoUrlFromKey } from "../helpers/s3";
 
 export default class OrganizationService {
   constructor(
@@ -25,6 +26,11 @@ export default class OrganizationService {
       organizationId,
     );
     assertDatabaseResult(organization);
-    return organization;
+    return {
+      ...organization,
+      logo: organization.logo
+        ? getOrganizationLogoUrlFromKey(organization.logo)
+        : null,
+    };
   }
 }

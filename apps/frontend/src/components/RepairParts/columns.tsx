@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend";
+
 import NiceModal from "@ebay/nice-modal-react";
 import { Button } from "@repo/ui/button";
 import { DataTableColumnHeader } from "@repo/ui/data-table";
@@ -7,8 +9,6 @@ import { CheckIcon, Pencil, Trash2 } from "@repo/ui/icons";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { formatDate } from "~/utils/formatDate";
-
-import type { RouterOutputs } from "../../../../backend/src/router";
 
 import ArchiveRepairPartModal from "../modals/ArchiveRepairPartModal";
 import UpdateRepairPartModal from "../modals/UpdateRepairPartModal";

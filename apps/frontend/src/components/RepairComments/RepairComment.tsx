@@ -1,3 +1,5 @@
+import type { RouterOutputs } from "@repo/backend";
+
 import { Avatar, AvatarFallback } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import { Pencil, Trash2, User } from "@repo/ui/icons";
@@ -6,8 +8,6 @@ import { useLocation } from "@tanstack/react-router";
 import { formatRelative } from "date-fns";
 
 import { useSession } from "~/auth/SessionProvider";
-
-import type { RouterOutputs } from "../../../../backend/src/router";
 
 import { CommentText } from "./CommentText";
 
