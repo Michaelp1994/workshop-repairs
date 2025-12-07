@@ -25,8 +25,8 @@ import { modelImageTable } from "../tables/modelImage.table";
 const modelFields = getTableColumns(modelTable);
 
 interface ModelFilters {
-  manufacturerId?: number;
-  equipmentTypeId?: number;
+  manufacturerId?: number | undefined;
+  equipmentTypeId?: number | undefined;
 }
 export default class ModelRepository {
   async archive(
@@ -150,7 +150,7 @@ export default class ModelRepository {
 
   async getAllSimple(
     tx: DatabaseTransaction,
-    input: GetAllSimpleInput,
+    input: GetAllSimpleInput<ModelFilters>,
     organizationId: OrganizationID,
   ) {
     const globalFilter = createGlobalFilters(input.globalFilter);

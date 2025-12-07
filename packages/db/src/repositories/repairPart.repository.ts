@@ -27,7 +27,7 @@ import {
 const repairPartFields = getTableColumns(repairPartTable);
 
 interface RepairPartFilters {
-  repairId?: number;
+  repairId?: number | undefined;
 }
 export default class RepairPartRepository {
   async archive(

@@ -30,8 +30,8 @@ import { repairTypeTable } from "../tables/repairType.table";
 const repairFields = getTableColumns(repairTable);
 
 interface RepairFilters {
-  assetId?: number;
-  clientId?: number;
+  assetId?: number | undefined;
+  clientId?: number | undefined;
 }
 export default class RepairRepository {
   async archive(

@@ -35,11 +35,11 @@ interface AssetSelector {
 }
 
 interface AssetFilters {
-  model?: number;
-  client?: number;
-  location?: number;
-  manufacturer?: number;
-  equipmentType?: number;
+  model?: string | undefined;
+  client?: string | undefined;
+  location?: string | undefined;
+  manufacturer?: string | undefined;
+  equipmentType?: string | undefined;
 }
 
 export default class AssetRepository {
