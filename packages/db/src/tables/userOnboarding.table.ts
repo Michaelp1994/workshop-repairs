@@ -12,7 +12,6 @@ export const userOnboardingTable = pgTable(
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     userId: integer()
       .notNull()
-      .unique()
       .references(() => userTable.id),
     welcomed: boolean().notNull().default(false),
     invitedUsers: boolean().notNull().default(false),
