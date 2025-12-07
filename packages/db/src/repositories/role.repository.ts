@@ -8,51 +8,47 @@ import type {
   GetAllInput,
   UpdateInput,
 } from "../types";
-import {
-  groupRoleTable,
-  type GroupRoleID,
-  type GroupRoleInput,
-} from "../tables/groupRole.table";
+import { roleTable, type RoleID, type RoleInput } from "../tables/role.table";
 
-export default class GroupRoleRepository {
+export default class RoleRepository {
   async archive(
     tx: DatabaseTransaction,
-    input: ArchiveInput<GroupRoleInput>,
-    groupRoleId: GroupRoleID,
+    input: ArchiveInput<RoleInput>,
+    roleId: RoleID,
   ) {
     const query = tx
-      .update(groupRoleTable)
+      .update(roleTable)
       .set(input)
-      .where(eq(groupRoleTable.id, groupRoleId))
+      .where(eq(roleTable.id, roleId))
       .returning();
     return await returnOne(query);
   }
   async getAll(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(groupRoleTable);
+    const query = tx.select().from(roleTable);
     return await query.execute();
   }
   async getById(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(groupRoleTable);
+    const query = tx.select().from(roleTable);
     return await returnOne(query);
   }
   async count(tx: DatabaseTransaction, input: CountInput) {
-    const query = tx.select({ count: count() }).from(groupRoleTable);
+    const query = tx.select({ count: count() }).from(roleTable);
     const res = await returnOne(query);
     return res.count;
   }
-  async create(tx: DatabaseTransaction, input: CreateInput<GroupRoleInput>) {
-    const query = tx.insert(groupRoleTable).values(input).returning();
+  async create(tx: DatabaseTransaction, input: CreateInput<RoleInput>) {
+    const query = tx.insert(roleTable).values(input).returning();
     return await returnOne(query);
   }
   async update(
     tx: DatabaseTransaction,
-    input: UpdateInput<GroupRoleInput>,
-    groupRoleId: GroupRoleID,
+    input: UpdateInput<RoleInput>,
+    roleId: RoleID,
   ) {
     const query = tx
-      .update(groupRoleTable)
+      .update(roleTable)
       .set(input)
-      .where(eq(groupRoleTable.id, groupRoleId))
+      .where(eq(roleTable.id, roleId))
       .returning();
     return await returnOne(query);
   }

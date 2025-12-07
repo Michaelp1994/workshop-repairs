@@ -9,50 +9,50 @@ import type {
   UpdateInput,
 } from "../types";
 import {
-  groupRoleTable,
-  type GroupRoleID,
-  type GroupRoleInput,
-} from "../tables/groupRole.table";
+  userGroupTable,
+  type UserGroupID,
+  type UserGroupInput,
+} from "../tables/userGroup.table";
 
-export default class GroupRoleRepository {
+export default class UserGroupRepository {
   async archive(
     tx: DatabaseTransaction,
-    input: ArchiveInput<GroupRoleInput>,
-    groupRoleId: GroupRoleID,
+    input: ArchiveInput<UserGroupInput>,
+    userGroupId: UserGroupID,
   ) {
     const query = tx
-      .update(groupRoleTable)
+      .update(userGroupTable)
       .set(input)
-      .where(eq(groupRoleTable.id, groupRoleId))
+      .where(eq(userGroupTable.id, userGroupId))
       .returning();
     return await returnOne(query);
   }
   async getAll(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(groupRoleTable);
+    const query = tx.select().from(userGroupTable);
     return await query.execute();
   }
   async getById(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(groupRoleTable);
+    const query = tx.select().from(userGroupTable);
     return await returnOne(query);
   }
   async count(tx: DatabaseTransaction, input: CountInput) {
-    const query = tx.select({ count: count() }).from(groupRoleTable);
+    const query = tx.select({ count: count() }).from(userGroupTable);
     const res = await returnOne(query);
     return res.count;
   }
-  async create(tx: DatabaseTransaction, input: CreateInput<GroupRoleInput>) {
-    const query = tx.insert(groupRoleTable).values(input).returning();
+  async create(tx: DatabaseTransaction, input: CreateInput<UserGroupInput>) {
+    const query = tx.insert(userGroupTable).values(input).returning();
     return await returnOne(query);
   }
   async update(
     tx: DatabaseTransaction,
-    input: UpdateInput<GroupRoleInput>,
-    groupRoleId: GroupRoleID,
+    input: UpdateInput<UserGroupInput>,
+    userGroupId: UserGroupID,
   ) {
     const query = tx
-      .update(groupRoleTable)
+      .update(userGroupTable)
       .set(input)
-      .where(eq(groupRoleTable.id, groupRoleId))
+      .where(eq(userGroupTable.id, userGroupId))
       .returning();
     return await returnOne(query);
   }

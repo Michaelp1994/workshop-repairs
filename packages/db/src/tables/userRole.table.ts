@@ -4,6 +4,8 @@ import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
 import { roleTable } from "./role.table";
 import { userTable } from "./user.table";
+import type { InferModel } from "../types";
+import type { InferInsertModel } from "drizzle-orm";
 
 export const userRoleTable = pgTable(
   "user_role",
@@ -20,3 +22,7 @@ export const userRoleTable = pgTable(
   },
   (t) => [unique().on(t.userId, t.roleId), ...auditConstraints(t)],
 );
+
+export type UserRole = InferModel<typeof userRoleTable>;
+export type UserRoleID = UserRole["id"];
+export type UserRoleInput = InferInsertModel<typeof userRoleTable>;
