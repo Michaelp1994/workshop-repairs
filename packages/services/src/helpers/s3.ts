@@ -27,7 +27,7 @@ export async function createPresignedUrl(
 ) {
   const command = new PutObjectCommand({
     ...opts,
-    Bucket: process.env["s3BucketName"],
+    Bucket: process.env["S3_BUCKET_NAME"],
   });
   return await getSignedUrl(s3, command, {
     expiresIn: ONE_MINUTE,
@@ -40,7 +40,7 @@ export function createRepairImageKeyFromFileName(fileName: string) {
 
 export async function fileExistsInS3(key: string) {
   const command = new HeadObjectCommand({
-    Bucket: process.env["s3BucketName"],
+    Bucket: process.env["S3_BUCKET_NAME"],
     Key: key,
   });
   const result = await s3.send(command);
