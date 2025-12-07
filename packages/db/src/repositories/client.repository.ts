@@ -18,6 +18,7 @@ import {
   getOrderBy,
 } from "../mappings/clients.mapper";
 import { type ClientInput, clientTable } from "../tables/client.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const clientFields = getTableColumns(clientTable);
 export default class ClientRepository {
@@ -37,8 +38,7 @@ export default class ClientRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -59,14 +59,13 @@ export default class ClientRepository {
           ...columnFilterParams,
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<ClientInput>) {
-    const [client] = await tx.insert(clientTable).values(input).returning();
-
-    return client;
+    const query = tx.insert(clientTable).values(input).returning();
+    return await returnOne(query);
   }
 
   async getAll(
@@ -138,8 +137,7 @@ export default class ClientRepository {
           eq(clientTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -158,7 +156,6 @@ export default class ClientRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

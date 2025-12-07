@@ -7,7 +7,6 @@ import UserOnboardingRepository from "@repo/db/repositories/userOnboarding.repos
 import { randomUUID } from "crypto";
 import { ZodError } from "zod";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   type AuthedSession,
   createInsertMetadata,
@@ -30,61 +29,12 @@ export default class UserOnboardingService {
     private organizationRepository: OrganizationRepository,
   ) {}
 
-  async createOrganization(
-    input: { name: string; logo: string },
-    session: AuthedSession,
-  ) {
-    const fileExists = await fileExistsInS3(
-      createOrganizationLogoKeyFromFileName(input.logo),
-    );
-    if (!fileExists) {
-      throw new Error("File does not exist.");
-    }
-
-    const user = await this.userRepository.getById(this.db, session.userId);
-    assertDatabaseResult(user);
-
-    if (user.organizationId) {
-      throw new Error("You already belong to an organization");
-    }
-
-    const organizationExists = await this.organizationRepository.getByName(
-      this.db,
-      input.name,
-    );
-
-    if (organizationExists) {
-      throw new ZodError([
-        {
-          input: null,
-          code: "custom",
-          path: ["name"],
-          message: "This name is already taken.",
-        },
-      ]);
-    }
-
-    const createdOrganization = await this.organizationRepository.create(
-      this.db,
-      input,
-    );
-    assertDatabaseResult(createdOrganization);
-    const metadata = createUpdateMetadata(session);
-    const updatedUser = await this.userRepository.update(
-      db,
-      { organizationId: createdOrganization.id, ...metadata },
-      session.userId,
-    );
-
-    return updatedUser;
-  }
-
   async getStatus(userId: UserID) {
     const userStatus = await this.userOnboardingRepository.getByUserId(
       this.db,
       userId,
     );
-    assertDatabaseResult(userStatus);
+
     return userStatus;
   }
 
@@ -93,7 +43,7 @@ export default class UserOnboardingService {
       this.db,
       session.userId,
     );
-    assertDatabaseResult(user);
+
     if (user.organizationId) {
       throw new Error("You already belong to an organization");
     }
@@ -123,8 +73,6 @@ export default class UserOnboardingService {
       session.userId,
     );
 
-    assertDatabaseResult(updatedUser);
-
     return organization;
   }
 
@@ -144,7 +92,7 @@ export default class UserOnboardingService {
     session: AuthedSession,
   ) {
     const user = await this.userRepository.getById(this.db, session.userId);
-    assertDatabaseResult(user);
+
     if (user.organizationId) {
       throw new Error("You already belong to an organization");
     }
@@ -181,7 +129,7 @@ export default class UserOnboardingService {
       this.db,
       session.organizationId,
     );
-    assertDatabaseResult(organization);
+
     const emailPromises = emails.map(async (unprocessedEmail) => {
       const email = unprocessedEmail.trim();
       const metadata = createInsertMetadata(session);

@@ -6,6 +6,12 @@ import OrganizationSequenceRepository from "@repo/db/repositories/organizationSe
 import type { OrganizationSequenceInput } from "../../../db/src/tables/organizationSequences.table";
 import type { CreateInput, UpdateInput } from "../types";
 
+import {
+  createInsertMetadata,
+  createUpdateMetadata,
+  type OrganizationSession,
+} from "../helpers/includeMetadata";
+
 export default class OrganizationSequenceService {
   constructor(
     private db: Database,
@@ -13,14 +19,26 @@ export default class OrganizationSequenceService {
   ) {}
   async createOrganizationSequence(
     input: CreateInput<OrganizationSequenceInput>,
+    session: OrganizationSession,
   ) {
-    return this.organizationSequenceRepository.create(this.db, input);
+    const metadata = createInsertMetadata(session);
+    const values = {
+      ...input,
+      ...metadata,
+    };
+    return this.organizationSequenceRepository.create(this.db, values);
   }
 
   async updateOrganizationSequence(
     input: UpdateInput<OrganizationSequenceInput>,
     id: OrganizationSequenceID,
+    session: OrganizationSession,
   ) {
-    return this.organizationSequenceRepository.update(this.db, input, id);
+    const metadata = createUpdateMetadata(session);
+    const values = {
+      ...input,
+      ...metadata,
+    };
+    return this.organizationSequenceRepository.update(this.db, values, id);
   }
 }

@@ -12,7 +12,6 @@ import metaRouter from "./routers/meta.router";
 import modelImagesRouter from "./routers/modelImages.router";
 import modelsRouter from "./routers/models.router";
 import organizationsRouter from "./routers/organizations.router";
-import organizationSequencesRouter from "./routers/organizationSequences.router";
 import partsRouter from "./routers/parts.router";
 import partsToModelsRouter from "./routers/partsToModels.router";
 import repairCommentsRouter from "./routers/repairComments.router";
@@ -23,7 +22,6 @@ import repairStatusTypesRouter from "./routers/repairStatusTypes.router";
 import repairTypesRouter from "./routers/repairTypes.router";
 import userOnboardingsRouter from "./routers/userOnboardings.router";
 import usersRouter from "./routers/users.router";
-import userTypesRouter from "./routers/userTypes.router";
 import {
   assetService,
   assetStatusService,
@@ -46,7 +44,6 @@ import {
   repairTypeService,
   userOnboardingService,
   userService,
-  userTypeService,
 } from "./services";
 import { router } from "./trpc";
 
@@ -62,9 +59,7 @@ const meta = metaRouter();
 const modelImages = modelImagesRouter(modelImageService);
 const models = modelsRouter(modelService);
 const organizations = organizationsRouter(organizationService);
-const organizationSequences = organizationSequencesRouter(
-  organizationSequenceService,
-);
+
 const parts = partsRouter(partService);
 const partsToModels = partsToModelsRouter(partToModelService);
 const repairComments = repairCommentsRouter(repairCommentService);
@@ -75,7 +70,6 @@ const repairStatusTypes = repairStatusTypesRouter(repairStatusTypeService);
 const repairTypes = repairTypesRouter(repairTypeService);
 const userOnboardings = userOnboardingsRouter(userOnboardingService);
 const users = usersRouter(userService);
-const userTypes = userTypesRouter(userTypeService);
 
 export const appRouter = router({
   auth,
@@ -86,7 +80,6 @@ export const appRouter = router({
   locations,
   manufacturers,
   organizations,
-  organizationSequences,
   meta,
   modelImages,
   models,
@@ -100,7 +93,6 @@ export const appRouter = router({
   repairTypes,
   users,
   userOnboardings,
-  userTypes,
 });
 
 // export type definition of API

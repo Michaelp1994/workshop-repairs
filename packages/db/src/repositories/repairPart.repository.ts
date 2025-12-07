@@ -23,6 +23,7 @@ import {
   type RepairPartInput,
   repairPartTable,
 } from "../tables/repairPart.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const repairPartFields = getTableColumns(repairPartTable);
 
@@ -40,8 +41,7 @@ export default class RepairPartRepository {
       .set(input)
       .where(eq(repairPartTable.id, repairPartId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -64,14 +64,13 @@ export default class RepairPartRepository {
             : undefined,
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<RepairPartInput>) {
     const query = tx.insert(repairPartTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -135,8 +134,7 @@ export default class RepairPartRepository {
       .innerJoin(repairTable, eq(repairTable.id, repairPartTable.repairId))
       .innerJoin(assetTable, eq(assetTable.id, repairTable.assetId))
       .where(eq(repairPartTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -149,7 +147,6 @@ export default class RepairPartRepository {
       .set(input)
       .where(eq(repairPartTable.id, repairPartId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

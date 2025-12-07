@@ -11,7 +11,6 @@ import UserRepository from "@repo/db/repositories/user.repository";
 import type { UserInput } from "../../../db/src/tables/user.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   type AuthedSession,
   createArchiveMetadata,
@@ -20,6 +19,7 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
+import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 
 export default class UserService {
   constructor(
@@ -43,14 +43,13 @@ export default class UserService {
     session: AuthedSession,
   ) {
     const user = await this.userRepository.getByEmail(this.db, input.email);
-    assertDatabaseResult(user);
+
     const request =
       await this.emailVerificationRequestRepository.getByEmailAndCode(
         this.db,
         input.email,
         input.code,
       );
-    assertDatabaseResult(request);
 
     await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
@@ -96,14 +95,6 @@ export default class UserService {
 
   async getUserById(id: UserID) {
     return this.userRepository.getById(this.db, id);
-  }
-
-  async sendEmailConfirmation(
-    input: { email: string },
-    session: AuthedSession,
-  ) {
-    await sendVerificationEmail(session.userId, input.email);
-    return true;
   }
 
   async updateUser(

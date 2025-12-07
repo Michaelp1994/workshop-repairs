@@ -11,7 +11,6 @@ import OrganizationSequenceRepository from "@repo/db/repositories/organizationSe
 import type { AssetInput } from "../../../db/src/tables/asset.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -39,13 +38,13 @@ export default class AssetService {
         metadata,
         where,
       );
-      assertDatabaseResult(archivedAsset);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.assetKeyPrefix, localId);
       return { slug, ...archivedAsset };
     });
@@ -57,7 +56,7 @@ export default class AssetService {
       input,
       session.organizationId,
     );
-    assertDatabaseResult(count);
+
     return count;
   }
 
@@ -73,8 +72,6 @@ export default class AssetService {
         );
       const metadata = createInsertMetadata(session);
 
-      assertDatabaseResult(sequence);
-
       const values = {
         ...input,
         ...metadata,
@@ -82,8 +79,6 @@ export default class AssetService {
       };
 
       const asset = await this.assetRepository.create(tx, values);
-
-      assertDatabaseResult(asset);
 
       const slug = createSlug(sequence.assetKeyPrefix, asset.localId);
 
@@ -100,8 +95,6 @@ export default class AssetService {
         this.db,
         session.organizationId,
       );
-
-    assertDatabaseResult(sequence);
 
     const allAssets = await this.assetRepository.getAll(
       this.db,
@@ -120,7 +113,7 @@ export default class AssetService {
       localId,
       organizationId: session.organizationId,
     });
-    assertDatabaseResult(asset);
+
     return asset;
   }
 
@@ -153,13 +146,13 @@ export default class AssetService {
       };
 
       const updatedAsset = await this.assetRepository.update(tx, values, where);
-      assertDatabaseResult(updatedAsset);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.assetKeyPrefix, localId);
       return {
         slug,

@@ -27,7 +27,6 @@ import { userTable } from "./tables/user.table";
 import { userGroupTable } from "./tables/userGroup.table";
 import { userOnboardingTable } from "./tables/userOnboarding.table";
 import { userRoleTable } from "./tables/userRole.table";
-import { userTypeTable } from "./tables/userType.table";
 
 export const schema = {
   assetStatusTable,
@@ -59,5 +58,4 @@ export const schema = {
   userOnboardingTable,
   userRoleTable,
   userTable,
-  userTypeTable,
 };

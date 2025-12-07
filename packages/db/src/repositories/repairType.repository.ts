@@ -15,6 +15,7 @@ import {
   type RepairTypeInput,
   repairTypeTable,
 } from "../tables/repairType.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class RepairTypeRepository {
   async archive(
@@ -27,8 +28,7 @@ export default class RepairTypeRepository {
       .set(input)
       .where(eq(repairTypeTable.id, repairTypeId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(tx: DatabaseTransaction, _input: CountInput) {
@@ -36,14 +36,13 @@ export default class RepairTypeRepository {
       .select({ count: count() })
       .from(repairTypeTable)
       .where(isNull(repairTypeTable.deletedAt));
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<RepairTypeInput>) {
     const query = tx.insert(repairTypeTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
@@ -73,8 +72,7 @@ export default class RepairTypeRepository {
       .select()
       .from(repairTypeTable)
       .where(eq(repairTypeTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -87,7 +85,6 @@ export default class RepairTypeRepository {
       .set(input)
       .where(eq(repairTypeTable.id, repairTypeId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

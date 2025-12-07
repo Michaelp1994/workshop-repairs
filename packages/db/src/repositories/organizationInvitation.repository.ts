@@ -5,6 +5,7 @@ import {
   type OrganizationInvitationInput,
   organizationInvitationTable,
 } from "../tables/organizationInvitation.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class OrganizationInvitationRepository {
   async createInvitation(
@@ -15,7 +16,6 @@ export default class OrganizationInvitationRepository {
       .insert(organizationInvitationTable)
       .values(input)
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

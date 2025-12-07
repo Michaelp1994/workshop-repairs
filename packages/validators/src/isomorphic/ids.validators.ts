@@ -48,9 +48,6 @@ export type RepairTypeID = z.infer<typeof repairTypeId>;
 export const userId = z.number().positive();
 export type UserID = z.infer<typeof userId>;
 
-export const userTypeId = z.number().positive();
-export type UserTypeID = z.infer<typeof userTypeId>;
-
 export const userOnboardingId = z.number().positive();
 export type UserOnboardingID = z.infer<typeof userOnboardingId>;
 

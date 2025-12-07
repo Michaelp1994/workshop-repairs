@@ -21,6 +21,7 @@ import { equipmentTypeTable } from "../tables/equipmentType.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
 import { type ModelInput, modelTable } from "../tables/model.table";
 import { modelImageTable } from "../tables/modelImage.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const modelFields = getTableColumns(modelTable);
 
@@ -45,8 +46,7 @@ export default class ModelRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -82,14 +82,13 @@ export default class ModelRepository {
         ),
       );
 
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<ModelInput>) {
     const query = tx.insert(modelTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -210,8 +209,7 @@ export default class ModelRepository {
           eq(modelTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -230,7 +228,6 @@ export default class ModelRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

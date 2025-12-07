@@ -11,7 +11,6 @@ import {
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
 import { type InferModel } from "../types";
 import { organizationTable } from "./organization.table";
-import { userTypeTable } from "./userType.table";
 
 export const userTable = pgTable(
   "user",
@@ -21,7 +20,6 @@ export const userTable = pgTable(
     lastName: varchar().notNull(),
     email: varchar({ length: 255 }).notNull().unique(),
     password: varchar().notNull(),
-    typeId: integer().notNull(),
     emailVerified: boolean().notNull().default(false),
     onboardingCompleted: boolean().notNull().default(false),
     organizationId: integer(),
@@ -33,10 +31,6 @@ export const userTable = pgTable(
     foreignKey({
       columns: [t.organizationId],
       foreignColumns: [organizationTable.id],
-    }),
-    foreignKey({
-      columns: [t.typeId],
-      foreignColumns: [userTypeTable.id],
     }),
     foreignKey({
       columns: [t.createdById],

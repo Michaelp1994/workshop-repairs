@@ -26,6 +26,7 @@ import { modelImageTable } from "../tables/modelImage.table";
 import { type RepairInput, repairTable } from "../tables/repair.table";
 import { repairStatusTypeTable } from "../tables/repairStatusType.table";
 import { repairTypeTable } from "../tables/repairType.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const repairFields = getTableColumns(repairTable);
 
@@ -50,8 +51,7 @@ export default class RepairRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -62,7 +62,7 @@ export default class RepairRepository {
     const globalFilterParams = getGlobalFilters(globalFilter);
     const columnFilterParams = getColumnFilters(columnFilters);
     const query = tx
-      .select({ value: count() })
+      .select({ count: count() })
       .from(repairTable)
       .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
       .innerJoin(repairTypeTable, eq(repairTable.typeId, repairTypeTable.id))
@@ -85,14 +85,13 @@ export default class RepairRepository {
         ),
       );
 
-    const [res] = await query.execute();
-    return res?.value;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<RepairInput>) {
     const query = tx.insert(repairTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -222,8 +221,7 @@ export default class RepairRepository {
         ),
       );
 
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -242,7 +240,6 @@ export default class RepairRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

@@ -20,7 +20,6 @@ import {
 } from "@repo/validators/client/users.schema";
 import { useNavigate } from "@tanstack/react-router";
 
-import UserTypeSelect from "~/components/selects/UserTypeSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
@@ -85,21 +84,6 @@ export default function UpdateUserForm({ userId }: UpdateUserFormProps) {
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="typeId"
-          render={({ field }) => {
-            return (
-              <FormItem>
-                <FormLabel>User Type</FormLabel>
-                <FormControl>
-                  <UserTypeSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

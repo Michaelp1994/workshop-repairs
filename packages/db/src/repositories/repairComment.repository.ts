@@ -16,6 +16,7 @@ import {
   repairCommentTable,
 } from "../tables/repairComment.table";
 import { userTable } from "../tables/user.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
@@ -30,8 +31,7 @@ export default class RepairCommentRepository {
       .set(input)
       .where(eq(repairCommentTable.id, repairCommentId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(tx: DatabaseTransaction, _input: CountInput) {
@@ -39,8 +39,8 @@ export default class RepairCommentRepository {
       .select({ count: count() })
       .from(repairCommentTable)
       .where(isNull(repairCommentTable.deletedAt));
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(
@@ -48,8 +48,7 @@ export default class RepairCommentRepository {
     input: CreateInput<RepairCommentInput>,
   ) {
     const query = tx.insert(repairCommentTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
@@ -92,8 +91,7 @@ export default class RepairCommentRepository {
       .from(repairCommentTable)
       .where(eq(repairCommentTable.id, input));
 
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -106,7 +104,6 @@ export default class RepairCommentRepository {
       .set(input)
       .where(eq(repairCommentTable.id, repairCommentId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

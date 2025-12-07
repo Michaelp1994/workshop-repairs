@@ -17,7 +17,7 @@ import {
   getOrderBy,
 } from "../mappings/users.mapper";
 import { type UserID, type UserInput, userTable } from "../tables/user.table";
-import { userTypeTable } from "../tables/userType.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
@@ -33,8 +33,7 @@ export default class UserRepository {
       .set(input)
       .where(eq(userTable.id, userId))
       .returning({ ...publicUserColumns });
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -55,8 +54,8 @@ export default class UserRepository {
           ...columnFilterParams,
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<UserInput>) {
@@ -64,8 +63,7 @@ export default class UserRepository {
       .insert(userTable)
       .values(input)
       .returning({ ...publicUserColumns });
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -77,9 +75,8 @@ export default class UserRepository {
     const globalFilterParams = getGlobalFilters(globalFilter);
     const columnFilterParams = getColumnFilters(columnFilters);
     const query = tx
-      .select({ ...publicUserColumns, type: userTypeTable })
+      .select({ ...publicUserColumns })
       .from(userTable)
-      .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
       .where(
         and(
           isNull(userTable.deletedAt),
@@ -96,35 +93,30 @@ export default class UserRepository {
 
   async getByEmail(tx: DatabaseTransaction, input: string) {
     const query = tx.select().from(userTable).where(eq(userTable.email, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getById(tx: DatabaseTransaction, input: UserID) {
     const { createdByTable, updatedByTable, deletedByTable, metadata } =
       createMetadataFields();
     const query = tx
-      .select({ ...publicUserColumns, type: userTypeTable, ...metadata })
+      .select({ ...publicUserColumns, ...metadata })
       .from(userTable)
       .leftJoin(createdByTable, eq(userTable.createdById, createdByTable.id))
       .leftJoin(updatedByTable, eq(userTable.updatedById, updatedByTable.id))
       .leftJoin(deletedByTable, eq(userTable.deletedById, deletedByTable.id))
-      .innerJoin(userTypeTable, eq(userTypeTable.id, userTable.typeId))
       .where(eq(userTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getSimpleById(tx: DatabaseTransaction, input: UserID) {
     const query = tx
       .select({
-        typeId: userTable.typeId,
         organizationId: userTable.organizationId,
       })
       .from(userTable)
       .where(eq(userTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -137,7 +129,6 @@ export default class UserRepository {
       .set(input)
       .where(eq(userTable.id, userId))
       .returning({ ...publicUserColumns });
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

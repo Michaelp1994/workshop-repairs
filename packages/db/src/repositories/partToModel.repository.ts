@@ -20,6 +20,7 @@ import {
   type PartToModelInput,
   partToModelTable,
 } from "../tables/partToModel.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const partToModelsFields = getTableColumns(partToModelTable);
 
@@ -46,8 +47,7 @@ export default class PartToModelRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async countAllModelsByPartId(
@@ -69,8 +69,8 @@ export default class PartToModelRepository {
           ...columnFilterParams,
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async countAllPartsByModelId(
@@ -92,14 +92,13 @@ export default class PartToModelRepository {
           ...columnFilterParams,
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<PartToModelInput>) {
     const query = tx.insert(partToModelTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAllModelsByPartId(
@@ -186,8 +185,7 @@ export default class PartToModelRepository {
           eq(partToModelTable.modelId, input.modelId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getModelsByPartIdSelect(
@@ -258,7 +256,6 @@ export default class PartToModelRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

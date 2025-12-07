@@ -4,7 +4,7 @@ import Logo from "~/components/Logo";
 import OnboardingProgress from "~/components/OnboardingProgress";
 import ProfileAvatar from "~/components/ProfileAvatar";
 
-export const Route = createFileRoute("/onboarding/_layout")({
+export const Route = createFileRoute("/onboarding")({
   component: OnboardingLayout,
 });
 

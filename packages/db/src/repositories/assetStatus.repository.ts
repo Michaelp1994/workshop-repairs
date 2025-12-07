@@ -15,6 +15,7 @@ import {
   type AssetStatusInput,
   assetStatusTable,
 } from "../tables/assetStatus.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class AssetStatusRepository {
   async archive(
@@ -27,8 +28,7 @@ export default class AssetStatusRepository {
       .set(input)
       .where(eq(assetStatusTable.id, assetStatusId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(tx: DatabaseTransaction, _input: CountInput) {
@@ -36,14 +36,13 @@ export default class AssetStatusRepository {
       .select({ count: count() })
       .from(assetStatusTable)
       .where(isNull(assetStatusTable.deletedAt));
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<AssetStatusInput>) {
     const query = tx.insert(assetStatusTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
@@ -73,8 +72,7 @@ export default class AssetStatusRepository {
       .select()
       .from(assetStatusTable)
       .where(eq(assetStatusTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -87,7 +85,6 @@ export default class AssetStatusRepository {
       .set(input)
       .where(eq(assetStatusTable.id, assetStatusId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

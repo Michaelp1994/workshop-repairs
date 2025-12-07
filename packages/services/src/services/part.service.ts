@@ -11,7 +11,6 @@ import PartRepository from "@repo/db/repositories/part.repository";
 import type { PartInput } from "../../../db/src/tables/part.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -35,13 +34,13 @@ export default class PartService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(archivedPart);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.assetKeyPrefix, localId);
       return { slug, ...archivedPart };
     });
@@ -63,15 +62,12 @@ export default class PartService {
         );
       const metadata = createInsertMetadata(session);
 
-      assertDatabaseResult(sequence);
-
       const values = {
         ...input,
         ...metadata,
         localId: sequence.partLastUsedValue,
       };
       const part = await this.partRepository.create(tx, values);
-      assertDatabaseResult(part);
 
       const slug = createSlug(sequence.assetKeyPrefix, part.localId);
 
@@ -88,7 +84,7 @@ export default class PartService {
         db,
         session.organizationId,
       );
-    assertDatabaseResult(sequence);
+
     const allParts = await this.partRepository.getAll(
       this.db,
       input,
@@ -136,13 +132,13 @@ export default class PartService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(part);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.assetKeyPrefix, localId);
       return {
         slug,

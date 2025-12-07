@@ -15,6 +15,7 @@ import {
   type ModelImageInput,
   modelImageTable,
 } from "../tables/modelImage.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class ModelImageRepository {
   async archive(
@@ -27,8 +28,7 @@ export default class ModelImageRepository {
       .set(input)
       .where(eq(modelImageTable.id, modelImageId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(tx: DatabaseTransaction, _input: CountInput) {
@@ -36,14 +36,13 @@ export default class ModelImageRepository {
       .select({ count: count() })
       .from(modelImageTable)
       .where(isNull(modelImageTable.deletedAt));
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<ModelImageInput>) {
     const query = tx.insert(modelImageTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
@@ -74,8 +73,7 @@ export default class ModelImageRepository {
       .select()
       .from(modelImageTable)
       .where(eq(modelImageTable.id, id));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -88,7 +86,6 @@ export default class ModelImageRepository {
       .set(input)
       .where(eq(modelImageTable.id, modelImageId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

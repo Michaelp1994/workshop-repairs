@@ -40,7 +40,6 @@ export const organizationProcedure = procedure.use(async ({ ctx, next }) => {
       session: {
         userId: ctx.session.userId,
         organizationId: user.organizationId,
-        userTypeId: user.typeId,
       },
     },
   });

@@ -12,7 +12,6 @@ import UserRepository from "@repo/db/repositories/user.repository";
 import UserOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
 import { ZodError } from "zod";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
 
 interface LogicInput {
@@ -99,13 +98,11 @@ export default class AuthService {
     const { user, code } = await this.db.transaction(async (tx) => {
       const user = await this.userRepository.create(tx, {
         ...input,
-        typeId: 1,
         password: hash,
         emailVerified: false,
         organizationId: null,
         createdAt: new Date(),
       });
-      assertDatabaseResult(user);
 
       const onboarding = await this.userOnboardingRepository.create(tx, {
         userId: user.id,
@@ -114,8 +111,6 @@ export default class AuthService {
         createdAt: new Date(),
         createdById: user.id,
       });
-
-      assertDatabaseResult(onboarding);
 
       const code = generateRandomOTP();
       const request = await this.emailVerificationRequestRepository.create(tx, {
@@ -126,7 +121,7 @@ export default class AuthService {
         createdAt: new Date(),
         createdById: user.id,
       });
-      assertDatabaseResult(request);
+
       return { user, code };
     });
 

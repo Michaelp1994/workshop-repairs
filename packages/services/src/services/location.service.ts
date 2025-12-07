@@ -11,7 +11,6 @@ import OrganizationSequenceRepository from "@repo/db/repositories/organizationSe
 import type { LocationInput } from "../../../db/src/tables/location.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -36,13 +35,13 @@ export default class LocationService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(archivedLocation);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.locationKeyPrefix, localId);
       return { slug, ...archivedLocation };
     });
@@ -57,7 +56,7 @@ export default class LocationService {
       input,
       session.organizationId,
     );
-    assertDatabaseResult(count);
+
     return count;
   }
 
@@ -72,14 +71,14 @@ export default class LocationService {
           session.organizationId,
         );
       const metadata = createInsertMetadata(session);
-      assertDatabaseResult(sequence);
+
       const values = {
         ...input,
         ...metadata,
         localId: sequence.locationLastUsedValue,
       };
       const location = await this.locationRepository.create(tx, values);
-      assertDatabaseResult(location);
+
       const slug = createSlug(sequence.locationKeyPrefix, location.localId);
       return {
         ...location,
@@ -97,7 +96,7 @@ export default class LocationService {
         db,
         session.organizationId,
       );
-    assertDatabaseResult(sequence);
+
     const allLocations = await this.locationRepository.getAll(
       db,
       input,
@@ -115,7 +114,7 @@ export default class LocationService {
       localId,
       session.organizationId,
     );
-    assertDatabaseResult(location);
+
     return location;
   }
 
@@ -149,13 +148,13 @@ export default class LocationService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(updatedLocation);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.locationKeyPrefix, localId);
       return {
         slug,

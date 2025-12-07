@@ -62,7 +62,7 @@ export default class RepairStatusTypeService {
     input: GetAllRepairStatusTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getAl(db, input);
+    return this.repairStatusTypeRepository.getAll(db, input);
   }
 
   async getRepairStatusById(

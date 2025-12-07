@@ -18,6 +18,7 @@ import {
   getOrderBy,
 } from "../mappings/locations.mapper";
 import { type LocationInput, locationTable } from "../tables/location.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const locationFields = getTableColumns(locationTable);
 export default class LocationRepository {
@@ -37,8 +38,7 @@ export default class LocationRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -61,14 +61,13 @@ export default class LocationRepository {
         ),
       );
 
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<LocationInput>) {
     const query = tx.insert(locationTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -148,8 +147,7 @@ export default class LocationRepository {
           eq(locationTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -168,7 +166,6 @@ export default class LocationRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

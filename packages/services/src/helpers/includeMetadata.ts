@@ -5,7 +5,6 @@ export interface AuthedSession {
 export interface OrganizationSession {
   userId: number;
   organizationId: number;
-  userTypeId: number;
 }
 
 export function createInsertMetadata(session: OrganizationSession) {

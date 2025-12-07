@@ -26,6 +26,7 @@ import { locationTable } from "../tables/location.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
 import { modelTable } from "../tables/model.table";
 import { modelImageTable } from "../tables/modelImage.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const assetFields = getTableColumns(assetTable);
 
@@ -58,8 +59,7 @@ export default class AssetRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return returnOne(query);
   }
   async count(
     tx: DatabaseTransaction,
@@ -102,14 +102,13 @@ export default class AssetRepository {
           ...createColumnFilters(columnFilters),
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<AssetInput>) {
     const query = tx.insert(assetTable).values(input).returning();
-    const [asset] = await query.execute();
-    return asset;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -247,8 +246,7 @@ export default class AssetRepository {
           eq(assetTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -266,7 +264,6 @@ export default class AssetRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

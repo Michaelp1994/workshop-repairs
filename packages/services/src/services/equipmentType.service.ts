@@ -11,7 +11,6 @@ import OrganizationSequenceRepository from "@repo/db/repositories/organizationSe
 import type { EquipmentTypeInput } from "../../../db/src/tables/equipmentType.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -41,7 +40,7 @@ export default class EquipmentTypeService {
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.equipmentTypeKeyPrefix, localId);
       return {
         slug,
@@ -71,7 +70,7 @@ export default class EquipmentTypeService {
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const metadata = createInsertMetadata(session);
       const values = {
         localId: sequence.equipmentTypeLastUsedValue,
@@ -82,7 +81,7 @@ export default class EquipmentTypeService {
         tx,
         values,
       );
-      assertDatabaseResult(equipmentType);
+
       const slug = createSlug(
         sequence.equipmentTypeKeyPrefix,
         equipmentType.localId,
@@ -104,7 +103,6 @@ export default class EquipmentTypeService {
         session.organizationId,
       );
 
-    assertDatabaseResult(sequence);
     const allEquipmentTypes = await this.equipmentTypeRepository.getAll(
       this.db,
       input,
@@ -154,7 +152,7 @@ export default class EquipmentTypeService {
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.equipmentTypeKeyPrefix, localId);
       return {
         slug,

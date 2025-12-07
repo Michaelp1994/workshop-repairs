@@ -8,6 +8,7 @@ import {
   type UserOnboardingInput,
   userOnboardingTable,
 } from "../tables/userOnboarding.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
@@ -19,8 +20,7 @@ export default class UserOnboardingRepository {
     input: CreateInput<UserOnboardingInput>,
   ) {
     const query = tx.insert(userOnboardingTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getByUserId(tx: DatabaseTransaction, userId: UserID) {
@@ -35,8 +35,7 @@ export default class UserOnboardingRepository {
         eq(userTable.id, userOnboardingTable.userId),
       )
       .where(eq(userTable.id, userId));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async updateByUserId(
@@ -49,7 +48,6 @@ export default class UserOnboardingRepository {
       .set(input)
       .where(eq(userOnboardingTable.userId, userId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

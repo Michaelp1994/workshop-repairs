@@ -11,7 +11,6 @@ import OrganizationSequenceRepository from "@repo/db/repositories/organizationSe
 import type { ModelInput } from "../../../db/src/tables/model.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -36,14 +35,13 @@ export default class ModelService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(archivedModel);
 
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.modelKeyPrefix, localId);
 
       return { slug, ...archivedModel };
@@ -66,15 +64,12 @@ export default class ModelService {
         );
       const metadata = createInsertMetadata(session);
 
-      assertDatabaseResult(sequence);
-
       const values = {
         ...input,
         ...metadata,
         localId: sequence.modelLastUsedValue,
       };
       const model = await this.modelRepository.create(tx, values);
-      assertDatabaseResult(model);
 
       const slug = createSlug(sequence.modelKeyPrefix, model.localId);
 
@@ -91,7 +86,7 @@ export default class ModelService {
         this.db,
         session.organizationId,
       );
-    assertDatabaseResult(sequence);
+
     const allModels = await this.modelRepository.getAll(
       this.db,
       input,
@@ -143,14 +138,13 @@ export default class ModelService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(model);
 
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.modelKeyPrefix, localId);
 
       return {

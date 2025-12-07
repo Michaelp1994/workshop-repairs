@@ -15,6 +15,7 @@ import {
   type RepairStatusTypeInput,
   repairStatusTypeTable,
 } from "../tables/repairStatusType.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class RepairStatusTypeRepository {
   async archive(
@@ -27,8 +28,7 @@ export default class RepairStatusTypeRepository {
       .set(input)
       .where(eq(repairStatusTypeTable.id, repairStatusTypeId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(tx: DatabaseTransaction, _input: CountInput) {
@@ -36,8 +36,8 @@ export default class RepairStatusTypeRepository {
       .select({ count: count() })
       .from(repairStatusTypeTable)
       .where(isNull(repairStatusTypeTable.deletedAt));
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(
@@ -45,8 +45,7 @@ export default class RepairStatusTypeRepository {
     input: CreateInput<RepairStatusTypeInput>,
   ) {
     const query = tx.insert(repairStatusTypeTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
@@ -77,8 +76,7 @@ export default class RepairStatusTypeRepository {
       .select()
       .from(repairStatusTypeTable)
       .where(eq(repairStatusTypeTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -91,7 +89,6 @@ export default class RepairStatusTypeRepository {
       .set(input)
       .where(eq(repairStatusTypeTable.id, repairStatusTypeId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

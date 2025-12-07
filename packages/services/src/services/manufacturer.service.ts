@@ -11,7 +11,6 @@ import OrganizationSequenceRepository from "@repo/db/repositories/organizationSe
 import type { ManufacturerInput } from "../../../db/src/tables/manufacturer.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -36,13 +35,13 @@ export default class ManufacturerService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(manufacturer);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.manufacturerKeyPrefix, localId);
       return {
         slug,
@@ -72,7 +71,7 @@ export default class ManufacturerService {
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const metadata = createInsertMetadata(session);
       const values = {
         localId: sequence.manufacturerLastUsedValue,
@@ -80,7 +79,7 @@ export default class ManufacturerService {
         ...input,
       };
       const manufacturer = await this.manufacturerRepository.create(tx, values);
-      assertDatabaseResult(manufacturer);
+
       const slug = createSlug(
         sequence.manufacturerKeyPrefix,
         manufacturer.localId,
@@ -102,7 +101,6 @@ export default class ManufacturerService {
         session.organizationId,
       );
 
-    assertDatabaseResult(sequence);
     const allManufacturers = await this.manufacturerRepository.getAll(
       db,
       input,
@@ -150,13 +148,13 @@ export default class ManufacturerService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(manufacturer);
+
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.manufacturerKeyPrefix, localId);
       return {
         slug,

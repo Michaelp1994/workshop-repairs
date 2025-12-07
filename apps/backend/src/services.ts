@@ -20,7 +20,6 @@ import RepairStatusTypeRepository from "@repo/db/repositories/repairStatusType.r
 import RepairTypeRepository from "@repo/db/repositories/repairType.repository";
 import UserRepository from "@repo/db/repositories/user.repository";
 import UserOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
-import UserTypeRepository from "@repo/db/repositories/userType.repository";
 // Services
 import AssetService from "@repo/services/services/asset.service";
 import AssetStatusService from "@repo/services/services/assetStatus.service";
@@ -43,7 +42,6 @@ import RepairStatusTypeService from "@repo/services/services/repairStatusType.se
 import RepairTypeService from "@repo/services/services/repairType.service";
 import UserService from "@repo/services/services/user.service";
 import UserOnboardingService from "@repo/services/services/userOnboarding.service";
-import UserTypeService from "@repo/services/services/userType.service";
 
 // repositories
 const assetRepository = new AssetRepository();
@@ -68,7 +66,6 @@ const repairStatusTypeRepository = new RepairStatusTypeRepository();
 const repairTypeRepository = new RepairTypeRepository();
 const userRepository = new UserRepository();
 const userOnboardingRepository = new UserOnboardingRepository();
-const userTypeRepository = new UserTypeRepository();
 
 // services
 export const assetService = new AssetService(
@@ -120,6 +117,8 @@ export const modelImageService = new ModelImageService(
 export const organizationService = new OrganizationService(
   db,
   organizationRepository,
+  userRepository,
+  organizationSequenceRepository,
 );
 export const organizationSequenceService = new OrganizationSequenceService(
   db,
@@ -170,4 +169,3 @@ export const userOnboardingService = new UserOnboardingService(
   userRepository,
   organizationRepository,
 );
-export const userTypeService = new UserTypeService(db, userTypeRepository);

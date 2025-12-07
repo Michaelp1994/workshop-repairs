@@ -11,7 +11,6 @@ import RepairRepository from "@repo/db/repositories/repair.repository";
 import type { RepairInput } from "../../../db/src/tables/repair.table";
 import type { CreateInput, UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -36,14 +35,13 @@ export default class RepairService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(archivedRepair);
 
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.assetKeyPrefix, localId);
 
       return { slug, ...archivedRepair };
@@ -66,15 +64,12 @@ export default class RepairService {
         );
       const metadata = createInsertMetadata(session);
 
-      assertDatabaseResult(sequence);
-
       const values = {
         ...input,
         ...metadata,
         localId: sequence.repairLastUsedValue,
       };
       const repair = await this.repairRepository.create(tx, values);
-      assertDatabaseResult(repair);
 
       const slug = createSlug(sequence.assetKeyPrefix, repair.localId);
 
@@ -91,7 +86,7 @@ export default class RepairService {
         this.db,
         session.organizationId,
       );
-    assertDatabaseResult(sequence);
+
     const allRepairs = await this.repairRepository.getAll(
       this.db,
       input,
@@ -140,14 +135,13 @@ export default class RepairService {
         localId,
         session.organizationId,
       );
-      assertDatabaseResult(repair);
 
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
           session.organizationId,
         );
-      assertDatabaseResult(sequence);
+
       const slug = createSlug(sequence.repairKeyPrefix, localId);
 
       return {

@@ -18,6 +18,7 @@ import {
   getOrderBy,
 } from "../mappings/parts.mapper";
 import { type PartInput, partTable } from "../tables/part.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const partFields = getTableColumns(partTable);
 export default class PartRepository {
@@ -37,8 +38,7 @@ export default class PartRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -61,14 +61,13 @@ export default class PartRepository {
         ),
       );
 
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<PartInput>) {
     const query = tx.insert(partTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -140,8 +139,7 @@ export default class PartRepository {
           eq(partTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -160,7 +158,6 @@ export default class PartRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

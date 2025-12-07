@@ -21,6 +21,7 @@ import {
   type ManufacturerInput,
   manufacturerTable,
 } from "../tables/manufacturer.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const manufacturerFields = getTableColumns(manufacturerTable);
 export default class ManufacturerRepository {
@@ -40,8 +41,7 @@ export default class ManufacturerRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -64,14 +64,13 @@ export default class ManufacturerRepository {
         ),
       );
 
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(tx: DatabaseTransaction, input: CreateInput<ManufacturerInput>) {
     const query = tx.insert(manufacturerTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -151,8 +150,7 @@ export default class ManufacturerRepository {
           eq(manufacturerTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -171,7 +169,6 @@ export default class ManufacturerRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

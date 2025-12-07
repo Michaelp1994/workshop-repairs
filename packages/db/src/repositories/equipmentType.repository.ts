@@ -21,6 +21,7 @@ import {
   type EquipmentTypeInput,
   equipmentTypeTable,
 } from "../tables/equipmentType.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 
@@ -41,8 +42,7 @@ export default class EquipmentTypeRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async count(
@@ -61,8 +61,8 @@ export default class EquipmentTypeRepository {
           eq(equipmentTypeTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
 
   async create(
@@ -70,8 +70,7 @@ export default class EquipmentTypeRepository {
     input: CreateInput<EquipmentTypeInput>,
   ) {
     const query = tx.insert(equipmentTypeTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getAll(
@@ -139,8 +138,7 @@ export default class EquipmentTypeRepository {
         eq(equipmentTypeTable.deletedById, deletedByTable.id),
       )
       .where(eq(equipmentTypeTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getByLocalId(
@@ -174,8 +172,7 @@ export default class EquipmentTypeRepository {
           eq(equipmentTypeTable.organizationId, organizationId),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -194,7 +191,6 @@ export default class EquipmentTypeRepository {
         ),
       )
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

@@ -15,6 +15,7 @@ import {
   type RepairImageInput,
   repairImageTable,
 } from "../tables/repairImage.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class RepairImageRepository {
   async archive(
@@ -27,21 +28,19 @@ export default class RepairImageRepository {
       .set(input)
       .where(eq(repairImageTable.id, repairImageId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
   async count(tx: DatabaseTransaction, _input: CountInput) {
     const query = tx
       .select({ count: count() })
       .from(repairImageTable)
       .where(isNull(repairImageTable.deletedAt));
-    const [res] = await query.execute();
-    return res?.count;
+    const res = await returnOne(query);
+    return res.count;
   }
   async create(tx: DatabaseTransaction, input: CreateInput<RepairImageInput>) {
     const query = tx.insert(repairImageTable).values(input).returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
   async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
     const query = tx
@@ -71,8 +70,7 @@ export default class RepairImageRepository {
       .select()
       .from(repairImageTable)
       .where(eq(repairImageTable.id, input));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -85,7 +83,6 @@ export default class RepairImageRepository {
       .set(input)
       .where(eq(repairImageTable.id, repairImageId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

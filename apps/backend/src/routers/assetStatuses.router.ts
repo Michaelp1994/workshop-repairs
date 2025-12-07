@@ -20,11 +20,11 @@ export default function assetStatusRouter(
     getAll: organizationProcedure
       .input(getAllAssetStatusesSchema)
       .query(async ({ input, ctx }) => {
-        const allUserTypes = await assetStatusService.getAllAssetStatuses(
+        const allAssetStatuses = await assetStatusService.getAllAssetStatuses(
           input,
           ctx.session,
         );
-        return allUserTypes;
+        return allAssetStatuses;
       }),
     countAll: organizationProcedure
       .input(countAssetStatusesSchema)
@@ -38,59 +38,59 @@ export default function assetStatusRouter(
     getSelect: organizationProcedure
       .input(getAssetStatusesSelectSchema)
       .query(async ({ input, ctx }) => {
-        const allUserTypes = await assetStatusService.getAssetStatusSelect(
+        const allAssetStatuses = await assetStatusService.getAssetStatusSelect(
           input,
           ctx.session,
         );
-        return allUserTypes;
+        return allAssetStatuses;
       }),
     getById: organizationProcedure
       .input(getAssetStatusByIdSchema)
       .query(async ({ input, ctx }) => {
-        const userType = await assetStatusService.getAssetStatus(
+        const AssetStatus = await assetStatusService.getAssetStatus(
           input.id,
           ctx.session,
         );
 
-        if (!userType) {
+        if (!AssetStatus) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "userType not found",
+            message: "AssetStatus not found",
           });
         }
 
-        return userType;
+        return AssetStatus;
       }),
     create: organizationProcedure
       .input(createAssetStatusSchema)
       .mutation(async ({ input, ctx }) => {
-        const createdUserType = await assetStatusService.createAssetStatus(
+        const createdAssetStatus = await assetStatusService.createAssetStatus(
           input,
           ctx.session,
         );
 
-        return createdUserType;
+        return createdAssetStatus;
       }),
     update: organizationProcedure
       .input(updateAssetStatusSchema)
       .mutation(async ({ input: { id, ...values }, ctx }) => {
-        const updatedUserType = await assetStatusService.updateAssetStatus(
+        const updatedAssetStatus = await assetStatusService.updateAssetStatus(
           values,
           id,
           ctx.session,
         );
 
-        return updatedUserType;
+        return updatedAssetStatus;
       }),
     archive: organizationProcedure
       .input(archiveAssetStatusSchema)
       .mutation(async ({ input, ctx }) => {
-        const archivedUserType = await assetStatusService.archiveAssetStatus(
+        const archivedAssetStatus = await assetStatusService.archiveAssetStatus(
           input.id,
           ctx.session,
         );
 
-        return archivedUserType;
+        return archivedAssetStatus;
       }),
   });
 }

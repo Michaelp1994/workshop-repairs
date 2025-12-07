@@ -12,7 +12,6 @@ import { randomUUID } from "crypto";
 import type { ModelImageInput } from "../../../db/src/tables/modelImage.table";
 import type { UpdateInput } from "../types";
 
-import assertDatabaseResult from "../helpers/assertDatabaseResult";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -73,7 +72,7 @@ export default class ModelImageService {
         tx,
         values,
       );
-      assertDatabaseResult(createdModelImage);
+
       if (isFirstImage) {
         const modelMetadata = createUpdateMetadata(session);
         //TODO: fixme
@@ -123,7 +122,6 @@ export default class ModelImageService {
       this.db,
       input.id,
     );
-    assertDatabaseResult(modelImage);
 
     const metadata = createUpdateMetadata(session);
     //TODO: fixme

@@ -8,6 +8,7 @@ import {
   type EmailVerificationRequestInput,
   emailVerificationRequestTable,
 } from "../tables/emailVerificationRequest.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class EmailVerificationRequestRepository {
   async archive(tx: DatabaseTransaction, id: EmailVerificationRequestID) {
@@ -15,8 +16,7 @@ export default class EmailVerificationRequestRepository {
       .delete(emailVerificationRequestTable)
       .where(and(eq(emailVerificationRequestTable.id, id)))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async create(
@@ -27,8 +27,7 @@ export default class EmailVerificationRequestRepository {
       .insert(emailVerificationRequestTable)
       .values(input)
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async getByEmailAndCode(
@@ -45,7 +44,6 @@ export default class EmailVerificationRequestRepository {
           eq(emailVerificationRequestTable.code, code),
         ),
       );
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }

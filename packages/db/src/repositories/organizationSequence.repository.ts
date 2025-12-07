@@ -9,6 +9,7 @@ import {
   type OrganizationSequenceInput,
   organizationSequenceTable,
 } from "../tables/organizationSequences.table";
+import { returnOne } from "../helpers/executeQuery";
 
 export default class OrganizationSequenceRepository {
   async create(
@@ -19,8 +20,8 @@ export default class OrganizationSequenceRepository {
       .insert(organizationSequenceTable)
       .values(input)
       .returning();
-    const [res] = await query.execute();
-    return res;
+
+    return returnOne(query);
   }
 
   async getByOrganizationId(tx: DatabaseTransaction, id: OrganizationID) {
@@ -28,8 +29,7 @@ export default class OrganizationSequenceRepository {
       .select()
       .from(organizationSequenceTable)
       .where(eq(organizationSequenceTable.organizationId, id));
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementAssetSequence(
@@ -43,8 +43,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementClientSequence(
@@ -58,8 +57,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementEquipmentTypeSequence(
@@ -73,8 +71,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementLocationSequence(
@@ -88,8 +85,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementManufacturerSequence(
@@ -103,8 +99,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementModelSequence(
@@ -118,8 +113,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementPartSequence(
@@ -133,8 +127,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async incrementRepairSequence(
@@ -148,8 +141,7 @@ export default class OrganizationSequenceRepository {
       })
       .where(eq(organizationSequenceTable.organizationId, organizationId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 
   async update(
@@ -162,7 +154,6 @@ export default class OrganizationSequenceRepository {
       .set(input)
       .where(eq(organizationSequenceTable.id, organizationSequenceId))
       .returning();
-    const [res] = await query.execute();
-    return res;
+    return await returnOne(query);
   }
 }
