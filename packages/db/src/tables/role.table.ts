@@ -10,6 +10,7 @@ export const roleTable = pgTable(
   "role",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
@@ -18,7 +19,11 @@ export const roleTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.organizationId, t.name), ...auditConstraints(t)],
+  (t) => [
+    unique().on(t.organizationId, t.name),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export type Role = InferModel<typeof roleTable>;

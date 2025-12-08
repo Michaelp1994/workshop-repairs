@@ -10,6 +10,7 @@ export const groupTable = pgTable(
   "group",
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    localId: integer().notNull(),
     organizationId: integer()
       .notNull()
       .references(() => organizationTable.id),
@@ -18,7 +19,11 @@ export const groupTable = pgTable(
     ...timestamps,
     ...strictAuditing,
   },
-  (t) => [unique().on(t.name, t.organizationId), ...auditConstraints(t)],
+  (t) => [
+    unique().on(t.name, t.organizationId),
+    unique().on(t.localId, t.organizationId),
+    ...auditConstraints(t),
+  ],
 );
 
 export type Group = InferModel<typeof groupTable>;
