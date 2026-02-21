@@ -1,4 +1,4 @@
-import { db } from "@repo/db";
+import { createDbConnection } from "@repo/db";
 import AssetRepository from "@repo/db/repositories/asset.repository";
 import AssetStatusRepository from "@repo/db/repositories/assetStatus.repository";
 import ClientRepository from "@repo/db/repositories/client.repository";
@@ -43,6 +43,8 @@ import RepairTypeService from "@repo/services/services/repairType.service";
 import UserService from "@repo/services/services/user.service";
 import UserOnboardingService from "@repo/services/services/userOnboarding.service";
 
+import { env } from "./env";
+
 // repositories
 const assetRepository = new AssetRepository();
 const organizationSequenceRepository = new OrganizationSequenceRepository();
@@ -66,6 +68,15 @@ const repairStatusTypeRepository = new RepairStatusTypeRepository();
 const repairTypeRepository = new RepairTypeRepository();
 const userRepository = new UserRepository();
 const userOnboardingRepository = new UserOnboardingRepository();
+
+// Create db connection
+const db = createDbConnection({
+  host: env.postgresHost,
+  port: env.postgresPort,
+  user: env.postgresUser,
+  password: env.postgresPassword,
+  database: env.postgresDatabase,
+});
 
 // services
 export const assetService = new AssetService(
@@ -169,3 +180,6 @@ export const userOnboardingService = new UserOnboardingService(
   userRepository,
   organizationRepository,
 );
+
+
+

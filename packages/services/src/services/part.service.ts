@@ -4,7 +4,7 @@ import type {
   GetPartsSelectInput,
 } from "@repo/validators/server/parts.validators";
 
-import { type Database, db } from "@repo/db";
+import { type Database } from "@repo/db";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 import PartRepository from "@repo/db/repositories/part.repository";
 
@@ -81,7 +81,7 @@ export default class PartService {
   async getAllParts(input: GetAllPartsInput, session: OrganizationSession) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
-        db,
+        this.db,
         session.organizationId,
       );
 

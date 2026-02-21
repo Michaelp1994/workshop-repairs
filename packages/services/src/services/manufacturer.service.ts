@@ -4,7 +4,7 @@ import type {
   GetSelectInput,
 } from "@repo/validators/server/dataTables.validators";
 
-import { type Database, db } from "@repo/db";
+import { type Database } from "@repo/db";
 import ManufacturerRepository from "@repo/db/repositories/manufacturer.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
@@ -97,12 +97,12 @@ export default class ManufacturerService {
   ) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
-        db,
+        this.db,
         session.organizationId,
       );
 
     const allManufacturers = await this.manufacturerRepository.getAll(
-      db,
+      this.db,
       input,
       session.organizationId,
     );

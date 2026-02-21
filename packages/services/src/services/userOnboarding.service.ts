@@ -1,6 +1,6 @@
 import type { UserID } from "@repo/validators/ids.validators";
 
-import { type Database, db } from "@repo/db";
+import { type Database } from "@repo/db";
 import OrganizationRepository from "@repo/db/repositories/organization.repository";
 import UserRepository from "@repo/db/repositories/user.repository";
 import UserOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
@@ -16,7 +16,6 @@ import {
 import {
   createOrganizationLogoKeyFromFileName,
   createPresignedUrl,
-  fileExistsInS3,
   getFileExtension,
 } from "../helpers/s3";
 import sendInvitationEmail from "../helpers/sendInvitationEmail";
@@ -48,7 +47,7 @@ export default class UserOnboardingService {
       throw new Error("You already belong to an organization");
     }
 
-    const organization = await this.organizationRepository.getByInvitationCode(
+    const organization = await this.organizationRepository.findByInvitationCode(
       this.db,
       input.joinCode,
     );
@@ -63,8 +62,8 @@ export default class UserOnboardingService {
       ]);
     }
     const metadata = createUpdateMetadata(session);
-    const updatedUser = await this.userRepository.update(
-      db,
+    await this.userRepository.update(
+      this.db,
       {
         organizationId: organization.id,
         onboardingCompleted: true,
@@ -77,7 +76,7 @@ export default class UserOnboardingService {
   }
 
   async markUserAsWelcomed(session: AuthedSession) {
-    return await db.transaction(async (tx) => {
+    return await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
       return this.userOnboardingRepository.updateByUserId(
         tx,
@@ -144,7 +143,7 @@ export default class UserOnboardingService {
 
     await Promise.all(emailPromises);
 
-    await db.transaction(async (tx) => {
+    await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
       await this.userOnboardingRepository.updateByUserId(
         tx,
@@ -166,7 +165,7 @@ export default class UserOnboardingService {
   }
 
   async skipInvitations(session: OrganizationSession) {
-    return await db.transaction(async (tx) => {
+    return await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
 
       await this.userOnboardingRepository.updateByUserId(

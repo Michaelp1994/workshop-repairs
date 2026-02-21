@@ -4,7 +4,7 @@ import type {
   GetLocationsSelectInput,
 } from "@repo/validators/server/locations.validators";
 
-import { type Database, db } from "@repo/db";
+import { type Database } from "@repo/db";
 import LocationRepository from "@repo/db/repositories/location.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
@@ -52,7 +52,7 @@ export default class LocationService {
     session: OrganizationSession,
   ) {
     const count = await this.locationRepository.count(
-      db,
+      this.db,
       input,
       session.organizationId,
     );
@@ -93,12 +93,12 @@ export default class LocationService {
   ) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
-        db,
+        this.db,
         session.organizationId,
       );
 
     const allLocations = await this.locationRepository.getAll(
-      db,
+      this.db,
       input,
       session.organizationId,
     );
@@ -110,7 +110,7 @@ export default class LocationService {
 
   async getLocation(localId: number, session: OrganizationSession) {
     const location = await this.locationRepository.getByLocalId(
-      db,
+      this.db,
       localId,
       session.organizationId,
     );
@@ -123,7 +123,7 @@ export default class LocationService {
     session: OrganizationSession,
   ) {
     const locations = await this.locationRepository.getAllSimple(
-      db,
+      this.db,
       input,
       session.organizationId,
     );

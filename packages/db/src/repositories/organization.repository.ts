@@ -3,12 +3,12 @@ import { eq } from "drizzle-orm";
 import type { CreateInput } from "../types";
 
 import { type DatabaseTransaction } from "..";
+import { returnOne } from "../helpers/executeQuery";
 import {
   type OrganizationID,
   type OrganizationInput,
   organizationTable,
 } from "../tables/organization.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class OrganizationRepository {
   async create(tx: DatabaseTransaction, input: CreateInput<OrganizationInput>) {
@@ -16,19 +16,20 @@ export default class OrganizationRepository {
     return await returnOne(query);
   }
 
+  async findByInvitationCode(tx: DatabaseTransaction, invitationCode: string) {
+    const query = tx
+      .select()
+      .from(organizationTable)
+      .where(eq(organizationTable.invitationCode, invitationCode));
+    const [result] = await query.execute();
+    return result;
+  }
+
   async getById(tx: DatabaseTransaction, id: OrganizationID) {
     const query = tx
       .select()
       .from(organizationTable)
       .where(eq(organizationTable.id, id));
-    return await returnOne(query);
-  }
-
-  async getByInvitationCode(tx: DatabaseTransaction, invitationCode: string) {
-    const query = tx
-      .select()
-      .from(organizationTable)
-      .where(eq(organizationTable.invitationCode, invitationCode));
     return await returnOne(query);
   }
 

@@ -5,7 +5,7 @@ import type {
   GetRepairStatusSelectInput,
 } from "@repo/validators/server/repairStatusTypes.validators";
 
-import { type Database, db } from "@repo/db";
+import { type Database } from "@repo/db";
 import RepairStatusTypeRepository from "@repo/db/repositories/repairStatusType.repository";
 
 import type { RepairStatusTypeInput } from "../../../db/src/tables/repairStatusType.table";
@@ -41,7 +41,7 @@ export default class RepairStatusTypeService {
     input: CountRepairStatusTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.count(db, input);
+    return this.repairStatusTypeRepository.count(this.db, input);
   }
 
   async createRepairStatusType(
@@ -62,21 +62,21 @@ export default class RepairStatusTypeService {
     input: GetAllRepairStatusTypesInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getAll(db, input);
+    return this.repairStatusTypeRepository.getAll(this.db, input);
   }
 
   async getRepairStatusById(
     id: RepairStatusTypeID,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getById(db, id);
+    return this.repairStatusTypeRepository.getById(this.db, id);
   }
 
   async getRepairStatusSelect(
     input: GetRepairStatusSelectInput,
     _session: OrganizationSession,
   ) {
-    return this.repairStatusTypeRepository.getAllSimple(db, input);
+    return this.repairStatusTypeRepository.getAllSimple(this.db, input);
   }
 
   async updateRepairStatusType(

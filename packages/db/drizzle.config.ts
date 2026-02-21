@@ -7,7 +7,7 @@ if (
   !process.env["POSTGRES_PASSWORD"] ||
   !process.env["POSTGRES_DB"]
 ) {
-  throw Error("env vars not working for drizzle");
+  throw Error("env vars not set for drizzle");
 }
 
 export default defineConfig({

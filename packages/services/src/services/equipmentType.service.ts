@@ -4,7 +4,7 @@ import type {
   GetEquipmentTypesSelectInput,
 } from "@repo/validators/server/equipmentTypes.validators";
 
-import { type Database, db } from "@repo/db";
+import { type Database } from "@repo/db";
 import EquipmentTypeRepository from "@repo/db/repositories/equipmentType.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
@@ -54,7 +54,7 @@ export default class EquipmentTypeService {
     session: OrganizationSession,
   ) {
     return this.equipmentTypeRepository.count(
-      db,
+      this.db,
       input,
       session.organizationId,
     );
@@ -116,7 +116,7 @@ export default class EquipmentTypeService {
 
   async getEquipmentType(localId: number, session: OrganizationSession) {
     return this.equipmentTypeRepository.getByLocalId(
-      db,
+      this.db,
       localId,
       session.organizationId,
     );
@@ -127,7 +127,7 @@ export default class EquipmentTypeService {
     session: OrganizationSession,
   ) {
     return this.equipmentTypeRepository.getAllSimple(
-      db,
+      this.db,
       input,
       session.organizationId,
     );
