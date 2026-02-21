@@ -1,7 +1,7 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { locationTable } from "../tables/location.sql";
+import { locationTable } from "../tables/location.table";
 
 const orderMapping = {
   name: locationTable.name,

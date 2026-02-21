@@ -4,7 +4,7 @@ import replaceLineBreaks from "../helpers/replaceLineBreaks";
 import { repairCommentId, repairId } from "../isomorphic/ids.validators";
 import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
-const repairCommentFilters = z.object({}).optional();
+const repairCommentFilters = z.object({}).default({});
 
 export const getAllRepairCommentsSchema = dataTableSchema.extend({
   filters: repairCommentFilters,

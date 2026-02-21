@@ -1,82 +1,90 @@
-import type {
-  CountRepairTypesInput,
-  GetAllRepairTypesInput,
-  GetRepairTypesSelectInput,
-} from "@repo/validators/server/repairTypes.validators";
-
 import { count, eq, isNull } from "drizzle-orm";
 
-import { db } from "../index";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
+
+import { type DatabaseTransaction } from "../index";
 import {
-  type ArchiveRepairType,
-  type CreateRepairType,
   type RepairTypeID,
+  type RepairTypeInput,
   repairTypeTable,
-  type UpdateRepairType,
-} from "../tables/repair-type.sql";
+} from "../tables/repairType.table";
+import { returnOne } from "../helpers/executeQuery";
 
-export function getAllRepairTypes({ pagination }: GetAllRepairTypesInput) {
-  const query = db
-    .select()
-    .from(repairTypeTable)
-    .where(isNull(repairTypeTable.deletedAt))
-    .orderBy(repairTypeTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+export default class RepairTypeRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<RepairTypeInput>,
+    repairTypeId: RepairTypeID,
+  ) {
+    const query = tx
+      .update(repairTypeTable)
+      .set(input)
+      .where(eq(repairTypeTable.id, repairTypeId))
+      .returning();
+    return await returnOne(query);
+  }
 
-export async function countRepairTypes(_: CountRepairTypesInput) {
-  const query = db
-    .select({ count: count() })
-    .from(repairTypeTable)
-    .where(isNull(repairTypeTable.deletedAt));
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async count(tx: DatabaseTransaction, _input: CountInput) {
+    const query = tx
+      .select({ count: count() })
+      .from(repairTypeTable)
+      .where(isNull(repairTypeTable.deletedAt));
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-export async function getRepairTypesSelect(_: GetRepairTypesSelectInput) {
-  const query = db
-    .select({
-      value: repairTypeTable.id,
-      label: repairTypeTable.name,
-    })
-    .from(repairTypeTable)
-    .where(isNull(repairTypeTable.deletedAt));
-  return query.execute();
-}
+  async create(tx: DatabaseTransaction, input: CreateInput<RepairTypeInput>) {
+    const query = tx.insert(repairTypeTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export async function getRepairTypeById(input: RepairTypeID) {
-  const query = db
-    .select()
-    .from(repairTypeTable)
-    .where(eq(repairTypeTable.id, input));
-  const [res] = await query.execute();
-  return res;
-}
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
+    const query = tx
+      .select()
+      .from(repairTypeTable)
+      .where(isNull(repairTypeTable.deletedAt))
+      .orderBy(repairTypeTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return query.execute();
+  }
 
-export async function createRepairType(input: CreateRepairType) {
-  const query = db.insert(repairTypeTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllSimple(tx: DatabaseTransaction, _input: GetAllSimpleInput) {
+    const query = tx
+      .select({
+        value: repairTypeTable.id,
+        label: repairTypeTable.name,
+      })
+      .from(repairTypeTable)
+      .where(isNull(repairTypeTable.deletedAt));
+    return query.execute();
+  }
 
-export async function updateRepairType(input: UpdateRepairType) {
-  const query = db
-    .update(repairTypeTable)
-    .set(input)
-    .where(eq(repairTypeTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getById(tx: DatabaseTransaction, input: RepairTypeID) {
+    const query = tx
+      .select()
+      .from(repairTypeTable)
+      .where(eq(repairTypeTable.id, input));
+    return await returnOne(query);
+  }
 
-export async function archiveRepairType(input: ArchiveRepairType) {
-  const query = db
-    .update(repairTypeTable)
-    .set(input)
-    .where(eq(repairTypeTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<RepairTypeInput>,
+    repairTypeId: RepairTypeID,
+  ) {
+    const query = tx
+      .update(repairTypeTable)
+      .set(input)
+      .where(eq(repairTypeTable.id, repairTypeId))
+      .returning();
+    return await returnOne(query);
+  }
 }

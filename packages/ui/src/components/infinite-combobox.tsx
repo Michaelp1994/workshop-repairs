@@ -1,5 +1,3 @@
-"use client";
-
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { CommandLoading } from "cmdk";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -81,7 +79,6 @@ export const InfiniteCombobox = ({
         scrollContainer.clientHeight;
 
       if (isAtBottom && fetchNextPage && !isFetchingNextPage) {
-        console.log("fetching next page");
         fetchNextPage();
       }
     }

@@ -8,7 +8,6 @@
 .turbo
 # testing
 /coverage
-.open-next
 
 # database
 /prisma/db.sqlite
@@ -16,11 +15,6 @@
 db.sqlite
 db-data
 packages/db/scripts/seeds
-
-# next.js
-**/.next/
-/out/
-next-env.d.ts
 
 # production
 /build

@@ -1,148 +1,233 @@
+import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
+
+import type { OrganizationID } from "../tables/organization.table";
 import type {
-  CountModelsInput,
-  GetAllModelsInput,
-  GetModelsSelectInput,
-} from "@repo/validators/server/models.validators";
-
-import { and, eq, getTableColumns, isNull } from "drizzle-orm";
-
-import type { OrganizationID } from "../tables/organization.sql";
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { db } from "../index";
-import { createGlobalFilters } from "../mappings/model.mapper";
+import { type DatabaseTransaction } from "../index";
 import {
-  createAllModelsQuery,
-  createModelsCountQuery,
-} from "../queries/model.query";
-import { equipmentTypeTable } from "../tables/equipment-type.sql";
-import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelImageTable } from "../tables/model-image.sql";
-import {
-  type ArchiveModel,
-  type CreateModel,
-  type ModelID,
-  modelTable,
-  type UpdateModel,
-} from "../tables/model.sql";
+  createColumnFilters,
+  createGlobalFilters,
+  createSortOrder,
+} from "../mappings/model.mapper";
+import { equipmentTypeTable } from "../tables/equipmentType.table";
+import { manufacturerTable } from "../tables/manufacturer.table";
+import { type ModelInput, modelTable } from "../tables/model.table";
+import { modelImageTable } from "../tables/modelImage.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const modelFields = getTableColumns(modelTable);
 
-export function getAllModels(
-  { filters, ...dataTableInput }: GetAllModelsInput,
-  organizationId: OrganizationID,
-) {
-  const query = createAllModelsQuery(
-    dataTableInput,
-    isNull(modelTable.deletedAt),
-    eq(modelTable.organizationId, organizationId),
-    filters?.manufacturerId
-      ? eq(modelTable.manufacturerId, filters.manufacturerId)
-      : undefined,
-    filters?.equipmentTypeId
-      ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
-      : undefined,
-  );
-  return query.execute();
+interface ModelFilters {
+  manufacturerId?: number | undefined;
+  equipmentTypeId?: number | undefined;
 }
+export default class ModelRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<ModelInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(modelTable)
+      .set(input)
+      .where(
+        and(
+          eq(modelTable.localId, localId),
+          eq(modelTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 
-export async function countModels(
-  { filters, ...dataTableInput }: CountModelsInput,
-  organizationId: OrganizationID,
-) {
-  const query = createModelsCountQuery(
-    dataTableInput,
-    isNull(modelTable.deletedAt),
-    eq(modelTable.organizationId, organizationId),
-    filters?.manufacturerId
-      ? eq(modelTable.manufacturerId, filters.manufacturerId)
-      : undefined,
-    filters?.equipmentTypeId
-      ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
-      : undefined,
-  );
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async count(
+    tx: DatabaseTransaction,
+    { filters, globalFilter, columnFilters }: CountInput<ModelFilters>,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = createGlobalFilters(globalFilter);
+    const columnFilterParams = createColumnFilters(columnFilters);
+    const query = tx
+      .select({ count: count() })
+      .from(modelTable)
+      .leftJoin(
+        manufacturerTable,
+        eq(modelTable.manufacturerId, manufacturerTable.id),
+      )
+      .innerJoin(
+        equipmentTypeTable,
+        eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
+      )
+      .where(
+        and(
+          isNull(modelTable.deletedAt),
+          eq(modelTable.organizationId, organizationId),
+          filters.manufacturerId
+            ? eq(modelTable.manufacturerId, filters.manufacturerId)
+            : undefined,
+          filters.equipmentTypeId
+            ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
+            : undefined,
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
 
-export function getModelsSelect(
-  input: GetModelsSelectInput,
-  organizationId: OrganizationID,
-) {
-  const globalFilter = createGlobalFilters(input.globalFilter);
-  const query = db
-    .select({
-      value: modelTable.id,
-      label: modelTable.name,
-    })
-    .from(modelTable)
-    .where(
-      and(
-        isNull(modelTable.deletedAt),
-        eq(modelTable.organizationId, organizationId),
-        globalFilter,
-      ),
-    )
-    .orderBy(modelTable.id);
-  const res = query.execute();
-  return res;
-}
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-export async function getModelById(id: ModelID) {
-  const { createdByTable, deletedByTable, metadata, updatedByTable } =
-    createMetadataFields();
+  async create(tx: DatabaseTransaction, input: CreateInput<ModelInput>) {
+    const query = tx.insert(modelTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-  const query = db
-    .select({
-      ...modelFields,
-      manufacturer: manufacturerTable,
-      equipmentType: equipmentTypeTable,
-      imageUrl: modelImageTable.url,
-      ...metadata,
-    })
-    .from(modelTable)
-    .innerJoin(createdByTable, eq(modelTable.createdById, createdByTable.id))
-    .leftJoin(updatedByTable, eq(modelTable.updatedById, updatedByTable.id))
-    .leftJoin(deletedByTable, eq(modelTable.deletedById, deletedByTable.id))
-    .innerJoin(
-      manufacturerTable,
-      eq(modelTable.manufacturerId, manufacturerTable.id),
-    )
-    .innerJoin(
-      equipmentTypeTable,
-      eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
-    )
-    .leftJoin(
-      modelImageTable,
-      eq(modelTable.defaultImageId, modelImageTable.id),
-    )
-    .where(eq(modelTable.id, id));
-  const [res] = await query.execute();
-  return res;
-}
+  async getAll(
+    tx: DatabaseTransaction,
+    {
+      filters,
+      sorting,
+      columnFilters,
+      globalFilter,
+      pagination,
+    }: GetAllInput<ModelFilters>,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = createGlobalFilters(globalFilter);
+    const columnFilterParams = createColumnFilters(columnFilters);
+    const orderByParams = createSortOrder(sorting);
 
-export async function createModel(input: CreateModel) {
-  const query = db.insert(modelTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+    const query = tx
+      .select({
+        ...modelFields,
+        defaultImageUrl: modelImageTable.url,
+        equipmentType: equipmentTypeTable,
+        manufacturer: manufacturerTable,
+      })
+      .from(modelTable)
+      .innerJoin(
+        manufacturerTable,
+        eq(modelTable.manufacturerId, manufacturerTable.id),
+      )
+      .innerJoin(
+        equipmentTypeTable,
+        eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
+      )
+      .leftJoin(
+        modelImageTable,
+        eq(modelTable.defaultImageId, modelImageTable.id),
+      )
+      .where(
+        and(
+          isNull(modelTable.deletedAt),
+          eq(modelTable.organizationId, organizationId),
+          filters.manufacturerId
+            ? eq(modelTable.manufacturerId, filters.manufacturerId)
+            : undefined,
+          filters.equipmentTypeId
+            ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
+            : undefined,
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      )
+      .orderBy(...orderByParams, modelTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
 
-export async function updateModel(input: UpdateModel) {
-  const query = db
-    .update(modelTable)
-    .set(input)
-    .where(eq(modelTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+    return query.execute();
+  }
 
-export async function archiveModel(input: ArchiveModel) {
-  const query = db
-    .update(modelTable)
-    .set(input)
-    .where(eq(modelTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    input: GetAllSimpleInput<ModelFilters>,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilter = createGlobalFilters(input.globalFilter);
+    const query = tx
+      .select({
+        value: modelTable.id,
+        label: modelTable.name,
+      })
+      .from(modelTable)
+      .where(
+        and(
+          isNull(modelTable.deletedAt),
+          eq(modelTable.organizationId, organizationId),
+          globalFilter,
+        ),
+      )
+      .orderBy(modelTable.id);
+    const res = query.execute();
+    return res;
+  }
+
+  async getByLocalId(
+    tx: DatabaseTransaction,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const { createdByTable, deletedByTable, metadata, updatedByTable } =
+      createMetadataFields();
+
+    const query = tx
+      .select({
+        ...modelFields,
+        manufacturer: manufacturerTable,
+        equipmentType: equipmentTypeTable,
+        imageUrl: modelImageTable.url,
+        ...metadata,
+      })
+      .from(modelTable)
+      .innerJoin(createdByTable, eq(modelTable.createdById, createdByTable.id))
+      .leftJoin(updatedByTable, eq(modelTable.updatedById, updatedByTable.id))
+      .leftJoin(deletedByTable, eq(modelTable.deletedById, deletedByTable.id))
+      .innerJoin(
+        manufacturerTable,
+        eq(modelTable.manufacturerId, manufacturerTable.id),
+      )
+      .innerJoin(
+        equipmentTypeTable,
+        eq(modelTable.equipmentTypeId, equipmentTypeTable.id),
+      )
+      .leftJoin(
+        modelImageTable,
+        eq(modelTable.defaultImageId, modelImageTable.id),
+      )
+      .where(
+        and(
+          eq(modelTable.localId, localId),
+          eq(modelTable.organizationId, organizationId),
+        ),
+      );
+    return await returnOne(query);
+  }
+
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<ModelInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(modelTable)
+      .set(input)
+      .where(
+        and(
+          eq(modelTable.localId, localId),
+          eq(modelTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 }

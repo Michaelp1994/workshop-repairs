@@ -1,136 +1,171 @@
-import type {
-  CountLocationsInput,
-  GetAllLocationsInput,
-  GetLocationsSelectInput,
-} from "@repo/validators/server/locations.validators";
-
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/locations.mapper";
-import {
-  type ArchiveLocation,
-  type CreateLocation,
-  type LocationID,
-  locationTable,
-  type UpdateLocation,
-} from "../tables/location.sql";
+import { type LocationInput, locationTable } from "../tables/location.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const locationFields = getTableColumns(locationTable);
+export default class LocationRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<LocationInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(locationTable)
+      .set(input)
+      .where(
+        and(
+          eq(locationTable.localId, localId),
+          eq(locationTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 
-export function getAllLocations(
-  { pagination, globalFilter, sorting, columnFilters }: GetAllLocationsInput,
-  organizationId: OrganizationID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const orderByParams = getOrderBy(sorting);
-  const query = db
-    .select()
-    .from(locationTable)
-    .where(
-      and(
-        isNull(locationTable.deletedAt),
-        eq(locationTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, locationTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+  async count(
+    tx: DatabaseTransaction,
+    { globalFilter, columnFilters }: CountInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
 
-export async function countLocations(
-  { globalFilter, columnFilters }: CountLocationsInput,
-  organizationId: OrganizationID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({ count: count() })
+      .from(locationTable)
+      .where(
+        and(
+          isNull(locationTable.deletedAt),
+          eq(locationTable.organizationId, organizationId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
 
-  const query = db
-    .select({ count: count() })
-    .from(locationTable)
-    .where(
-      and(
-        isNull(locationTable.deletedAt),
-        eq(locationTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async create(tx: DatabaseTransaction, input: CreateInput<LocationInput>) {
+    const query = tx.insert(locationTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export function getLocationsSelect(
-  _: GetLocationsSelectInput,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .select({
-      value: locationTable.id,
-      label: locationTable.name,
-    })
-    .from(locationTable)
-    .where(
-      and(
-        isNull(locationTable.deletedAt),
-        eq(locationTable.organizationId, organizationId),
-      ),
-    )
-    .orderBy(locationTable.name);
-  return query.execute();
-}
+  async getAll(
+    tx: DatabaseTransaction,
+    { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const orderByParams = getOrderBy(sorting);
+    const query = tx
+      .select()
+      .from(locationTable)
+      .where(
+        and(
+          isNull(locationTable.deletedAt),
+          eq(locationTable.organizationId, organizationId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      )
+      .orderBy(...orderByParams, locationTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return query.execute();
+  }
 
-export async function getLocationById(id: LocationID) {
-  const { metadata, createdByTable, deletedByTable, updatedByTable } =
-    createMetadataFields();
-  const query = db
-    .select({
-      ...locationFields,
-      ...metadata,
-    })
-    .from(locationTable)
-    .innerJoin(createdByTable, eq(locationTable.createdById, createdByTable.id))
-    .leftJoin(updatedByTable, eq(locationTable.updatedById, updatedByTable.id))
-    .leftJoin(deletedByTable, eq(locationTable.deletedById, deletedByTable.id))
-    .where(eq(locationTable.id, id));
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: locationTable.id,
+        label: locationTable.name,
+      })
+      .from(locationTable)
+      .where(
+        and(
+          isNull(locationTable.deletedAt),
+          eq(locationTable.organizationId, organizationId),
+        ),
+      )
+      .orderBy(locationTable.name);
+    return query.execute();
+  }
 
-export async function createLocation(input: CreateLocation) {
-  const query = db.insert(locationTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getByLocalId(
+    tx: DatabaseTransaction,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const { metadata, createdByTable, deletedByTable, updatedByTable } =
+      createMetadataFields();
+    const query = tx
+      .select({
+        ...locationFields,
+        ...metadata,
+      })
+      .from(locationTable)
+      .innerJoin(
+        createdByTable,
+        eq(locationTable.createdById, createdByTable.id),
+      )
+      .leftJoin(
+        updatedByTable,
+        eq(locationTable.updatedById, updatedByTable.id),
+      )
+      .leftJoin(
+        deletedByTable,
+        eq(locationTable.deletedById, deletedByTable.id),
+      )
+      .where(
+        and(
+          eq(locationTable.localId, localId),
+          eq(locationTable.organizationId, organizationId),
+        ),
+      );
+    return await returnOne(query);
+  }
 
-export async function updateLocation(input: UpdateLocation) {
-  const query = db
-    .update(locationTable)
-    .set(input)
-    .where(eq(locationTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function archiveLocation(input: ArchiveLocation) {
-  const query = db
-    .update(locationTable)
-    .set(input)
-    .where(eq(locationTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<LocationInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(locationTable)
+      .set(input)
+      .where(
+        and(
+          eq(locationTable.localId, localId),
+          eq(locationTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 }

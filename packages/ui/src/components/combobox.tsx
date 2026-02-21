@@ -1,5 +1,3 @@
-"use client";
-
 import { CommandLoading } from "cmdk";
 import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";

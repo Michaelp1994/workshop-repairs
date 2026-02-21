@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const assetStatusFilters = z.object({}).optional();
+const assetStatusFilters = z.object({}).default({});
 
 export const getAllAssetStatusesSchema = dataTableSchema.extend({
   filters: assetStatusFilters,
@@ -21,7 +21,9 @@ export const countAssetStatusesSchema = dataTableCountSchema.extend({
 });
 export type CountAssetStatusesInput = z.infer<typeof countAssetStatusesSchema>;
 
-export const getAssetStatusesSelectSchema = getSelectSchema.extend({});
+export const getAssetStatusesSelectSchema = getSelectSchema.extend({
+  filters: assetStatusFilters,
+});
 
 export type GetAssetStatusesSelectInput = z.infer<
   typeof getAssetStatusesSelectSchema

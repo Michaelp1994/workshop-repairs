@@ -1,82 +1,90 @@
-import type {
-  CountAssetStatusesInput,
-  GetAllAssetStatusesInput,
-  GetAssetStatusesSelectInput,
-} from "@repo/validators/server/assetStatuses.validators";
-
 import { count, eq, isNull } from "drizzle-orm";
 
-import { db } from "../index";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
+
+import { type DatabaseTransaction } from "../index";
 import {
-  type ArchiveAssetStatus,
   type AssetStatusID,
+  type AssetStatusInput,
   assetStatusTable,
-  type CreateAssetStatus,
-  type UpdateAssetStatus,
-} from "../tables/asset-status.sql";
+} from "../tables/assetStatus.table";
+import { returnOne } from "../helpers/executeQuery";
 
-export function getAllAssetStatuses({ pagination }: GetAllAssetStatusesInput) {
-  const query = db
-    .select()
-    .from(assetStatusTable)
-    .where(isNull(assetStatusTable.deletedAt))
-    .orderBy(assetStatusTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+export default class AssetStatusRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<AssetStatusInput>,
+    assetStatusId: AssetStatusID,
+  ) {
+    const query = tx
+      .update(assetStatusTable)
+      .set(input)
+      .where(eq(assetStatusTable.id, assetStatusId))
+      .returning();
+    return await returnOne(query);
+  }
 
-export async function countAssetStatuses(_: CountAssetStatusesInput) {
-  const query = db
-    .select({ count: count() })
-    .from(assetStatusTable)
-    .where(isNull(assetStatusTable.deletedAt));
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async count(tx: DatabaseTransaction, _input: CountInput) {
+    const query = tx
+      .select({ count: count() })
+      .from(assetStatusTable)
+      .where(isNull(assetStatusTable.deletedAt));
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-export async function getAssetStatusById(input: AssetStatusID) {
-  const query = db
-    .select()
-    .from(assetStatusTable)
-    .where(eq(assetStatusTable.id, input));
-  const [res] = await query.execute();
-  return res;
-}
+  async create(tx: DatabaseTransaction, input: CreateInput<AssetStatusInput>) {
+    const query = tx.insert(assetStatusTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export function getAssetStatusSelect(_: GetAssetStatusesSelectInput) {
-  const query = db
-    .select({
-      value: assetStatusTable.id,
-      label: assetStatusTable.name,
-    })
-    .from(assetStatusTable)
-    .orderBy(assetStatusTable.name);
-  return query.execute();
-}
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
+    const query = tx
+      .select()
+      .from(assetStatusTable)
+      .where(isNull(assetStatusTable.deletedAt))
+      .orderBy(assetStatusTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return await query.execute();
+  }
 
-export async function createAssetStatus(input: CreateAssetStatus) {
-  const query = db.insert(assetStatusTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllSimple(tx: DatabaseTransaction, _input: GetAllSimpleInput) {
+    const query = tx
+      .select({
+        value: assetStatusTable.id,
+        label: assetStatusTable.name,
+      })
+      .from(assetStatusTable)
+      .orderBy(assetStatusTable.name);
+    return await query.execute();
+  }
 
-export async function updateAssetStatus(input: UpdateAssetStatus) {
-  const query = db
-    .update(assetStatusTable)
-    .set(input)
-    .where(eq(assetStatusTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getById(tx: DatabaseTransaction, input: AssetStatusID) {
+    const query = tx
+      .select()
+      .from(assetStatusTable)
+      .where(eq(assetStatusTable.id, input));
+    return await returnOne(query);
+  }
 
-export async function archiveAssetStatus(input: ArchiveAssetStatus) {
-  const query = db
-    .update(assetStatusTable)
-    .set(input)
-    .where(eq(assetStatusTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<AssetStatusInput>,
+    assetStatusId: AssetStatusID,
+  ) {
+    const query = tx
+      .update(assetStatusTable)
+      .set(input)
+      .where(eq(assetStatusTable.id, assetStatusId))
+      .returning();
+    return await returnOne(query);
+  }
 }

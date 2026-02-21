@@ -1,11 +1,12 @@
-import { SortingInput } from "@repo/validators/dataTables.schema";
 import { asc, desc } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
+
+import type { Sorting } from "../types";
 
 type ColumnMapping = Record<string, PgColumn>;
 
 export function createOrderByFunction(mapping: ColumnMapping) {
-  return function (sorting: SortingInput) {
+  return function (sorting: Sorting[]) {
     if (sorting.length === 0) {
       return [];
     }
@@ -15,7 +16,8 @@ export function createOrderByFunction(mapping: ColumnMapping) {
         const direction = isDescending ? desc : asc;
         const column = mapping[id];
         if (!column) {
-          throw Error(`cannot sort by column: ${column}`);
+          console.log({ column });
+          throw Error(`cannot sort by column`);
         }
         return direction(column);
       });

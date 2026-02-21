@@ -1,238 +1,261 @@
-import type { GetSelectInput } from "@repo/validators/server/dataTables.validators";
-import type {
-  CountAllModelsByPartIdInput,
-  CountAllPartsByModelIdInput,
-  GetAllModelsByPartIdInput,
-  GetAllPartsByModelIdInput,
-} from "@repo/validators/server/partsToModel.validators";
-
 import { and, count, eq, getTableColumns } from "drizzle-orm";
 
-import { db } from "..";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
+
+import { type DatabaseTransaction } from "..";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/partsToModels.mapper";
-import { type ModelID, modelTable } from "../tables/model.sql";
-import { type PartID, partTable } from "../tables/part.sql";
+import { type ModelID, modelTable } from "../tables/model.table";
+import { type PartID, partTable } from "../tables/part.table";
 import {
-  type ArchivePartToModel,
-  type CreatePartToModel,
-  partsToModelTable,
-  UpdatePartToModel,
-} from "../tables/parts-to-model.sql";
+  type PartToModelInput,
+  partToModelTable,
+} from "../tables/partToModel.table";
+import { returnOne } from "../helpers/executeQuery";
 
-const partsToModelsFields = getTableColumns(partsToModelTable);
+const partToModelsFields = getTableColumns(partToModelTable);
 
-export function getAllPartsByModelId({
-  sorting,
-  pagination,
-  globalFilter,
-  columnFilters,
-  filters,
-}: GetAllPartsByModelIdInput) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const orderByParams = getOrderBy(sorting);
-  const query = db
-    .select({
-      ...partsToModelsFields,
-      part: partTable,
-    })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .where(
-      and(
-        eq(partsToModelTable.modelId, filters.modelId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, partsToModelTable.partId)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  const res = query.execute();
-  return res;
+interface PartToModelFilters {
+  modelId: number;
 }
 
-export async function countAllPartsByModelId({
-  columnFilters,
-  globalFilter,
-  filters,
-}: CountAllPartsByModelIdInput) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
-    .select({
-      count: count(),
-    })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .where(
-      and(
-        eq(partsToModelTable.modelId, filters.modelId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
-  const [res] = await query.execute();
-  return res?.count;
+interface ModelToPartFilter {
+  partId: number;
 }
 
-export function getAllModelsByPartId({
-  sorting,
-  pagination,
-  globalFilter,
-  columnFilters,
-  filters,
-}: GetAllModelsByPartIdInput) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const orderByParams = getOrderBy(sorting);
-  const query = db
-    .select({
-      ...partsToModelsFields,
-      model: modelTable,
-    })
-    .from(partsToModelTable)
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(
-      and(
-        eq(partsToModelTable.partId, filters.partId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, partsToModelTable.partId)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  const res = query.execute();
-  return res;
-}
+export default class PartToModelRepository {
+  // TODO: should this be a delete operation or an archive operation?
+  async archive(
+    tx: DatabaseTransaction,
+    { partId, modelId }: { partId: PartID; modelId: ModelID },
+  ) {
+    const query = tx
+      .delete(partToModelTable)
+      .where(
+        and(
+          eq(partToModelTable.partId, partId),
+          eq(partToModelTable.modelId, modelId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 
-export async function countAllModelsByPartId({
-  columnFilters,
-  globalFilter,
-  filters,
-}: CountAllModelsByPartIdInput) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
-    .select({
-      count: count(),
-    })
-    .from(partsToModelTable)
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(
-      and(
-        eq(partsToModelTable.partId, filters.partId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async countAllModelsByPartId(
+    tx: DatabaseTransaction,
+    { columnFilters, globalFilter, filters }: CountInput<ModelToPartFilter>,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({
+        count: count(),
+      })
+      .from(partToModelTable)
+      .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
+      .where(
+        and(
+          eq(partToModelTable.partId, filters.partId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-export function getPartsByModelIdSelect(
-  { globalFilter, columnFilters }: GetSelectInput,
-  modelId: ModelID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
-    .select({
-      value: partTable.id,
-      label: partTable.name,
-    })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(
-      and(
-        eq(partsToModelTable.modelId, modelId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
+  async countAllPartsByModelId(
+    tx: DatabaseTransaction,
+    { columnFilters, globalFilter, filters }: CountInput<PartToModelFilters>,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({
+        count: count(),
+      })
+      .from(partToModelTable)
+      .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
+      .where(
+        and(
+          eq(partToModelTable.modelId, filters.modelId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-  return query.execute();
-}
+  async create(tx: DatabaseTransaction, input: CreateInput<PartToModelInput>) {
+    const query = tx.insert(partToModelTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export function getModelsByPartIdSelect(
-  { globalFilter, columnFilters }: GetSelectInput,
-  partId: PartID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const query = db
-    .select({
-      value: modelTable.id,
-      label: modelTable.name,
-    })
-    .from(partsToModelTable)
-    .innerJoin(partTable, eq(partTable.id, partsToModelTable.partId))
-    .innerJoin(modelTable, eq(modelTable.id, partsToModelTable.modelId))
-    .where(
-      and(
-        eq(partsToModelTable.partId, partId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
+  async getAllModelsByPartId(
+    tx: DatabaseTransaction,
+    {
+      sorting,
+      pagination,
+      globalFilter,
+      columnFilters,
+      filters,
+    }: GetAllInput<ModelToPartFilter>,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const orderByParams = getOrderBy(sorting);
+    const query = tx
+      .select({
+        ...partToModelsFields,
+        model: modelTable,
+      })
+      .from(partToModelTable)
+      .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
+      .where(
+        and(
+          eq(partToModelTable.partId, filters.partId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      )
+      .orderBy(...orderByParams, partToModelTable.partId)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    const res = query.execute();
+    return res;
+  }
 
-  return query.execute();
-}
+  async getAllPartsByModelId(
+    tx: DatabaseTransaction,
+    {
+      sorting,
+      pagination,
+      globalFilter,
+      columnFilters,
+      filters,
+    }: GetAllInput<PartToModelFilters>,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const orderByParams = getOrderBy(sorting);
+    const query = tx
+      .select({
+        ...partToModelsFields,
+        part: partTable,
+      })
+      .from(partToModelTable)
+      .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
+      .where(
+        and(
+          eq(partToModelTable.modelId, filters.modelId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      )
+      .orderBy(...orderByParams, partToModelTable.partId)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    const res = query.execute();
+    return res;
+  }
 
-export async function getPartToModelById(input: {
-  partId: PartID;
-  modelId: ModelID;
-}) {
-  const query = db
-    .select()
-    .from(partsToModelTable)
-    .where(
-      and(
-        eq(partsToModelTable.partId, input.partId),
-        eq(partsToModelTable.modelId, input.modelId),
-      ),
-    );
-  const [res] = await query.execute();
-  return res;
-}
+  async getById(
+    tx: DatabaseTransaction,
+    input: {
+      partId: PartID;
+      modelId: ModelID;
+    },
+  ) {
+    const query = tx
+      .select()
+      .from(partToModelTable)
+      .where(
+        and(
+          eq(partToModelTable.partId, input.partId),
+          eq(partToModelTable.modelId, input.modelId),
+        ),
+      );
+    return await returnOne(query);
+  }
 
-export async function createPartToModel(input: CreatePartToModel) {
-  const query = db.insert(partsToModelTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getModelsByPartIdSelect(
+    tx: DatabaseTransaction,
+    { globalFilter, columnFilters }: GetAllSimpleInput,
+    partId: PartID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({
+        value: modelTable.id,
+        label: modelTable.name,
+      })
+      .from(partToModelTable)
+      .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
+      .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
+      .where(
+        and(
+          eq(partToModelTable.partId, partId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
 
-export async function updatePartToModel(input: UpdatePartToModel) {
-  const query = db
-    .update(partsToModelTable)
-    .set(input)
-    .where(
-      and(
-        eq(partsToModelTable.partId, input.partId),
-        eq(partsToModelTable.modelId, input.modelId),
-      ),
-    )
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+    return query.execute();
+  }
 
-export async function archivePartToModel(input: ArchivePartToModel) {
-  const query = db
-    .delete(partsToModelTable)
-    .where(
-      and(
-        eq(partsToModelTable.partId, input.partId),
-        eq(partsToModelTable.modelId, input.modelId),
-      ),
-    )
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async getPartsByModelIdSelect(
+    tx: DatabaseTransaction,
+    { globalFilter, columnFilters }: GetAllSimpleInput,
+    modelId: ModelID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({
+        value: partTable.id,
+        label: partTable.name,
+      })
+      .from(partToModelTable)
+      .innerJoin(partTable, eq(partTable.id, partToModelTable.partId))
+      .innerJoin(modelTable, eq(modelTable.id, partToModelTable.modelId))
+      .where(
+        and(
+          eq(partToModelTable.modelId, modelId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
+
+    return query.execute();
+  }
+
+  // TODO: refactor type of input
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<PartToModelInput>,
+    { partId, modelId }: { partId: PartID; modelId: ModelID },
+  ) {
+    const query = tx
+      .update(partToModelTable)
+      .set(input)
+      .where(
+        and(
+          eq(partToModelTable.partId, partId),
+          eq(partToModelTable.modelId, modelId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 }

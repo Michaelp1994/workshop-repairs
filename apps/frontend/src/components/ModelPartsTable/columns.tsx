@@ -1,0 +1,78 @@
+import type { RouterOutputs } from "@repo/backend";
+
+import NiceModal from "@ebay/nice-modal-react";
+import { Button } from "@repo/ui/button";
+import { DataTableColumnHeader } from "@repo/ui/data-table";
+import { DataTableHeaderCheckbox } from "@repo/ui/data-table";
+import { DataTableRowCheckbox } from "@repo/ui/data-table";
+import { Pencil, Trash2 } from "@repo/ui/icons";
+import { createColumnHelper } from "@tanstack/react-table";
+
+import ArchiveModelPartModal from "../modals/ArchiveModelPartModal";
+import UpdateModelPartModal from "../modals/UpdateModelPartModal";
+
+const columnHelper =
+  createColumnHelper<
+    RouterOutputs["partsToModels"]["getAllPartsByModelId"][number]
+  >();
+
+export const columns = [
+  columnHelper.display({
+    id: "selection",
+    enableHiding: false,
+    header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
+    cell: ({ row }) => <DataTableRowCheckbox row={row} />,
+  }),
+  columnHelper.accessor("part.partNumber", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Part Number" />
+    ),
+    meta: {
+      name: "Part Number",
+    },
+  }),
+  columnHelper.accessor("part.name", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Part Name" />
+    ),
+    meta: {
+      name: "Name",
+    },
+  }),
+  columnHelper.accessor("quantity", {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Quantity" />
+    ),
+    meta: {
+      name: "Quantity",
+    },
+  }),
+  columnHelper.display({
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      async function showEditModal() {
+        await NiceModal.show(UpdateModelPartModal, {
+          modelId: row.original.modelId,
+          partId: row.original.partId,
+        });
+      }
+      async function showArchiveModal() {
+        await NiceModal.show(ArchiveModelPartModal, {
+          modelId: row.original.modelId,
+          partId: row.original.partId,
+        });
+      }
+      return (
+        <>
+          <Button onClick={showEditModal} size="sm" variant="link">
+            <Pencil className="h-5 w-5" />
+          </Button>
+          <Button onClick={showArchiveModal} size="sm" variant="link">
+            <Trash2 className="h-5 w-5" />
+          </Button>
+        </>
+      );
+    },
+  }),
+];

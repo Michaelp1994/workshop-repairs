@@ -1,4 +1,5 @@
 import type { UserID } from "@repo/validators/ids.validators";
+import type { IncomingHttpHeaders, ServerResponse } from "http";
 
 import { getCookie, setCookie } from "./cookies";
 import { generateToken, verifyToken } from "./tokens";
@@ -7,7 +8,9 @@ export interface Session {
   userId: number;
 }
 
-export async function getSession(headers: Headers): Promise<Session | null> {
+export async function getSession(
+  headers: IncomingHttpHeaders,
+): Promise<Session | null> {
   const authCookie = getCookie(headers, "Authorization");
   if (!authCookie) {
     return null;
@@ -28,52 +31,31 @@ export async function getSession(headers: Headers): Promise<Session | null> {
   }
 }
 
-export function createSetSession(resHeaders?: Headers) {
+export function createSetSession(res: ServerResponse) {
   return async function (user: { id: UserID }) {
-    if (!resHeaders) {
-      throw new Error(
-        "You are trying to set a session within a server component that does not have access to the response headers.",
-      );
-    }
     const token = await generateToken({
       userId: user.id,
     });
-    setCookie(resHeaders, "Authorization", `Bearer ${token}`, {
+    const cookieValue = setCookie("Authorization", `Bearer ${token}`, {
       secure: false,
       sameSite: "lax",
+      domain: "localhost",
       path: "/",
       maxAge: 60 * 60 * 24 * 30,
     });
-    setCookie(resHeaders, "userId", user.id.toString(), {
-      secure: false,
-      sameSite: "lax",
-      httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-    });
+    res.appendHeader("Set-Cookie", cookieValue);
   };
 }
 
-export function createClearSession(resHeaders?: Headers) {
-  return async function () {
-    if (!resHeaders) {
-      throw new Error(
-        "You are trying to clear a session within a server component that does not have access to the response headers.",
-      );
-    }
-    setCookie(resHeaders, "Authorization", "", {
+export function createClearSession(res: ServerResponse) {
+  return function () {
+    const authCookie = setCookie("Authorization", "", {
       secure: false,
       sameSite: "lax",
       httpOnly: true,
       path: "/",
       maxAge: 0,
     });
-    setCookie(resHeaders, "userId", "", {
-      secure: false,
-      sameSite: "lax",
-      httpOnly: true,
-      path: "/",
-      maxAge: 0,
-    });
+    res.appendHeader("Set-Cookie", authCookie);
   };
 }

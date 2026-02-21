@@ -1,54 +1,43 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "..";
+import type { CreateInput } from "../types";
+
+import { type DatabaseTransaction } from "..";
+import { returnOne } from "../helpers/executeQuery";
 import {
-  type CreateOrganizationInvitation,
-  organizationInvitationTable,
-} from "../tables/organization-invitation.sql";
-import {
-  type CreateOrganization,
   type OrganizationID,
+  type OrganizationInput,
   organizationTable,
-} from "../tables/organization.sql";
+} from "../tables/organization.table";
 
-export async function getOrganizationById(id: OrganizationID) {
-  const query = db
-    .select()
-    .from(organizationTable)
-    .where(eq(organizationTable.id, id));
-  const [res] = await query.execute();
-  return res;
-}
+export default class OrganizationRepository {
+  async create(tx: DatabaseTransaction, input: CreateInput<OrganizationInput>) {
+    const query = tx.insert(organizationTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export async function getOrganizationByName(name: string) {
-  const query = db
-    .select()
-    .from(organizationTable)
-    .where(eq(organizationTable.name, name));
-  const [res] = await query.execute();
-  return res;
-}
+  async findByInvitationCode(tx: DatabaseTransaction, invitationCode: string) {
+    const query = tx
+      .select()
+      .from(organizationTable)
+      .where(eq(organizationTable.invitationCode, invitationCode));
+    const [result] = await query.execute();
+    return result;
+  }
 
-export async function createOrganization(input: CreateOrganization) {
-  const query = db.insert(organizationTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getById(tx: DatabaseTransaction, id: OrganizationID) {
+    const query = tx
+      .select()
+      .from(organizationTable)
+      .where(eq(organizationTable.id, id));
+    return await returnOne(query);
+  }
 
-export async function getOrganizationByInvitationCode(invitationCode: string) {
-  const query = db
-    .select()
-    .from(organizationTable)
-    .where(eq(organizationTable.invitationCode, invitationCode));
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function createInvitation(input: CreateOrganizationInvitation) {
-  const query = db
-    .insert(organizationInvitationTable)
-    .values(input)
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async getByName(tx: DatabaseTransaction, name: string) {
+    const query = tx
+      .select()
+      .from(organizationTable)
+      .where(eq(organizationTable.name, name));
+    return await returnOne(query);
+  }
 }

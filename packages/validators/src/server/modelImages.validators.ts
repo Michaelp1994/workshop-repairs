@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const modelImageFilters = z.object({}).optional();
+const modelImageFilters = z.object({}).default({});
 
 export const getAllModelImagesSchema = dataTableSchema.extend({
   filters: modelImageFilters,
@@ -19,7 +19,9 @@ export const countModelImagesSchema = dataTableCountSchema.extend({
 });
 export type CountModelImagesInput = z.infer<typeof countModelImagesSchema>;
 
-export const getModelImagesSelectSchema = getSelectSchema.extend({});
+export const getModelImagesSelectSchema = getSelectSchema.extend({
+  filters: modelImageFilters,
+});
 
 export type GetModelImagesSelectInput = z.infer<
   typeof getModelImagesSelectSchema

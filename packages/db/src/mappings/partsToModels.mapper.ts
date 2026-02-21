@@ -1,20 +1,20 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { modelTable } from "../tables/model.sql";
-import { partTable } from "../tables/part.sql";
-import { partsToModelTable } from "../tables/parts-to-model.sql";
+import { modelTable } from "../tables/model.table";
+import { partToModelTable } from "../tables/partToModel.table";
+import { partTable } from "../tables/part.table";
 
 const orderMapping = {
   part_name: partTable.name,
   part_partNumber: partTable.partNumber,
   model_name: modelTable.name,
-  quantity: partsToModelTable.quantity,
+  quantity: partToModelTable.quantity,
 };
 
 const filterMapping = {
-  part_id: partsToModelTable.partId,
-  model_id: partsToModelTable.modelId,
+  part_id: partToModelTable.partId,
+  model_id: partToModelTable.modelId,
 };
 
 const globalFilterColumns = [

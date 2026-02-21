@@ -1,87 +1,53 @@
-import assert from "assert";
 import { eq, getTableColumns } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { CreateInput, UpdateInput } from "../types";
 
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
+import { type UserID, userTable } from "../tables/user.table";
 import {
-  type CreateUserOnboarding,
-  type UpdateUserOnboarding,
+  type UserOnboardingInput,
   userOnboardingTable,
-} from "../tables/user-onboarding.sql";
-import { type UserID, userTable } from "../tables/user.sql";
+} from "../tables/userOnboarding.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
 const userOnboardingColumns = getTableColumns(userOnboardingTable);
 
-export async function getUserOnboardingByUserId(userId: UserID) {
-  const query = db
-    .select({
-      ...publicUserColumns,
-      onboarding: userOnboardingColumns,
-    })
-    .from(userTable)
-    .leftJoin(userOnboardingTable, eq(userTable.id, userOnboardingTable.userId))
-    .where(eq(userTable.id, userId));
-  const [res] = await query.execute();
-  return res;
-}
+export default class UserOnboardingRepository {
+  async create(
+    tx: DatabaseTransaction,
+    input: CreateInput<UserOnboardingInput>,
+  ) {
+    const query = tx.insert(userOnboardingTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export async function createUserOnboarding(input: CreateUserOnboarding) {
-  const query = db.insert(userOnboardingTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getByUserId(tx: DatabaseTransaction, userId: UserID) {
+    const query = tx
+      .select({
+        ...publicUserColumns,
+        onboarding: userOnboardingColumns,
+      })
+      .from(userTable)
+      .leftJoin(
+        userOnboardingTable,
+        eq(userTable.id, userOnboardingTable.userId),
+      )
+      .where(eq(userTable.id, userId));
+    return await returnOne(query);
+  }
 
-export async function setOrganization(
-  userId: UserID,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .update(userTable)
-    .set({
-      organizationId,
-    })
-    .where(eq(userTable.id, userId))
-    .returning({ ...publicUserColumns });
-
-  const [res] = await query.execute();
-
-  return res;
-}
-
-export async function setInvitations(userId: UserID) {
-  const query = db
-    .update(userOnboardingTable)
-    .set({
-      invitedUsers: true,
-    })
-    .where(eq(userOnboardingTable.userId, userId))
-    .returning();
-  const [res] = await query.execute();
-  assert(res, "User not found");
-  const query2 = db
-    .update(userTable)
-    .set({
-      onboardingCompleted: true,
-    })
-    .where(eq(userTable.id, userId))
-    .returning({
-      ...publicUserColumns,
-    });
-  const [res2] = await query2.execute();
-  return res2;
-}
-
-export async function updateUserOnboardingByUserId(
-  input: UpdateUserOnboarding,
-) {
-  const query = db
-    .update(userOnboardingTable)
-    .set(input)
-    .where(eq(userOnboardingTable.userId, input.userId))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async updateByUserId(
+    tx: DatabaseTransaction,
+    input: UpdateInput<UserOnboardingInput>,
+    userId: UserID,
+  ) {
+    const query = tx
+      .update(userOnboardingTable)
+      .set(input)
+      .where(eq(userOnboardingTable.userId, userId))
+      .returning();
+    return await returnOne(query);
+  }
 }

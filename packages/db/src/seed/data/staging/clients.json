@@ -1,22 +1,22 @@
 [
   {
-    "id": 1,
-    "name": "Client 1"
+    "name": "Client 1",
+    "localId": 1
   },
   {
-    "id": 2,
-    "name": "Client 2"
+    "name": "Client 2",
+    "localId": 2
   },
   {
-    "id": 3,
-    "name": "Client 3"
+    "name": "Client 3",
+    "localId": 3
   },
   {
-    "id": 4,
-    "name": "Client 4"
+    "name": "Client 4",
+    "localId": 4
   },
   {
-    "id": 5,
-    "name": "Client 5"
+    "name": "Client 5",
+    "localId": 5
   }
 ]

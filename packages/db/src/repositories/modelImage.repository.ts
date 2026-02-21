@@ -1,82 +1,91 @@
-import {
-  CountModelImagesInput,
-  GetAllModelImagesInput,
-} from "@repo/validators/server/modelImages.validators";
 import { and, count, eq, isNull } from "drizzle-orm";
 
-import { db } from "../index";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
+
+import { type DatabaseTransaction } from "../index";
+import { type ModelID } from "../tables/model.table";
 import {
-  type ArchiveModelImage,
-  type CreateModelImage,
   type ModelImageID,
+  type ModelImageInput,
   modelImageTable,
-  type UpdateModelImage,
-} from "../tables/model-image.sql";
-import { type ModelID } from "../tables/model.sql";
+} from "../tables/modelImage.table";
+import { returnOne } from "../helpers/executeQuery";
 
-export function getAllModelImages({ pagination }: GetAllModelImagesInput) {
-  const query = db
-    .select()
-    .from(modelImageTable)
-    .where(isNull(modelImageTable.deletedAt))
-    .orderBy(modelImageTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+export default class ModelImageRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<ModelImageInput>,
+    modelImageId: ModelImageID,
+  ) {
+    const query = tx
+      .update(modelImageTable)
+      .set(input)
+      .where(eq(modelImageTable.id, modelImageId))
+      .returning();
+    return await returnOne(query);
+  }
 
-export async function countModelImages(_: CountModelImagesInput) {
-  const query = db
-    .select({ count: count() })
-    .from(modelImageTable)
-    .where(isNull(modelImageTable.deletedAt));
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async count(tx: DatabaseTransaction, _input: CountInput) {
+    const query = tx
+      .select({ count: count() })
+      .from(modelImageTable)
+      .where(isNull(modelImageTable.deletedAt));
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-export async function getAllModelImagesByModelId(id: ModelID) {
-  const query = db
-    .select()
-    .from(modelImageTable)
-    .where(
-      and(isNull(modelImageTable.deletedAt), eq(modelImageTable.modelId, id)),
-    )
-    .orderBy(modelImageTable.id);
-  const res = await query.execute();
-  return res;
-}
+  async create(tx: DatabaseTransaction, input: CreateInput<ModelImageInput>) {
+    const query = tx.insert(modelImageTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export async function getModelImageById(id: ModelImageID) {
-  const query = db
-    .select()
-    .from(modelImageTable)
-    .where(eq(modelImageTable.id, id));
-  const [res] = await query.execute();
-  return res;
-}
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
+    const query = tx
+      .select()
+      .from(modelImageTable)
+      .where(isNull(modelImageTable.deletedAt))
+      .orderBy(modelImageTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return await query.execute();
+  }
 
-export async function createModelImage(input: CreateModelImage) {
-  const query = db.insert(modelImageTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllByModelId(tx: DatabaseTransaction, id: ModelID) {
+    const query = tx
+      .select()
+      .from(modelImageTable)
+      .where(
+        and(isNull(modelImageTable.deletedAt), eq(modelImageTable.modelId, id)),
+      )
+      .orderBy(modelImageTable.id);
+    const res = await query.execute();
+    return res;
+  }
 
-export async function updateModelImage(input: UpdateModelImage) {
-  const query = db
-    .update(modelImageTable)
-    .set(input)
-    .where(eq(modelImageTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getById(tx: DatabaseTransaction, id: ModelImageID) {
+    const query = tx
+      .select()
+      .from(modelImageTable)
+      .where(eq(modelImageTable.id, id));
+    return await returnOne(query);
+  }
 
-export async function archiveModelImage(input: ArchiveModelImage) {
-  const query = db
-    .update(modelImageTable)
-    .set(input)
-    .where(eq(modelImageTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<ModelImageInput>,
+    modelImageId: ModelImageID,
+  ) {
+    const query = tx
+      .update(modelImageTable)
+      .set(input)
+      .where(eq(modelImageTable.id, modelImageId))
+      .returning();
+    return await returnOne(query);
+  }
 }

@@ -1,87 +1,110 @@
-import type {
-  OmitSome,
-  Prettify,
-  RemoveNull,
-  RemoveNullSome,
-  RequireSome,
-} from "@repo/validators/types";
-
-import {
-  type InferInsertModel,
-  type InferSelectModel,
-  type Table,
-} from "drizzle-orm";
+import { type InferSelectModel } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
 
 export type OrderMapping = Record<string, PgColumn>;
 export type FilterMapping = Record<string, PgColumn>;
 
+export type OmitSome<T, K extends keyof T> = Omit<T, K>;
+
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & NonNullable<unknown>;
+
+export type RemoveNull<T> = {
+  [K in keyof T]: Exclude<T[K], null>;
+};
+
+export type RemoveNullSome<T, K extends keyof T> = RemoveNull<Pick<T, K>> &
+  Partial<Omit<T, K>>;
+
+export type RemoveUndefined<T> = {
+  [P in keyof T]: Exclude<T[P], undefined>;
+};
+
+export type RequireSome<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
 interface BaseType {
   id?: string | number;
-  updatedAt?: string | number | null;
-  updatedById?: string | number | null;
-  createdById?: string | number | null;
-  createdAt?: string | number | null;
-  deletedAt?: string | number | null;
-  deletedById?: string | number | null;
+  localId?: number;
+  createdById?: number | null | undefined;
+  createdAt?: Date | undefined;
+  deletedAt?: Date | null | undefined;
+  deletedById?: number | null | undefined;
+  updatedAt?: Date | null | undefined;
+  updatedById?: number | null | undefined;
 }
 
 type OmitKeys<T extends BaseType> = OmitSome<
   T,
-  "createdAt" | "createdById" | "deletedAt" | "deletedById"
+  "createdAt" | "createdById" | "deletedAt" | "deletedById" | "id" | "localId"
 >;
 
 type RequireKeys<T extends OmitKeys<BaseType>> = RequireSome<
   T,
-  "id" | "updatedAt" | "updatedById"
+  "updatedAt" | "updatedById"
 >;
 
 type RemoveNullKeys<T extends OmitKeys<BaseType>> = RemoveNullSome<
   RequireKeys<T>,
-  "updatedAt" | "updatedById" | "id"
+  "updatedAt" | "updatedById"
 >;
 
-type UpdateInput<T extends BaseType> = RemoveNullKeys<OmitKeys<T>>;
-
-type InferUpdateModel<
-  TTable extends Table,
-  TConfig extends {
-    dbColumnNames: boolean;
-  } = {
-    dbColumnNames: false;
-  },
-> = Prettify<UpdateInput<InferSelectModel<TTable, TConfig>>>;
-
-type DeleteInput<T extends BaseType> = Required<
-  RemoveNull<Pick<T, "id" | "deletedById" | "deletedAt">>
+export type CreateInput<T extends BaseType> = Prettify<
+  Omit<
+    RequireSome<T, "createdAt" | "createdById">,
+    "id" | "updatedById" | "updatedAt" | "deletedAt" | "deletedById"
+  >
 >;
 
-type InferArchiveModel<
-  TTable extends Table,
-  TConfig extends {
-    dbColumnNames: boolean;
-  } = {
-    dbColumnNames: false;
-  },
-> = Prettify<DeleteInput<InferSelectModel<TTable, TConfig>>>;
-
-type CreateInput<T extends BaseType> = Omit<
-  T,
-  "id" | "updatedAt" | "updatedById" | "deletedById" | "deletedAt"
+export type UpdateInput<T extends BaseType> = Prettify<
+  RemoveNullKeys<OmitKeys<T>>
 >;
 
-type InferCreateModel<
-  TTable extends Table,
-  TConfig extends {
-    dbColumnNames: boolean;
-  } = {
-    dbColumnNames: false;
-  },
-> = CreateInput<InferInsertModel<TTable, TConfig>>;
+export type ArchiveInput<T extends BaseType> = Prettify<
+  RemoveNullSome<
+    RequireSome<
+      Pick<T, "deletedAt" | "deletedById">,
+      "deletedAt" | "deletedById"
+    >,
+    "deletedAt" | "deletedById"
+  >
+>;
 
-export type {
-  InferArchiveModel,
-  InferCreateModel,
-  InferSelectModel as InferModel,
-  InferUpdateModel,
-};
+// Data tables
+
+export interface Pagination {
+  pageIndex: number;
+  pageSize: number;
+}
+
+export interface Sorting {
+  id: string;
+  desc: boolean;
+}
+
+export interface ColumnFilter {
+  id: string;
+  value: unknown;
+}
+
+export interface GetAllInput<T = Record<string, never> | undefined> {
+  pagination: Pagination;
+  sorting: Sorting[];
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+  filters: T;
+}
+
+export interface CountInput<T = Record<string, never> | undefined> {
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+  filters: T;
+}
+
+export interface GetAllSimpleInput<T = Record<string, never> | undefined> {
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+  filters: T;
+}
+
+export type { InferSelectModel as InferModel };

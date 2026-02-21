@@ -3,7 +3,7 @@ import { z } from "zod";
 import { repairId, repairImageId } from "../isomorphic/ids.validators";
 import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
-const repairImageFilters = z.object({}).optional();
+const repairImageFilters = z.object({}).default({});
 
 export const getAllRepairImagesSchema = dataTableSchema.extend({
   filters: repairImageFilters,

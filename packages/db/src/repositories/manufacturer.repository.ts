@@ -1,145 +1,174 @@
-import type {
-  DataTableCountOutput,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/server/dataTables.validators";
-
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/manufacturers.mapper";
 import {
-  type ArchiveManufacturer,
-  type CreateManufacturer,
-  type ManufacturerID,
+  type ManufacturerInput,
   manufacturerTable,
-  type UpdateManufacturer,
-} from "../tables/manufacturer.sql";
+} from "../tables/manufacturer.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const manufacturerFields = getTableColumns(manufacturerTable);
+export default class ManufacturerRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<ManufacturerInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(manufacturerTable)
+      .set(input)
+      .where(
+        and(
+          eq(manufacturerTable.localId, localId),
+          eq(manufacturerTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 
-export function getAllManufacturers(
-  { pagination, sorting, globalFilter, columnFilters }: DataTableOutput,
-  organizationId: OrganizationID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const orderByParams = getOrderBy(sorting);
+  async count(
+    tx: DatabaseTransaction,
+    { globalFilter, columnFilters }: CountInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
 
-  const query = db
-    .select()
-    .from(manufacturerTable)
-    .where(
-      and(
-        isNull(manufacturerTable.deletedAt),
-        eq(manufacturerTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, manufacturerTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+    const query = tx
+      .select({ count: count() })
+      .from(manufacturerTable)
+      .where(
+        and(
+          isNull(manufacturerTable.deletedAt),
+          eq(manufacturerTable.organizationId, organizationId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
 
-export async function countManufacturers(
-  { globalFilter, columnFilters }: DataTableCountOutput,
-  organizationId: OrganizationID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-  const query = db
-    .select({ count: count() })
-    .from(manufacturerTable)
-    .where(
-      and(
-        isNull(manufacturerTable.deletedAt),
-        eq(manufacturerTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
+  async create(tx: DatabaseTransaction, input: CreateInput<ManufacturerInput>) {
+    const query = tx.insert(manufacturerTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async getAll(
+    tx: DatabaseTransaction,
+    { pagination, sorting, globalFilter, columnFilters }: GetAllInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const orderByParams = getOrderBy(sorting);
 
-export async function getManufacturerById(id: ManufacturerID) {
-  const { metadata, createdByTable, deletedByTable, updatedByTable } =
-    createMetadataFields();
-  const query = db
-    .select({
-      ...manufacturerFields,
-      ...metadata,
-    })
-    .from(manufacturerTable)
-    .innerJoin(
-      createdByTable,
-      eq(manufacturerTable.createdById, createdByTable.id),
-    )
-    .leftJoin(
-      updatedByTable,
-      eq(manufacturerTable.updatedById, updatedByTable.id),
-    )
-    .leftJoin(
-      deletedByTable,
-      eq(manufacturerTable.deletedById, deletedByTable.id),
-    )
-    .where(eq(manufacturerTable.id, id));
-  const [res] = await query.execute();
-  return res;
-}
+    const query = tx
+      .select()
+      .from(manufacturerTable)
+      .where(
+        and(
+          isNull(manufacturerTable.deletedAt),
+          eq(manufacturerTable.organizationId, organizationId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      )
+      .orderBy(...orderByParams, manufacturerTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return query.execute();
+  }
 
-export async function getManufacturersSelect(
-  _: GetSelectInput,
-  organizationId: OrganizationID,
-) {
-  const query = db
-    .select({
-      value: manufacturerTable.id,
-      label: manufacturerTable.name,
-    })
-    .from(manufacturerTable)
-    .where(
-      and(
-        isNull(manufacturerTable.deletedAt),
-        eq(manufacturerTable.organizationId, organizationId),
-      ),
-    );
-  return query.execute();
-}
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: manufacturerTable.id,
+        label: manufacturerTable.name,
+      })
+      .from(manufacturerTable)
+      .where(
+        and(
+          isNull(manufacturerTable.deletedAt),
+          eq(manufacturerTable.organizationId, organizationId),
+        ),
+      );
+    return query.execute();
+  }
 
-export async function createManufacturer(input: CreateManufacturer) {
-  const query = db.insert(manufacturerTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getByLocalId(
+    tx: DatabaseTransaction,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const { metadata, createdByTable, deletedByTable, updatedByTable } =
+      createMetadataFields();
+    const query = tx
+      .select({
+        ...manufacturerFields,
+        ...metadata,
+      })
+      .from(manufacturerTable)
+      .innerJoin(
+        createdByTable,
+        eq(manufacturerTable.createdById, createdByTable.id),
+      )
+      .leftJoin(
+        updatedByTable,
+        eq(manufacturerTable.updatedById, updatedByTable.id),
+      )
+      .leftJoin(
+        deletedByTable,
+        eq(manufacturerTable.deletedById, deletedByTable.id),
+      )
+      .where(
+        and(
+          eq(manufacturerTable.localId, localId),
+          eq(manufacturerTable.organizationId, organizationId),
+        ),
+      );
+    return await returnOne(query);
+  }
 
-export async function updateManufacturer(input: UpdateManufacturer) {
-  const query = db
-    .update(manufacturerTable)
-    .set(input)
-    .where(eq(manufacturerTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function archiveManufacturer(input: ArchiveManufacturer) {
-  const query = db
-    .update(manufacturerTable)
-    .set(input)
-    .where(eq(manufacturerTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<ManufacturerInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(manufacturerTable)
+      .set(input)
+      .where(
+        and(
+          eq(manufacturerTable.localId, localId),
+          eq(manufacturerTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 }

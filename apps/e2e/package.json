@@ -4,17 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "clean": "rm -rf .turbo node_modules dist .next .open-next",
     "test": "vitest",
     "test:e2e": "playwright test",
-    "test:gen": "playwright codegen"
+    "test:gen": "playwright codegen",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.7.0",
-    "@playwright/test": "^1.52.0",
+    "@faker-js/faker": "^10.1.0",
+    "@playwright/test": "^1.57.0",
     "@repo/eslint-config": "workspace:*",
-    "@types/node": "^22.15.3",
-    "dotenv": "^16.5.0",
-    "eslint": "^9.26.0",
-    "typescript": "^5.8.3"
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3"
   }
 }

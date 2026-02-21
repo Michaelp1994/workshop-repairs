@@ -1,99 +1,109 @@
-import {
-  CountRepairCommentsInput,
-  GetAllRepairCommentsInput,
-} from "@repo/validators/server/repairComments.validators";
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import { db } from "..";
+import type { DatabaseTransaction } from "..";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
+
+import { type RepairID } from "../tables/repair.table";
 import {
-  type ArchiveRepairComment,
-  type CreateRepairComment,
   type RepairCommentID,
+  type RepairCommentInput,
   repairCommentTable,
-  type UpdateRepairComment,
-} from "../tables/repair-comment.sql";
-import { type RepairID } from "../tables/repair.sql";
-import { userTable } from "../tables/user.sql";
+} from "../tables/repairComment.table";
+import { userTable } from "../tables/user.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 
-export function getAllRepairComments({
-  pagination,
-}: GetAllRepairCommentsInput) {
-  const query = db
-    .select()
-    .from(repairCommentTable)
-    .where(isNull(repairCommentTable.deletedAt))
-    .orderBy(repairCommentTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+export default class RepairCommentRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<RepairCommentInput>,
+    repairCommentId: RepairCommentID,
+  ) {
+    const query = tx
+      .update(repairCommentTable)
+      .set(input)
+      .where(eq(repairCommentTable.id, repairCommentId))
+      .returning();
+    return await returnOne(query);
+  }
 
-export async function countRepairComments(_input: CountRepairCommentsInput) {
-  const query = db
-    .select({ count: count() })
-    .from(repairCommentTable)
-    .where(isNull(repairCommentTable.deletedAt));
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async count(tx: DatabaseTransaction, _input: CountInput) {
+    const query = tx
+      .select({ count: count() })
+      .from(repairCommentTable)
+      .where(isNull(repairCommentTable.deletedAt));
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-export async function getAllRepairCommentsByRepairId(input: RepairID) {
-  const query = db
-    .select({
-      ...repairCommentFields,
-      createdBy: {
-        id: userTable.id,
-        firstName: userTable.firstName,
-        lastName: userTable.lastName,
-      },
-    })
-    .from(repairCommentTable)
-    .innerJoin(userTable, eq(repairCommentTable.createdById, userTable.id))
-    .where(
-      and(
-        isNull(repairCommentTable.deletedAt),
-        eq(repairCommentTable.repairId, input),
-      ),
-    )
-    .orderBy(repairCommentTable.createdAt);
-  const res = await query.execute();
-  return res;
-}
+  async create(
+    tx: DatabaseTransaction,
+    input: CreateInput<RepairCommentInput>,
+  ) {
+    const query = tx.insert(repairCommentTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export async function getRepairCommentById(input: RepairCommentID) {
-  const query = db
-    .select()
-    .from(repairCommentTable)
-    .where(eq(repairCommentTable.id, input));
+  async getAll(tx: DatabaseTransaction, { pagination }: GetAllInput) {
+    const query = tx
+      .select()
+      .from(repairCommentTable)
+      .where(isNull(repairCommentTable.deletedAt))
+      .orderBy(repairCommentTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return query.execute();
+  }
 
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllByRepairId(tx: DatabaseTransaction, input: RepairID) {
+    const query = tx
+      .select({
+        ...repairCommentFields,
+        createdBy: {
+          id: userTable.id,
+          firstName: userTable.firstName,
+          lastName: userTable.lastName,
+        },
+      })
+      .from(repairCommentTable)
+      .innerJoin(userTable, eq(repairCommentTable.createdById, userTable.id))
+      .where(
+        and(
+          isNull(repairCommentTable.deletedAt),
+          eq(repairCommentTable.repairId, input),
+        ),
+      )
+      .orderBy(repairCommentTable.createdAt);
+    const res = await query.execute();
+    return res;
+  }
 
-export async function createRepairComment(input: CreateRepairComment) {
-  const query = db.insert(repairCommentTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getById(tx: DatabaseTransaction, input: RepairCommentID) {
+    const query = tx
+      .select()
+      .from(repairCommentTable)
+      .where(eq(repairCommentTable.id, input));
 
-export async function updateRepairComment(input: UpdateRepairComment) {
-  const query = db
-    .update(repairCommentTable)
-    .set(input)
-    .where(eq(repairCommentTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
+    return await returnOne(query);
+  }
 
-export async function archiveRepairComment(input: ArchiveRepairComment) {
-  const query = db
-    .update(repairCommentTable)
-    .set(input)
-    .where(eq(repairCommentTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<RepairCommentInput>,
+    repairCommentId: RepairCommentID,
+  ) {
+    const query = tx
+      .update(repairCommentTable)
+      .set(input)
+      .where(eq(repairCommentTable.id, repairCommentId))
+      .returning();
+    return await returnOne(query);
+  }
 }

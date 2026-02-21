@@ -1,11 +1,11 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
-import { assetStatusTable } from "../tables/asset-status.sql";
-import { assetTable } from "../tables/asset.sql";
-import { locationTable } from "../tables/location.sql";
-import { manufacturerTable } from "../tables/manufacturer.sql";
-import { modelTable } from "../tables/model.sql";
+import { assetTable } from "../tables/asset.table";
+import { assetStatusTable } from "../tables/assetStatus.table";
+import { locationTable } from "../tables/location.table";
+import { manufacturerTable } from "../tables/manufacturer.table";
+import { modelTable } from "../tables/model.table";
 import { FilterMapping, OrderMapping } from "../types";
 
 const assetSortMapper: OrderMapping = {

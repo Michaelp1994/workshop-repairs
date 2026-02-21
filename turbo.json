@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
   "tasks": {
     "topo": {
       "dependsOn": ["^topo"]
@@ -9,6 +10,10 @@
       "outputs": ["node_modules/.cache/tsbuildinfo.json", "dist/**"]
     },
     "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "db": {
       "cache": false,
       "persistent": true
     },
@@ -36,37 +41,13 @@
       "cache": false
     }
   },
-  "globalEnv": [
-    "NODE_ENV",
-    "NEXTAUTH_SECRET",
-    "DATABASE_URL",
-    "POSTGRES_URL",
-    "AUTH_DISCORD_ID",
-    "AUTH_DISCORD_SECRET",
-    "AUTH_REDIRECT_PROXY_URL",
-    "AUTH_SECRET",
-    "PORT"
-  ],
   "globalPassThroughEnv": [
     "NODE_ENV",
-    "AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY",
-    "AWS_REGION",
-    "AMPLIFY_BUCKET",
-    "NEXTAUTH_SECRET",
-    "DATABASE_URL",
-    "CI",
-    "VERCEL",
-    "VERCEL_ENV",
-    "VERCEL_URL",
-    "npm_lifecycle_event",
-    "POSTGRES_URL",
-    "POSTGRES_PRISMA_URL",
-    "POSTGRES_URL_NO_SSL",
-    "POSTGRES_URL_NON_POOLING",
-    "POSTGRES_USER",
-    "POSTGRES_HOST",
-    "POSTGRES_PASSWORD",
-    "POSTGRES_DATABASE"
+    "POSTGRES_*",
+    "JWT_SECRET",
+    "NODE_ENV",
+    "S3_BUCKET_NAME",
+    "IMAGE_URL",
+    "RETURN_EMAIL"
   ]
 }

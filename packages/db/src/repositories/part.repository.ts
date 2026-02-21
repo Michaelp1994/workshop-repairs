@@ -1,128 +1,163 @@
-import type {
-  CountPartsInput,
-  GetAllPartsInput,
-  GetPartsSelectInput,
-} from "@repo/validators/server/parts.validators";
-
 import { and, count, eq, getTableColumns, isNull } from "drizzle-orm";
 
-import type { OrganizationID } from "../tables/organization.sql";
+import type { OrganizationID } from "../tables/organization.table";
+import type {
+  ArchiveInput,
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
-import { db } from "../index";
+import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
   getGlobalFilters,
   getOrderBy,
 } from "../mappings/parts.mapper";
-import {
-  type ArchivePart,
-  type CreatePart,
-  type PartID,
-  partTable,
-  type UpdatePart,
-} from "../tables/part.sql";
+import { type PartInput, partTable } from "../tables/part.table";
+import { returnOne } from "../helpers/executeQuery";
 
 const partFields = getTableColumns(partTable);
+export default class PartRepository {
+  async archive(
+    tx: DatabaseTransaction,
+    input: ArchiveInput<PartInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(partTable)
+      .set(input)
+      .where(
+        and(
+          eq(partTable.localId, localId),
+          eq(partTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 
-export function getAllParts(
-  { pagination, globalFilter, sorting, columnFilters }: GetAllPartsInput,
-  organizationId: OrganizationID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
-  const orderByParams = getOrderBy(sorting);
-  const query = db
-    .select()
-    .from(partTable)
-    .where(
-      and(
-        isNull(partTable.deletedAt),
-        eq(partTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    )
-    .orderBy(...orderByParams, partTable.id)
-    .limit(pagination.pageSize)
-    .offset(pagination.pageIndex * pagination.pageSize);
-  return query.execute();
-}
+  async count(
+    tx: DatabaseTransaction,
+    { globalFilter, columnFilters }: CountInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
 
-export async function countParts(
-  { globalFilter, columnFilters }: CountPartsInput,
-  organizationId: OrganizationID,
-) {
-  const globalFilterParams = getGlobalFilters(globalFilter);
-  const columnFilterParams = getColumnFilters(columnFilters);
+    const query = tx
+      .select({ count: count() })
+      .from(partTable)
+      .where(
+        and(
+          isNull(partTable.deletedAt),
+          eq(partTable.organizationId, organizationId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      );
 
-  const query = db
-    .select({ count: count() })
-    .from(partTable)
-    .where(
-      and(
-        isNull(partTable.deletedAt),
-        eq(partTable.organizationId, organizationId),
-        globalFilterParams,
-        ...columnFilterParams,
-      ),
-    );
+    const res = await returnOne(query);
+    return res.count;
+  }
 
-  const [res] = await query.execute();
-  return res?.count;
-}
+  async create(tx: DatabaseTransaction, input: CreateInput<PartInput>) {
+    const query = tx.insert(partTable).values(input).returning();
+    return await returnOne(query);
+  }
 
-export async function getPartsSelect(_props: GetPartsSelectInput) {
-  const query = db
-    .select({
-      value: partTable.id,
-      label: partTable.name,
-    })
-    .from(partTable)
-    .orderBy(partTable.id);
-  const res = await query.execute();
-  return res;
-}
+  async getAll(
+    tx: DatabaseTransaction,
+    { pagination, globalFilter, sorting, columnFilters }: GetAllInput,
+    organizationId: OrganizationID,
+  ) {
+    const globalFilterParams = getGlobalFilters(globalFilter);
+    const columnFilterParams = getColumnFilters(columnFilters);
+    const orderByParams = getOrderBy(sorting);
+    const query = tx
+      .select()
+      .from(partTable)
+      .where(
+        and(
+          isNull(partTable.deletedAt),
+          eq(partTable.organizationId, organizationId),
+          globalFilterParams,
+          ...columnFilterParams,
+        ),
+      )
+      .orderBy(...orderByParams, partTable.id)
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize);
+    return await query.execute();
+  }
 
-export async function getPartById(id: PartID) {
-  const { createdByTable, updatedByTable, deletedByTable, metadata } =
-    createMetadataFields();
-  const query = db
-    .select({
-      ...partFields,
-      ...metadata,
-    })
-    .from(partTable)
-    .innerJoin(createdByTable, eq(partTable.createdById, createdByTable.id))
-    .leftJoin(updatedByTable, eq(partTable.updatedById, updatedByTable.id))
-    .leftJoin(deletedByTable, eq(partTable.deletedById, deletedByTable.id))
-    .where(eq(partTable.id, id));
-  const [res] = await query.execute();
-  return res;
-}
+  async getAllSimple(
+    tx: DatabaseTransaction,
+    _input: GetAllSimpleInput,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .select({
+        value: partTable.id,
+        label: partTable.name,
+      })
+      .from(partTable)
+      .where(
+        and(
+          isNull(partTable.deletedAt),
+          eq(partTable.organizationId, organizationId),
+        ),
+      )
+      .orderBy(partTable.id);
+    const res = await query.execute();
+    return res;
+  }
 
-export async function createPart(input: CreatePart) {
-  const query = db.insert(partTable).values(input).returning();
-  const [res] = await query.execute();
-  return res;
-}
+  async getByLocalId(
+    tx: DatabaseTransaction,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const { createdByTable, updatedByTable, deletedByTable, metadata } =
+      createMetadataFields();
+    const query = tx
+      .select({
+        ...partFields,
+        ...metadata,
+      })
+      .from(partTable)
+      .innerJoin(createdByTable, eq(partTable.createdById, createdByTable.id))
+      .leftJoin(updatedByTable, eq(partTable.updatedById, updatedByTable.id))
+      .leftJoin(deletedByTable, eq(partTable.deletedById, deletedByTable.id))
+      .where(
+        and(
+          eq(partTable.localId, localId),
+          eq(partTable.organizationId, organizationId),
+        ),
+      );
+    return await returnOne(query);
+  }
 
-export async function updatePart(input: UpdatePart) {
-  const query = db
-    .update(partTable)
-    .set(input)
-    .where(eq(partTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
-}
-
-export async function archivePart(input: ArchivePart) {
-  const query = db
-    .update(partTable)
-    .set(input)
-    .where(eq(partTable.id, input.id))
-    .returning();
-  const [res] = await query.execute();
-  return res;
+  async update(
+    tx: DatabaseTransaction,
+    input: UpdateInput<PartInput>,
+    localId: number,
+    organizationId: OrganizationID,
+  ) {
+    const query = tx
+      .update(partTable)
+      .set(input)
+      .where(
+        and(
+          eq(partTable.localId, localId),
+          eq(partTable.organizationId, organizationId),
+        ),
+      )
+      .returning();
+    return await returnOne(query);
+  }
 }

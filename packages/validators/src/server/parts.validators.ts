@@ -1,13 +1,12 @@
 import { z } from "zod";
 
-import { partId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
   getSelectSchema,
 } from "./dataTables.validators";
 
-const partFilters = z.object({}).optional();
+const partFilters = z.object({}).default({});
 
 export const getAllPartsSchema = dataTableSchema.extend({
   filters: partFilters,
@@ -19,7 +18,9 @@ export const countPartsSchema = dataTableCountSchema.extend({
 });
 export type CountPartsInput = z.infer<typeof countPartsSchema>;
 
-export const getPartsSelectSchema = getSelectSchema.extend({});
+export const getPartsSelectSchema = getSelectSchema.extend({
+  filters: partFilters,
+});
 export type GetPartsSelectInput = z.infer<typeof getPartsSelectSchema>;
 
 export const createPartSchema = z.object({
@@ -28,17 +29,14 @@ export const createPartSchema = z.object({
   description: z.string(),
 });
 
-export const updatePartSchema = z.object({
-  id: partId,
-  name: z.string().min(3),
-  partNumber: z.string().min(3),
-  description: z.string(),
+export const updatePartSchema = createPartSchema.partial().extend({
+  slug: z.string(),
 });
 
-export const getPartByIdSchema = z.object({
-  id: partId,
+export const getPartBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const archivePartSchema = z.object({
-  id: partId,
+  slug: z.string(),
 });

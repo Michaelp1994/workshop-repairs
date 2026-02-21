@@ -1,5 +1,3 @@
-"use client";
-
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
@@ -62,22 +60,22 @@ const Carousel = ({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
+  function onSelect(api: CarouselApi) {
     if (!api) {
       return;
     }
 
     setCanScrollPrev(api.canScrollPrev());
     setCanScrollNext(api.canScrollNext());
-  }, []);
+  }
 
-  const scrollPrev = React.useCallback(() => {
+  function scrollPrev() {
     api?.scrollPrev();
-  }, [api]);
+  }
 
-  const scrollNext = React.useCallback(() => {
+  function scrollNext() {
     api?.scrollNext();
-  }, [api]);
+  }
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -203,7 +201,7 @@ const CarouselPrevious = ({
       className={cn(
         "absolute h-8 w-8 rounded-full",
         orientation === "horizontal"
-          ? "-left-12 top-1/2 -translate-y-1/2"
+          ? "top-1/2 -left-12 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className,
       )}
@@ -235,7 +233,7 @@ const CarouselNext = ({
       className={cn(
         "absolute h-8 w-8 rounded-full",
         orientation === "horizontal"
-          ? "-right-12 top-1/2 -translate-y-1/2"
+          ? "top-1/2 -right-12 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className,
       )}

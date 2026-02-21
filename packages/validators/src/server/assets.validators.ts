@@ -1,12 +1,9 @@
 import { z } from "zod";
 
 import {
-  assetId,
   assetStatusId,
   clientId,
-  equipmentTypeId,
   locationId,
-  manufacturerId,
   modelId,
   repairId,
 } from "../isomorphic/ids.validators";
@@ -20,13 +17,15 @@ import {
 
 const assetFilters = z
   .object({
-    modelId: modelId.optional(),
-    clientId: clientId.optional(),
-    locationId: locationId.optional(),
-    manufacturerId: manufacturerId.optional(),
-    equipmentTypeId: equipmentTypeId.optional(),
+    model: z.string().optional(),
+    client: z.string().optional(),
+    location: z.string().optional(),
+    manufacturer: z.string().optional(),
+    equipmentType: z.string().optional(),
   })
-  .optional();
+  .default({});
+
+export type AssetFilters = z.infer<typeof assetFilters>;
 
 export const getAllAssetsSchema = dataTableSchema.extend({
   filters: assetFilters,
@@ -38,11 +37,13 @@ export const countAssetsSchema = dataTableCountSchema.extend({
 });
 export type CountAssetsInput = z.infer<typeof countAssetsSchema>;
 
-export const getAssestsSelectSchema = getSelectSchema.extend({});
-export type GetAssetsSelectSchema = z.infer<typeof getAssestsSelectSchema>;
+export const getAssestsSelectSchema = getSelectSchema.extend({
+  filters: assetFilters,
+});
+export type GetAssetsSelectInput = z.infer<typeof getAssestsSelectSchema>;
 
-export const getAssetByIdSchema = z.object({
-  id: assetId,
+export const getAssetBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const getAssetByRepairIdSchema = z.object({
@@ -61,8 +62,8 @@ export const createAssetSchema = z.object({
 
 export const updateAssetSchema = createAssetSchema
   .partial()
-  .extend({ id: assetId });
+  .extend({ slug: z.string() });
 
 export const archiveAssetSchema = z.object({
-  id: assetId,
+  slug: z.string(),
 });

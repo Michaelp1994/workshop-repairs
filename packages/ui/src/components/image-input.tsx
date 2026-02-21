@@ -31,11 +31,11 @@ export function setRef<T>(val: T, ...refs: MutableRefList<T>): void {
 const ImageInput = ({ ref, ...props }: FileInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const preview =
-    props.value && props.value?.type.startsWith("image/")
+    props.value?.type.startsWith("image/")
       ? URL.createObjectURL(props.value)
       : null;
   return (
-    <div className="flex flex-row items-center gap-2 pb-2 pt-2">
+    <div className="flex flex-row items-center gap-2 pt-2 pb-2">
       {preview ? (
         <div className="relative">
           <img
@@ -44,7 +44,7 @@ const ImageInput = ({ ref, ...props }: FileInputProps) => {
             src={preview}
           />
           <Button
-            className="absolute right-0 top-0 h-6 w-6 rounded-full p-1"
+            className="absolute top-0 right-0 h-6 w-6 rounded-full p-1"
             onClick={() => props.onChange?.(null)}
             size="icon"
             type="button"

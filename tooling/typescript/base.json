@@ -36,5 +36,5 @@
     "allowUnreachableCode": false,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "build", "dist", ".next", ".expo"]
+  "exclude": ["node_modules", "build", "dist", ".expo"]
 }

@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const clientFilters = z.object({}).optional();
+const clientFilters = z.object({}).default({});
 
 export const getAllClientsSchema = dataTableSchema.extend({
   filters: clientFilters,
@@ -19,7 +19,9 @@ export const countClientsSchema = dataTableCountSchema.extend({
 });
 export type CountClientsInput = z.infer<typeof countClientsSchema>;
 
-export const getClientsSelectSchema = getSelectSchema.extend({});
+export const getClientsSelectSchema = getSelectSchema.extend({
+  filters: clientFilters,
+});
 
 export type GetClientSelectInput = z.infer<typeof getClientsSelectSchema>;
 
@@ -28,7 +30,7 @@ export const createClientSchema = z.object({
 });
 
 export const updateClientSchema = z.object({
-  id: clientId,
+  slug: z.string(),
   name: z.string().min(2),
 });
 
@@ -36,6 +38,10 @@ export const getClientByIdSchema = z.object({
   id: clientId,
 });
 
+export const getClientBySlugSchema = z.object({
+  slug: z.string(),
+});
+
 export const archiveClientSchema = z.object({
-  id: clientId,
+  slug: z.string(),
 });

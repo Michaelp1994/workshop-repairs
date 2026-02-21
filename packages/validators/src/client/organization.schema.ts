@@ -11,7 +11,7 @@ export const createOrganizationSchema = z.object({
 export type CreateOrganizationInput = z.infer<typeof createOrganizationSchema>;
 
 export const joinOrganizationSchema = z.object({
-  joinCode: z.string().uuid({
+  joinCode: z.uuid({
     message: "Invalid join code, please check and try again.",
   }),
 });

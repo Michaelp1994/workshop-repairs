@@ -9,28 +9,24 @@
   "exports": {
     "./server/*": "./src/server/*.ts",
     "./client/*": "./src/client/*.ts",
-    "./*": "./src/isomorphic/*.ts",
-    "./types": "./src/types.ts"
+    "./*": "./src/isomorphic/*.ts"
   },
   "scripts": {
-    "// build": "tsc && tsc-alias",
-    "//dev": "tsc --watch",
     "clean": "rm -rf .turbo node_modules dist",
     "lint": "eslint .",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "sst": "^3.14.11",
-    "zod": "4.0.0-beta.20250430T185432"
+    "zod": "4.1.13"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.15.3",
-    "eslint": "^9.26.0",
-    "tsc-alias": "^1.8.15",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.2"
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
   }
 }

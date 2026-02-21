@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { userId, userTypeId } from "../isomorphic/ids.validators";
+import { userId } from "../isomorphic/ids.validators";
 import { dataTableCountSchema, dataTableSchema } from "./dataTables.validators";
 
-const userFilters = z.object({}).optional();
+const userFilters = z.object({}).default({});
 
 export const getAllUsersSchema = dataTableSchema.extend({
   filters: userFilters,
@@ -18,15 +18,14 @@ export type CountUsersInput = z.infer<typeof countUsersSchema>;
 export const registerUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
 });
 
 export const createUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
-  typeId: userTypeId,
+  email: z.email(),
   password: z.string().min(8),
 });
 
@@ -34,14 +33,13 @@ export const updateUserSchema = z.object({
   id: userId,
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
-  typeId: userTypeId,
+  email: z.email(),
 });
 
 export const updateCurrentUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
-  email: z.string().email(),
+  email: z.email(),
 });
 
 export const getCurrentUserSchema = z.object({});

@@ -4,7 +4,6 @@ import {
   assetId,
   equipmentTypeId,
   manufacturerId,
-  modelId,
 } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
@@ -17,7 +16,7 @@ const modelFilters = z
     manufacturerId: manufacturerId.optional(),
     equipmentTypeId: equipmentTypeId.optional(),
   })
-  .optional();
+  .default({});
 
 export const getAllModelsSchema = dataTableSchema.extend({
   filters: modelFilters,
@@ -29,7 +28,9 @@ export const countModelsSchema = dataTableCountSchema.extend({
 });
 export type CountModelsInput = z.infer<typeof countModelsSchema>;
 
-export const getModelsSelectSchema = getSelectSchema.extend({});
+export const getModelsSelectSchema = getSelectSchema.extend({
+  filters: modelFilters,
+});
 
 export type GetModelsSelectInput = z.infer<typeof getModelsSelectSchema>;
 
@@ -40,15 +41,12 @@ export const createModelSchema = z.object({
   equipmentTypeId,
 });
 
-export const updateModelSchema = z.object({
-  id: modelId,
-  name: z.string().min(3),
-  manufacturerId,
-  equipmentTypeId,
+export const updateModelSchema = createModelSchema.partial().extend({
+  slug: z.string(),
 });
 
-export const getModelByIdSchema = z.object({
-  id: modelId,
+export const getModelBySlugSchema = z.object({
+  slug: z.string(),
 });
 
 export const getModelByAssetIdSchema = z.object({
@@ -56,5 +54,5 @@ export const getModelByAssetIdSchema = z.object({
 });
 
 export const archiveModelSchema = z.object({
-  id: modelId,
+  slug: z.string(),
 });

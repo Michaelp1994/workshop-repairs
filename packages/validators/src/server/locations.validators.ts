@@ -7,7 +7,7 @@ import {
   getSelectSchema,
 } from "./dataTables.validators";
 
-const locationFilters = z.object({}).optional();
+const locationFilters = z.object({}).default({});
 
 export const getAllLocationsSchema = dataTableSchema.extend({
   filters: locationFilters,
@@ -19,7 +19,9 @@ export const countLocationsSchema = dataTableCountSchema.extend({
 });
 export type CountLocationsInput = z.infer<typeof countLocationsSchema>;
 
-export const getLocationsSelectSchema = getSelectSchema.extend({});
+export const getLocationsSelectSchema = getSelectSchema.extend({
+  filters: locationFilters,
+});
 
 export type GetLocationsSelectInput = z.infer<typeof getLocationsSelectSchema>;
 
@@ -28,16 +30,18 @@ export const createLocationSchema = z.object({
   address: z.string().min(3),
 });
 
-export const updateLocationSchema = z.object({
-  id: locationId,
-  name: z.string().min(3),
-  address: z.string().min(3),
+export const updateLocationSchema = createLocationSchema.partial().extend({
+  slug: z.string(),
 });
 
 export const getLocationByIdSchema = z.object({
   id: locationId,
 });
 
+export const getLocationBySlugSchema = z.object({
+  slug: z.string(),
+});
+
 export const archiveLocationSchema = z.object({
-  id: locationId,
+  slug: z.string(),
 });

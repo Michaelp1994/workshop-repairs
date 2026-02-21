@@ -1,0 +1,85 @@
+import RepairPartService from "@repo/services/services/repairPart.service";
+import {
+  archiveRepairPartSchema,
+  countRepairPartsSchema,
+  createRepairPartSchema,
+  getAllRepairPartsSchema,
+  getRepairPartByIdSchema,
+  updateRepairPartSchema,
+} from "@repo/validators/server/repairParts.validators";
+import { TRPCError } from "@trpc/server";
+
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
+
+export default function repairPartRouter(repairPartService: RepairPartService) {
+  return router({
+    getAll: organizationProcedure
+      .input(getAllRepairPartsSchema)
+      .query(async ({ input, ctx }) => {
+        const allRepairParts = await repairPartService.getAllRepairParts(
+          input,
+          ctx.session,
+        );
+
+        return allRepairParts;
+      }),
+    countAll: organizationProcedure
+      .input(countRepairPartsSchema)
+      .query(async ({ input, ctx }) => {
+        const count = await repairPartService.countRepairParts(
+          input,
+          ctx.session,
+        );
+        return count;
+      }),
+    getById: organizationProcedure
+      .input(getRepairPartByIdSchema)
+      .query(async ({ input, ctx }) => {
+        const repairPart = await repairPartService.getRepairPartById(
+          input.id,
+          ctx.session,
+        );
+
+        if (!repairPart) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "repairPart not found",
+          });
+        }
+
+        return repairPart;
+      }),
+    create: organizationProcedure
+      .input(createRepairPartSchema)
+      .mutation(async ({ input, ctx }) => {
+        const createdRepairPart = await repairPartService.createRepairPart(
+          input,
+          ctx.session,
+        );
+
+        return createdRepairPart;
+      }),
+    update: organizationProcedure
+      .input(updateRepairPartSchema)
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const updatedRepairPart = await repairPartService.updateRepairPart(
+          values,
+          id,
+          ctx.session,
+        );
+
+        return updatedRepairPart;
+      }),
+    archive: organizationProcedure
+      .input(archiveRepairPartSchema)
+      .mutation(async ({ input, ctx }) => {
+        const archivedRepairPart = await repairPartService.archiveRepairPart(
+          input.id,
+          ctx.session,
+        );
+
+        return archivedRepairPart;
+      }),
+  });
+}

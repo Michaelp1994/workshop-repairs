@@ -1,0 +1,26 @@
+import { type InferInsertModel } from "drizzle-orm";
+import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+
+import auditConstraints from "../helpers/auditConstraints";
+import { strictAuditing, timestamps } from "../helpers/commonColumns";
+import { type InferModel } from "../types";
+import { repairTable } from "./repair.table";
+
+export const repairImageTable = pgTable(
+  "repair_image",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    caption: varchar().notNull(),
+    url: varchar().notNull(),
+    repairId: integer()
+      .notNull()
+      .references(() => repairTable.id),
+    ...timestamps,
+    ...strictAuditing,
+  },
+  (t) => [...auditConstraints(t)],
+);
+
+export type RepairImage = InferModel<typeof repairImageTable>;
+export type RepairImageID = RepairImage["id"];
+export type RepairImageInput = InferInsertModel<typeof repairImageTable>;
