@@ -8,7 +8,6 @@ import {
   getRepairStatusTypeByIdSchema,
   updateRepairStatusTypeSchema,
 } from "@repo/validators/server/repairStatusTypes.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -55,13 +54,6 @@ export default function Router(
             input.id,
             ctx.session,
           );
-
-        if (!repairStatusType) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairStatusType not found",
-          });
-        }
 
         return repairStatusType;
       }),

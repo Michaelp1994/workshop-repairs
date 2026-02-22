@@ -1,3 +1,4 @@
+import type OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 import type UserRepository from "@repo/db/repositories/user.repository";
 import type { OrganizationID } from "@repo/validators/ids.validators";
 
@@ -7,7 +8,6 @@ import { ZodError } from "zod";
 
 import {
   type AuthedSession,
-  createInsertMetadata,
   createUpdateMetadata,
 } from "../helpers/includeMetadata";
 import {
@@ -15,7 +15,6 @@ import {
   fileExistsInS3,
   getOrganizationLogoUrlFromKey,
 } from "../helpers/s3";
-import type OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 export default class OrganizationService {
   constructor(
@@ -42,7 +41,7 @@ export default class OrganizationService {
       throw new Error("You already belong to an organization");
     }
 
-    const organizationExists = await this.organizationRepository.getByName(
+    const organizationExists = await this.organizationRepository.findByName(
       this.db,
       input.name,
     );
@@ -64,22 +63,19 @@ export default class OrganizationService {
         createdAt: new Date(),
       });
 
-      const createdSequence = await this.organizationSequenceRepository.create(
-        tx,
-        {
-          assetKeyPrefix: "AST",
-          partKeyPrefix: "PRT",
-          repairKeyPrefix: "RPR",
-          manufacturerKeyPrefix: "MFR",
-          clientKeyPrefix: "CLT",
-          modelKeyPrefix: "MDL",
-          equipmentTypeKeyPrefix: "EPT",
-          locationKeyPrefix: "LOC",
-          createdById: session.userId,
-          createdAt: new Date(),
-          organizationId: createdOrganization.id,
-        },
-      );
+      await this.organizationSequenceRepository.create(tx, {
+        assetKeyPrefix: "AST",
+        partKeyPrefix: "PRT",
+        repairKeyPrefix: "RPR",
+        manufacturerKeyPrefix: "MFR",
+        clientKeyPrefix: "CLT",
+        modelKeyPrefix: "MDL",
+        equipmentTypeKeyPrefix: "EPT",
+        locationKeyPrefix: "LOC",
+        createdById: session.userId,
+        createdAt: new Date(),
+        organizationId: createdOrganization.id,
+      });
 
       const metadata = createUpdateMetadata(session);
       return await this.userRepository.update(

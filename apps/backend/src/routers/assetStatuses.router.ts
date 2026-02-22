@@ -8,7 +8,6 @@ import {
   getAssetStatusesSelectSchema,
   updateAssetStatusSchema,
 } from "@repo/validators/server/assetStatuses.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -51,13 +50,6 @@ export default function assetStatusRouter(
           input.id,
           ctx.session,
         );
-
-        if (!AssetStatus) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "AssetStatus not found",
-          });
-        }
 
         return AssetStatus;
       }),

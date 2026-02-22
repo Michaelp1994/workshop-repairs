@@ -10,12 +10,12 @@ import type {
   UpdateInput,
 } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import {
   type RepairStatusTypeID,
   type RepairStatusTypeInput,
   repairStatusTypeTable,
 } from "../tables/repairStatusType.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class RepairStatusTypeRepository {
   async archive(

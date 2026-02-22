@@ -95,7 +95,7 @@ export default class UserOnboardingService {
     if (user.organizationId) {
       throw new Error("You already belong to an organization");
     }
-    const organizationExists = await this.organizationRepository.getByName(
+    const organizationExists = await this.organizationRepository.findByName(
       this.db,
       input.name,
     );

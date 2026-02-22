@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
@@ -18,7 +19,6 @@ import {
   getOrderBy,
 } from "../mappings/locations.mapper";
 import { type LocationInput, locationTable } from "../tables/location.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const locationFields = getTableColumns(locationTable);
 export default class LocationRepository {

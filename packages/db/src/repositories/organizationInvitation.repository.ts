@@ -1,11 +1,11 @@
 import type { DatabaseTransaction } from "..";
 import type { CreateInput } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import {
   type OrganizationInvitationInput,
   organizationInvitationTable,
 } from "../tables/organizationInvitation.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class OrganizationInvitationRepository {
   async createInvitation(

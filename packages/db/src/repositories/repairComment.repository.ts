@@ -9,6 +9,7 @@ import type {
   UpdateInput,
 } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import { type RepairID } from "../tables/repair.table";
 import {
   type RepairCommentID,
@@ -16,7 +17,6 @@ import {
   repairCommentTable,
 } from "../tables/repairComment.table";
 import { userTable } from "../tables/user.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const repairCommentFields = getTableColumns(repairCommentTable);
 

@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
@@ -18,7 +19,6 @@ import {
   getOrderBy,
 } from "../mappings/parts.mapper";
 import { type PartInput, partTable } from "../tables/part.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const partFields = getTableColumns(partTable);
 export default class PartRepository {

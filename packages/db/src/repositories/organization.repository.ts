@@ -25,19 +25,20 @@ export default class OrganizationRepository {
     return result;
   }
 
+  async findByName(tx: DatabaseTransaction, name: string) {
+    const query = tx
+      .select()
+      .from(organizationTable)
+      .where(eq(organizationTable.name, name));
+    const [result] = await query.execute();
+    return result;
+  }
+
   async getById(tx: DatabaseTransaction, id: OrganizationID) {
     const query = tx
       .select()
       .from(organizationTable)
       .where(eq(organizationTable.id, id));
-    return await returnOne(query);
-  }
-
-  async getByName(tx: DatabaseTransaction, name: string) {
-    const query = tx
-      .select()
-      .from(organizationTable)
-      .where(eq(organizationTable.name, name));
     return await returnOne(query);
   }
 }

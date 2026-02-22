@@ -10,12 +10,12 @@ import type {
 } from "../types";
 
 import { type DatabaseTransaction } from "..";
+import { returnOne } from "../helpers/executeQuery";
 import {
   type RepairImageID,
   type RepairImageInput,
   repairImageTable,
 } from "../tables/repairImage.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class RepairImageRepository {
   async archive(

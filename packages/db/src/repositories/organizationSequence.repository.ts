@@ -4,12 +4,12 @@ import type { OrganizationID } from "../tables/organization.table";
 import type { CreateInput, UpdateInput } from "../types";
 
 import { type DatabaseTransaction } from "..";
+import { returnOne } from "../helpers/executeQuery";
 import {
   type OrganizationSequenceID,
   type OrganizationSequenceInput,
   organizationSequenceTable,
 } from "../tables/organizationSequences.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class OrganizationSequenceRepository {
   async create(

@@ -1,9 +1,11 @@
+import type { InferInsertModel } from "drizzle-orm";
+
 import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
+
+import type { InferModel } from "../types";
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
-import type { InferModel } from "../types";
-import type { InferInsertModel } from "drizzle-orm";
 
 export const permissionTable = pgTable(
   "permission",

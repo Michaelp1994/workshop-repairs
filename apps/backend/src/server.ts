@@ -39,4 +39,4 @@ const server = createServer((req, res) => {
 
 server.listen(2022);
 
-console.log("Server started");
+console.log("Server started at http://localhost:2022");

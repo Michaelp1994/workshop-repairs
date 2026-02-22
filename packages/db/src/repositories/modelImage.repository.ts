@@ -8,6 +8,7 @@ import type {
   UpdateInput,
 } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import { type ModelID } from "../tables/model.table";
 import {
@@ -15,7 +16,6 @@ import {
   type ModelImageInput,
   modelImageTable,
 } from "../tables/modelImage.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class ModelImageRepository {
   async archive(

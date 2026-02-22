@@ -32,7 +32,6 @@ import {
   manufacturerService,
   modelImageService,
   modelService,
-  organizationSequenceService,
   organizationService,
   partService,
   partToModelService,

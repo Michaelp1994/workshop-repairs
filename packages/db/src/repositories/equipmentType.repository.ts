@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   createGlobalFilters,
@@ -21,7 +22,6 @@ import {
   type EquipmentTypeInput,
   equipmentTypeTable,
 } from "../tables/equipmentType.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const equipmentTypeFields = getTableColumns(equipmentTypeTable);
 

@@ -4,6 +4,7 @@ import type {
   GetAllUsersInput,
 } from "@repo/validators/server/users.validators";
 
+import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import { type Database } from "@repo/db";
 import EmailVerificationRequestRepository from "@repo/db/repositories/emailVerificationRequest.repository";
 import UserRepository from "@repo/db/repositories/user.repository";
@@ -19,7 +20,6 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 import sendVerificationEmail from "../helpers/sendVerificationEmail";
-import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 
 export default class UserService {
   constructor(
@@ -34,7 +34,6 @@ export default class UserService {
       return this.userRepository.archive(tx, metadata, id);
     });
   }
-
   async confirmEmail(
     input: {
       email: string;
@@ -42,7 +41,11 @@ export default class UserService {
     },
     session: AuthedSession,
   ) {
-    const user = await this.userRepository.getByEmail(this.db, input.email);
+    const user = await this.userRepository.findByEmail(this.db, input.email);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
 
     const request =
       await this.emailVerificationRequestRepository.getByEmailAndCode(
@@ -95,6 +98,12 @@ export default class UserService {
 
   async getUserById(id: UserID) {
     return this.userRepository.getById(this.db, id);
+  }
+
+  async sendEmailConfirmation(session: AuthedSession) {
+    const user = await this.userRepository.getById(this.db, session.userId);
+    const code = generateRandomOTP();
+    await sendVerificationEmail(user.email, code);
   }
 
   async updateUser(

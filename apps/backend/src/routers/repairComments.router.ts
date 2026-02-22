@@ -8,7 +8,6 @@ import {
   getRepairCommentByIdSchema,
   updateRepairCommentSchema,
 } from "@repo/validators/server/repairComments.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -37,13 +36,6 @@ export default function repairCommentRouter(
         const repairComment = await repairCommentService.getRepairCommentById(
           input.id,
         );
-
-        if (!repairComment) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairComment not found",
-          });
-        }
 
         return repairComment;
       }),

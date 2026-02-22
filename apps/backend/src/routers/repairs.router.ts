@@ -8,7 +8,6 @@ import {
   getRepairsSelectSchema,
   updateRepairSchema,
 } from "@repo/validators/server/repairs.validators";
-import { TRPCError } from "@trpc/server";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -30,12 +29,7 @@ export default function Router(repairService: RepairService) {
       .input(countRepairsSchema)
       .query(async ({ ctx, input }) => {
         const count = await repairService.countRepairs(input, ctx.session);
-        if (count === undefined) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "can't count repairs",
-          });
-        }
+
         return count;
       }),
 
@@ -54,13 +48,6 @@ export default function Router(repairService: RepairService) {
       .query(async ({ input, ctx }) => {
         const { localId } = splitSlug(input.slug);
         const repair = await repairService.getRepair(localId, ctx.session);
-
-        if (!repair) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "User not found",
-          });
-        }
 
         return repair;
       }),

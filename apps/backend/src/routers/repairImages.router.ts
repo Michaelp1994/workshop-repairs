@@ -9,7 +9,6 @@ import {
   requestUploadRepairImageSchema,
   updateRepairImageSchema,
 } from "@repo/validators/server/repairImages.validators";
-import { TRPCError } from "@trpc/server";
 
 import { env } from "../env";
 import { organizationProcedure } from "../procedures";
@@ -49,13 +48,6 @@ export default function repairImageRouter(
         const repairImage = await repairImageService.getRepairImageById(
           input.id,
         );
-
-        if (!repairImage) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairImage not found",
-          });
-        }
 
         return repairImage;
       }),

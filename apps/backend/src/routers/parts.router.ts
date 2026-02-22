@@ -8,7 +8,6 @@ import {
   getPartsSelectSchema,
   updatePartSchema,
 } from "@repo/validators/server/parts.validators";
-import { TRPCError } from "@trpc/server";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -42,13 +41,6 @@ export default function partRouter(partService: PartService) {
       .query(async ({ input, ctx }) => {
         const { localId } = splitSlug(input.slug);
         const part = await partService.getPart(localId, ctx.session);
-
-        if (!part) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "part not found",
-          });
-        }
 
         return part;
       }),

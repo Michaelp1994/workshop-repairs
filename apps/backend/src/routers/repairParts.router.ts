@@ -7,7 +7,6 @@ import {
   getRepairPartByIdSchema,
   updateRepairPartSchema,
 } from "@repo/validators/server/repairParts.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -40,13 +39,6 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
           input.id,
           ctx.session,
         );
-
-        if (!repairPart) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairPart not found",
-          });
-        }
 
         return repairPart;
       }),

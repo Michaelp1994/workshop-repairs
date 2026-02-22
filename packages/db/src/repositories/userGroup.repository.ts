@@ -1,6 +1,6 @@
 import { count, eq } from "drizzle-orm";
+
 import type { DatabaseTransaction } from "..";
-import { returnOne } from "../helpers/executeQuery";
 import type {
   ArchiveInput,
   CountInput,
@@ -8,10 +8,12 @@ import type {
   GetAllInput,
   UpdateInput,
 } from "../types";
+
+import { returnOne } from "../helpers/executeQuery";
 import {
-  userGroupTable,
   type UserGroupID,
   type UserGroupInput,
+  userGroupTable,
 } from "../tables/userGroup.table";
 
 export default class UserGroupRepository {
@@ -27,14 +29,6 @@ export default class UserGroupRepository {
       .returning();
     return await returnOne(query);
   }
-  async getAll(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(userGroupTable);
-    return await query.execute();
-  }
-  async getById(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(userGroupTable);
-    return await returnOne(query);
-  }
   async count(tx: DatabaseTransaction, input: CountInput) {
     const query = tx.select({ count: count() }).from(userGroupTable);
     const res = await returnOne(query);
@@ -42,6 +36,14 @@ export default class UserGroupRepository {
   }
   async create(tx: DatabaseTransaction, input: CreateInput<UserGroupInput>) {
     const query = tx.insert(userGroupTable).values(input).returning();
+    return await returnOne(query);
+  }
+  async getAll(tx: DatabaseTransaction, input: GetAllInput) {
+    const query = tx.select().from(userGroupTable);
+    return await query.execute();
+  }
+  async getById(tx: DatabaseTransaction, input: GetAllInput) {
+    const query = tx.select().from(userGroupTable);
     return await returnOne(query);
   }
   async update(

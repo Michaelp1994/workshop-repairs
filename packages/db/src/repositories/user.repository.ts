@@ -10,6 +10,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
@@ -17,7 +18,6 @@ import {
   getOrderBy,
 } from "../mappings/users.mapper";
 import { type UserID, type UserInput, userTable } from "../tables/user.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);
@@ -66,6 +66,12 @@ export default class UserRepository {
     return await returnOne(query);
   }
 
+  async findByEmail(tx: DatabaseTransaction, input: string) {
+    const query = tx.select().from(userTable).where(eq(userTable.email, input));
+    const [result] = await query.execute();
+    return result;
+  }
+
   async getAll(
     tx: DatabaseTransaction,
     { globalFilter, sorting, pagination, columnFilters }: GetAllInput,
@@ -89,11 +95,6 @@ export default class UserRepository {
       .limit(pagination.pageSize)
       .offset(pagination.pageIndex * pagination.pageSize);
     return query.execute();
-  }
-
-  async getByEmail(tx: DatabaseTransaction, input: string) {
-    const query = tx.select().from(userTable).where(eq(userTable.email, input));
-    return await returnOne(query);
   }
 
   async getById(tx: DatabaseTransaction, input: UserID) {

@@ -9,13 +9,13 @@ import type {
   UpdateInput,
 } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   type RepairTypeID,
   type RepairTypeInput,
   repairTypeTable,
 } from "../tables/repairType.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class RepairTypeRepository {
   async archive(

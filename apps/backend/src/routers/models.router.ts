@@ -8,7 +8,6 @@ import {
   getModelsSelectSchema,
   updateModelSchema,
 } from "@repo/validators/server/models.validators";
-import { TRPCError } from "@trpc/server";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -43,13 +42,6 @@ export default function modelRouter(modelService: ModelService) {
         const { localId } = splitSlug(input.slug);
 
         const model = await modelService.getModel(localId, ctx.session);
-
-        if (!model) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "can't find model",
-          });
-        }
 
         return model;
       }),

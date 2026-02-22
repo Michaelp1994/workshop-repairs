@@ -1,6 +1,6 @@
 import { count, eq } from "drizzle-orm";
+
 import type { DatabaseTransaction } from "..";
-import { returnOne } from "../helpers/executeQuery";
 import type {
   ArchiveInput,
   CountInput,
@@ -8,10 +8,12 @@ import type {
   GetAllInput,
   UpdateInput,
 } from "../types";
+
+import { returnOne } from "../helpers/executeQuery";
 import {
-  permissionTable,
   type PermissionID,
   type PermissionInput,
+  permissionTable,
 } from "../tables/permission.table";
 
 export default class PermissionRepository {
@@ -27,14 +29,6 @@ export default class PermissionRepository {
       .returning();
     return await returnOne(query);
   }
-  async getAll(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(permissionTable);
-    return await query.execute();
-  }
-  async getById(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(permissionTable);
-    return await returnOne(query);
-  }
   async count(tx: DatabaseTransaction, input: CountInput) {
     const query = tx.select({ count: count() }).from(permissionTable);
     const res = await returnOne(query);
@@ -42,6 +36,14 @@ export default class PermissionRepository {
   }
   async create(tx: DatabaseTransaction, input: CreateInput<PermissionInput>) {
     const query = tx.insert(permissionTable).values(input).returning();
+    return await returnOne(query);
+  }
+  async getAll(tx: DatabaseTransaction, input: GetAllInput) {
+    const query = tx.select().from(permissionTable);
+    return await query.execute();
+  }
+  async getById(tx: DatabaseTransaction, input: GetAllInput) {
+    const query = tx.select().from(permissionTable);
     return await returnOne(query);
   }
   async update(

@@ -9,13 +9,13 @@ import type {
   UpdateInput,
 } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   type AssetStatusID,
   type AssetStatusInput,
   assetStatusTable,
 } from "../tables/assetStatus.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class AssetStatusRepository {
   async archive(

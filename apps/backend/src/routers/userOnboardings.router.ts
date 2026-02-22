@@ -1,6 +1,5 @@
 import UserOnboardingService from "@repo/services/services/userOnboarding.service";
 import {
-  createOrganizationSchema,
   inviteOthersToOrganizationSchema,
   joinOrganizationSchema,
   requestUploadOrganizationLogoSchema,
@@ -13,7 +12,6 @@ export default function Router(userOnboardingService: UserOnboardingService) {
   return router({
     getStatus: authedProcedure.query(async ({ ctx }) => {
       const user = await userOnboardingService.getStatus(ctx.session.userId);
-
       return {
         welcomed: user.onboarding?.welcomed,
         organizationChosen: user.organizationId !== null,
@@ -31,14 +29,6 @@ export default function Router(userOnboardingService: UserOnboardingService) {
       .input(requestUploadOrganizationLogoSchema)
       .mutation(async ({ input, ctx }) => {
         return await userOnboardingService.requestUpload(input, ctx.session);
-      }),
-    createOrganization: authedProcedure
-      .input(createOrganizationSchema)
-      .mutation(async ({ input, ctx }) => {
-        return await userOnboardingService.createOrganization(
-          input,
-          ctx.session,
-        );
       }),
     joinOrganization: authedProcedure
       .input(joinOrganizationSchema)

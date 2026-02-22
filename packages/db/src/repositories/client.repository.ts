@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
@@ -18,7 +19,6 @@ import {
   getOrderBy,
 } from "../mappings/clients.mapper";
 import { type ClientInput, clientTable } from "../tables/client.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const clientFields = getTableColumns(clientTable);
 export default class ClientRepository {

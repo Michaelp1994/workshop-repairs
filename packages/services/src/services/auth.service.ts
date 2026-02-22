@@ -34,7 +34,7 @@ export default class AuthService {
   ) {}
 
   async login(input: LogicInput) {
-    const user = await this.userRepository.getByEmail(this.db, input.email);
+    const user = await this.userRepository.findByEmail(this.db, input.email);
     if (!user) {
       throw new ZodError([
         {
@@ -75,7 +75,7 @@ export default class AuthService {
           "Your password has been found in a data breach. Please choose a different password",
       });
     }
-    const emailExists = await this.userRepository.getByEmail(
+    const emailExists = await this.userRepository.findByEmail(
       this.db,
       input.email,
     );
@@ -102,9 +102,10 @@ export default class AuthService {
         emailVerified: false,
         organizationId: null,
         createdAt: new Date(),
+        createdById: null,
       });
 
-      const onboarding = await this.userOnboardingRepository.create(tx, {
+      await this.userOnboardingRepository.create(tx, {
         userId: user.id,
         invitedUsers: false,
         welcomed: false,
@@ -113,7 +114,8 @@ export default class AuthService {
       });
 
       const code = generateRandomOTP();
-      const request = await this.emailVerificationRequestRepository.create(tx, {
+
+      await this.emailVerificationRequestRepository.create(tx, {
         userId: user.id,
         email: user.email,
         code: code,

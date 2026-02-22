@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
@@ -21,7 +22,6 @@ import {
   type ManufacturerInput,
   manufacturerTable,
 } from "../tables/manufacturer.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const manufacturerFields = getTableColumns(manufacturerTable);
 export default class ManufacturerRepository {

@@ -9,7 +9,6 @@ import {
   setFavouriteModelImageSchema,
   updateModelImageSchema,
 } from "@repo/validators/server/modelImages.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -62,13 +61,6 @@ export default function modelImageRouter(modelImageService: ModelImageService) {
           input.id,
           ctx.session,
         );
-
-        if (!modelImage) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "modelImage not found",
-          });
-        }
 
         return modelImage;
       }),

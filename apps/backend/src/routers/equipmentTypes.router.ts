@@ -8,7 +8,6 @@ import {
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
 } from "@repo/validators/server/equipmentTypes.validators";
-import { TRPCError } from "@trpc/server";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -56,12 +55,6 @@ export default function equipmentTypeRouter(
           ctx.session,
         );
 
-        if (!equipmentType) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "can't find Equipment Type",
-          });
-        }
         return equipmentType;
       }),
     create: organizationProcedure

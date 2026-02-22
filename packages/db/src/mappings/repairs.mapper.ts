@@ -2,9 +2,9 @@ import { createColumnFilterFunction } from "../helpers/createColumnFilterFunctio
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
 import { assetTable } from "../tables/asset.table";
+import { repairTable } from "../tables/repair.table";
 import { repairStatusTypeTable } from "../tables/repairStatusType.table";
 import { repairTypeTable } from "../tables/repairType.table";
-import { repairTable } from "../tables/repair.table";
 
 const orderMapping = {
   id: repairTable.id,

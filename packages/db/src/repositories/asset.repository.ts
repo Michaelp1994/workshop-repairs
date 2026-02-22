@@ -12,6 +12,7 @@ import type {
 
 import createMetadataFields from "../helpers/createMetadataFields";
 import { createTenantFilter } from "../helpers/createTenantFilter";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   createColumnFilters,
@@ -26,7 +27,6 @@ import { locationTable } from "../tables/location.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
 import { modelTable } from "../tables/model.table";
 import { modelImageTable } from "../tables/modelImage.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const assetFields = getTableColumns(assetTable);
 

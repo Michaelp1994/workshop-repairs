@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   createColumnFilters,
@@ -21,7 +22,6 @@ import { equipmentTypeTable } from "../tables/equipmentType.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
 import { type ModelInput, modelTable } from "../tables/model.table";
 import { modelImageTable } from "../tables/modelImage.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const modelFields = getTableColumns(modelTable);
 

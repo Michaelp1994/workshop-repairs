@@ -10,6 +10,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import {
   getColumnFilters,
   getGlobalFilters,
@@ -23,7 +24,6 @@ import {
   type RepairPartInput,
   repairPartTable,
 } from "../tables/repairPart.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const repairPartFields = getTableColumns(repairPartTable);
 

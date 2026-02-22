@@ -36,11 +36,6 @@ export default function Router(userService: UserService) {
     resetPassword: authedProcedure.input(resetPasswordSchema).mutation(() => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
-    sendEmailConfirmation: authedProcedure
-      .input(confirmEmailSchema)
-      .mutation(async ({ ctx, input }) => {
-        return await userService.sendEmailConfirmation(input, ctx.session);
-      }),
     confirmEmail: authedProcedure
       .input(confirmEmailSchema)
       .mutation(async ({ input, ctx }) => {
@@ -51,12 +46,6 @@ export default function Router(userService: UserService) {
       .input(getCurrentUserSchema)
       .query(async ({ ctx }) => {
         const user = await userService.getUserById(ctx.session.userId);
-        if (!user) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "User not found",
-          });
-        }
 
         return user;
       }),
@@ -65,13 +54,6 @@ export default function Router(userService: UserService) {
       .input(getUserByIdSchema)
       .query(async ({ input }) => {
         const user = await userService.getUserById(input.id);
-
-        if (!user) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "User not found",
-          });
-        }
 
         return user;
       }),

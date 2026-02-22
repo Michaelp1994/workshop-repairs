@@ -8,7 +8,6 @@ import {
   getManufacturersSelectSchema,
   updateManufacturerSchema,
 } from "@repo/validators/server/manufacturers.validators";
-import { TRPCError } from "@trpc/server";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -55,13 +54,6 @@ export default function manufacturerRouter(
           localId,
           ctx.session,
         );
-
-        if (!manufacturer) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Manufacturer not found",
-          });
-        }
 
         return manufacturer;
       }),

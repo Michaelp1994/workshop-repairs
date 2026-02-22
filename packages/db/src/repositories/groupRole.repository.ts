@@ -1,6 +1,6 @@
 import { count, eq } from "drizzle-orm";
+
 import type { DatabaseTransaction } from "..";
-import { returnOne } from "../helpers/executeQuery";
 import type {
   ArchiveInput,
   CountInput,
@@ -8,10 +8,12 @@ import type {
   GetAllInput,
   UpdateInput,
 } from "../types";
+
+import { returnOne } from "../helpers/executeQuery";
 import {
-  groupRoleTable,
   type GroupRoleID,
   type GroupRoleInput,
+  groupRoleTable,
 } from "../tables/groupRole.table";
 
 export default class GroupRoleRepository {
@@ -27,14 +29,6 @@ export default class GroupRoleRepository {
       .returning();
     return await returnOne(query);
   }
-  async getAll(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(groupRoleTable);
-    return await query.execute();
-  }
-  async getById(tx: DatabaseTransaction, input: GetAllInput) {
-    const query = tx.select().from(groupRoleTable);
-    return await returnOne(query);
-  }
   async count(tx: DatabaseTransaction, input: CountInput) {
     const query = tx.select({ count: count() }).from(groupRoleTable);
     const res = await returnOne(query);
@@ -42,6 +36,14 @@ export default class GroupRoleRepository {
   }
   async create(tx: DatabaseTransaction, input: CreateInput<GroupRoleInput>) {
     const query = tx.insert(groupRoleTable).values(input).returning();
+    return await returnOne(query);
+  }
+  async getAll(tx: DatabaseTransaction, input: GetAllInput) {
+    const query = tx.select().from(groupRoleTable);
+    return await query.execute();
+  }
+  async getById(tx: DatabaseTransaction, input: GetAllInput) {
+    const query = tx.select().from(groupRoleTable);
     return await returnOne(query);
   }
   async update(

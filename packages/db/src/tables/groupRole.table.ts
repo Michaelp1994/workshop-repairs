@@ -1,11 +1,13 @@
+import type { InferInsertModel } from "drizzle-orm";
+
 import { integer, pgTable, unique } from "drizzle-orm/pg-core";
+
+import type { InferModel } from "../types";
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
 import { groupTable } from "./group.table";
 import { roleTable } from "./role.table";
-import type { InferModel } from "../types";
-import type { InferInsertModel } from "drizzle-orm";
 
 export const groupRoleTable = pgTable(
   "group_role",

@@ -3,12 +3,12 @@ import { and, eq } from "drizzle-orm";
 import type { CreateInput } from "../types";
 
 import { type DatabaseTransaction } from "..";
+import { returnOne } from "../helpers/executeQuery";
 import {
   type EmailVerificationRequestID,
   type EmailVerificationRequestInput,
   emailVerificationRequestTable,
 } from "../tables/emailVerificationRequest.table";
-import { returnOne } from "../helpers/executeQuery";
 
 export default class EmailVerificationRequestRepository {
   async archive(tx: DatabaseTransaction, id: EmailVerificationRequestID) {

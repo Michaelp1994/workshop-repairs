@@ -8,7 +8,6 @@ import {
   getRepairTypesSelectSchema,
   updateRepairTypeSchema,
 } from "@repo/validators/server/repairTypes.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -50,12 +49,6 @@ export default function Router(repairTypeService: RepairTypeService) {
           ctx.session,
         );
 
-        if (!repairType) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairType not found",
-          });
-        }
         return repairType;
       }),
     create: organizationProcedure

@@ -2,13 +2,13 @@ import { eq, getTableColumns } from "drizzle-orm";
 
 import type { CreateInput, UpdateInput } from "../types";
 
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import { type UserID, userTable } from "../tables/user.table";
 import {
   type UserOnboardingInput,
   userOnboardingTable,
 } from "../tables/userOnboarding.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const { password: _DANGEROUS_DO_NOT_EXPOSE_PASSWORD, ...publicUserColumns } =
   getTableColumns(userTable);

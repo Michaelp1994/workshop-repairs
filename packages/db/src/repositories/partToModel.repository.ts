@@ -9,6 +9,7 @@ import type {
 } from "../types";
 
 import { type DatabaseTransaction } from "..";
+import { returnOne } from "../helpers/executeQuery";
 import {
   getColumnFilters,
   getGlobalFilters,
@@ -20,7 +21,6 @@ import {
   type PartToModelInput,
   partToModelTable,
 } from "../tables/partToModel.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const partToModelsFields = getTableColumns(partToModelTable);
 

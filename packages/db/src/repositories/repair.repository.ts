@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
   getColumnFilters,
@@ -26,7 +27,6 @@ import { modelImageTable } from "../tables/modelImage.table";
 import { type RepairInput, repairTable } from "../tables/repair.table";
 import { repairStatusTypeTable } from "../tables/repairStatusType.table";
 import { repairTypeTable } from "../tables/repairType.table";
-import { returnOne } from "../helpers/executeQuery";
 
 const repairFields = getTableColumns(repairTable);
 

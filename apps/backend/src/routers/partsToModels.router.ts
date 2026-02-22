@@ -11,7 +11,6 @@ import {
   getPartToModelByIdSchema,
   updatePartToModelSchema,
 } from "@repo/validators/server/partsToModel.validators";
-import { TRPCError } from "@trpc/server";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -32,12 +31,6 @@ export default function partToModelRouter(
       .query(async ({ input }) => {
         const count = await partToModelService.countAllPartsByModelId(input);
 
-        if (count === undefined) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "can't get count",
-          });
-        }
         return count;
       }),
     getAllModelsByPartId: organizationProcedure
@@ -50,12 +43,6 @@ export default function partToModelRouter(
       .input(countAllModelsByPartIdSchema)
       .query(async ({ input }) => {
         const count = await partToModelService.countAllModelsByPartId(input);
-        if (count === undefined) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "can't get count",
-          });
-        }
         return count;
       }),
 
