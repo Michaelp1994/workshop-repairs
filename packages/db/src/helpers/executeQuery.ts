@@ -1,5 +1,3 @@
-import { QueryBuilder } from "drizzle-orm/pg-core";
-
 interface SingleRowQueryExecutor<T> {
   execute: () => Promise<T[]>;
 }
