@@ -16,7 +16,8 @@
     "test:coverage": "pnpm vitest run --coverage",
     "test:e2e": "pnpm -F e2e test:e2e",
     "test:gen": "pnpm -F e2e test:gen",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "aws:login": "aws sso login --profile workshop-repairs"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",
