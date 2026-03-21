@@ -20,8 +20,10 @@ interface ComboboxOption {
   value: string | number;
 }
 
-export interface ComboboxProps
-  extends Omit<React.ComponentProps<"button">, "onChange"> {
+export interface ComboboxProps extends Omit<
+  React.ComponentProps<"button">,
+  "onChange"
+> {
   data: ComboboxOption[] | undefined;
   onChange: (value: string | number | null) => void;
   isLoading?: boolean;

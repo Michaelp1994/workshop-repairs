@@ -11,17 +11,23 @@ interface DBConfig {
   database: string;
 }
 
-export function createDbConnection({ host, port, user, password, database}: DBConfig) {
-const pool = new pg.Pool({
+export function createDbConnection({
   host,
   port,
   user,
   password,
   database,
-  connectionTimeoutMillis: 5000,
-});
+}: DBConfig) {
+  const pool = new pg.Pool({
+    host,
+    port,
+    user,
+    password,
+    database,
+    connectionTimeoutMillis: 5000,
+  });
 
-return drizzle(pool, { schema, casing: "snake_case" });
+  return drizzle(pool, { schema, casing: "snake_case" });
 }
 
 export type Database = NodePgDatabase<typeof schema>;
@@ -29,4 +35,3 @@ export type Database = NodePgDatabase<typeof schema>;
 export type DatabaseTransaction =
   | Parameters<Parameters<Database["transaction"]>[0]>[0]
   | Database;
-
