@@ -1,15 +1,16 @@
 import type { RepairID, RepairImageID } from "@repo/validators/ids.validators";
-import type {
-  CountRepairImagesInput,
-  GetAllRepairImagesInput,
-} from "@repo/validators/server/repairImages.validators";
 
 import { type Database } from "@repo/db";
 import RepairImageRepository from "@repo/db/repositories/repairImage.repository";
 import { randomUUID } from "crypto";
 
 import type { RepairImageInput } from "../../../db/src/tables/repairImage.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -36,7 +37,7 @@ export default class RepairImageService {
     });
   }
 
-  async countRepairImages(input: CountRepairImagesInput) {
+  async countRepairImages(input: CountInput) {
     return this.repairImageRepository.count(this.db, input);
   }
 
@@ -63,7 +64,7 @@ export default class RepairImageService {
     return createdRepairImage;
   }
 
-  async getAllRepairImages(input: GetAllRepairImagesInput) {
+  async getAllRepairImages(input: GetAllInput) {
     return this.repairImageRepository.getAll(this.db, input);
   }
 

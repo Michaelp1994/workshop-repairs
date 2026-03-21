@@ -1,8 +1,4 @@
 import type { UserID } from "@repo/validators/ids.validators";
-import type {
-  CountUsersInput,
-  GetAllUsersInput,
-} from "@repo/validators/server/users.validators";
 
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 import { type Database } from "@repo/db";
@@ -10,7 +6,12 @@ import EmailVerificationRequestRepository from "@repo/db/repositories/emailVerif
 import UserRepository from "@repo/db/repositories/user.repository";
 
 import type { UserInput } from "../../../db/src/tables/user.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
 
 import {
   type AuthedSession,
@@ -70,7 +71,7 @@ export default class UserService {
     return true;
   }
 
-  async countUsers(input: CountUsersInput, session: OrganizationSession) {
+  async countUsers(input: CountInput, session: OrganizationSession) {
     return this.userRepository.count(this.db, input, session.organizationId);
   }
 
@@ -88,7 +89,7 @@ export default class UserService {
     });
   }
 
-  async getAllUsers(input: GetAllUsersInput, session: OrganizationSession) {
+  async getAllUsers(input: GetAllInput, session: OrganizationSession) {
     return this.userRepository.getAll(this.db, input, session.organizationId);
   }
 

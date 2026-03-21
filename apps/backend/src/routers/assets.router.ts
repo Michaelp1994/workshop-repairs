@@ -58,9 +58,14 @@ export default function assetRouter(assetService: AssetService) {
       }),
     getSelect: organizationProcedure
       .input(getAssestsSelectSchema)
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input: { filters, ...input } }) => {
+        const newFilters = assetFilters(filters);
+        const values = {
+          ...input,
+          filters: newFilters,
+        };
         const allAssets = await assetService.getAssetsSelect(
-          input,
+          values,
           ctx.session,
         );
         return allAssets;

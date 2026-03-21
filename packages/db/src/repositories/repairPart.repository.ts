@@ -27,7 +27,7 @@ import {
 
 const repairPartFields = getTableColumns(repairPartTable);
 
-interface RepairPartFilters {
+export interface RepairPartFilters {
   repairId?: number | undefined;
 }
 export default class RepairPartRepository {

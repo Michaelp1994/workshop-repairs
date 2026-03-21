@@ -1,15 +1,15 @@
-import type {
-  DataTableCountOutput,
-  DataTableOutput,
-  GetSelectInput,
-} from "@repo/validators/server/dataTables.validators";
-
 import { type Database } from "@repo/db";
 import ManufacturerRepository from "@repo/db/repositories/manufacturer.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { ManufacturerInput } from "../../../db/src/tables/manufacturer.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -50,10 +50,7 @@ export default class ManufacturerService {
     });
   }
 
-  async countManufacturers(
-    input: DataTableCountOutput,
-    session: OrganizationSession,
-  ) {
+  async countManufacturers(input: CountInput, session: OrganizationSession) {
     return this.manufacturerRepository.count(
       this.db,
       input,
@@ -91,10 +88,7 @@ export default class ManufacturerService {
     });
   }
 
-  async getAllManufacturers(
-    input: DataTableOutput,
-    session: OrganizationSession,
-  ) {
+  async getAllManufacturers(input: GetAllInput, session: OrganizationSession) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -121,7 +115,7 @@ export default class ManufacturerService {
   }
 
   async getManufacturersSelect(
-    input: GetSelectInput,
+    input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
     return this.manufacturerRepository.getAllSimple(

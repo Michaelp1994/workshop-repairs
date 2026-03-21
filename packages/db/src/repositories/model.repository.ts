@@ -25,7 +25,7 @@ import { modelImageTable } from "../tables/modelImage.table";
 
 const modelFields = getTableColumns(modelTable);
 
-interface ModelFilters {
+export interface ModelFilters {
   manufacturerId?: number | undefined;
   equipmentTypeId?: number | undefined;
 }

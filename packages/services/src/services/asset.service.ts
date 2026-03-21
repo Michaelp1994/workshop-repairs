@@ -1,15 +1,17 @@
-import type {
-  CountAssetsInput,
-  GetAllAssetsInput,
-  GetAssetsSelectInput,
-} from "@repo/validators/server/assets.validators";
-
 import { type Database } from "@repo/db";
-import AssetRepository from "@repo/db/repositories/asset.repository";
+import AssetRepository, {
+  AssetFilters,
+} from "@repo/db/repositories/asset.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { AssetInput } from "../../../db/src/tables/asset.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -50,7 +52,10 @@ export default class AssetService {
     });
   }
 
-  async countAssets(input: CountAssetsInput, session: OrganizationSession) {
+  async countAssets(
+    input: CountInput<AssetFilters>,
+    session: OrganizationSession,
+  ) {
     const count = await this.assetRepository.count(
       this.db,
       input,
@@ -89,7 +94,10 @@ export default class AssetService {
     });
   }
 
-  async getAllAssets(input: GetAllAssetsInput, session: OrganizationSession) {
+  async getAllAssets(
+    input: GetAllInput<AssetFilters>,
+    session: OrganizationSession,
+  ) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -118,7 +126,7 @@ export default class AssetService {
   }
 
   async getAssetsSelect(
-    input: GetAssetsSelectInput,
+    input: GetAllSimpleInput<AssetFilters>,
     session: OrganizationSession,
   ) {
     const assets = await this.assetRepository.getAllSimple(

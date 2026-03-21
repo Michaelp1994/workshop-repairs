@@ -33,7 +33,7 @@ export default function CreateOrganizationForm() {
     });
   const navigate = useNavigate();
   const utils = api.useUtils();
-  const createMutation = api.userOnboardings.createOrganization.useMutation({
+  const createMutation = api.organizations.create.useMutation({
     async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
       toast.success("Organization created.");

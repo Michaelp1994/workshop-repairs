@@ -30,7 +30,7 @@ import { repairTypeTable } from "../tables/repairType.table";
 
 const repairFields = getTableColumns(repairTable);
 
-interface RepairFilters {
+export interface RepairFilters {
   assetId?: number | undefined;
   clientId?: number | undefined;
 }

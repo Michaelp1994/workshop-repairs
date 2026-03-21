@@ -1,15 +1,15 @@
-import type {
-  CountEquipmentTypesInput,
-  GetAllEquipmentTypesInput,
-  GetEquipmentTypesSelectInput,
-} from "@repo/validators/server/equipmentTypes.validators";
-
 import { type Database } from "@repo/db";
 import EquipmentTypeRepository from "@repo/db/repositories/equipmentType.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { EquipmentTypeInput } from "../../../db/src/tables/equipmentType.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -49,10 +49,7 @@ export default class EquipmentTypeService {
     });
   }
 
-  async countEquipmentTypes(
-    input: CountEquipmentTypesInput,
-    session: OrganizationSession,
-  ) {
+  async countEquipmentTypes(input: CountInput, session: OrganizationSession) {
     return this.equipmentTypeRepository.count(
       this.db,
       input,
@@ -93,10 +90,7 @@ export default class EquipmentTypeService {
     });
   }
 
-  async getAllEquipmentTypes(
-    input: GetAllEquipmentTypesInput,
-    session: OrganizationSession,
-  ) {
+  async getAllEquipmentTypes(input: GetAllInput, session: OrganizationSession) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -123,7 +117,7 @@ export default class EquipmentTypeService {
   }
 
   async getEquipmentTypesSelect(
-    input: GetEquipmentTypesSelectInput,
+    input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
     return this.equipmentTypeRepository.getAllSimple(

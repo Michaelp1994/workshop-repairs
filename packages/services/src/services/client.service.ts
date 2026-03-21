@@ -1,15 +1,15 @@
-import type {
-  CountClientsInput,
-  GetAllClientsInput,
-  GetClientSelectInput,
-} from "@repo/validators/server/clients.validators";
-
 import { type Database } from "@repo/db";
 import ClientRepository from "@repo/db/repositories/client.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { ClientInput } from "../../../db/src/tables/client.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -47,7 +47,7 @@ export default class ClientService {
     });
   }
 
-  async countClients(input: CountClientsInput, session: OrganizationSession) {
+  async countClients(input: CountInput, session: OrganizationSession) {
     return this.clientRepository.count(this.db, input, session.organizationId);
   }
 
@@ -79,7 +79,7 @@ export default class ClientService {
     });
   }
 
-  async getAllClients(input: GetAllClientsInput, session: OrganizationSession) {
+  async getAllClients(input: GetAllInput, session: OrganizationSession) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -107,7 +107,7 @@ export default class ClientService {
   }
 
   async getClientsSelect(
-    input: GetClientSelectInput,
+    input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
     return this.clientRepository.getAllSimple(

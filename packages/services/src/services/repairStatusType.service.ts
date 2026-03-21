@@ -1,15 +1,16 @@
 import type { RepairStatusTypeID } from "@repo/validators/ids.validators";
-import type {
-  CountRepairStatusTypesInput,
-  GetAllRepairStatusTypesInput,
-  GetRepairStatusSelectInput,
-} from "@repo/validators/server/repairStatusTypes.validators";
 
 import { type Database } from "@repo/db";
 import RepairStatusTypeRepository from "@repo/db/repositories/repairStatusType.repository";
 
 import type { RepairStatusTypeInput } from "../../../db/src/tables/repairStatusType.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -38,7 +39,7 @@ export default class RepairStatusTypeService {
   }
 
   async countRepairStatusTypes(
-    input: CountRepairStatusTypesInput,
+    input: CountInput,
     _session: OrganizationSession,
   ) {
     return this.repairStatusTypeRepository.count(this.db, input);
@@ -59,7 +60,7 @@ export default class RepairStatusTypeService {
   }
 
   async getAllRepairStatusTypes(
-    input: GetAllRepairStatusTypesInput,
+    input: GetAllInput,
     _session: OrganizationSession,
   ) {
     return this.repairStatusTypeRepository.getAll(this.db, input);
@@ -73,7 +74,7 @@ export default class RepairStatusTypeService {
   }
 
   async getRepairStatusSelect(
-    input: GetRepairStatusSelectInput,
+    input: GetAllSimpleInput,
     _session: OrganizationSession,
   ) {
     return this.repairStatusTypeRepository.getAllSimple(this.db, input);

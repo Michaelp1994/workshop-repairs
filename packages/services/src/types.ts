@@ -31,3 +31,37 @@ export type UpdateInput<T> = Prettify<
     >
   >
 >;
+
+export interface GetAllInput<T = Record<string, never> | undefined> {
+  filters: T;
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  globalFilter: string;
+  sorting: {
+    desc: boolean;
+    id: string;
+  }[];
+  columnFilters: {
+    id: string;
+    value: unknown;
+  }[];
+}
+
+export interface ColumnFilter {
+  id: string;
+  value: unknown;
+}
+
+export interface CountInput<T = Record<string, never> | undefined> {
+  filters: T;
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+}
+
+export interface GetAllSimpleInput<T = Record<string, never> | undefined> {
+  globalFilter: string;
+  columnFilters: ColumnFilter[];
+  filters: T;
+}

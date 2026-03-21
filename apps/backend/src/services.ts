@@ -9,6 +9,7 @@ import ManufacturerRepository from "@repo/db/repositories/manufacturer.repositor
 import ModelRepository from "@repo/db/repositories/model.repository";
 import ModelImageRepository from "@repo/db/repositories/modelImage.repository";
 import OrganizationRepository from "@repo/db/repositories/organization.repository";
+import OrganizationInvitationRepository from "@repo/db/repositories/organizationInvitation.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 import PartRepository from "@repo/db/repositories/part.repository";
 import PartToModelRepository from "@repo/db/repositories/partToModel.repository";
@@ -68,6 +69,7 @@ const repairStatusTypeRepository = new RepairStatusTypeRepository();
 const repairTypeRepository = new RepairTypeRepository();
 const userRepository = new UserRepository();
 const userOnboardingRepository = new UserOnboardingRepository();
+const userInvitationRepository = new OrganizationInvitationRepository();
 
 // Create db connection
 const db = createDbConnection({
@@ -179,7 +181,5 @@ export const userOnboardingService = new UserOnboardingService(
   userOnboardingRepository,
   userRepository,
   organizationRepository,
+  userInvitationRepository,
 );
-
-
-

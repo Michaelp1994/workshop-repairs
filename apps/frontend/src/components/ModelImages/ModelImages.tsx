@@ -1,7 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { type ModelID } from "@repo/validators/ids.validators";
-import { Link } from "@tanstack/react-router";
 
 import {
   ImageGrid,
@@ -32,17 +31,13 @@ export default function ModelImages({ modelId }: ModelImagesProps) {
         <ImageGrid>
           {data.map((modelImage) => {
             return (
-              <Link
+              <ImageGridItem
+                alt={modelImage.caption ?? ""}
+                height={84}
                 key={modelImage.id}
-                to={`${modelId}/images?id=${modelImage.id}`}
-              >
-                <ImageGridItem
-                  alt={modelImage.caption ?? ""}
-                  height={84}
-                  src={modelImage.url}
-                  width={84}
-                />
-              </Link>
+                src={modelImage.url}
+                width={84}
+              />
             );
           })}
           <ImageGridUploadButton onClick={showUploadModal} />

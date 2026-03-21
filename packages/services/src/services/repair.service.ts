@@ -1,15 +1,17 @@
-import type {
-  CountRepairsInput,
-  GetAllRepairsInput,
-  GetRepairsSelectInput,
-} from "@repo/validators/server/repairs.validators";
-
 import { type Database } from "@repo/db";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
-import RepairRepository from "@repo/db/repositories/repair.repository";
+import RepairRepository, {
+  RepairFilters,
+} from "@repo/db/repositories/repair.repository";
 
 import type { RepairInput } from "../../../db/src/tables/repair.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -48,7 +50,10 @@ export default class RepairService {
     });
   }
 
-  async countRepairs(input: CountRepairsInput, session: OrganizationSession) {
+  async countRepairs(
+    input: CountInput<RepairFilters>,
+    session: OrganizationSession,
+  ) {
     return this.repairRepository.count(this.db, input, session.organizationId);
   }
 
@@ -80,7 +85,10 @@ export default class RepairService {
     });
   }
 
-  async getAllRepairs(input: GetAllRepairsInput, session: OrganizationSession) {
+  async getAllRepairs(
+    input: GetAllInput<RepairFilters>,
+    session: OrganizationSession,
+  ) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -107,7 +115,7 @@ export default class RepairService {
   }
 
   async getRepairsSelect(
-    input: GetRepairsSelectInput,
+    input: GetAllSimpleInput<RepairFilters>,
     session: OrganizationSession,
   ) {
     return this.repairRepository.getAllSimple(

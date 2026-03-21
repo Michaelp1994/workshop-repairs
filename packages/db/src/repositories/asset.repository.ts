@@ -35,12 +35,12 @@ interface AssetSelector {
   organizationId: OrganizationID;
 }
 
-interface AssetFilters {
-  model?: string | undefined;
-  client?: string | undefined;
-  location?: string | undefined;
-  manufacturer?: string | undefined;
-  equipmentType?: string | undefined;
+export interface AssetFilters {
+  model?: number | undefined;
+  client?: number | undefined;
+  location?: number | undefined;
+  manufacturer?: number | undefined;
+  equipmentType?: number | undefined;
 }
 
 export default class AssetRepository {

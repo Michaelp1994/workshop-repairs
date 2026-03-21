@@ -2,6 +2,7 @@ import type { UserID } from "@repo/validators/ids.validators";
 
 import { type Database } from "@repo/db";
 import OrganizationRepository from "@repo/db/repositories/organization.repository";
+import OrganizationInvitationRepository from "@repo/db/repositories/organizationInvitation.repository";
 import UserRepository from "@repo/db/repositories/user.repository";
 import UserOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
 import { randomUUID } from "crypto";
@@ -26,6 +27,7 @@ export default class UserOnboardingService {
     private userOnboardingRepository: UserOnboardingRepository,
     private userRepository: UserRepository,
     private organizationRepository: OrganizationRepository,
+    private organizationInvitationRepository: OrganizationInvitationRepository,
   ) {}
 
   async getStatus(userId: UserID) {
@@ -133,7 +135,7 @@ export default class UserOnboardingService {
       const email = unprocessedEmail.trim();
       const metadata = createInsertMetadata(session);
       // TODO: Check if valid email.
-      await this.organizationRepository.createInvitation(this.db, {
+      await this.organizationInvitationRepository.createInvitation(this.db, {
         email,
         emailSentAt: new Date(),
         ...metadata,

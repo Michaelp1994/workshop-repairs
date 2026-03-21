@@ -1,15 +1,15 @@
-import type {
-  CountPartsInput,
-  GetAllPartsInput,
-  GetPartsSelectInput,
-} from "@repo/validators/server/parts.validators";
-
 import { type Database } from "@repo/db";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 import PartRepository from "@repo/db/repositories/part.repository";
 
 import type { PartInput } from "../../../db/src/tables/part.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -46,7 +46,7 @@ export default class PartService {
     });
   }
 
-  async countParts(input: CountPartsInput, session: OrganizationSession) {
+  async countParts(input: CountInput, session: OrganizationSession) {
     return this.partRepository.count(this.db, input, session.organizationId);
   }
 
@@ -78,7 +78,7 @@ export default class PartService {
     });
   }
 
-  async getAllParts(input: GetAllPartsInput, session: OrganizationSession) {
+  async getAllParts(input: GetAllInput, session: OrganizationSession) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -104,10 +104,7 @@ export default class PartService {
     );
   }
 
-  async getPartsSelect(
-    input: GetPartsSelectInput,
-    session: OrganizationSession,
-  ) {
+  async getPartsSelect(input: GetAllSimpleInput, session: OrganizationSession) {
     return this.partRepository.getAllSimple(
       this.db,
       input,

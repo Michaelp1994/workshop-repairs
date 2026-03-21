@@ -1,15 +1,15 @@
-import type {
-  CountLocationsInput,
-  GetAllLocationsInput,
-  GetLocationsSelectInput,
-} from "@repo/validators/server/locations.validators";
-
 import { type Database } from "@repo/db";
 import LocationRepository from "@repo/db/repositories/location.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { LocationInput } from "../../../db/src/tables/location.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -47,10 +47,7 @@ export default class LocationService {
     });
   }
 
-  async countLocations(
-    input: CountLocationsInput,
-    session: OrganizationSession,
-  ) {
+  async countLocations(input: CountInput, session: OrganizationSession) {
     const count = await this.locationRepository.count(
       this.db,
       input,
@@ -87,10 +84,7 @@ export default class LocationService {
     });
   }
 
-  async getAllLocations(
-    input: GetAllLocationsInput,
-    session: OrganizationSession,
-  ) {
+  async getAllLocations(input: GetAllInput, session: OrganizationSession) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -119,7 +113,7 @@ export default class LocationService {
   }
 
   async getLocationsSelect(
-    input: GetLocationsSelectInput,
+    input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
     const locations = await this.locationRepository.getAllSimple(

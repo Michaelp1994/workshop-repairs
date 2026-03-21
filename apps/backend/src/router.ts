@@ -55,7 +55,7 @@ const equipmentTypes = equipmentTypesRouter(equipmentTypeService);
 const locations = locationsRouter(locationService);
 const manufacturers = manufacturersRouter(manufacturerService);
 const meta = metaRouter();
-const modelImages = modelImagesRouter(modelImageService);
+const modelImages = modelImagesRouter(modelImageService, modelService);
 const models = modelsRouter(modelService);
 const organizations = organizationsRouter(organizationService);
 

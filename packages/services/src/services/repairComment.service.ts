@@ -2,16 +2,17 @@ import type {
   RepairCommentID,
   RepairID,
 } from "@repo/validators/ids.validators";
-import type {
-  CountRepairCommentsInput,
-  GetAllRepairCommentsInput,
-} from "@repo/validators/server/repairComments.validators";
 
 import { type Database } from "@repo/db";
 import RepairCommentRepository from "@repo/db/repositories/repairComment.repository";
 
 import type { RepairCommentInput } from "../../../db/src/tables/repairComment.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -36,7 +37,7 @@ export default class RepairCommentService {
     });
   }
 
-  async countRepairComments(input: CountRepairCommentsInput) {
+  async countRepairComments(input: CountInput) {
     return this.repairCommentRepository.count(this.db, input);
   }
 
@@ -54,7 +55,7 @@ export default class RepairCommentService {
     });
   }
 
-  async getAllRepairComments(input: GetAllRepairCommentsInput) {
+  async getAllRepairComments(input: GetAllInput) {
     return this.repairCommentRepository.getAll(this.db, input);
   }
 

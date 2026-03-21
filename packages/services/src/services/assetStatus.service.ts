@@ -1,18 +1,18 @@
-import type { AssetStatusID } from "@repo/validators/ids.validators";
-import type {
-  GetAllAssetStatusesInput,
-  GetAssetStatusesSelectInput,
-} from "@repo/validators/server/assetStatuses.validators";
-import type { CountAssetStatusesInput } from "@repo/validators/server/assetStatuses.validators";
-
 import { type Database } from "@repo/db";
 import AssetStatusRepository from "@repo/db/repositories/assetStatus.repository";
 
 import type { AssetStatusInput } from "../../../db/src/tables/assetStatus.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
+  createInsertMetadata,
   createUpdateMetadata,
   type OrganizationSession,
 } from "../helpers/includeMetadata";
@@ -29,10 +29,7 @@ export default class AssetStatusService {
     });
   }
 
-  async countAssetStatuses(
-    input: CountAssetStatusesInput,
-    _session: OrganizationSession,
-  ) {
+  async countAssetStatuses(input: CountInput, _session: OrganizationSession) {
     return this.assetStatusRepository.count(this.db, input);
   }
 
@@ -41,7 +38,7 @@ export default class AssetStatusService {
     session: OrganizationSession,
   ) {
     return await this.db.transaction(async (tx) => {
-      const metadata = createUpdateMetadata(session);
+      const metadata = createInsertMetadata(session);
       const values = {
         ...input,
         ...metadata,
@@ -51,19 +48,16 @@ export default class AssetStatusService {
     });
   }
 
-  async getAllAssetStatuses(
-    input: GetAllAssetStatusesInput,
-    _session: OrganizationSession,
-  ) {
+  async getAllAssetStatuses(input: GetAllInput, _session: OrganizationSession) {
     return this.assetStatusRepository.getAll(this.db, input);
   }
 
-  async getAssetStatus(id: AssetStatusID, _session: OrganizationSession) {
+  async getAssetStatus(id: number, _session: OrganizationSession) {
     return this.assetStatusRepository.getById(this.db, id);
   }
 
   async getAssetStatusSelect(
-    input: GetAssetStatusesSelectInput,
+    input: GetAllSimpleInput,
     _session: OrganizationSession,
   ) {
     return this.assetStatusRepository.getAllSimple(this.db, input);

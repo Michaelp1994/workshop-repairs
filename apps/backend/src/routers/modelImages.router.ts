@@ -1,8 +1,10 @@
+import ModelService from "@repo/services/services/model.service";
 import ModelImageService from "@repo/services/services/modelImage.service";
 import {
   archiveModelImageSchema,
   countModelImagesSchema,
   createModelImageSchema,
+  getAllModelImagesByModelIdSchema,
   getAllModelImagesSchema,
   getModelImageByIdSchema,
   requestUploadModelImageSchema,
@@ -10,10 +12,14 @@ import {
   updateModelImageSchema,
 } from "@repo/validators/server/modelImages.validators";
 
+import { getModelImageUrlFromKey } from "../../../../packages/services/src/helpers/s3";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
-export default function modelImageRouter(modelImageService: ModelImageService) {
+export default function modelImageRouter(
+  modelImageService: ModelImageService,
+  modelService: ModelService,
+) {
   return router({
     getAll: organizationProcedure
       .input(getAllModelImagesSchema)
@@ -34,26 +40,23 @@ export default function modelImageRouter(modelImageService: ModelImageService) {
         );
         return count;
       }),
-    // getAllByModelId: organizationProcedure
-    //   .input(getAllModelImagesByModelIdSchema)
-    //   .query(async ({ input }) => {
-    //     const model = await modelImageService.getModelById(input.modelId);
+    getAllByModelId: organizationProcedure
+      .input(getAllModelImagesByModelIdSchema)
+      .query(async ({ input, ctx }) => {
+        const model = await modelService.getModel(input.modelId, ctx.session);
 
-    //     if (!model) {
-    //       throw new TRPCError({
-    //         code: "NOT_FOUND",
-    //         message: "model not found",
-    //       });
-    //     }
+        const allModelImages =
+          await modelImageService.getAllModelImagesByModelId(
+            input.modelId,
+            ctx.session,
+          );
 
-    //     const allModelImages = await modelImageService.getAllModelImagesByModelId(input.modelId);
-
-    //     return allModelImages.map((modelImage) => ({
-    //       ...modelImage,
-    //       url: getModelImageUrlFromKey(modelImage.url),
-    //       favourite: modelImage.id === model.defaultImageId,
-    //     }));
-    //   }),
+        return allModelImages.map((modelImage) => ({
+          ...modelImage,
+          url: getModelImageUrlFromKey(modelImage.url),
+          favourite: modelImage.id === model.defaultImageId,
+        }));
+      }),
     getById: organizationProcedure
       .input(getModelImageByIdSchema)
       .query(async ({ input, ctx }) => {

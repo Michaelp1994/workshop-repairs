@@ -16,6 +16,7 @@ import {
   type ClientFormInput,
   clientFormSchema,
 } from "@repo/validators/client/clients.schema";
+import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
@@ -26,10 +27,17 @@ interface BaseFormProps {
 
 export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
   const [client] = api.clients.getBySlug.useSuspenseQuery({ slug: clientSlug });
+  const navigate = useNavigate();
+  const utils = api.useUtils();
 
   const updateMutation = api.clients.update.useMutation({
-    onSuccess() {
+    async onSuccess() {
       toast.success(`Client updated`);
+      await utils.clients.getBySlug.invalidate({ slug: clientSlug });
+      await navigate({
+        to: "/clients/$clientSlug",
+        params: { clientSlug },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -65,7 +73,7 @@ export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={updateMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

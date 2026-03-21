@@ -1,15 +1,17 @@
-import type {
-  CountModelsInput,
-  GetAllModelsInput,
-  GetModelsSelectInput,
-} from "@repo/validators/server/models.validators";
-
 import { type Database } from "@repo/db";
-import ModelRepository from "@repo/db/repositories/model.repository";
+import ModelRepository, {
+  ModelFilters,
+} from "@repo/db/repositories/model.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
 import type { ModelInput } from "../../../db/src/tables/model.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -48,7 +50,10 @@ export default class ModelService {
     });
   }
 
-  async countModels(input: CountModelsInput, session: OrganizationSession) {
+  async countModels(
+    input: CountInput<ModelFilters>,
+    session: OrganizationSession,
+  ) {
     return this.modelRepository.count(this.db, input, session.organizationId);
   }
 
@@ -80,7 +85,10 @@ export default class ModelService {
     });
   }
 
-  async getAllModels(input: GetAllModelsInput, session: OrganizationSession) {
+  async getAllModels(
+    input: GetAllInput<ModelFilters>,
+    session: OrganizationSession,
+  ) {
     const sequence =
       await this.organizationSequenceRepository.getByOrganizationId(
         this.db,
@@ -110,7 +118,7 @@ export default class ModelService {
   }
 
   async getModelsSelect(
-    input: GetModelsSelectInput,
+    input: GetAllSimpleInput<ModelFilters>,
     session: OrganizationSession,
   ) {
     return this.modelRepository.getAllSimple(

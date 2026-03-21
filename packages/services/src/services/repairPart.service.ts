@@ -1,14 +1,17 @@
 import type { RepairPartID } from "@repo/validators/ids.validators";
-import type {
-  CountRepairPartsInput,
-  GetAllRepairPartsInput,
-} from "@repo/validators/server/repairParts.validators";
 
 import { type Database } from "@repo/db";
-import RepairPartRepository from "@repo/db/repositories/repairPart.repository";
+import RepairPartRepository, {
+  RepairPartFilters,
+} from "@repo/db/repositories/repairPart.repository";
 
 import type { RepairPartInput } from "../../../db/src/tables/repairPart.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type {
+  CountInput,
+  CreateInput,
+  GetAllInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -30,7 +33,7 @@ export default class RepairPartService {
   }
 
   async countRepairParts(
-    input: CountRepairPartsInput,
+    input: CountInput<RepairPartFilters>,
     _session: OrganizationSession,
   ) {
     return this.repairPartRepository.count(this.db, input);
@@ -51,7 +54,7 @@ export default class RepairPartService {
   }
 
   async getAllRepairParts(
-    input: GetAllRepairPartsInput,
+    input: GetAllInput<RepairPartFilters>,
     _session: OrganizationSession,
   ) {
     return this.repairPartRepository.getAll(this.db, input);

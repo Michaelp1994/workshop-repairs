@@ -1,8 +1,4 @@
 import type { ModelID, ModelImageID } from "@repo/validators/ids.validators";
-import type {
-  CountModelImagesInput,
-  GetAllModelImagesInput,
-} from "@repo/validators/server/modelImages.validators";
 
 import { type Database } from "@repo/db";
 import ModelRepository from "@repo/db/repositories/model.repository";
@@ -10,7 +6,12 @@ import ModelImageRepository from "@repo/db/repositories/modelImage.repository";
 import { randomUUID } from "crypto";
 
 import type { ModelImageInput } from "../../../db/src/tables/modelImage.table";
-import type { UpdateInput } from "../types";
+import type {
+  CountInput,
+  GetAllInput,
+  GetAllSimpleInput,
+  UpdateInput,
+} from "../types";
 
 import {
   createArchiveMetadata,
@@ -38,10 +39,7 @@ export default class ModelImageService {
     });
   }
 
-  async countModelImages(
-    input: CountModelImagesInput,
-    _session: OrganizationSession,
-  ) {
+  async countModelImages(input: CountInput, _session: OrganizationSession) {
     return this.modelImageRepository.count(this.db, input);
   }
 
@@ -86,10 +84,7 @@ export default class ModelImageService {
     });
   }
 
-  async getAllModelImages(
-    input: GetAllModelImagesInput,
-    _session: OrganizationSession,
-  ) {
+  async getAllModelImages(input: GetAllInput, _session: OrganizationSession) {
     return this.modelImageRepository.getAll(this.db, input);
   }
 

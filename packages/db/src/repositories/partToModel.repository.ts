@@ -24,11 +24,11 @@ import {
 
 const partToModelsFields = getTableColumns(partToModelTable);
 
-interface PartToModelFilters {
+export interface PartToModelFilters {
   modelId: number;
 }
 
-interface ModelToPartFilter {
+export interface ModelToPartFilter {
   partId: number;
 }
 
