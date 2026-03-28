@@ -118,11 +118,20 @@ export default class ManufacturerService {
     input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
-    return this.manufacturerRepository.getAllSimple(
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
+    const manufacturers = await this.manufacturerRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
+    return manufacturers.map(({ value, label }) => ({
+      value: createSlug(sequence.manufacturerKeyPrefix, value),
+      label,
+    }));
   }
 
   async updateManufacturer(

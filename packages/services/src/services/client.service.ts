@@ -42,7 +42,7 @@ export default class ClientService {
           session.organizationId,
         );
 
-      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      const slug = createSlug(sequence.clientKeyPrefix, localId);
       return { slug, ...archivedClient };
     });
   }
@@ -110,11 +110,20 @@ export default class ClientService {
     input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
-    return this.clientRepository.getAllSimple(
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
+    const clients = await this.clientRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
+    return clients.map(({ value, label }) => ({
+      value: createSlug(sequence.clientKeyPrefix, value),
+      label,
+    }));
   }
 
   async updateClient(

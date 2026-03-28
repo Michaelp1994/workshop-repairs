@@ -41,7 +41,7 @@ export default class PartService {
           session.organizationId,
         );
 
-      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      const slug = createSlug(sequence.partKeyPrefix, localId);
       return { slug, ...archivedPart };
     });
   }
@@ -69,7 +69,7 @@ export default class PartService {
       };
       const part = await this.partRepository.create(tx, values);
 
-      const slug = createSlug(sequence.assetKeyPrefix, part.localId);
+      const slug = createSlug(sequence.partKeyPrefix, part.localId);
 
       return {
         ...part,
@@ -105,11 +105,20 @@ export default class PartService {
   }
 
   async getPartsSelect(input: GetAllSimpleInput, session: OrganizationSession) {
-    return this.partRepository.getAllSimple(
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
+    const parts = await this.partRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
+    return parts.map(({ value, label }) => ({
+      value: createSlug(sequence.partKeyPrefix, value),
+      label,
+    }));
   }
 
   async updatePart(
@@ -136,7 +145,7 @@ export default class PartService {
           session.organizationId,
         );
 
-      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      const slug = createSlug(sequence.partKeyPrefix, localId);
       return {
         slug,
         ...part,

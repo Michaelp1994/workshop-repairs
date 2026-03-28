@@ -116,12 +116,20 @@ export default class LocationService {
     input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
     const locations = await this.locationRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
-    return locations;
+    return locations.map(({ value, label }) => ({
+      value: createSlug(sequence.locationKeyPrefix, value),
+      label,
+    }));
   }
 
   async updateLocation(

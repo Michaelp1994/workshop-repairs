@@ -18,6 +18,8 @@ const modelFilters = z
   })
   .default({});
 
+export type ModelFilters = z.infer<typeof modelFilters>;
+
 export const getAllModelsSchema = dataTableSchema.extend({
   filters: modelFilters,
 });

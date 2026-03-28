@@ -1,16 +1,15 @@
 import { type Database } from "@repo/db";
+import AssetRepository from "@repo/db/repositories/asset.repository";
+import ClientRepository from "@repo/db/repositories/client.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 import RepairRepository, {
   RepairFilters,
 } from "@repo/db/repositories/repair.repository";
 
-import type { RepairInput } from "../../../db/src/tables/repair.table";
 import type {
   CountInput,
-  CreateInput,
   GetAllInput,
   GetAllSimpleInput,
-  UpdateInput,
 } from "../types";
 
 import {
@@ -26,6 +25,8 @@ export default class RepairService {
     private db: Database,
     private repairRepository: RepairRepository,
     private organizationSequenceRepository: OrganizationSequenceRepository,
+    private clientRepository: ClientRepository,
+    private assetRepository: AssetRepository,
   ) {}
 
   async archiveRepair(localId: number, session: OrganizationSession) {
@@ -44,7 +45,7 @@ export default class RepairService {
           session.organizationId,
         );
 
-      const slug = createSlug(sequence.assetKeyPrefix, localId);
+      const slug = createSlug(sequence.repairKeyPrefix, localId);
 
       return { slug, ...archivedRepair };
     });
@@ -58,7 +59,14 @@ export default class RepairService {
   }
 
   async createRepair(
-    input: CreateInput<RepairInput>,
+    input: {
+      fault: string;
+      clientReference: string;
+      typeId: number | string;
+      statusId: number | string;
+      clientLocalId: number;
+      assetLocalId: number;
+    },
     session: OrganizationSession,
   ) {
     return await this.db.transaction(async (tx) => {
@@ -69,14 +77,29 @@ export default class RepairService {
         );
       const metadata = createInsertMetadata(session);
 
+      const client = await this.clientRepository.getByLocalId(
+        tx,
+        input.clientLocalId,
+        session.organizationId,
+      );
+      const asset = await this.assetRepository.getById(tx, {
+        localId: input.assetLocalId,
+        organizationId: session.organizationId,
+      });
+
       const values = {
-        ...input,
+        fault: input.fault,
+        clientReference: input.clientReference,
+        typeId: Number(input.typeId),
+        statusId: Number(input.statusId),
+        clientId: client.id,
+        assetId: asset.id,
         ...metadata,
         localId: sequence.repairLastUsedValue,
       };
       const repair = await this.repairRepository.create(tx, values);
 
-      const slug = createSlug(sequence.assetKeyPrefix, repair.localId);
+      const slug = createSlug(sequence.repairKeyPrefix, repair.localId);
 
       return {
         ...repair,
@@ -118,22 +141,67 @@ export default class RepairService {
     input: GetAllSimpleInput<RepairFilters>,
     session: OrganizationSession,
   ) {
-    return this.repairRepository.getAllSimple(
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
+    const repairs = await this.repairRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
+    return repairs.map(({ value, label }) => ({
+      value: createSlug(sequence.repairKeyPrefix, value),
+      label,
+    }));
   }
 
   async updateRepair(
-    input: UpdateInput<RepairInput>,
+    input: {
+      fault?: string;
+      clientReference?: string;
+      typeId?: number | string;
+      statusId?: number | string;
+      clientLocalId?: number;
+      assetLocalId?: number;
+    },
     localId: number,
     session: OrganizationSession,
   ) {
     return await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
+
+      let clientId: number | undefined;
+      let assetId: number | undefined;
+
+      if (input.clientLocalId !== undefined) {
+        const client = await this.clientRepository.getByLocalId(
+          tx,
+          input.clientLocalId,
+          session.organizationId,
+        );
+        clientId = client.id;
+      }
+      if (input.assetLocalId !== undefined) {
+        const asset = await this.assetRepository.getById(tx, {
+          localId: input.assetLocalId,
+          organizationId: session.organizationId,
+        });
+        assetId = asset.id;
+      }
+
+      const partialValues = {
+        ...(input.fault !== undefined && { fault: input.fault }),
+        ...(input.clientReference !== undefined && { clientReference: input.clientReference }),
+        ...(input.typeId !== undefined && { typeId: Number(input.typeId) }),
+        ...(input.statusId !== undefined && { statusId: Number(input.statusId) }),
+        ...(clientId !== undefined && { clientId }),
+        ...(assetId !== undefined && { assetId }),
+      };
+
       const values = {
-        ...input,
+        ...partialValues,
         ...metadata,
       };
 

@@ -85,6 +85,9 @@ export const assetService = new AssetService(
   db,
   assetRepository,
   organizationSequenceRepository,
+  modelRepository,
+  clientRepository,
+  locationRepository,
 );
 
 export const assetStatusService = new AssetStatusService(
@@ -121,6 +124,8 @@ export const modelService = new ModelService(
   db,
   modelRepository,
   organizationSequenceRepository,
+  manufacturerRepository,
+  equipmentTypeRepository,
 );
 export const modelImageService = new ModelImageService(
   db,
@@ -150,6 +155,8 @@ export const repairService = new RepairService(
   db,
   repairRepository,
   organizationSequenceRepository,
+  clientRepository,
+  assetRepository,
 );
 export const repairCommentService = new RepairCommentService(
   db,
@@ -162,6 +169,8 @@ export const repairImageService = new RepairImageService(
 export const repairPartService = new RepairPartService(
   db,
   repairPartRepository,
+  repairRepository,
+  partRepository,
 );
 export const repairStatusTypeService = new RepairStatusTypeService(
   db,

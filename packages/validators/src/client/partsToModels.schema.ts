@@ -10,7 +10,7 @@ export const modelPartFormSchema = z.object({
 export type ModelPartFormInput = z.infer<typeof modelPartFormSchema>;
 
 export const defaultModelPart: ModelPartFormInput = {
-  partId: 0,
+  partId: "",
   quantity: 1,
 };
 
@@ -23,5 +23,5 @@ export type PartsModelFormInput = z.infer<typeof partModelFormSchema>;
 
 export const defaultPartModel: PartsModelFormInput = {
   quantity: 1,
-  modelId: 0,
+  modelId: "",
 };

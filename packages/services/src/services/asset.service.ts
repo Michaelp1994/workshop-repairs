@@ -2,16 +2,12 @@ import { type Database } from "@repo/db";
 import AssetRepository, {
   AssetFilters,
 } from "@repo/db/repositories/asset.repository";
+import ClientRepository from "@repo/db/repositories/client.repository";
+import LocationRepository from "@repo/db/repositories/location.repository";
+import ModelRepository from "@repo/db/repositories/model.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
-import type { AssetInput } from "../../../db/src/tables/asset.table";
-import type {
-  CountInput,
-  CreateInput,
-  GetAllInput,
-  GetAllSimpleInput,
-  UpdateInput,
-} from "../types";
+import type { CountInput, GetAllInput, GetAllSimpleInput } from "../types";
 
 import {
   createArchiveMetadata,
@@ -21,13 +17,25 @@ import {
 } from "../helpers/includeMetadata";
 import { createSlug } from "../helpers/slugs";
 
+export interface AssetInput {
+  assetNumber: string;
+  serialNumber: string;
+  softwareVersion: string;
+  statusId: number;
+  modelLocalId: number;
+  clientLocalId: number;
+  locationLocalId: number;
+}
+
 export default class AssetService {
   constructor(
     private db: Database,
     private assetRepository: AssetRepository,
     private organizationSequenceRepository: OrganizationSequenceRepository,
+    private modelRepository: ModelRepository,
+    private clientRepository: ClientRepository,
+    private locationRepository: LocationRepository,
   ) {}
-
   async archiveAsset(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
@@ -65,10 +73,7 @@ export default class AssetService {
     return count;
   }
 
-  async createAsset(
-    input: CreateInput<AssetInput>,
-    session: OrganizationSession,
-  ) {
+  async createAsset(input: AssetInput, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const sequence =
         await this.organizationSequenceRepository.incrementAssetSequence(
@@ -77,8 +82,32 @@ export default class AssetService {
         );
       const metadata = createInsertMetadata(session);
 
+      const model = await this.modelRepository.getByLocalId(
+        tx,
+        input.modelLocalId,
+        session.organizationId,
+      );
+
+      const client = await this.clientRepository.getByLocalId(
+        tx,
+        input.clientLocalId,
+        session.organizationId,
+      );
+
+      const location = await this.locationRepository.getByLocalId(
+        tx,
+        input.locationLocalId,
+        session.organizationId,
+      );
+
       const values = {
-        ...input,
+        assetNumber: input.assetNumber,
+        serialNumber: input.serialNumber,
+        softwareVersion: input.softwareVersion,
+        statusId: input.statusId,
+        modelId: model.id,
+        clientId: client.id,
+        locationId: location.id,
         ...metadata,
         localId: sequence.assetLastUsedValue,
       };
@@ -129,23 +158,78 @@ export default class AssetService {
     input: GetAllSimpleInput<AssetFilters>,
     session: OrganizationSession,
   ) {
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
     const assets = await this.assetRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
-    return assets;
+    return assets.map(({ value, label }) => ({
+      value: createSlug(sequence.assetKeyPrefix, value),
+      label,
+    }));
   }
 
   async updateAsset(
-    input: UpdateInput<AssetInput>,
+    input: Partial<AssetInput>,
     localId: number,
     session: OrganizationSession,
   ) {
     return await this.db.transaction(async (tx) => {
+      const metadata = createUpdateMetadata(session);
+
+      let modelId: number | undefined;
+      let clientId: number | undefined;
+      let locationId: number | undefined;
+
+      if (input.modelLocalId !== undefined) {
+        const model = await this.modelRepository.getByLocalId(
+          tx,
+          input.modelLocalId,
+          session.organizationId,
+        );
+        modelId = model.id;
+      }
+      if (input.clientLocalId !== undefined) {
+        const client = await this.clientRepository.getByLocalId(
+          tx,
+          input.clientLocalId,
+          session.organizationId,
+        );
+        clientId = client.id;
+      }
+      if (input.locationLocalId !== undefined) {
+        const location = await this.locationRepository.getByLocalId(
+          tx,
+          input.locationLocalId,
+          session.organizationId,
+        );
+        locationId = location.id;
+      }
+
+      const partialValues = {
+        ...(input.assetNumber !== undefined && {
+          assetNumber: input.assetNumber,
+        }),
+        ...(input.serialNumber !== undefined && {
+          serialNumber: input.serialNumber,
+        }),
+        ...(input.softwareVersion !== undefined && {
+          softwareVersion: input.softwareVersion,
+        }),
+        ...(input.statusId !== undefined && { statusId: input.statusId }),
+        ...(modelId !== undefined && { modelId }),
+        ...(clientId !== undefined && { clientId }),
+        ...(locationId !== undefined && { locationId }),
+      };
+
       const values = {
-        ...input,
-        ...createUpdateMetadata(session),
+        ...partialValues,
+        ...metadata,
       };
 
       const where = {

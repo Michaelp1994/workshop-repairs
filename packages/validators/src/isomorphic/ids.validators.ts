@@ -3,7 +3,7 @@ import { z } from "zod";
 export const assetId = z.string();
 export type AssetID = z.infer<typeof assetId>;
 
-export const assetStatusId = z.string();
+export const assetStatusId = z.number();
 export type AssetStatusID = z.infer<typeof assetStatusId>;
 
 export const clientId = z.string();
@@ -30,32 +30,32 @@ export type PartID = z.infer<typeof partId>;
 export const repairId = z.string();
 export type RepairID = z.infer<typeof repairId>;
 
-export const repairCommentId = z.string();
+export const repairCommentId = z.number();
 export type RepairCommentID = z.infer<typeof repairCommentId>;
 
-export const repairImageId = z.string();
+export const repairImageId = z.number();
 export type RepairImageID = z.infer<typeof repairImageId>;
 
-export const repairPartId = z.string();
+export const repairPartId = z.number();
 export type RepairPartID = z.infer<typeof repairPartId>;
 
-export const repairStatusTypeId = z.string();
+export const repairStatusTypeId = z.number();
 export type RepairStatusTypeID = z.infer<typeof repairStatusTypeId>;
 
-export const repairTypeId = z.string();
+export const repairTypeId = z.number();
 export type RepairTypeID = z.infer<typeof repairTypeId>;
 
-export const userId = z.string();
+export const userId = z.number();
 export type UserID = z.infer<typeof userId>;
 
 export const userOnboardingId = z.string();
 export type UserOnboardingID = z.infer<typeof userOnboardingId>;
 
-export const organizationId = z.string();
+export const organizationId = z.number();
 export type OrganizationID = z.infer<typeof organizationId>;
 
 export const organizationInvitationId = z.string();
 export type OrganizationInvitationID = z.infer<typeof organizationInvitationId>;
 
-export const organizationSequenceId = z.string();
+export const organizationSequenceId = z.number();
 export type OrganizationSequenceID = z.infer<typeof organizationSequenceId>;

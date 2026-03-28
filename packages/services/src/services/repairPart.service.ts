@@ -1,17 +1,14 @@
 import type { RepairPartID } from "@repo/validators/ids.validators";
 
 import { type Database } from "@repo/db";
+import PartRepository from "@repo/db/repositories/part.repository";
+import RepairRepository from "@repo/db/repositories/repair.repository";
 import RepairPartRepository, {
   RepairPartFilters,
 } from "@repo/db/repositories/repairPart.repository";
 
 import type { RepairPartInput } from "../../../db/src/tables/repairPart.table";
-import type {
-  CountInput,
-  CreateInput,
-  GetAllInput,
-  UpdateInput,
-} from "../types";
+import type { CountInput, GetAllInput, UpdateInput } from "../types";
 
 import {
   createArchiveMetadata,
@@ -24,6 +21,8 @@ export default class RepairPartService {
   constructor(
     private db: Database,
     private repairPartRepository: RepairPartRepository,
+    private repairRepository: RepairRepository,
+    private partRepository: PartRepository,
   ) {}
   async archiveRepairPart(id: RepairPartID, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
@@ -40,14 +39,31 @@ export default class RepairPartService {
   }
 
   async createRepairPart(
-    input: CreateInput<RepairPartInput>,
+    input: {
+      quantity: number;
+      installed: boolean;
+      repairLocalId: number;
+      partLocalId: number;
+    },
     session: OrganizationSession,
   ) {
     return await this.db.transaction(async (tx) => {
+      const repair = await this.repairRepository.getByLocalId(
+        tx,
+        input.repairLocalId,
+        session.organizationId,
+      );
+      const part = await this.partRepository.getByLocalId(
+        tx,
+        input.partLocalId,
+        session.organizationId,
+      );
       const metadata = createInsertMetadata(session);
       const values = {
         ...input,
         ...metadata,
+        repairId: repair.id,
+        partId: part.id,
       };
       return this.repairPartRepository.create(tx, values);
     });

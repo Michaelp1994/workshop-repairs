@@ -120,11 +120,20 @@ export default class EquipmentTypeService {
     input: GetAllSimpleInput,
     session: OrganizationSession,
   ) {
-    return this.equipmentTypeRepository.getAllSimple(
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
+    const equipmentTypes = await this.equipmentTypeRepository.getAllSimple(
       this.db,
       input,
       session.organizationId,
     );
+    return equipmentTypes.map(({ value, label }) => ({
+      value: createSlug(sequence.equipmentTypeKeyPrefix, value),
+      label,
+    }));
   }
 
   async updateEquipmentType(
