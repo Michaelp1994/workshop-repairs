@@ -4,7 +4,7 @@ import {
   countLocationsSchema,
   createLocationSchema,
   getAllLocationsSchema,
-  getLocationBySlugSchema,
+  getLocationByIdSchema,
   getLocationsSelectSchema,
   updateLocationSchema,
 } from "@repo/validators/server/locations.validators";
@@ -40,10 +40,10 @@ export default function locationRouter(locationService: LocationService) {
         );
         return locations;
       }),
-    getBySlug: organizationProcedure
-      .input(getLocationBySlugSchema)
+    getById: organizationProcedure
+      .input(getLocationByIdSchema)
       .query(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const location = await locationService.getLocation(
           localId,
@@ -64,8 +64,8 @@ export default function locationRouter(locationService: LocationService) {
       }),
     update: organizationProcedure
       .input(updateLocationSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedLocation = await locationService.updateLocation(
           values,
@@ -78,7 +78,7 @@ export default function locationRouter(locationService: LocationService) {
     archive: organizationProcedure
       .input(archiveLocationSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedLocation = await locationService.archiveLocation(
           localId,

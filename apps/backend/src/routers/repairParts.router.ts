@@ -8,6 +8,7 @@ import {
   updateRepairPartSchema,
 } from "@repo/validators/server/repairParts.validators";
 
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
@@ -45,8 +46,14 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
     create: organizationProcedure
       .input(createRepairPartSchema)
       .mutation(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
+        const partLocalId = splitSlug(input.partId).localId;
         const createdRepairPart = await repairPartService.createRepairPart(
-          input,
+          {
+            ...input,
+            repairLocalId,
+            partLocalId,
+          },
           ctx.session,
         );
 

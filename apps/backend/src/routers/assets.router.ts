@@ -6,7 +6,7 @@ import {
   createAssetSchema,
   getAllAssetsSchema,
   getAssestsSelectSchema,
-  getAssetBySlugSchema,
+  getAssetByIdSchema,
   updateAssetSchema,
 } from "@repo/validators/server/assets.validators";
 
@@ -16,16 +16,18 @@ import { router } from "../trpc";
 
 function assetFilters(filters: AssetFilters) {
   return {
-    model: filters.model ? splitSlug(filters.model).localId : undefined,
-    client: filters.client ? splitSlug(filters.client).localId : undefined,
-    location: filters.location
-      ? splitSlug(filters.location).localId
+    modelId: filters.modelId ? splitSlug(filters.modelId).localId : undefined,
+    clientId: filters.clientId
+      ? splitSlug(filters.clientId).localId
       : undefined,
-    manufacturer: filters.manufacturer
-      ? splitSlug(filters.manufacturer).localId
+    locationId: filters.locationId
+      ? splitSlug(filters.locationId).localId
       : undefined,
-    equipmentType: filters.equipmentType
-      ? splitSlug(filters.equipmentType).localId
+    manufacturerId: filters.manufacturerId
+      ? splitSlug(filters.manufacturerId).localId
+      : undefined,
+    equipmentTypeId: filters.equipmentTypeId
+      ? splitSlug(filters.equipmentTypeId).localId
       : undefined,
   };
 }
@@ -70,10 +72,10 @@ export default function assetRouter(assetService: AssetService) {
         );
         return allAssets;
       }),
-    getBySlug: organizationProcedure
-      .input(getAssetBySlugSchema)
+    getById: organizationProcedure
+      .input(getAssetByIdSchema)
       .query(async ({ ctx, input }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const asset = await assetService.getAsset(localId, ctx.session);
 
@@ -82,26 +84,47 @@ export default function assetRouter(assetService: AssetService) {
     create: organizationProcedure
       .input(createAssetSchema)
       .mutation(async ({ input, ctx }) => {
-        const asset = await assetService.createAsset(input, ctx.session);
+        const { modelId, clientId, locationId, ...rest } = input;
+        const asset = await assetService.createAsset(
+          {
+            ...rest,
+            modelLocalId: splitSlug(modelId).localId,
+            clientLocalId: splitSlug(clientId).localId,
+            locationLocalId: splitSlug(locationId).localId,
+          },
+          ctx.session,
+        );
         return asset;
       }),
     update: organizationProcedure
       .input(updateAssetSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(
+        async ({
+          input: { id, modelId, clientId, locationId, ...values },
+          ctx,
+        }) => {
+          const { localId } = splitSlug(id);
 
-        const updatedAsset = await assetService.updateAsset(
-          values,
-          localId,
-          ctx.session,
-        );
+          const updatedAsset = await assetService.updateAsset(
+            {
+              ...values,
+              modelLocalId: modelId ? splitSlug(modelId).localId : undefined,
+              clientLocalId: clientId ? splitSlug(clientId).localId : undefined,
+              locationLocalId: locationId
+                ? splitSlug(locationId).localId
+                : undefined,
+            },
+            localId,
+            ctx.session,
+          );
 
-        return updatedAsset;
-      }),
+          return updatedAsset;
+        },
+      ),
     archive: organizationProcedure
       .input(archiveAssetSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedAsset = await assetService.archiveAsset(
           localId,

@@ -4,7 +4,7 @@ import {
   countEquipmentTypesSchema,
   createEquipmentTypeSchema,
   getAllEquipmentTypesSchema,
-  getEquipmentTypeBySlugSchema,
+  getEquipmentTypeByIdSchema,
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
 } from "@repo/validators/server/equipmentTypes.validators";
@@ -45,10 +45,10 @@ export default function equipmentTypeRouter(
 
         return allEquipmentTypes;
       }),
-    getBySlug: organizationProcedure
-      .input(getEquipmentTypeBySlugSchema)
+    getById: organizationProcedure
+      .input(getEquipmentTypeByIdSchema)
       .query(async ({ ctx, input }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const equipmentType = await equipmentTypeService.getEquipmentType(
           localId,
@@ -67,8 +67,8 @@ export default function equipmentTypeRouter(
       }),
     update: organizationProcedure
       .input(updateEquipmentTypeSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedEquipmentType =
           await equipmentTypeService.updateEquipmentType(
@@ -82,7 +82,7 @@ export default function equipmentTypeRouter(
     archive: organizationProcedure
       .input(archiveEquipmentTypeSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedEquipmentType =
           await equipmentTypeService.archiveEquipmentType(localId, ctx.session);

@@ -4,7 +4,7 @@ import {
   countManufacturersSchema,
   createManufacturerSchema,
   getAllManufacturersSchema,
-  getManufacturerBySlugSchema,
+  getManufacturerByIdSchema,
   getManufacturersSelectSchema,
   updateManufacturerSchema,
 } from "@repo/validators/server/manufacturers.validators";
@@ -46,10 +46,10 @@ export default function manufacturerRouter(
 
         return manufacturers;
       }),
-    getBySlug: organizationProcedure
-      .input(getManufacturerBySlugSchema)
+    getById: organizationProcedure
+      .input(getManufacturerByIdSchema)
       .query(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
         const manufacturer = await manufacturerService.getManufacturer(
           localId,
           ctx.session,
@@ -67,8 +67,8 @@ export default function manufacturerRouter(
       }),
     update: organizationProcedure
       .input(updateManufacturerSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedManufacturer =
           await manufacturerService.updateManufacturer(
@@ -82,7 +82,7 @@ export default function manufacturerRouter(
     archive: organizationProcedure
       .input(archiveManufacturerSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedManufacturer =
           await manufacturerService.archiveManufacturer(localId, ctx.session);

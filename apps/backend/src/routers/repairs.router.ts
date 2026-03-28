@@ -4,8 +4,9 @@ import {
   countRepairsSchema,
   createRepairSchema,
   getAllRepairsSchema,
-  getRepairBySlugSchema,
+  getRepairByIdSchema,
   getRepairsSelectSchema,
+  type RepairFilters,
   updateRepairSchema,
 } from "@repo/validators/server/repairs.validators";
 
@@ -13,13 +14,20 @@ import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
+function repairFilters(filters: RepairFilters) {
+  return {
+    assetLocalId: filters.assetId ? splitSlug(filters.assetId).localId : undefined,
+    clientLocalId: filters.clientId ? splitSlug(filters.clientId).localId : undefined,
+  };
+}
+
 export default function Router(repairService: RepairService) {
   return router({
     getAll: organizationProcedure
       .input(getAllRepairsSchema)
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input: { filters, ...rest } }) => {
         const allRepairs = await repairService.getAllRepairs(
-          input,
+          { ...rest, filters: repairFilters(filters) },
           ctx.session,
         );
         return allRepairs;
@@ -27,26 +35,29 @@ export default function Router(repairService: RepairService) {
 
     countAll: organizationProcedure
       .input(countRepairsSchema)
-      .query(async ({ ctx, input }) => {
-        const count = await repairService.countRepairs(input, ctx.session);
+      .query(async ({ ctx, input: { filters, ...rest } }) => {
+        const count = await repairService.countRepairs(
+          { ...rest, filters: repairFilters(filters) },
+          ctx.session,
+        );
 
         return count;
       }),
 
     getSelect: organizationProcedure
       .input(getRepairsSelectSchema)
-      .query(async ({ input, ctx }) => {
+      .query(async ({ input: { filters, ...rest }, ctx }) => {
         const allRepairs = await repairService.getRepairsSelect(
-          input,
+          { ...rest, filters: repairFilters(filters) },
           ctx.session,
         );
         return allRepairs;
       }),
 
-    getBySlug: organizationProcedure
-      .input(getRepairBySlugSchema)
+    getById: organizationProcedure
+      .input(getRepairByIdSchema)
       .query(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
         const repair = await repairService.getRepair(localId, ctx.session);
 
         return repair;
@@ -55,18 +66,30 @@ export default function Router(repairService: RepairService) {
     create: organizationProcedure
       .input(createRepairSchema)
       .mutation(async ({ input, ctx }) => {
-        const repair = await repairService.createRepair(input, ctx.session);
+        const { clientId, assetId, ...rest } = input;
+        const repair = await repairService.createRepair(
+          {
+            ...rest,
+            clientLocalId: splitSlug(clientId).localId,
+            assetLocalId: splitSlug(assetId).localId,
+          },
+          ctx.session,
+        );
 
         return repair;
       }),
 
     update: organizationProcedure
       .input(updateRepairSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, clientId, assetId, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedRepair = await repairService.updateRepair(
-          values,
+          {
+            ...values,
+            clientLocalId: clientId ? splitSlug(clientId).localId : undefined,
+            assetLocalId: assetId ? splitSlug(assetId).localId : undefined,
+          },
           localId,
           ctx.session,
         );
@@ -77,7 +100,7 @@ export default function Router(repairService: RepairService) {
     archive: organizationProcedure
       .input(archiveRepairSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedRepair = await repairService.archiveRepair(
           localId,

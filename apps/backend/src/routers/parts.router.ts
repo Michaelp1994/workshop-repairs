@@ -4,7 +4,7 @@ import {
   countPartsSchema,
   createPartSchema,
   getAllPartsSchema,
-  getPartBySlugSchema,
+  getPartByIdSchema,
   getPartsSelectSchema,
   updatePartSchema,
 } from "@repo/validators/server/parts.validators";
@@ -36,10 +36,10 @@ export default function partRouter(partService: PartService) {
 
         return allParts;
       }),
-    getBySlug: organizationProcedure
-      .input(getPartBySlugSchema)
+    getById: organizationProcedure
+      .input(getPartByIdSchema)
       .query(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
         const part = await partService.getPart(localId, ctx.session);
 
         return part;
@@ -53,8 +53,8 @@ export default function partRouter(partService: PartService) {
       }),
     update: organizationProcedure
       .input(updatePartSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedPart = await partService.updatePart(
           values,
@@ -67,7 +67,7 @@ export default function partRouter(partService: PartService) {
     archive: organizationProcedure
       .input(archivePartSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedPart = await partService.archivePart(
           localId,
