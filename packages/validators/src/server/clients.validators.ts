@@ -30,7 +30,7 @@ export const createClientSchema = z.object({
 });
 
 export const updateClientSchema = z.object({
-  slug: z.string(),
+  id: clientId,
   name: z.string().min(2),
 });
 
@@ -38,10 +38,6 @@ export const getClientByIdSchema = z.object({
   id: clientId,
 });
 
-export const getClientBySlugSchema = z.object({
-  slug: z.string(),
-});
-
 export const archiveClientSchema = z.object({
-  slug: z.string(),
+  id: clientId,
 });

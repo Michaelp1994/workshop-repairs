@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { partId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
@@ -30,13 +31,13 @@ export const createPartSchema = z.object({
 });
 
 export const updatePartSchema = createPartSchema.partial().extend({
-  slug: z.string(),
+  id: partId,
 });
 
-export const getPartBySlugSchema = z.object({
-  slug: z.string(),
+export const getPartByIdSchema = z.object({
+  id: partId,
 });
 
 export const archivePartSchema = z.object({
-  slug: z.string(),
+  id: partId,
 });

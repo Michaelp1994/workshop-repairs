@@ -15,24 +15,14 @@ export const assetFormSchema = z.object(
         message: "Status is required",
       }),
     modelId: z
-      .number({
-        message: "Model is required",
-      })
-      .positive({
-        message: "Model is required",
-      }),
+      .string({ message: "Model is required" })
+      .min(1, "Model is required"),
     locationId: z
-      .number({
-        message: "Location is required",
-      })
-      .positive({
-        message: "Location is required",
-      }),
+      .string({ message: "Location is required" })
+      .min(1, "Location is required"),
     clientId: z
-      .number({
-        message: "Client is required",
-      })
-      .positive({ message: "Client is required" }),
+      .string({ message: "Client is required" })
+      .min(1, "Client is required"),
   },
   {},
 );
@@ -43,8 +33,8 @@ export const defaultAsset: AssetFormInput = {
   assetNumber: "",
   serialNumber: "",
   softwareVersion: "",
-  modelId: 0,
+  modelId: "",
   statusId: 0,
-  locationId: 0,
-  clientId: 0,
+  locationId: "",
+  clientId: "",
 };

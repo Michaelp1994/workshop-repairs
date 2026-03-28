@@ -31,17 +31,13 @@ export const createLocationSchema = z.object({
 });
 
 export const updateLocationSchema = createLocationSchema.partial().extend({
-  slug: z.string(),
+  id: z.string(),
 });
 
 export const getLocationByIdSchema = z.object({
   id: locationId,
 });
 
-export const getLocationBySlugSchema = z.object({
-  slug: z.string(),
-});
-
 export const archiveLocationSchema = z.object({
-  slug: z.string(),
+  id: locationId,
 });

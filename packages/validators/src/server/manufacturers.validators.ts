@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { manufacturerId } from "../isomorphic/ids.validators";
 import {
   dataTableCountSchema,
   dataTableSchema,
@@ -35,13 +36,13 @@ export const createManufacturerSchema = z.object({
 export const updateManufacturerSchema = createManufacturerSchema
   .partial()
   .extend({
-    slug: z.string(),
+    id: manufacturerId,
   });
 
-export const getManufacturerBySlugSchema = z.object({
-  slug: z.string(),
+export const getManufacturerByIdSchema = z.object({
+  id: manufacturerId,
 });
 
 export const archiveManufacturerSchema = z.object({
-  slug: z.string(),
+  id: manufacturerId,
 });

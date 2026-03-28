@@ -40,8 +40,8 @@ export const getAllRepairsByAssetIdSchema = z.object({
   assetId,
 });
 
-export const getRepairBySlugSchema = z.object({
-  slug: z.string(),
+export const getRepairByIdSchema = z.object({
+  id: z.string(),
 });
 
 export const createRepairSchema = z.object({
@@ -55,8 +55,8 @@ export const createRepairSchema = z.object({
 
 export const updateRepairSchema = createRepairSchema
   .partial()
-  .extend({ slug: z.string() });
+  .extend({ id: z.string() });
 
 export const archiveRepairSchema = z.object({
-  slug: z.string(),
+  id: z.string(),
 });

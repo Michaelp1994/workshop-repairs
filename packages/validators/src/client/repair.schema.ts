@@ -2,18 +2,17 @@ import { z } from "zod";
 
 import {
   assetId,
-  clientId,
   repairStatusTypeId,
   repairTypeId,
 } from "../isomorphic/ids.validators";
 
 export const repairFormSchema = z.object({
   fault: z.string().min(3),
-  clientId,
+  clientId: z.string().min(1),
   clientReference: z.string(),
   typeId: repairTypeId,
   statusId: repairStatusTypeId,
-  assetId,
+  assetId: z.string().min(1),
 });
 
 export type RepairFormInput = z.infer<typeof repairFormSchema>;
@@ -21,10 +20,10 @@ export type RepairFormInput = z.infer<typeof repairFormSchema>;
 export const defaultRepair: RepairFormInput = {
   fault: "",
   clientReference: "",
-  clientId: 0,
+  clientId: "",
   typeId: 0,
   statusId: 0,
-  assetId: 0,
+  assetId: "",
 };
 
 export const repairSearchSchema = z.object({

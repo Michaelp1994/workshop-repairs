@@ -37,13 +37,13 @@ export const createEquipmentTypeSchema = z.object({
 export const updateEquipmentTypeSchema = createEquipmentTypeSchema
   .partial()
   .extend({
-    slug: z.string(),
+    id: z.string(),
   });
 
-export const getEquipmentTypeBySlugSchema = z.object({
-  slug: z.string(),
+export const getEquipmentTypeByIdSchema = z.object({
+  id: z.string(),
 });
 
 export const archiveEquipmentTypeSchema = z.object({
-  slug: z.string(),
+  id: z.string(),
 });

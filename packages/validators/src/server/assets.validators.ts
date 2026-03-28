@@ -3,7 +3,9 @@ import { z } from "zod";
 import {
   assetStatusId,
   clientId,
+  equipmentTypeId,
   locationId,
+  manufacturerId,
   modelId,
   repairId,
 } from "../isomorphic/ids.validators";
@@ -17,11 +19,11 @@ import {
 
 const assetFilters = z
   .object({
-    model: z.string().optional(),
-    client: z.string().optional(),
-    location: z.string().optional(),
-    manufacturer: z.string().optional(),
-    equipmentType: z.string().optional(),
+    modelId: modelId.optional(),
+    clientId: clientId.optional(),
+    locationId: locationId.optional(),
+    manufacturerId: manufacturerId.optional(),
+    equipmentTypeId: equipmentTypeId.optional(),
   })
   .default({});
 
@@ -42,8 +44,8 @@ export const getAssestsSelectSchema = getSelectSchema.extend({
 });
 export type GetAssetsSelectInput = z.infer<typeof getAssestsSelectSchema>;
 
-export const getAssetBySlugSchema = z.object({
-  slug: z.string(),
+export const getAssetByIdSchema = z.object({
+  id: z.string(),
 });
 
 export const getAssetByRepairIdSchema = z.object({
@@ -62,8 +64,8 @@ export const createAssetSchema = z.object({
 
 export const updateAssetSchema = createAssetSchema
   .partial()
-  .extend({ slug: z.string() });
+  .extend({ id: z.string() });
 
 export const archiveAssetSchema = z.object({
-  slug: z.string(),
+  id: z.string(),
 });

@@ -42,11 +42,11 @@ export const createModelSchema = z.object({
 });
 
 export const updateModelSchema = createModelSchema.partial().extend({
-  slug: z.string(),
+  id: z.string(),
 });
 
-export const getModelBySlugSchema = z.object({
-  slug: z.string(),
+export const getModelByIdSchema = z.object({
+  id: z.string(),
 });
 
 export const getModelByAssetIdSchema = z.object({
@@ -54,5 +54,5 @@ export const getModelByAssetIdSchema = z.object({
 });
 
 export const archiveModelSchema = z.object({
-  slug: z.string(),
+  id: z.string(),
 });
