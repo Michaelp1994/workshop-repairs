@@ -1,0 +1,20 @@
+[
+    {
+        "assetKeyPrefix": "AST",
+        "clientKeyPrefix": "CLI",
+        "equipmentTypeKeyPrefix": "EQU",
+        "locationKeyPrefix": "LOC",
+        "manufacturerKeyPrefix": "MAN",
+        "modelKeyPrefix": "MOD",
+        "partKeyPrefix": "PRT",
+        "repairKeyPrefix": "RPR",
+        "assetLastUsedValue": 0,
+        "clientLastUsedValue": 0,
+        "equipmentTypeLastUsedValue": 0,
+        "locationLastUsedValue": 0,
+        "manufacturerLastUsedValue": 0,
+        "modelLastUsedValue": 0,
+        "partLastUsedValue": 0,
+        "repairLastUsedValue": 0
+    }
+]

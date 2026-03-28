@@ -9,7 +9,6 @@
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "next start",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
