@@ -103,7 +103,7 @@ export default class EquipmentTypeRepository {
   ) {
     const query = tx
       .select({
-        value: equipmentTypeTable.id,
+        value: equipmentTypeTable.localId,
         label: equipmentTypeTable.name,
       })
       .from(equipmentTypeTable)

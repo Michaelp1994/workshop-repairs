@@ -36,11 +36,11 @@ interface AssetSelector {
 }
 
 export interface AssetFilters {
-  model?: number | undefined;
-  client?: number | undefined;
-  location?: number | undefined;
-  manufacturer?: number | undefined;
-  equipmentType?: number | undefined;
+  modelLocalId?: number | undefined;
+  clientLocalId?: number | undefined;
+  locationLocalId?: number | undefined;
+  manufacturerLocalId?: number | undefined;
+  equipmentTypeLocalId?: number | undefined;
 }
 
 export default class AssetRepository {
@@ -85,17 +85,25 @@ export default class AssetRepository {
         and(
           isNull(assetTable.deletedAt),
           eq(assetTable.organizationId, organizationId),
-          createTenantFilter(modelTable, filters.model, organizationId),
-          createTenantFilter(clientTable, filters.client, organizationId),
-          createTenantFilter(locationTable, filters.location, organizationId),
+          createTenantFilter(modelTable, filters.modelLocalId, organizationId),
+          createTenantFilter(
+            clientTable,
+            filters.clientLocalId,
+            organizationId,
+          ),
+          createTenantFilter(
+            locationTable,
+            filters.locationLocalId,
+            organizationId,
+          ),
           createTenantFilter(
             manufacturerTable,
-            filters.manufacturer,
+            filters.manufacturerLocalId,
             organizationId,
           ),
           createTenantFilter(
             equipmentTypeTable,
-            filters.equipmentType,
+            filters.equipmentTypeLocalId,
             organizationId,
           ),
           createGlobalFilters(globalFilter),
@@ -156,17 +164,25 @@ export default class AssetRepository {
         and(
           isNull(assetTable.deletedAt),
           eq(assetTable.organizationId, organizationId),
-          createTenantFilter(modelTable, filters.model, organizationId),
-          createTenantFilter(clientTable, filters.client, organizationId),
-          createTenantFilter(locationTable, filters.location, organizationId),
+          createTenantFilter(modelTable, filters.modelLocalId, organizationId),
+          createTenantFilter(
+            clientTable,
+            filters.clientLocalId,
+            organizationId,
+          ),
+          createTenantFilter(
+            locationTable,
+            filters.locationLocalId,
+            organizationId,
+          ),
           createTenantFilter(
             manufacturerTable,
-            filters.manufacturer,
+            filters.manufacturerLocalId,
             organizationId,
           ),
           createTenantFilter(
             equipmentTypeTable,
-            filters.equipmentType,
+            filters.equipmentTypeLocalId,
             organizationId,
           ),
           createGlobalFilters(globalFilter),
@@ -188,7 +204,7 @@ export default class AssetRepository {
   ) {
     const query = tx
       .select({
-        value: assetTable.id,
+        value: assetTable.localId,
         label: assetTable.serialNumber,
       })
       .from(assetTable)

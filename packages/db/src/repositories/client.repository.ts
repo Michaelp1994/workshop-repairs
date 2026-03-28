@@ -101,7 +101,7 @@ export default class ClientRepository {
   ) {
     const query = tx
       .select({
-        value: clientTable.id,
+        value: clientTable.localId,
         label: clientTable.name,
       })
       .from(clientTable)

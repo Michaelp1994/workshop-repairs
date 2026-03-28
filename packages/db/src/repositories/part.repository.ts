@@ -102,7 +102,7 @@ export default class PartRepository {
   ) {
     const query = tx
       .select({
-        value: partTable.id,
+        value: partTable.localId,
         label: partTable.name,
       })
       .from(partTable)

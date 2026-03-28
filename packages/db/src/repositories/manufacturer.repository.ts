@@ -106,7 +106,7 @@ export default class ManufacturerRepository {
   ) {
     const query = tx
       .select({
-        value: manufacturerTable.id,
+        value: manufacturerTable.localId,
         label: manufacturerTable.name,
       })
       .from(manufacturerTable)

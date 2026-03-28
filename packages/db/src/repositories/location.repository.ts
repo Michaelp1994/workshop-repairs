@@ -102,7 +102,7 @@ export default class LocationRepository {
   ) {
     const query = tx
       .select({
-        value: locationTable.id,
+        value: locationTable.localId,
         label: locationTable.name,
       })
       .from(locationTable)

@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { createTenantFilter } from "../helpers/createTenantFilter";
 import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
@@ -26,8 +27,8 @@ import { modelImageTable } from "../tables/modelImage.table";
 const modelFields = getTableColumns(modelTable);
 
 export interface ModelFilters {
-  manufacturerId?: number | undefined;
-  equipmentTypeId?: number | undefined;
+  manufacturerLocalId?: number | undefined;
+  equipmentTypeLocalId?: number | undefined;
 }
 export default class ModelRepository {
   async archive(
@@ -71,12 +72,16 @@ export default class ModelRepository {
         and(
           isNull(modelTable.deletedAt),
           eq(modelTable.organizationId, organizationId),
-          filters.manufacturerId
-            ? eq(modelTable.manufacturerId, filters.manufacturerId)
-            : undefined,
-          filters.equipmentTypeId
-            ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
-            : undefined,
+          createTenantFilter(
+            manufacturerTable,
+            filters.manufacturerLocalId,
+            organizationId,
+          ),
+          createTenantFilter(
+            equipmentTypeTable,
+            filters.equipmentTypeLocalId,
+            organizationId,
+          ),
           globalFilterParams,
           ...columnFilterParams,
         ),
@@ -130,12 +135,16 @@ export default class ModelRepository {
         and(
           isNull(modelTable.deletedAt),
           eq(modelTable.organizationId, organizationId),
-          filters.manufacturerId
-            ? eq(modelTable.manufacturerId, filters.manufacturerId)
-            : undefined,
-          filters.equipmentTypeId
-            ? eq(modelTable.equipmentTypeId, filters.equipmentTypeId)
-            : undefined,
+          createTenantFilter(
+            manufacturerTable,
+            filters.manufacturerLocalId,
+            organizationId,
+          ),
+          createTenantFilter(
+            equipmentTypeTable,
+            filters.equipmentTypeLocalId,
+            organizationId,
+          ),
           globalFilterParams,
           ...columnFilterParams,
         ),
@@ -155,7 +164,7 @@ export default class ModelRepository {
     const globalFilter = createGlobalFilters(input.globalFilter);
     const query = tx
       .select({
-        value: modelTable.id,
+        value: modelTable.localId,
         label: modelTable.name,
       })
       .from(modelTable)

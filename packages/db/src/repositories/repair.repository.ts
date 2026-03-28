@@ -11,6 +11,7 @@ import type {
 } from "../types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
+import { createTenantFilter } from "../helpers/createTenantFilter";
 import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../index";
 import {
@@ -31,8 +32,8 @@ import { repairTypeTable } from "../tables/repairType.table";
 const repairFields = getTableColumns(repairTable);
 
 export interface RepairFilters {
-  assetId?: number | undefined;
-  clientId?: number | undefined;
+  assetLocalId?: number | undefined;
+  clientLocalId?: number | undefined;
 }
 export default class RepairRepository {
   async archive(
@@ -65,6 +66,7 @@ export default class RepairRepository {
       .select({ count: count() })
       .from(repairTable)
       .innerJoin(assetTable, eq(repairTable.assetId, assetTable.id))
+      .innerJoin(clientTable, eq(repairTable.clientId, clientTable.id))
       .innerJoin(repairTypeTable, eq(repairTable.typeId, repairTypeTable.id))
       .innerJoin(
         repairStatusTypeTable,
@@ -72,12 +74,12 @@ export default class RepairRepository {
       )
       .where(
         and(
-          filters.assetId
-            ? eq(repairTable.assetId, filters.assetId)
-            : undefined,
-          filters.clientId
-            ? eq(repairTable.clientId, filters.clientId)
-            : undefined,
+          createTenantFilter(assetTable, filters.assetLocalId, organizationId),
+          createTenantFilter(
+            clientTable,
+            filters.clientLocalId,
+            organizationId,
+          ),
           isNull(repairTable.deletedAt),
           eq(assetTable.organizationId, organizationId),
           globalFilterParams,
@@ -137,12 +139,12 @@ export default class RepairRepository {
       )
       .where(
         and(
-          filters.assetId
-            ? eq(repairTable.assetId, filters.assetId)
-            : undefined,
-          filters.clientId
-            ? eq(repairTable.clientId, filters.clientId)
-            : undefined,
+          createTenantFilter(assetTable, filters.assetLocalId, organizationId),
+          createTenantFilter(
+            clientTable,
+            filters.clientLocalId,
+            organizationId,
+          ),
           isNull(repairTable.deletedAt),
           eq(assetTable.organizationId, organizationId),
           globalFilterParams,
@@ -162,7 +164,7 @@ export default class RepairRepository {
   ) {
     const query = tx
       .select({
-        value: repairTable.id,
+        value: repairTable.localId,
         label: repairTable.fault,
       })
       .from(repairTable)
