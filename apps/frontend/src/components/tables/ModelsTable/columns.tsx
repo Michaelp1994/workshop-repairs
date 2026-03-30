@@ -35,15 +35,15 @@ export const columns = [
       name: "Image",
     },
   }),
-  columnHelper.accessor("slug", {
+  columnHelper.accessor("id", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ getValue }) => (
       <Link
         className="font-bold hover:underline"
-        params={{ modelSlug: getValue() }}
-        to="/models/$modelSlug"
+        params={{ modelId: getValue() }}
+        to="/models/$modelId"
       >
         {getValue()}
       </Link>
@@ -108,10 +108,7 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
-          <Link
-            params={{ modelSlug: row.original.slug }}
-            to="/models/$modelSlug"
-          >
+          <Link params={{ modelId: row.original.id }} to="/models/$modelId">
             <ChevronRight className="size-4" />
           </Link>
         </Button>

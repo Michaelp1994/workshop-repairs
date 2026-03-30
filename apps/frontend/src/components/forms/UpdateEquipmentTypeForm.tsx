@@ -22,27 +22,27 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateEquipmentTypeFormProps {
-  slug: string;
+  equipmentTypeId: string;
 }
 
 export default function UpdateEquipmentTypeForm({
-  slug,
+  equipmentTypeId,
 }: UpdateEquipmentTypeFormProps) {
   const navigate = useNavigate();
   const utils = api.useUtils();
-  const [equipmentType] = api.equipmentTypes.getBySlug.useSuspenseQuery({
-    slug,
+  const [equipmentType] = api.equipmentTypes.getById.useSuspenseQuery({
+    id: equipmentTypeId,
   });
 
   const updateMutation = api.equipmentTypes.update.useMutation({
     async onSuccess(data) {
-      await utils.equipmentTypes.getBySlug.invalidate({
-        slug,
+      await utils.equipmentTypes.getById.invalidate({
+        id: equipmentTypeId,
       });
       toast.success(`Updated Equipment Type: ${data.name}`);
       await navigate({
-        to: "/equipment-types/$equipmentTypeSlug",
-        params: { equipmentTypeSlug: slug },
+        to: "/equipment-types/$equipmentTypeId",
+        params: { equipmentTypeId: equipmentTypeId },
       });
     },
     onError(errors) {
@@ -56,7 +56,7 @@ export default function UpdateEquipmentTypeForm({
   });
 
   function handleValid(values: EquipmentTypeFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: equipmentTypeId });
   }
 
   return (

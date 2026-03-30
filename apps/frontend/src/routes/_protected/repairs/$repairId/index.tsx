@@ -17,30 +17,30 @@ import RepairImages from "~/components/RepairImages";
 import RepairParts from "~/components/RepairParts";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/repairs/$repairSlug/")({
+export const Route = createFileRoute("/_protected/repairs/$repairId/")({
   component: ViewRepairPage,
 });
 
 function ViewRepairPage() {
-  const { repairSlug } = Route.useParams();
-  const [repair] = api.repairs.getBySlug.useSuspenseQuery({
-    slug: repairSlug,
+  const { repairId } = Route.useParams();
+  const [repair] = api.repairs.getById.useSuspenseQuery({
+    id: repairId,
   });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveRepairModal, { slug: repairSlug });
+    await NiceModal.show(ArchiveRepairModal, { repairId });
   }
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>{repairSlug}</PageTitle>
+          <PageTitle>{repairId}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
           <Button onClick={showArchiveModal}>Archive</Button>
           <IconButton
             linkOptions={{
-              to: "/repairs/$repairSlug/edit",
-              params: { repairSlug },
+              to: "/repairs/$repairId/edit",
+              params: { repairId },
             }}
             variant="update"
           >
@@ -48,10 +48,10 @@ function ViewRepairPage() {
           </IconButton>
         </PageHeaderActions>
       </PageHeader>
-      <RepairDetails slug={repairSlug} />
-      <RepairParts repairId={repair.id} />
-      <RepairCommentsTable repairId={repair.id} />
-      <RepairImages repairId={repair.id} />
+      <RepairDetails repairId={repairId} />
+      <RepairParts repairId={repair.id.toString()} />
+      <RepairCommentsTable repairId={repair.id.toString()} />
+      <RepairImages repairId={repair.id.toString()} />
     </PageWrapper>
   );
 }

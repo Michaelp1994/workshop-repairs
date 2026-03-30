@@ -25,12 +25,12 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateAssetFormProps {
-  slug: string;
+  assetId: string;
 }
 
-export default function UpdateAssetForm({ slug }: UpdateAssetFormProps) {
-  const [asset] = api.assets.getBySlug.useSuspenseQuery({
-    slug,
+export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
+  const [asset] = api.assets.getById.useSuspenseQuery({
+    id: assetId,
   });
 
   const updateMutation = api.assets.update.useMutation({
@@ -43,11 +43,16 @@ export default function UpdateAssetForm({ slug }: UpdateAssetFormProps) {
   });
 
   function handleValid(values: AssetFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: assetId });
   }
 
   const form = useForm({
-    values: asset,
+    values: {
+      ...asset,
+      modelId: asset.modelId.toString(),
+      locationId: asset.locationId.toString(),
+      clientId: asset.clientId.toString(),
+    },
     schema: assetFormSchema,
   });
 

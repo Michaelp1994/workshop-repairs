@@ -53,14 +53,14 @@ export const columns = [
     cell: ({ row }) => {
       async function showEditModal() {
         await NiceModal.show(UpdateModelPartModal, {
-          modelId: row.original.modelId,
-          partId: row.original.partId,
+          modelId: row.original.modelId.toString(),
+          partId: row.original.partId.toString(),
         });
       }
       async function showArchiveModal() {
         await NiceModal.show(ArchiveModelPartModal, {
-          modelId: row.original.modelId,
-          partId: row.original.partId,
+          modelId: row.original.modelId.toString(),
+          partId: row.original.partId.toString(),
         });
       }
       return (

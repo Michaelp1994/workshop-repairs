@@ -25,22 +25,22 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface CreateRepairPartFormProps {
-  slug: string;
+  repairId: string;
 }
 
 export default function CreateRepairPartForm({
-  slug,
+  repairId,
 }: CreateRepairPartFormProps) {
   const utils = api.useUtils();
-  const [repair] = api.repairs.getBySlug.useSuspenseQuery({
-    slug,
+  const [repair] = api.repairs.getById.useSuspenseQuery({
+    id: repairId,
   });
 
   const createMutation = api.repairParts.create.useMutation({
     async onSuccess() {
       await utils.repairParts.getAll.invalidate();
       await utils.repairParts.countAll.invalidate();
-      toast.success(`Part was added to ${slug}`);
+      toast.success(`Part was added to ${repairId}`);
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -53,7 +53,7 @@ export default function CreateRepairPartForm({
   });
 
   function handleValid(values: RepairPartFormInput) {
-    createMutation.mutate({ ...values, repairId });
+    createMutation.mutate({ ...values, repairId: repairId });
   }
 
   return (
@@ -73,7 +73,7 @@ export default function CreateRepairPartForm({
               <FormItem>
                 <FormLabel>Part</FormLabel>
                 <FormControl>
-                  <ModelPartSelect modelId={repair.asset.modelId} {...field} />
+                  <ModelPartSelect modelId={repair.model.id.toString()} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -27,8 +27,8 @@ export default function CreatePartForm() {
   const createMutation = api.parts.create.useMutation({
     async onSuccess(data) {
       await navigate({
-        to: "/parts/$partSlug",
-        params: { partSlug: data.slug },
+        to: "/parts/$partId",
+        params: { partId: data.id },
       });
       toast.success(`Part ${data.name} created`);
     },

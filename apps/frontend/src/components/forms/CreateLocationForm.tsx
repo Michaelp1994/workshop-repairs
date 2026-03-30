@@ -30,8 +30,8 @@ export default function CreateLocationForm() {
       await utils.locations.getAll.invalidate();
       toast.success(`Location ${data.name} created`);
       await navigate({
-        to: "/locations/$locationSlug",
-        params: { locationSlug: data.slug },
+        to: "/locations/$locationId",
+        params: { locationId: data.id },
       });
     },
     onError(errors) {

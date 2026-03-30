@@ -1,30 +1,30 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
-import UpdateAssetForm from "~/components/forms/UpdateAssetForm";
+import UpdateRepairForm from "~/components/forms/UpdateRepairForm";
 import {
   PageHeader,
   PageHeaderText,
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-
-export const Route = createFileRoute("/_protected/assets/$assetSlug/edit")({
-  component: EditAssetPage,
+export const Route = createFileRoute("/_protected/repairs/$repairId/edit")({
+  component: EditRepairPage,
 });
 
-function EditAssetPage() {
-  const { assetSlug } = Route.useParams();
+function EditRepairPage() {
+  const { repairId } = Route.useParams();
+
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>Edit Asset</PageTitle>
+          <PageTitle>Edit Repair</PageTitle>
         </PageHeaderText>
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateAssetForm slug={assetSlug} />
+          <UpdateRepairForm repairId={repairId} />
         </CardContent>
       </Card>
     </PageWrapper>

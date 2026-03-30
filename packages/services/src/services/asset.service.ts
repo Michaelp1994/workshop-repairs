@@ -118,7 +118,7 @@ export default class AssetService {
 
       return {
         ...asset,
-        slug,
+        id: slug,
       };
     });
   }

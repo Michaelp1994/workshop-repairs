@@ -14,11 +14,11 @@ import { api } from "~/trpc/client";
 import { columns } from "./AssetsTable/columns";
 
 interface ClientAssetsTableProps {
-  clientSlug: string;
+  clientId: string;
 }
 
 export default function ClientAssetsTable({
-  clientSlug,
+  clientId,
 }: ClientAssetsTableProps) {
   const { dataState, countState, tableState } = useDataTableState({
     columns: {

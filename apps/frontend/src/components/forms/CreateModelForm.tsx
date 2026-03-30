@@ -34,8 +34,8 @@ export default function CreateModelForm() {
     async onSuccess(data) {
       toast.success(`Model ${data.name} created`);
       await navigate({
-        to: "/models/$modelSlug",
-        params: { modelSlug: data.slug },
+        to: "/models/$modelId",
+        params: { modelId: data.id },
       });
     },
     onError(errors) {

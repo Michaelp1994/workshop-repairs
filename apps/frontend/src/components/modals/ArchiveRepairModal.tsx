@@ -17,13 +17,13 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface ArchiveRepairModalProps extends BaseModalProps {
-  slug: string;
+  repairId: string;
 }
 
 function ArchiveRepairModal({
   isOpen,
   onOpenChange,
-  slug,
+  repairId,
 }: ArchiveRepairModalProps) {
   const utils = api.useUtils();
   const archiveMutation = api.repairs.archive.useMutation({
@@ -43,7 +43,7 @@ function ArchiveRepairModal({
         <DialogOverlay />
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Archive {slug}</DialogTitle>
+            <DialogTitle>Archive {repairId}</DialogTitle>
             <DialogDescription>
               Are you sure you wish to archive this repair?
             </DialogDescription>
@@ -51,7 +51,7 @@ function ArchiveRepairModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ slug })}
+              onClick={() => archiveMutation.mutate({ id: repairId })}
               variant="destructive"
             >
               Yes, I am sure

@@ -36,8 +36,8 @@ export default function CreateRepairForm() {
     async onSuccess(values) {
       toast.success("Repair created");
       await navigate({
-        to: "/repairs/$repairSlug",
-        params: { repairSlug: values.slug },
+        to: "/repairs/$repairId",
+        params: { repairId: values.id },
       });
     },
     onError(errors) {

@@ -15,29 +15,29 @@ import {
 import AssetRepairsTable from "~/components/tables/AssetRepairsTable";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/assets/$assetSlug/")({
+export const Route = createFileRoute("/_protected/assets/$assetId/")({
   component: ViewAssetPage,
 });
 
 function ViewAssetPage() {
-  const { assetSlug } = Route.useParams();
+  const { assetId } = Route.useParams();
 
-  const [asset] = api.assets.getBySlug.useSuspenseQuery({ slug: assetSlug });
+  const [asset] = api.assets.getById.useSuspenseQuery({ id: assetId });
 
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveAssetModal, { slug: assetSlug });
+    await NiceModal.show(ArchiveAssetModal, { assetId });
   }
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>{assetSlug}</PageTitle>
+          <PageTitle>{assetId}</PageTitle>
         </PageHeaderText>
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/assets/$assetSlug/edit",
-              params: { assetSlug },
+              to: "/assets/$assetId/edit",
+              params: { assetId },
             }}
             variant="update"
           >
@@ -46,8 +46,8 @@ function ViewAssetPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <AssetDetails slug={assetSlug} />
-      <AssetRepairsTable assetId={asset.id} />
+      <AssetDetails assetId={assetId} />
+      <AssetRepairsTable assetId={asset.id.toString()} />
     </PageWrapper>
   );
 }

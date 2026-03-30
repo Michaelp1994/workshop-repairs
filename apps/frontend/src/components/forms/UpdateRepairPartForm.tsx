@@ -48,7 +48,7 @@ export default function UpdateRepairPartForm({
   });
 
   const form = useForm({
-    values: repairPart,
+    values: { ...repairPart, partId: repairPart.partId.toString() },
     schema: repairPartFormSchema,
   });
 
@@ -71,7 +71,7 @@ export default function UpdateRepairPartForm({
                 <FormLabel>Part</FormLabel>
                 <FormControl>
                   <ModelPartSelect
-                    modelId={repairPart.assets.modelId}
+                    modelId={repairPart.assets.modelId.toString()}
                     {...field}
                   />
                 </FormControl>

@@ -22,21 +22,21 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface BaseFormProps {
-  clientSlug: string;
+  clientId: string;
 }
 
-export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
-  const [client] = api.clients.getBySlug.useSuspenseQuery({ slug: clientSlug });
+export default function UpdateClientForm({ clientId }: BaseFormProps) {
+  const [client] = api.clients.getById.useSuspenseQuery({ id: clientId });
   const navigate = useNavigate();
   const utils = api.useUtils();
 
   const updateMutation = api.clients.update.useMutation({
     async onSuccess() {
       toast.success(`Client updated`);
-      await utils.clients.getBySlug.invalidate({ slug: clientSlug });
+      await utils.clients.getById.invalidate({ id: clientId });
       await navigate({
-        to: "/clients/$clientSlug",
-        params: { clientSlug },
+        to: "/clients/$clientId",
+        params: { clientId },
       });
     },
     onError(errors) {
@@ -50,7 +50,7 @@ export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
   });
 
   function handleValid(values: ClientFormInput) {
-    updateMutation.mutate({ ...values, slug: clientSlug });
+    updateMutation.mutate({ ...values, id: clientId });
   }
 
   return (

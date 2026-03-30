@@ -21,15 +21,15 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("slug", {
+  columnHelper.accessor("id", {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ getValue }) => (
       <Link
         className="font-bold hover:underline"
-        params={{ equipmentTypeSlug: getValue() }}
-        to="/equipment-types/$equipmentTypeSlug"
+        params={{ equipmentTypeId: getValue() }}
+        to="/equipment-types/$equipmentTypeId"
       >
         {getValue()}
       </Link>
@@ -73,8 +73,8 @@ export const columns = [
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
           <Link
-            params={{ equipmentTypeSlug: row.original.slug }}
-            to="/equipment-types/$equipmentTypeSlug"
+            params={{ equipmentTypeId: row.original.id }}
+            to="/equipment-types/$equipmentTypeId"
           >
             <ChevronRight className="size-4" />
           </Link>

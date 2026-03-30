@@ -15,17 +15,17 @@ import {
 } from "~/components/Page";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/locations/$locationSlug/")({
+export const Route = createFileRoute("/_protected/locations/$locationId/")({
   component: ViewLocationPage,
 });
 
 function ViewLocationPage() {
-  const { locationSlug } = Route.useParams();
-  const [location] = api.locations.getBySlug.useSuspenseQuery({
-    slug: locationSlug,
+  const { locationId } = Route.useParams();
+  const [location] = api.locations.getById.useSuspenseQuery({
+    id: locationId,
   });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveLocationModal, { slug: locationSlug });
+    await NiceModal.show(ArchiveLocationModal, { locationId });
   }
   return (
     <PageWrapper>
@@ -36,8 +36,8 @@ function ViewLocationPage() {
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/locations/$locationSlug/edit",
-              params: { locationSlug },
+              to: "/locations/$locationId/edit",
+              params: { locationId },
             }}
             variant="update"
           >
@@ -46,8 +46,8 @@ function ViewLocationPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <LocationDetails slug={locationSlug} />
-      <LocationAssetsTable locationId={location.id} />
+      <LocationDetails locationId={locationId} />
+      <LocationAssetsTable locationId={location.id.toString()} />
     </PageWrapper>
   );
 }

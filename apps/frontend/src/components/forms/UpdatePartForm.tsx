@@ -24,20 +24,20 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdatePartFormProps {
-  slug: string;
+  partId: string;
 }
 
-export default function UpdatePartForm({ slug }: UpdatePartFormProps) {
+export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
   const navigate = useNavigate();
-  const [part] = api.parts.getBySlug.useSuspenseQuery({
-    slug,
+  const [part] = api.parts.getById.useSuspenseQuery({
+    id: partId,
   });
 
   const updateMutation = api.parts.update.useMutation({
     async onSuccess(values) {
       await navigate({
-        to: "/parts/$partSlug",
-        params: { partSlug: slug },
+        to: "/parts/$partId",
+        params: { partId: partId },
       });
       toast.success(`Part ${values.name} updated`);
     },
@@ -52,7 +52,7 @@ export default function UpdatePartForm({ slug }: UpdatePartFormProps) {
   });
 
   function handleValid(values: PartFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: partId });
   }
 
   return (

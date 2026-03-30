@@ -1,30 +1,33 @@
 import { Card, CardContent } from "@repo/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
-import UpdateRepairForm from "~/components/forms/UpdateRepairForm";
+import UpdateLocationForm from "~/components/forms/UpdateLocationForm";
 import {
   PageHeader,
   PageHeaderText,
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
-export const Route = createFileRoute("/_protected/repairs/$repairSlug/edit")({
-  component: EditRepairPage,
+
+export const Route = createFileRoute(
+  "/_protected/locations/$locationId/edit",
+)({
+  component: EditLocationPage,
 });
 
-function EditRepairPage() {
-  const { repairSlug } = Route.useParams();
+function EditLocationPage() {
+  const { locationId } = Route.useParams();
 
   return (
     <PageWrapper>
       <PageHeader>
         <PageHeaderText>
-          <PageTitle>Edit Repair</PageTitle>
+          <PageTitle>Edit Location</PageTitle>
         </PageHeaderText>
       </PageHeader>
       <Card>
         <CardContent>
-          <UpdateRepairForm slug={repairSlug} />
+          <UpdateLocationForm locationId={locationId} />
         </CardContent>
       </Card>
     </PageWrapper>

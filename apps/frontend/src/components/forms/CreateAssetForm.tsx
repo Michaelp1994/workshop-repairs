@@ -34,8 +34,8 @@ export default function CreateAssetForm() {
     async onSuccess(data) {
       toast.success(`Asset ${data.assetNumber} created`);
       await navigate({
-        to: "/assets/$assetSlug",
-        params: { assetSlug: data.slug },
+        to: "/assets/$assetId",
+        params: { assetId: data.id },
       });
     },
     onError(errors) {

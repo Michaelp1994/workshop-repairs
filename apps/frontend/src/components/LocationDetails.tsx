@@ -5,11 +5,11 @@ import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
 interface LocationDetailsProps {
-  slug: string;
+  locationId: string;
 }
 
-export default function LocationDetails({ slug }: LocationDetailsProps) {
-  const [location] = api.locations.getBySlug.useSuspenseQuery({ slug });
+export default function LocationDetails({ locationId }: LocationDetailsProps) {
+  const [location] = api.locations.getById.useSuspenseQuery({ id: locationId });
   return (
     <Card>
       <CardHeader>

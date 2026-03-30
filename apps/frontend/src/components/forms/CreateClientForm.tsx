@@ -28,8 +28,8 @@ export default function CreateClientForm() {
     async onSuccess(data) {
       toast.success(`Client created`);
       await navigate({
-        to: "/clients/$clientSlug",
-        params: { clientSlug: data.slug },
+        to: "/clients/$clientId",
+        params: { clientId: data.id },
       });
     },
     onError(errors) {

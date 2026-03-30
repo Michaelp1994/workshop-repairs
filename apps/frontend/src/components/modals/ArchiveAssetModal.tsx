@@ -17,11 +17,11 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface ArchiveAssetModalProps extends BaseModalProps {
-  slug: string;
+  assetId: string;
 }
 
 function ArchiveAssetModal({
-  slug,
+  assetId,
   isOpen,
   onOpenChange,
 }: ArchiveAssetModalProps) {
@@ -30,10 +30,10 @@ function ArchiveAssetModal({
     async onSuccess() {
       await utils.assets.getAll.invalidate();
       await utils.assets.countAll.invalidate();
-      await utils.assets.getBySlug.invalidate({
-        slug,
+      await utils.assets.getById.invalidate({
+        id: assetId,
       });
-      toast.success(`${slug} has been archived.`);
+      toast.success(`${assetId} has been archived.`);
       onOpenChange();
     },
     onError(error) {
@@ -55,7 +55,7 @@ function ArchiveAssetModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ slug })}
+              onClick={() => archiveMutation.mutate({ id: assetId })}
               variant="destructive"
             >
               Yes, I am sure

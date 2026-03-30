@@ -36,7 +36,7 @@ export default function CreateModelPartForm({
     async onSuccess(data) {
       await utils.partsToModels.getByIds.invalidate({
         modelId,
-        partId: data.partId,
+        partId: data.partId.toString(),
       });
       await utils.partsToModels.getAllPartsByModelId.invalidate();
       await utils.partsToModels.getAllModelsByPartId.invalidate();

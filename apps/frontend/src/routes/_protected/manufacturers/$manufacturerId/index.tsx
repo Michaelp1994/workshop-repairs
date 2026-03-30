@@ -16,18 +16,18 @@ import {
 import { api } from "~/trpc/client";
 
 export const Route = createFileRoute(
-  "/_protected/manufacturers/$manufacturerSlug/",
+  "/_protected/manufacturers/$manufacturerId/",
 )({
   component: ViewManufacturerPage,
 });
 
 function ViewManufacturerPage() {
-  const { manufacturerSlug } = Route.useParams();
-  const [manufacturer] = api.manufacturers.getBySlug.useSuspenseQuery({
-    slug: manufacturerSlug,
+  const { manufacturerId } = Route.useParams();
+  const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
+    id: manufacturerId,
   });
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveManufacturerModal, { slug: manufacturerSlug });
+    await NiceModal.show(ArchiveManufacturerModal, { manufacturerId });
   }
   return (
     <PageWrapper>
@@ -38,8 +38,8 @@ function ViewManufacturerPage() {
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/manufacturers/$manufacturerSlug/edit",
-              params: { manufacturerSlug },
+              to: "/manufacturers/$manufacturerId/edit",
+              params: { manufacturerId },
             }}
             variant="update"
           >
@@ -48,8 +48,8 @@ function ViewManufacturerPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <ManufacturerDetails slug={manufacturerSlug} />
-      <ManufacturerModelsTable manufacturerId={manufacturer.id} />
+      <ManufacturerDetails manufacturerId={manufacturerId} />
+      <ManufacturerModelsTable manufacturerId={manufacturer.id.toString()} />
     </PageWrapper>
   );
 }

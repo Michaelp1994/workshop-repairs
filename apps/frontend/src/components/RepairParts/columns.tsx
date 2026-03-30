@@ -128,13 +128,13 @@ export const columns = [
     cell: ({ row }) => {
       async function showEditModal() {
         await NiceModal.show(UpdateRepairPartModal, {
-          repairId: row.original.repairId,
+          repairId: row.original.repairId.toString(),
           repairPartId: row.original.id,
         });
       }
       async function showArchiveModal() {
         await NiceModal.show(ArchiveRepairPartModal, {
-          repairId: row.original.repairId,
+          repairId: row.original.repairId.toString(),
           repairPartId: row.original.id,
         });
       }

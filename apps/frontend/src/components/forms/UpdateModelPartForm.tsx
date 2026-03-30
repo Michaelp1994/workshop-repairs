@@ -50,7 +50,7 @@ export default function UpdateModelPartForm({
   });
   const form = useForm({
     schema: modelPartFormSchema,
-    values: partToModel,
+    values: { ...partToModel, partId: partToModel.partId.toString() },
   });
 
   function handleValid(data: ModelPartFormInput) {

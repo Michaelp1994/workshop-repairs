@@ -16,16 +16,16 @@ import ClientAssetsTable from "~/components/tables/ClientAssetsTable";
 import ClientRepairsTable from "~/components/tables/ClientRepairsTable";
 import { api } from "~/trpc/client";
 
-export const Route = createFileRoute("/_protected/clients/$clientSlug/")({
+export const Route = createFileRoute("/_protected/clients/$clientId/")({
   component: ViewClientPage,
 });
 
 function ViewClientPage() {
-  const { clientSlug } = Route.useParams();
-  const [client] = api.clients.getBySlug.useSuspenseQuery({ slug: clientSlug });
+  const { clientId } = Route.useParams();
+  const [client] = api.clients.getById.useSuspenseQuery({ id: clientId });
 
   async function showArchiveModal() {
-    await NiceModal.show(ArchiveClientModal, { slug: clientSlug });
+    await NiceModal.show(ArchiveClientModal, { clientId });
   }
   return (
     <PageWrapper>
@@ -36,8 +36,8 @@ function ViewClientPage() {
         <PageHeaderActions>
           <IconButton
             linkOptions={{
-              to: "/clients/$clientSlug/edit",
-              params: { clientSlug },
+              to: "/clients/$clientId/edit",
+              params: { clientId },
             }}
             variant="update"
           >
@@ -46,9 +46,9 @@ function ViewClientPage() {
           <Button onClick={showArchiveModal}>Archive</Button>
         </PageHeaderActions>
       </PageHeader>
-      <ClientDetails clientSlug={clientSlug} />
-      <ClientAssetsTable clientSlug={clientSlug} />
-      <ClientRepairsTable clientSlug={clientSlug} />
+      <ClientDetails clientId={clientId} />
+      <ClientAssetsTable clientId={clientId} />
+      <ClientRepairsTable clientId={clientId} />
     </PageWrapper>
   );
 }
