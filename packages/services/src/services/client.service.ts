@@ -29,7 +29,7 @@ export default class ClientService {
   async archiveClient(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedClient = await this.clientRepository.archive(
+      const { id, ...archivedClient } = await this.clientRepository.archive(
         tx,
         metadata,
         localId,
@@ -43,7 +43,7 @@ export default class ClientService {
         );
 
       const slug = createSlug(sequence.clientKeyPrefix, localId);
-      return { slug, ...archivedClient };
+      return { id: slug, ...archivedClient };
     });
   }
 
@@ -68,13 +68,13 @@ export default class ClientService {
         ...metadata,
         localId: sequence.clientLastUsedValue,
       };
-      const client = await this.clientRepository.create(tx, values);
+      const { id, ...client } = await this.clientRepository.create(tx, values);
 
       const slug = createSlug(sequence.clientKeyPrefix, client.localId);
 
       return {
+        id: slug,
         ...client,
-        slug,
       };
     });
   }
@@ -94,7 +94,7 @@ export default class ClientService {
 
     return allClients.map(({ localId, ...client }) => ({
       ...client,
-      slug: createSlug(sequence.clientKeyPrefix, localId),
+      id: createSlug(sequence.clientKeyPrefix, localId),
     }));
   }
 
@@ -137,7 +137,7 @@ export default class ClientService {
         ...input,
         ...metadata,
       };
-      const client = await this.clientRepository.update(
+      const { id, ...client } = await this.clientRepository.update(
         tx,
         values,
         localId,
@@ -152,7 +152,7 @@ export default class ClientService {
 
       const slug = createSlug(sequence.clientKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...client,
       };
     });

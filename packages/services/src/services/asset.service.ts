@@ -43,7 +43,7 @@ export default class AssetService {
         localId,
         organizationId: session.organizationId,
       };
-      const archivedAsset = await this.assetRepository.archive(
+      const { id, ...archivedAsset } = await this.assetRepository.archive(
         tx,
         metadata,
         where,
@@ -56,7 +56,7 @@ export default class AssetService {
         );
 
       const slug = createSlug(sequence.assetKeyPrefix, localId);
-      return { slug, ...archivedAsset };
+      return { id: slug, ...archivedAsset };
     });
   }
 
@@ -112,13 +112,13 @@ export default class AssetService {
         localId: sequence.assetLastUsedValue,
       };
 
-      const asset = await this.assetRepository.create(tx, values);
+      const { id, ...asset } = await this.assetRepository.create(tx, values);
 
       const slug = createSlug(sequence.assetKeyPrefix, asset.localId);
 
       return {
-        ...asset,
         id: slug,
+        ...asset,
       };
     });
   }
@@ -139,9 +139,9 @@ export default class AssetService {
       session.organizationId,
     );
 
-    return allAssets.map(({ localId, ...asset }) => ({
+    return allAssets.map(({ id, localId, ...asset }) => ({
+      id: createSlug(sequence.assetKeyPrefix, localId),
       ...asset,
-      slug: createSlug(sequence.assetKeyPrefix, localId),
     }));
   }
 
@@ -237,7 +237,7 @@ export default class AssetService {
         organizationId: session.organizationId,
       };
 
-      const updatedAsset = await this.assetRepository.update(tx, values, where);
+      const { id, ...updatedAsset } = await this.assetRepository.update(tx, values, where);
 
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
@@ -247,7 +247,7 @@ export default class AssetService {
 
       const slug = createSlug(sequence.assetKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...updatedAsset,
       };
     });

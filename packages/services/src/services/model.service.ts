@@ -33,7 +33,7 @@ export default class ModelService {
   async archiveModel(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedModel = await this.modelRepository.archive(
+      const { id, ...archivedModel } = await this.modelRepository.archive(
         tx,
         metadata,
         localId,
@@ -48,7 +48,7 @@ export default class ModelService {
 
       const slug = createSlug(sequence.modelKeyPrefix, localId);
 
-      return { slug, ...archivedModel };
+      return { id: slug, ...archivedModel };
     });
   }
 
@@ -95,13 +95,13 @@ export default class ModelService {
         ...metadata,
         localId: sequence.modelLastUsedValue,
       };
-      const model = await this.modelRepository.create(tx, values);
+      const { id, ...model } = await this.modelRepository.create(tx, values);
 
       const slug = createSlug(sequence.modelKeyPrefix, model.localId);
 
       return {
+        id: slug,
         ...model,
-        slug,
       };
     });
   }
@@ -123,7 +123,7 @@ export default class ModelService {
     );
     return allModels.map(({ localId, ...model }) => ({
       ...model,
-      slug: createSlug(sequence.modelKeyPrefix, localId),
+      id: createSlug(sequence.modelKeyPrefix, localId),
       defaultImageUrl: model.defaultImageUrl
         ? getModelImageUrlFromKey(model.defaultImageUrl)
         : null,
@@ -203,7 +203,7 @@ export default class ModelService {
         ...metadata,
       };
 
-      const model = await this.modelRepository.update(
+      const { id, ...model } = await this.modelRepository.update(
         tx,
         values,
         localId,
@@ -219,7 +219,7 @@ export default class ModelService {
       const slug = createSlug(sequence.modelKeyPrefix, localId);
 
       return {
-        slug,
+        id: slug,
         ...model,
       };
     });

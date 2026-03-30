@@ -32,7 +32,7 @@ export default class RepairService {
   async archiveRepair(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedRepair = await this.repairRepository.archive(
+      const { id, ...archivedRepair } = await this.repairRepository.archive(
         tx,
         metadata,
         localId,
@@ -47,7 +47,7 @@ export default class RepairService {
 
       const slug = createSlug(sequence.repairKeyPrefix, localId);
 
-      return { slug, ...archivedRepair };
+      return { id: slug, ...archivedRepair };
     });
   }
 
@@ -97,13 +97,13 @@ export default class RepairService {
         ...metadata,
         localId: sequence.repairLastUsedValue,
       };
-      const repair = await this.repairRepository.create(tx, values);
+      const { id, ...repair } = await this.repairRepository.create(tx, values);
 
       const slug = createSlug(sequence.repairKeyPrefix, repair.localId);
 
       return {
+        id: slug,
         ...repair,
-        slug,
       };
     });
   }
@@ -125,7 +125,7 @@ export default class RepairService {
     );
     return allRepairs.map(({ localId, ...repair }) => ({
       ...repair,
-      slug: createSlug(sequence.repairKeyPrefix, localId),
+      id: createSlug(sequence.repairKeyPrefix, localId),
     }));
   }
 
@@ -205,7 +205,7 @@ export default class RepairService {
         ...metadata,
       };
 
-      const repair = await this.repairRepository.update(
+      const { id, ...repair } = await this.repairRepository.update(
         tx,
         values,
         localId,
@@ -221,7 +221,7 @@ export default class RepairService {
       const slug = createSlug(sequence.repairKeyPrefix, localId);
 
       return {
-        slug,
+        id: slug,
         ...repair,
       };
     });

@@ -28,7 +28,7 @@ export default class PartService {
   async archivePart(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedPart = await this.partRepository.archive(
+      const { id, ...archivedPart } = await this.partRepository.archive(
         tx,
         metadata,
         localId,
@@ -42,7 +42,7 @@ export default class PartService {
         );
 
       const slug = createSlug(sequence.partKeyPrefix, localId);
-      return { slug, ...archivedPart };
+      return { id: slug, ...archivedPart };
     });
   }
 
@@ -67,13 +67,13 @@ export default class PartService {
         ...metadata,
         localId: sequence.partLastUsedValue,
       };
-      const part = await this.partRepository.create(tx, values);
+      const { id, ...part } = await this.partRepository.create(tx, values);
 
       const slug = createSlug(sequence.partKeyPrefix, part.localId);
 
       return {
+        id: slug,
         ...part,
-        slug,
       };
     });
   }
@@ -92,7 +92,7 @@ export default class PartService {
     );
     return allParts.map(({ localId, ...part }) => ({
       ...part,
-      slug: createSlug(sequence.partKeyPrefix, localId),
+      id: createSlug(sequence.partKeyPrefix, localId),
     }));
   }
 
@@ -132,7 +132,7 @@ export default class PartService {
         ...input,
         ...metadata,
       };
-      const part = await this.partRepository.update(
+      const { id, ...part } = await this.partRepository.update(
         tx,
         values,
         localId,
@@ -147,7 +147,7 @@ export default class PartService {
 
       const slug = createSlug(sequence.partKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...part,
       };
     });

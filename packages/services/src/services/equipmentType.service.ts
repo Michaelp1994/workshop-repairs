@@ -29,7 +29,7 @@ export default class EquipmentTypeService {
   async archiveEquipmentType(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const equipmentType = await this.equipmentTypeRepository.archive(
+      const { id, ...equipmentType } = await this.equipmentTypeRepository.archive(
         tx,
         metadata,
         localId,
@@ -43,7 +43,7 @@ export default class EquipmentTypeService {
 
       const slug = createSlug(sequence.equipmentTypeKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...equipmentType,
       };
     });
@@ -74,7 +74,7 @@ export default class EquipmentTypeService {
         ...input,
         ...metadata,
       };
-      const equipmentType = await this.equipmentTypeRepository.create(
+      const { id, ...equipmentType } = await this.equipmentTypeRepository.create(
         tx,
         values,
       );
@@ -84,7 +84,7 @@ export default class EquipmentTypeService {
         equipmentType.localId,
       );
       return {
-        slug,
+        id: slug,
         ...equipmentType,
       };
     });
@@ -104,7 +104,7 @@ export default class EquipmentTypeService {
     );
     return allEquipmentTypes.map(({ localId, ...client }) => ({
       ...client,
-      slug: createSlug(sequence.equipmentTypeKeyPrefix, localId),
+      id: createSlug(sequence.equipmentTypeKeyPrefix, localId),
     }));
   }
 
@@ -144,7 +144,7 @@ export default class EquipmentTypeService {
     return await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
       const values = { ...input, ...metadata };
-      const equipmentType = await this.equipmentTypeRepository.update(
+      const { id, ...equipmentType } = await this.equipmentTypeRepository.update(
         tx,
         values,
         localId,
@@ -158,7 +158,7 @@ export default class EquipmentTypeService {
 
       const slug = createSlug(sequence.equipmentTypeKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...equipmentType,
       };
     });

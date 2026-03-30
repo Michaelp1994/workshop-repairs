@@ -29,7 +29,7 @@ export default class ManufacturerService {
   async archiveManufacturer(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const manufacturer = await this.manufacturerRepository.archive(
+      const { id, ...manufacturer } = await this.manufacturerRepository.archive(
         tx,
         metadata,
         localId,
@@ -44,7 +44,7 @@ export default class ManufacturerService {
 
       const slug = createSlug(sequence.manufacturerKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...manufacturer,
       };
     });
@@ -75,15 +75,15 @@ export default class ManufacturerService {
         ...metadata,
         ...input,
       };
-      const manufacturer = await this.manufacturerRepository.create(tx, values);
+      const { id, ...manufacturer } = await this.manufacturerRepository.create(tx, values);
 
       const slug = createSlug(
         sequence.manufacturerKeyPrefix,
         manufacturer.localId,
       );
       return {
+        id: slug,
         ...manufacturer,
-        slug,
       };
     });
   }
@@ -102,7 +102,7 @@ export default class ManufacturerService {
     );
     return allManufacturers.map(({ localId, ...manufacturer }) => ({
       ...manufacturer,
-      slug: createSlug(sequence.manufacturerKeyPrefix, localId),
+      id: createSlug(sequence.manufacturerKeyPrefix, localId),
     }));
   }
 
@@ -145,7 +145,7 @@ export default class ManufacturerService {
         ...metadata,
         ...input,
       };
-      const manufacturer = await this.manufacturerRepository.update(
+      const { id, ...manufacturer } = await this.manufacturerRepository.update(
         tx,
         values,
         localId,
@@ -160,7 +160,7 @@ export default class ManufacturerService {
 
       const slug = createSlug(sequence.manufacturerKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...manufacturer,
       };
     });

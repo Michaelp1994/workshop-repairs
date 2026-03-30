@@ -29,7 +29,7 @@ export default class LocationService {
   async archiveLocation(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const archivedLocation = await this.locationRepository.archive(
+      const { id, ...archivedLocation } = await this.locationRepository.archive(
         tx,
         metadata,
         localId,
@@ -43,7 +43,7 @@ export default class LocationService {
         );
 
       const slug = createSlug(sequence.locationKeyPrefix, localId);
-      return { slug, ...archivedLocation };
+      return { id: slug, ...archivedLocation };
     });
   }
 
@@ -74,12 +74,12 @@ export default class LocationService {
         ...metadata,
         localId: sequence.locationLastUsedValue,
       };
-      const location = await this.locationRepository.create(tx, values);
+      const { id, ...location } = await this.locationRepository.create(tx, values);
 
       const slug = createSlug(sequence.locationKeyPrefix, location.localId);
       return {
+        id: slug,
         ...location,
-        slug,
       };
     });
   }
@@ -98,7 +98,7 @@ export default class LocationService {
     );
     return allLocations.map(({ localId, ...location }) => ({
       ...location,
-      slug: createSlug(sequence.locationKeyPrefix, localId),
+      id: createSlug(sequence.locationKeyPrefix, localId),
     }));
   }
 
@@ -144,7 +144,7 @@ export default class LocationService {
         ...metadata,
       };
 
-      const updatedLocation = await this.locationRepository.update(
+      const { id, ...updatedLocation } = await this.locationRepository.update(
         tx,
         values,
         localId,
@@ -159,7 +159,7 @@ export default class LocationService {
 
       const slug = createSlug(sequence.locationKeyPrefix, localId);
       return {
-        slug,
+        id: slug,
         ...updatedLocation,
       };
     });
