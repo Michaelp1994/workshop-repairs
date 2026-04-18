@@ -40,12 +40,26 @@ function RootComponent() {
 function GlobalError({ reset, error }: ErrorComponentProps) {
   console.log(error);
   return (
-    <html>
-      <body>
-        <h2>Something went wrong (Global)!</h2>
-        <button onClick={() => reset()}>Try again</button>
-      </body>
-    </html>
+    <div className="grid min-h-screen w-full place-content-center p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-center">Error</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Ghost className="text-muted-foreground mx-auto h-20 w-20" />
+          <h2>Something went wrong (Global)!</h2>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={() => reset()}>Try again</Button>
+          <Button asChild>
+            <Link to="/dashboard">
+              <Home className="mr-2 h-4 w-4" />
+              Return Home
+            </Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }
 
