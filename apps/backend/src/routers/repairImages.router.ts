@@ -11,6 +11,7 @@ import {
 } from "@repo/validators/server/repairImages.validators";
 
 import { env } from "../env";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
@@ -34,9 +35,13 @@ export default function repairImageRouter(
       }),
     getAllByRepairId: organizationProcedure
       .input(getAllRepairImagesByRepairIdSchema)
-      .query(async ({ input }) => {
+      .query(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
         const allRepairImages =
-          await repairImageService.getAllRepairImagesByRepairId(input.repairId);
+          await repairImageService.getAllRepairImagesByRepairId(
+            repairLocalId,
+            ctx.session,
+          );
         return allRepairImages.map((repairImage) => ({
           ...repairImage,
           url: `${env.imageUrl}/repairImages/${repairImage.url}`,
@@ -59,7 +64,11 @@ export default function repairImageRouter(
     create: organizationProcedure
       .input(createRepairImageSchema)
       .mutation(async ({ input, ctx }) => {
-        return await repairImageService.createRepairImage(input, ctx.session);
+        const repairLocalId = splitSlug(input.repairId).localId;
+        return await repairImageService.createRepairImage(
+          { caption: input.caption, fileName: input.fileName, repairLocalId },
+          ctx.session,
+        );
       }),
     update: organizationProcedure
       .input(updateRepairImageSchema)

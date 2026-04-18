@@ -150,6 +150,8 @@ export const partService = new PartService(
 export const partToModelService = new PartToModelService(
   db,
   partToModelRepository,
+  modelRepository,
+  partRepository,
 );
 export const repairService = new RepairService(
   db,
@@ -161,10 +163,12 @@ export const repairService = new RepairService(
 export const repairCommentService = new RepairCommentService(
   db,
   repairCommentRepository,
+  repairRepository,
 );
 export const repairImageService = new RepairImageService(
   db,
   repairImageRepository,
+  repairRepository,
 );
 export const repairPartService = new RepairPartService(
   db,

@@ -13,6 +13,7 @@ import {
 } from "@repo/validators/server/modelImages.validators";
 
 import { getModelImageUrlFromKey } from "../../../../packages/services/src/helpers/s3";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
@@ -43,11 +44,12 @@ export default function modelImageRouter(
     getAllByModelId: organizationProcedure
       .input(getAllModelImagesByModelIdSchema)
       .query(async ({ input, ctx }) => {
-        const model = await modelService.getModel(input.modelId, ctx.session);
+        const modelLocalId = splitSlug(input.modelId).localId;
+        const model = await modelService.getModel(modelLocalId, ctx.session);
 
         const allModelImages =
           await modelImageService.getAllModelImagesByModelId(
-            input.modelId,
+            modelLocalId,
             ctx.session,
           );
 
@@ -78,7 +80,11 @@ export default function modelImageRouter(
     create: organizationProcedure
       .input(createModelImageSchema)
       .mutation(async ({ input, ctx }) => {
-        return await modelImageService.createModelImage(input, ctx.session);
+        const modelLocalId = splitSlug(input.modelId).localId;
+        return await modelImageService.createModelImage(
+          { caption: input.caption, fileName: input.fileName, modelLocalId },
+          ctx.session,
+        );
       }),
     update: organizationProcedure
       .input(updateModelImageSchema)

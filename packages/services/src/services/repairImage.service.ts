@@ -1,7 +1,8 @@
-import type { RepairID, RepairImageID } from "@repo/validators/ids.validators";
+import type { RepairImageID } from "@repo/validators/ids.validators";
 
 import { type Database } from "@repo/db";
 import RepairImageRepository from "@repo/db/repositories/repairImage.repository";
+import RepairRepository from "@repo/db/repositories/repair.repository";
 import { randomUUID } from "crypto";
 
 import type { RepairImageInput } from "../../../db/src/tables/repairImage.table";
@@ -28,6 +29,7 @@ export default class RepairImageService {
   constructor(
     private db: Database,
     private repairImageRepository: RepairImageRepository,
+    private repairRepository: RepairRepository,
   ) {}
 
   async archiveRepairImage(id: RepairImageID, session: OrganizationSession) {
@@ -42,7 +44,10 @@ export default class RepairImageService {
   }
 
   async createRepairImage(
-    input: Omit<CreateInput<RepairImageInput>, "url"> & { fileName: string },
+    input: Omit<CreateInput<RepairImageInput>, "url" | "repairId"> & {
+      fileName: string;
+      repairLocalId: number;
+    },
     session: OrganizationSession,
   ) {
     const fileExists = await fileExistsInS3(`repairImages/${input.fileName}`);
@@ -52,9 +57,16 @@ export default class RepairImageService {
     }
 
     const createdRepairImage = await this.db.transaction(async (tx) => {
+      const repair = await this.repairRepository.getByLocalId(
+        tx,
+        input.repairLocalId,
+        session.organizationId,
+      );
       const metadata = createInsertMetadata(session);
+      const { repairLocalId: _, ...rest } = input;
       const values = {
-        ...input,
+        ...rest,
+        repairId: repair.id,
         url: input.fileName,
         ...metadata,
       };
@@ -68,8 +80,16 @@ export default class RepairImageService {
     return this.repairImageRepository.getAll(this.db, input);
   }
 
-  async getAllRepairImagesByRepairId(repairId: RepairID) {
-    return this.repairImageRepository.getAllByRepairId(this.db, repairId);
+  async getAllRepairImagesByRepairId(
+    repairLocalId: number,
+    session: OrganizationSession,
+  ) {
+    const repair = await this.repairRepository.getByLocalId(
+      this.db,
+      repairLocalId,
+      session.organizationId,
+    );
+    return this.repairImageRepository.getAllByRepairId(this.db, repair.id);
   }
 
   async getRepairImageById(id: RepairImageID) {

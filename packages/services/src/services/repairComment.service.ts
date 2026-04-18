@@ -1,10 +1,8 @@
-import type {
-  RepairCommentID,
-  RepairID,
-} from "@repo/validators/ids.validators";
+import type { RepairCommentID } from "@repo/validators/ids.validators";
 
 import { type Database } from "@repo/db";
 import RepairCommentRepository from "@repo/db/repositories/repairComment.repository";
+import RepairRepository from "@repo/db/repositories/repair.repository";
 
 import type { RepairCommentInput } from "../../../db/src/tables/repairComment.table";
 import type {
@@ -25,6 +23,7 @@ export default class RepairCommentService {
   constructor(
     private db: Database,
     private repairCommentRepository: RepairCommentRepository,
+    private repairRepository: RepairRepository,
   ) {}
 
   async archiveRepairComment(
@@ -42,13 +41,22 @@ export default class RepairCommentService {
   }
 
   async createRepairComment(
-    input: CreateInput<RepairCommentInput>,
+    input: Omit<CreateInput<RepairCommentInput>, "repairId"> & {
+      repairLocalId: number;
+    },
     session: OrganizationSession,
   ) {
     return await this.db.transaction(async (tx) => {
+      const repair = await this.repairRepository.getByLocalId(
+        tx,
+        input.repairLocalId,
+        session.organizationId,
+      );
       const metadata = createInsertMetadata(session);
+      const { repairLocalId: _, ...rest } = input;
       const values = {
-        ...input,
+        ...rest,
+        repairId: repair.id,
         ...metadata,
       };
       return this.repairCommentRepository.create(tx, values);
@@ -59,8 +67,16 @@ export default class RepairCommentService {
     return this.repairCommentRepository.getAll(this.db, input);
   }
 
-  async getAllRepairCommentsByRepairId(repairId: RepairID) {
-    return this.repairCommentRepository.getAllByRepairId(this.db, repairId);
+  async getAllRepairCommentsByRepairId(
+    repairLocalId: number,
+    session: OrganizationSession,
+  ) {
+    const repair = await this.repairRepository.getByLocalId(
+      this.db,
+      repairLocalId,
+      session.organizationId,
+    );
+    return this.repairCommentRepository.getAllByRepairId(this.db, repair.id);
   }
 
   async getRepairCommentById(id: RepairCommentID) {

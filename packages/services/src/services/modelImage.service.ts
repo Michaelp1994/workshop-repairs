@@ -1,4 +1,4 @@
-import type { ModelID, ModelImageID } from "@repo/validators/ids.validators";
+import type { ModelImageID } from "@repo/validators/ids.validators";
 
 import { type Database } from "@repo/db";
 import ModelRepository from "@repo/db/repositories/model.repository";
@@ -44,7 +44,7 @@ export default class ModelImageService {
   }
 
   async createModelImage(
-    input: { fileName: string; modelId: ModelID; caption: string },
+    input: { fileName: string; modelLocalId: number; caption: string },
     session: OrganizationSession,
   ) {
     const fileExists = await fileExistsInS3(
@@ -53,16 +53,22 @@ export default class ModelImageService {
     if (!fileExists) {
       throw new Error("File does not exist.");
     }
+    const model = await this.modelRepository.getByLocalId(
+      this.db,
+      input.modelLocalId,
+      session.organizationId,
+    );
     const modelImages = await this.modelImageRepository.getAllByModelId(
       this.db,
-      input.modelId,
+      model.id,
     );
     const isFirstImage = modelImages.length === 0;
 
     return await this.db.transaction(async (tx) => {
       const metadata = createInsertMetadata(session);
       const values = {
-        ...input,
+        caption: input.caption,
+        modelId: model.id,
         url: input.fileName,
         ...metadata,
       };
@@ -88,8 +94,16 @@ export default class ModelImageService {
     return this.modelImageRepository.getAll(this.db, input);
   }
 
-  async getAllModelImagesByModelId(id: ModelID, _session: OrganizationSession) {
-    return this.modelImageRepository.getAllByModelId(this.db, id);
+  async getAllModelImagesByModelId(
+    modelLocalId: number,
+    session: OrganizationSession,
+  ) {
+    const model = await this.modelRepository.getByLocalId(
+      this.db,
+      modelLocalId,
+      session.organizationId,
+    );
+    return this.modelImageRepository.getAllByModelId(this.db, model.id);
   }
 
   async getModelImageById(id: ModelImageID, _session: OrganizationSession) {

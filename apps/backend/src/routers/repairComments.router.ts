@@ -9,6 +9,7 @@ import {
   updateRepairCommentSchema,
 } from "@repo/validators/server/repairComments.validators";
 
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
@@ -41,19 +42,25 @@ export default function repairCommentRouter(
       }),
     getAllByRepairId: organizationProcedure
       .input(getAllRepairCommentsByRepairIdSchema)
-      .query(async ({ input }) => {
-        const allRepairParts =
+      .query(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
+        const allRepairComments =
           await repairCommentService.getAllRepairCommentsByRepairId(
-            input.repairId,
+            repairLocalId,
+            ctx.session,
           );
 
-        return allRepairParts;
+        return allRepairComments;
       }),
     create: organizationProcedure
       .input(createRepairCommentSchema)
       .mutation(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
         const createdRepairComment =
-          await repairCommentService.createRepairComment(input, ctx.session);
+          await repairCommentService.createRepairComment(
+            { comment: input.comment, repairLocalId },
+            ctx.session,
+          );
 
         return createdRepairComment;
       }),

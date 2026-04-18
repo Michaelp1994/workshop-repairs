@@ -17,8 +17,11 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
     getAll: organizationProcedure
       .input(getAllRepairPartsSchema)
       .query(async ({ input, ctx }) => {
+        const repairLocalId = input.filters.repairId
+          ? splitSlug(input.filters.repairId).localId
+          : undefined;
         const allRepairParts = await repairPartService.getAllRepairParts(
-          input,
+          { ...input, filters: { repairLocalId } },
           ctx.session,
         );
 
@@ -27,8 +30,11 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
     countAll: organizationProcedure
       .input(countRepairPartsSchema)
       .query(async ({ input, ctx }) => {
+        const repairLocalId = input.filters.repairId
+          ? splitSlug(input.filters.repairId).localId
+          : undefined;
         const count = await repairPartService.countRepairParts(
-          input,
+          { ...input, filters: { repairLocalId } },
           ctx.session,
         );
         return count;

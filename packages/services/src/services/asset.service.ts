@@ -146,7 +146,7 @@ export default class AssetService {
   }
 
   async getAsset(localId: number, session: OrganizationSession) {
-    const asset = await this.assetRepository.getById(this.db, {
+    const asset = await this.assetRepository.getByLocalId(this.db, {
       localId,
       organizationId: session.organizationId,
     });
@@ -237,7 +237,11 @@ export default class AssetService {
         organizationId: session.organizationId,
       };
 
-      const { id, ...updatedAsset } = await this.assetRepository.update(tx, values, where);
+      const { id, ...updatedAsset } = await this.assetRepository.update(
+        tx,
+        values,
+        where,
+      );
 
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(

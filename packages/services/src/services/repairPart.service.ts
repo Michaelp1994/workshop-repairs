@@ -3,9 +3,7 @@ import type { RepairPartID } from "@repo/validators/ids.validators";
 import { type Database } from "@repo/db";
 import PartRepository from "@repo/db/repositories/part.repository";
 import RepairRepository from "@repo/db/repositories/repair.repository";
-import RepairPartRepository, {
-  RepairPartFilters,
-} from "@repo/db/repositories/repairPart.repository";
+import RepairPartRepository from "@repo/db/repositories/repairPart.repository";
 
 import type { RepairPartInput } from "../../../db/src/tables/repairPart.table";
 import type { CountInput, GetAllInput, UpdateInput } from "../types";
@@ -32,10 +30,22 @@ export default class RepairPartService {
   }
 
   async countRepairParts(
-    input: CountInput<RepairPartFilters>,
-    _session: OrganizationSession,
+    input: CountInput<{ repairLocalId?: number }>,
+    session: OrganizationSession,
   ) {
-    return this.repairPartRepository.count(this.db, input);
+    let repairId: number | undefined;
+    if (input.filters.repairLocalId !== undefined) {
+      const repair = await this.repairRepository.getByLocalId(
+        this.db,
+        input.filters.repairLocalId,
+        session.organizationId,
+      );
+      repairId = repair.id;
+    }
+    return this.repairPartRepository.count(this.db, {
+      ...input,
+      filters: { repairId },
+    });
   }
 
   async createRepairPart(
@@ -70,10 +80,22 @@ export default class RepairPartService {
   }
 
   async getAllRepairParts(
-    input: GetAllInput<RepairPartFilters>,
-    _session: OrganizationSession,
+    input: GetAllInput<{ repairLocalId?: number }>,
+    session: OrganizationSession,
   ) {
-    return this.repairPartRepository.getAll(this.db, input);
+    let repairId: number | undefined;
+    if (input.filters.repairLocalId !== undefined) {
+      const repair = await this.repairRepository.getByLocalId(
+        this.db,
+        input.filters.repairLocalId,
+        session.organizationId,
+      );
+      repairId = repair.id;
+    }
+    return this.repairPartRepository.getAll(this.db, {
+      ...input,
+      filters: { repairId },
+    });
   }
 
   async getRepairPartById(id: RepairPartID, _session: OrganizationSession) {

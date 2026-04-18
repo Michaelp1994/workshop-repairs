@@ -220,7 +220,7 @@ export default class AssetRepository {
     return res;
   }
 
-  async getById(
+  async getByLocalId(
     tx: DatabaseTransaction,
     { localId, organizationId }: AssetSelector,
   ) {

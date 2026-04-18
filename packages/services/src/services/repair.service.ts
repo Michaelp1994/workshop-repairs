@@ -6,11 +6,7 @@ import RepairRepository, {
   RepairFilters,
 } from "@repo/db/repositories/repair.repository";
 
-import type {
-  CountInput,
-  GetAllInput,
-  GetAllSimpleInput,
-} from "../types";
+import type { CountInput, GetAllInput, GetAllSimpleInput } from "../types";
 
 import {
   createArchiveMetadata,
@@ -82,7 +78,7 @@ export default class RepairService {
         input.clientLocalId,
         session.organizationId,
       );
-      const asset = await this.assetRepository.getById(tx, {
+      const asset = await this.assetRepository.getByLocalId(tx, {
         localId: input.assetLocalId,
         organizationId: session.organizationId,
       });
@@ -130,11 +126,25 @@ export default class RepairService {
   }
 
   async getRepair(localId: number, session: OrganizationSession) {
-    return this.repairRepository.getByLocalId(
+    const sequence =
+      await this.organizationSequenceRepository.getByOrganizationId(
+        this.db,
+        session.organizationId,
+      );
+    const repair = await this.repairRepository.getByLocalId(
       this.db,
       localId,
       session.organizationId,
     );
+
+    return {
+      ...repair,
+      id: createSlug(sequence.repairKeyPrefix, localId),
+      modelId: createSlug(sequence.modelKeyPrefix, localId),
+      locationId: createSlug(sequence.locationKeyPrefix, localId),
+      clientId: createSlug(sequence.clientKeyPrefix, localId),
+      assetId: createSlug(sequence.assetKeyPrefix, localId),
+    };
   }
 
   async getRepairsSelect(
@@ -184,7 +194,7 @@ export default class RepairService {
         clientId = client.id;
       }
       if (input.assetLocalId !== undefined) {
-        const asset = await this.assetRepository.getById(tx, {
+        const asset = await this.assetRepository.getByLocalId(tx, {
           localId: input.assetLocalId,
           organizationId: session.organizationId,
         });
@@ -193,9 +203,13 @@ export default class RepairService {
 
       const partialValues = {
         ...(input.fault !== undefined && { fault: input.fault }),
-        ...(input.clientReference !== undefined && { clientReference: input.clientReference }),
+        ...(input.clientReference !== undefined && {
+          clientReference: input.clientReference,
+        }),
         ...(input.typeId !== undefined && { typeId: Number(input.typeId) }),
-        ...(input.statusId !== undefined && { statusId: Number(input.statusId) }),
+        ...(input.statusId !== undefined && {
+          statusId: Number(input.statusId),
+        }),
         ...(clientId !== undefined && { clientId }),
         ...(assetId !== undefined && { assetId }),
       };
