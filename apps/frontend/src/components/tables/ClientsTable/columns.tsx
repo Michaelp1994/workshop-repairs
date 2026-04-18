@@ -1,4 +1,4 @@
-import type { RouterOutputs } from "@repo/backend/router";
+import type { RouterOutputs } from "@repo/backend";
 
 import { Button } from "@repo/ui/button";
 import {
@@ -71,7 +71,7 @@ export const columns = [
     },
   }),
   columnHelper.display({
-    id: "id",
+    id: "actions",
     enableHiding: false,
     cell: ({ row }) => (
       <div className="flex justify-end">

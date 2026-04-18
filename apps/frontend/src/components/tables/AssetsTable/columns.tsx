@@ -1,4 +1,4 @@
-import type { RouterOutputs } from "@repo/backend/router";
+import type { RouterOutputs } from "@repo/backend";
 
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
