@@ -74,7 +74,10 @@ export default class LocationService {
         ...metadata,
         localId: sequence.locationLastUsedValue,
       };
-      const { id, ...location } = await this.locationRepository.create(tx, values);
+      const { id, ...location } = await this.locationRepository.create(
+        tx,
+        values,
+      );
 
       const slug = createSlug(sequence.locationKeyPrefix, location.localId);
       return {

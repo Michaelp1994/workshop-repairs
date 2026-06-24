@@ -29,12 +29,13 @@ export default class EquipmentTypeService {
   async archiveEquipmentType(localId: number, session: OrganizationSession) {
     return await this.db.transaction(async (tx) => {
       const metadata = createArchiveMetadata(session);
-      const { id, ...equipmentType } = await this.equipmentTypeRepository.archive(
-        tx,
-        metadata,
-        localId,
-        session.organizationId,
-      );
+      const { id, ...equipmentType } =
+        await this.equipmentTypeRepository.archive(
+          tx,
+          metadata,
+          localId,
+          session.organizationId,
+        );
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
@@ -74,10 +75,8 @@ export default class EquipmentTypeService {
         ...input,
         ...metadata,
       };
-      const { id, ...equipmentType } = await this.equipmentTypeRepository.create(
-        tx,
-        values,
-      );
+      const { id, ...equipmentType } =
+        await this.equipmentTypeRepository.create(tx, values);
 
       const slug = createSlug(
         sequence.equipmentTypeKeyPrefix,
@@ -144,12 +143,13 @@ export default class EquipmentTypeService {
     return await this.db.transaction(async (tx) => {
       const metadata = createUpdateMetadata(session);
       const values = { ...input, ...metadata };
-      const { id, ...equipmentType } = await this.equipmentTypeRepository.update(
-        tx,
-        values,
-        localId,
-        session.organizationId,
-      );
+      const { id, ...equipmentType } =
+        await this.equipmentTypeRepository.update(
+          tx,
+          values,
+          localId,
+          session.organizationId,
+        );
       const sequence =
         await this.organizationSequenceRepository.getByOrganizationId(
           tx,
