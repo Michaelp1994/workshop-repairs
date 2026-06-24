@@ -75,7 +75,10 @@ export default class ManufacturerService {
         ...metadata,
         ...input,
       };
-      const { id, ...manufacturer } = await this.manufacturerRepository.create(tx, values);
+      const { id, ...manufacturer } = await this.manufacturerRepository.create(
+        tx,
+        values,
+      );
 
       const slug = createSlug(
         sequence.manufacturerKeyPrefix,

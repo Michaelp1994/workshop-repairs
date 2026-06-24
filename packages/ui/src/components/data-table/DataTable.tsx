@@ -31,6 +31,9 @@ export default function DataTable<TData extends BaseData>({
           if ("id" in row && typeof row["id"] === "number") {
             return row["id"].toString();
           }
+          if ("id" in row && typeof row["id"] === "string") {
+            return row["id"];
+          }
           throw new Error(
             "getRowId must be provided if the row does not have an 'id' field",
           );

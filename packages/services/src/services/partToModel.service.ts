@@ -22,12 +22,23 @@ export default class PartToModelService {
   ) {}
 
   async archivePartToModel(
-    { partLocalId, modelLocalId }: { partLocalId: number; modelLocalId: number },
+    {
+      partLocalId,
+      modelLocalId,
+    }: { partLocalId: number; modelLocalId: number },
     session: OrganizationSession,
   ) {
     const [part, model] = await Promise.all([
-      this.partRepository.getByLocalId(this.db, partLocalId, session.organizationId),
-      this.modelRepository.getByLocalId(this.db, modelLocalId, session.organizationId),
+      this.partRepository.getByLocalId(
+        this.db,
+        partLocalId,
+        session.organizationId,
+      ),
+      this.modelRepository.getByLocalId(
+        this.db,
+        modelLocalId,
+        session.organizationId,
+      ),
     ]);
     return await this.db.transaction(async (tx) => {
       return this.partToModelRepository.archive(tx, {
@@ -75,8 +86,16 @@ export default class PartToModelService {
     session: OrganizationSession,
   ) {
     const [part, model] = await Promise.all([
-      this.partRepository.getByLocalId(this.db, input.partLocalId, session.organizationId),
-      this.modelRepository.getByLocalId(this.db, input.modelLocalId, session.organizationId),
+      this.partRepository.getByLocalId(
+        this.db,
+        input.partLocalId,
+        session.organizationId,
+      ),
+      this.modelRepository.getByLocalId(
+        this.db,
+        input.modelLocalId,
+        session.organizationId,
+      ),
     ]);
     return await this.db.transaction(async (tx) => {
       const metadata = createInsertMetadata(session);
@@ -161,8 +180,16 @@ export default class PartToModelService {
     session: OrganizationSession,
   ) {
     const [part, model] = await Promise.all([
-      this.partRepository.getByLocalId(this.db, partLocalId, session.organizationId),
-      this.modelRepository.getByLocalId(this.db, modelLocalId, session.organizationId),
+      this.partRepository.getByLocalId(
+        this.db,
+        partLocalId,
+        session.organizationId,
+      ),
+      this.modelRepository.getByLocalId(
+        this.db,
+        modelLocalId,
+        session.organizationId,
+      ),
     ]);
     return this.partToModelRepository.getById(this.db, {
       partId: part.id,
@@ -177,8 +204,16 @@ export default class PartToModelService {
     session: OrganizationSession,
   ) {
     const [part, model] = await Promise.all([
-      this.partRepository.getByLocalId(this.db, partLocalId, session.organizationId),
-      this.modelRepository.getByLocalId(this.db, modelLocalId, session.organizationId),
+      this.partRepository.getByLocalId(
+        this.db,
+        partLocalId,
+        session.organizationId,
+      ),
+      this.modelRepository.getByLocalId(
+        this.db,
+        modelLocalId,
+        session.organizationId,
+      ),
     ]);
     return await this.db.transaction(async (tx) => {
       return this.partToModelRepository.update(tx, input, {

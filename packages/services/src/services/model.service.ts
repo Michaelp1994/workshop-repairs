@@ -6,11 +6,7 @@ import ModelRepository, {
 } from "@repo/db/repositories/model.repository";
 import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
 
-import type {
-  CountInput,
-  GetAllInput,
-  GetAllSimpleInput,
-} from "../types";
+import type { CountInput, GetAllInput, GetAllSimpleInput } from "../types";
 
 import {
   createArchiveMetadata,

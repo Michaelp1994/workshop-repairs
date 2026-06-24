@@ -70,6 +70,7 @@ export default class EquipmentTypeService {
         );
 
       const metadata = createInsertMetadata(session);
+
       const values = {
         localId: sequence.equipmentTypeLastUsedValue,
         ...input,

@@ -7,6 +7,6 @@
     "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": ["src", "*.config.*"],
+  "include": ["src", "*.config.*", "../../packages/services/src/services"],
   "exclude": ["node_modules", "eslint.config.js"]
 }
