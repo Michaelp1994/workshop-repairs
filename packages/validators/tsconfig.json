@@ -5,9 +5,6 @@
     "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "tsc-alias": {
-    "resolveFullPaths": true
-  },
   "include": ["src", "*.config.*"],
   "exclude": ["node_modules", "eslint.config.js"]
 }

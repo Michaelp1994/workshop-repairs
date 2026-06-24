@@ -1,17 +1,8 @@
 {
   "extends": "@repo/typescript-config/internal-package.json",
   "compilerOptions": {
-    "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "tsc-alias": {
-    "resolveFullPaths": true
-  },
-  "include": [
-    "src",
-    "scripts",
-    "*.config.*",
-    "../services/src/helpers/includeMetadata.ts"
-  ],
+  "include": ["src", "scripts", "*.config.*"],
   "exclude": ["node_modules", "eslint.config.js"]
 }
