@@ -1,10 +1,6 @@
 import { z } from "zod";
 
-import {
-  assetId,
-  repairStatusTypeId,
-  repairTypeId,
-} from "../../../backend/src/validators/isomorphic/ids.validators";
+import { assetId, repairStatusTypeId, repairTypeId } from "./ids.validators";
 
 export const repairFormSchema = z.object({
   fault: z.string().min(3),
