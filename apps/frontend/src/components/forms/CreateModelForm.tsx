@@ -16,7 +16,7 @@ import {
   defaultModel,
   type ModelFormInput,
   modelFormSchema,
-} from "@repo/validators/client/models.schema";
+} from "~/validators/models.schema";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";

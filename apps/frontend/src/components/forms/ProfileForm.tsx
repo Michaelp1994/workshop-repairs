@@ -12,7 +12,7 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import { updateProfileFormSchema } from "@repo/validators/client/auth.schema";
+import { updateProfileFormSchema } from "~/validators/auth.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

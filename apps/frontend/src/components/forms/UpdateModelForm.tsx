@@ -12,15 +12,15 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  type ModelFormInput,
-  modelFormSchema,
-} from "@repo/validators/client/models.schema";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  type ModelFormInput,
+  modelFormSchema,
+} from "~/validators/models.schema";
 
 interface UpdateModelFormProps {
   modelId: string;
@@ -50,8 +50,8 @@ export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
   const form = useForm({
     values: {
       ...model,
-      manufacturerId: model.manufacturerId.toString(),
-      equipmentTypeId: model.equipmentTypeId.toString(),
+      manufacturerId: model.manufacturerId,
+      equipmentTypeId: model.equipmentTypeId,
     },
     schema: modelFormSchema,
   });

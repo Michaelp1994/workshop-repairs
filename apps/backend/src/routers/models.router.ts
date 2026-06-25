@@ -1,4 +1,4 @@
-import ModelService from "@repo/services/services/model.service";
+import ModelService from "../services/model.service";
 import {
   archiveModelSchema,
   countModelsSchema,
@@ -8,7 +8,7 @@ import {
   getModelsSelectSchema,
   type ModelFilters,
   updateModelSchema,
-} from "@repo/validators/server/models.validators";
+} from "../validators/models.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";

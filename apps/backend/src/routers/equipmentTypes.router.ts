@@ -1,4 +1,4 @@
-import EquipmentTypeService from "@repo/services/services/equipmentType.service";
+import EquipmentTypeService from "../services/equipmentType.service";
 import {
   archiveEquipmentTypeSchema,
   countEquipmentTypesSchema,
@@ -7,7 +7,7 @@ import {
   getEquipmentTypeByIdSchema,
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
-} from "@repo/validators/server/equipmentTypes.validators";
+} from "../validators/equipmentTypes.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";

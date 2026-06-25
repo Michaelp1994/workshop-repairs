@@ -1,6 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { type ModelID } from "@repo/validators/ids.validators";
+import { type ModelID } from "~/validators/ids.validators";
 
 import {
   ImageGrid,

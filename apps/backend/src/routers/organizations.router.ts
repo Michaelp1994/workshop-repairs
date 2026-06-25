@@ -1,8 +1,8 @@
-import OrganizationService from "@repo/services/services/organization.service";
+import OrganizationService from "../services/organization.service";
 import {
   createOrganizationSchema,
   getOrganizationByIdSchema,
-} from "@repo/validators/server/organization.validators";
+} from "../validators/organization.validators";
 
 import { authedProcedure, organizationProcedure } from "../procedures";
 import { router } from "../trpc";

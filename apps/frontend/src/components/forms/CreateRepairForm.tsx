@@ -17,7 +17,7 @@ import {
   defaultRepair,
   type RepairFormInput,
   repairFormSchema,
-} from "@repo/validators/client/repair.schema";
+} from "~/validators/repair.schema";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import AssetSelect from "~/components/selects/AssetSelect";

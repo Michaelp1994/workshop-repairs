@@ -1,4 +1,4 @@
-import type { EquipmentTypeID } from "@repo/validators/ids.validators";
+import type { EquipmentTypeID } from "~/validators/ids.validators";
 
 import {
   Card,

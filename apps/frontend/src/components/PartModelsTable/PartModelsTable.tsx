@@ -1,4 +1,4 @@
-import type { PartID } from "@repo/validators/ids.validators";
+import type { PartID } from "~/validators/ids.validators";
 
 import {
   Card,

@@ -1,4 +1,4 @@
-import LocationService from "@repo/services/services/location.service";
+import LocationService from "../services/location.service";
 import {
   archiveLocationSchema,
   countLocationsSchema,
@@ -7,7 +7,7 @@ import {
   getLocationByIdSchema,
   getLocationsSelectSchema,
   updateLocationSchema,
-} from "@repo/validators/server/locations.validators";
+} from "../validators/locations.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";

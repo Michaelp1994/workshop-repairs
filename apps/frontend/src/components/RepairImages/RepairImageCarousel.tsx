@@ -1,4 +1,4 @@
-import type { RepairID, RepairImageID } from "@repo/validators/ids.validators";
+import type { RepairID, RepairImageID } from "~/validators/ids.validators";
 
 import {
   Carousel,

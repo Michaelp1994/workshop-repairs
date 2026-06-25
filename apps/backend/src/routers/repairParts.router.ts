@@ -1,4 +1,4 @@
-import RepairPartService from "@repo/services/services/repairPart.service";
+import RepairPartService from "../services/repairPart.service";
 import {
   archiveRepairPartSchema,
   countRepairPartsSchema,
@@ -6,7 +6,7 @@ import {
   getAllRepairPartsSchema,
   getRepairPartByIdSchema,
   updateRepairPartSchema,
-} from "@repo/validators/server/repairParts.validators";
+} from "../validators/repairParts.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";

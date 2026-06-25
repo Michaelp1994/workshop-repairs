@@ -47,7 +47,7 @@ function ViewLocationPage() {
         </PageHeaderActions>
       </PageHeader>
       <LocationDetails locationId={locationId} />
-      <LocationAssetsTable locationId={location.id.toString()} />
+      <LocationAssetsTable locationId={locationId} />
     </PageWrapper>
   );
 }

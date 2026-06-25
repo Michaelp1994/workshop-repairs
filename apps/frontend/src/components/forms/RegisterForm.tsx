@@ -17,7 +17,7 @@ import {
   defaultRegister,
   type RegisterFormInput,
   registerFormSchema,
-} from "@repo/validators/client/auth.schema";
+} from "~/validators/auth.schema";
 import { Link, useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

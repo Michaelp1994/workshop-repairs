@@ -14,15 +14,15 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  defaultRepairPart,
-  type RepairPartFormInput,
-  repairPartFormSchema,
-} from "@repo/validators/client/repairParts.schema";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  defaultRepairPart,
+  type RepairPartFormInput,
+  repairPartFormSchema,
+} from "~/validators/repairParts.schema";
 
 interface CreateRepairPartFormProps {
   repairId: string;
@@ -73,7 +73,7 @@ export default function CreateRepairPartForm({
               <FormItem>
                 <FormLabel>Part</FormLabel>
                 <FormControl>
-                  <ModelPartSelect modelId={repair.model.id.toString()} {...field} />
+                  <ModelPartSelect modelId={repair.modelId} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

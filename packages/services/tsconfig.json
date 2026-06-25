@@ -1,8 +1,0 @@
-{
-  "extends": "@repo/typescript-config/internal-package.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
-  },
-  "include": ["src", "scripts", "*.config.*"],
-  "exclude": ["node_modules", "eslint.config.js"]
-}

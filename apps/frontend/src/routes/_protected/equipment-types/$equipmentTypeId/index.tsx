@@ -54,8 +54,8 @@ function ViewEquipmentTypePage() {
         </PageHeaderActions>
       </PageHeader>
       <EquipmentTypeDetails equipmentTypeId={equipmentTypeId} />
-      <EquipmentTypeModelsTable equipmentTypeId={equipmentType.id} />
-      <EquipmentTypeAssetsTable equipmentTypeId={equipmentType.id} />
+      <EquipmentTypeModelsTable equipmentTypeId={equipmentTypeId} />
+      <EquipmentTypeAssetsTable equipmentTypeId={equipmentTypeId} />
     </PageWrapper>
   );
 }

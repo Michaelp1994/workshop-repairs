@@ -13,10 +13,6 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
-import {
-  type RepairFormInput,
-  repairFormSchema,
-} from "@repo/validators/client/repair.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import AssetSelect from "~/components/selects/AssetSelect";
@@ -25,6 +21,10 @@ import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect"
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  type RepairFormInput,
+  repairFormSchema,
+} from "~/validators/repair.schema";
 
 interface UpdateRepairFormProps {
   repairId: string;
@@ -53,8 +53,8 @@ export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   const form = useForm({
     values: {
       ...repair,
-      assetId: repair.assetId.toString(),
-      clientId: repair.clientId.toString(),
+      assetId: repair.assetId,
+      clientId: repair.clientId,
     },
     schema: repairFormSchema,
   });

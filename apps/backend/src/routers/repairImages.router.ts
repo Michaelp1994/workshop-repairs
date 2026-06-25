@@ -1,4 +1,4 @@
-import RepairImageService from "@repo/services/services/repairImage.service";
+import RepairImageService from "../services/repairImage.service";
 import {
   archiveRepairImageSchema,
   countRepairImagesSchema,
@@ -8,7 +8,7 @@ import {
   getRepairImageByIdSchema,
   requestUploadRepairImageSchema,
   updateRepairImageSchema,
-} from "@repo/validators/server/repairImages.validators";
+} from "../validators/repairImages.validators";
 
 import { env } from "../env";
 import { splitSlug } from "../helpers/splitUrlSlug";

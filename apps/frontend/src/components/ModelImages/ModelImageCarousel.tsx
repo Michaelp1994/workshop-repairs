@@ -1,4 +1,4 @@
-import type { ModelID, ModelImageID } from "@repo/validators/ids.validators";
+import type { ModelID, ModelImageID } from "~/validators/ids.validators";
 
 import { Button } from "@repo/ui/button";
 import {

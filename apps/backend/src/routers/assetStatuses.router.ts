@@ -1,4 +1,4 @@
-import AssetStatusService from "@repo/services/services/assetStatus.service";
+import AssetStatusService from "../services/assetStatus.service";
 import {
   archiveAssetStatusSchema,
   countAssetStatusesSchema,
@@ -7,7 +7,7 @@ import {
   getAssetStatusByIdSchema,
   getAssetStatusesSelectSchema,
   updateAssetStatusSchema,
-} from "@repo/validators/server/assetStatuses.validators";
+} from "../validators/assetStatuses.validators";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";

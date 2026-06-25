@@ -1,4 +1,7 @@
-import ManufacturerService from "@repo/services/services/manufacturer.service";
+import { splitSlug } from "../helpers/splitUrlSlug";
+import { organizationProcedure } from "../procedures";
+import ManufacturerService from "../services/manufacturer.service";
+import { router } from "../trpc";
 import {
   archiveManufacturerSchema,
   countManufacturersSchema,
@@ -7,11 +10,7 @@ import {
   getManufacturerByIdSchema,
   getManufacturersSelectSchema,
   updateManufacturerSchema,
-} from "@repo/validators/server/manufacturers.validators";
-
-import { splitSlug } from "../helpers/splitUrlSlug";
-import { organizationProcedure } from "../procedures";
-import { router } from "../trpc";
+} from "../validators/manufacturers.validators";
 
 export default function manufacturerRouter(
   manufacturerService: ManufacturerService,

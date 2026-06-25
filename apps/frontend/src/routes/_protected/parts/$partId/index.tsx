@@ -44,7 +44,7 @@ function ViewPartPage() {
         </PageHeaderActions>
       </PageHeader>
       <PartDetails partId={partId} />
-      <PartModelsTable partId={part.id.toString()} />
+      <PartModelsTable partId={partId} />
     </PageWrapper>
   );
 }

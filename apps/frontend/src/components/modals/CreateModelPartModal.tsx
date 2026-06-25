@@ -1,4 +1,4 @@
-import type { ModelID } from "@repo/validators/ids.validators";
+import type { ModelID } from "~/validators/ids.validators";
 
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {

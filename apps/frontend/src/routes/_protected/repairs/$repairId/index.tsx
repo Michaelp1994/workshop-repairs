@@ -49,9 +49,9 @@ function ViewRepairPage() {
         </PageHeaderActions>
       </PageHeader>
       <RepairDetails repairId={repairId} />
-      <RepairParts repairId={repair.id.toString()} />
-      <RepairCommentsTable repairId={repair.id.toString()} />
-      <RepairImages repairId={repair.id.toString()} />
+      <RepairParts repairId={repairId} />
+      <RepairCommentsTable repairId={repairId} />
+      <RepairImages repairId={repairId} />
     </PageWrapper>
   );
 }

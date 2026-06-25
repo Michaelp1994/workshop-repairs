@@ -47,7 +47,7 @@ function ViewAssetPage() {
         </PageHeaderActions>
       </PageHeader>
       <AssetDetails assetId={assetId} />
-      <AssetRepairsTable assetId={asset.id.toString()} />
+      <AssetRepairsTable assetId={assetId} />
     </PageWrapper>
   );
 }

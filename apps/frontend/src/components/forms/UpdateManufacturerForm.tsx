@@ -15,7 +15,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "@repo/validators/client/manufacturers.schema";
+} from "~/validators/manufacturers.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

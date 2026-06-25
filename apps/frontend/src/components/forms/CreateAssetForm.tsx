@@ -12,11 +12,6 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  type AssetFormInput,
-  assetFormSchema,
-  defaultAsset,
-} from "@repo/validators/client/assets.schema";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
@@ -25,6 +20,11 @@ import LocationSelect from "~/components/selects/LocationSelect";
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  type AssetFormInput,
+  assetFormSchema,
+  defaultAsset,
+} from "~/validators/assets.schema";
 
 export default function CreateAssetForm() {
   const { clientId, locationId, modelId } = useSearch({ strict: false });

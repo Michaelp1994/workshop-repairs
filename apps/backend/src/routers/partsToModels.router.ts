@@ -1,4 +1,8 @@
-import PartToModelService from "@repo/services/services/partToModel.service";
+import PartToModelService from "../services/partToModel.service";
+
+import { splitSlug } from "../helpers/splitUrlSlug";
+import { organizationProcedure } from "../procedures";
+import { router } from "../trpc";
 import {
   archivePartToModelSchema,
   countAllModelsByPartIdSchema,
@@ -10,11 +14,7 @@ import {
   getPartsByModelIdSelectSchema,
   getPartToModelByIdSchema,
   updatePartToModelSchema,
-} from "@repo/validators/server/partsToModel.validators";
-
-import { splitSlug } from "../helpers/splitUrlSlug";
-import { organizationProcedure } from "../procedures";
-import { router } from "../trpc";
+} from "../validators/partsToModel.validators";
 
 export default function partToModelRouter(
   partToModelService: PartToModelService,

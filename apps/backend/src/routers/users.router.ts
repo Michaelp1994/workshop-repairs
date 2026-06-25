@@ -1,8 +1,8 @@
-import UserService from "@repo/services/services/user.service";
+import UserService from "../services/user.service";
 import {
   confirmEmailSchema,
   resetPasswordSchema,
-} from "@repo/validators/server/auth.validators";
+} from "../validators/auth.validators";
 import {
   archiveUserSchema,
   countUsersSchema,
@@ -12,7 +12,7 @@ import {
   getUserByIdSchema,
   updateCurrentUserSchema,
   updateUserSchema,
-} from "@repo/validators/server/users.validators";
+} from "../validators/users.validators";
 import { TRPCError } from "@trpc/server";
 
 import { authedProcedure, organizationProcedure } from "../procedures";

@@ -15,7 +15,7 @@ import {
   defaultLogin,
   type ForgotPasswordFormInput,
   forgotPasswordFormSchema,
-} from "@repo/validators/client/auth.schema";
+} from "~/validators/auth.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

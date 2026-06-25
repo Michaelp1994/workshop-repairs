@@ -113,7 +113,7 @@ interface BreadcrumbProps {
   }[];
 }
 
-function Breadcrumbs({ routes = [] }: BreadcrumbProps) {
+function Breadcrumbs({ routes }: BreadcrumbProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>

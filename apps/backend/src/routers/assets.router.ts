@@ -1,4 +1,7 @@
-import AssetService from "@repo/services/services/asset.service";
+import { splitSlug } from "../helpers/splitUrlSlug";
+import { organizationProcedure } from "../procedures";
+import AssetService from "../services/asset.service";
+import { router } from "../trpc";
 import {
   archiveAssetSchema,
   type AssetFilters,
@@ -8,11 +11,7 @@ import {
   getAssestsSelectSchema,
   getAssetByIdSchema,
   updateAssetSchema,
-} from "@repo/validators/server/assets.validators";
-
-import { splitSlug } from "../helpers/splitUrlSlug";
-import { organizationProcedure } from "../procedures";
-import { router } from "../trpc";
+} from "../validators/assets.validators";
 
 function assetFilters(filters: AssetFilters) {
   return {

@@ -1,5 +1,5 @@
 import { Combobox, type ComboboxProps } from "@repo/ui/combobox";
-import { type ModelID } from "@repo/validators/ids.validators";
+import { type ModelID } from "~/validators/ids.validators";
 
 import { api } from "~/trpc/client";
 

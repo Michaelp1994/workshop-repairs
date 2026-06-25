@@ -16,7 +16,7 @@ import {
   type CreateOrganizationSequenceInput,
   createOrganizationSequenceSchema,
   defaultOrganizationSequence,
-} from "@repo/validators/client/organizationSequences.schema";
+} from "~/validators/organizationSequences.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

@@ -15,7 +15,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type LocationFormInput,
   locationFormSchema,
-} from "@repo/validators/client/locations.schema";
+} from "~/validators/locations.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
@@ -24,7 +24,9 @@ interface UpdateLocationFormProps {
   locationId: string;
 }
 
-export default function UpdateLocationForm({ locationId }: UpdateLocationFormProps) {
+export default function UpdateLocationForm({
+  locationId,
+}: UpdateLocationFormProps) {
   const [location] = api.locations.getById.useSuspenseQuery({
     id: locationId,
   });

@@ -15,7 +15,7 @@ import {
   type CreateOrganizationInput,
   createOrganizationSchema,
   defaultOrganization,
-} from "@repo/validators/client/organization.schema";
+} from "~/validators/organization.schema";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 

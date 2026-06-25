@@ -1,4 +1,4 @@
-import RepairCommentService from "@repo/services/services/repairComment.service";
+import RepairCommentService from "../services/repairComment.service";
 import {
   archiveRepairCommentSchema,
   countRepairCommentsSchema,
@@ -7,7 +7,7 @@ import {
   getAllRepairCommentsSchema,
   getRepairCommentByIdSchema,
   updateRepairCommentSchema,
-} from "@repo/validators/server/repairComments.validators";
+} from "../validators/repairComments.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";

@@ -1,4 +1,4 @@
-import ClientService from "@repo/services/services/client.service";
+import ClientService from "../services/client.service";
 import {
   archiveClientSchema,
   countClientsSchema,
@@ -7,7 +7,7 @@ import {
   getClientByIdSchema,
   getClientsSelectSchema,
   updateClientSchema,
-} from "@repo/validators/server/clients.validators";
+} from "../validators/clients.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";

@@ -47,9 +47,9 @@ function ViewModelPage() {
         </PageHeaderActions>
       </PageHeader>
       <ModelDetails modelId={modelId} />
-      <ModelAssetsTable modelId={model.id.toString()} />
-      <ModelPartsTable modelId={model.id.toString()} />
-      <ModelImages modelId={model.id.toString()} />
+      <ModelAssetsTable modelId={modelId} />
+      <ModelPartsTable modelId={modelId} />
+      <ModelImages modelId={modelId} />
     </PageWrapper>
   );
 }

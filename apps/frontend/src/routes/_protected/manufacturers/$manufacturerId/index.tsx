@@ -49,7 +49,7 @@ function ViewManufacturerPage() {
         </PageHeaderActions>
       </PageHeader>
       <ManufacturerDetails manufacturerId={manufacturerId} />
-      <ManufacturerModelsTable manufacturerId={manufacturer.id.toString()} />
+      <ManufacturerModelsTable manufacturerId={manufacturerId} />
     </PageWrapper>
   );
 }

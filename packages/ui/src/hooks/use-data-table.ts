@@ -1,8 +1,8 @@
-import type { DataTableInput } from "@repo/validators/client/dataTables.schema";
+import type { DataTableInput } from "~/validators/dataTables.schema";
 import type {
   DataTableCountInput,
   DataTableInput as ServerDataTableInput,
-} from "@repo/validators/server/dataTables.validators";
+} from "~/validators/server/dataTables.validators";
 
 import {
   ColumnFiltersState,

@@ -1,9 +1,9 @@
-import UserOnboardingService from "@repo/services/services/userOnboarding.service";
+import UserOnboardingService from "../services/userOnboarding.service";
 import {
   inviteOthersToOrganizationSchema,
   joinOrganizationSchema,
   requestUploadOrganizationLogoSchema,
-} from "@repo/validators/server/organization.validators";
+} from "../validators/organization.validators";
 
 import { authedProcedure, organizationProcedure } from "../procedures";
 import { router } from "../trpc";

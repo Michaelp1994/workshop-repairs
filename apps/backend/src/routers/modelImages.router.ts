@@ -1,5 +1,5 @@
-import ModelService from "@repo/services/services/model.service";
-import ModelImageService from "@repo/services/services/modelImage.service";
+import ModelService from "../services/model.service";
+import ModelImageService from "../services/modelImage.service";
 import {
   archiveModelImageSchema,
   countModelImagesSchema,
@@ -10,9 +10,9 @@ import {
   requestUploadModelImageSchema,
   setFavouriteModelImageSchema,
   updateModelImageSchema,
-} from "@repo/validators/server/modelImages.validators";
+} from "../validators/modelImages.validators";
 
-import { getModelImageUrlFromKey } from "../../../../packages/services/src/helpers/s3";
+import { getModelImageUrlFromKey } from "../helpers/s3";
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";

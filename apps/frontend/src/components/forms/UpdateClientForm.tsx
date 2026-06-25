@@ -15,7 +15,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ClientFormInput,
   clientFormSchema,
-} from "@repo/validators/client/clients.schema";
+} from "~/validators/clients.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

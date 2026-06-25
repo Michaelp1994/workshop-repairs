@@ -16,7 +16,7 @@ import {
   defaultLocation,
   type LocationFormInput,
   locationFormSchema,
-} from "@repo/validators/client/locations.schema";
+} from "~/validators/locations.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

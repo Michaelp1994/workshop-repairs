@@ -16,7 +16,7 @@ import {
   defaultPart,
   type PartFormInput,
   partFormSchema,
-} from "@repo/validators/client/parts.schema";
+} from "~/validators/parts.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

@@ -1,4 +1,4 @@
-import RepairService from "@repo/services/services/repair.service";
+import RepairService from "../services/repair.service";
 import {
   archiveRepairSchema,
   countRepairsSchema,
@@ -8,7 +8,7 @@ import {
   getRepairsSelectSchema,
   type RepairFilters,
   updateRepairSchema,
-} from "@repo/validators/server/repairs.validators";
+} from "../validators/repairs.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -16,8 +16,12 @@ import { router } from "../trpc";
 
 function repairFilters(filters: RepairFilters) {
   return {
-    assetLocalId: filters.assetId ? splitSlug(filters.assetId).localId : undefined,
-    clientLocalId: filters.clientId ? splitSlug(filters.clientId).localId : undefined,
+    assetLocalId: filters.assetId
+      ? splitSlug(filters.assetId).localId
+      : undefined,
+    clientLocalId: filters.clientId
+      ? splitSlug(filters.clientId).localId
+      : undefined,
   };
 }
 
@@ -81,21 +85,23 @@ export default function Router(repairService: RepairService) {
 
     update: organizationProcedure
       .input(updateRepairSchema)
-      .mutation(async ({ input: { id, clientId, assetId, ...values }, ctx }) => {
-        const { localId } = splitSlug(id);
+      .mutation(
+        async ({ input: { id, clientId, assetId, ...values }, ctx }) => {
+          const { localId } = splitSlug(id);
 
-        const updatedRepair = await repairService.updateRepair(
-          {
-            ...values,
-            clientLocalId: clientId ? splitSlug(clientId).localId : undefined,
-            assetLocalId: assetId ? splitSlug(assetId).localId : undefined,
-          },
-          localId,
-          ctx.session,
-        );
+          const updatedRepair = await repairService.updateRepair(
+            {
+              ...values,
+              clientLocalId: clientId ? splitSlug(clientId).localId : undefined,
+              assetLocalId: assetId ? splitSlug(assetId).localId : undefined,
+            },
+            localId,
+            ctx.session,
+          );
 
-        return updatedRepair;
-      }),
+          return updatedRepair;
+        },
+      ),
 
     archive: organizationProcedure
       .input(archiveRepairSchema)

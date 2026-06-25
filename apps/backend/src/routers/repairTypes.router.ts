@@ -1,4 +1,4 @@
-import RepairTypeService from "@repo/services/services/repairType.service";
+import RepairTypeService from "../services/repairType.service";
 import {
   archiveRepairTypeSchema,
   countRepairTypesSchema,
@@ -7,7 +7,7 @@ import {
   getRepairTypeByIdSchema,
   getRepairTypesSelectSchema,
   updateRepairTypeSchema,
-} from "@repo/validators/server/repairTypes.validators";
+} from "../validators/repairTypes.validators";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";

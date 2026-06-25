@@ -1,4 +1,4 @@
-import type { RepairPartID } from "@repo/validators/ids.validators";
+import type { RepairPartID } from "~/validators/ids.validators";
 
 import { Checkbox } from "@repo/ui/checkbox";
 import {
@@ -19,7 +19,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type RepairPartFormInput,
   repairPartFormSchema,
-} from "@repo/validators/client/repairParts.schema";
+} from "~/validators/repairParts.schema";
 
 import ModelPartSelect from "~/components/selects/ModelPartSelect";
 import { api } from "~/trpc/client";

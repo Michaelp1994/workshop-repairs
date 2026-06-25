@@ -15,7 +15,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type EquipmentTypeFormInput,
   equipmentTypeFormSchema,
-} from "@repo/validators/client/equipmentTypes.schema";
+} from "~/validators/equipmentTypes.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
