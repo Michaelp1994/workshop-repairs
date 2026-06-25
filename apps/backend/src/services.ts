@@ -1,49 +1,49 @@
-import { createDbConnection } from "@repo/db";
-import AssetRepository from "@repo/db/repositories/asset.repository";
-import AssetStatusRepository from "@repo/db/repositories/assetStatus.repository";
-import ClientRepository from "@repo/db/repositories/client.repository";
-import EmailVerificationRequestRepository from "@repo/db/repositories/emailVerificationRequest.repository";
-import EquipmentTypeRepository from "@repo/db/repositories/equipmentType.repository";
-import LocationRepository from "@repo/db/repositories/location.repository";
-import ManufacturerRepository from "@repo/db/repositories/manufacturer.repository";
-import ModelRepository from "@repo/db/repositories/model.repository";
-import ModelImageRepository from "@repo/db/repositories/modelImage.repository";
-import OrganizationRepository from "@repo/db/repositories/organization.repository";
-import OrganizationSequenceRepository from "@repo/db/repositories/organizationSequence.repository";
-import PartRepository from "@repo/db/repositories/part.repository";
-import PartToModelRepository from "@repo/db/repositories/partToModel.repository";
-import RepairRepository from "@repo/db/repositories/repair.repository";
-import RepairCommentRepository from "@repo/db/repositories/repairComment.repository";
-import RepairImageRepository from "@repo/db/repositories/repairImage.repository";
-import RepairPartRepository from "@repo/db/repositories/repairPart.repository";
-import RepairStatusTypeRepository from "@repo/db/repositories/repairStatusType.repository";
-import RepairTypeRepository from "@repo/db/repositories/repairType.repository";
-import UserRepository from "@repo/db/repositories/user.repository";
-import UserOnboardingRepository from "@repo/db/repositories/userOnboarding.repository";
-// Services
-import AssetService from "@repo/services/services/asset.service";
-import AssetStatusService from "@repo/services/services/assetStatus.service";
-import AuthService from "@repo/services/services/auth.service";
-import ClientService from "@repo/services/services/client.service";
-import EquipmentTypeService from "@repo/services/services/equipmentType.service";
-import LocationService from "@repo/services/services/location.service";
-import ManufacturerService from "@repo/services/services/manufacturer.service";
-import ModelService from "@repo/services/services/model.service";
-import ModelImageService from "@repo/services/services/modelImage.service";
-import OrganizationService from "@repo/services/services/organization.service";
-import OrganizationSequenceService from "@repo/services/services/organizationSequence.service";
-import PartService from "@repo/services/services/part.service";
-import PartToModelService from "@repo/services/services/partToModel.service";
-import RepairService from "@repo/services/services/repair.service";
-import RepairCommentService from "@repo/services/services/repairComment.service";
-import RepairImageService from "@repo/services/services/repairImage.service";
-import RepairPartService from "@repo/services/services/repairPart.service";
-import RepairStatusTypeService from "@repo/services/services/repairStatusType.service";
-import RepairTypeService from "@repo/services/services/repairType.service";
-import UserService from "@repo/services/services/user.service";
-import UserOnboardingService from "@repo/services/services/userOnboarding.service";
-
+import { createDbConnection } from "./db";
 import { env } from "./env";
+import AssetRepository from "./repositories/asset.repository";
+import AssetStatusRepository from "./repositories/assetStatus.repository";
+import ClientRepository from "./repositories/client.repository";
+import EmailVerificationRequestRepository from "./repositories/emailVerificationRequest.repository";
+import EquipmentTypeRepository from "./repositories/equipmentType.repository";
+import LocationRepository from "./repositories/location.repository";
+import ManufacturerRepository from "./repositories/manufacturer.repository";
+import ModelRepository from "./repositories/model.repository";
+import ModelImageRepository from "./repositories/modelImage.repository";
+import OrganizationRepository from "./repositories/organization.repository";
+import OrganizationInvitationRepository from "./repositories/organizationInvitation.repository";
+import OrganizationSequenceRepository from "./repositories/organizationSequence.repository";
+import PartRepository from "./repositories/part.repository";
+import PartToModelRepository from "./repositories/partToModel.repository";
+import RepairRepository from "./repositories/repair.repository";
+import RepairCommentRepository from "./repositories/repairComment.repository";
+import RepairImageRepository from "./repositories/repairImage.repository";
+import RepairPartRepository from "./repositories/repairPart.repository";
+import RepairStatusTypeRepository from "./repositories/repairStatusType.repository";
+import RepairTypeRepository from "./repositories/repairType.repository";
+import UserRepository from "./repositories/user.repository";
+import UserOnboardingRepository from "./repositories/userOnboarding.repository";
+// Services
+import AssetService from "./services/asset.service";
+import AssetStatusService from "./services/assetStatus.service";
+import AuthService from "./services/auth.service";
+import ClientService from "./services/client.service";
+import EquipmentTypeService from "./services/equipmentType.service";
+import LocationService from "./services/location.service";
+import ManufacturerService from "./services/manufacturer.service";
+import ModelService from "./services/model.service";
+import ModelImageService from "./services/modelImage.service";
+import OrganizationService from "./services/organization.service";
+import OrganizationSequenceService from "./services/organizationSequence.service";
+import PartService from "./services/part.service";
+import PartToModelService from "./services/partToModel.service";
+import RepairService from "./services/repair.service";
+import RepairCommentService from "./services/repairComment.service";
+import RepairImageService from "./services/repairImage.service";
+import RepairPartService from "./services/repairPart.service";
+import RepairStatusTypeService from "./services/repairStatusType.service";
+import RepairTypeService from "./services/repairType.service";
+import UserService from "./services/user.service";
+import UserOnboardingService from "./services/userOnboarding.service";
 
 // repositories
 const assetRepository = new AssetRepository();
@@ -68,6 +68,7 @@ const repairStatusTypeRepository = new RepairStatusTypeRepository();
 const repairTypeRepository = new RepairTypeRepository();
 const userRepository = new UserRepository();
 const userOnboardingRepository = new UserOnboardingRepository();
+const userInvitationRepository = new OrganizationInvitationRepository();
 
 // Create db connection
 const db = createDbConnection({
@@ -83,6 +84,9 @@ export const assetService = new AssetService(
   db,
   assetRepository,
   organizationSequenceRepository,
+  modelRepository,
+  clientRepository,
+  locationRepository,
 );
 
 export const assetStatusService = new AssetStatusService(
@@ -119,6 +123,8 @@ export const modelService = new ModelService(
   db,
   modelRepository,
   organizationSequenceRepository,
+  manufacturerRepository,
+  equipmentTypeRepository,
 );
 export const modelImageService = new ModelImageService(
   db,
@@ -143,23 +149,31 @@ export const partService = new PartService(
 export const partToModelService = new PartToModelService(
   db,
   partToModelRepository,
+  modelRepository,
+  partRepository,
 );
 export const repairService = new RepairService(
   db,
   repairRepository,
   organizationSequenceRepository,
+  clientRepository,
+  assetRepository,
 );
 export const repairCommentService = new RepairCommentService(
   db,
   repairCommentRepository,
+  repairRepository,
 );
 export const repairImageService = new RepairImageService(
   db,
   repairImageRepository,
+  repairRepository,
 );
 export const repairPartService = new RepairPartService(
   db,
   repairPartRepository,
+  repairRepository,
+  partRepository,
 );
 export const repairStatusTypeService = new RepairStatusTypeService(
   db,
@@ -179,7 +193,5 @@ export const userOnboardingService = new UserOnboardingService(
   userOnboardingRepository,
   userRepository,
   organizationRepository,
+  userInvitationRepository,
 );
-
-
-

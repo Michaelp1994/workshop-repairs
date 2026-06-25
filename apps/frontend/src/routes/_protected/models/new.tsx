@@ -1,8 +1,5 @@
 import { Card, CardContent } from "@repo/ui/card";
-import {
-  equipmentTypeId,
-  manufacturerId,
-} from "@repo/validators/ids.validators";
+import { equipmentTypeId, manufacturerId } from "~/validators/ids.validators";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 

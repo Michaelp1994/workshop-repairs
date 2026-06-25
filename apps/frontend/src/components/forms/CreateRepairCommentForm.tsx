@@ -1,4 +1,4 @@
-import type { RepairID } from "@repo/validators/ids.validators";
+import type { RepairID } from "~/validators/ids.validators";
 
 import {
   Form,
@@ -16,7 +16,7 @@ import {
   defaultRepairComment,
   type RepairCommentFormInput,
   repairCommentFormSchema,
-} from "@repo/validators/client/repairComments.schema";
+} from "~/validators/repairComments.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";

@@ -16,7 +16,7 @@ import {
   defaultEquipmentType,
   type EquipmentTypeFormInput,
   equipmentTypeFormSchema,
-} from "@repo/validators/client/equipmentTypes.schema";
+} from "~/validators/equipmentTypes.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
@@ -28,8 +28,8 @@ export default function CreateEquipmentTypeForm() {
     async onSuccess(data) {
       toast.success(`${data.name} created`);
       await navigate({
-        to: "/equipment-types/$equipmentTypeSlug",
-        params: { equipmentTypeSlug: data.slug },
+        to: "/equipment-types/$equipmentTypeId",
+        params: { equipmentTypeId: data.id },
       });
     },
     onError(errors) {

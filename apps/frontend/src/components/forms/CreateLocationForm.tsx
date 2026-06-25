@@ -16,7 +16,7 @@ import {
   defaultLocation,
   type LocationFormInput,
   locationFormSchema,
-} from "@repo/validators/client/locations.schema";
+} from "~/validators/locations.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
@@ -30,8 +30,8 @@ export default function CreateLocationForm() {
       await utils.locations.getAll.invalidate();
       toast.success(`Location ${data.name} created`);
       await navigate({
-        to: "/locations/$locationSlug",
-        params: { locationSlug: data.slug },
+        to: "/locations/$locationId",
+        params: { locationId: data.id },
       });
     },
     onError(errors) {

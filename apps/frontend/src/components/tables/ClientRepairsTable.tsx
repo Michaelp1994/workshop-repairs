@@ -1,4 +1,4 @@
-import type { ClientID } from "@repo/validators/ids.validators";
+import type { ClientID } from "~/validators/ids.validators";
 
 import {
   Card,
@@ -16,11 +16,11 @@ import { api } from "~/trpc/client";
 import { columns } from "./RepairsTable/columns";
 
 interface ClientRepairsTableProps {
-  clientSlug: string;
+  clientId: string;
 }
 
 export default function ClientRepairsTable({
-  clientSlug,
+  clientId,
 }: ClientRepairsTableProps) {
   const { dataState, countState, tableState } = useDataTableState({
     columns: {

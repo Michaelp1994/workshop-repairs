@@ -15,21 +15,29 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ClientFormInput,
   clientFormSchema,
-} from "@repo/validators/client/clients.schema";
+} from "~/validators/clients.schema";
+import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface BaseFormProps {
-  clientSlug: string;
+  clientId: string;
 }
 
-export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
-  const [client] = api.clients.getBySlug.useSuspenseQuery({ slug: clientSlug });
+export default function UpdateClientForm({ clientId }: BaseFormProps) {
+  const [client] = api.clients.getById.useSuspenseQuery({ id: clientId });
+  const navigate = useNavigate();
+  const utils = api.useUtils();
 
   const updateMutation = api.clients.update.useMutation({
-    onSuccess() {
+    async onSuccess() {
       toast.success(`Client updated`);
+      await utils.clients.getById.invalidate({ id: clientId });
+      await navigate({
+        to: "/clients/$clientId",
+        params: { clientId },
+      });
     },
     onError(errors) {
       displayMutationErrors(errors, form);
@@ -42,7 +50,7 @@ export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
   });
 
   function handleValid(values: ClientFormInput) {
-    updateMutation.mutate({ ...values, slug: clientSlug });
+    updateMutation.mutate({ ...values, id: clientId });
   }
 
   return (
@@ -65,7 +73,7 @@ export default function UpdateClientForm({ clientSlug }: BaseFormProps) {
         />
         <FormFooter>
           <ResetButton />
-          <SubmitButton />
+          <SubmitButton isLoading={updateMutation.isPending} />
         </FormFooter>
       </form>
     </Form>

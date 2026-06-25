@@ -1,4 +1,4 @@
-import RepairPartService from "@repo/services/services/repairPart.service";
+import RepairPartService from "../services/repairPart.service";
 import {
   archiveRepairPartSchema,
   countRepairPartsSchema,
@@ -6,9 +6,9 @@ import {
   getAllRepairPartsSchema,
   getRepairPartByIdSchema,
   updateRepairPartSchema,
-} from "@repo/validators/server/repairParts.validators";
-import { TRPCError } from "@trpc/server";
+} from "../validators/repairParts.validators";
 
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
@@ -17,8 +17,11 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
     getAll: organizationProcedure
       .input(getAllRepairPartsSchema)
       .query(async ({ input, ctx }) => {
+        const repairLocalId = input.filters.repairId
+          ? splitSlug(input.filters.repairId).localId
+          : undefined;
         const allRepairParts = await repairPartService.getAllRepairParts(
-          input,
+          { ...input, filters: { repairLocalId } },
           ctx.session,
         );
 
@@ -27,8 +30,11 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
     countAll: organizationProcedure
       .input(countRepairPartsSchema)
       .query(async ({ input, ctx }) => {
+        const repairLocalId = input.filters.repairId
+          ? splitSlug(input.filters.repairId).localId
+          : undefined;
         const count = await repairPartService.countRepairParts(
-          input,
+          { ...input, filters: { repairLocalId } },
           ctx.session,
         );
         return count;
@@ -41,20 +47,19 @@ export default function repairPartRouter(repairPartService: RepairPartService) {
           ctx.session,
         );
 
-        if (!repairPart) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairPart not found",
-          });
-        }
-
         return repairPart;
       }),
     create: organizationProcedure
       .input(createRepairPartSchema)
       .mutation(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
+        const partLocalId = splitSlug(input.partId).localId;
         const createdRepairPart = await repairPartService.createRepairPart(
-          input,
+          {
+            ...input,
+            repairLocalId,
+            partLocalId,
+          },
           ctx.session,
         );
 

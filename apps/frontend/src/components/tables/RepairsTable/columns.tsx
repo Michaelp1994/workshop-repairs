@@ -1,4 +1,4 @@
-import type { RouterOutputs } from "@repo/backend/router";
+import type { RouterOutputs } from "@repo/backend";
 
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
@@ -25,8 +25,8 @@ export const columns = [
     header: ({ table }) => <DataTableHeaderCheckbox table={table} />,
     cell: ({ row }) => <DataTableRowCheckbox row={row} />,
   }),
-  columnHelper.accessor("slug", {
-    id: "slug",
+  columnHelper.accessor("id", {
+    id: "id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Repair" />
     ),
@@ -34,8 +34,8 @@ export const columns = [
       return (
         <Link
           className="font-bold hover:underline"
-          params={{ repairSlug: getValue() }}
-          to="/repairs/$repairSlug"
+          params={{ repairId: getValue() }}
+          to="/repairs/$repairId"
         >
           {getValue()}
         </Link>
@@ -122,10 +122,7 @@ export const columns = [
     cell: ({ row }) => (
       <div className="flex justify-end">
         <Button asChild size="sm" variant="ghost">
-          <Link
-            params={{ repairSlug: row.original.slug }}
-            to="/repairs/$repairSlug"
-          >
+          <Link params={{ repairId: row.original.id }} to="/repairs/$repairId">
             <ChevronRight className="size-4" />
           </Link>
         </Button>

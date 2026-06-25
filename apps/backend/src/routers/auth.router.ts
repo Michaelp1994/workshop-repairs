@@ -1,10 +1,10 @@
-import AuthService from "@repo/services/services/auth.service";
+import AuthService from "../services/auth.service";
 import {
   forgotPasswordSchema,
   loginSchema,
   logoutSchema,
   registerSchema,
-} from "@repo/validators/server/auth.validators";
+} from "../validators/auth.validators";
 import { TRPCError } from "@trpc/server";
 
 import { authedProcedure, publicProcedure } from "../procedures";

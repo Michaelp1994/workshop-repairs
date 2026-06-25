@@ -1,14 +1,13 @@
-import EquipmentTypeService from "@repo/services/services/equipmentType.service";
+import EquipmentTypeService from "../services/equipmentType.service";
 import {
   archiveEquipmentTypeSchema,
   countEquipmentTypesSchema,
   createEquipmentTypeSchema,
   getAllEquipmentTypesSchema,
-  getEquipmentTypeBySlugSchema,
+  getEquipmentTypeByIdSchema,
   getEquipmentTypesSelectSchema,
   updateEquipmentTypeSchema,
-} from "@repo/validators/server/equipmentTypes.validators";
-import { TRPCError } from "@trpc/server";
+} from "../validators/equipmentTypes.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -46,22 +45,16 @@ export default function equipmentTypeRouter(
 
         return allEquipmentTypes;
       }),
-    getBySlug: organizationProcedure
-      .input(getEquipmentTypeBySlugSchema)
+    getById: organizationProcedure
+      .input(getEquipmentTypeByIdSchema)
       .query(async ({ ctx, input }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const equipmentType = await equipmentTypeService.getEquipmentType(
           localId,
           ctx.session,
         );
 
-        if (!equipmentType) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "can't find Equipment Type",
-          });
-        }
         return equipmentType;
       }),
     create: organizationProcedure
@@ -74,8 +67,8 @@ export default function equipmentTypeRouter(
       }),
     update: organizationProcedure
       .input(updateEquipmentTypeSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedEquipmentType =
           await equipmentTypeService.updateEquipmentType(
@@ -89,7 +82,7 @@ export default function equipmentTypeRouter(
     archive: organizationProcedure
       .input(archiveEquipmentTypeSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedEquipmentType =
           await equipmentTypeService.archiveEquipmentType(localId, ctx.session);

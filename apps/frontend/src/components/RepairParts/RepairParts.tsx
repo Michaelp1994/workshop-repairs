@@ -9,7 +9,7 @@ import {
 } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
-import { type RepairID } from "@repo/validators/ids.validators";
+import { type RepairID } from "~/validators/ids.validators";
 
 import { api } from "~/trpc/client";
 

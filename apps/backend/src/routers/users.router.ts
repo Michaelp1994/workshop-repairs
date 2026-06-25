@@ -1,8 +1,8 @@
-import UserService from "@repo/services/services/user.service";
+import UserService from "../services/user.service";
 import {
   confirmEmailSchema,
   resetPasswordSchema,
-} from "@repo/validators/server/auth.validators";
+} from "../validators/auth.validators";
 import {
   archiveUserSchema,
   countUsersSchema,
@@ -12,7 +12,7 @@ import {
   getUserByIdSchema,
   updateCurrentUserSchema,
   updateUserSchema,
-} from "@repo/validators/server/users.validators";
+} from "../validators/users.validators";
 import { TRPCError } from "@trpc/server";
 
 import { authedProcedure, organizationProcedure } from "../procedures";
@@ -36,11 +36,6 @@ export default function Router(userService: UserService) {
     resetPassword: authedProcedure.input(resetPasswordSchema).mutation(() => {
       throw new TRPCError({ code: "NOT_IMPLEMENTED" });
     }),
-    sendEmailConfirmation: authedProcedure
-      .input(confirmEmailSchema)
-      .mutation(async ({ ctx, input }) => {
-        return await userService.sendEmailConfirmation(input, ctx.session);
-      }),
     confirmEmail: authedProcedure
       .input(confirmEmailSchema)
       .mutation(async ({ input, ctx }) => {
@@ -51,12 +46,6 @@ export default function Router(userService: UserService) {
       .input(getCurrentUserSchema)
       .query(async ({ ctx }) => {
         const user = await userService.getUserById(ctx.session.userId);
-        if (!user) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "User not found",
-          });
-        }
 
         return user;
       }),
@@ -65,13 +54,6 @@ export default function Router(userService: UserService) {
       .input(getUserByIdSchema)
       .query(async ({ input }) => {
         const user = await userService.getUserById(input.id);
-
-        if (!user) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "User not found",
-          });
-        }
 
         return user;
       }),

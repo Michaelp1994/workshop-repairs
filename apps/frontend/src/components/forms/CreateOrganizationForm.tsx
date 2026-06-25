@@ -15,7 +15,7 @@ import {
   type CreateOrganizationInput,
   createOrganizationSchema,
   defaultOrganization,
-} from "@repo/validators/client/organization.schema";
+} from "~/validators/organization.schema";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -33,7 +33,7 @@ export default function CreateOrganizationForm() {
     });
   const navigate = useNavigate();
   const utils = api.useUtils();
-  const createMutation = api.userOnboardings.createOrganization.useMutation({
+  const createMutation = api.organizations.create.useMutation({
     async onSuccess() {
       await utils.userOnboardings.getStatus.invalidate();
       toast.success("Organization created.");

@@ -12,10 +12,6 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  type AssetFormInput,
-  assetFormSchema,
-} from "@repo/validators/client/assets.schema";
 
 import AssetStatusSelect from "~/components/selects/AssetStatusSelect";
 import ClientSelect from "~/components/selects/ClientSelect";
@@ -23,14 +19,18 @@ import LocationSelect from "~/components/selects/LocationSelect";
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  type AssetFormInput,
+  assetFormSchema,
+} from "~/validators/assets.schema";
 
 interface UpdateAssetFormProps {
-  slug: string;
+  assetId: string;
 }
 
-export default function UpdateAssetForm({ slug }: UpdateAssetFormProps) {
-  const [asset] = api.assets.getBySlug.useSuspenseQuery({
-    slug,
+export default function UpdateAssetForm({ assetId }: UpdateAssetFormProps) {
+  const [asset] = api.assets.getById.useSuspenseQuery({
+    id: assetId,
   });
 
   const updateMutation = api.assets.update.useMutation({
@@ -43,11 +43,16 @@ export default function UpdateAssetForm({ slug }: UpdateAssetFormProps) {
   });
 
   function handleValid(values: AssetFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: assetId });
   }
 
   const form = useForm({
-    values: asset,
+    values: {
+      ...asset,
+      modelId: asset.modelId,
+      locationId: asset.locationId,
+      clientId: asset.clientId,
+    },
     schema: assetFormSchema,
   });
 

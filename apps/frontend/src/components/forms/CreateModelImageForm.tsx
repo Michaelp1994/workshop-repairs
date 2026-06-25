@@ -17,8 +17,8 @@ import {
   defaultModelImage,
   type ModelImageFormInput,
   modelImageFormSchema,
-} from "@repo/validators/client/modelImages.schema";
-import { type ModelID } from "@repo/validators/ids.validators";
+} from "~/validators/modelImages.schema";
+import { type ModelID } from "~/validators/ids.validators";
 import { useState } from "react";
 
 import { api } from "~/trpc/client";

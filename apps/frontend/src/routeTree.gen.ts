@@ -44,23 +44,23 @@ import { Route as ProtectedEquipmentTypesNewRouteImport } from './routes/_protec
 import { Route as ProtectedClientsNewRouteImport } from './routes/_protected/clients/new'
 import { Route as ProtectedAssetsNewRouteImport } from './routes/_protected/assets/new'
 import { Route as ProtectedUsersUserIdIndexRouteImport } from './routes/_protected/users/$userId/index'
-import { Route as ProtectedRepairsRepairSlugIndexRouteImport } from './routes/_protected/repairs/$repairSlug/index'
-import { Route as ProtectedPartsPartSlugIndexRouteImport } from './routes/_protected/parts/$partSlug/index'
-import { Route as ProtectedModelsModelSlugIndexRouteImport } from './routes/_protected/models/$modelSlug/index'
-import { Route as ProtectedManufacturersManufacturerSlugIndexRouteImport } from './routes/_protected/manufacturers/$manufacturerSlug/index'
-import { Route as ProtectedLocationsLocationSlugIndexRouteImport } from './routes/_protected/locations/$locationSlug/index'
-import { Route as ProtectedEquipmentTypesEquipmentTypeSlugIndexRouteImport } from './routes/_protected/equipment-types/$equipmentTypeSlug/index'
-import { Route as ProtectedClientsClientSlugIndexRouteImport } from './routes/_protected/clients/$clientSlug/index'
-import { Route as ProtectedAssetsAssetSlugIndexRouteImport } from './routes/_protected/assets/$assetSlug/index'
+import { Route as ProtectedRepairsRepairIdIndexRouteImport } from './routes/_protected/repairs/$repairId/index'
+import { Route as ProtectedPartsPartIdIndexRouteImport } from './routes/_protected/parts/$partId/index'
+import { Route as ProtectedModelsModelIdIndexRouteImport } from './routes/_protected/models/$modelId/index'
+import { Route as ProtectedManufacturersManufacturerIdIndexRouteImport } from './routes/_protected/manufacturers/$manufacturerId/index'
+import { Route as ProtectedLocationsLocationIdIndexRouteImport } from './routes/_protected/locations/$locationId/index'
+import { Route as ProtectedEquipmentTypesEquipmentTypeIdIndexRouteImport } from './routes/_protected/equipment-types/$equipmentTypeId/index'
+import { Route as ProtectedClientsClientIdIndexRouteImport } from './routes/_protected/clients/$clientId/index'
+import { Route as ProtectedAssetsAssetIdIndexRouteImport } from './routes/_protected/assets/$assetId/index'
 import { Route as ProtectedUsersUserIdEditRouteImport } from './routes/_protected/users/$userId/edit'
-import { Route as ProtectedRepairsRepairSlugEditRouteImport } from './routes/_protected/repairs/$repairSlug/edit'
-import { Route as ProtectedPartsPartSlugEditRouteImport } from './routes/_protected/parts/$partSlug/edit'
-import { Route as ProtectedModelsModelSlugEditRouteImport } from './routes/_protected/models/$modelSlug/edit'
-import { Route as ProtectedManufacturersManufacturerSlugEditRouteImport } from './routes/_protected/manufacturers/$manufacturerSlug/edit'
-import { Route as ProtectedLocationsLocationSlugEditRouteImport } from './routes/_protected/locations/$locationSlug/edit'
-import { Route as ProtectedEquipmentTypesEquipmentTypeSlugEditRouteImport } from './routes/_protected/equipment-types/$equipmentTypeSlug/edit'
-import { Route as ProtectedClientsClientSlugEditRouteImport } from './routes/_protected/clients/$clientSlug/edit'
-import { Route as ProtectedAssetsAssetSlugEditRouteImport } from './routes/_protected/assets/$assetSlug/edit'
+import { Route as ProtectedRepairsRepairIdEditRouteImport } from './routes/_protected/repairs/$repairId/edit'
+import { Route as ProtectedPartsPartIdEditRouteImport } from './routes/_protected/parts/$partId/edit'
+import { Route as ProtectedModelsModelIdEditRouteImport } from './routes/_protected/models/$modelId/edit'
+import { Route as ProtectedManufacturersManufacturerIdEditRouteImport } from './routes/_protected/manufacturers/$manufacturerId/edit'
+import { Route as ProtectedLocationsLocationIdEditRouteImport } from './routes/_protected/locations/$locationId/edit'
+import { Route as ProtectedEquipmentTypesEquipmentTypeIdEditRouteImport } from './routes/_protected/equipment-types/$equipmentTypeId/edit'
+import { Route as ProtectedClientsClientIdEditRouteImport } from './routes/_protected/clients/$clientId/edit'
+import { Route as ProtectedAssetsAssetIdEditRouteImport } from './routes/_protected/assets/$assetId/edit'
 
 const OnboardingRouteRoute = OnboardingRouteRouteImport.update({
   id: '/onboarding',
@@ -246,52 +246,52 @@ const ProtectedUsersUserIdIndexRoute =
     path: '/users/$userId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedRepairsRepairSlugIndexRoute =
-  ProtectedRepairsRepairSlugIndexRouteImport.update({
-    id: '/repairs/$repairSlug/',
-    path: '/repairs/$repairSlug/',
+const ProtectedRepairsRepairIdIndexRoute =
+  ProtectedRepairsRepairIdIndexRouteImport.update({
+    id: '/repairs/$repairId/',
+    path: '/repairs/$repairId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedPartsPartSlugIndexRoute =
-  ProtectedPartsPartSlugIndexRouteImport.update({
-    id: '/parts/$partSlug/',
-    path: '/parts/$partSlug/',
+const ProtectedPartsPartIdIndexRoute =
+  ProtectedPartsPartIdIndexRouteImport.update({
+    id: '/parts/$partId/',
+    path: '/parts/$partId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedModelsModelSlugIndexRoute =
-  ProtectedModelsModelSlugIndexRouteImport.update({
-    id: '/models/$modelSlug/',
-    path: '/models/$modelSlug/',
+const ProtectedModelsModelIdIndexRoute =
+  ProtectedModelsModelIdIndexRouteImport.update({
+    id: '/models/$modelId/',
+    path: '/models/$modelId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedManufacturersManufacturerSlugIndexRoute =
-  ProtectedManufacturersManufacturerSlugIndexRouteImport.update({
-    id: '/manufacturers/$manufacturerSlug/',
-    path: '/manufacturers/$manufacturerSlug/',
+const ProtectedManufacturersManufacturerIdIndexRoute =
+  ProtectedManufacturersManufacturerIdIndexRouteImport.update({
+    id: '/manufacturers/$manufacturerId/',
+    path: '/manufacturers/$manufacturerId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedLocationsLocationSlugIndexRoute =
-  ProtectedLocationsLocationSlugIndexRouteImport.update({
-    id: '/locations/$locationSlug/',
-    path: '/locations/$locationSlug/',
+const ProtectedLocationsLocationIdIndexRoute =
+  ProtectedLocationsLocationIdIndexRouteImport.update({
+    id: '/locations/$locationId/',
+    path: '/locations/$locationId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute =
-  ProtectedEquipmentTypesEquipmentTypeSlugIndexRouteImport.update({
-    id: '/equipment-types/$equipmentTypeSlug/',
-    path: '/equipment-types/$equipmentTypeSlug/',
+const ProtectedEquipmentTypesEquipmentTypeIdIndexRoute =
+  ProtectedEquipmentTypesEquipmentTypeIdIndexRouteImport.update({
+    id: '/equipment-types/$equipmentTypeId/',
+    path: '/equipment-types/$equipmentTypeId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedClientsClientSlugIndexRoute =
-  ProtectedClientsClientSlugIndexRouteImport.update({
-    id: '/clients/$clientSlug/',
-    path: '/clients/$clientSlug/',
+const ProtectedClientsClientIdIndexRoute =
+  ProtectedClientsClientIdIndexRouteImport.update({
+    id: '/clients/$clientId/',
+    path: '/clients/$clientId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedAssetsAssetSlugIndexRoute =
-  ProtectedAssetsAssetSlugIndexRouteImport.update({
-    id: '/assets/$assetSlug/',
-    path: '/assets/$assetSlug/',
+const ProtectedAssetsAssetIdIndexRoute =
+  ProtectedAssetsAssetIdIndexRouteImport.update({
+    id: '/assets/$assetId/',
+    path: '/assets/$assetId/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 const ProtectedUsersUserIdEditRoute =
@@ -300,56 +300,57 @@ const ProtectedUsersUserIdEditRoute =
     path: '/users/$userId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedRepairsRepairSlugEditRoute =
-  ProtectedRepairsRepairSlugEditRouteImport.update({
-    id: '/repairs/$repairSlug/edit',
-    path: '/repairs/$repairSlug/edit',
+const ProtectedRepairsRepairIdEditRoute =
+  ProtectedRepairsRepairIdEditRouteImport.update({
+    id: '/repairs/$repairId/edit',
+    path: '/repairs/$repairId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedPartsPartSlugEditRoute =
-  ProtectedPartsPartSlugEditRouteImport.update({
-    id: '/parts/$partSlug/edit',
-    path: '/parts/$partSlug/edit',
+const ProtectedPartsPartIdEditRoute =
+  ProtectedPartsPartIdEditRouteImport.update({
+    id: '/parts/$partId/edit',
+    path: '/parts/$partId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedModelsModelSlugEditRoute =
-  ProtectedModelsModelSlugEditRouteImport.update({
-    id: '/models/$modelSlug/edit',
-    path: '/models/$modelSlug/edit',
+const ProtectedModelsModelIdEditRoute =
+  ProtectedModelsModelIdEditRouteImport.update({
+    id: '/models/$modelId/edit',
+    path: '/models/$modelId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedManufacturersManufacturerSlugEditRoute =
-  ProtectedManufacturersManufacturerSlugEditRouteImport.update({
-    id: '/manufacturers/$manufacturerSlug/edit',
-    path: '/manufacturers/$manufacturerSlug/edit',
+const ProtectedManufacturersManufacturerIdEditRoute =
+  ProtectedManufacturersManufacturerIdEditRouteImport.update({
+    id: '/manufacturers/$manufacturerId/edit',
+    path: '/manufacturers/$manufacturerId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedLocationsLocationSlugEditRoute =
-  ProtectedLocationsLocationSlugEditRouteImport.update({
-    id: '/locations/$locationSlug/edit',
-    path: '/locations/$locationSlug/edit',
+const ProtectedLocationsLocationIdEditRoute =
+  ProtectedLocationsLocationIdEditRouteImport.update({
+    id: '/locations/$locationId/edit',
+    path: '/locations/$locationId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedEquipmentTypesEquipmentTypeSlugEditRoute =
-  ProtectedEquipmentTypesEquipmentTypeSlugEditRouteImport.update({
-    id: '/equipment-types/$equipmentTypeSlug/edit',
-    path: '/equipment-types/$equipmentTypeSlug/edit',
+const ProtectedEquipmentTypesEquipmentTypeIdEditRoute =
+  ProtectedEquipmentTypesEquipmentTypeIdEditRouteImport.update({
+    id: '/equipment-types/$equipmentTypeId/edit',
+    path: '/equipment-types/$equipmentTypeId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedClientsClientSlugEditRoute =
-  ProtectedClientsClientSlugEditRouteImport.update({
-    id: '/clients/$clientSlug/edit',
-    path: '/clients/$clientSlug/edit',
+const ProtectedClientsClientIdEditRoute =
+  ProtectedClientsClientIdEditRouteImport.update({
+    id: '/clients/$clientId/edit',
+    path: '/clients/$clientId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedAssetsAssetSlugEditRoute =
-  ProtectedAssetsAssetSlugEditRouteImport.update({
-    id: '/assets/$assetSlug/edit',
-    path: '/assets/$assetSlug/edit',
+const ProtectedAssetsAssetIdEditRoute =
+  ProtectedAssetsAssetIdEditRouteImport.update({
+    id: '/assets/$assetId/edit',
+    path: '/assets/$assetId/edit',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof publicIndexRoute
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/forgot-password': typeof publicForgotPasswordRoute
   '/login': typeof publicLoginRoute
@@ -359,7 +360,6 @@ export interface FileRoutesByFullPath {
   '/onboarding/invitation': typeof OnboardingInvitationRoute
   '/onboarding/sequences': typeof OnboardingSequencesRoute
   '/onboarding/welcome': typeof OnboardingWelcomeRoute
-  '/': typeof publicIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/assets/new': typeof ProtectedAssetsNewRoute
   '/clients/new': typeof ProtectedClientsNewRoute
@@ -371,38 +371,39 @@ export interface FileRoutesByFullPath {
   '/repairs/new': typeof ProtectedRepairsNewRoute
   '/onboarding/organization/create': typeof OnboardingOrganizationCreateRoute
   '/onboarding/organization/join': typeof OnboardingOrganizationJoinRoute
-  '/assets': typeof ProtectedAssetsIndexRoute
-  '/clients': typeof ProtectedClientsIndexRoute
-  '/equipment-types': typeof ProtectedEquipmentTypesIndexRoute
-  '/locations': typeof ProtectedLocationsIndexRoute
-  '/manufacturers': typeof ProtectedManufacturersIndexRoute
-  '/models': typeof ProtectedModelsIndexRoute
-  '/organization': typeof ProtectedOrganizationIndexRoute
-  '/parts': typeof ProtectedPartsIndexRoute
-  '/profile': typeof ProtectedProfileIndexRoute
-  '/repairs': typeof ProtectedRepairsIndexRoute
-  '/users': typeof ProtectedUsersIndexRoute
-  '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
-  '/assets/$assetSlug/edit': typeof ProtectedAssetsAssetSlugEditRoute
-  '/clients/$clientSlug/edit': typeof ProtectedClientsClientSlugEditRoute
-  '/equipment-types/$equipmentTypeSlug/edit': typeof ProtectedEquipmentTypesEquipmentTypeSlugEditRoute
-  '/locations/$locationSlug/edit': typeof ProtectedLocationsLocationSlugEditRoute
-  '/manufacturers/$manufacturerSlug/edit': typeof ProtectedManufacturersManufacturerSlugEditRoute
-  '/models/$modelSlug/edit': typeof ProtectedModelsModelSlugEditRoute
-  '/parts/$partSlug/edit': typeof ProtectedPartsPartSlugEditRoute
-  '/repairs/$repairSlug/edit': typeof ProtectedRepairsRepairSlugEditRoute
+  '/assets/': typeof ProtectedAssetsIndexRoute
+  '/clients/': typeof ProtectedClientsIndexRoute
+  '/equipment-types/': typeof ProtectedEquipmentTypesIndexRoute
+  '/locations/': typeof ProtectedLocationsIndexRoute
+  '/manufacturers/': typeof ProtectedManufacturersIndexRoute
+  '/models/': typeof ProtectedModelsIndexRoute
+  '/organization/': typeof ProtectedOrganizationIndexRoute
+  '/parts/': typeof ProtectedPartsIndexRoute
+  '/profile/': typeof ProtectedProfileIndexRoute
+  '/repairs/': typeof ProtectedRepairsIndexRoute
+  '/users/': typeof ProtectedUsersIndexRoute
+  '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
+  '/assets/$assetId/edit': typeof ProtectedAssetsAssetIdEditRoute
+  '/clients/$clientId/edit': typeof ProtectedClientsClientIdEditRoute
+  '/equipment-types/$equipmentTypeId/edit': typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
+  '/locations/$locationId/edit': typeof ProtectedLocationsLocationIdEditRoute
+  '/manufacturers/$manufacturerId/edit': typeof ProtectedManufacturersManufacturerIdEditRoute
+  '/models/$modelId/edit': typeof ProtectedModelsModelIdEditRoute
+  '/parts/$partId/edit': typeof ProtectedPartsPartIdEditRoute
+  '/repairs/$repairId/edit': typeof ProtectedRepairsRepairIdEditRoute
   '/users/$userId/edit': typeof ProtectedUsersUserIdEditRoute
-  '/assets/$assetSlug': typeof ProtectedAssetsAssetSlugIndexRoute
-  '/clients/$clientSlug': typeof ProtectedClientsClientSlugIndexRoute
-  '/equipment-types/$equipmentTypeSlug': typeof ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute
-  '/locations/$locationSlug': typeof ProtectedLocationsLocationSlugIndexRoute
-  '/manufacturers/$manufacturerSlug': typeof ProtectedManufacturersManufacturerSlugIndexRoute
-  '/models/$modelSlug': typeof ProtectedModelsModelSlugIndexRoute
-  '/parts/$partSlug': typeof ProtectedPartsPartSlugIndexRoute
-  '/repairs/$repairSlug': typeof ProtectedRepairsRepairSlugIndexRoute
-  '/users/$userId': typeof ProtectedUsersUserIdIndexRoute
+  '/assets/$assetId/': typeof ProtectedAssetsAssetIdIndexRoute
+  '/clients/$clientId/': typeof ProtectedClientsClientIdIndexRoute
+  '/equipment-types/$equipmentTypeId/': typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
+  '/locations/$locationId/': typeof ProtectedLocationsLocationIdIndexRoute
+  '/manufacturers/$manufacturerId/': typeof ProtectedManufacturersManufacturerIdIndexRoute
+  '/models/$modelId/': typeof ProtectedModelsModelIdIndexRoute
+  '/parts/$partId/': typeof ProtectedPartsPartIdIndexRoute
+  '/repairs/$repairId/': typeof ProtectedRepairsRepairIdIndexRoute
+  '/users/$userId/': typeof ProtectedUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof publicIndexRoute
   '/forgot-password': typeof publicForgotPasswordRoute
   '/login': typeof publicLoginRoute
   '/register': typeof publicRegisterRoute
@@ -411,7 +412,6 @@ export interface FileRoutesByTo {
   '/onboarding/invitation': typeof OnboardingInvitationRoute
   '/onboarding/sequences': typeof OnboardingSequencesRoute
   '/onboarding/welcome': typeof OnboardingWelcomeRoute
-  '/': typeof publicIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/assets/new': typeof ProtectedAssetsNewRoute
   '/clients/new': typeof ProtectedClientsNewRoute
@@ -435,23 +435,23 @@ export interface FileRoutesByTo {
   '/repairs': typeof ProtectedRepairsIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
-  '/assets/$assetSlug/edit': typeof ProtectedAssetsAssetSlugEditRoute
-  '/clients/$clientSlug/edit': typeof ProtectedClientsClientSlugEditRoute
-  '/equipment-types/$equipmentTypeSlug/edit': typeof ProtectedEquipmentTypesEquipmentTypeSlugEditRoute
-  '/locations/$locationSlug/edit': typeof ProtectedLocationsLocationSlugEditRoute
-  '/manufacturers/$manufacturerSlug/edit': typeof ProtectedManufacturersManufacturerSlugEditRoute
-  '/models/$modelSlug/edit': typeof ProtectedModelsModelSlugEditRoute
-  '/parts/$partSlug/edit': typeof ProtectedPartsPartSlugEditRoute
-  '/repairs/$repairSlug/edit': typeof ProtectedRepairsRepairSlugEditRoute
+  '/assets/$assetId/edit': typeof ProtectedAssetsAssetIdEditRoute
+  '/clients/$clientId/edit': typeof ProtectedClientsClientIdEditRoute
+  '/equipment-types/$equipmentTypeId/edit': typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
+  '/locations/$locationId/edit': typeof ProtectedLocationsLocationIdEditRoute
+  '/manufacturers/$manufacturerId/edit': typeof ProtectedManufacturersManufacturerIdEditRoute
+  '/models/$modelId/edit': typeof ProtectedModelsModelIdEditRoute
+  '/parts/$partId/edit': typeof ProtectedPartsPartIdEditRoute
+  '/repairs/$repairId/edit': typeof ProtectedRepairsRepairIdEditRoute
   '/users/$userId/edit': typeof ProtectedUsersUserIdEditRoute
-  '/assets/$assetSlug': typeof ProtectedAssetsAssetSlugIndexRoute
-  '/clients/$clientSlug': typeof ProtectedClientsClientSlugIndexRoute
-  '/equipment-types/$equipmentTypeSlug': typeof ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute
-  '/locations/$locationSlug': typeof ProtectedLocationsLocationSlugIndexRoute
-  '/manufacturers/$manufacturerSlug': typeof ProtectedManufacturersManufacturerSlugIndexRoute
-  '/models/$modelSlug': typeof ProtectedModelsModelSlugIndexRoute
-  '/parts/$partSlug': typeof ProtectedPartsPartSlugIndexRoute
-  '/repairs/$repairSlug': typeof ProtectedRepairsRepairSlugIndexRoute
+  '/assets/$assetId': typeof ProtectedAssetsAssetIdIndexRoute
+  '/clients/$clientId': typeof ProtectedClientsClientIdIndexRoute
+  '/equipment-types/$equipmentTypeId': typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
+  '/locations/$locationId': typeof ProtectedLocationsLocationIdIndexRoute
+  '/manufacturers/$manufacturerId': typeof ProtectedManufacturersManufacturerIdIndexRoute
+  '/models/$modelId': typeof ProtectedModelsModelIdIndexRoute
+  '/parts/$partId': typeof ProtectedPartsPartIdIndexRoute
+  '/repairs/$repairId': typeof ProtectedRepairsRepairIdIndexRoute
   '/users/$userId': typeof ProtectedUsersUserIdIndexRoute
 }
 export interface FileRoutesById {
@@ -490,28 +490,29 @@ export interface FileRoutesById {
   '/_protected/repairs/': typeof ProtectedRepairsIndexRoute
   '/_protected/users/': typeof ProtectedUsersIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
-  '/_protected/assets/$assetSlug/edit': typeof ProtectedAssetsAssetSlugEditRoute
-  '/_protected/clients/$clientSlug/edit': typeof ProtectedClientsClientSlugEditRoute
-  '/_protected/equipment-types/$equipmentTypeSlug/edit': typeof ProtectedEquipmentTypesEquipmentTypeSlugEditRoute
-  '/_protected/locations/$locationSlug/edit': typeof ProtectedLocationsLocationSlugEditRoute
-  '/_protected/manufacturers/$manufacturerSlug/edit': typeof ProtectedManufacturersManufacturerSlugEditRoute
-  '/_protected/models/$modelSlug/edit': typeof ProtectedModelsModelSlugEditRoute
-  '/_protected/parts/$partSlug/edit': typeof ProtectedPartsPartSlugEditRoute
-  '/_protected/repairs/$repairSlug/edit': typeof ProtectedRepairsRepairSlugEditRoute
+  '/_protected/assets/$assetId/edit': typeof ProtectedAssetsAssetIdEditRoute
+  '/_protected/clients/$clientId/edit': typeof ProtectedClientsClientIdEditRoute
+  '/_protected/equipment-types/$equipmentTypeId/edit': typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
+  '/_protected/locations/$locationId/edit': typeof ProtectedLocationsLocationIdEditRoute
+  '/_protected/manufacturers/$manufacturerId/edit': typeof ProtectedManufacturersManufacturerIdEditRoute
+  '/_protected/models/$modelId/edit': typeof ProtectedModelsModelIdEditRoute
+  '/_protected/parts/$partId/edit': typeof ProtectedPartsPartIdEditRoute
+  '/_protected/repairs/$repairId/edit': typeof ProtectedRepairsRepairIdEditRoute
   '/_protected/users/$userId/edit': typeof ProtectedUsersUserIdEditRoute
-  '/_protected/assets/$assetSlug/': typeof ProtectedAssetsAssetSlugIndexRoute
-  '/_protected/clients/$clientSlug/': typeof ProtectedClientsClientSlugIndexRoute
-  '/_protected/equipment-types/$equipmentTypeSlug/': typeof ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute
-  '/_protected/locations/$locationSlug/': typeof ProtectedLocationsLocationSlugIndexRoute
-  '/_protected/manufacturers/$manufacturerSlug/': typeof ProtectedManufacturersManufacturerSlugIndexRoute
-  '/_protected/models/$modelSlug/': typeof ProtectedModelsModelSlugIndexRoute
-  '/_protected/parts/$partSlug/': typeof ProtectedPartsPartSlugIndexRoute
-  '/_protected/repairs/$repairSlug/': typeof ProtectedRepairsRepairSlugIndexRoute
+  '/_protected/assets/$assetId/': typeof ProtectedAssetsAssetIdIndexRoute
+  '/_protected/clients/$clientId/': typeof ProtectedClientsClientIdIndexRoute
+  '/_protected/equipment-types/$equipmentTypeId/': typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
+  '/_protected/locations/$locationId/': typeof ProtectedLocationsLocationIdIndexRoute
+  '/_protected/manufacturers/$manufacturerId/': typeof ProtectedManufacturersManufacturerIdIndexRoute
+  '/_protected/models/$modelId/': typeof ProtectedModelsModelIdIndexRoute
+  '/_protected/parts/$partId/': typeof ProtectedPartsPartIdIndexRoute
+  '/_protected/repairs/$repairId/': typeof ProtectedRepairsRepairIdIndexRoute
   '/_protected/users/$userId/': typeof ProtectedUsersUserIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/onboarding'
     | '/forgot-password'
     | '/login'
@@ -521,7 +522,6 @@ export interface FileRouteTypes {
     | '/onboarding/invitation'
     | '/onboarding/sequences'
     | '/onboarding/welcome'
-    | '/'
     | '/onboarding/'
     | '/assets/new'
     | '/clients/new'
@@ -533,38 +533,39 @@ export interface FileRouteTypes {
     | '/repairs/new'
     | '/onboarding/organization/create'
     | '/onboarding/organization/join'
-    | '/assets'
-    | '/clients'
-    | '/equipment-types'
-    | '/locations'
-    | '/manufacturers'
-    | '/models'
-    | '/organization'
-    | '/parts'
-    | '/profile'
-    | '/repairs'
-    | '/users'
-    | '/onboarding/organization'
-    | '/assets/$assetSlug/edit'
-    | '/clients/$clientSlug/edit'
-    | '/equipment-types/$equipmentTypeSlug/edit'
-    | '/locations/$locationSlug/edit'
-    | '/manufacturers/$manufacturerSlug/edit'
-    | '/models/$modelSlug/edit'
-    | '/parts/$partSlug/edit'
-    | '/repairs/$repairSlug/edit'
+    | '/assets/'
+    | '/clients/'
+    | '/equipment-types/'
+    | '/locations/'
+    | '/manufacturers/'
+    | '/models/'
+    | '/organization/'
+    | '/parts/'
+    | '/profile/'
+    | '/repairs/'
+    | '/users/'
+    | '/onboarding/organization/'
+    | '/assets/$assetId/edit'
+    | '/clients/$clientId/edit'
+    | '/equipment-types/$equipmentTypeId/edit'
+    | '/locations/$locationId/edit'
+    | '/manufacturers/$manufacturerId/edit'
+    | '/models/$modelId/edit'
+    | '/parts/$partId/edit'
+    | '/repairs/$repairId/edit'
     | '/users/$userId/edit'
-    | '/assets/$assetSlug'
-    | '/clients/$clientSlug'
-    | '/equipment-types/$equipmentTypeSlug'
-    | '/locations/$locationSlug'
-    | '/manufacturers/$manufacturerSlug'
-    | '/models/$modelSlug'
-    | '/parts/$partSlug'
-    | '/repairs/$repairSlug'
-    | '/users/$userId'
+    | '/assets/$assetId/'
+    | '/clients/$clientId/'
+    | '/equipment-types/$equipmentTypeId/'
+    | '/locations/$locationId/'
+    | '/manufacturers/$manufacturerId/'
+    | '/models/$modelId/'
+    | '/parts/$partId/'
+    | '/repairs/$repairId/'
+    | '/users/$userId/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -573,7 +574,6 @@ export interface FileRouteTypes {
     | '/onboarding/invitation'
     | '/onboarding/sequences'
     | '/onboarding/welcome'
-    | '/'
     | '/onboarding'
     | '/assets/new'
     | '/clients/new'
@@ -597,23 +597,23 @@ export interface FileRouteTypes {
     | '/repairs'
     | '/users'
     | '/onboarding/organization'
-    | '/assets/$assetSlug/edit'
-    | '/clients/$clientSlug/edit'
-    | '/equipment-types/$equipmentTypeSlug/edit'
-    | '/locations/$locationSlug/edit'
-    | '/manufacturers/$manufacturerSlug/edit'
-    | '/models/$modelSlug/edit'
-    | '/parts/$partSlug/edit'
-    | '/repairs/$repairSlug/edit'
+    | '/assets/$assetId/edit'
+    | '/clients/$clientId/edit'
+    | '/equipment-types/$equipmentTypeId/edit'
+    | '/locations/$locationId/edit'
+    | '/manufacturers/$manufacturerId/edit'
+    | '/models/$modelId/edit'
+    | '/parts/$partId/edit'
+    | '/repairs/$repairId/edit'
     | '/users/$userId/edit'
-    | '/assets/$assetSlug'
-    | '/clients/$clientSlug'
-    | '/equipment-types/$equipmentTypeSlug'
-    | '/locations/$locationSlug'
-    | '/manufacturers/$manufacturerSlug'
-    | '/models/$modelSlug'
-    | '/parts/$partSlug'
-    | '/repairs/$repairSlug'
+    | '/assets/$assetId'
+    | '/clients/$clientId'
+    | '/equipment-types/$equipmentTypeId'
+    | '/locations/$locationId'
+    | '/manufacturers/$manufacturerId'
+    | '/models/$modelId'
+    | '/parts/$partId'
+    | '/repairs/$repairId'
     | '/users/$userId'
   id:
     | '__root__'
@@ -651,23 +651,23 @@ export interface FileRouteTypes {
     | '/_protected/repairs/'
     | '/_protected/users/'
     | '/onboarding/organization/'
-    | '/_protected/assets/$assetSlug/edit'
-    | '/_protected/clients/$clientSlug/edit'
-    | '/_protected/equipment-types/$equipmentTypeSlug/edit'
-    | '/_protected/locations/$locationSlug/edit'
-    | '/_protected/manufacturers/$manufacturerSlug/edit'
-    | '/_protected/models/$modelSlug/edit'
-    | '/_protected/parts/$partSlug/edit'
-    | '/_protected/repairs/$repairSlug/edit'
+    | '/_protected/assets/$assetId/edit'
+    | '/_protected/clients/$clientId/edit'
+    | '/_protected/equipment-types/$equipmentTypeId/edit'
+    | '/_protected/locations/$locationId/edit'
+    | '/_protected/manufacturers/$manufacturerId/edit'
+    | '/_protected/models/$modelId/edit'
+    | '/_protected/parts/$partId/edit'
+    | '/_protected/repairs/$repairId/edit'
     | '/_protected/users/$userId/edit'
-    | '/_protected/assets/$assetSlug/'
-    | '/_protected/clients/$clientSlug/'
-    | '/_protected/equipment-types/$equipmentTypeSlug/'
-    | '/_protected/locations/$locationSlug/'
-    | '/_protected/manufacturers/$manufacturerSlug/'
-    | '/_protected/models/$modelSlug/'
-    | '/_protected/parts/$partSlug/'
-    | '/_protected/repairs/$repairSlug/'
+    | '/_protected/assets/$assetId/'
+    | '/_protected/clients/$clientId/'
+    | '/_protected/equipment-types/$equipmentTypeId/'
+    | '/_protected/locations/$locationId/'
+    | '/_protected/manufacturers/$manufacturerId/'
+    | '/_protected/models/$modelId/'
+    | '/_protected/parts/$partId/'
+    | '/_protected/repairs/$repairId/'
     | '/_protected/users/$userId/'
   fileRoutesById: FileRoutesById
 }
@@ -692,7 +692,7 @@ declare module '@tanstack/react-router' {
     '/_protected': {
       id: '/_protected'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof ProtectedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -769,84 +769,84 @@ declare module '@tanstack/react-router' {
     '/onboarding/organization/': {
       id: '/onboarding/organization/'
       path: '/organization'
-      fullPath: '/onboarding/organization'
+      fullPath: '/onboarding/organization/'
       preLoaderRoute: typeof OnboardingOrganizationIndexRouteImport
       parentRoute: typeof OnboardingRouteRoute
     }
     '/_protected/users/': {
       id: '/_protected/users/'
       path: '/users'
-      fullPath: '/users'
+      fullPath: '/users/'
       preLoaderRoute: typeof ProtectedUsersIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/repairs/': {
       id: '/_protected/repairs/'
       path: '/repairs'
-      fullPath: '/repairs'
+      fullPath: '/repairs/'
       preLoaderRoute: typeof ProtectedRepairsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/profile/': {
       id: '/_protected/profile/'
       path: '/profile'
-      fullPath: '/profile'
+      fullPath: '/profile/'
       preLoaderRoute: typeof ProtectedProfileIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/parts/': {
       id: '/_protected/parts/'
       path: '/parts'
-      fullPath: '/parts'
+      fullPath: '/parts/'
       preLoaderRoute: typeof ProtectedPartsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/organization/': {
       id: '/_protected/organization/'
       path: '/organization'
-      fullPath: '/organization'
+      fullPath: '/organization/'
       preLoaderRoute: typeof ProtectedOrganizationIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/models/': {
       id: '/_protected/models/'
       path: '/models'
-      fullPath: '/models'
+      fullPath: '/models/'
       preLoaderRoute: typeof ProtectedModelsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/manufacturers/': {
       id: '/_protected/manufacturers/'
       path: '/manufacturers'
-      fullPath: '/manufacturers'
+      fullPath: '/manufacturers/'
       preLoaderRoute: typeof ProtectedManufacturersIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/locations/': {
       id: '/_protected/locations/'
       path: '/locations'
-      fullPath: '/locations'
+      fullPath: '/locations/'
       preLoaderRoute: typeof ProtectedLocationsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/equipment-types/': {
       id: '/_protected/equipment-types/'
       path: '/equipment-types'
-      fullPath: '/equipment-types'
+      fullPath: '/equipment-types/'
       preLoaderRoute: typeof ProtectedEquipmentTypesIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/clients/': {
       id: '/_protected/clients/'
       path: '/clients'
-      fullPath: '/clients'
+      fullPath: '/clients/'
       preLoaderRoute: typeof ProtectedClientsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/assets/': {
       id: '/_protected/assets/'
       path: '/assets'
-      fullPath: '/assets'
+      fullPath: '/assets/'
       preLoaderRoute: typeof ProtectedAssetsIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
@@ -923,64 +923,64 @@ declare module '@tanstack/react-router' {
     '/_protected/users/$userId/': {
       id: '/_protected/users/$userId/'
       path: '/users/$userId'
-      fullPath: '/users/$userId'
+      fullPath: '/users/$userId/'
       preLoaderRoute: typeof ProtectedUsersUserIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/repairs/$repairSlug/': {
-      id: '/_protected/repairs/$repairSlug/'
-      path: '/repairs/$repairSlug'
-      fullPath: '/repairs/$repairSlug'
-      preLoaderRoute: typeof ProtectedRepairsRepairSlugIndexRouteImport
+    '/_protected/repairs/$repairId/': {
+      id: '/_protected/repairs/$repairId/'
+      path: '/repairs/$repairId'
+      fullPath: '/repairs/$repairId/'
+      preLoaderRoute: typeof ProtectedRepairsRepairIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/parts/$partSlug/': {
-      id: '/_protected/parts/$partSlug/'
-      path: '/parts/$partSlug'
-      fullPath: '/parts/$partSlug'
-      preLoaderRoute: typeof ProtectedPartsPartSlugIndexRouteImport
+    '/_protected/parts/$partId/': {
+      id: '/_protected/parts/$partId/'
+      path: '/parts/$partId'
+      fullPath: '/parts/$partId/'
+      preLoaderRoute: typeof ProtectedPartsPartIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/models/$modelSlug/': {
-      id: '/_protected/models/$modelSlug/'
-      path: '/models/$modelSlug'
-      fullPath: '/models/$modelSlug'
-      preLoaderRoute: typeof ProtectedModelsModelSlugIndexRouteImport
+    '/_protected/models/$modelId/': {
+      id: '/_protected/models/$modelId/'
+      path: '/models/$modelId'
+      fullPath: '/models/$modelId/'
+      preLoaderRoute: typeof ProtectedModelsModelIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/manufacturers/$manufacturerSlug/': {
-      id: '/_protected/manufacturers/$manufacturerSlug/'
-      path: '/manufacturers/$manufacturerSlug'
-      fullPath: '/manufacturers/$manufacturerSlug'
-      preLoaderRoute: typeof ProtectedManufacturersManufacturerSlugIndexRouteImport
+    '/_protected/manufacturers/$manufacturerId/': {
+      id: '/_protected/manufacturers/$manufacturerId/'
+      path: '/manufacturers/$manufacturerId'
+      fullPath: '/manufacturers/$manufacturerId/'
+      preLoaderRoute: typeof ProtectedManufacturersManufacturerIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/locations/$locationSlug/': {
-      id: '/_protected/locations/$locationSlug/'
-      path: '/locations/$locationSlug'
-      fullPath: '/locations/$locationSlug'
-      preLoaderRoute: typeof ProtectedLocationsLocationSlugIndexRouteImport
+    '/_protected/locations/$locationId/': {
+      id: '/_protected/locations/$locationId/'
+      path: '/locations/$locationId'
+      fullPath: '/locations/$locationId/'
+      preLoaderRoute: typeof ProtectedLocationsLocationIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/equipment-types/$equipmentTypeSlug/': {
-      id: '/_protected/equipment-types/$equipmentTypeSlug/'
-      path: '/equipment-types/$equipmentTypeSlug'
-      fullPath: '/equipment-types/$equipmentTypeSlug'
-      preLoaderRoute: typeof ProtectedEquipmentTypesEquipmentTypeSlugIndexRouteImport
+    '/_protected/equipment-types/$equipmentTypeId/': {
+      id: '/_protected/equipment-types/$equipmentTypeId/'
+      path: '/equipment-types/$equipmentTypeId'
+      fullPath: '/equipment-types/$equipmentTypeId/'
+      preLoaderRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/clients/$clientSlug/': {
-      id: '/_protected/clients/$clientSlug/'
-      path: '/clients/$clientSlug'
-      fullPath: '/clients/$clientSlug'
-      preLoaderRoute: typeof ProtectedClientsClientSlugIndexRouteImport
+    '/_protected/clients/$clientId/': {
+      id: '/_protected/clients/$clientId/'
+      path: '/clients/$clientId'
+      fullPath: '/clients/$clientId/'
+      preLoaderRoute: typeof ProtectedClientsClientIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/assets/$assetSlug/': {
-      id: '/_protected/assets/$assetSlug/'
-      path: '/assets/$assetSlug'
-      fullPath: '/assets/$assetSlug'
-      preLoaderRoute: typeof ProtectedAssetsAssetSlugIndexRouteImport
+    '/_protected/assets/$assetId/': {
+      id: '/_protected/assets/$assetId/'
+      path: '/assets/$assetId'
+      fullPath: '/assets/$assetId/'
+      preLoaderRoute: typeof ProtectedAssetsAssetIdIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/users/$userId/edit': {
@@ -990,60 +990,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedUsersUserIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/repairs/$repairSlug/edit': {
-      id: '/_protected/repairs/$repairSlug/edit'
-      path: '/repairs/$repairSlug/edit'
-      fullPath: '/repairs/$repairSlug/edit'
-      preLoaderRoute: typeof ProtectedRepairsRepairSlugEditRouteImport
+    '/_protected/repairs/$repairId/edit': {
+      id: '/_protected/repairs/$repairId/edit'
+      path: '/repairs/$repairId/edit'
+      fullPath: '/repairs/$repairId/edit'
+      preLoaderRoute: typeof ProtectedRepairsRepairIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/parts/$partSlug/edit': {
-      id: '/_protected/parts/$partSlug/edit'
-      path: '/parts/$partSlug/edit'
-      fullPath: '/parts/$partSlug/edit'
-      preLoaderRoute: typeof ProtectedPartsPartSlugEditRouteImport
+    '/_protected/parts/$partId/edit': {
+      id: '/_protected/parts/$partId/edit'
+      path: '/parts/$partId/edit'
+      fullPath: '/parts/$partId/edit'
+      preLoaderRoute: typeof ProtectedPartsPartIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/models/$modelSlug/edit': {
-      id: '/_protected/models/$modelSlug/edit'
-      path: '/models/$modelSlug/edit'
-      fullPath: '/models/$modelSlug/edit'
-      preLoaderRoute: typeof ProtectedModelsModelSlugEditRouteImport
+    '/_protected/models/$modelId/edit': {
+      id: '/_protected/models/$modelId/edit'
+      path: '/models/$modelId/edit'
+      fullPath: '/models/$modelId/edit'
+      preLoaderRoute: typeof ProtectedModelsModelIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/manufacturers/$manufacturerSlug/edit': {
-      id: '/_protected/manufacturers/$manufacturerSlug/edit'
-      path: '/manufacturers/$manufacturerSlug/edit'
-      fullPath: '/manufacturers/$manufacturerSlug/edit'
-      preLoaderRoute: typeof ProtectedManufacturersManufacturerSlugEditRouteImport
+    '/_protected/manufacturers/$manufacturerId/edit': {
+      id: '/_protected/manufacturers/$manufacturerId/edit'
+      path: '/manufacturers/$manufacturerId/edit'
+      fullPath: '/manufacturers/$manufacturerId/edit'
+      preLoaderRoute: typeof ProtectedManufacturersManufacturerIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/locations/$locationSlug/edit': {
-      id: '/_protected/locations/$locationSlug/edit'
-      path: '/locations/$locationSlug/edit'
-      fullPath: '/locations/$locationSlug/edit'
-      preLoaderRoute: typeof ProtectedLocationsLocationSlugEditRouteImport
+    '/_protected/locations/$locationId/edit': {
+      id: '/_protected/locations/$locationId/edit'
+      path: '/locations/$locationId/edit'
+      fullPath: '/locations/$locationId/edit'
+      preLoaderRoute: typeof ProtectedLocationsLocationIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/equipment-types/$equipmentTypeSlug/edit': {
-      id: '/_protected/equipment-types/$equipmentTypeSlug/edit'
-      path: '/equipment-types/$equipmentTypeSlug/edit'
-      fullPath: '/equipment-types/$equipmentTypeSlug/edit'
-      preLoaderRoute: typeof ProtectedEquipmentTypesEquipmentTypeSlugEditRouteImport
+    '/_protected/equipment-types/$equipmentTypeId/edit': {
+      id: '/_protected/equipment-types/$equipmentTypeId/edit'
+      path: '/equipment-types/$equipmentTypeId/edit'
+      fullPath: '/equipment-types/$equipmentTypeId/edit'
+      preLoaderRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/clients/$clientSlug/edit': {
-      id: '/_protected/clients/$clientSlug/edit'
-      path: '/clients/$clientSlug/edit'
-      fullPath: '/clients/$clientSlug/edit'
-      preLoaderRoute: typeof ProtectedClientsClientSlugEditRouteImport
+    '/_protected/clients/$clientId/edit': {
+      id: '/_protected/clients/$clientId/edit'
+      path: '/clients/$clientId/edit'
+      fullPath: '/clients/$clientId/edit'
+      preLoaderRoute: typeof ProtectedClientsClientIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/assets/$assetSlug/edit': {
-      id: '/_protected/assets/$assetSlug/edit'
-      path: '/assets/$assetSlug/edit'
-      fullPath: '/assets/$assetSlug/edit'
-      preLoaderRoute: typeof ProtectedAssetsAssetSlugEditRouteImport
+    '/_protected/assets/$assetId/edit': {
+      id: '/_protected/assets/$assetId/edit'
+      path: '/assets/$assetId/edit'
+      fullPath: '/assets/$assetId/edit'
+      preLoaderRoute: typeof ProtectedAssetsAssetIdEditRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
@@ -1070,23 +1070,23 @@ interface ProtectedRouteRouteChildren {
   ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
   ProtectedRepairsIndexRoute: typeof ProtectedRepairsIndexRoute
   ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
-  ProtectedAssetsAssetSlugEditRoute: typeof ProtectedAssetsAssetSlugEditRoute
-  ProtectedClientsClientSlugEditRoute: typeof ProtectedClientsClientSlugEditRoute
-  ProtectedEquipmentTypesEquipmentTypeSlugEditRoute: typeof ProtectedEquipmentTypesEquipmentTypeSlugEditRoute
-  ProtectedLocationsLocationSlugEditRoute: typeof ProtectedLocationsLocationSlugEditRoute
-  ProtectedManufacturersManufacturerSlugEditRoute: typeof ProtectedManufacturersManufacturerSlugEditRoute
-  ProtectedModelsModelSlugEditRoute: typeof ProtectedModelsModelSlugEditRoute
-  ProtectedPartsPartSlugEditRoute: typeof ProtectedPartsPartSlugEditRoute
-  ProtectedRepairsRepairSlugEditRoute: typeof ProtectedRepairsRepairSlugEditRoute
+  ProtectedAssetsAssetIdEditRoute: typeof ProtectedAssetsAssetIdEditRoute
+  ProtectedClientsClientIdEditRoute: typeof ProtectedClientsClientIdEditRoute
+  ProtectedEquipmentTypesEquipmentTypeIdEditRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdEditRoute
+  ProtectedLocationsLocationIdEditRoute: typeof ProtectedLocationsLocationIdEditRoute
+  ProtectedManufacturersManufacturerIdEditRoute: typeof ProtectedManufacturersManufacturerIdEditRoute
+  ProtectedModelsModelIdEditRoute: typeof ProtectedModelsModelIdEditRoute
+  ProtectedPartsPartIdEditRoute: typeof ProtectedPartsPartIdEditRoute
+  ProtectedRepairsRepairIdEditRoute: typeof ProtectedRepairsRepairIdEditRoute
   ProtectedUsersUserIdEditRoute: typeof ProtectedUsersUserIdEditRoute
-  ProtectedAssetsAssetSlugIndexRoute: typeof ProtectedAssetsAssetSlugIndexRoute
-  ProtectedClientsClientSlugIndexRoute: typeof ProtectedClientsClientSlugIndexRoute
-  ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute: typeof ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute
-  ProtectedLocationsLocationSlugIndexRoute: typeof ProtectedLocationsLocationSlugIndexRoute
-  ProtectedManufacturersManufacturerSlugIndexRoute: typeof ProtectedManufacturersManufacturerSlugIndexRoute
-  ProtectedModelsModelSlugIndexRoute: typeof ProtectedModelsModelSlugIndexRoute
-  ProtectedPartsPartSlugIndexRoute: typeof ProtectedPartsPartSlugIndexRoute
-  ProtectedRepairsRepairSlugIndexRoute: typeof ProtectedRepairsRepairSlugIndexRoute
+  ProtectedAssetsAssetIdIndexRoute: typeof ProtectedAssetsAssetIdIndexRoute
+  ProtectedClientsClientIdIndexRoute: typeof ProtectedClientsClientIdIndexRoute
+  ProtectedEquipmentTypesEquipmentTypeIdIndexRoute: typeof ProtectedEquipmentTypesEquipmentTypeIdIndexRoute
+  ProtectedLocationsLocationIdIndexRoute: typeof ProtectedLocationsLocationIdIndexRoute
+  ProtectedManufacturersManufacturerIdIndexRoute: typeof ProtectedManufacturersManufacturerIdIndexRoute
+  ProtectedModelsModelIdIndexRoute: typeof ProtectedModelsModelIdIndexRoute
+  ProtectedPartsPartIdIndexRoute: typeof ProtectedPartsPartIdIndexRoute
+  ProtectedRepairsRepairIdIndexRoute: typeof ProtectedRepairsRepairIdIndexRoute
   ProtectedUsersUserIdIndexRoute: typeof ProtectedUsersUserIdIndexRoute
 }
 
@@ -1111,29 +1111,28 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
   ProtectedRepairsIndexRoute: ProtectedRepairsIndexRoute,
   ProtectedUsersIndexRoute: ProtectedUsersIndexRoute,
-  ProtectedAssetsAssetSlugEditRoute: ProtectedAssetsAssetSlugEditRoute,
-  ProtectedClientsClientSlugEditRoute: ProtectedClientsClientSlugEditRoute,
-  ProtectedEquipmentTypesEquipmentTypeSlugEditRoute:
-    ProtectedEquipmentTypesEquipmentTypeSlugEditRoute,
-  ProtectedLocationsLocationSlugEditRoute:
-    ProtectedLocationsLocationSlugEditRoute,
-  ProtectedManufacturersManufacturerSlugEditRoute:
-    ProtectedManufacturersManufacturerSlugEditRoute,
-  ProtectedModelsModelSlugEditRoute: ProtectedModelsModelSlugEditRoute,
-  ProtectedPartsPartSlugEditRoute: ProtectedPartsPartSlugEditRoute,
-  ProtectedRepairsRepairSlugEditRoute: ProtectedRepairsRepairSlugEditRoute,
+  ProtectedAssetsAssetIdEditRoute: ProtectedAssetsAssetIdEditRoute,
+  ProtectedClientsClientIdEditRoute: ProtectedClientsClientIdEditRoute,
+  ProtectedEquipmentTypesEquipmentTypeIdEditRoute:
+    ProtectedEquipmentTypesEquipmentTypeIdEditRoute,
+  ProtectedLocationsLocationIdEditRoute: ProtectedLocationsLocationIdEditRoute,
+  ProtectedManufacturersManufacturerIdEditRoute:
+    ProtectedManufacturersManufacturerIdEditRoute,
+  ProtectedModelsModelIdEditRoute: ProtectedModelsModelIdEditRoute,
+  ProtectedPartsPartIdEditRoute: ProtectedPartsPartIdEditRoute,
+  ProtectedRepairsRepairIdEditRoute: ProtectedRepairsRepairIdEditRoute,
   ProtectedUsersUserIdEditRoute: ProtectedUsersUserIdEditRoute,
-  ProtectedAssetsAssetSlugIndexRoute: ProtectedAssetsAssetSlugIndexRoute,
-  ProtectedClientsClientSlugIndexRoute: ProtectedClientsClientSlugIndexRoute,
-  ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute:
-    ProtectedEquipmentTypesEquipmentTypeSlugIndexRoute,
-  ProtectedLocationsLocationSlugIndexRoute:
-    ProtectedLocationsLocationSlugIndexRoute,
-  ProtectedManufacturersManufacturerSlugIndexRoute:
-    ProtectedManufacturersManufacturerSlugIndexRoute,
-  ProtectedModelsModelSlugIndexRoute: ProtectedModelsModelSlugIndexRoute,
-  ProtectedPartsPartSlugIndexRoute: ProtectedPartsPartSlugIndexRoute,
-  ProtectedRepairsRepairSlugIndexRoute: ProtectedRepairsRepairSlugIndexRoute,
+  ProtectedAssetsAssetIdIndexRoute: ProtectedAssetsAssetIdIndexRoute,
+  ProtectedClientsClientIdIndexRoute: ProtectedClientsClientIdIndexRoute,
+  ProtectedEquipmentTypesEquipmentTypeIdIndexRoute:
+    ProtectedEquipmentTypesEquipmentTypeIdIndexRoute,
+  ProtectedLocationsLocationIdIndexRoute:
+    ProtectedLocationsLocationIdIndexRoute,
+  ProtectedManufacturersManufacturerIdIndexRoute:
+    ProtectedManufacturersManufacturerIdIndexRoute,
+  ProtectedModelsModelIdIndexRoute: ProtectedModelsModelIdIndexRoute,
+  ProtectedPartsPartIdIndexRoute: ProtectedPartsPartIdIndexRoute,
+  ProtectedRepairsRepairIdIndexRoute: ProtectedRepairsRepairIdIndexRoute,
   ProtectedUsersUserIdIndexRoute: ProtectedUsersUserIdIndexRoute,
 }
 

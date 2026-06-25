@@ -1,5 +1,3 @@
-import type { ModelID, PartID } from "@repo/validators/ids.validators";
-
 import {
   Form,
   FormControl,
@@ -14,14 +12,16 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  partModelFormSchema,
-  type PartsModelFormInput,
-} from "@repo/validators/client/partsToModels.schema";
+
+import type { ModelID, PartID } from "~/validators/ids.validators";
 
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  partModelFormSchema,
+  type PartsModelFormInput,
+} from "~/validators/partsToModels.schema";
 
 interface UpdatePartModelFormProps {
   partId: PartID;
@@ -50,7 +50,7 @@ export default function UpdatePartModelForm({
   });
 
   const form = useForm({
-    values: partModel,
+    values: { ...partModel, modelId: partModel.modelId },
     schema: partModelFormSchema,
   });
 

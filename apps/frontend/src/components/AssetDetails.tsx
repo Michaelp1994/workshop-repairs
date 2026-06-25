@@ -5,11 +5,11 @@ import MetadataFields from "~/components/MetadataFields";
 import { api } from "~/trpc/client";
 
 interface AssetDetailsProps {
-  slug: string;
+  assetId: string;
 }
 
-export default function AssetDetails({ slug }: AssetDetailsProps) {
-  const [asset] = api.assets.getBySlug.useSuspenseQuery({ slug });
+export default function AssetDetails({ assetId }: AssetDetailsProps) {
+  const [asset] = api.assets.getById.useSuspenseQuery({ id: assetId });
   return (
     <Card>
       <CardHeader>

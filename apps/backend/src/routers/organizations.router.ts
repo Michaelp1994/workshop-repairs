@@ -1,7 +1,10 @@
-import OrganizationService from "@repo/services/services/organization.service";
-import { getOrganizationByIdSchema } from "@repo/validators/server/organization.validators";
+import OrganizationService from "../services/organization.service";
+import {
+  createOrganizationSchema,
+  getOrganizationByIdSchema,
+} from "../validators/organization.validators";
 
-import { organizationProcedure } from "../procedures";
+import { authedProcedure, organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
 export default function organizationRouter(
@@ -15,6 +18,11 @@ export default function organizationRouter(
           ctx.session.organizationId,
         );
         return organization;
+      }),
+    create: authedProcedure
+      .input(createOrganizationSchema)
+      .mutation(async ({ input, ctx }) => {
+        return await organizationService.createOrganization(input, ctx.session);
       }),
   });
 }

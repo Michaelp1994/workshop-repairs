@@ -1,4 +1,4 @@
-import type { RepairID, RepairImageID } from "@repo/validators/ids.validators";
+import type { RepairID, RepairImageID } from "~/validators/ids.validators";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";

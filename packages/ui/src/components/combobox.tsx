@@ -20,8 +20,10 @@ interface ComboboxOption {
   value: string | number;
 }
 
-export interface ComboboxProps
-  extends Omit<React.ComponentProps<"button">, "onChange"> {
+export interface ComboboxProps extends Omit<
+  React.ComponentProps<"button">,
+  "onChange"
+> {
   data: ComboboxOption[] | undefined;
   onChange: (value: string | number | null) => void;
   isLoading?: boolean;
@@ -39,8 +41,13 @@ export const Combobox = ({
   const [open, setOpen] = React.useState(false);
 
   function handleSelect(newValue: string) {
-    onChange(Number(newValue) === value ? null : Number(newValue));
-    setOpen(false);
+    const selectedOption = data.find(
+      (option) => option.value.toString() === newValue,
+    );
+    if (selectedOption) {
+      onChange(selectedOption.value === value ? null : selectedOption.value);
+      setOpen(false);
+    }
   }
 
   const selectedOption = React.useMemo(

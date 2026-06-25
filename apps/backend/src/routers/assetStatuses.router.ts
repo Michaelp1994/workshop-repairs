@@ -1,4 +1,4 @@
-import AssetStatusService from "@repo/services/services/assetStatus.service";
+import AssetStatusService from "../services/assetStatus.service";
 import {
   archiveAssetStatusSchema,
   countAssetStatusesSchema,
@@ -7,8 +7,7 @@ import {
   getAssetStatusByIdSchema,
   getAssetStatusesSelectSchema,
   updateAssetStatusSchema,
-} from "@repo/validators/server/assetStatuses.validators";
-import { TRPCError } from "@trpc/server";
+} from "../validators/assetStatuses.validators";
 
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
@@ -51,13 +50,6 @@ export default function assetStatusRouter(
           input.id,
           ctx.session,
         );
-
-        if (!AssetStatus) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "AssetStatus not found",
-          });
-        }
 
         return AssetStatus;
       }),

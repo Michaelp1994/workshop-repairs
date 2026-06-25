@@ -1,7 +1,4 @@
-import type {
-  RepairCommentID,
-  RepairID,
-} from "@repo/validators/ids.validators";
+import type { RepairCommentID, RepairID } from "~/validators/ids.validators";
 
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import {

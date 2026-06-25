@@ -13,13 +13,13 @@ import {
 import CreateRepairPartForm from "../forms/CreateRepairPartForm";
 
 interface CreateRepairPartModalProps extends BaseModalProps {
-  repairSlug: string;
+  repairId: string;
 }
 
 function CreateRepairPartModal({
   isOpen,
   onOpenChange,
-  repairSlug,
+  repairId,
 }: CreateRepairPartModalProps) {
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
@@ -28,9 +28,9 @@ function CreateRepairPartModal({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create Repair Part</DialogTitle>
-            <DialogDescription>Add a part to {repairSlug}</DialogDescription>
+            <DialogDescription>Add a part to {repairId}</DialogDescription>
           </DialogHeader>
-          <CreateRepairPartForm slug={repairSlug} />
+          <CreateRepairPartForm repairId={repairId} />
         </DialogContent>
       </DialogPortal>
     </Dialog>

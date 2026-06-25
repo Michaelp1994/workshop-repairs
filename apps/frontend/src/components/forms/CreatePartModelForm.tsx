@@ -1,4 +1,4 @@
-import type { PartID } from "@repo/validators/ids.validators";
+import type { PartID } from "~/validators/ids.validators";
 
 import {
   Form,
@@ -18,7 +18,7 @@ import {
   defaultPartModel,
   partModelFormSchema,
   type PartsModelFormInput,
-} from "@repo/validators/client/partsToModels.schema";
+} from "~/validators/partsToModels.schema";
 
 import ModelSelect from "~/components/selects/ModelSelect";
 import { api } from "~/trpc/client";

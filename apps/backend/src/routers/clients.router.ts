@@ -1,13 +1,13 @@
-import ClientService from "@repo/services/services/client.service";
+import ClientService from "../services/client.service";
 import {
   archiveClientSchema,
   countClientsSchema,
   createClientSchema,
   getAllClientsSchema,
-  getClientBySlugSchema,
+  getClientByIdSchema,
   getClientsSelectSchema,
   updateClientSchema,
-} from "@repo/validators/server/clients.validators";
+} from "../validators/clients.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -30,10 +30,10 @@ export default function clientRouter(clientService: ClientService) {
       .query(async ({ ctx, input }) => {
         return clientService.getClientsSelect(input, ctx.session);
       }),
-    getBySlug: organizationProcedure
-      .input(getClientBySlugSchema)
+    getById: organizationProcedure
+      .input(getClientByIdSchema)
       .query(async ({ ctx, input }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         return clientService.getClient(localId, ctx.session);
       }),
@@ -44,14 +44,14 @@ export default function clientRouter(clientService: ClientService) {
       }),
     update: organizationProcedure
       .input(updateClientSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
         return await clientService.updateClient(values, localId, ctx.session);
       }),
     archive: organizationProcedure
       .input(archiveClientSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
         return clientService.archiveClient(localId, ctx.session);
       }),
   });

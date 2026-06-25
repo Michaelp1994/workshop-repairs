@@ -29,7 +29,7 @@ export const organizationProcedure = procedure.use(async ({ ctx, next }) => {
   }
 
   const user = await userService.getUserById(ctx.session.userId);
-  if (!user?.organizationId) {
+  if (!user.organizationId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });

@@ -85,7 +85,7 @@ export const columns = [
   }),
 
   columnHelper.display({
-    id: "id",
+    id: "actions",
     enableHiding: false,
     cell: ({ row }) => (
       <div className="flex justify-end">

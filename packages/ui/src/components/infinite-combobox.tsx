@@ -28,8 +28,10 @@ interface Data {
   }[];
 }
 
-export interface ComboboxProps
-  extends Omit<React.ComponentProps<"button">, "onChange"> {
+export interface ComboboxProps extends Omit<
+  React.ComponentProps<"button">,
+  "onChange"
+> {
   data: Data | undefined;
   onChange: (value: string | number | null) => void;
   isLoading?: boolean;

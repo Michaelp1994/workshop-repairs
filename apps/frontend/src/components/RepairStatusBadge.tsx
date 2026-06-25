@@ -1,4 +1,4 @@
-import type { RepairStatusTypeID } from "@repo/validators/ids.validators";
+import type { RepairStatusTypeID } from "~/validators/ids.validators";
 
 import { Badge } from "@repo/ui/badge";
 

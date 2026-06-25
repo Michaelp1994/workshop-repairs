@@ -1,4 +1,4 @@
-import RepairCommentService from "@repo/services/services/repairComment.service";
+import RepairCommentService from "../services/repairComment.service";
 import {
   archiveRepairCommentSchema,
   countRepairCommentsSchema,
@@ -7,9 +7,9 @@ import {
   getAllRepairCommentsSchema,
   getRepairCommentByIdSchema,
   updateRepairCommentSchema,
-} from "@repo/validators/server/repairComments.validators";
-import { TRPCError } from "@trpc/server";
+} from "../validators/repairComments.validators";
 
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
@@ -38,30 +38,29 @@ export default function repairCommentRouter(
           input.id,
         );
 
-        if (!repairComment) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "repairComment not found",
-          });
-        }
-
         return repairComment;
       }),
     getAllByRepairId: organizationProcedure
       .input(getAllRepairCommentsByRepairIdSchema)
-      .query(async ({ input }) => {
-        const allRepairParts =
+      .query(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
+        const allRepairComments =
           await repairCommentService.getAllRepairCommentsByRepairId(
-            input.repairId,
+            repairLocalId,
+            ctx.session,
           );
 
-        return allRepairParts;
+        return allRepairComments;
       }),
     create: organizationProcedure
       .input(createRepairCommentSchema)
       .mutation(async ({ input, ctx }) => {
+        const repairLocalId = splitSlug(input.repairId).localId;
         const createdRepairComment =
-          await repairCommentService.createRepairComment(input, ctx.session);
+          await repairCommentService.createRepairComment(
+            { comment: input.comment, repairLocalId },
+            ctx.session,
+          );
 
         return createdRepairComment;
       }),

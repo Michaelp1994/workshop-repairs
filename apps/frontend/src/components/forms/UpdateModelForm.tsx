@@ -12,34 +12,34 @@ import {
 } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  type ModelFormInput,
-  modelFormSchema,
-} from "@repo/validators/client/models.schema";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
 import ManufacturerSelect from "~/components/selects/ManufacturerSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  type ModelFormInput,
+  modelFormSchema,
+} from "~/validators/models.schema";
 
 interface UpdateModelFormProps {
-  slug: string;
+  modelId: string;
 }
 
-export default function UpdateModelForm({ slug }: UpdateModelFormProps) {
+export default function UpdateModelForm({ modelId }: UpdateModelFormProps) {
   const utils = api.useUtils();
-  const [model] = api.models.getBySlug.useSuspenseQuery({
-    slug,
+  const [model] = api.models.getById.useSuspenseQuery({
+    id: modelId,
   });
 
   const updateMutation = api.models.update.useMutation({
     async onMutate() {
       await utils.models.getAll.cancel();
-      await utils.models.getBySlug.cancel({ slug });
+      await utils.models.getById.cancel({ id: modelId });
     },
     async onSuccess(values) {
       toast.success(`Model ${values.name} updated`);
-      await utils.models.getBySlug.invalidate({ slug });
+      await utils.models.getById.invalidate({ id: modelId });
       await utils.models.getAll.invalidate();
     },
     onError(errors) {
@@ -48,12 +48,16 @@ export default function UpdateModelForm({ slug }: UpdateModelFormProps) {
   });
 
   const form = useForm({
-    values: model,
+    values: {
+      ...model,
+      manufacturerId: model.manufacturerId,
+      equipmentTypeId: model.equipmentTypeId,
+    },
     schema: modelFormSchema,
   });
 
   function handleValid(values: ModelFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: modelId });
   }
 
   return (

@@ -9,7 +9,7 @@ import {
   DialogPortal,
   DialogTitle,
 } from "@repo/ui/dialog";
-import { type ModelID } from "@repo/validators/ids.validators";
+import { type ModelID } from "~/validators/ids.validators";
 
 import ModelImageCarousel from "../ModelImages/ModelImageCarousel";
 

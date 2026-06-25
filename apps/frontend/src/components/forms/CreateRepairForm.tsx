@@ -17,7 +17,7 @@ import {
   defaultRepair,
   type RepairFormInput,
   repairFormSchema,
-} from "@repo/validators/client/repair.schema";
+} from "~/validators/repair.schema";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import AssetSelect from "~/components/selects/AssetSelect";
@@ -36,8 +36,8 @@ export default function CreateRepairForm() {
     async onSuccess(values) {
       toast.success("Repair created");
       await navigate({
-        to: "/repairs/$repairSlug",
-        params: { repairSlug: values.slug },
+        to: "/repairs/$repairId",
+        params: { repairId: values.id },
       });
     },
     onError(errors) {

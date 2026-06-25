@@ -1,4 +1,4 @@
-import type { RepairID } from "@repo/validators/ids.validators";
+import type { RepairID } from "~/validators/ids.validators";
 
 import {
   Form,
@@ -20,7 +20,7 @@ import {
   defaultRepairImage,
   type RepairImageFormInput,
   repairImageFormSchema,
-} from "@repo/validators/client/repairImages.schema";
+} from "~/validators/repairImages.schema";
 import { useState } from "react";
 
 import { api } from "~/trpc/client";

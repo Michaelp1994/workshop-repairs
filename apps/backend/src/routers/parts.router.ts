@@ -1,14 +1,13 @@
-import PartService from "@repo/services/services/part.service";
+import PartService from "../services/part.service";
 import {
   archivePartSchema,
   countPartsSchema,
   createPartSchema,
   getAllPartsSchema,
-  getPartBySlugSchema,
+  getPartByIdSchema,
   getPartsSelectSchema,
   updatePartSchema,
-} from "@repo/validators/server/parts.validators";
-import { TRPCError } from "@trpc/server";
+} from "../validators/parts.validators";
 
 import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
@@ -37,18 +36,11 @@ export default function partRouter(partService: PartService) {
 
         return allParts;
       }),
-    getBySlug: organizationProcedure
-      .input(getPartBySlugSchema)
+    getById: organizationProcedure
+      .input(getPartByIdSchema)
       .query(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
         const part = await partService.getPart(localId, ctx.session);
-
-        if (!part) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "part not found",
-          });
-        }
 
         return part;
       }),
@@ -61,8 +53,8 @@ export default function partRouter(partService: PartService) {
       }),
     update: organizationProcedure
       .input(updatePartSchema)
-      .mutation(async ({ input: { slug, ...values }, ctx }) => {
-        const { localId } = splitSlug(slug);
+      .mutation(async ({ input: { id, ...values }, ctx }) => {
+        const { localId } = splitSlug(id);
 
         const updatedPart = await partService.updatePart(
           values,
@@ -75,7 +67,7 @@ export default function partRouter(partService: PartService) {
     archive: organizationProcedure
       .input(archivePartSchema)
       .mutation(async ({ input, ctx }) => {
-        const { localId } = splitSlug(input.slug);
+        const { localId } = splitSlug(input.id);
 
         const archivedPart = await partService.archivePart(
           localId,

@@ -1,4 +1,3 @@
-import type { UserID } from "@repo/validators/ids.validators";
 import type { IncomingHttpHeaders, ServerResponse } from "http";
 
 import { getCookie, setCookie } from "./cookies";
@@ -32,7 +31,7 @@ export async function getSession(
 }
 
 export function createSetSession(res: ServerResponse) {
-  return async function (user: { id: UserID }) {
+  return async function (user: { id: number }) {
     const token = await generateToken({
       userId: user.id,
     });

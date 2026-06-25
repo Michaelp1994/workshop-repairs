@@ -15,32 +15,32 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "@repo/validators/client/manufacturers.schema";
+} from "~/validators/manufacturers.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateManufacturerFormProps {
-  slug: string;
+  manufacturerId: string;
 }
 
 export default function UpdateManufacturerForm({
-  slug,
+  manufacturerId,
 }: UpdateManufacturerFormProps) {
   const navigate = useNavigate();
   const utils = api.useUtils();
-  const [manufacturer] = api.manufacturers.getBySlug.useSuspenseQuery({
-    slug,
+  const [manufacturer] = api.manufacturers.getById.useSuspenseQuery({
+    id: manufacturerId,
   });
 
   const updateMutation = api.manufacturers.update.useMutation({
     async onSuccess(values) {
-      await utils.manufacturers.getBySlug.invalidate({ slug: slug });
+      await utils.manufacturers.getById.invalidate({ id: manufacturerId });
       toast.success(`Manufacturer ${values.name} updated`);
       await navigate({
-        to: "/manufacturers/$manufacturerSlug",
-        params: { manufacturerSlug: slug },
+        to: "/manufacturers/$manufacturerId",
+        params: { manufacturerId: manufacturerId },
       });
     },
     onError(errors) {
@@ -54,7 +54,7 @@ export default function UpdateManufacturerForm({
   });
 
   function handleValid(values: ManufacturerFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: manufacturerId });
   }
 
   return (

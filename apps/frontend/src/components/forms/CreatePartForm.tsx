@@ -16,7 +16,7 @@ import {
   defaultPart,
   type PartFormInput,
   partFormSchema,
-} from "@repo/validators/client/parts.schema";
+} from "~/validators/parts.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
@@ -27,8 +27,8 @@ export default function CreatePartForm() {
   const createMutation = api.parts.create.useMutation({
     async onSuccess(data) {
       await navigate({
-        to: "/parts/$partSlug",
-        params: { partSlug: data.slug },
+        to: "/parts/$partId",
+        params: { partId: data.id },
       });
       toast.success(`Part ${data.name} created`);
     },

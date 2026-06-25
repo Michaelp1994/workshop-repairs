@@ -15,18 +15,20 @@ import { toast } from "@repo/ui/sonner";
 import {
   type LocationFormInput,
   locationFormSchema,
-} from "@repo/validators/client/locations.schema";
+} from "~/validators/locations.schema";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdateLocationFormProps {
-  slug: string;
+  locationId: string;
 }
 
-export default function UpdateLocationForm({ slug }: UpdateLocationFormProps) {
-  const [location] = api.locations.getBySlug.useSuspenseQuery({
-    slug,
+export default function UpdateLocationForm({
+  locationId,
+}: UpdateLocationFormProps) {
+  const [location] = api.locations.getById.useSuspenseQuery({
+    id: locationId,
   });
 
   const updateMutation = api.locations.update.useMutation({
@@ -44,7 +46,7 @@ export default function UpdateLocationForm({ slug }: UpdateLocationFormProps) {
   });
 
   function handleValid(values: LocationFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: locationId });
   }
 
   return (

@@ -17,11 +17,11 @@ import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface ArchiveModelModalProps extends BaseModalProps {
-  slug: string;
+  modelId: string;
 }
 
 function ArchiveModelModal({
-  slug,
+  modelId,
   isOpen,
   onOpenChange,
 }: ArchiveModelModalProps) {
@@ -30,8 +30,8 @@ function ArchiveModelModal({
     async onSuccess(data) {
       await utils.models.getAll.invalidate();
       await utils.models.countAll.invalidate();
-      await utils.models.getBySlug.invalidate({
-        slug,
+      await utils.models.getById.invalidate({
+        id: modelId,
       });
       toast.success(`${data.name} has been archived.`);
       onOpenChange();
@@ -55,7 +55,7 @@ function ArchiveModelModal({
           <DialogFooter>
             <Button onClick={() => onOpenChange()}>No</Button>
             <Button
-              onClick={() => archiveMutation.mutate({ slug })}
+              onClick={() => archiveMutation.mutate({ id: modelId })}
               variant="destructive"
             >
               Yes, I am sure

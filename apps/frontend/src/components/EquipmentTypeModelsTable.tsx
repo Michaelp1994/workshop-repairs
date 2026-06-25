@@ -8,7 +8,7 @@ import {
 } from "@repo/ui/card";
 import DataTable from "@repo/ui/data-table/DataTable";
 import { useDataTableState } from "@repo/ui/hooks/use-data-table";
-import { type EquipmentTypeID } from "@repo/validators/ids.validators";
+import { type EquipmentTypeID } from "~/validators/ids.validators";
 
 import { IconButton } from "~/components/IconButton";
 import { api } from "~/trpc/client";

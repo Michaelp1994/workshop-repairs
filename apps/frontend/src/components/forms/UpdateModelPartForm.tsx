@@ -1,4 +1,4 @@
-import type { ModelID, PartID } from "@repo/validators/ids.validators";
+import type { ModelID, PartID } from "~/validators/ids.validators";
 
 import {
   Form,
@@ -17,7 +17,7 @@ import { toast } from "@repo/ui/sonner";
 import {
   type ModelPartFormInput,
   modelPartFormSchema,
-} from "@repo/validators/client/partsToModels.schema";
+} from "~/validators/partsToModels.schema";
 
 import PartSelect from "~/components/selects/PartSelect";
 import { api } from "~/trpc/client";
@@ -50,7 +50,7 @@ export default function UpdateModelPartForm({
   });
   const form = useForm({
     schema: modelPartFormSchema,
-    values: partToModel,
+    values: { ...partToModel, partId: partToModel.partId.toString() },
   });
 
   function handleValid(data: ModelPartFormInput) {

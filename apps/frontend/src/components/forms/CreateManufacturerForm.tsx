@@ -16,7 +16,7 @@ import {
   defaultManufacturer,
   type ManufacturerFormInput,
   manufacturerFormSchema,
-} from "@repo/validators/client/manufacturers.schema";
+} from "~/validators/manufacturers.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
@@ -28,8 +28,8 @@ export default function CreateManufacturerForm() {
     async onSuccess(data) {
       toast.success(`Manufacturer ${data.name} created`);
       await navigate({
-        to: "/manufacturers/$manufacturerSlug",
-        params: { manufacturerSlug: data.slug },
+        to: "/manufacturers/$manufacturerId",
+        params: { manufacturerId: data.id },
       });
     },
     onError(errors) {

@@ -1,20 +1,26 @@
-import ModelImageService from "@repo/services/services/modelImage.service";
+import ModelService from "../services/model.service";
+import ModelImageService from "../services/modelImage.service";
 import {
   archiveModelImageSchema,
   countModelImagesSchema,
   createModelImageSchema,
+  getAllModelImagesByModelIdSchema,
   getAllModelImagesSchema,
   getModelImageByIdSchema,
   requestUploadModelImageSchema,
   setFavouriteModelImageSchema,
   updateModelImageSchema,
-} from "@repo/validators/server/modelImages.validators";
-import { TRPCError } from "@trpc/server";
+} from "../validators/modelImages.validators";
 
+import { getModelImageUrlFromKey } from "../helpers/s3";
+import { splitSlug } from "../helpers/splitUrlSlug";
 import { organizationProcedure } from "../procedures";
 import { router } from "../trpc";
 
-export default function modelImageRouter(modelImageService: ModelImageService) {
+export default function modelImageRouter(
+  modelImageService: ModelImageService,
+  modelService: ModelService,
+) {
   return router({
     getAll: organizationProcedure
       .input(getAllModelImagesSchema)
@@ -35,26 +41,24 @@ export default function modelImageRouter(modelImageService: ModelImageService) {
         );
         return count;
       }),
-    // getAllByModelId: organizationProcedure
-    //   .input(getAllModelImagesByModelIdSchema)
-    //   .query(async ({ input }) => {
-    //     const model = await modelImageService.getModelById(input.modelId);
+    getAllByModelId: organizationProcedure
+      .input(getAllModelImagesByModelIdSchema)
+      .query(async ({ input, ctx }) => {
+        const modelLocalId = splitSlug(input.modelId).localId;
+        const model = await modelService.getModel(modelLocalId, ctx.session);
 
-    //     if (!model) {
-    //       throw new TRPCError({
-    //         code: "NOT_FOUND",
-    //         message: "model not found",
-    //       });
-    //     }
+        const allModelImages =
+          await modelImageService.getAllModelImagesByModelId(
+            modelLocalId,
+            ctx.session,
+          );
 
-    //     const allModelImages = await modelImageService.getAllModelImagesByModelId(input.modelId);
-
-    //     return allModelImages.map((modelImage) => ({
-    //       ...modelImage,
-    //       url: getModelImageUrlFromKey(modelImage.url),
-    //       favourite: modelImage.id === model.defaultImageId,
-    //     }));
-    //   }),
+        return allModelImages.map((modelImage) => ({
+          ...modelImage,
+          url: getModelImageUrlFromKey(modelImage.url),
+          favourite: modelImage.id === model.defaultImageId,
+        }));
+      }),
     getById: organizationProcedure
       .input(getModelImageByIdSchema)
       .query(async ({ input, ctx }) => {
@@ -62,13 +66,6 @@ export default function modelImageRouter(modelImageService: ModelImageService) {
           input.id,
           ctx.session,
         );
-
-        if (!modelImage) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "modelImage not found",
-          });
-        }
 
         return modelImage;
       }),
@@ -83,7 +80,11 @@ export default function modelImageRouter(modelImageService: ModelImageService) {
     create: organizationProcedure
       .input(createModelImageSchema)
       .mutation(async ({ input, ctx }) => {
-        return await modelImageService.createModelImage(input, ctx.session);
+        const modelLocalId = splitSlug(input.modelId).localId;
+        return await modelImageService.createModelImage(
+          { caption: input.caption, fileName: input.fileName, modelLocalId },
+          ctx.session,
+        );
       }),
     update: organizationProcedure
       .input(updateModelImageSchema)

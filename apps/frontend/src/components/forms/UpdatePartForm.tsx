@@ -1,4 +1,4 @@
-import type { PartID } from "@repo/validators/ids.validators";
+import type { PartID } from "~/validators/ids.validators";
 
 import {
   Form,
@@ -14,30 +14,27 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  type PartFormInput,
-  partFormSchema,
-} from "@repo/validators/client/parts.schema";
+import { type PartFormInput, partFormSchema } from "~/validators/parts.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
 
 interface UpdatePartFormProps {
-  slug: string;
+  partId: string;
 }
 
-export default function UpdatePartForm({ slug }: UpdatePartFormProps) {
+export default function UpdatePartForm({ partId }: UpdatePartFormProps) {
   const navigate = useNavigate();
-  const [part] = api.parts.getBySlug.useSuspenseQuery({
-    slug,
+  const [part] = api.parts.getById.useSuspenseQuery({
+    id: partId,
   });
 
   const updateMutation = api.parts.update.useMutation({
     async onSuccess(values) {
       await navigate({
-        to: "/parts/$partSlug",
-        params: { partSlug: slug },
+        to: "/parts/$partId",
+        params: { partId: partId },
       });
       toast.success(`Part ${values.name} updated`);
     },
@@ -52,7 +49,7 @@ export default function UpdatePartForm({ slug }: UpdatePartFormProps) {
   });
 
   function handleValid(values: PartFormInput) {
-    updateMutation.mutate({ ...values, slug });
+    updateMutation.mutate({ ...values, id: partId });
   }
 
   return (

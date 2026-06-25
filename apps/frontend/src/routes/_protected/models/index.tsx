@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { IconButton } from "~/components/IconButton";
-import ModelsTable from "~/components/tables/ModelsTable";
 import {
   PageHeader,
   PageHeaderActions,
@@ -9,6 +8,7 @@ import {
   PageTitle,
   PageWrapper,
 } from "~/components/Page";
+import ModelsTable from "~/components/tables/ModelsTable";
 
 export const Route = createFileRoute("/_protected/models/")({
   component: AllModelsPage,

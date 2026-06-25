@@ -3,8 +3,10 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 
 import { Button } from "../../button";
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.ComponentProps<"div"> {
+interface DataTableColumnHeaderProps<
+  TData,
+  TValue,
+> extends React.ComponentProps<"div"> {
   column: Column<TData, TValue>;
   title: string;
 }

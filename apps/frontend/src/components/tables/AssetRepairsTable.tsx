@@ -8,7 +8,7 @@ import { api } from "~/trpc/client";
 import { columns } from "./RepairsTable/columns";
 
 interface AssetRepairsTableProps {
-  assetId: number;
+  assetId: string;
 }
 
 export default function AssetRepairsTable({ assetId }: AssetRepairsTableProps) {

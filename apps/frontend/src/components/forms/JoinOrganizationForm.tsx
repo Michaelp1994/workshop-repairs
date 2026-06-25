@@ -14,7 +14,7 @@ import {
   defaultJoinOrganization,
   type JoinOrganizationInput,
   joinOrganizationSchema,
-} from "@repo/validators/client/organization.schema";
+} from "~/validators/organization.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

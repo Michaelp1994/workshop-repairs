@@ -1,4 +1,4 @@
-import type { ModelID, ModelImageID } from "@repo/validators/ids.validators";
+import type { ModelID, ModelImageID } from "~/validators/ids.validators";
 
 import { Button } from "@repo/ui/button";
 import {
@@ -28,7 +28,7 @@ export default function ModelImageCarousel({
   });
 
   const startIndex = modelImageId
-    ? repairImages.findIndex((image) => image.id === modelImageId)
+    ? repairImages.findIndex((image) => image.id.toString() === modelImageId)
     : 0;
 
   return (
@@ -71,7 +71,7 @@ function FavouriteButton({ favourite, id }: FavouriteButtonProps) {
     <Button
       className="absolute top-0 right-0"
       onClick={() => {
-        if (!favourite) favouriteMutation.mutate({ id });
+        if (!favourite) favouriteMutation.mutate({ id: id.toString() });
       }}
       size="icon"
       variant="ghost"

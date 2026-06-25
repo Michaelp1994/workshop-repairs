@@ -9,9 +9,7 @@ import {
   PageWrapper,
 } from "~/components/Page";
 
-export const Route = createFileRoute(
-  "/_protected/equipment-types/new",
-)({
+export const Route = createFileRoute("/_protected/equipment-types/new")({
   component: CreateEquipmentTypePage,
 });
 

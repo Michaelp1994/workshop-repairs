@@ -1,4 +1,4 @@
-import type { PartID } from "@repo/validators/ids.validators";
+import type { PartID } from "~/validators/ids.validators";
 
 import {
   Form,
@@ -14,10 +14,7 @@ import {
 import { useForm } from "@repo/ui/form";
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
-import {
-  UserFormInput,
-  userFormSchema,
-} from "@repo/validators/client/users.schema";
+import { UserFormInput, userFormSchema } from "~/validators/users.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import { api } from "~/trpc/client";

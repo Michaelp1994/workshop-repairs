@@ -1,6 +1,6 @@
-import type { UserID } from "@repo/validators/ids.validators";
-
 import * as React from "react";
+
+import type { UserID } from "~/validators/ids.validators";
 
 interface SessionData {
   userId: UserID | undefined;

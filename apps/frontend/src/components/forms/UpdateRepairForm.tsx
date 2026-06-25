@@ -13,10 +13,6 @@ import {
 import { Input } from "@repo/ui/input";
 import { toast } from "@repo/ui/sonner";
 import { Textarea } from "@repo/ui/textarea";
-import {
-  type RepairFormInput,
-  repairFormSchema,
-} from "@repo/validators/client/repair.schema";
 import { useNavigate } from "@tanstack/react-router";
 
 import AssetSelect from "~/components/selects/AssetSelect";
@@ -25,24 +21,28 @@ import RepairStatusTypeSelect from "~/components/selects/RepairStatusTypeSelect"
 import RepairTypeSelect from "~/components/selects/RepairTypeSelect";
 import { api } from "~/trpc/client";
 import displayMutationErrors from "~/utils/displayMutationErrors";
+import {
+  type RepairFormInput,
+  repairFormSchema,
+} from "~/validators/repair.schema";
 
 interface UpdateRepairFormProps {
-  slug: string;
+  repairId: string;
 }
 
-export default function UpdateRepairForm({ slug }: UpdateRepairFormProps) {
+export default function UpdateRepairForm({ repairId }: UpdateRepairFormProps) {
   const utils = api.useUtils();
   const navigate = useNavigate();
-  const [repair] = api.repairs.getBySlug.useSuspenseQuery({
-    slug,
+  const [repair] = api.repairs.getById.useSuspenseQuery({
+    id: repairId,
   });
   const updateMutation = api.repairs.update.useMutation({
     async onSuccess() {
-      await utils.repairs.getBySlug.invalidate({ slug });
+      await utils.repairs.getById.invalidate({ id: repairId });
       toast.success("Repair updated successfully");
       await navigate({
-        to: "/repairs/$repairSlug",
-        params: { repairSlug: slug },
+        to: "/repairs/$repairId",
+        params: { repairId: repairId },
       });
     },
     onError(errors) {
@@ -51,12 +51,16 @@ export default function UpdateRepairForm({ slug }: UpdateRepairFormProps) {
   });
 
   const form = useForm({
-    values: repair,
+    values: {
+      ...repair,
+      assetId: repair.assetId,
+      clientId: repair.clientId,
+    },
     schema: repairFormSchema,
   });
 
   function handleValid(data: RepairFormInput) {
-    updateMutation.mutate({ ...data, slug });
+    updateMutation.mutate({ ...data, id: repairId });
   }
 
   return (

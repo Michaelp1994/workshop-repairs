@@ -16,7 +16,7 @@ import {
   defaultModel,
   type ModelFormInput,
   modelFormSchema,
-} from "@repo/validators/client/models.schema";
+} from "~/validators/models.schema";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
 import EquipmentTypeSelect from "~/components/selects/EquipmentTypeSelect";
@@ -34,8 +34,8 @@ export default function CreateModelForm() {
     async onSuccess(data) {
       toast.success(`Model ${data.name} created`);
       await navigate({
-        to: "/models/$modelSlug",
-        params: { modelSlug: data.slug },
+        to: "/models/$modelId",
+        params: { modelId: data.id },
       });
     },
     onError(errors) {

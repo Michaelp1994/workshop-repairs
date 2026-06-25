@@ -28,9 +28,9 @@ interface UseFormProps<
   TContext = unknown,
   TTransformedValues = FieldValues,
 > extends Omit<
-    _UseFormProps<TFieldValues, TContext, TTransformedValues>,
-    "resolver"
-  > {
+  _UseFormProps<TFieldValues, TContext, TTransformedValues>,
+  "resolver"
+> {
   schema: StandardSchemaV1<TFieldValues, TTransformedValues>;
   values?: NoInfer<TFieldValues>;
 }
@@ -86,10 +86,6 @@ const useFormField = () => {
   const { getFieldState, formState } = useFormContext();
 
   const fieldState = getFieldState(fieldContext.name, formState);
-
-  if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>");
-  }
 
   const { id } = itemContext;
 
@@ -221,8 +217,10 @@ const FormFooter = ({
 };
 FormFooter.displayName = "FormFooter";
 
-interface SubmitButtonProps
-  extends Omit<React.ComponentProps<"button">, "type"> {
+interface SubmitButtonProps extends Omit<
+  React.ComponentProps<"button">,
+  "type"
+> {
   isLoading?: boolean;
 }
 
@@ -235,10 +233,8 @@ const SubmitButton = ({
   <Button disabled={isLoading} ref={ref} type="submit" {...buttonProps}>
     {isLoading ? (
       <LoaderCircle className="animate-spin" />
-    ) : children ? (
-      children
     ) : (
-      "Submit"
+      (children ?? "Submit")
     )}
   </Button>
 );

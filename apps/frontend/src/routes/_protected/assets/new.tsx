@@ -4,7 +4,7 @@ import {
   equipmentTypeId,
   locationId,
   modelId,
-} from "@repo/validators/ids.validators";
+} from "~/validators/ids.validators";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 
