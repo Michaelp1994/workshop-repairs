@@ -1,12 +1,12 @@
 import { createColumnFilterFunction } from "../helpers/createColumnFilterFunction";
 import { createGlobalFilterFunction } from "../helpers/createGlobalFilterFunction";
 import { createOrderByFunction } from "../helpers/createOrderByFunction";
+import { FilterMapping, OrderMapping } from "../services/types";
 import { assetTable } from "../tables/asset.table";
 import { assetStatusTable } from "../tables/assetStatus.table";
 import { locationTable } from "../tables/location.table";
 import { manufacturerTable } from "../tables/manufacturer.table";
 import { modelTable } from "../tables/model.table";
-import { FilterMapping, OrderMapping } from "../types";
 
 const assetSortMapper: OrderMapping = {
   assetNumber: assetTable.assetNumber,

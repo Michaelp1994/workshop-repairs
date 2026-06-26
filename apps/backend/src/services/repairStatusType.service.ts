@@ -5,7 +5,7 @@ import type {
   GetAllInput,
   GetAllSimpleInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 import type { RepairStatusTypeID } from "../validators/ids.validators";
 
 import { type Database } from "../db";

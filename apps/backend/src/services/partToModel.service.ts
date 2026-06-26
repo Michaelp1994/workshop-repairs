@@ -1,5 +1,5 @@
 import type { PartToModelInput } from "../tables/partToModel.table";
-import type { CountInput, GetAllInput, UpdateInput } from "../types";
+import type { CountInput, GetAllInput, UpdateInput } from "./types";
 import type { GetSelectInput } from "../validators/dataTables.validators";
 
 import { type Database } from "../db";

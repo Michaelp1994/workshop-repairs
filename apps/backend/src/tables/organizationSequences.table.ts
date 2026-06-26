@@ -2,7 +2,7 @@ import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 import { organizationTable } from "./organization.table";
 
 export const organizationSequenceTable = pgTable("organization_sequence", {

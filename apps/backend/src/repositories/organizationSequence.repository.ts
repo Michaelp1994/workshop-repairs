@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 
 import type { OrganizationID } from "../tables/organization.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type { CreateInput, UpdateInput } from "./types";
 
 import { type DatabaseTransaction } from "../db";
 import { returnOne } from "../helpers/executeQuery";

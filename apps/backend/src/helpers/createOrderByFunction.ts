@@ -1,7 +1,7 @@
 import { asc, desc } from "drizzle-orm";
 import { PgColumn } from "drizzle-orm/pg-core";
 
-import type { Sorting } from "../types";
+import type { Sorting } from "../services/types";
 
 type ColumnMapping = Record<string, PgColumn>;
 

@@ -5,7 +5,7 @@ import type {
   GetAllInput,
   GetAllSimpleInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 
 import { type Database } from "../db";
 import { createSlug } from "../helpers/createSlug";

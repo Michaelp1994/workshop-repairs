@@ -8,7 +8,7 @@ import type {
   GetAllInput,
   GetAllSimpleInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 
 import { type DatabaseTransaction } from "../db";
 import createMetadataFields from "../helpers/createMetadataFields";

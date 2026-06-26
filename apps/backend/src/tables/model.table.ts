@@ -9,7 +9,7 @@ import {
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 import { equipmentTypeTable } from "./equipmentType.table";
 import { manufacturerTable } from "./manufacturer.table";
 import { modelImageTable } from "./modelImage.table";

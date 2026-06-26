@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 
 import type { ModelImageInput } from "../tables/modelImage.table";
-import type { CountInput, GetAllInput, UpdateInput } from "../types";
+import type { CountInput, GetAllInput, UpdateInput } from "./types";
 import type { ModelImageID } from "../validators/ids.validators";
 
 import { type Database } from "../db";

@@ -8,7 +8,7 @@ import type {
   GetAllInput,
   GetAllSimpleInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 
 import createMetadataFields from "../helpers/createMetadataFields";
 import { returnOne } from "../helpers/executeQuery";

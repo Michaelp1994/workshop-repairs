@@ -1,5 +1,5 @@
 import type { OrganizationSequenceInput } from "../tables/organizationSequences.table";
-import type { CreateInput, UpdateInput } from "../types";
+import type { CreateInput, UpdateInput } from "./types";
 import type { OrganizationSequenceID } from "../validators/ids.validators";
 
 import { type Database } from "../db";

@@ -8,7 +8,7 @@ import {
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 import { modelTable } from "./model.table";
 
 export const modelImageTable = pgTable(

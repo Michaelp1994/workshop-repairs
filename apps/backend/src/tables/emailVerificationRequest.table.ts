@@ -8,7 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { InferModel } from "../types";
+import type { InferModel } from "../services/types";
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";

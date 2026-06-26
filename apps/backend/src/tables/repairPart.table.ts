@@ -3,7 +3,7 @@ import { boolean, integer, pgTable } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 import { partTable } from "./part.table";
 import { repairTable } from "./repair.table";
 

@@ -6,7 +6,7 @@ import type {
   CreateInput,
   GetAllInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 
 import { type DatabaseTransaction } from "../db";
 import { returnOne } from "../helpers/executeQuery";

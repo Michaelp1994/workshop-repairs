@@ -3,7 +3,7 @@ import { integer, pgTable, unique, varchar } from "drizzle-orm/pg-core";
 
 import auditConstraints from "../helpers/auditConstraints";
 import { strictAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 import { assetTable } from "./asset.table";
 import { clientTable } from "./client.table";
 import { organizationTable } from "./organization.table";

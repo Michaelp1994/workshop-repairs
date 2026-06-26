@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 
-import type { CreateInput } from "../types";
+import type { CreateInput } from "./types";
 
 import { type DatabaseTransaction } from "../db";
 import { returnOne } from "../helpers/executeQuery";

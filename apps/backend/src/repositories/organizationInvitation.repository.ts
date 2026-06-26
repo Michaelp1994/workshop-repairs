@@ -1,5 +1,5 @@
 import type { DatabaseTransaction } from "../db";
-import type { CreateInput } from "../types";
+import type { CreateInput } from "./types";
 
 import { returnOne } from "../helpers/executeQuery";
 import {

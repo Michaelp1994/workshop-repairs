@@ -1,6 +1,6 @@
 import { eq, getTableColumns } from "drizzle-orm";
 
-import type { CreateInput, UpdateInput } from "../types";
+import type { CreateInput, UpdateInput } from "./types";
 
 import { returnOne } from "../helpers/executeQuery";
 import { type DatabaseTransaction } from "../db";

@@ -1,9 +1,3 @@
-import type { DataTableInput } from "~/validators/dataTables.schema";
-import type {
-  DataTableCountInput,
-  DataTableInput as ServerDataTableInput,
-} from "~/validators/server/dataTables.validators";
-
 import {
   ColumnFiltersState,
   PaginationState,
@@ -13,6 +7,12 @@ import {
 } from "@tanstack/react-table";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useState } from "react";
+
+import type { DataTableInput } from "~/validators/dataTables.schema";
+import type {
+  DataTableCountInput,
+  DataTableInput as ServerDataTableInput,
+} from "~/validators/server/dataTables.validators";
 
 export function useDataTableState(initialState?: DataTableInput) {
   const init = {

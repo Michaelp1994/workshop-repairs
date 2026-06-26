@@ -7,7 +7,7 @@ import type {
   CreateInput,
   GetAllInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 
 import { returnOne } from "../helpers/executeQuery";
 import {

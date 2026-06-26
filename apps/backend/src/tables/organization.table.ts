@@ -2,7 +2,7 @@ import { type InferInsertModel } from "drizzle-orm";
 import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 
 export const organizationTable = pgTable("organization", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

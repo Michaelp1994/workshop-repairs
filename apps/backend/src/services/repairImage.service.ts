@@ -6,7 +6,7 @@ import type {
   CreateInput,
   GetAllInput,
   UpdateInput,
-} from "../types";
+} from "./types";
 import type { RepairImageID } from "../validators/ids.validators";
 
 import { type Database } from "../db";

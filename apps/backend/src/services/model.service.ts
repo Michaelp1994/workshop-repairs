@@ -1,4 +1,4 @@
-import type { CountInput, GetAllInput, GetAllSimpleInput } from "../types";
+import type { CountInput, GetAllInput, GetAllSimpleInput } from "./types";
 
 import { type Database } from "../db";
 import { createSlug } from "../helpers/createSlug";

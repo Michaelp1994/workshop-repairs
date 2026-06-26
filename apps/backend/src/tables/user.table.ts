@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { laxAuditing, timestamps } from "../helpers/commonColumns";
-import { type InferModel } from "../types";
+import { type InferModel } from "../services/types";
 import { organizationTable } from "./organization.table";
 
 export const userTable = pgTable(

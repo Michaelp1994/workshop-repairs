@@ -1,5 +1,5 @@
 import type { RepairPartInput } from "../tables/repairPart.table";
-import type { CountInput, GetAllInput, UpdateInput } from "../types";
+import type { CountInput, GetAllInput, UpdateInput } from "./types";
 import type { RepairPartID } from "../validators/ids.validators";
 
 import { type Database } from "../db";

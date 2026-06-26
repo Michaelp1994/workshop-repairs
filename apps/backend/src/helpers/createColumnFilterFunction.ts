@@ -1,7 +1,7 @@
 import assert from "assert";
 import { eq, inArray } from "drizzle-orm";
 
-import { ColumnFilter, FilterMapping } from "../types";
+import { ColumnFilter, FilterMapping } from "../services/types";
 
 export function createColumnFilterFunction(mappingArray: FilterMapping) {
   return function (columnFilters: ColumnFilter[]) {
