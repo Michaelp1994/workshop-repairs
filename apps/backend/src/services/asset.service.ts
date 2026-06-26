@@ -1,13 +1,13 @@
 import type { CountInput, GetAllInput, GetAllSimpleInput } from "../types";
 
 import { type Database } from "../db";
+import { createSlug } from "../helpers/createSlug";
 import {
   createArchiveMetadata,
   createInsertMetadata,
   createUpdateMetadata,
   type OrganizationSession,
 } from "../helpers/includeMetadata";
-import { createSlug } from "../helpers/slugs";
 import AssetRepository, {
   AssetFilters,
 } from "../repositories/asset.repository";

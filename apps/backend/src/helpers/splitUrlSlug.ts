@@ -14,12 +14,5 @@ export function splitSlug(slug: string) {
 
   const prefix = match[1].toUpperCase();
   const localId = parseInt(match[2], 10);
-  console.log({ prefix, localId });
   return { prefix, localId };
-}
-
-export function createSlug(prefix: string, localId: number) {
-  const stringId = localId.toFixed(0);
-  const paddedId = stringId.padStart(5, "0");
-  return `${prefix}${paddedId}`;
 }

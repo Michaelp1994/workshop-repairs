@@ -53,6 +53,7 @@
     "S3_BUCKET_NAME",
     "IMAGE_URL",
     "RETURN_EMAIL",
-    "TEST_*"
+    "TEST_*",
+    "OTLP_*"
   ]
 }

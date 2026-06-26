@@ -1,7 +1,7 @@
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { generateRandomOTP } from "@repo/auth/generateRandomOTP";
 
-import type { Organization } from "../../../db/src/tables/organization.table";
+import type { Organization } from "../tables/organization.table";
 
 const client = new SESv2Client();
 

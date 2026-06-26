@@ -8,13 +8,13 @@ import type {
 } from "../types";
 
 import { type Database } from "../db";
+import { createSlug } from "../helpers/createSlug";
 import {
   createArchiveMetadata,
   createInsertMetadata,
   createUpdateMetadata,
   type OrganizationSession,
 } from "../helpers/includeMetadata";
-import { createSlug } from "../helpers/slugs";
 import ClientRepository from "../repositories/client.repository";
 import OrganizationSequenceRepository from "../repositories/organizationSequence.repository";
 

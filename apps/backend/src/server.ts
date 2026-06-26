@@ -3,6 +3,7 @@ import cors from "cors";
 import { createServer } from "http";
 
 import { createTRPCContext } from "./createContext";
+import "./instrumentation";
 import { appRouter } from "./router";
 
 const handler = createHTTPHandler({

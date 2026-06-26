@@ -1,7 +1,6 @@
-import { createRouter, RouterProvider } from "@tanstack/react-router";
-import "@repo/ui/globals.css";
 import { initializeFaro } from "@grafana/faro-react";
-
+import "@repo/ui/globals.css";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
@@ -24,7 +23,7 @@ initializeFaro({
 
   // required: the identification label of your application
   app: {
-    name: "workshop-repairs (dev)",
+    name: "workshop-repairs-browser (dev)",
     version: "1.0.0",
     environment: "production",
   },

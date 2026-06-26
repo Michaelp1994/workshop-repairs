@@ -1,6 +1,7 @@
 import type { CountInput, GetAllInput, GetAllSimpleInput } from "../types";
 
 import { type Database } from "../db";
+import { createSlug } from "../helpers/createSlug";
 import {
   createArchiveMetadata,
   createInsertMetadata,
@@ -8,7 +9,6 @@ import {
   type OrganizationSession,
 } from "../helpers/includeMetadata";
 import { getModelImageUrlFromKey } from "../helpers/s3";
-import { createSlug } from "../helpers/slugs";
 import EquipmentTypeRepository from "../repositories/equipmentType.repository";
 import ManufacturerRepository from "../repositories/manufacturer.repository";
 import ModelRepository, {
